@@ -50,6 +50,10 @@ typedef struct Ev2StreamRec {
 
 /*___________________________________*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void MidiStreamInitMthTbl 	(LinearizeMthTbl lin);
 void MidiStreamInit 		(Ev2StreamPtr f, LinearizeMthTbl lin);
 void MidiStreamReset 		(Ev2StreamPtr f);
@@ -58,5 +62,9 @@ MidiEvPtr 	MidiStreamPutEvent	(Ev2StreamPtr f, MidiEvPtr e);
 Boolean		MidiStreamGetByte	(Ev2StreamPtr f, Byte *code);
 
 static inline short MidiStreamCountByte (Ev2StreamPtr f) { return f->count;}
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

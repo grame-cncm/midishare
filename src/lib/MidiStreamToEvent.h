@@ -85,6 +85,10 @@ typedef struct StreamFifo{
 
 
 /*------------------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void	 	MidiParseError(StreamFifoPtr f);
 void 		MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl);
 void 		MidiParseReset(StreamFifoPtr f);
@@ -92,5 +96,9 @@ void 		MidiParseInitMthTbl (ParseMethodTbl tbl);
 void 		MidiParseInitTypeTbl(Status2TypeTbl table);
 
 static inline MidiEvPtr MidiParseByte (StreamFifoPtr f, Byte c) { return (*f->parse)(f,c); }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

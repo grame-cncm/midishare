@@ -24,9 +24,17 @@
 #define __MidiPrint__
 
 //______________________________________________
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void MidiPrintf (char *s);
 void MidiPrintp (unsigned char *s);
 void MidiPrintl (long val);
 void MidiPrintH (long val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
