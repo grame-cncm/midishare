@@ -44,6 +44,10 @@ void TPlayerSynchroniserExt::Stop ()
 
 void TPlayerSynchroniserExt::Cont (ULONG date_ticks) 
 { 
+	ULONG tempo = fTempoVisitor->GetTempo();
+	fTempoVisitor->Init(); // Important  (Tempo Map must be re-initialized)
+	fTempoVisitor->SetTempo(date_ticks,tempo);
+
 	SetPosTicks(date_ticks);
 	fOffset = MidiGetTime() - fTempoVisitor->CurDateMs();
 	fState->SetRunning(); // ordre ??
