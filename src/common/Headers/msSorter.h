@@ -23,72 +23,68 @@
 #ifndef __msSorter__
 #define __msSorter__
 
-#ifdef __WIN16__
-#define FAR far
-#else
-#define FAR 
-#endif
 
-/*_____________________________________________________________________*/
-/* data structures                                                     */
+/*______________________________________________________________*/
+/*                   data structures  		     	  			*/
+/*______________________________________________________________*/
 
-typedef struct TDatedEv FAR *TDatedEvPtr;
-typedef struct TDatedEv {		/* events common structure         */
-	TDatedEvPtr		link;		/* next event pointer (keep first) */
-	unsigned long	date;		/* 32 bits time stamping           */
+
+/*--------------------- Time stamped event -------------------- */
+typedef struct TDatedEv * TDatedEvPtr;
+typedef struct TDatedEv {
+  TDatedEvPtr  	link;		/* next event pointer (keep first) */
+  unsigned long	date;		/* 32 bits time stamping           */
 } TDatedEv;
 
-typedef struct Tfifo FAR *TfifoPtr;
-typedef struct Tfifo {			/* events fifo structure    */
+
+/*--------------- Fifo of time stamped events ------------------ */
+
+typedef struct TSFifo * TSFifoPtr;
+typedef struct TSFifo {			/* events fifo structure    */
  	TDatedEvPtr	first;			/* first event (keep first) */
  	TDatedEvPtr	last;			/* last event               */
-} Tfifo;
+} TSFifo;
 
-typedef Tfifo 	 Tbuffer[256];  /* a 256 fifos table */
-typedef TfifoPtr TbufferPtr;
 
-typedef struct TLevel FAR *TLevelPtr;
-typedef struct TLevel {		/* Structure of a sorting level    */
-	TLevelPtr	next;		/* pointer to the next level       */
-	TfifoPtr	fifo;		/* pointer to the fifo to resort   */
-	TbufferPtr	buf;		/* pointer to the main buffer      */
-	TbufferPtr	alt;		/* pointer to the alternate buffer */
-	unsigned char 	lev;	/* corresponding level             */
-	unsigned char 	pos;	/* resort position                 */
+/*------------------- Table of 256 Fifo ------------------------ */
+
+typedef struct TBuffer * TBufferPtr;
+typedef struct TBuffer {			/* events fifo structure    */
+ 	TSFifo	fifo[256];			/* first event (keep first) */
+} TBuffer;
+
+
+/*----------------- Structure of a sorter level ----------- */
+
+typedef struct TLevel * TLevelPtr;
+typedef struct TLevel {		
+  TLevelPtr			next;		/* pointer to the next level       	*/
+  TSFifoPtr			fifo;		/* pointer to the fifo to resort  	*/
+  TBufferPtr		pri;		/* pointer to the primary buffer   	*/
+  TBufferPtr		alt;		/* pointer to the alternate buffer 	*/
+  TBuffer			buf[2];		/* the actual buffers				*/
+  unsigned char 	lev;		/* corresponding level             	*/
+  unsigned char 	pos;		/* resort position                 	*/
 } TLevel;
 
-typedef struct Tsorter FAR *TsorterPtr;
-typedef struct Tsorter {	/* Structure of an events sorter */
-	unsigned long sysDate;	/* current date of the system    */
-	TLevel		level[4];	/* level 0, the date MSB 	     */
-							/* level 1, LSB of the MS word   */
-							/* level 2, MSB of the LS word   */
-							/* level 3, the date LSB         */
-	Tfifo		ready;		/* events ready                  */
-	Tfifo		input;		/* events to put in the sorter   */
-	short		rSize;		/* amount of events to resortp   */
-} Tsorter;
 
-typedef struct TsorterBlock FAR *TsorterBlockPtr;
-typedef struct TsorterBlock {
-    Tsorter  sorter;            /* the sorter datas    */
-    Tbuffer  buf[4];            /* its buffers         */
-    Tbuffer  alt[3];            /* alternate buffers   */
-} TsorterBlock;
+/*--------------------- Structure of a sorter ------------------*/
 
-				
-#define SorterDate(sb)     (sb->sorter.sysDate)
+typedef struct TSorter * TSorterPtr;
+typedef struct TSorter {	
+  unsigned long sysDate;	/* current date of the system    */
+  long			rSize;		/* amount of events to resort    */
+  TLevel		level[4];	/* 0: date MSB .. 3: date LSB 	 */
+  TSFifo		late;
+} TSorter;
 
-/*_____________________________________________________________________*/
+/*--------------------- the sorter interface -------------------*/
 #ifdef __cplusplus
 extern "C" {
 #endif
 		
-void 		SorterInit	(TsorterBlockPtr sb);
-void 		SorterRSize	(TsorterBlockPtr sb, short Rsize);
-void 		SorterPut	(TsorterBlockPtr sb, TDatedEvPtr event);
-void 		SorterClock	(TsorterBlockPtr sb);
-TDatedEvPtr	SorterGet	(TsorterBlockPtr sb);
+void 		SorterInit		(TSorterPtr sb, long rs);
+TDatedEvPtr	SorterClock		(TSorterPtr sb, TDatedEvPtr es);
 
 #ifdef __cplusplus
 }

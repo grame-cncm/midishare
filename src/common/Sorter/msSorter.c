@@ -17,15 +17,17 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+  [01-10-99] DF - YO - sorter interface simplification
+             externalization of the synchronisation mechanisms to provide a better
+             module independance
 
 */
 
 #include "msSorter.h"
-#include "msSync.h"
-
 
 /*-------------------------------------------------------------------------*/
-
 #ifdef __LittleEndian__
 enum { kLev3, kLev2, kLev1, kLev0 };
 #else
@@ -38,39 +40,37 @@ typedef union {
 } SorterDate;
 
 #define Next(e)          e->link
-#define SorterData(sb)   sb->sorter
-#define SorterBuf(sb)    sb->buf
-#define SorterAlt(g)     sb->alt
 
 
 /*===========================================================================
   Internal macros
 =========================================================================== */
 #ifdef __LittleEndian__
-  #define GetFifo(sorter, date, lev) (sorter->level[3-lev].buf[date.part[lev]])
+  #define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
 #else
-  #define GetFifo(sorter, date, lev) (sorter->level[lev].buf[date.part[lev]])
+  #define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
 #endif
 
-#define SWAP(level) { TbufferPtr tmp; tmp=level->alt; level->alt=level->buf; level->buf=tmp; }
+#define SWAP(level) { TBufferPtr tmp; tmp=level->alt; level->alt=level->pri; level->pri=tmp; }
 
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
   
-static void 		FifoInit	( TfifoPtr fifo);
-static void 		BufferInit	( TbufferPtr buffer);
-static void 		LevelInit	( TsorterBlockPtr sb, TLevelPtr level, unsigned char index);
-static void 		FifoPut		( TfifoPtr fifo, TDatedEvPtr event);
-static TDatedEvPtr	BufferPut	( TbufferPtr buff, TDatedEvPtr event, unsigned char index);
-static void 		Resort2		( TLevelPtr level, TfifoPtr fifo);
-static void 		ResortAll	( TLevelPtr level, TfifoPtr fifo);
+static void 		FifoInit	( TSFifoPtr fifo);
+static void 		BufferInit	( TBufferPtr buffer);
+static void 		LevelInit	( TLevelPtr level, unsigned char index);
+
+static void 		FifoPut		( TSFifoPtr fifo, TDatedEvPtr event);
+static TDatedEvPtr	BufferPut	( TBufferPtr buff, TDatedEvPtr event, unsigned char index);
+
+static void 		Resort2		( TLevelPtr level, TSFifoPtr fifo);
+static void 		ResortAll	( TLevelPtr level, TSFifoPtr fifo);
 static void 		LevelClock	( TLevelPtr level, unsigned char date);
 
-static void HandleInput	(TsorterPtr sorter, TfifoPtr fifo);
-static void PutEvent 	(TsorterPtr sorter, TDatedEvPtr event);
-
+static void 		HandleInput (TSorterPtr sorter, TDatedEvPtr ev);
+static void 		PutEvent (TSorterPtr sorter, TDatedEvPtr event);
 
 
 /*===========================================================================
@@ -80,90 +80,57 @@ static void PutEvent 	(TsorterPtr sorter, TDatedEvPtr event);
 /*-------------------------------------------------------------------------*/
 /* - SorterInit - Initialize the sorter */
 /*-------------------------------------------------------------------------*/
-void  SorterInit (TsorterBlockPtr sb)
+void  SorterInit (TSorterPtr sorter, long rs)
 {
 	unsigned char i;
-	TsorterPtr sorter = &SorterData(sb);
 	sorter->sysDate = 0;
-	FifoInit(&sorter->ready);
-	FifoInit(&sorter->input);
+	sorter->rSize = rs;
+	FifoInit(&sorter->late);
 	for (i=0;i<4;i++) {
-		LevelInit (sb, &sorter->level[i], i);
+		LevelInit (&sorter->level[i], i);
 	}
 }	
 
-/*===========================================================================
-  External functions implementation
-  =========================================================================== */
-
 /*-------------------------------------------------------------------------*/
-/* - SorterRSize - setup the amount of events to resort at every clock     */
+/* - SorterClock - insert events, sort and return the ready events         */
 /*-------------------------------------------------------------------------*/
-void SorterRSize (TsorterBlockPtr sb, short Rsize)
-{
-	SorterData(sb).rSize= Rsize;
-}
-
-/*-------------------------------------------------------------------------*/
-/* - SorterGet - returns the ready events */
-/*-------------------------------------------------------------------------*/
-TDatedEvPtr SorterGet (TsorterBlockPtr sb)
-{
-	TsorterPtr sorter = &SorterData(sb);
-	TfifoPtr fifo = &sorter->ready;
-	TDatedEvPtr	ev = fifo->first;
-	FifoInit (fifo);
-	return ev;
-}
-
-/*-------------------------------------------------------------------------*/
-/* - SorterPut - insert an event in the sorter */
-/*-------------------------------------------------------------------------*/
-void SorterPut (TsorterBlockPtr sb, TDatedEvPtr event)
-{
-	TsorterPtr sorter = &SorterData(sb);
-	TfifoPtr fifo = (event->date > sorter->sysDate) ? &sorter->input : &sorter->ready;
-	FifoPut (fifo, event);
-}
-
-/*-------------------------------------------------------------------------*/
-/* - SorterClock - sort the events and update the list of ready events     */
-/*-------------------------------------------------------------------------*/
-void SorterClock (TsorterBlockPtr sb)
+TDatedEvPtr SorterClock (TSorterPtr sorter, TDatedEvPtr in)
 {
 	TLevelPtr	lastLevel;
-	TfifoPtr	fifo;
+	TSFifoPtr	fifo, late;
 	SorterDate	date;
-	TsorterPtr sorter = &SorterData(sb);
+	TDatedEvPtr out;
 
-	HandleInput (sorter, &sorter->input);
+	HandleInput (sorter, in);
 	
 	date.date = sorter->sysDate += 1;
-	LevelClock(&sorter->level[0],date.part[kLev0]);
-	LevelClock(&sorter->level[1],date.part[kLev1]);
-	LevelClock(&sorter->level[2],date.part[kLev2]);
+	LevelClock(&sorter->level[0], date.part[kLev0]);
+	LevelClock(&sorter->level[1], date.part[kLev1]);
+	LevelClock(&sorter->level[2], date.part[kLev2]);
 
 	lastLevel = &sorter->level[3];			/* last level processing  */
-	if ( !date.part[kLev3] ) {				/* check if we need to invert the buffers */
+	if ( !date.part[kLev3] ) {				/* check if we need to invert the Buffers */
 		SWAP(lastLevel);
-		lastLevel->fifo=lastLevel->buf;		/* initialize Fifo to buf[0] */
+		lastLevel->fifo = &lastLevel->pri->fifo[0];	/* initialize Fifo to pri[0] */
 	}
 	fifo = lastLevel->fifo++;				/* current fifo = next fifo */
-	if ( fifo->first ) {					/* if not empty */
-		Next(sorter->ready.last) = fifo->first;
-		sorter->ready.last = fifo->last;	/* add current fifo to ready */
-		fifo->first = 0;
-		fifo->last = (TDatedEvPtr)fifo;
+	late = &sorter->late;
+	if (late->first) {
+		late->last->link = fifo->first;
+		out = late->first;
+		FifoInit(late);
 	}
+	else out = fifo->first;
+	FifoInit(fifo);
+	return out;
 }
 		
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
-static void HandleInput (TsorterPtr sorter, TfifoPtr fifo)
+static void HandleInput (TSorterPtr sorter, TDatedEvPtr ev)
 {
-	TDatedEvPtr next, ev = fifo->first;
-	FifoInit (fifo);
+	TDatedEvPtr next;
 	while (ev) {
 		next = ev->link;
 		PutEvent (sorter, ev);
@@ -172,7 +139,7 @@ static void HandleInput (TsorterPtr sorter, TfifoPtr fifo)
 }
 	
 /*-------------------------------------------------------------------------*/
-static void PutEvent (TsorterPtr sorter, TDatedEvPtr event)
+static void PutEvent (TSorterPtr sorter, TDatedEvPtr event)
 {
 	if ( event->date > sorter->sysDate ) {
 		SorterDate evDate,sysDate;
@@ -188,66 +155,66 @@ static void PutEvent (TsorterPtr sorter, TDatedEvPtr event)
 			FifoPut(&GetFifo(sorter,evDate,kLev3), event);
 		}
 	}
-	else FifoPut(&sorter->ready, event);
+	else {
+		FifoPut(&sorter->late, event);
+	}
 }
 
 /*-------------------------------------------------------------------------*/
-static void FifoInit (TfifoPtr fifo)
+static void FifoInit (TSFifoPtr fifo)
 {
   fifo->first = 0;
   fifo->last = (TDatedEvPtr)fifo;
 }
 
 /*-------------------------------------------------------------------------*/
-static void BufferInit (TbufferPtr buffer)
+static void BufferInit (TBufferPtr buffer)
 {
   short i = 256;
 
-  while ( i-- ) FifoInit(buffer++);
+  while ( i-- ) FifoInit(&buffer->fifo[i]);
 }
 
 /*-------------------------------------------------------------------------*/
-static void LevelInit (TsorterBlockPtr sb, TLevelPtr level, unsigned char index)
+static void LevelInit (TLevelPtr level, unsigned char index)
 {
 #ifdef __LittleEndian__
 	level->lev = 3-index;
 #else
 	level->lev = (unsigned char)index;
 #endif
-	level->buf = SorterBuf(sb)[index];
 
-	/* level 0, corresponds to a date MSB - no alternate buffer */
-	level->alt = index ? SorterAlt(sb)[index-1] : level->buf;
+	level->pri=&level->buf[0];
+	level->alt=&level->buf[1];	
 
 	/* level 3, corresponds to a date LSB - no next level */
 	level->next = ( index == 3 ) ? 0 : level + 1;
 
-	level->fifo = &level->buf[1];
+	level->fifo = &level->pri->fifo[1];
 	level->pos = 1;
-	BufferInit(level->buf);
+	BufferInit(level->pri);
 	BufferInit(level->alt);
 }
 	
+
+
 /*-------------------------------------------------------------------------*/
-static void FifoPut (TfifoPtr fifo, TDatedEvPtr event)
+static void FifoPut (TSFifoPtr fifo, TDatedEvPtr event)
 {
-	Boolean done = false;
 	event->link = 0;
-	while (!done) {
-		done = CompareAndSwap (&fifo->last->link, 0, event);
-	}
+	fifo->last->link = event;
 	fifo->last = event;
 }
 
 /*-------------------------------------------------------------------------*/
-static TDatedEvPtr BufferPut (TbufferPtr buff, TDatedEvPtr event, unsigned char index)
+static TDatedEvPtr BufferPut (TBufferPtr Buf, TDatedEvPtr event, unsigned char index)
 {
 	TDatedEvPtr	nextEv;
-	TfifoPtr	fifo;
+	TSFifoPtr	fifo;
 	SorterDate	date;
 
 	date.date = event->date;
-	fifo = &buff[date.part[index]];
+	fifo = &Buf->fifo[date.part[index]];
 	Next(fifo->last) = event;
 	fifo->last = event;
 	nextEv = Next(event);
@@ -256,7 +223,7 @@ static TDatedEvPtr BufferPut (TbufferPtr buff, TDatedEvPtr event, unsigned char 
 }
 
 /*-------------------------------------------------------------------------*/
-static void Resort2 (TLevelPtr level, TfifoPtr fifo)
+static void Resort2 (TLevelPtr level, TSFifoPtr fifo)
 {
   TDatedEvPtr event;	
 
@@ -269,7 +236,7 @@ static void Resort2 (TLevelPtr level, TfifoPtr fifo)
 }
 
 /*-------------------------------------------------------------------------*/
-static void ResortAll (TLevelPtr level, TfifoPtr fifo)
+static void ResortAll (TLevelPtr level, TSFifoPtr fifo)
 {
   TDatedEvPtr event;	
 
@@ -290,7 +257,7 @@ static void LevelClock (TLevelPtr level, unsigned char date)
   else {
     ResortAll(level->next,level->fifo);
     if ( !level->pos ) SWAP(level);
-    if ( !++level->pos ) level->fifo = level->alt;
+    if ( !++level->pos ) level->fifo = &level->alt->fifo[0];
     else level->fifo++;
   }
 }
