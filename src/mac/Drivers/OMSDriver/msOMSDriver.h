@@ -26,8 +26,11 @@
 
 #define OMSDriverName	"\pOMS Driver"
 
+extern Boolean doneFlag;
+
 Boolean CheckOMS ();
 Boolean SetUpMidi ();
 void 	CloseMidi ();
+void 	DoIdle();
 
 #endif
