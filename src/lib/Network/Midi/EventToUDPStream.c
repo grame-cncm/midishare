@@ -22,8 +22,8 @@
 
 #include "EventToUDPStream.h"
 
-#ifndef false
-enum {false, true };
+#if WIN32
+enum { false, true };
 #endif
 
 /*===========================================================================
