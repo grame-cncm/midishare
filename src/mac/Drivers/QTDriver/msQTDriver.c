@@ -143,12 +143,12 @@ static pascal void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
 static pascal void ReceiveEvents (short r)
 {
 	QuickTimeEnvPtr qt = QTE(GetData ());
-	MidiEvPtr copy, e = MidiGetEv(r);
+	MidiEvPtr copy,e;
 
 	if (!qt->clean) {
 		MidiFlushEvs (r);
 	}
-	else while (e) {
+	else while (e = MidiGetEv (r)) {
 		switch (EvType(e)) {
 			case typeNote:
 				copy = MidiCopyEv (e);
@@ -165,10 +165,10 @@ static pascal void ReceiveEvents (short r)
 				break;
 			case typePitchWheel:	PlayPitchWheel (qt, e);
 				break;
+			case typeReset:			PlayReset (qt);
+				break;
 		}
-		if (EvType(e) == typeReset) PlayReset (qt);
 		MidiFreeEv (e);
-		e = MidiGetEv (r);
 	}
 }
 
