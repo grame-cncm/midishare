@@ -18,6 +18,9 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - new memory management
+
 */
 
 #ifndef __msConnections__
@@ -25,10 +28,9 @@
 
 #include "msTypes.h"
 #include "msAppls.h"
-#include "msMemory.h"
 
-void RemAllDstCon (TApplPtr appl, MSMemoryPtr mem);
-void RemAllSrcCon (TApplPtr appl, MSMemoryPtr mem);
+void RemAllDstCon (TApplPtr appl, lifo* freelist);
+void RemAllSrcCon (TApplPtr appl, lifo* freelist);
 
 MSFunctionType(void)    MSConnect     (short src, short dest, Boolean state, TClientsPtr g);
 MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g);

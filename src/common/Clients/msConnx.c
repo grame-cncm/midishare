@@ -18,11 +18,14 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - new memory management
+
 */
 
 #include "msAlarms.h"
 #include "msConnx.h"
-#include "msEvents.h"
+#include "lflifo.h"
 
 /*===========================================================================
   private prototypes
@@ -61,22 +64,17 @@ MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
 	return false;
 }
 
-
-/*===========================================================================
-  other external functions
-=========================================================================== */
-
 /*__________________________________________________________________________*/
 /* 	- RemAllDstCon : remove all the application output connections          */
 /*__________________________________________________________________________*/
-void RemAllDstCon (TApplPtr appl, MSMemoryPtr mem)
+void RemAllDstCon (TApplPtr appl, lifo* freelist)
 {
 	TConnectionPtr cnx, next;
 	cnx= appl->dstList;						/* application connections list  */
 	while( cnx) {
 		next= cnx->nextDst;                 /* get the next connection       */
 		Rem1SrcCon (cnx->itsDst, cnx);      /* remove the current connection */
-		MSFreeCell ((MidiEvPtr)cnx, mem);	/* free the connection           */
+		lfpush (freelist, (cell *)cnx);     /* free the connection           */
 		cnx= next;							/* current = next connection     */
 	}
 	appl->dstList= 0;                       /*  connection list is now empty */
@@ -85,7 +83,7 @@ void RemAllDstCon (TApplPtr appl, MSMemoryPtr mem)
 /*__________________________________________________________________________*/
 /* 	- RemAllSrcCon : remove all the application input connections           */
 /*__________________________________________________________________________*/
-void RemAllSrcCon (TApplPtr appl, MSMemoryPtr mem)
+void RemAllSrcCon (TApplPtr appl, lifo* freelist)
 {
 	TConnectionPtr cnx, next;
 
@@ -93,7 +91,7 @@ void RemAllSrcCon (TApplPtr appl, MSMemoryPtr mem)
 	while( cnx) {
 		next= cnx->nextSrc;                 /* get the next connection       */
 		Rem1DstCon(cnx->itsSrc, cnx);       /* remove the current connection */
-		MSFreeCell ((MidiEvPtr)cnx, mem);	/* free the connection           */
+		lfpush (freelist, (cell *)cnx);     /* free the connection           */
 		cnx= next;							/* current = next connection     */
 	}
 	appl->srcList= 0;                       /*  connection list is now empty */
@@ -110,7 +108,7 @@ void RemAllSrcCon (TApplPtr appl, MSMemoryPtr mem)
 static void SetConnection (TApplPtr appSrc, TApplPtr appDest, TClientsPtr g)
 {
 	if( !FindConnection (appSrc, appDest)) {
-		TConnectionPtr cnx= (TConnectionPtr)MSNewCell(g->memory);
+		TConnectionPtr cnx= (TConnectionPtr)lfpop(FreeList(g->memory));
 		if( cnx) {
 			cnx->itsSrc= appSrc;
 			cnx->itsDst= appDest;
@@ -132,7 +130,7 @@ static void ClearConnection (TApplPtr appSrc, TApplPtr appDest, TClientsPtr g)
 	if( cnx) {
 		Rem1SrcCon (appDest, cnx);
 		Rem1DstCon (appSrc, cnx);
-		MSFreeCell ((MidiEvPtr)cnx, g->memory);
+		lfpush (FreeList(g->memory), (cell*)cnx);
 		CallAlarm (appSrc->refNum, MIDIChgConnect, g);
 	}
 }
