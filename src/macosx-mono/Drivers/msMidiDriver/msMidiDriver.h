@@ -30,8 +30,8 @@
 #include "MidiStreamToEvent.h"
 #include "lffifo.h"
 
-#define kMidiDriverVersion	100
-#define MidiShareDrvRef     127
+#define kMidiDriverVersion	102
+#define MidiShareDrvRef     	127
 #define kBuffSize		512
 
 

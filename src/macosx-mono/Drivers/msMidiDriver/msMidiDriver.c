@@ -23,6 +23,7 @@
 #include "msMidiDriver.h"
 #include "msMidiInOut.h"
 
+//#define SlotLength 64
 #define SlotLength 64
 
 SlotPtr gInSlots = 0, gOutSlots = 0;
@@ -72,34 +73,38 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 	MIDIDeviceRef dev;
 	MIDIEntityRef ref;
 	CFStringRef pmodel;
+        OSStatus err;
 	
 	n = MIDIGetNumberOfDevices();
 	
 	for (i = 0; i < n; i++) {
 	
-		dev = MIDIGetDevice(i);
-		
-		MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &pmodel);
-		CFStringGetCString(pmodel, gmodel, SlotLength, 0);
-		CFRelease(pmodel);
-		
-		m = MIDIDeviceGetNumberOfEntities(dev);
-
-		for (j = 0; j < m; j++) {
-		
-			ref = MIDIDeviceGetEntity(dev,j);
-			o = MIDIEntityGetNumberOfSources(ref);
-			p = MIDIEntityGetNumberOfDestinations(ref);
-			
-			for (k = 0; k < o; k++) {
-				if (MIDIEntityGetSource(ref,k) == device) return true;
-			}
-			
-			for (k = 0; k < p; k++) {
-				if (MIDIEntityGetDestination(ref,k) == device) return true;
-			}
-		}
-	}
+            dev = MIDIGetDevice(i);
+            err = MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &pmodel);
+             
+            if (err == noErr) {
+               
+                CFStringGetCString(pmodel, gmodel, SlotLength, 0);
+                CFRelease(pmodel);
+                
+                m = MIDIDeviceGetNumberOfEntities(dev);
+    
+                for (j = 0; j < m; j++) {
+                
+                        ref = MIDIDeviceGetEntity(dev,j);
+                        o = MIDIEntityGetNumberOfSources(ref);
+                        p = MIDIEntityGetNumberOfDestinations(ref);
+                        
+                        for (k = 0; k < o; k++) {
+                                if (MIDIEntityGetSource(ref,k) == device) return true;
+                        }
+                        
+                        for (k = 0; k < p; k++) {
+                                if (MIDIEntityGetDestination(ref,k) == device) return true;
+                        }
+                }
+            }
+    	}
 	return false;
 }	
 
@@ -110,56 +115,65 @@ void AddSlots (short refNum)
 	int i, n;
 	MIDIEndpointRef src,dest;
 	CFStringRef pname;
-	char name[SlotLength],slotname[SlotLength], model[SlotLength];
+	char slotname[SlotLength], name[(SlotLength/2)-1], model[(SlotLength/2)-1]; // 'name' + 'model' length must be < slotname 'length'
+        OSStatus err;
 	SlotPtr slot;
 	
 	n = MIDIGetNumberOfSources();
-	for (i=0; i<n; i++) {
+   	for (i=0; i<n; i++) {
 	
 		src = MIDIGetSource(i);
-		MIDIObjectGetStringProperty(src, kMIDIPropertyName, &pname);
-		CFStringGetCString(pname, name, sizeof(name), 0);
-		CFRelease(pname);
-		
-		// If found, add the model name before the device name
-		if (GetModel(src,model)) {
-                        sprintf(slotname, "%s:%s", model,name);
-           	}else {
-			strcpy(slotname,name);
-		}
-		
-		slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
-		if (slot) {
-                 	slot->next = gInSlots;
-			gInSlots = slot;
-                	// No connection with the source : done by the application alarm
-		}
+		err = MIDIObjectGetStringProperty(src, kMIDIPropertyName, &pname);
+                
+                if (err == noErr) {
+                   
+                    CFStringGetCString(pname, name, sizeof(name), 0);
+                    CFRelease(pname);
+                     
+                    // If found, add the model name before the device name
+                    if (GetModel(src,model)) {
+                        sprintf(slotname, "%s:%s", model, name); // 'model' and 'name' are concatenated to build 'slotname'
+                    }else {
+                        strcpy(slotname,name);
+                    }
+                    
+                    slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
+                    if (slot) {
+                            slot->next = gInSlots;
+                            gInSlots = slot;
+                            // No connection with the source : done by the application alarm
+                    }
+                }
 	}
-	
-	n = MIDIGetNumberOfDestinations();
+        
+   	n = MIDIGetNumberOfDestinations();
 	for (i=0; i<n; i++) {
 	
 		dest = MIDIGetDestination(i);
-		MIDIObjectGetStringProperty(dest, kMIDIPropertyName, &pname);
-		CFStringGetCString(pname, name, sizeof(name), 0);
-		CFRelease(pname);
-		
-		// If found, add the model name before the device name
-		if (GetModel(dest,model)) {
-                        sprintf (slotname, "%s:%s", model,name);
-                 }else {
-			strcpy(slotname,name);
-		}
-		
-		slot = CreateSlot (refNum, slotname, MidiOutputSlot, 0);
-		if (slot) {
-			slot->port = gOutPort;
-			slot->dest = dest;
-			slot->next = gOutSlots;
-			gOutSlots = slot;
-		}
+		err = MIDIObjectGetStringProperty(dest, kMIDIPropertyName, &pname);
+                
+                 if (err == noErr) {
+                 
+                    CFStringGetCString(pname, name, sizeof(name), 0);
+                    CFRelease(pname);
+                    
+                    // If found, add the model name before the device name
+                    if (GetModel(dest,model)) {
+                        sprintf (slotname, "%s:%s", model, name); // 'model' and 'name' are concatenated to build 'slotname'
+                    }else {
+                        strcpy(slotname,name);
+                    }
+                    
+                    slot = CreateSlot (refNum, slotname, MidiOutputSlot, 0);
+                    if (slot) {
+                            slot->port = gOutPort;
+                            slot->dest = dest;
+                            slot->next = gOutSlots;
+                            gOutSlots = slot;
+                    }
+                }
 	}
-}	
+ }	
 
 
 //_________________________________________________________
