@@ -98,7 +98,6 @@ short TPlayer::Open (MidiName name)
 	if (ref < 0) return kErrAppl;
 	
 	// Check the MidiShare memory
-	MidiGrowSpace(kMemoryLimit);
 	if (MidiFreeSpace() < kMemoryLimit) {
 		Close();
 		return kErrMemory;
