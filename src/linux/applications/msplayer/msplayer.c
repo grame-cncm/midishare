@@ -238,6 +238,7 @@ void synchroPlayer( GtkWidget *button,char*  data )
          GtkWidget *bbox;
  
          frame = gtk_frame_new (title);
+	 gtk_frame_set_label_align(GTK_FRAME(frame), 0.5,0.5);
 
          if (horizontal)
            bbox = gtk_hbox_new (TRUE,1);
@@ -280,6 +281,7 @@ GtkWidget *createDateMSBox( gint  horizontal,
          GtkWidget *bbox;
  
          frame = gtk_frame_new (title);
+	 gtk_frame_set_label_align(GTK_FRAME(frame), 0.5,0.5);
 
          if (horizontal)
            bbox = gtk_hbox_new (TRUE,1);
@@ -387,11 +389,11 @@ int main(int argc, char *argv[] )
 
 
 	vbox = gtk_table_new(3,5, TRUE);
-	gtk_table_attach(GTK_TABLE(vbox),createDateBBUBox (TRUE, "Date : Bar Beat Unit", 1, 15, 20, GTK_BUTTONBOX_START),
+	gtk_table_attach(GTK_TABLE(vbox),createDateBBUBox (TRUE, "Bar  Beat  Unit", 1, 15, 20, GTK_BUTTONBOX_START),
                               0,3,0,1,GTK_EXPAND,GTK_EXPAND, 5,5);
 	
 	
-	gtk_table_attach(GTK_TABLE(vbox),createDateMSBox (TRUE, "Date : Min Sec Ms", 1, 15, 20, GTK_BUTTONBOX_START),
+	gtk_table_attach(GTK_TABLE(vbox),createDateMSBox (TRUE, "Min  Sec  Ms", 1, 15, 20, GTK_BUTTONBOX_START),
                               0,3,1,2,GTK_EXPAND,GTK_EXPAND, 5,5);
 	
 	
