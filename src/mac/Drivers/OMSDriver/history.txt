@@ -3,6 +3,12 @@ MidiShare OMS Driver changes history
 ====================================
 
 
+v 1.10 : background only OMS driver is not any more supported
+		 OMS driver application includes a setup menu to :
+		  - show/hide application window
+		  - allow to automatically quit at MidiShare sleep time
+		  - corrects a bug consisting in slots multiple declarations
+
 v 1.02 : internal changes in slot infos management - require MidiShare v1.82 or later
 
 v 1.01 : bug corrected: common events with 1 data byte may have incorrect date
