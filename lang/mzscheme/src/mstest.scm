@@ -1,5 +1,11 @@
+;; For macintosh
+(load-extension "MidiShare.so")
 
+
+;; For Windows
 (load-extension "mzshare3216")
+
+
 (load "libmidishare.scm")
 
 (define my-ref-num (midi-open "mz"))

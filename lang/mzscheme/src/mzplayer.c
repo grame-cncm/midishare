@@ -562,10 +562,10 @@ static Scheme_Object *sch_getParamPlayer(int argc, Scheme_Object **argv)
 static Scheme_Object *sch_insertAllTrackPlayer(int argc, Scheme_Object **argv)
 {   
   if (!SCHEME_INTP(argv[0]))
-    scheme_wrong_type("insert-all-track-player", "integer refnum ", 0, argc, argv);
+    scheme_wrong_type("insert-all-track-player!", "integer refnum ", 0, argc, argv);
     
   if (SCHEME_TYPE(argv[1]) != seq_type)
-    scheme_wrong_type("insert-all-track-player", "midi-seq", 1, argc, argv);
+    scheme_wrong_type("insert-all-track-player!", "midi-seq", 1, argc, argv);
 
   return scheme_make_integer_value(InsertAllTrackPlayer((short)SCHEME_INT_VAL(argv[0]),
 				    ((shNewSeq *)argv[1])->midi_seq_ptr));  
@@ -574,12 +574,12 @@ static Scheme_Object *sch_insertAllTrackPlayer(int argc, Scheme_Object **argv)
 static Scheme_Object *sch_insertTrackPlayer(int argc, Scheme_Object **argv)
 {   
   if (!SCHEME_INTP(argv[0]))
-    scheme_wrong_type("insert-track-player", "integer refnum ", 0, argc, argv);
+    scheme_wrong_type("insert-track-player!", "integer refnum ", 0, argc, argv);
   if (!SCHEME_INTP(argv[1]))
-    scheme_wrong_type("insert-track-player", "integer tracknum ", 0, argc, argv);
+    scheme_wrong_type("insert-track-player!", "integer tracknum ", 0, argc, argv);
       
   if (SCHEME_TYPE(argv[2]) != seq_type)
-    scheme_wrong_type("insert-track-player", "midi-seq", 1, argc, argv);
+    scheme_wrong_type("insert-track-player!", "midi-seq", 1, argc, argv);
 
   return scheme_make_integer_value(InsertTrackPlayer((short)SCHEME_INT_VAL(argv[0]), 
 				  (short)  SCHEME_INT_VAL(argv[1]),
@@ -724,10 +724,10 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("set-param-player!", scheme_make_prim_w_arity(sch_setParamPlayer, "set-param-player!", 4,4), env);
   scheme_add_global("get-param-player", scheme_make_prim_w_arity(sch_getParamPlayer, "get-param-player", 3,3), env);
 
-  scheme_add_global("insert-all-track-player", scheme_make_prim_w_arity(sch_insertAllTrackPlayer, 
-									"insert-all-track-player", 2, 2), env);
-  scheme_add_global("insert-track-player", scheme_make_prim_w_arity(sch_insertTrackPlayer, 
-								    "insert-track-player", 3, 3), env);
+  scheme_add_global("insert-all-track-player!", scheme_make_prim_w_arity(sch_insertAllTrackPlayer, 
+									"insert-all-track-player!", 2, 2), env);
+  scheme_add_global("insert-track-player!", scheme_make_prim_w_arity(sch_insertTrackPlayer, 
+								    "insert-track-player!", 3, 3), env);
   scheme_add_global("make-midi-file-infos", scheme_make_prim_w_arity(sch_makeMidiFileInfos, 
 								  "make-midi-file-infos", 4,4), env);
 

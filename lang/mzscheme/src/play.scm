@@ -7,15 +7,22 @@
 ;  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" 
 
 
-;;(load-extension "MidiShare.so")
-;;(load-extension "Player.so")
+;; For Macintosh
+(load-extension "MidiShare.so")
+
+(if (midi-share?)
+ (load-extension "Player.so")
+ (display "(load-extension \"MidiShare\") before loading Player"))
 
 
+;; For Windows
 (load-extension "mzshare3216")
 
 (if (midi-share?)
-(load-extension "mzplayer3216")
-(display "(load-extension \"mzshare\") before loading mzplayer"))
+ (load-extension "mzplayer3216")
+ (display "(load-extension \"mzshare\") before loading mzplayer"))
+
+
 
 ;;def from C header
 (load "libmidishare.scm")  
@@ -65,7 +72,7 @@
 (display "you can stop the loop with (set-loop-player! player kLoopOff)")(newline))
 
 ;;create new state
-  (define st (get-state-player player  ))
+(define st (get-state-player player  ))
 
 ;;read the player bar
 (state-player-bar st)
