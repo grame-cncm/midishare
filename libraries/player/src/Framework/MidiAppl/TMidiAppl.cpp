@@ -6,6 +6,10 @@
 // Grame : Computer Music Research Laboratory
 // Web : http://www.grame.fr/Research
 // E-mail : MidiShare@rd.grame.fr
+//
+// modifications history:
+//   [11-12-99] SL - Linux adaptation
+//
 // ===========================================================================
 
 
@@ -148,6 +152,15 @@ void TMidiAppl::Close()
 		*adr = 0;
 }
 
+#ifdef __Linux__
+
+void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long a3,MidiEvPtr* adr)
+{
+	*adr = MidiTask(routine, date, fRefnum, a1, a2, a3);
+}
+
+#endif
+
 /*--------------------------------------------------------------------------*/
 
 #ifdef __Macintosh__
@@ -162,6 +175,11 @@ void TMidiAppl::Close()
 #ifdef __MSWindows__
 	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date,  long a1,long a2,long a3)
 #endif
+
+#ifdef __Linux__
+	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date,  long a1,long a2,long a3)
+#endif
+
 
 {
 	MidiCall(routine,date,fRefnum,a1,a2,a3);
