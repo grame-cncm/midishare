@@ -19,8 +19,10 @@
 	#define nil 0
 	#define errno 
 	#define FAR
+	#define NEAR
 	#define EXPORT
 	#define MSALARMAPI
+	#define MFAPI
 #endif
 
 #ifdef __Macintosh__
