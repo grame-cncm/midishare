@@ -39,6 +39,7 @@
 /* 128: Linux version 
 /* 129: Add IsAcceptedPort, IsAcceptedChan, IsAcceptedType functions
 /* 130: Functions for drivers management
+/* 131: New PortPrefix event type
 /*****************************************************************************/
 
 
@@ -57,7 +58,7 @@ An introduction on MidiShare can be found <A HREF = "MSH_intro.html">here</A>.
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  130;
+	public   static  int  Version =  131;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
@@ -579,13 +580,37 @@ public final class Midi {
 	
 	public static final int typeSpecific		= 148;
 	
+	
+	/**
+	A port prefix event (from the Midi File 1.0 specification).
+    This event cannot be sent to external Midi devices.   <br><br>
+	
+	PortPrefix events have one field. <br><br>
+	0 : A port prefix number from 0 to 255. (Field size : 1
+    byte) 
+	*/
+	
+	public static final int typePortPrefix		= 149;
+	
+	/**
+	For internal use
+	*/
+	
+	public static final int typeRcvAlarm		= 150;
+	
+	/**
+	For internal use
+	*/
+	
+	public static final int typeApplAlarm		= 151;
+
+
 	/**
   	These events are reserved for future use.   
 	*/
 	
-
-	public static final int typeReserved		= 149; /* 149 .... 254 */
-	static final int typeDead			= 255;
+	public static final int typeReserved		= 152; /* 152 .... 254 */
+	static final int typeDead					= 255;
 	
 	
 	/** 	Midi status code.	*/							
