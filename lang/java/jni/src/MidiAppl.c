@@ -42,6 +42,10 @@
 	#define MSALARMAPI
 #endif
 
+#ifdef WIN32
+	#include <MidiShare.h>
+#endif
+
 #include "MidiAppl.h"
 
 
@@ -53,14 +57,14 @@
 	ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
        
-MSALARMAPI void  ApplAlarm( short ref,long code);
+void  MSALARMAPI ApplAlarm( short ref,long code);
 
 		
 /*--------------------------------------------------------------------------*/
 
 #define typeAlarm 20
 
-MSALARMAPI void  ApplAlarm( short ref,long code)
+void  MSALARMAPI ApplAlarm( short ref,long code)
 {
 	MidiEvPtr e;
 
