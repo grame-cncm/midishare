@@ -76,15 +76,21 @@ short refNum= nil;
 #ifdef PASCALNAME
 MidiName ApplName   = "\pDrivers";
 DriverName TestName   = "\pTest Driver";
-TDriverInfos 	 gDrvInfo1 = { "\pTest Driver1", 100, 0 };
-TDriverInfos 	 gDrvInfo2 = { "\pTest Driver2", 100, 0 };
+TDriverInfos	gDrvInfo1 = { "\pTest Driver1", 100, 0 };
+TDriverInfos	gDrvInfo2 = { "\pTest Driver2", 100, 0 };
+MidiName		gSlot1 = "\pSlot 1";
+MidiName		gSlot2 = "\pSlot 2";
+MidiName		NewName = "\pNew Name";
 #endif
 
 #ifdef CNAME
 MidiName ApplName   = "Drivers";
 DriverName TestName   = "Test Driver";
-TDriverInfos 	 gDrvInfo1 = { "Test Driver1", 100, 0 };
-TDriverInfos 	 gDrvInfo2 = { "Test Driver2", 100, 0 };
+TDriverInfos	gDrvInfo1 = { "Test Driver1", 100, 0 };
+TDriverInfos	gDrvInfo2 = { "Test Driver2", 100, 0 };
+MidiName		gSlot1 = "Slot 1";
+MidiName		gSlot2 = "Slot 2";
+MidiName		NewName = "New Name";
 #endif
 
 static void wakeup (short refnum);
@@ -93,8 +99,8 @@ static void silentwakeup (short refnum);
 static void silentsleep  (short refnum);
 static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos);
 
-TDriverOperation gDrvOp   	 = { wakeup, sleep, slotInfo, 0, 0 };
-TDriverOperation gSilentOp   = { silentwakeup, silentsleep, slotInfo, 0, 0 };
+TDriverOperation gDrvOp   	 = { wakeup, sleep, 0, 0, 0 };
+TDriverOperation gSilentOp   = { silentwakeup, silentsleep, 0, 0, 0 };
 MidiEvPtr		 gReceived   = 0;
 
 /*____________________________________________________________________*/
@@ -124,22 +130,6 @@ static void silentwakeup (short refnum) {
 static void sleep (short refnum)
 		{ print ("       sleep called for ref %d\n", (int)refnum); }
 static void silentsleep (short unused1) { }
-
-#define MaxSlot	4
-static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos) 
-{	
-	short i = 0;
-	if (slot.slotRef > MaxSlot) {
-		return false;
-	}
-#ifdef PASCALNAME
-	infos->name[i++] = 1;
-#endif
-	infos->name[i++] = '0' + slot.slotRef;
-	infos->name[i] = 0;
-	infos->direction = (slot.slotRef & 1) ? MidiInputSlot : MidiOutputSlot;
-	return true;
-}
 
 /*____________________________________________________________________*/
 int Environment()
@@ -355,6 +345,24 @@ void Connections()
 }
 
 /*____________________________________________________________________*/
+static int EqualNames (MidiName n1, MidiName n2)
+{
+#ifdef PASCALNAME
+		int n = *n1++;
+		if (*n2++ != n) return false;
+		while (n--) {
+			if (*n1++ != *n2++) return false;
+		}
+		return true;
+#else
+		while (*n1) {
+			if (*n1++ != *n2++) return false;
+		}
+		return *n2 ? false : true;
+#endif
+}
+
+/*____________________________________________________________________*/
 void Slots()
 {
 	int r1=0, i; SlotRefNum sref1, sref2, sr; Boolean ret;
@@ -363,8 +371,8 @@ void Slots()
 	print ("\nSlots management :\n");flush;
 	r1 = MidiRegisterDriver(&gDrvInfo1, &gSilentOp);
 	print ("    MidiAddSlot : ");flush;
-	sref1 = MidiAddSlot (r1);
-	sref2 = MidiAddSlot (r1);
+	sref1 = MidiAddSlot (r1, gSlot1, MidiInputSlot);
+	sref2 = MidiAddSlot (r1, gSlot2, MidiOutputSlot);
 	print ("(%lx , %lx) %s\n", sref1, sref2, OK);
 	if (MidiGetDriverInfos (r1, &infos)) {
 		if (infos.slots != 2)
@@ -397,6 +405,22 @@ void Slots()
 	if (sr.slotRef >= 0) {
 		print ("Warning : MidiGetIndSlot returned refnum %lx for slot 50\n", sr);
 	}
+
+
+	print ("    MidiSetSlotName : ");flush;
+	MidiSetSlotName (sref1, NewName);
+	if (MidiGetSlotInfos (sref1, &islot)) {
+#ifdef PASCALNAME
+				s = (char *)&islot.name[1];
+#else
+				s = islot.name;
+#endif
+		print ("\"%s\" %s\n", s, OK);
+		if (!EqualNames (NewName, islot.name))
+			print ("\nWarning : new name not correctly set : \"%s\" instead \"%s\"\n", s, NewName);
+	}
+	else print ("\nWarning : cannot get slot infos\n");
+
 
 	print ("    MidiConnectSlot : ");flush;
 	MidiConnectSlot (0, sref1, true);
@@ -507,8 +531,8 @@ void SendingAndReceiving()
 			MidiConnect (0, r3, true);
 			MidiSetRcvAlarm (r1, RcvAlarm);
 			MidiSetRcvAlarm (r3, RcvAlarm);
-			sref1 = MidiAddSlot (r1);
-			sref2 = MidiAddSlot (r1);
+			sref1 = MidiAddSlot (r1, gSlot1, MidiInputSlot);
+			sref2 = MidiAddSlot (r1, gSlot2, MidiOutputSlot);
 			MidiConnectSlot (0, sref2, true);
 			MidiConnectSlot (2, sref1, true);
 			print ("    Port 0 connected to %lx\n", sref2);
