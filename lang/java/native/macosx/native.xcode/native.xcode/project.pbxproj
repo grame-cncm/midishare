@@ -1,0 +1,552 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		00E6828EFEC88D1A11DB9C8B = {
+			buildSettings = {
+			};
+			buildStyles = (
+				130F8B95001BDF0A11CA292A,
+				130F8B96001BDF0A11CA292A,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 00E6828FFEC88D1A11DB9C8B;
+			productRefGroup = 0120612AFEC8923411DB9C8B;
+			projectDirPath = "";
+			targets = (
+				130F8B90001BDF0A11CA292A,
+			);
+		};
+		00E6828FFEC88D1A11DB9C8B = {
+			children = (
+				4BAD990707E5DE7C008F1C3C,
+				6A8008AE02C7B68F0CC91562,
+				6A0644A002C7BD230CC91562,
+				0120612AFEC8923411DB9C8B,
+			);
+			isa = PBXGroup;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//000
+//001
+//002
+//003
+//004
+//010
+//011
+//012
+//013
+//014
+		0120612AFEC8923411DB9C8B = {
+			children = (
+				6A9ED92C02B0286D0CC91562,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//010
+//011
+//012
+//013
+//014
+//130
+//131
+//132
+//133
+//134
+		130F8B90001BDF0A11CA292A = {
+			buildPhases = (
+				130F8B91001BDF0A11CA292A,
+				130F8B93001BDF0A11CA292A,
+				130F8B94001BDF0A11CA292A,
+				6A0644BC02C7C42C0CC91562,
+			);
+			buildSettings = {
+				JAVA_ARCHIVE_CLASSES = YES;
+				JAVA_ARCHIVE_COMPRESSION = NO;
+				JAVA_ARCHIVE_TYPE = JAR;
+				JAVA_COMPILER = /usr/bin/javac;
+				JAVA_COMPILER_TARGET_VM_VERSION = 1.4;
+				JAVA_MANIFEST_FILE = Manifest;
+				JAVA_SOURCE_SUBDIR = .;
+				PRODUCT_NAME = grame;
+				PURE_JAVA = YES;
+				REZ_EXECUTABLE = YES;
+			};
+			dependencies = (
+			);
+			isa = PBXToolTarget;
+			name = native;
+			productInstallPath = /usr/local/bin;
+			productName = native;
+			productReference = 6A9ED92C02B0286D0CC91562;
+		};
+		130F8B91001BDF0A11CA292A = {
+			buildActionMask = 2147483647;
+			files = (
+				4BAD991F07E5DE7C008F1C3C,
+				4BAD992007E5DE7C008F1C3C,
+				4BAD992107E5DE7C008F1C3C,
+				4BAD992207E5DE7C008F1C3C,
+				4BAD992307E5DE7C008F1C3C,
+				4BAD992407E5DE7C008F1C3C,
+				4BAD992507E5DE7C008F1C3C,
+				4BAD992607E5DE7C008F1C3C,
+				4BAD992707E5DE7C008F1C3C,
+				4BAD992807E5DE7C008F1C3C,
+				4BAD992907E5DE7C008F1C3C,
+				4BAD992A07E5DE7C008F1C3C,
+				4BAD992B07E5DE7C008F1C3C,
+				4BAD992C07E5DE7C008F1C3C,
+				4BAD992D07E5DE7C008F1C3C,
+				4BAD992E07E5DE7C008F1C3C,
+				4BAD992F07E5DE7C008F1C3C,
+				4BAD993007E5DE7C008F1C3C,
+				4BAD993107E5DE7C008F1C3C,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		130F8B93001BDF0A11CA292A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXJavaArchiveBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		130F8B94001BDF0A11CA292A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		130F8B95001BDF0A11CA292A = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		130F8B96001BDF0A11CA292A = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//130
+//131
+//132
+//133
+//134
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4BAD990707E5DE7C008F1C3C = {
+			children = (
+				4BAD990807E5DE7C008F1C3C,
+			);
+			isa = PBXGroup;
+			name = grame;
+			path = ../grame;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BAD990807E5DE7C008F1C3C = {
+			children = (
+				4BAD990907E5DE7C008F1C3C,
+				4BAD990A07E5DE7C008F1C3C,
+				4BAD990B07E5DE7C008F1C3C,
+				4BAD990C07E5DE7C008F1C3C,
+				4BAD990D07E5DE7C008F1C3C,
+				4BAD991107E5DE7C008F1C3C,
+				4BAD991207E5DE7C008F1C3C,
+				4BAD991307E5DE7C008F1C3C,
+				4BAD991707E5DE7C008F1C3C,
+				4BAD991807E5DE7C008F1C3C,
+				4BAD991907E5DE7C008F1C3C,
+				4BAD991A07E5DE7C008F1C3C,
+				4BAD991B07E5DE7C008F1C3C,
+				4BAD991E07E5DE7C008F1C3C,
+			);
+			isa = PBXGroup;
+			path = midishare;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990907E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = DriverInfos.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990A07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = Midi.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990B07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiAppl.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990C07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiException.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990D07E5DE7C008F1C3C = {
+			children = (
+				4BAD990E07E5DE7C008F1C3C,
+				4BAD990F07E5DE7C008F1C3C,
+				4BAD991007E5DE7C008F1C3C,
+			);
+			isa = PBXGroup;
+			path = midifile;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990E07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiFileInfos.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD990F07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiFileStream.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991007E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = SeekOutputStream.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991107E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiNativeAppl.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991207E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiTask.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991307E5DE7C008F1C3C = {
+			children = (
+				4BAD991407E5DE7C008F1C3C,
+				4BAD991507E5DE7C008F1C3C,
+				4BAD991607E5DE7C008F1C3C,
+			);
+			isa = PBXGroup;
+			path = player;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991407E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiPlayer.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991507E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = PlayerPos.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991607E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = PlayerState.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991707E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = ReadEvInfo.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991807E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = SlotInfos.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991907E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = SmpteLoc.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991A07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = SyncInfo.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991B07E5DE7C008F1C3C = {
+			children = (
+				4BAD991C07E5DE7C008F1C3C,
+				4BAD991D07E5DE7C008F1C3C,
+			);
+			isa = PBXGroup;
+			path = tools;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991C07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiEvent.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991D07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = MidiSequence.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991E07E5DE7C008F1C3C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			path = WriteEvInfo.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BAD991F07E5DE7C008F1C3C = {
+			fileRef = 4BAD990907E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992007E5DE7C008F1C3C = {
+			fileRef = 4BAD990A07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992107E5DE7C008F1C3C = {
+			fileRef = 4BAD990B07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992207E5DE7C008F1C3C = {
+			fileRef = 4BAD990C07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992307E5DE7C008F1C3C = {
+			fileRef = 4BAD990E07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992407E5DE7C008F1C3C = {
+			fileRef = 4BAD990F07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992507E5DE7C008F1C3C = {
+			fileRef = 4BAD991007E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992607E5DE7C008F1C3C = {
+			fileRef = 4BAD991107E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992707E5DE7C008F1C3C = {
+			fileRef = 4BAD991207E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992807E5DE7C008F1C3C = {
+			fileRef = 4BAD991407E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992907E5DE7C008F1C3C = {
+			fileRef = 4BAD991507E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992A07E5DE7C008F1C3C = {
+			fileRef = 4BAD991607E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992B07E5DE7C008F1C3C = {
+			fileRef = 4BAD991707E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992C07E5DE7C008F1C3C = {
+			fileRef = 4BAD991807E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992D07E5DE7C008F1C3C = {
+			fileRef = 4BAD991907E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992E07E5DE7C008F1C3C = {
+			fileRef = 4BAD991A07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD992F07E5DE7C008F1C3C = {
+			fileRef = 4BAD991C07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD993007E5DE7C008F1C3C = {
+			fileRef = 4BAD991D07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAD993107E5DE7C008F1C3C = {
+			fileRef = 4BAD991E07E5DE7C008F1C3C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//6A0
+//6A1
+//6A2
+//6A3
+//6A4
+		6A0644A002C7BD230CC91562 = {
+			children = (
+				6A0644AC02C7C26E0CC91562,
+			);
+			isa = PBXGroup;
+			name = Documentation;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6A0644AC02C7C26E0CC91562 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.man;
+			path = native.1;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6A0644BC02C7C42C0CC91562 = {
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				6A0644BD02C7C4400CC91562,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		6A0644BD02C7C4400CC91562 = {
+			fileRef = 6A0644AC02C7C26E0CC91562;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6A8008AE02C7B68F0CC91562 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = Manifest;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6A9ED92C02B0286D0CC91562 = {
+			explicitFileType = "compiled.mach-o.executable";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = grame.jar;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+	};
+	rootObject = 00E6828EFEC88D1A11DB9C8B;
+}
