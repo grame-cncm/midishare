@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------
+Radio Hard Disk Client
+---------------------------------------------------------------------------
+Versions history:
+---------------------------------------------------------------------------
+
+v 1.0.0.0	: first release
+v 1.0.1.0	: bug corrected in possible pure virtual method call: 
+		  may crash the application at exit.
+v 1.0.2.0	: default connection is the first slot if no internal synth found
+
+
