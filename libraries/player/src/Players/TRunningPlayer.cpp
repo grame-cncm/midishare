@@ -112,4 +112,4 @@ void TRunningPlayer::RcvClock(ULONG date_ms) {fPlayer->RcvClock(date_ms);}
 
 /*----------------------------------------------------------------------------*/
 
-ULONG TRunningPlayer::GetTempo() {  return fPlayer->GetTempo();}
+ULONG TRunningPlayer::GetTempo() {return fPlayer->GetTempo();}

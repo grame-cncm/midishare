@@ -87,8 +87,7 @@ void TSMPTEPlayer::PlaySliceBackward()
 
 void TSMPTEPlayer::SetPosTicks (ULONG date_ticks) 
 { 
-	
-	if (fRunningState->IsRunning()){
+ 	if (fRunningState->IsRunning()){
 		fPlayer->Stop();
 		fPlayer->SetPosTicks(date_ticks);
 		fPlayer->Cont();
@@ -120,7 +119,7 @@ void TSMPTEPlayer::StartAtSMPTEOffset()
 		fMidiAppl->ScheduleTask(&fSMPTEtask, MidiGetTime() + fSmpteInfos->GetSMPTEOffset() - curexttime);
 	}else  if (curexttime == fSmpteInfos->GetSMPTEOffset()){
 		fPlayer->Start();
-	}else {
+	}else{
 		fPlayer->SetPosMs(curexttime - fSmpteInfos->GetSMPTEOffset());
 		fPlayer->Cont();
 	}
