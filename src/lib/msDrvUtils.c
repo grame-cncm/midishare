@@ -25,9 +25,12 @@
 #include "MidiShareKernel.h"
 #else
 #include "MidiShare.h"
+#include "FilterUtils.h"
 #endif
 
 #include "msDrvUtils.h"
+
+
 
 /*===========================================================================
   Internal functions prototypes
