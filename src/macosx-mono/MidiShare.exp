@@ -91,7 +91,3 @@ MidiIsAcceptedType
 MidiGetPortState
 MidiSetPortState
 MidiShareSpecialInit
-__MSInitialize
-
-noteon
-noteoff
