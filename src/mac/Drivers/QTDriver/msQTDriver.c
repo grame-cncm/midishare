@@ -342,7 +342,7 @@ static pascal void QTTask (long date, short refNum, long a1,long a2,long a3)
 static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e)
 {
 	if (Chan(e) != 9) {
-		short sndNum = MidiGetField (e, 0);
+		short sndNum = MidiGetField (e, 0) + 1; // MidiShare ProgChange go from 0 to 127, QuikTime from 1 to 128
 		NASetInstrumentNumberInterruptSafe (qt->allocator, Note(qt, Chan(e)), sndNum);
 		qt->chan[Chan(e)].sndNum = sndNum;
 		MidiDTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
