@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+
+LIB=/usr/lib
+MSF=/Applications/MidiShare
+UMSF1=$HOME/MidiShare
+UMSF2=$HOME/.MidiShare
+NEWUMSF=$HOME/Library/Preferences/MidiShare
+
+function put_info () {
+	cat <<! > $1
+Since MidiShare version 1.87, the .ini files are stored in the
+MidiShare folder, located int the Library/Preferences folder of your 
+home directory.
+
+Apart the midishare.ini (which isn't compatible with the new one)
+previous ini files have been moved to the new folder.
+
+Provided you didn't store some personnal files in your home MidiShare
+folder, you can now safely remove it.
+
+!
+	/usr/sbin/chown $2 $1
+}
+
+function move_old () {
+	if [ -d $1 ]
+	then
+		for a in $(find $1 -name "*.ini")
+		do
+			[ $(basename $a .ini) = "midishare" ] || mv $a $NEWUMSF
+		done
+		rm -f $1/midishare.ini
+		rm -f $1/Applications
+		put_info $1/ReadMe-1.87.txt $user
+	fi
+}
+
+# removes the old dynamic libraries
+rm -f $LIB/libMidiShare*.dylib
+rm -f $LIB/ms*Driver*.dylib
+rm -f $MSF/.checkinstall
+
+user=$(ls -ld $HOME | sed -e's/  */ /g' | cut -d' ' -f3)
+
+# creates the new MidiShare folder
+[ -d $NEWUMSF ] || mkdir -p $NEWUMSF
+/usr/sbin/chown $user $NEWUMSF
+
+# moves the ini files to the new user MidiShare folder
+move_old $UMSF1
+
+
+# put a message into the old .MidiShare
+if [ -d $UMSF2 ]
+then
+	cat <<! > $UMSF2/ReadMe.txt
+MidiShare .ini files are now stored in the MidiShare folder, 
+located int the Library/Preferences folder of your 
+home directory.
+The .MidiShare folder isn't used any more.
+!
+/usr/sbin/chown $user $UMSF2
+fi
+
+# check for hostname
+hostconfig=/etc/hostconfig
+grep "^HOSTNAME" $hostconfig || echo "HOSTNAME=-AUTOMATIC-" >> $hostconfig
+
+exit 0

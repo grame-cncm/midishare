@@ -239,13 +239,14 @@ enum{   MIDIOpenAppl=1,
 	typedef struct TMidiST *MidiSTPtr;		
 	typedef struct TMidiST					
 	{
-	#if __SupportOldSTDef__
+	#ifdef __SupportOldSTDef__
 		Ptr ptr1;						/* 4 32-bits fields 				*/
 		Ptr ptr2;							
 		Ptr ptr3;
 		Ptr ptr4;	
-	#endif
-		long val[4];					
+	#else
+		long val[4];		
+        #endif
 	}	TMidiST;						
 		
 

@@ -1,0 +1,13 @@
+msLANDriver versions
+
+1.0.1 
+1.0.2 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
+
+
+
+
+msWANDriver versions
+
+1.0.1 
+1.0.2 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
+

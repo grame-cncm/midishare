@@ -308,7 +308,7 @@ Boolean MSCompareAndSwap (void **adr, void *compareTo, void *swapWith)
 
 /*__________________________________________________________________________*/
 void msOpenMutex  (unsigned int mutex) {}
-void msCloseMutex  (unsigned int mutex) {}
+void msCloseMutex (unsigned int mutex) {}
 
 /*_________________________________________________________________________*/
 /* initialization part, including time task                                */

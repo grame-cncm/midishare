@@ -6,49 +6,145 @@ History :
 06-18-02 : Return default value if file does not exist, new write_private_profile_int function.
 */
 
-
 /***** Routines to read profile strings --  by Joseph J. Graf ******/
+/***** corrections and improvements -- by D. Fober - Grame ******/
+/*
+	corrections: buffer sizes control
+	improvements: behavior more similar to windows
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <errno.h>
 
 #include <ctype.h> 
 #include "profport.h"   /* function prototypes in here */
 
-static char* TmpDirectory = "/tmp";
-/*
-static int isdigit (char c) 
-{
-	static char digits[10]={'0','1','2','3','4','5','6','7','8','9'};
-	int i;
-	for (i = 0 ; i < 10; i++) if (digits[i]==c) return 1;
-	return 0;
-}
-*/
-static int read_line(FILE *fp, char *bp);
+static int read_line (FILE *fp, char *bp, int size);
+static int read_section(FILE *fp, char *section);
+static int read_entry (FILE *fp, char *entry, char *buff, int size);
+static char * read_value (char *buff);
+static int read_int_value (char *buff, int def);
+static char * read_file (char *file);
+static char * str_search (char * buff, char * str, int stopCond);
 
 /*****************************************************************
 * Function:     read_line()
 * Arguments:    <FILE *> fp - a pointer to the file to be read from
 *               <char *> bp - a pointer to the copy buffer
-* Returns:      TRUE if successful FALSE otherwise
+*               <int>  size - size of the copy buffer
+* Returns:      the line length if successful -1 otherwise
 ******************************************************************/
-
-static int read_line(FILE *fp, char *bp)
+static int read_line(FILE *fp, char *bp, int size)
 {  
-    char c = '\0';
-    int i = 0;
-    /* Read one line from the source file */
-    while( (c = getc(fp)) != '\n' )
-    {   if( c == EOF )         /* return FALSE on unexpected EOF */
-            return(0);
-        bp[i++] = c;
-    }
-    bp[i] = '\0';
-    return(1);
+	char c = '\0';
+	int i = 0, limit = size-2;
+
+	/* Read one line from the source file */
+	while (((c = getc(fp)) != '\n') && (i < limit)) {
+		if (c == EOF) {
+			if (!i) return -1;
+			else break;
+		}
+		bp[i++] = c;
+	}
+	bp[i] = '\0';
+	return i;
 }
+
+static int read_section (FILE *fp, char *section)
+{  
+	char buff[MAX_LINE_LENGTH];
+	char t_section[MAX_LINE_LENGTH];
+	int n, slen;
+
+	sprintf(t_section,"[%s]", section); /* Format the section name */
+	slen = strlen (t_section);
+	/*  Move through file 1 line at a time until a section is matched or EOF */
+	do {
+		n = read_line(fp, buff, MAX_LINE_LENGTH); 
+		if (n == -1)   
+			return 0;
+	} while (strncmp (buff,t_section, slen));
+	return 1;
+ }
+
+static int read_entry (FILE *fp, char *entry, char *buff, int size)
+{  
+	int n, elen = strlen (entry);
+
+	do {
+		n = read_line(fp, buff, size); 
+		if (n == -1) 
+			return 0;
+		else if (*buff == '[')
+			return 0;	
+	} while (strncmp (buff, entry, elen));
+	return 1;
+ }
+
+#define isBlank(c)	((c == ' ') || (c == '\t'))
+static char * read_value (char *buff)
+{  
+    char * eq = strrchr (buff,'=');    /* Parse out the equal sign */
+    if (eq) {
+    	eq++;
+    	while (*eq && isBlank(*eq))
+    		eq++;
+    	return *eq ? eq : 0;
+    }
+    return eq;
+ }
+
+#define isSignedDigit(c)	(isdigit(c) || (c == '+') || (c == '-'))
+static int read_int_value (char *buff, int def)
+{  
+    char * val = read_value (buff);
+    char value[20]; int i;
+    
+    if (!*val) return def;
+    
+	for (i = 0; isSignedDigit(*val) && (i <= 10); i++ )
+		value[i] = *val++;
+	value[i] = '\0';
+    return value[0] ? atoi(value) : def;
+}
+ 
+static char * read_file (char *file)
+{
+	FILE *fd = fopen (file,"r");
+	int size; char * buff = 0;
+	
+	if (!fd) return 0;
+	if (fseek (fd, 0, SEEK_END) == -1) goto err;
+	size = ftell (fd);
+	if (size < 0) goto err;
+	if (fseek (fd, 0, SEEK_SET) == -1) goto err;
+	buff = (char *) malloc (size+1);
+	if (buff) {
+		*buff = 0;
+		fread (buff, 1, size, fd);
+		buff[size] = 0;
+	}
+err:
+	fclose (fd);
+	return buff;
+}
+ 
+static char * str_search (char * buff, char * str, int stopCond)
+{
+	char *ptr = buff;
+	int len = strlen (str);
+	while (*ptr && strncmp (ptr, str, len)) {
+		while (*ptr && (*ptr++ != '\n')) 
+			;
+		if (*ptr == stopCond)
+			return 0;
+	}
+	return *ptr ? ptr : 0;
+}
+
 /**************************************************************************
 * Function:     get_private_profile_int()
 * Arguments:    <char *> section - the name of the section to search for
@@ -57,52 +153,21 @@ static int read_line(FILE *fp, char *bp)
 *               <char *> file_name - the name of the .ini file to read from
 * Returns:      the value located at entry
 ***************************************************************************/
-
 int get_private_profile_int(char *section,
     char *entry, int def, char *file_name)
 {   
     FILE *fp = fopen(file_name,"r");
     char buff[MAX_LINE_LENGTH];
-    char *ep;
-    char t_section[MAX_LINE_LENGTH];
-    char value[6];
-    int len = strlen(entry);
-    int i;
     
-    if( !fp ) return(def); /* Return default value if file does not exist */
-    sprintf(t_section,"[%s]",section); /* Format the section name */
-    /*  Move through file 1 line at a time until a section is matched or EOF */
-    do
-    {   if( !read_line(fp,buff) )
-        {   fclose(fp);
-            return(def);
-        }
-    } while( strcmp(buff,t_section) );
-    /* Now that the section has been found, find the entry.
-     * Stop searching upon leaving the section's area. */
-    do
-    {   if( !read_line(fp,buff) || buff[0] == '\0' )
-        {   fclose(fp);
-            return(def);
-        }
-    }  while( strncmp(buff,entry,len) );
-    ep = strrchr(buff,'=');    /* Parse out the equal sign */
-    if (ep) {
-	    ep++;
-	    if( !strlen(ep) )          /* No setting? */
-	        return(def);
-	    /* Copy only numbers fail on characters */
-
-	    for(i = 0; isdigit(ep[i]); i++ )
-	        value[i] = ep[i];
-	    value[i] = '\0';
-	    fclose(fp);                /* Clean up and return the value */
-	    return(atoi(value));
-	}else {
-		 fclose(fp);   
-		 return def; 
-	}
+    if( !fp ) return def; /* Return default value if file does not exist */
+    if (!read_section (fp, section)) goto err;
+    if (!read_entry (fp, entry, buff, MAX_LINE_LENGTH)) goto err;
+	def = read_int_value (buff, def);
+err:
+	fclose (fp);
+	return def;
 }
+
 /**************************************************************************
 * Function:     get_private_profile_string()
 * Arguments:    <char *> section - the name of the section to search for
@@ -117,44 +182,21 @@ int get_private_profile_int(char *section,
 int get_private_profile_string(char *section, char *entry, char *def,
     char *buffer, int buffer_len, char *file_name)
 {   
-    FILE *fp = fopen(file_name,"r");
+    FILE *fp = fopen (file_name,"r");
     char buff[MAX_LINE_LENGTH];
-    char *ep;
-    char t_section[MAX_LINE_LENGTH];
-    int len = strlen(entry);
+    char *val;
     
-    if( !fp ) return(0); 
-     sprintf(t_section,"[%s]",section);    /* Format the section name */
-    /*  Move through file 1 line at a time until a section is matched or EOF */
-    do
-    {   if( !read_line(fp,buff) )
-        {   fclose(fp);
-            strncpy(buffer,def,buffer_len);
-            return(strlen(buffer));
-        }
-    }
-    while( strcmp(buff,t_section) );
-    /* Now that the section has been found, find the entry.
-     * Stop searching upon leaving the section's area. */
-    do
-    {   if( !read_line(fp,buff) || buff[0] == '\0' )
-        {   fclose(fp);
-            strncpy(buffer,def,buffer_len);
-            return(strlen(buffer));
-        }
-    }  while( strncmp(buff,entry,len) );
-    ep = strrchr(buff,'=');    /* Parse out the equal sign */
-    if(ep) {
-   		ep++;
-    	/* Copy up to buffer_len chars to buffer */
-    	strncpy(buffer,ep,buffer_len - 1);
-		buffer[buffer_len] = '\0';
-    	fclose(fp);               /* Clean up and return the amount copied */
-    	return(strlen(buffer));
-    }else {
-    	fclose(fp);
-    	return(0);
-    }
+    if( !fp ) goto err; /* Return default value if file does not exist */
+    if (!read_section (fp, section)) goto err;
+    if (!read_entry (fp, entry, buff, MAX_LINE_LENGTH)) goto err;
+	val = read_value (buff);
+    if(val) def = val;
+
+err:
+	if (fp) fclose (fp);
+	strncpy (buffer, def, buffer_len - 1);
+	buffer[buffer_len] = '\0';
+	return strlen (buffer);
 }
 
 
@@ -166,100 +208,58 @@ int get_private_profile_string(char *section, char *entry, char *def,
  *              <char *> file_name - the name of the .ini file to read from
  * Returns:     TRUE if successful, otherwise FALSE
  ***************************************************************************/
- 
 int write_private_profile_string(char *section,
     char *entry, char *buffer, char *file_name)
 
-{   FILE *rfp, *wfp;
-    char* tmp_name;
-    char buff[MAX_LINE_LENGTH];
-    char t_section[MAX_LINE_LENGTH];
-    int len = strlen(entry);
-    
-    //Does not work on MacOSX
-    //char tmp_name[15];
-    //tmpnam(tmp_name); /* Get a temporary file name to copy to */
-    
-    tmp_name = tempnam(TmpDirectory,"");
-    sprintf(t_section,"[%s]",section);/* Format the section name */
-    
-    if( !(rfp = fopen(file_name,"r")) )  /* If the .ini file doesn't exist */
-    {   if( !(wfp = fopen(file_name,"w")) ) /*  then make one */
-        {   
-            return(0);   
-        }
-        fprintf(wfp,"%s\n",t_section);
-        fprintf(wfp,"%s=%s\n",entry,buffer);
-        fclose(wfp);
-        return(1);
+{
+	char * content = read_file(file_name);
+	FILE * fd = fopen(file_name,"w");
+    char t_section[MAX_LINE_LENGTH], *ptr;
+    int ret = 0;
+	
+	if (!fd) goto end;
+	if (!content) {
+    	fprintf (fd, "[%s]\n%s = %s\n", section, entry, buffer);
+    	ret = 1;
+    	goto end;
+	}
+    sprintf(t_section,"[%s]",section);         /* Format the section name */
+    ptr = str_search (content, t_section, 0);  /* look for the section start */
+    if (!ptr) {
+    	/* no such section: add the new section at end of file */
+    	fprintf (fd, "%s\n[%s]\n%s = %s\n", content, section, entry, buffer);
     }
-    if( !(wfp = fopen(tmp_name,"w")) )
-    {   
-        fflush(rfp);
-        fclose(rfp);
-        return(0);
+    else {
+    	char * eptr;
+    	eptr = str_search (ptr, entry, '[');
+    	if (!eptr) {
+    		/* no such entry: looks for next section */
+    		eptr = str_search (++ptr, "[", 0);
+	    	if (!eptr) {
+    			/* section is the last one */
+	    		fprintf (fd, "%s\n%s = %s\n", content, entry, buffer);
+	    	}
+	    	else {
+	    		while (*ptr && (*ptr != '\n')) ptr++;
+	    		*ptr = 0;
+	    		fprintf (fd, "%s\n%s = %s", content, entry, buffer);
+	    		*ptr = '\n';
+	    		fprintf (fd, "%s", ptr);
+	    	}
+	    }
+	    else {
+	    	*eptr++ = 0;
+	    	fprintf (fd, "%s%s = %s", content, entry, buffer);
+	    	while (*eptr && (*eptr != '\n')) eptr++;
+	    	if (eptr) fprintf (fd, "%s", eptr);
+	    }
     }
-    /* Move through the file one line at a time until a section is
-     * matched or until EOF. Copy to temp file as it is read. */
-    do
-    {   if( !read_line(rfp,buff) )
-        {   
-            /* Failed to find section, so add one to the end */
-            fprintf(wfp,"\n%s\n",t_section);
-            fprintf(wfp,"%s=%s\n",entry,buffer);
-            /* Clean up and rename */
-            fclose(rfp);
-            fclose(wfp);
-            unlink(file_name);
-            rename(tmp_name,file_name);
-            return(1);
-        }
-        fprintf(wfp,"%s\n",buff);
-     } while( strcmp(buff,t_section) );
-    /* Now that the section has been found, find the entry. Stop searching
-     * upon leaving the section's area. Copy the file as it is read
-     * and create an entry if one is not found.  */
-    while( 1 )
-    {   
-        if( !read_line(rfp,buff) )
-        {   /* EOF without an entry so make one */
-            fprintf(wfp,"%s=%s\n",entry,buffer);
-            /* Clean up and rename */
-            fclose(rfp);
-            fclose(wfp);
-            unlink(file_name);
-            rename(tmp_name,file_name);
-            return(1);
+    ret = 1;
 
-        }
-        if( !strncmp(buff,entry,len) || buff[0] == '\0' )
-            break;
-            
-        fprintf(wfp,"%s\n",buff);
-    }
-    
-    if( buff[0] == '\0' )
-    {   
-       fprintf(wfp,"%s=%s\n",entry,buffer);
-        do
-        {
-            fprintf(wfp,"%s\n",buff);
-        } while( read_line(rfp,buff) );
-    }
-    else
-    {   
-        fprintf(wfp,"%s=%s\n",entry,buffer);
-        while( read_line(rfp,buff) )
-        {
-             fprintf(wfp,"%s\n",buff);
-        }
-    }
-    /* Clean up and rename */
-    fclose(wfp);
-    fclose(rfp);
-    unlink(file_name);
-    rename(tmp_name,file_name);
-    return(1);
+end:
+	if (content) free(content);
+	if (fd) fclose(fd);
+	return 0;
 }
 
 /***************************************************************************
@@ -276,5 +276,5 @@ int write_private_profile_int(char *section,
 {
     char buffer [64];
     sprintf(buffer, "%d", val);
-    return write_private_profile_string(section,entry, buffer, file_name);
+    return write_private_profile_string (section,entry, buffer, file_name);
 }

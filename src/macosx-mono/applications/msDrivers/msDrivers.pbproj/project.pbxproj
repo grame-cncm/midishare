@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		0249A665FF388DC511CA2CEA = {
 			isa = PBXApplicationReference;
@@ -32,7 +32,7 @@
 				F728175A0206AC2D01053118,
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 //040
 //041
@@ -149,6 +149,7 @@
 				05952DFCFFF02D1B11CA0E50,
 				05952DFDFFF02D1B11CA0E50,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 20286C29FDCF999611CA2CEA;
 			projectDirPath = "";
@@ -184,6 +185,7 @@
 			children = (
 				F72817510206AC2D01053118,
 				0867D6AAFE840B52C02AAC07,
+				D3F581810507341900053103,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -196,6 +198,7 @@
 				0249A669FF388E3911CA2CEA,
 				0640BAA4FFF0323A11CA0E50,
 				0640BAA5FFF0323A11CA0E50,
+				4B5F86C7050CCDB800053105,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -221,10 +224,9 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = ../../../lib;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "/Users/fober/src/midishare/macosx-mono";
+				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-lMidiShare";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msDrivers;
@@ -240,15 +242,17 @@
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = 0249A665FF388DC511CA2CEA;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>msDrivers</string>
 	<key>CFBundleGetInfoString</key>
-	<string>v.1.0 © Grame 2002</string>
+	<string>v.1.3 © Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msDrivers.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -256,32 +260,32 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>v. 1.0</string>
+	<string>v. 1.3</string>
 	<key>CFBundleSignature</key>
 	<string>SlCt</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.3</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		20286C35FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C36FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
 				0867D6ACFE840B52C02AAC07,
+				D3F581820507341900053103,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C38FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -292,15 +296,16 @@
 				F721C9E20208216001053118,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3BFDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
 				20286C3CFDCF999611CA2CEA,
+				4B5F86C8050CCDB800053105,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3CFDCF999611CA2CEA = {
 			fileRef = 20286C33FDCF999611CA2CEA;
@@ -313,6 +318,49 @@
 //202
 //203
 //204
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4B5F86C7050CCDB800053105 = {
+			isa = PBXFrameworkReference;
+			name = MidiShare.framework;
+			path = /System/Library/Frameworks/MidiShare.framework;
+			refType = 0;
+		};
+		4B5F86C8050CCDB800053105 = {
+			fileRef = 4B5F86C7050CCDB800053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3F581810507341900053103 = {
+			isa = PBXFileReference;
+			path = msDrivers.icns;
+			refType = 2;
+		};
+		D3F581820507341900053103 = {
+			fileRef = D3F581810507341900053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F70
 //F71
 //F72
@@ -331,16 +379,19 @@
 			};
 		};
 		F72817500206AC2D01053118 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msDrivers.c;
 			refType = 2;
 		};
 		F72817510206AC2D01053118 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msDrivers.r;
 			refType = 2;
 		};
 		F72817520206AC2D01053118 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msDrvAppl.c;
 			refType = 2;
@@ -364,12 +415,14 @@
 			};
 		};
 		F75041100207042D01053118 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = states.c;
 			path = ../lib/states.c;
 			refType = 2;
 		};
 		F7504113020708BE01053118 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = profport.c;
 			path = ../../../lib/profport.c;

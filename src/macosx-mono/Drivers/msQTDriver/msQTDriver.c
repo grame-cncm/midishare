@@ -21,7 +21,7 @@
 */
 
 #include <Carbon/Carbon.h>
-#include <QuickTimeMusic.h>
+#include <QuickTime/QuickTimeMusic.h>
 
 #include "MidiShare.h"
 #include "msQTDriver.h"
@@ -45,7 +45,7 @@ typedef struct {
 } MidiChan;
 
 typedef struct {
-	Boolean 	clean;
+	Boolean 	running;
 	NoteAllocator	allocator;
 	MidiChan	chan[kChansCount];	
 } QuickTimeEnv, * QuickTimeEnvPtr;
@@ -79,6 +79,7 @@ static void QuickTimeDispose (QuickTimeEnvPtr qt);
 static Boolean QuickTimeWakeup (QuickTimeEnvPtr qt);
 static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound);
 static void FlushReceivedEvents (short r);
+static void ReceiveEvents (short r);
 
 DriverData gData;
 static inline DriverDataPtr GetData ()	{ return &gData; }
@@ -88,21 +89,18 @@ static inline DriverDataPtr GetData ()	{ return &gData; }
 /* -----------------------------------------------------------------------------*/
 static void WakeUp (short r)
 {
-	DriverDataPtr data = GetData ();
-	QuickTimeInit (QTE(data));
-	if (QuickTimeWakeup (QTE(data))) {
-		MidiConnect (MidiShareDrvRef, r, true);
-		MidiConnect (r, MidiShareDrvRef, true);
-	}
-	else MidiSetRcvAlarm (r, FlushReceivedEvents);
+        QuickTimeEnvPtr qt = QTE(GetData ());
+          
+        if (qt->running) {
+            MidiSetRcvAlarm (r, ReceiveEvents);
+            MidiConnect (MidiShareDrvRef, r, true);
+            MidiConnect (r, MidiShareDrvRef, true);
+        }else
+            MidiSetRcvAlarm (r, FlushReceivedEvents);
 }
 
 /* -----------------------------------------------------------------------------*/
-static void Sleep (short r)
-{
-	DriverDataPtr data = GetData ();
-	QuickTimeDispose (QTE(data));
-}
+static void Sleep (short r) {}
 
 /* -----------------------------------------------------------------------------*/
 /* MidiShare part                                                               */
@@ -112,6 +110,7 @@ static void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
 	PlayNote ((QuickTimeEnvPtr)a2, (MidiEvPtr)a1, 0);
 	MidiFreeEv((MidiEvPtr)a1);
 }
+
 
 /* -----------------------------------------------------------------------------*/
 static void FlushReceivedEvents (short r)
@@ -177,19 +176,28 @@ Boolean SetUpMidi ()
 	TDriverInfos infos = { QTDriverName, kQTDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
-	
-	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
-	
-	refNum = MidiRegisterDriver(&infos, &op);
-	if (refNum == MIDIerrSpace)return false;
-	
+        
+  	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
+   	refNum = MidiRegisterDriver(&infos, &op);
+      
+	if (refNum == MIDIerrSpace) return false;
+     
 	data->refNum = refNum;
 	data->slotRef = MidiAddSlot (refNum, QTSlotName, MidiOutputSlot);
-	MidiSetRcvAlarm (refNum, ReceiveEvents);		
+        
+	MidiSetRcvAlarm (refNum, FlushReceivedEvents);	
+        	
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);
 	LoadSlot ("Output Slots", GetProfileFullName(kProfileName),QTDriverName);
-	return true;
+        
+	// Init QuickTime
+	QuickTimeInit (QTE(data));
+	if (!QuickTimeWakeup (QTE(data))) {
+		MidiUnregisterDriver(refNum);
+		return false;
+	}else
+		return true;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -202,6 +210,8 @@ void CloseMidi ()
 		SaveSlot ("Output Slots", GetProfileFullName(kProfileName),QTDriverName);
 		MidiUnregisterDriver (ref);
 	}
+        
+	// Dispose QuickTime
 	QuickTimeDispose (QTE(data));
 }
 
@@ -222,20 +232,22 @@ Boolean CheckQuickTime ()
 static Boolean QuickTimeWakeup (QuickTimeEnvPtr qt)
 {
 	short i;
-
+ 
 	qt->allocator = OpenDefaultComponent (kNoteAllocatorComponentType, 0);
 	if (!qt->allocator)
-		goto err;
+ 		goto err;
+       
 
 	for (i = 0; i < kChansCount; i++) {
 		if (!SndChanInit (qt, i, SndNum(qt, i)))
 			goto err;
 	}
-	qt->clean = true;
+	qt->running = true;
 	return true;
 	
 err:
 	QuickTimeDispose (qt);
+	qt->running = false;
 	return false;	
 }
 
@@ -243,14 +255,15 @@ err:
 static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound)
 {
 	ComponentResult err; NoteRequest nr;
-	
+        
 	nr.info.flags = 0;
 	nr.info.polyphony = 8;
 	nr.info.typicalPolyphony = 0x00010000;
 	err = NAStuffToneDescription (qt->allocator, sound, &nr.tone);
+    
 	if (err == noErr) {
 		err = NANewNoteChannel (qt->allocator, &nr, &Note(qt, chan));
-	}
+   	}
 	return (err == noErr) && Note(qt, chan);
 }
 
@@ -263,7 +276,6 @@ static void QuickTimeInit (QuickTimeEnvPtr qt)
 		Note(qt, i) = 0;
 		SndNum(qt, i) = (i == 9) ? kDrumKit : kDefaultSound;
 	}
-	qt->clean = false;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -279,7 +291,7 @@ static void QuickTimeDispose (QuickTimeEnvPtr qt)
 	}
 	CloseComponent (qt->allocator);
 	qt->allocator = 0;
-	qt->clean = false;
+	qt->running = false;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -307,7 +319,7 @@ static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e)
 		short sndNum = MidiGetField (e, 0) + 1; // MidiShare ProgChange go from 0 to 127, QuikTime from 1 to 128
 		NASetInstrumentNumberInterruptSafe (qt->allocator, Note(qt, Chan(e)), sndNum);
 		qt->chan[Chan(e)].sndNum = sndNum;
-                MidiTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
+		MidiTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
 	}
 }
 

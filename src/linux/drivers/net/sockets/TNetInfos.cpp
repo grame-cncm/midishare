@@ -37,7 +37,6 @@
 #endif
 
 //extern int errno, h_errno;
-
 //____________________________________________________________
 TNetInfos::TNetInfos (short port)
 {

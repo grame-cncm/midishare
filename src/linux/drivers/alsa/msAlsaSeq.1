@@ -1,0 +1,125 @@
+.TH MSALSASEQ 1 "May 2004" "" "MidiShare User's Manual"
+.SH "NAME"
+.B msAlsaSeq
+- ALSA driver for MidiShare
+.SH "SYNOPSIS"
+.BI "msAlsaSeq [" options "] [" client-name "]"
+.SH "DESCRIPTION"
+.B msAlsaSeq
+creates an ALSA sequencer client and a corresponding MidiShare client, both
+named
+.I client-name
+("MidiShare/ALSA Bridge" by default) and establishes connections to other
+ALSA clients as given by the
+.B -i
+and
+.B -o
+options. MIDI input received by the ALSA client becomes the input of the
+MidiShare client, and output of the MidiShare client is sent to the output
+side of the ALSA client. This allows you to access ALSA devices and other ALSA
+clients from MidiShare applications, simply by connecting your MidiShare
+application to the input/and or output of the
+.B msAlsaSeq
+MidiShare client.
+.PP
+You can just start the program as
+.B msAlsaSeq
+and establish connections to other ALSA clients manually with
+.BR aconnect (1)
+or your favourite ALSA patchbay. Alternatively, you can specify the desired
+connections directly on the command line. For instance,
+.sp
+.nf
+         msAlsaSeq -i 64:0 -o 64:0
+.fi
+.sp
+connects input and output to port 0 of client 64. Usually this corresponds to
+the external MIDI interface of your first soundcard. To find out about the
+available ALSA sequencer clients and ports on your system, run the ALSA
+program
+.B aconnect
+with the
+.B -i
+and
+.B -o
+options. You can also use the MidiShare
+.B msconnect
+program to connect your MidiShare applications with the MidiShare client
+created by
+.BR msAlsaSeq .
+.PP
+Instead of a numeric ALSA client id, you can also specify the client's
+name. Shell wildcards (`*', `?' etc.)  are recognized as well. E.g.,
+.sp
+.nf
+        msAlsaSeq -i 'Rawmidi*':0
+.fi
+.sp
+connects the input to port 0 of the first client whose name starts with
+`Rawmidi'. 
+.PP
+By default, the MidiShare port number of a received event is always zero, and
+transmitted events are always sent to all connected ALSA clients, no matter
+which MidiShare port was specified. This behaviour is consistent with the
+other drivers supplied with the Linux version of MidiShare, and is convenient
+if you want to dynamically connect to different ALSA clients with the
+.B aconnect
+utility. If necessary, multiple instances of
+.B msAlsaSeq
+can be run to access different ALSA clients. In this case it is useful to
+specify the
+.I client-name
+parameter to distinguish the different clients. Example:
+.sp
+.nf
+         msAlsaSeq "ALSA Midi Port" -i 64:0 -o 64:0
+         msAlsaSeq "ALSA Wavetable Synth" -o 65:0
+.fi
+.sp
+Alternatively, you can also specify a mapping between ALSA client ports and
+MidiShare ports as follows:
+.sp
+.nf
+         msAlsaSeq -i 64:0/0 -o 64:0/0 -o 65:0/1
+.fi
+.sp
+Here we configured one input port, which is mapped to MidiShare port 0, and
+two output ports which are mapped to the MidiShare ports 0 and 1,
+respectively. This provides some degree of compatibility with the MacOS and
+Windows versions of MidiShare (where you usually access different devices
+using corresponding port numbers, instead of connecting to different MidiShare
+clients), but is less versatile, as all input and output ports have to be
+specified in advance and cannot be changed dynamically.
+.SH "OPTIONS"
+.TP
+.B -h
+Prints a short usage message and exits.
+.TP
+.BI -i " client" : port [/ msport ]
+Establishes an input connection with the given ALSA client and port. The
+client can be given either by its numeric id or a pattern for the client
+name. The MidiShare port number
+.I msport
+is optional. If present, it indicates that input is mapped to the given
+MidiShare port when an event is delivered to the MidiShare application.
+.TP
+.BI -o " client" : port [/ msport ]
+Establishes an output connection for the given ALSA client and port. If the
+MidiShare port number
+.I msport
+is given, only MidiShare events directed to that port will be output on this
+connection.
+.SH "BUGS"
+Right now
+.B msAlsaSeq
+does not keep track of the original ALSA timestamps. The timestamp of a
+received event thus indicates the time at which the event was read by the
+driver.
+.SH "SEE ALSO"
+aconnect(1), http://www.alsa-project.org
+.br
+http://www.grame.fr/MidiShare
+.SH "AUTHOR"
+Albert Graef, University of Mainz. (Based on Grame's
+.B msRawMidi
+driver.)

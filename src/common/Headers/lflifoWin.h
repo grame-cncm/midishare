@@ -24,7 +24,7 @@
 #define __LFLIFOWIN__
 
 #ifdef __SMP__
-#define LOCK lock ; 
+#define LOCK lock
 #else
 #define LOCK
 #endif

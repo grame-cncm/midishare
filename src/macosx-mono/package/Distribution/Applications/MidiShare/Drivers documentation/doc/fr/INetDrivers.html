@@ -1,0 +1,78 @@
+<HTML>  
+<HEAD>
+  <TITLE>MidiShare Internet Drivers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P>&nbsp;</P>
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial"><IMG SRC="../images/icon.LAN.jpg"
+WIDTH="31" HEIGHT="31" ALIGN="MIDDLE" BORDER="0" NATURALSIZEFLAG="3">
+MidiShare Internet Drivers <IMG SRC="../images/icon.WAN.jpg" 
+WIDTH="31" HEIGHT="31" ALIGN="MIDDLE" BORDER="0" NATURALSIZEFLAG="3"></FONT></CENTER></H1>
+
+<P><CENTER><A HREF="../../ReadMe.html"><FONT FACE="Arial"><IMG 
+SRC="../images/uk.GIF" WIDTH="30" HEIGHT="21" ALIGN="MIDDLE" 
+BORDER="0" NATURALSIZEFLAG="3"></FONT><FONT SIZE="-1" FACE="Arial">english
+version</FONT></A></CENTER></P>
+
+<P><CENTER><HR></CENTER></P>
+
+<P><FONT FACE="Arial">Les drivers MidiShare Internet ouvrent le
+monde de la communication temps r&eacute;el sur Internet aux applications
+clientes de MidiShare.<BR>
+Ces drivers sont fournis sous la forme de 2 librairies partag&eacute;es
+distinctes:</FONT></P>
+
+<UL>
+  <LI><A HREF="msLAN.html"><FONT FACE="Arial">msLANDriver.dylib</FONT></A><FONT
+   FACE="Arial"> : fournit un syst&egrave;me de communication temps
+  r&eacute;el avec une faible latence sur un r&eacute;seau local.
+  Le driver inclus un syst&egrave;me automatique de reconnaissance
+  des machines distantes.</FONT>
+  <LI><A HREF="msWAN.html"><FONT FACE="Arial">msWANDriver.dylib</FONT></A><FONT
+   FACE="Arial"> : fournit la communication temps r&eacute;el sur
+  Internet. La connection &agrave; une machine distante est control&eacute;e
+  par l'utilisateur via un fichier d'initialisation.</FONT>
+</UL>
+
+<P><FONT FACE="Arial">Les 2 drivers ont les caract&eacute;ristiques
+communes suivantes :</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">les machines distantes apparaissent comme
+  des slots MidiShare. Pour configurer les connections avec ces
+  slots, utilisez l'application 'msDrivers'.</FONT>
+  <LI><FONT FACE="Arial">comme les machines distantes sont identifi&eacute;es
+  de mani&egrave;re unique par leur adresse IP, celle-ci est utilis&eacute;e
+  pour sauver et restaurer automatiquement l'&eacute;tat des connexions
+  de ces machines. Selon le mode de fonctionnement du driver, ces
+  connexions repr&eacute;sentent des connexions inter-applications
+  ou des connexions de port.</FONT>
+  <LI><FONT FACE="Arial">le comportement des drivers est control&eacute;
+  par des fichiers .ini (msLANDriver.ini et msWANDriver.ini). Ces fichiers sont lus
+  dans le dossier $HOME/MidiShare de l'utilisateur.
+  En l'absence de fichier .ini, des valeurs par d&eacute;faut sont
+  utilis&eacute;es pour les param&egrave;tres (voir les pages correspondant
+  &agrave; chaque driver).</FONT>
+</UL>
+
+<P><FONT FACE="Arial">Le driver Internet de MidiShare est &agrave;
+la base du projet <A HREF="http://radio-hd.grame.fr/radio-hd">Radio
+Hard Disk</A> qui consiste notamment en une diffusion permanente
+de musique en temps r&eacute;el sur Internet.</FONT></P>
+
+<P><HR ALIGN=LEFT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Les drivers Internet font partie du projet
+  <A HREF="http://www.grame.fr/MidiShare/fr" TARGET="_top">MidiShare</A>.
+  Ils ont &eacute;t&eacute; d&eacute;velopp&eacute;s par le <A
+  HREF="http://www.grame.fr/Research/fr" TARGET="_top">laboratoire
+  de recherche en informatique musicale</A> de <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>, en collaboration avec la soci&eacute;t&eacute;
+  <A HREF="http://www.milprod.com/" TARGET="_blank">Mil-Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

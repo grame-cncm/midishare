@@ -2,7 +2,7 @@
 TARGET = ../macosx-mono/msCommon.o
 OPTIONS = -D__Macintosh__ -D__POWERPC__ -D__MacOSX__
 INC = Headers
-CFLAGS := -O3 -Wall $(OPTIONS) -I$(INC)
+CFLAGS :=  -03 -Wall $(OPTIONS) -I$(INC)
 CC = cc
 
 C = Clients

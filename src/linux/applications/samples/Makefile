@@ -44,5 +44,6 @@ msEcho : msEcho.c
 msClock : msClock.c      
 	gcc   msClock.c -g $(OPTIONS) -I$(INC) -o msClock $(LIB) 
 
+
 clean:
 	rm msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 

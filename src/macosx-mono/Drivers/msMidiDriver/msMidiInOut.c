@@ -23,17 +23,37 @@
 
 #include "msMidiInOut.h"
 #include "lffifo.h"
+#include <mach/mach_time.h>
 
 #define PRINT(x) { printf x; fflush(stdout); }
 #define DBUG(x)    /* PRINT(x) */
 
-
 extern short gRefNum;
-
-// Buffer for sending
 
 static int min(a,b) {return (a<b)?a:b;}
 static void CompletionProc( MIDISysexSendRequest *request );
+
+//____________________________________________________________________________________________________________
+// Timing functions found in /Developer/Examples/CoreAudio/MIDI/SampleUSBDriver/Shared/MIDIDriverUtils.cpp
+
+static bool		sIsInited = false;
+static Float64	sNanoRatio;
+
+//_________________________________________________________
+static void InitHostTime()
+{
+	struct mach_timebase_info info;
+
+	mach_timebase_info(&info);
+	sNanoRatio = (double)info.numer / (double)info.denom;
+	sIsInited = true;
+}
+
+//_________________________________________________________
+MIDITimeStamp MIDIGetCurrentHostTime()
+{
+	return mach_absolute_time();
+}
 
 //_________________________________________________________
 static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
@@ -72,78 +92,73 @@ static void SendSysExAux(SlotPtr slot)
 	slot->request.completionProc = CompletionProc;
 	slot->request.completionRefCon = slot;
 	
-	err = MIDISendSysex( &slot->request);
-        slot->sending = (err == noErr);
+	err = MIDISendSysex(&slot->request);
+	if (err != noErr) fprintf(stderr, "MIDISendSysex : error %ld\n", err);
  }
  
 //_________________________________________________________
-static MidiEvPtr SendSysEx(SlotPtr slot,MidiEvPtr e)
+static void SendSysEx(SlotPtr slot,MidiEvPtr e)
 {
 	slot->remaining = (EvType(e) == typeSysEx) ? (MidiCountFields(e)+2) : MidiCountFields(e);
 	
 	// Write event to be sent
-	e = MidiStreamPutEvent (&slot->outsysex, e);
+	MidiStreamPutEvent (&slot->outsysex, e);
 	SendSysExAux(slot);
-	return e;
 }
 
 //_________________________________________________________
-static MidiEvPtr SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
+void KOffTask (long date, short ref, long a1,long a2,long a3)
+{
+	MidiEvPtr e = (MidiEvPtr)a1;
+	MS2MM (ref, (SlotPtr)a2, e);
+}
+
+//_________________________________________________________
+static void SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 { 
 	MIDIPacketList* pktlist = (MIDIPacketList*)state->packetBuffer;
 	MIDIPacket* packet = MIDIPacketListInit(pktlist);
 	unsigned char * ptr = state->evBuffer;
-	int  n = 0;
+	OSErr err;
+	int n = 0;
   	 
 	e = MidiStreamPutEvent (&state->outsmall, e);
+	if (e) MidiTask (KOffTask, Date(e), gRefNum, (long)e, (long)slot, 0); // typeNote
+	
 	while (MidiStreamGetByte (&state->outsmall, ptr++)) {n++;}
 	
-	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,0,n,state->evBuffer);
-	MIDISend(slot->port,slot->dest,pktlist);
-	
-	return e;
- }
-
-//_________________________________________________________
-static void CompletionProc( MIDISysexSendRequest *request )
-{
-    SlotPtr slot =  (SlotPtr)request->completionRefCon;
-    MidiEvPtr ev;
-    
-    if (slot->remaining == 0){
-        slot->sending = FALSE;
-        
-        while ((ev = (MidiEvPtr)fifoget(&slot->pending))) {
-            // If typeSysEx or typeStream : send one, pending events will be sent by the CompletionProc
-            if ((EvType(ev) == typeSysEx) || (EvType(ev) == typeStream)) {
-                    SendSysEx(slot,ev);
-                    break;
-            // Send all pending small events
-            }else{ 
-                    SendSmallEv(slot,ev,&slot->state2);
-            }
-        }
-         
-    } else {
-        SendSysExAux(slot);
-    }
+	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,MIDIGetCurrentHostTime(),n,state->evBuffer);
+	err = MIDISend(slot->port,slot->dest,pktlist);
+	if (err != noErr) fprintf(stderr, "MIDISend : error %ld\n", err);
 }
+
 
 //________________________________________________________________________________________
- MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e)
+static void CompletionProc(MIDISysexSendRequest *request)
 {
-	if ((EvType(e) >= typeClock) && (EvType(e) <= typeReset)){
-		return SendSmallEv(slot,e,&slot->state1);
-	}else if (slot->sending) {
-		fifoput(&slot->pending,(cell*)e);
-		return 0;
- 	}else  if ((EvType(e) == typeSysEx) || (EvType(e) == typeStream)) {
-		return SendSysEx(slot,e);
-	}else {
-		return SendSmallEv(slot,e,&slot->state1);
+    SlotPtr slot = (SlotPtr)request->completionRefCon;
+	
+	if (slot->remaining > 0){
+		SendSysExAux(slot);
+	}else{
+		SendEvents2(gRefNum);
+	}
+ }
+
+//________________________________________________________________________________________
+bool MS2MM(short refNum, SlotPtr slot, MidiEvPtr e)
+{
+	int type = EvType(e);
+	
+	if ((type == typeSysEx) || (type == typeStream)) {
+		MidiSetRcvAlarm(refNum,0);
+		SendSysEx(slot,e);
+		return false;
+	}else{
+		SendSmallEv(slot,e,&slot->state);
+		return true;
 	}
 }
-
 
 //________________________________________________________________________________________
 void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
@@ -152,10 +167,12 @@ void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
 	MIDIPacket *packet = (MIDIPacket *)pktlist->packet;	
 	int i;
 	DBUG(("ReadProc \n"));
+
 	for (i = 0; i < pktlist->numPackets; ++i) {
 		LMM2MS( slot, packet);
 		packet = MIDIPacketNext(packet);
 	}
-        DBUG(("ReadProc OK\n"));
+	
+	DBUG(("ReadProc OK\n"));
 }
 

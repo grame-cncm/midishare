@@ -46,10 +46,32 @@ typedef struct {
 	WinDriverPtr drivers;
 } WinRsrc, * WinRsrcPtr;
 
+typedef struct {
+    CRITICAL_SECTION cs;
+    int             initialized;
+} TMutex;
+
+static TMutex gMutex[kMutexCount] = { 0 };
 WinRsrc gWinRsrc = { 0 };
 
-MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
-MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
+/*------------------------------------------------------------------------------*/
+void msOpenMutex  (unsigned int mutex) {
+	if (mutex < kMutexCount) {
+       if (!gMutex[mutex].initialized) {
+            InitializeCriticalSection (&gMutex[mutex].cs);
+            gMutex[mutex].initialized = 1;
+        }
+		EnterCriticalSection(&gMutex[mutex].cs);
+    }
+}
+
+/*------------------------------------------------------------------------------*/
+void msCloseMutex (unsigned int mutex) {
+	if (mutex < kMutexCount) {
+		LeaveCriticalSection(&gMutex[mutex].cs);
+    }
+}
+
 /*------------------------------------------------------------------------------*/
 Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {

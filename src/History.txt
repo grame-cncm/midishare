@@ -4,31 +4,30 @@ Versions:
 v 1.72      : new MidiShare kernel first release
 v 1.80      : kernel with drivers management
 v 1.81      : bug in MSClearSeq corrected
-		      internal changes in drivers management
+		    internal changes in drivers management
 v 1.82      : bug in MSSend corrected
-			  internal change in slot infos management
-			  Macintosh release : obsolete function MidiGetPortState returns true
+			internal change in slot infos management
+			Macintosh release : obsolete function MidiGetPortState returns true
 v 1.83      : Linux release : bug in differed task management corrected
 v 1.84      : Macintosh release : filters functions entry points added
-		 	                      don't bring launched driver applications to front 
+			don't bring launched driver applications to front 
 v 1.85 	    : PortPrefix MIDIFile event added
 v 1.86 	    : minor bug in MidiClose corrected (memory not released)
-			  Linux release : signals are not patched any more, exceptions are now
-			                  handled using device close function.
-			  Windows release : search midishare.ini file first in application 
-			                    directory then when not found, in windows directory
-v 1.87 	    : MacOSX release: framework version
-                              extends time management to timer mode
-							  comments supported in conf. files
-v 1.88 	    : open close guarded by a critical section (macosx and windows only)
+			Linux release : signals are not patched any more, exceptions are now
+			handled using device close function.
+			Windows release : search midishare.ini file first in application 
+			directory then when not found, in windows directory
+v 1.87      : MacOSX release: framework version
+			extends time management to timer mode
+			comments supported in conf. files			          
 
 
 Tags :
 ------------------------
-26/07/2001  V186      : Release 1.86 for all platforms
-26/06/2001  dev       : Created a 'dev' tag for all platforms
-26/06/2001  V185      : Release 1.85 for all platforms
-23/05/2001  linux_22x : For linux kernels 2.2.x
-25/04/2001  V184      : Release 1.84 for all platforms
-10/04/2000  V181M     : Macintosh release 1.81
-28/01/2000  ALSA040   : Linux version with Midi drivers built using ALSA 0.4
+23/02/2004  V187M	: Macintosh release 1.87
+26/06/2001  dev		: Created a 'dev' tag for all platforms
+26/06/2001  V185	: Release 1.85 for all platforms
+23/05/2001  linux_22x	: For linux kernels 2.2.x
+25/04/2001  V184	: Release 1.84 for all platforms
+10/04/2000  V181M	: Macintosh release 1.81
+28/01/2000  ALSA040	: Linux version with Midi drivers built using ALSA 0.4

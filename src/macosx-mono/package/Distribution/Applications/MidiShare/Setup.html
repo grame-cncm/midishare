@@ -1,0 +1,127 @@
+<HTML>  
+<HEAD>
+  <TITLE>MidiShare Ports Setup</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#1822cd" SIZE="+4" FACE="Arial"><BR>
+MidiShare Ports Setup <BR>
+<IMG SRC="Images/msPS5.gif" ALIGN="BOTTOM" BORDER="0"></FONT></CENTER></H1>
+
+<P><FONT FACE="Arial"><HR ALIGN=LEFT></FONT></P>
+
+<H3><FONT FACE="Arial">Drivers</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Since MidiShare 1.80, the drivers are separate
+  components. They can be dynamically loaded and unloaded, as any
+  other MidiShare client application. On MacOSX, the drivers are
+  provided as shared libraries. Available drivers are mentionned
+  in the 'midishare.ini' file.</FONT></P>
+  <UL>
+    <LI><U><FONT FACE="Arial">Activating a driver</FONT></U><FONT
+     FACE="Arial">:  opens the  'midishare.ini' file, go to the [Drivers]
+    section and move the driver name to the 'active' line. Save the
+    file as text only. </FONT>
+    <LI><U><FONT FACE="Arial">Disabling a driver</FONT></U><FONT
+     FACE="Arial">: opens the  'midishare.ini' file, go to the [Drivers]
+    section and move the driver name from  the 'active' line to the
+    'disable' line. Save the file as text only. </FONT>
+  </UL>
+</BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Slots and port connections</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Each driver is declaring input and output
+  slots, corresponding to the supported input and output ports.
+  For example, the Quicktime driver declare a single output slot
+  named 'Quicktime GM Synth'.</FONT></P>
+  <P><FONT FACE="Arial">To send or receive from the drivers, an
+  application should be connected to MidiShare. Routing the events
+  stream to the slots is done using connections which operates
+  like inter-application connections :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">a MidiShare port can be connected to one
+    or several slots: every event sent to MidiShare on this port
+    will generate a MIDI message on the corresponding slots.</FONT>
+    <LI><FONT FACE="Arial">a slot can be connected to one or several
+    MidiShare ports: every MIDI message received on this slot will
+    generate incoming MidiShare events on the corresponding ports.</FONT>
+  </UL>
+</BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">The Drivers Manager <IMG SRC="Images/msPS1.gif"
+ALIGN="MIDDLE" BORDER="0"></FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The Drivers Manager is a MidiShare client
+  application used to setup the connections between MidiShare ports
+  and driver slots.</FONT></P>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="Images/msPS2.gif" ALIGN="BOTTOM"
+  BORDER="0"></FONT></CENTER></P>
+  <P><FONT FACE="Arial">The user interface is similar to msConnect
+  : on the left are the input slots, on the right the output slots
+  and on the middle, a 16 X 16 matrix which represents the 256
+  MidiShare ports. Ports outlined in blue color are busy ports
+  (ie ports which are connected to at least one slot), the others
+  are free ports (ie ports which are not connected to any slot).</FONT></P>
+  <P><B><FONT FACE="Arial">The information zone </FONT></B><FONT
+   FACE="Arial">dynamically indicates the following:</FONT></P></BLOCKQUOTE>
+
+<UL>
+  <UL>
+    <LI><FONT FACE="Arial">when the mouse pointer is over a slot:
+    the name of the owner driver</FONT>
+    <LI><FONT FACE="Arial">when the mouse pointer is over a port:
+    the corresponding port number</FONT>
+  </UL>
+</UL>
+
+<H4><FONT FACE="Arial">Making or breaking a connection</FONT></H4>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">First click on the ports matrix to select
+  a target port: the selected port become red and you enter into
+  editing mode : the window is framed in red, the slots currently
+  connected to the selected port are highlighted and you can select
+  or deselect a slot in the output or input list. To leave the
+  editing mode, click again on the selected port.</FONT></P>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="Images/msPS3.gif" ALIGN="BOTTOM"
+  BORDER="0"></FONT></CENTER></P></BLOCKQUOTE>
+
+<H4><FONT FACE="Arial">Information mode</FONT></H4>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Outside the editing mode, you can select
+  a slot to see all its connections in one glance. The connected
+  ports are then displayed in green. To change a connection, you
+  should first return in editing mode.</FONT></P>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="Images/msPS4.gif" ALIGN="BOTTOM"
+  BORDER="0"></FONT></CENTER></P></BLOCKQUOTE>
+  
+<H4><FONT FACE="Arial">WARNING, WARNING !! : limitations and special considerations for mono-application release </FONT></H4>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">With a mono-application release : 
+<UL>
+<LI> different MidiShare clients won't be able to communicate unless they run in the same address space (ie they belong to the same process) but <B>will be able to share the MIDI drivers and thus access the input output devices at the same time. </B> 
+<LI> since there is no global state shared by all MidiShare clients, a change done in port/slot connections with the Drivers Manager <B> willl not be reflected immediately </B> for other running MidiShare clients. The driver manager has to be closed so that the it's new state is saved in the .ini file, and clients will have to be<B> quitted and relaunched to see the new state.</B>
+
+</FONT></P>
+</P></BLOCKQUOTE>
+
+
+<P><FONT FACE="Arial">To get more information about MidiShare
+please go to the <A HREF="http://www.grame.fr/MidiShare">MidiShare
+Web pages.</A></FONT></P>
+
+<P><FONT FACE="Arial"><HR ALIGN=LEFT></FONT></P>
+
+<P><B><FONT FACE="Arial">Grame - <A HREF="http://www.grame.fr/Research">Computer
+Music Research Lab</A>. <BR>
+</FONT></B><FONT SIZE="-1" FACE="Arial">9, rue du Garet, BP 1185,
+69202 LYON Cedex 01, FRANCE</FONT>
+
+</BODY>
+</HTML>

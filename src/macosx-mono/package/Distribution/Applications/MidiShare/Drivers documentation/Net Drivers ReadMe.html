@@ -1,0 +1,67 @@
+<HTML>  
+<HEAD>
+  <TITLE>MidiShare Internet Drivers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P>&nbsp;</P>
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial"><IMG SRC="doc/images/icon.LAN.jpg"
+ALIGN="MIDDLE" BORDER="0"> MidiShare Internet Drivers <IMG SRC="doc/images/icon.WAN.jpg"
+ALIGN="MIDDLE" BORDER="0"></FONT></CENTER></H1>
+
+<P><CENTER><A HREF="doc/fr/INetDrivers.html"><FONT FACE="Arial"><IMG 
+SRC="doc/images/fr.GIF" ALIGN="MIDDLE" BORDER="0"></FONT><FONT
+ SIZE="-1" FACE="Arial">version fran&ccedil;aise</FONT></A></CENTER></P>
+
+<P><CENTER><HR></CENTER></P>
+
+<P><FONT FACE="Arial">The MidiShare Internet Drivers provides
+real-time communication over Internet to MidiShare client applications.
+<BR>
+These drivers are two separate shared libraries :</FONT></P>
+
+<UL>
+  <LI><A HREF="doc/msLAN.html"><FONT FACE="Arial">msLANDriver.dylib</FONT></A><FONT
+   FACE="Arial"> : provides low latency real-time communication
+  restricted to local array networks. It includes automatic recognition
+  of remote hosts.</FONT>
+  <LI><A HREF="doc/msWAN.html"><FONT FACE="Arial">msWANDriver.dylib</FONT></A><FONT
+   FACE="Arial"> : provides real-time communication over Internet.
+  Remote host connection is controlled by the user using an .ini
+  file.</FONT>
+</UL>
+
+<P><FONT FACE="Arial">Both drivers have the following common characteristics:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">remote hosts appears as MidiShare slots.
+  To setup connections to these slots, uses the 'msDrivers' application.</FONT>
+  <LI><FONT FACE="Arial">as remote clients provides a unique identifier
+  with their IP address, their connections state is saved and automatically
+  restored using this identifier.</FONT>
+  <LI><FONT FACE="Arial">their behavior is controlled by a .ini
+  file (msLANDriver.ini and msWANDriver.ini). These files should
+  be located in your $HOME/MidiShare folder. When not found, default
+  values are used for the parameters (see each driver page).</FONT>
+</UL>
+
+<P><FONT FACE="Arial">The MidiShare WAN driver is the base of
+the <A HREF="http://radio-hd.grame.fr/radio-hd" TARGET="_blank">Radio
+Hard Disk project</A> which notably consists in a permanent music
+broadcasting over Internet.</FONT></P>
+
+<P><FONT FACE="Arial"><HR ALIGN=LEFT></FONT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare Internet Drivers are part
+  of the <A HREF="http://www.grame.fr/MidiShare" TARGET="_top">MidiShare</A>
+  project. They have been developed by the <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>'s <A HREF="http://www.grame.fr/Research"
+  TARGET="_top">Computer Music Research Laboratory</A>, in collaboration
+  with the company <A HREF="http://www.milprod.com/" TARGET="_blank">Mil
+  Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

@@ -39,7 +39,7 @@
 
 Boolean doneFlag = false;
 #define kGroupTime	10
-#define kVersion	"1.11"
+#define kVersion	"1.13"
 
 NetConfig gNet = { -1, -1, -1 };
 int clientsIndex, clientsCount = 0;
@@ -169,6 +169,8 @@ static void run (pthread_t thread, NetConfig *net)
 	const char * space = "                    ";
 
  	sprintf (msg, "%s MidiShare Internet driver v. %s is running", dateString(), kVersion);
+	log (msg);
+ 	sprintf (msg, "%sBasic scan detection active and redirected to stderr", space);
 	log (msg);
 	if (serverMode) {
 		sprintf (msg, "%sTCP server mode on: %d clients allowed", space, (int)maxClients);

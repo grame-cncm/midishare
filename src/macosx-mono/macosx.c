@@ -27,24 +27,22 @@
 #include "msMem.h"
 #include "msTasks.h"
 #include "msPrefs.h"
+#include "msTimeImpl.h"
 
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "dlfcn.h"
+#include <dlfcn.h>
+#include <pthread.h>
 
-#include "portaudio.h"
+#ifdef __msBench__
+#include "benchs.h"
+#endif
 
 /*------------------------------------------------------------------------------*/
-/* MacOSX specific resources          											*/
-
-#define SAMPLE_RATE 44100
-#define AUDIO_MS_INT (SAMPLE_RATE/100)
-
-#define AUDIO_DEVICE "Built-in audio controller"
-
+/* MacOSX specific resources          						*/
 typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
 
 struct MacOSXDriver {
@@ -52,14 +50,37 @@ struct MacOSXDriver {
 	void*		handle;
 };
 
+typedef struct {
+    pthread_mutex_t mutex;
+    int             initialized;
+} TMutex;
+
+static TMutex gMutex[kMutexCount] = { 0 };
 static MacOSXDriverPtr gMacOSXDriver = { 0 };
-static PortAudioStream * gStream;
-static long gFrames = 0;
-static long gAudioSize = 0; // 10 * real size
+static unsigned long   gTimeMode = 0;
+
+/*------------------------------------------------------------------------------*/
+void msOpenMutex  (unsigned int mutex)
+{
+    if (mutex < kMutexCount) {
+        if (!gMutex[mutex].initialized) {
+            pthread_mutex_init (&gMutex[mutex].mutex, 0);
+            gMutex[mutex].initialized = 1;
+        }
+        pthread_mutex_lock (&gMutex[mutex].mutex);
+    }
+}
+
+/*------------------------------------------------------------------------------*/
+void msCloseMutex (unsigned int mutex)
+{
+    if (mutex < kMutexCount) {
+        if (gMutex[mutex].initialized)
+            pthread_mutex_unlock (&gMutex[mutex].mutex);
+	}
+}
 
 
-MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
-MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
 /*------------------------------------------------------------------------------*/
 Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {
@@ -68,7 +89,7 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 }
 
 /*------------------------------------------------------------------------------*/
-/*                      Drivers loading                     					*/
+/*                      Drivers loading                     			*/
 /*------------------------------------------------------------------------------*/
 
 typedef Boolean (* Start) ();
@@ -84,75 +105,73 @@ void CheckInstall()
 }
 
 /*------------------------------------------------------------------------------*/
-void *  LoadLibrary( const char *filename, const char *symbol)
+void *  LoadLibrary(const char *filename, const char *symbol)
 {
-	void * handle = dlopen(filename,RTLD_LAZY);
+	void * handle = dlopen(filename, RTLD_LAZY);
 	Start fun ;
 	Boolean res;
-	
-	if (handle && (fun = (Start) dlsym(handle,symbol)) && (res = (*fun)())) {
-		return handle;
-	}else {
-		Report("MidiShare", "can't load driver",filename);
-		if (handle) dlclose(handle);
-		return 0;
+        
+        if (!handle) { 
+            Report("MidiShare", "can't load driver", filename);
+        }else if ((fun = (Start)dlsym(handle,symbol)) && (res = (*fun)())){
+            return handle;
+        }else {
+            Report("MidiShare", "can't start driver", filename);
+            if (handle) dlclose(handle);
 	}
+	return 0;
 }
 
 /*------------------------------------------------------------------------------*/
-
 void FreeLibrary(void * handle, const char *symbol)
 { 
 	Stop fun;
-	if (fun = (Stop) dlsym(handle,symbol)) (*fun)(); 
+	if (fun = (Stop)dlsym(handle, symbol)) (*fun)(); 
 	dlclose(handle);
 }
-
 
 /*------------------------------------------------------------------------------*/
 /*                      initializations : wakeup & sleep                        */
 /*------------------------------------------------------------------------------*/
-static Boolean LoadDriver (char *drvName) 
+static Boolean LoadDriver(char *drvName) 
 {
-	   MacOSXDriverPtr mem = (MacOSXDriverPtr)AllocateMemory (kStdMemory, sizeof(MacOSXDriver));
+		MacOSXDriverPtr mem = (MacOSXDriverPtr)AllocateMemory(kStdMemory, sizeof(MacOSXDriver));
         if (!mem) return false;
         
         mem->next = gMacOSXDriver;
-        mem->handle = LoadLibrary (drvName,"_Start");
+        mem->handle = LoadLibrary(drvName,"_Start");
         
         if (mem->handle) {
             gMacOSXDriver = mem;
         }else {
-            DisposeMemory (mem);
+            DisposeMemory(mem);
             return false;
         }
-      
         return true;
 }
 
 /*------------------------------------------------------------------------------*/
-void SpecialWakeUp (TMSGlobalPtr g) 
+void SpecialWakeUp(TMSGlobalPtr g) 
 {
        unsigned short i, n;
        char str[256];
        
        CheckInstall();
 
-	   n = CountDrivers ();
+       n = CountDrivers();
        for (i=0; i<n; i++) {
-           if (GetDriver (i, str, 256))  LoadDriver (str);
+           if (GetDriver(i, str, 256)) LoadDriver(str);
        }
 }
 
-
 /*------------------------------------------------------------------------------*/
-void SpecialSleep  (TMSGlobalPtr g)
+void SpecialSleep(TMSGlobalPtr g)
 {
         MacOSXDriverPtr next, drv = gMacOSXDriver;
         gMacOSXDriver = 0;
         while (drv) {
                 next = drv->next;
-                FreeLibrary (drv->handle,"_Stop");
+				FreeLibrary (drv->handle,"_Stop");
                 DisposeMemory (drv);
                 drv = next;
         }
@@ -161,37 +180,37 @@ void SpecialSleep  (TMSGlobalPtr g)
 /*------------------------------------------------------------------------------*/
 /*                   client applications context and tasks                      */
 /*------------------------------------------------------------------------------*/
-TApplContextPtr CreateApplContext ()     { return 0; }
-void  DisposeApplContext (TApplContextPtr context)    { }
+TApplContextPtr CreateApplContext ()  {return 0;}
+void  DisposeApplContext (TApplContextPtr context)  {}
 
 /*_________________________________________________________________________*/
-void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode)
+void CallApplAlarm(TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {
      (*alarm) (refNum, alarmCode);     /* real alarm call */
 }
 
 /*_________________________________________________________________________*/
-void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
+void CallRcvAlarm(TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 {
     (*alarm) (refNum);                /* real alarm call */
- }
+}
 
 /*_________________________________________________________________________*/
-void CallTaskCode  (TApplContextPtr context, MidiEvPtr e)
+void CallTaskCode(TApplContextPtr context, MidiEvPtr e)
 {
     TTaskExtPtr task = (TTaskExtPtr)LinkST(e);      /* event extension */
     (*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 }
 
 /*_________________________________________________________________________*/
-void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
+void CallDTaskCode(TApplContextPtr context, MidiEvPtr e)
 {
         TTaskExtPtr task = (TTaskExtPtr)LinkST(e);      /* event extension */
         (*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 }
 
 /*_________________________________________________________________________*/
-void DriverWakeUp (TApplPtr appl) 
+void DriverWakeUp(TApplPtr appl) 
 {
         WakeupPtr wakeup = Wakeup(appl);
         if (wakeup) {
@@ -200,7 +219,7 @@ void DriverWakeUp (TApplPtr appl)
 }
 
 /*_________________________________________________________________________*/
-void DriverSleep (TApplPtr appl)
+void DriverSleep(TApplPtr appl)
 {
         SleepPtr sleep = Sleep(appl);
         if (sleep) {
@@ -208,95 +227,53 @@ void DriverSleep (TApplPtr appl)
         }
 }
 
-/*__________________________________________________________________________*/
-/*      Interrupt handlers                                                                                                              */
-/*__________________________________________________________________________*/
-
-static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
-                             unsigned long framesPerBuffer,
-                             PaTimestamp outTime, void *userData )
-{
- 	gFrames += gAudioSize;
- 	
-	while (gFrames>=AUDIO_MS_INT) {
-		ClockHandler((TMSGlobalPtr)userData);
-		gFrames-=AUDIO_MS_INT;
-	}
-	
- 	return 0; 
-}
-
-
 /*_________________________________________________________________________*/
-void OpenTimeInterrupts(TMSGlobalPtr g)
+Boolean ForgetTaskSync(MidiEvPtr * taskPtr, MidiEvPtr content)
 {
-	PaError err;
-	const PaDeviceInfo* info;
-	int device;
-    err = Pa_Initialize();
-  	if( err != paNoError ) goto error_recovery;
-  	
-  	// Load audio sizr from the .ini file
-  	gAudioSize = LoadBufferSize()*10;
-  	
-  	// Look for the internal built-in sound device
-  	for (device= 0 ; device<Pa_CountDevices();device++) {
-  		info = Pa_GetDeviceInfo(device);
-  		if (strcmp (AUDIO_DEVICE,info->name) == 0) break;
-  	}
-  
-	// Open Audio stream
-    err = Pa_OpenStream(
-				&gStream,
-				paNoDevice,		/* default input device */
-				0,         		/* no input */
-				paFloat32, 	
-				NULL,
-				device, 			
-				2,       		/* stereo output */
-				paFloat32,     
-				NULL,
-				SAMPLE_RATE,
-				gAudioSize/10,  /* frames per buffer */
-				0,              /* number of buffers, if zero then use default minimum */
-				paClipOff,      /* we won't output out of range samples so don't bother clipping them */
-				AudioClockHandler,
-				g );
- 
-	 if( err != paNoError ) goto error_recovery;
-	 err = Pa_StartStream( gStream );
-	 if( err != paNoError ) goto error_recovery;
-	 return;
-	 
-error_recovery:
-	 Report("MidiShare", "cannot open audio timer","");
-	 CloseTimeInterrupts(g);
+    if (*taskPtr == content) {
+        EvType(content) = typeDead;
+        *taskPtr = 0;
+        return true;
+    }
+    return false; 
+    // return CompareAndSwap (taskPtr, content, 0);
 }
-
-/*_________________________________________________________________________*/
-void CloseTimeInterrupts(TMSGlobalPtr g)
-{
-	if(gStream) Pa_CloseStream(gStream);
-	Pa_Terminate();
-}
-
-
-/*_________________________________________________________________________*/
-Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false; 
-	// return CompareAndSwap (taskPtr, content, 0);
-}
-
 
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory (MemoryType type, unsigned long size){ return (void*)malloc(size);}
-void DisposeMemory  (FarPtr(void) memPtr) {if (memPtr) free(memPtr);}
+FarPtr(void) AllocateMemory(MemoryType type, unsigned long size) {return (void*)malloc(size);}
+void DisposeMemory(FarPtr(void) memPtr) {if (memPtr) free(memPtr);}
 
+/*_________________________________________________________________________*/
+/* time task                                                               */
+/*_________________________________________________________________________*/
+void OpenTimeInterrupts (TMSGlobalPtr g)
+{
+#ifdef __msBench__
+    Report("MidiShare", "time accuracy bench will run","");
+	bench_reset();
+#endif
+	gTimeMode = LoadTimeMode();
+	switch (gTimeMode) {
+		case kAudioTime:
+			OpenAudioTime (g);
+			break;
+		default:
+			OpenTimer (g);
+	}
+}
+
+void CloseTimeInterrupts(TMSGlobalPtr g)
+{
+	switch (gTimeMode) {
+		case kAudioTime:
+			CloseAudioTime (g);
+			break;
+		default:
+			CloseTimer (g);
+	}
+#ifdef __msBench__
+	print_bench();
+#endif
+}

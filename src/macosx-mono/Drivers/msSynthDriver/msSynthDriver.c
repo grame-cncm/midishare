@@ -74,14 +74,14 @@ static Boolean open_iiwusynth ()
 	data->synth = new_iiwu_synth(&settings);
         if (data->synth == NULL) goto error;
         
-        /* configure log functions */
-	iiwu_set_log_function(PANIC, my_log_function);
-        iiwu_set_log_function(ERR, my_log_function);
-  	iiwu_set_log_function(WARN, my_log_function);
-  	iiwu_set_log_function(DBG, my_log_function);
+    /* configure log functions */
+	//iiwu_set_log_function(PANIC, my_log_function);
+    //iiwu_set_log_function(ERR, my_log_function);
+  	//iiwu_set_log_function(WARN, my_log_function);
+  	//iiwu_set_log_function(DBG, my_log_function);
          
-        /* load the soundfound */
-        if (iiwu_synth_sfload(data->synth, GetProfileFullName(data->soundfont)) != 0) goto error;
+    /* load the soundfound */
+    if (iiwu_synth_sfload(data->synth, GetProfileFullName(data->soundfont)) != 0) goto error;
          
     	/* start the midi handler and link it to the synth */
 	data->midi = new_iiwu_midi_handler(data->synth, midi_driver, midi_device,midi_id);

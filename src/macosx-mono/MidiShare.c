@@ -53,7 +53,7 @@ void __MSInitialize() {
 	MSSpecialInit (LoadSpace(), gMem); 
 }
 
-#pragma CALL_ON_MODULE_BIND __MSInitialize 
+#pragma CALL_ON_LOAD __MSInitialize 
 
 
 /*--------------------------- Global MidiShare environment --------------------*/

@@ -81,7 +81,7 @@ TMidiRemote::TMidiRemote (UPDParamsPtr udp, RemoteCtrlParams * rp, short refNum)
 	else {
 		fSkew = 0;
 		fLocked = true;
-		fCtrlTask->_Schedule (this, kOpenRemoteTask);
+		fCtrlTask->_Schedule (MidiGetTime(), this, kOpenRemoteTask);
 	}
 }
 

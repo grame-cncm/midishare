@@ -1,0 +1,87 @@
+<HTML>  
+<HEAD>
+  <TITLE>MidiShare LAN Driver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial">MidiShare LAN Driver
+for Mac OSX</FONT></CENTER></H1>
+
+<P><FONT FACE="Arial">The MidiShare LAN Driver provides low latency
+real-time network communication to MidiShare client applications.
+<BR>
+This communication is restricted to a local array network. Optimized
+transmission assumes that the network is mainly dedicated to musical
+transmission.</FONT></P>
+
+<P><FONT FACE="Arial">The MidiShare LAN Driver is sleeping as
+long as no other MidiShare client application is running. While
+in sleeping state, the station won't be visible by other stations
+on the network. The driver wakes up when the first MidiShare client
+application starts.</FONT></P>
+
+<P><FONT FACE="Arial">At wake up time, the driver automatically
+recognizes remote hosts on the network (provided that their drivers
+are not in sleeping state). These hosts will appear as MidiShare
+slots.</FONT></P>
+
+<H3><FONT FACE="Arial">Real-time transmission mechanisms :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Real-time transmission of the MidiShare
+  events stream relies on 2 mechanisms :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">a grouping period : the period during
+    which events are accumulated before being transmitted on the
+    network. It is intended to optimize network transmissions.This
+    parameter controls the transmission behavior.</FONT>
+    <LI><FONT FACE="Arial">a maximum latency : represents the maximum
+    transmission time (from sender to receiver) allowed to ensure
+    a correct time rendering of the transmitted events. It is intended
+    to compensate for the network latency and the transmission time
+    variations. This parameter controls the receiver behavior.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The total delay introduced by the network
+  transmission is equal to the grouping period + the maximum transmission
+  delay.</FONT></P>
+  <P><FONT FACE="Arial">These parameters can be adjusted using
+  the msLANDriver.ini file.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Initialization file 'msLANDriver.ini' :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The Net Params section :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">UDP port : represents the udp port number.
+    Default value is 4950</FONT>
+    <LI><FONT FACE="Arial">Grouping time : represents the grouping
+    period (see above). Default value is 10 mls.</FONT>
+    <LI><FONT FACE="Arial">Maximum latency allowed : (see above).
+    Default value is 10 mls.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The 'Hosts input connections' section :
+<BR>
+  written by the driver, this section contains IP numbers followed
+  by a list of ports numbers representing input ports connections.
+  When the corresponding host appears, these connections are restored
+  by the driver. Uses the msDriver application to modify the connections
+  state.</FONT></P>
+  <P><FONT FACE="Arial">The 'Hosts output connections' section
+  : <BR>
+  written by the driver, this section contains IP numbers followed
+  by a list of ports numbers representing output ports connections
+  (see Hosts input connections).</FONT></P></BLOCKQUOTE>
+
+<P><HR ALIGN=LEFT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare LAN Drivers is part of the
+  <A HREF="http://www.grame.fr/MidiShare" TARGET="_top">MidiShare</A>
+  project. It has been developped by the <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>'s <A HREF="http://www.grame.fr/Research"
+  TARGET="_top">Computer Music Research Laboratory</A>, in collaboration
+  with the company <A HREF="http://www.milprod.com/" TARGET="_blank">Mil-Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,255 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		4BB494EF054EB73400053105 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreAudio.framework;
+			path = /System/Library/Frameworks/CoreAudio.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4BB494F0054EB73400053105 = {
+			fileRef = 4BB494EF054EB73400053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BB494F1054EB74800053105 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = AudioToolbox.framework;
+			path = /System/Library/Frameworks/AudioToolbox.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4BB494F2054EB74800053105 = {
+			fileRef = 4BB494F1054EB74800053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5240F2202080A2301053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = profport.c;
+			path = ../../../lib/profport.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5240F2302080A2301053105 = {
+			fileRef = F5240F2202080A2301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54622F401FC5D7801053105 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				F54622F601FC5D7801053105,
+				F54622F701FC5D7801053105,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = F54622F501FC5D7801053105;
+			productRefGroup = F547CC8101FC5DCC01053105;
+			projectDirPath = "";
+			targets = (
+				F547CC8301FC5DCC01053105,
+			);
+		};
+		F54622F501FC5D7801053105 = {
+			children = (
+				F54A7D7001FC5E5201053105,
+				F5240F2202080A2301053105,
+				F58CAEEC020ADFC101053105,
+				F58CAEED020ADFC101053105,
+				F547CC8101FC5DCC01053105,
+				4BB494EF054EB73400053105,
+				4BB494F1054EB74800053105,
+			);
+			isa = PBXGroup;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F54622F601FC5D7801053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F54622F701FC5D7801053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F547CC8101FC5DCC01053105 = {
+			children = (
+				F54A7D7201FC623E01053105,
+				F547CC8201FC5DCC01053105,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F547CC8201FC5DCC01053105 = {
+			explicitFileType = "compiled.mach-o.dylib";
+			fallbackIsa = PBXFileReference;
+			isa = PBXLibraryReference;
+			path = msSynthDriver.1.0.2.so;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F547CC8301FC5DCC01053105 = {
+			buildPhases = (
+				F547CC8401FC5DCC01053105,
+				F547CC8501FC5DCC01053105,
+				F547CC8601FC5DCC01053105,
+				F547CC8701FC5DCC01053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-framework MidiShare ./libiiwusynth.a ./PortAudioLib";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msSynthDriver.1.0.2.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = msSynthDriver;
+			productInstallPath = /usr/local/lib;
+			productName = msSynthDriver;
+			productReference = F547CC8201FC5DCC01053105;
+		};
+		F547CC8401FC5DCC01053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F58CAEEE020ADFC101053105,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F547CC8501FC5DCC01053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F54A7D7101FC5E5201053105,
+				F5240F2302080A2301053105,
+				F58CAEEF020ADFC101053105,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F547CC8601FC5DCC01053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BB494F0054EB73400053105,
+				4BB494F2054EB74800053105,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F547CC8701FC5DCC01053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54A7D7001FC5E5201053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msSynthDriver.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F54A7D7101FC5E5201053105 = {
+			fileRef = F54A7D7001FC5E5201053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54A7D7201FC623E01053105 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreAudio.framework;
+			path = /System/Library/Frameworks/CoreAudio.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F58CAEEC020ADFC101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F58CAEED020ADFC101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F58CAEEE020ADFC101053105 = {
+			fileRef = F58CAEED020ADFC101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEEF020ADFC101053105 = {
+			fileRef = F58CAEEC020ADFC101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = F54622F401FC5D7801053105;
+}

@@ -170,7 +170,7 @@ static void SetUpWindows()
 		if (ReadPos (profileName, &p)) MoveWindow (myWindow, p.h, p.v, false);
 		AdjustLocation (myWindow);
 		ShowWindow (myWindow);
-		chgDriver 	= true;
+		chgDriver = true;
 	}
 }
 
@@ -413,7 +413,8 @@ static void ResizeWind (Point where)
 		LSize (110, bottom - 41, theList[i]);
 		LSetDrawingMode (true, theList[i]);
 	}
-	InvalWindowRect (myWindow, &portRect);
+        InvalWindowRect (myWindow, &portRect);
+        chgDriver = true;
 }
 
 /* -----------------------------------------------------------------------------*/

@@ -1,0 +1,5 @@
+RadioHardDisk versions
+
+1.1 
+1.2 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
+

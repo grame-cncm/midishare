@@ -3,15 +3,39 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
+		4B97CB90050CC76F00053105 = {
+			isa = PBXFrameworkReference;
+			name = MidiShare.framework;
+			path = /System/Library/Frameworks/MidiShare.framework;
+			refType = 0;
+		};
+		4B97CB91050CC76F00053105 = {
+			fileRef = 4B97CB90050CC76F00053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//F50
+//F51
+//F52
+//F53
+//F54
 		F58CAEF0020ADFE701053105 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = msDriverState.c;
 			path = ../lib/msDriverState.c;
 			refType = 2;
 		};
 		F58CAEF1020ADFE701053105 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = msDriverState.h;
 			path = ../lib/msDriverState.h;
@@ -30,6 +54,7 @@
 			};
 		};
 		F58CAEF4020AE0C701053105 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = profport.c;
 			path = ../../../lib/profport.c;
@@ -46,6 +71,7 @@
 				F5EFF92A01FDE04F01053105,
 				F5EFF92B01FDE04F01053105,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F5EFF92901FDE04F01053105;
 			productRefGroup = F5EFF92C01FDE09501053105;
@@ -62,6 +88,7 @@
 				F58CAEF1020ADFE701053105,
 				F5EFF92C01FDE09501053105,
 				F58CAEF4020AE0C701053105,
+				4B97CB90050CC76F00053105,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -107,10 +134,11 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-lPitchTracker -lMidiShare -lc";
+				OTHER_LDFLAGS = "-lPitchTracker -flat_namespace ";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -126,7 +154,6 @@
 			productInstallPath = /usr/local/lib;
 			productName = msPTDriver;
 			productReference = F5EFF92D01FDE09501053105;
-			shouldUseHeadermap = 0;
 		};
 		F5EFF92F01FDE09501053105 = {
 			buildActionMask = 2147483647;
@@ -135,7 +162,7 @@
 				F58CAEF2020ADFE701053105,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF93001FDE09501053105 = {
 			buildActionMask = 2147483647;
@@ -145,28 +172,31 @@
 				F58CAEF5020AE0C701053105,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF93101FDE09501053105 = {
 			buildActionMask = 2147483647;
 			files = (
+				4B97CB91050CC76F00053105,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF93201FDE09501053105 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF93301FDE0DA01053105 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msPTDriver.c;
 			refType = 4;
 		};
 		F5EFF93401FDE0FF01053105 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msPTDriver.h;
 			refType = 4;
