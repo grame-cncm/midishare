@@ -53,6 +53,7 @@ typedef struct {
 	pitchtrackerPtr 	pitchTracker;
 	PortAudioStream *	stream;
 	Boolean	*			autoQuit;
+	Boolean	*			sflag;
 	Boolean             connected;
 	long*				tune;
 	long*				buffers;
@@ -64,6 +65,8 @@ typedef struct {
 	long*				fftsize;
 	long*				dynamic;
 	long 				old_bendlength;
+	long				old_vol;  // valeur du dernier volume envoyŽ
+	long				old_bend; // valeur du dernier bend envoyŽ
 	short	   		 	monoTable [BUFFER_SIZE];
 } DriverData, * DriverDataPtr;
 
@@ -75,7 +78,6 @@ typedef struct {
 
 DriverData gData;
 static inline DriverDataPtr GetData ()	{ return &gData; }
-static void AudioWakeUp ();
 static void AudioSleep (); 
 static void AudioStart ();
 
@@ -142,7 +144,7 @@ static MidiEvPtr BendSensitivity( short val )
             Chan(e) = 0;        
             Port(e) = 0;
             MidiSetField(e,0,0);    
-            MidiSetField(e,1,val>>7);
+            MidiSetField(e,1,val<<7);
     }
     return e;
 }
@@ -164,22 +166,33 @@ static int inputCallback(void *inputBuffer, void *outputBuffer,
 		for ( i = 0; i< framesPerBuffer; i++) data->monoTable[i] = in[2*i];
 	
 		// Update parameters
-		setFieldPitch(data->pitchTracker,NB_NOTE,*data->buffers);
-		setFieldPitch(data->pitchTracker,TUNE,*data->tune);
-		setFieldPitch(data->pitchTracker,TRESH_MAX,*data->noisein);
-		setFieldPitch(data->pitchTracker,TRESH_MIN,*data->noiseout);
-		setFieldPitch(data->pitchTracker,LENGTH_BEND,*data->bendlength);
-		setFieldPitch(data->pitchTracker,VOLUME,*data->dynamic);
-		setFieldPitch(data->pitchTracker,SIZE_FFT,*data->fftsize);
-	
+		if (*data->sflag) {
+			*data->sflag = false;
+			setFieldPitch(data->pitchTracker,NB_NOTE,*data->buffers);
+			setFieldPitch(data->pitchTracker,TUNE,*data->tune);
+			setFieldPitch(data->pitchTracker,TRESH_IN,*data->noisein);
+			setFieldPitch(data->pitchTracker,TRESH_OUT,*data->noiseout);
+			setFieldPitch(data->pitchTracker,LENGTH_BEND,*data->bendlength);
+			setFieldPitch(data->pitchTracker,VOLUME,*data->dynamic);
+			setFieldPitch(data->pitchTracker,SIZE_FFT,*data->fftsize);
+			resetPitch(data->pitchTracker);
+		}
+		
 		res = loadPitch(data->pitchTracker, data->monoTable);
 		
 		if (res.isEv == 1)
 		{
 	        if (res.Off != 0) MidiSendIm(data->refNum,KeyOn(res.Off,0));
 	        if (res.On != 0) MidiSendIm(data->refNum,KeyOn(res.On,res.Vol));
-	        if (res.Vol != 0 && *data->vol) MidiSendIm(data->refNum,CtrlChange(res.Vol));
-	        if (res.Bend != 0 && *data->bend) MidiSendIm(data->refNum,PitchWheel(res.Bend));
+	        
+	        if ((res.Vol != 0) && (res.Vol != data->old_vol) && *data->vol) {
+	        	MidiSendIm(data->refNum,CtrlChange(res.Vol));
+	        	data->old_vol = res.Vol;
+	        }
+	        if ((res.Bend != 0) && (res.Bend != data->old_bend) && *data->bend) {
+	        	MidiSendIm(data->refNum,PitchWheel(res.Bend));
+	        	data->old_bend = res.Bend;
+	        }
 	    }
 	    
 	    // If bend state changed 
@@ -241,7 +254,7 @@ static void AudioStart ()
 
 
 /* -----------------------------------------------------------------------------*/
-static void AudioWakeUp () 
+ Boolean AudioWakeUp () 
 {
 	PaError err;
 	DriverDataPtr data = GetData ();
@@ -269,10 +282,11 @@ static void AudioWakeUp ()
 				0 );
 
 	if( err != paNoError ) goto error;
-	return;
+	return true;
 	
-	error:
+error:
 	Pa_Terminate();
+	return false; 
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -314,11 +328,12 @@ Boolean SetUpMidi (StatePtr state)
 	data->bend = &state->bend;
 	data->fftsize = &state->fftsize;
 	data->dynamic = &state->dynamic;
-	data->old_bendlength = 0;
+	data->sflag = &state->sflag;
 	data->connected = true;
-
-	AudioWakeUp ();
-
+	data->old_bendlength = 0;
+	data->old_vol = 0;
+	data->old_bend = 0;
+	
 	refNum = MidiRegisterDriver(&infos, &op);
 	if (refNum == MIDIerrSpace) return false;
 	
@@ -330,6 +345,7 @@ Boolean SetUpMidi (StatePtr state)
 	MidiSendIm(data->refNum,BendSensitivity(*data->bendlength));
 	
 	return true;
+	
 }
 
 /* -----------------------------------------------------------------------------*/
