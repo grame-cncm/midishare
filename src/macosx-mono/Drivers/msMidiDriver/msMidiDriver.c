@@ -23,8 +23,8 @@
 #include "msMidiDriver.h"
 #include "msMidiInOut.h"
 
-//#define SlotLength 64
-#define SlotLength 64
+#define SlotLength DrvNameLen // defined in "MidiShare.h"
+#define StringLen 64
 
 SlotPtr gInSlots = 0, gOutSlots = 0;
 extern LinearizeMthTbl	gLinMethods;
@@ -35,7 +35,6 @@ extern Status2TypeTbl	gTypeTbl;
 extern MIDIPortRef	gInPort;
 extern MIDIPortRef	gOutPort;
 extern MIDIClientRef 	gClient;
-
 
 //_________________________________________________________
 static SlotPtr NewSlot (){ return malloc (sizeof(Slot)); }
@@ -56,7 +55,7 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpo
 	slot->src = src;
 	slot->sending = FALSE;
 	MidiStreamInit (&slot->state1.outsmall, gLinMethods);
-        MidiStreamInit (&slot->state2.outsmall, gLinMethods);
+    MidiStreamInit (&slot->state2.outsmall, gLinMethods);
 	MidiStreamInit (&slot->outsysex, gLinMethods);
 	MidiParseInit (&slot->in, gParseTbl, gTypeTbl);
 	fifoinit(&slot->pending);
@@ -67,44 +66,47 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpo
 
 //_________________________________________________________
 // Find the device model associated to a MIDIEndpointRef
-Boolean GetModel (MIDIEndpointRef device, char* gmodel)
+Boolean GetModel (MIDIEndpointRef device, char* gmodel, int strlen)
 {
 	int i,j,k, n,m,o,p;
 	MIDIDeviceRef dev;
 	MIDIEntityRef ref;
 	CFStringRef pmodel;
-        OSStatus err;
-	
+    OSStatus err;
+  	
 	n = MIDIGetNumberOfDevices();
 	
 	for (i = 0; i < n; i++) {
 	
-            dev = MIDIGetDevice(i);
-            err = MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &pmodel);
-             
-            if (err == noErr) {
-               
-                CFStringGetCString(pmodel, gmodel, SlotLength, 0);
-                CFRelease(pmodel);
-                
-                m = MIDIDeviceGetNumberOfEntities(dev);
-    
-                for (j = 0; j < m; j++) {
-                
-                        ref = MIDIDeviceGetEntity(dev,j);
-                        o = MIDIEntityGetNumberOfSources(ref);
-                        p = MIDIEntityGetNumberOfDestinations(ref);
-                        
-                        for (k = 0; k < o; k++) {
-                                if (MIDIEntityGetSource(ref,k) == device) return true;
-                        }
-                        
-                        for (k = 0; k < p; k++) {
-                                if (MIDIEntityGetDestination(ref,k) == device) return true;
-                        }
-                }
+        dev = MIDIGetDevice(i);
+        err = MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &pmodel);
+            
+        if (err == noErr) {
+            
+            if (!CFStringGetCString(pmodel, gmodel, strlen, 0)) {
+                printf("GetModel error : string too long\n");
+                return false;
             }
-    	}
+            CFRelease(pmodel);
+            
+            m = MIDIDeviceGetNumberOfEntities(dev);
+
+            for (j = 0; j < m; j++) {
+            
+                    ref = MIDIDeviceGetEntity(dev,j);
+                    o = MIDIEntityGetNumberOfSources(ref);
+                    p = MIDIEntityGetNumberOfDestinations(ref);
+                    
+                    for (k = 0; k < o; k++) {
+                            if (MIDIEntityGetSource(ref,k) == device) return true;
+                    }
+                    
+                    for (k = 0; k < p; k++) {
+                            if (MIDIEntityGetDestination(ref,k) == device) return true;
+                    }
+            }
+        }
+    }
 	return false;
 }	
 
@@ -115,8 +117,8 @@ void AddSlots (short refNum)
 	int i, n;
 	MIDIEndpointRef src,dest;
 	CFStringRef pname;
-	char slotname[SlotLength], name[(SlotLength/2)-1], model[(SlotLength/2)-1]; // 'name' + 'model' length must be < slotname 'length'
-        OSStatus err;
+    char slotname[SlotLength], name[StringLen], model[StringLen]; // 'name' + 'model' length must be < slotname 'length'
+    OSStatus err;
 	SlotPtr slot;
 	
 	n = MIDIGetNumberOfSources();
@@ -125,25 +127,25 @@ void AddSlots (short refNum)
 		src = MIDIGetSource(i);
 		err = MIDIObjectGetStringProperty(src, kMIDIPropertyName, &pname);
                 
-                if (err == noErr) {
-                   
-                    CFStringGetCString(pname, name, sizeof(name), 0);
-                    CFRelease(pname);
-                     
-                    // If found, add the model name before the device name
-                    if (GetModel(src,model)) {
-                        sprintf(slotname, "%s:%s", model, name); // 'model' and 'name' are concatenated to build 'slotname'
-                    }else {
-                        strcpy(slotname,name);
-                    }
-                    
-                    slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
-                    if (slot) {
-                            slot->next = gInSlots;
-                            gInSlots = slot;
-                            // No connection with the source : done by the application alarm
-                    }
-                }
+        if (err == noErr) {
+            
+            CFStringGetCString(pname, name, sizeof(name), 0);
+            CFRelease(pname);
+                
+            // If found, add the model name before the device name, copy no more than SlotLength
+            if (GetModel(src,model,StringLen)) {
+                snprintf(slotname, SlotLength-1, "%s:%s", name,model); // 'name' and 'model' are concatenated to build 'slotname'
+            }else {
+                strncpy(slotname,name,SlotLength-1);
+            }
+            
+            slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
+            if (slot) {
+                    slot->next = gInSlots;
+                    gInSlots = slot;
+                    // No connection with the source : done by the application alarm
+            }
+        }
 	}
         
    	n = MIDIGetNumberOfDestinations();
@@ -152,26 +154,26 @@ void AddSlots (short refNum)
 		dest = MIDIGetDestination(i);
 		err = MIDIObjectGetStringProperty(dest, kMIDIPropertyName, &pname);
                 
-                 if (err == noErr) {
-                 
-                    CFStringGetCString(pname, name, sizeof(name), 0);
-                    CFRelease(pname);
-                    
-                    // If found, add the model name before the device name
-                    if (GetModel(dest,model)) {
-                        sprintf (slotname, "%s:%s", model, name); // 'model' and 'name' are concatenated to build 'slotname'
-                    }else {
-                        strcpy(slotname,name);
-                    }
-                    
-                    slot = CreateSlot (refNum, slotname, MidiOutputSlot, 0);
-                    if (slot) {
-                            slot->port = gOutPort;
-                            slot->dest = dest;
-                            slot->next = gOutSlots;
-                            gOutSlots = slot;
-                    }
-                }
+        if (err == noErr) {
+            
+            CFStringGetCString(pname, name, sizeof(name), 0);
+            CFRelease(pname);
+            
+            // If found, add the model name before the device name, copy no more than SlotLength
+            if (GetModel(dest,model,StringLen)) {
+                snprintf(slotname, SlotLength-1, "%s:%s",name, model); // 'name' and 'model' are concatenated to build 'slotname'
+            }else {
+                strncpy(slotname,name,SlotLength-1);
+            }
+            
+            slot = CreateSlot (refNum, slotname, MidiOutputSlot, 0);
+            if (slot) {
+                    slot->port = gOutPort;
+                    slot->dest = dest;
+                    slot->next = gOutSlots;
+                    gOutSlots = slot;
+            }
+        }
 	}
  }	
 
@@ -270,7 +272,6 @@ void OpenSlot (SlotPtr slot, Boolean input)
 //_________________________________________________________
 static void ScanSlotChanges (SlotPtr slot)
 {
-        
 	while (slot) {
      		if (IsSlotConnected (slot->refNum)) {
    			OpenInputSlot (slot);
