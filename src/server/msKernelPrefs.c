@@ -337,7 +337,7 @@ static void ScanDrivers (msKernelPrefs * prefs, char *buffer)
 	
 	do {
 		enddrv = strchr (ptr, DriversSep);
-		if (*enddrv) {		
+		if (enddrv && *enddrv) {		
 			*enddrv = 0;
 			if (strlen (ptr))
 				prefs->drivers[prefs->drvCount++] = ptr;
