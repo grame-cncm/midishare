@@ -136,31 +136,36 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPublicPtr g)
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
 	MidiEvPtr e; char ref; TApplPtr appl;
-	
+
 	if (!InitComm(g)) return MIDIerrComm;
-	
+
 	e = MSNewEv (typeMidiOpen, &g->memory.freeList);
 	appl = NewAppl (sizeof(TAppl));
-	if (e && appl) {
-		str2ev (e, name, &g->memory.freeList);
-		Date(e) = g->pub->time;
-		e = MSSendSync (0, e, g);
-		if (!e) return MIDIerrComm;
+	if (!e || !appl) { ref = MIDIerrSpace; goto err; }
 
-        if (EvType(e) == typeMidiOpenRes) {
-			ref = RefNum(e);
-            fifoinit (&appl->rcv);
-            fifoinit (&appl->dTasks);
-            appl->filter = 0;
-            appl->rcvAlarm = 0;
-            appl->applAlarm = 0;
-            g->appls[ref] = appl;
-			g->nbAppls++;
-        }
-		else ref = MIDIerrComm;
-		MSFreeEv (e, &g->memory.freeList);
+	str2ev (e, name, &g->memory.freeList);
+	Date(e) = g->pub->time;
+	e = MSSendSync (0, e, g);
+	if (!e)  { ref = MIDIerrComm; goto err; }
+
+	if (EvType(e) == typeMidiOpenRes) {
+		ref = RefNum(e);
+		fifoinit (&appl->rcv);
+		fifoinit (&appl->dTasks);
+		appl->filter = 0;
+		appl->rcvAlarm = 0;
+		appl->applAlarm = 0;
+		g->appls[ref] = appl;
+		g->nbAppls++;
 	}
-	else ref = MIDIerrSpace;
+	else { ref = MIDIerrComm; goto err; }
+	MSFreeEv (e, &g->memory.freeList);
+	return ref;
+
+err:
+	if (e) 	MSFreeEv (e, &g->memory.freeList);
+	if (appl) FreeAppl (appl);
+	CloseComm(g);
 	return ref;
 }
 
@@ -190,7 +195,7 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TMSGlobalPtr g)
 	if (e) {
 		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
-		MSSendSync (ref, e, g);
+		MSSend (ref, e, g);
 	}
 }
 
@@ -201,7 +206,7 @@ MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TMSGlobalPtr g)
 	if (e) {
 		Date(e) = g->pub->time;
         e->info.longField = (long)info;
-		MSSendSync (ref, e, g);
+		MSSend (ref, e, g);
 	}
 }
 
@@ -223,7 +228,7 @@ MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TMSGlobalPtr g
             e->info.longField = fid ? *fid : 0;
 #endif
 			Date(e) = g->pub->time;
-			MSSendSync (ref, e, g);
+			MSSend (ref, e, g);
 			g->appls[ref]->filter = filter;
 		}
 	}
