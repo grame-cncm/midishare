@@ -190,7 +190,7 @@ static void run (pthread_t thread, NetConfig *net)
 //_______________________________________________________________________
 static int getclients (int argc, char *argv[], int i)
 {
-	for (i; i< argc; i++) {
+	for (; i< argc; i++) {
 		char * arg = argv[i];
 		if (*arg == '-') break;
 		else {
