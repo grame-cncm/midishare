@@ -20,8 +20,8 @@
 
 */
 
-#ifndef __implicit__
-#define __implicit__
+#ifndef __msimplicit__
+#define __msimplicit__
 
 //#include <Carbon/Carbon.h>
 #include "InetTypes.h"
