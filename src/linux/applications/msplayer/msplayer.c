@@ -407,12 +407,7 @@ int main(int argc, char *argv[] )
 	gtk_widget_show_all (window);
 	
 	// Connexion of signals
-	gtk_signal_connect(
-			GTK_OBJECT(window), "delete_event", 
-			GTK_SIGNAL_FUNC(my_delete_action), NULL
-	);
-	
-	gtk_signal_connect(
+		gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
