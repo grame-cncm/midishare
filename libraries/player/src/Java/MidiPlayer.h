@@ -97,6 +97,14 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosMs
 
 /*
  * Class:     grame_midishare_player_MidiPlayer
+ * Method:    SetPosTicks
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosTicks
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_player_MidiPlayer
  * Method:    SetLoop
  * Signature: (II)V
  */

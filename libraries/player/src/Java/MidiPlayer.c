@@ -187,9 +187,17 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
 /*--------------------------------------------------------------------------*/
 
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosMs
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint date_ms){
 
- 	SetPosMsPlayer(refnum, date);
+ 	SetPosMsPlayer(refnum, date_ms);
+ }
+ 
+ /*--------------------------------------------------------------------------*/
+
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosTicks
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint date_ticks){
+
+ 	SetPosTicksPlayer(refnum, date_ticks);
  }
  
 /*--------------------------------------------------------------------------*/
