@@ -30,6 +30,7 @@
 #include "StreamToEvent.h"
 
 #include "msCommChans.h"
+#include "msEventsHandler.h"
 #include "msKernelPrefs.h"
 #include "msSharedMem.h"
 #include "msMutex.h"
@@ -45,6 +46,11 @@ typedef struct {
 	/* methods tables for the streams - shared between all the streams */
     msStreamParseMethodTbl 	parseMthTable;
     msStreamMthTbl			streamMthTable;
+
+	/* methods tables for deferred time network events handling: shared between all the streams */
+    NetEventsHandlerTable	netDTEvHandlerTbl;
+	/* methods tables for real time network events handling: shared between all the streams */
+    NetEventsHandlerTable	netRTEvHandlerTbl;
 } msServerContext, *msServerContextPtr;
 
 #define ServerContext 	(msServerContextPtr)gMem->context

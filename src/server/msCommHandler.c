@@ -24,34 +24,16 @@
 
 #include "msFunctions.h"
 #include "msKernel.h"
-#include "EventToStream.h"
-#include "StreamToEvent.h"
 
 #include "msApplContext.h"
 #include "msCommHandler.h"
+#include "msEventsHandler.h"
 #include "msLog.h"
 #include "msServerInit.h"
-#include "msSharedMem.h"
-#include "msMutex.h"
 #include "msThreads.h"
 #include "osglue.h"
 
 #include "msRTListenProc.h"
-
-#define kReadBuffSize	2048
-#define kWriteBuffSize	2048
-
-typedef struct CommChans * CommChansPtr;
-typedef struct CommChans{
-    CommChansPtr 	next;
-    CommunicationChan comm;
-    msThreadPtr 	thread;
-    msThreadPtr 	rtthread;
-    msStreamBuffer 	parse;
-    Ev2StreamRec	stream;
-    char 			rbuff[kReadBuffSize];
-    char 			wbuff[kWriteBuffSize];
-}CommChans;
 
 CommChansPtr gCCList = 0;
 msStreamParseMethodTbl	gParseMthTable;
@@ -63,164 +45,6 @@ static void CCClose (CommunicationChan cc)
 	RTCommPtr rt = CCGetInfos (cc);
 	CloseCommunicationChannel (cc);
 	RTCommStop (rt);
-}
-
-/*____________________________________________________________________________*/
-static char * Event2Text (MidiEvPtr e, char *buff, short len)
-{
-	char * ptr = buff;
-    long i, n = MidiCountFields (e);
-    len -= 1;
-    n = (n > len) ? len : n;
-    for (i=0; i<n; i++) {
-        *ptr++ = (char)MidiGetField (e, i);
-    }
-    *ptr = 0;
-	return buff;
-}
-
-/*____________________________________________________________________________*/
-static void SetFilter (short ref, MidiEvPtr e)
-{
-    ShMemID id; SharedMemHandler memh; void *ptr;
-#ifdef WIN32
-    char fid[keyMaxSize+1];
-    Event2Text (e, fid, keyMaxSize+1);
-    id = *fid ? fid : 0;
-#else
-    id = e->info.longField;
-#endif
-    if (id) {
-        memh = msSharedMemOpen (id, &ptr);
-        if (memh) {
-            MidiSetFilter (ref, (MidiFilterPtr)ptr);
-        }
-        else LogWriteErr ("SetFilter: msSharedMemOpen failed");
-    }
-    else  MidiSetFilter (ref, 0);
-}
-
-/*____________________________________________________________________________*/
-static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
-{
-    char name[256]; short ref=0; msApplContextPtr context=0;
-	msServerContext * sc = ServerContext;
-	
-	msMutexLock (sc->OCMutex);
-printf ("%ld NetMidiOpen start...", MidiGetTime());
-	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
-	if (!reply) { 
-		LogWrite ("NetMidiOpen: MidiShare memory allocation failed");
-		goto err;
-	}
-	context = NewApplContext();
-	if (!context) { 
-		LogWrite ("NetMidiOpen: memory allocation failed\n");
-		goto err;
-	}
-	Event2Text (e, name, 256);
-	ref = MidiOpen (name);
-	RefNum(reply) = (unsigned char)ref;
-	if (ref > 0) {
-		TApplPtr appl = GetAppl(ref);
-		if (!appl) {
-			LogWrite ("NetMidiOpen: unconsistent application state");
-			goto err;
-		}
-		appl->netFlag = 1;	/* this flag indicates that this is a remote application */
-							/* set to 0 by default, the application state is non-consistent */
-							/* between the MidiOpen call and this step. It's however considered */
-							/* that we can support this unconsistency as it only affects the way */
-							/* tasks and alarms are handled by the kernel and none of them */
-							/* can be scheduled before the call returned */
-		context->chan = cc;
-		context->filterh = 0;
-		CCInc (cc);
-		appl->context = context;
-	}
-printf ("opened %d\n", ref);
-	msMutexUnlock (sc->OCMutex);
-	return reply;
-
-err:
-	msMutexUnlock (sc->OCMutex);
-	if (context) FreeApplContext(context);
-	if (reply) MidiFreeEv(reply);
-	if (ref > 0) MidiClose (ref);
-	return 0;
-}
-
-/*____________________________________________________________________________*/
-static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
-{
-	MidiEvPtr reply = 0;
-	short ref = RefNum(e);
-	msApplContextPtr context = ApplContext(ref);
-	msServerContext * sc = ServerContext;
-
-	msMutexLock (sc->OCMutex);
-printf ("%ld NetMidiClose start %d ... ", MidiGetTime(), ref);
-	if (context && (context->chan == cc)) {
-		if (context->filterh) msSharedMemClose(context->filterh);
-		MidiClose (ref);
-		FreeApplContext(context);
-		CCDec (cc);
-	}
-	reply = MidiNewEv (typeMidiCommSync);
-	if (!reply) {
-		LogWrite ("NetMidiClose: MidiShare memory allocation failed");
-	}
-printf ("closed %d\n", ref);
-	msMutexUnlock (sc->OCMutex);
-	return reply;
-}
-
-/*____________________________________________________________________________*/
-static MidiEvPtr EventHandlerProc (MidiEvPtr e, CommunicationChan cc)
-{
-    MidiEvPtr res = 0; char name[256]; 
-
-    if (EvType(e) >= typeReserved)
-        goto unexpected;
-
-    switch (EvType(e)) {
-        case typeRcvAlarm:
-        case typeApplAlarm:
-        case typeMidiOpenRes:
-            goto unexpected;
-
-        case typeMidiOpen:
-			res = NetMidiOpen (e, cc);
-			MidiFreeEv(e);
-			break;
-        case typeMidiClose:
-			res = NetMidiClose (e, cc);
-			MidiFreeEv(e);
-			break;
-        case typeMidiConnect:
-            MidiConnect (e->info.cnx.src, e->info.cnx.dst, CnxState(e));
-			MidiFreeEv(e);
-           break;
-        case typeMidiSetName:
-            MidiSetName (RefNum(e), Event2Text (e, name, 256));
-			MidiFreeEv(e);
-            break;
-        case typeMidiSetInfo:
-            MidiSetInfo (RefNum(e), (void *)e->info.longField);
-			MidiFreeEv(e);
-            break;
-        case typeMidiSetFilter:
-			SetFilter (RefNum(e), e);
-			MidiFreeEv(e);
-            break;
-        default:
-            MidiSend (RefNum(e), e);
-    }
-    return res;
-
-unexpected:
-    LogWrite ("EventHandlerProc: unexpected event type %d", EvType(e));
-    return 0;
 }
 
 /*____________________________________________________________________________*/
@@ -254,6 +78,7 @@ static ThreadProc(CommHandlerProc, p)
 {
 	CommChansPtr pl = (CommChansPtr)p;
 	msStreamBufferPtr parse = &pl->parse;
+    msServerContextPtr c = ServerContext;
 
 //fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
     do {
@@ -262,7 +87,8 @@ static ThreadProc(CommHandlerProc, p)
             int ret;  MidiEvPtr reply, e;
 			e = msStreamStartBuffer (parse, n, &ret);
 			if (e) {
-				reply = EventHandlerProc(e, pl->comm);
+//				reply = DTEventHandlerProc(e, pl->comm);
+				reply = c->netDTEvHandlerTbl[EvType(e)](e, pl->comm);
 				if (reply && !SendEvent (reply, pl))
 					break;
 			}
@@ -278,20 +104,30 @@ static ThreadProc(CommHandlerProc, p)
             break;
         }
     } while (CCRefCount(pl->comm));
-	if (CCRefCount(pl->comm))
-		LogWrite ("CommHandlerProc exit: CloseCommunicationChannel (refcount %d)", CCRefCount(pl->comm));
-    CCClose (pl->comm);
-    pl->comm = 0;
+	if (CCRefCount(pl->comm)) {		
+        LogWrite ("CommHandlerProc exit: CloseCommunicationChannel (refcount %d)", CCRefCount(pl->comm));
+    }
     pl->thread = 0;
+    RemoveCommChanRsrc (pl, CCRefCount(pl->comm));
     return 0;
 }
 
 /*____________________________________________________________________________*/
-static void CloseOneClientChannel (CommChansPtr pl)
+static int DetachCommChan (CommChansPtr pl)
 {
-    if (pl->comm) CCClose (pl->comm);
-    if (pl->thread) msThreadDelete (pl->thread);
-    free (pl);
+    CommChansPtr list = gCCList;
+    if (list == pl) {
+        gCCList = pl->next;
+        return 1;
+    }
+    while (list) {
+        if (list->next == pl) {
+            list->next = pl->next;
+            return 1;
+        }
+        list = list->next;
+    }
+    return 0;
 }
 
 /*____________________________________________________________________________*/
@@ -300,15 +136,76 @@ cdeclAPI(void) CloseAllClientChannels(void)
     CommChansPtr pl = gCCList;
     while (pl) {
         CommChansPtr next = pl->next;
-        CloseOneClientChannel (pl);
+        if (pl->comm) CCClose (pl->comm);
+        pl->comm = 0;
+        if (pl->thread) msThreadDelete (pl->thread);
+        pl->thread = 0;
+        free (pl);
         pl = next;
     }
     gCCList = 0;
 }
 
+//*____________________________________________________________________________*/
+static void DropClients  (CommunicationChan cc)
+{
+	TApplPtr * appls = Appls(gMem);
+	int i;
+	for (i=0; i<MaxAppls; i++) {
+		TApplPtr appl = appls[i];
+		if (appl && appl->netFlag) {
+			msApplContextPtr  ac = (msApplContextPtr)appl->context;
+			if (cc == ac->chan) {
+				LogWrite ("Client application \"%s\" (%d) dropped at time %ld", 
+                    pub(appl, name), pub(appl, refNum), MidiGetTime());
+				if (ac->filterh) msSharedMemClose(ac->filterh);
+				MidiClose (pub(appl, refNum));
+				FreeApplContext(ac);
+			}
+		}
+	}
+}
+
+/*____________________________________________________________________________*/
+void RemoveCommChanRsrc (CommChansPtr ccp, int dropclients)
+{
+    RTCommPtr rt;
+	msServerContext * sc = ServerContext;
+	
+//	msMutexLock (sc->OCMutex);
+    if (!DetachCommChan (ccp))
+        LogWrite ("RemoveCommChanRsrc: DetachCommChan failed");
+//    if (ccp->thread) msThreadDelete (ccp->thread);
+//    if (ccp->rtthread) msThreadDelete (ccp->rtthread);
+    ccp->thread = ccp->rtthread = 0;
+	rt = CCGetInfos (ccp->comm);
+    CCSetInfos (ccp->comm, 0);
+    if (rt) DisposeMemory (rt);
+    if (dropclients) DropClients (ccp->comm);
+    if (ccp->comm) CloseCommunicationChannel (ccp->comm);
+    ccp->comm = 0;
+    DisposeMemory (ccp);
+//	msMutexUnlock (sc->OCMutex);
+}
+
+/*____________________________________________________________________________*/
+CommChansPtr GetCommChanRsrc (CommunicationChan cc)
+{
+    CommChansPtr pl = gCCList;
+    while (pl) {
+        if (pl->comm == cc) return pl;
+        pl = pl->next;
+    }
+    return 0;
+}
+
 /*____________________________________________________________________________*/
 void InitCommHandlers ()
 {
+	msServerContextPtr c = ServerContext;
+
+    InitNetEventsHandler (c->netDTEvHandlerTbl, false);
+    InitNetEventsHandler (c->netRTEvHandlerTbl, true);
     msStreamParseInitMthTbl (gParseMthTable);
     msStreamInitMthTbl (gStreamMthTable);
     gCCList = 0;

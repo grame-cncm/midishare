@@ -25,32 +25,11 @@
 #include "msFunctions.h"
 #include "msExtern.h"
 
+#include "msCommHandler.h"
 #include "msRTListenProc.h"
 #include "msServerContext.h"
 #include "msApplContext.h"
 #include "msLog.h"
-
-#include <mach/mach_time.h>
-//*____________________________________________________________________________*/
-static void DropClients  (CommunicationChan cc)
-{
-	TApplPtr * appls = Appls(gMem);
-	int i;
-	
-	for (i=0; i<MaxAppls; i++) {
-		TApplPtr appl = appls[i];
-		if (appl && appl->netFlag) {
-			msApplContextPtr  ac = (msApplContextPtr)appl->context;
-			if (cc == ac->chan) {
-				LogWrite ("Client application \"%s\" (%d) dropped at time %lld", pub(appl, name), pub(appl, refNum), mach_absolute_time());
-				if (ac->filterh) msSharedMemClose(ac->filterh);
-				MidiClose (pub(appl, refNum));
-				CCDec (cc);
-				FreeApplContext(ac);
-			}
-		}
-	}
-}
 
 //*____________________________________________________________________________*/
 void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
@@ -89,12 +68,6 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	Ev2StreamPtr stream = &rt->stream;
     long n; short len; void *buff;
 
-static int reenter=0;
-
-if (reenter)
-	fprintf (stderr, "CallNetSend reenter = %d\n", reenter);
-reenter++;
-
 	buff=rt->wbuff[rt->index++];
 	if (rt->index >= kMaxWBuffers) rt->index = 0;
 
@@ -119,17 +92,17 @@ reenter++;
 	}
 	len = msStreamSize(stream);
 	n = CCRTWrite (cc, buff, len);
-reenter--;
-//    if (n != len) goto failed;
 }
 
 /*____________________________________________________________________________*/
+/*
 static void EventHandlerProc (MidiEvPtr e)
 {
     if (EvType(e) < typeMidiOpen)
 		MidiSend (RefNum(e), e);
     else MidiFreeEv (e);
 }
+*/
 
 /*____________________________________________________________________________*/
 static ThreadProc(RTListenProc, arg)
@@ -137,6 +110,8 @@ static ThreadProc(RTListenProc, arg)
 	CommunicationChan cc = (CommunicationChan)arg;
 	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
 	msStreamBufferPtr parse = &rt->parse;
+    msServerContextPtr c = ServerContext;
+    CommChansPtr ccp;
 
 	do {
         long n = CCRTRead (cc, rt->rbuff, kRTReadBuffSize) ;
@@ -144,18 +119,23 @@ static ThreadProc(RTListenProc, arg)
 			int ret;
 			MidiEvPtr e = msStreamStartBuffer (parse, n, &ret);
 			while (e) {
-				EventHandlerProc(e);
+//				EventHandlerProc(e);
+                c->netRTEvHandlerTbl[EvType(e)](e, cc);
 				e = msStreamGetEvent (parse, &ret);
 			}
 			if (ret != kStreamNoMoreData)
-				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
+				LogWrite ("RTListenProc: msStreamGetEvent read error (%d): %s", ret, msStreamGetErrorText(ret));
 		}
 		else {
-			LogWriteErr ("RTListenProc: CCRTRead read error (%ld)", n);
+			if (n < 0) LogWriteErr ("RTListenProc: CCRTRead read error (%ld)", n);
 			break;
 		}
 	} while (CCRefCount(cc));
-	DropClients (cc);
+	ccp = GetCommChanRsrc (cc);
+    if (ccp) {
+        ccp->rtthread = 0;
+        RemoveCommChanRsrc (ccp, CCRefCount(cc));
+    }
 	return 0;
 }
 

@@ -22,8 +22,8 @@
 
 */
 
-#include <errno.h>
-#include <signal.h>
+//#include <errno.h>
+//#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -32,6 +32,7 @@
 #include "msExtern.h"
 #include "msMem.h"
 #include "msTasks.h"
+#include "msFCallHandler.h"
 
 #include "msServerContext.h"
 #include "msRTListenProc.h"
@@ -102,6 +103,7 @@ static void UnloadDriver (void * drvref)
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
 	unsigned short i, n = CountDrivers ();
+    LogWrite ("MidiShare server is waking up");
 	for (i=0; i<n; i++) {
         char *name = GetDriverName(i);
 		gDrvRefs[i] = LoadDriver (name);
@@ -119,6 +121,7 @@ void SpecialSleep  (TMSGlobalPtr g)
 		if (gDrvRefs[i]) UnloadDriver(gDrvRefs[i]);
 		gDrvRefs[i] = 0;
 	}
+    LogWrite ("MidiShare server is sleeping");
 }
 
 /*------------------------------------------------------------------------------*/
@@ -180,5 +183,25 @@ Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
     		return true;
 	}
 	return false; 
+}
+
+/*__________________________________________________________________________*/
+MidiFilterPtr GetFilterPtr (MidiEvPtr e)
+{
+    ShMemID id; SharedMemHandler memh; void *ptr;
+#ifdef WIN32
+    char fid[keyMaxSize+1];
+    Event2Text (e, fid, keyMaxSize+1);
+    id = *fid ? fid : 0;
+#else
+    id = e->info.longField;
+#endif
+    if (id) {
+        memh = msSharedMemOpen (id, &ptr);
+        return memh ? (MidiFilterPtr)ptr : 0;
+        if (memh) return (MidiFilterPtr)ptr;
+        else LogWriteErr ("GetFilterPtr: msSharedMemOpen failed");
+    }
+    return 0;
 }
 

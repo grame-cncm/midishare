@@ -23,9 +23,29 @@
 #define __msCommHandler__
 
 #include "msCommChans.h"
+#include "msThreads.h"
+#include "EventToStream.h"
+#include "StreamToEvent.h"
+
+#define kReadBuffSize	2048
+#define kWriteBuffSize	2048
+
+typedef struct CommChans * CommChansPtr;
+typedef struct CommChans{
+    CommChansPtr 	next;
+    CommunicationChan comm;
+    msThreadPtr 	thread;
+    msThreadPtr 	rtthread;
+    msStreamBuffer 	parse;
+    Ev2StreamRec	stream;
+    char 			rbuff[kReadBuffSize];
+    char 			wbuff[kWriteBuffSize];
+}CommChans;
 
 void CloseAllClientChannels ();
 void NewClientChannel (CommunicationChan cc);
 void InitCommHandlers ();
+CommChansPtr GetCommChanRsrc (CommunicationChan cc);
+void RemoveCommChanRsrc (CommChansPtr ccp, int dropclients);
 
 #endif
