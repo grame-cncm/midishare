@@ -318,7 +318,7 @@ void Infos()
 /*____________________________________________________________________*/
 void Connections()
 {
-	short r1=0, r2=0, r3;
+	short r1=0, r2=0, r3; int state;
 	
 	print ("\nConnections :\n");flush;
 	r1 = MidiRegisterDriver(&gDrvInfo1, &gSilentOp);
@@ -326,8 +326,13 @@ void Connections()
 	print ("    MidiConnect drivers : ");flush;
 	MidiConnect (r1, r2, true);
 	print ("%s\n", OK);
-	if (MidiIsConnected (r1, r2))
-		print ("Warning : MidiIsConnected returned true (MidiShare sleeping)\n");
+	state = MidiIsConnected (r1, r2);
+	if (MidiGetVersion()<=186) {
+		if (state)
+			print ("Warning : MidiIsConnected returned true (MidiShare sleeping)\n");
+	}
+	else if (!state)
+			print ("Warning : MidiIsConnected returned false (MidiShare sleeping)\n");
 	print ("    WakeUp MidiShare...\n");flush;
 	r3 = MidiOpen (ApplName);
 	if (r3 < 0) 
@@ -559,13 +564,13 @@ void SendingAndReceiving()
 			print ("       send to port 1 :\n");
 			sendev (1, r3, false);
 			print ("       send to port 2 :\n");
-			sendev (2, r3, true);
+			sendev (2, r3, MidiGetVersion() > 187 ? false : true);
 
 			print ("    Driver to client :\n");
 			print ("       send from slot %d:\n", (int)(sref1.slotRef));
 			sendev (sref1.slotRef, r1, true);
 			print ("       send from slot %d:\n", (int)(sref2.slotRef));
-			sendev (sref2.slotRef, r1, true);
+			sendev (sref2.slotRef, r1, MidiGetVersion() > 187 ? false : true);
 			MidiConnectSlot (0, sref2, false);
 			print ("       send from slot %d (disconnected)\n", (int)(sref2.slotRef));
 			sendev (sref2.slotRef, r1, false);
