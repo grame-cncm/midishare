@@ -1,27 +1,8 @@
 
 /* MidiShare ALSA driver (derived from msRawMidi), 8-May-2004 Albert Graef */
 
-/* Usage: msAlsaSeq [client-name] [-i id:port | -o id:port ...]
-
-   Creates an ALSA client and a corresponding MidiShare client, both named
-   client-name ("MidiShare/ALSA Bridge" by default) and establishes
-   connections to other ALSA clients as given by the -i and -o options. Input
-   from port 0 of the ALSA client will be mapped to the MidiShare client, and
-   output from the MidiShare client will be mapped to port 1 of the ALSA
-   client. `msAlsaSeq -h' prints a short usage message.
-
-   You can just start the program as `msAlsaSeq' and establish connections
-   manually with `aconnect' or your favourite ALSA patchbay. Or you can
-   specify the desired connections directly on the command line, e.g.:
-   `msAlsaSeq -i 64:0 -o 64:0' connects input and output to port 0 of client
-   64 (usually this is the external MIDI interface of your first soundcard).
-
-   Instead of a numeric ALSA client id, you can also specify the client's
-   name. Shell wildcards (`*', `?' etc.)  are recognized as well. E.g.,
-   `msAlsaSeq -i 'Rawmidi*':0' will connect the input to port 0 of the first
-   client whose name starts with `Rawmidi'. To find out about the available
-   ALSA sequencer clients and ports on your system, run `aconnect' with the -i
-   and -o options. */
+/* Usage: msAlsaSeq [client-name] [-i id:port[/msport] | -o id:port[/msport]
+   ...]. See msAlsaSeq(1) for details. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +17,7 @@
 
 #define BUFSZ 1024
 #define MAXBUFSZ 0x4000000 /* 64 MB */
-#define MAXCONN 128
+#define MAXCONN 512
 
 typedef struct {
   /* ALSA sequencer handle and port numbers */
@@ -74,6 +55,8 @@ static inline DrvMemPtr GetData() { return &gMem; }
 
 static int n_inputs, n_outputs;
 static char *inputs[MAXCONN], *outputs[MAXCONN];
+static snd_seq_addr_t input_addr[MAXCONN], output_addr[MAXCONN];
+static int have_ports, input_port[MAXCONN], output_port[MAXCONN];
 
 static void fatal(const char *msg);
 
@@ -88,7 +71,8 @@ static int lookup(snd_seq_t *seq, char *name)
   return -1;
 }
 
-static int parse_addr(snd_seq_t *seq, char *s0, snd_seq_addr_t *addr)
+static int parse_addr(snd_seq_t *seq, char *s0, snd_seq_addr_t *addr,
+		      int *port)
 {
   int id;
   char *s = alloca(strlen(s0)+1), *t, *end;
@@ -96,7 +80,7 @@ static int parse_addr(snd_seq_t *seq, char *s0, snd_seq_addr_t *addr)
   strcpy(s, s0);
   if (!(t = strtok(s, ":")) || !*t)
     return -1;
-  t += strlen(t)+1;
+  t = strtok(NULL, "/");
   if (!*t)
     return -1;
   id = strtol(t, &end, 0);
@@ -111,6 +95,16 @@ static int parse_addr(snd_seq_t *seq, char *s0, snd_seq_addr_t *addr)
     addr->client = id;
   else
     return -1;
+  t = strtok(NULL, "");
+  if (!t || !*t)
+    *port = -1;
+  else {
+    id = strtol(t, &end, 0);
+    if (!*end && id >= 0 && id <= 255)
+      *port = id;
+    else
+      return -1;
+  }
   return 0;
 }
 
@@ -155,28 +149,23 @@ static inline void checkbuf(DrvMemPtr mem, int sz)
 
 static void InitAlsa(DrvMemPtr mem, char *name)
 {
-  char *portname = alloca(strlen(name)+10);
   snd_seq_client_info_t *info;
-  snd_seq_addr_t this, other;
+  snd_seq_addr_t this;
   int i;
   snd_seq_client_info_alloca(&info);
   /* open ALSA sequencer */
   if (snd_seq_open(&mem->seq_handle, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0)
     fatal("Error creating ALSA client.");
   snd_seq_set_client_name(mem->seq_handle, name);
-  /* create input and output ports */
-  strcat(strcpy(portname, name), " IN");
+  /* create input and output ports (looks like ALSA allows us to create a
+     single port with both read and write capability here) */
   if ((mem->in_port = snd_seq_create_simple_port
-       (mem->seq_handle, portname,
+       (mem->seq_handle, name,
+	SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ|
 	SND_SEQ_PORT_CAP_WRITE|SND_SEQ_PORT_CAP_SUBS_WRITE,
 	SND_SEQ_PORT_TYPE_APPLICATION)) < 0)
     fatal("Error creating ALSA input port.");
-  strcat(strcpy(portname, name), " OUT");
-  if ((mem->out_port = snd_seq_create_simple_port
-       (mem->seq_handle, portname,
-	SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ,
-	SND_SEQ_PORT_TYPE_APPLICATION)) < 0)
-    fatal("Error creating ALSA output port.");
+  mem->out_port = mem->in_port;
   /* set up event processing */
   initbuf(mem);
   snd_midi_event_no_status(mem->decoder, 1);
@@ -184,27 +173,47 @@ static void InitAlsa(DrvMemPtr mem, char *name)
   /* establish connections */
   this.client = snd_seq_client_id(mem->seq_handle);
   this.port = mem->in_port;
-  for (i = 0; i < n_inputs; i++)
-    if (parse_addr(mem->seq_handle, inputs[i], &other) ||
-	snd_seq_get_any_client_info(mem->seq_handle, other.client, info) < 0)
+  for (i = 0; i < n_inputs; i++) {
+    input_port[i] = -1;
+    if (parse_addr(mem->seq_handle, inputs[i], &input_addr[i],
+		   &input_port[i]) ||
+	snd_seq_get_any_client_info(mem->seq_handle, input_addr[i].client,
+				    info) < 0)
       fprintf(stderr, "WARNING: Unknown input address `%s'.\n", inputs[i]);
     else {
-      subscribe(mem->seq_handle, &other, &this);
-      printf("Connecting input \"%s\" (%d:%d).\n",
-	     snd_seq_client_info_get_name(info),
-	     other.client, other.port);
+      if (input_port[i] >= 0) {
+	have_ports = 1;
+	printf("Connecting input \"%s\" (%d:%d) to MidiShare port %d.\n",
+	       snd_seq_client_info_get_name(info),
+	       input_addr[i].client, input_addr[i].port, input_port[i]);
+      } else
+	printf("Connecting input \"%s\" (%d:%d).\n",
+	       snd_seq_client_info_get_name(info),
+	       input_addr[i].client, input_addr[i].port);
+      subscribe(mem->seq_handle, &input_addr[i], &this);
     }
+  }
   this.port = mem->out_port;
-  for (i = 0; i < n_outputs; i++)
-    if (parse_addr(mem->seq_handle, outputs[i], &other) ||
-	snd_seq_get_any_client_info(mem->seq_handle, other.client, info) < 0)
+  for (i = 0; i < n_outputs; i++) {
+    output_port[i] = -1;
+    if (parse_addr(mem->seq_handle, outputs[i], &output_addr[i],
+		   &output_port[i]) ||
+	snd_seq_get_any_client_info(mem->seq_handle, output_addr[i].client,
+				    info) < 0)
       fprintf(stderr, "WARNING: Unknown output address `%s'.\n", outputs[i]);
     else {
-      subscribe(mem->seq_handle, &this, &other);
-      printf("Connecting output \"%s\" (%d:%d).\n",
-	     snd_seq_client_info_get_name(info),
-	     other.client, other.port);
+      if (output_port[i] >= 0) {
+	have_ports = 1;
+	printf("Connecting output \"%s\" (%d:%d) to MidiShare port %d.\n",
+	       snd_seq_client_info_get_name(info),
+	       output_addr[i].client, output_addr[i].port, output_port[i]);
+      } else
+	printf("Connecting output \"%s\" (%d:%d).\n",
+	       snd_seq_client_info_get_name(info),
+	       output_addr[i].client, output_addr[i].port);
+      subscribe(mem->seq_handle, &this, &output_addr[i]);
     }
+  }
 }
 
 static inline int midi_in(DrvMemPtr mem)
@@ -220,7 +229,7 @@ static inline int midi_in(DrvMemPtr mem)
   return i;
 }
 
-static inline void alsa_out(DrvMemPtr mem, long count)
+static inline void alsa_out(DrvMemPtr mem, long count, int port)
 {
   snd_seq_event_t ev;
   if (count <= 0) return;
@@ -229,9 +238,19 @@ static inline void alsa_out(DrvMemPtr mem, long count)
   if (snd_midi_event_encode(mem->encoder, mem->buf, count, &ev) >= 0) {
     /* send ALSA sequencer event */
     snd_seq_ev_set_source(&ev, mem->out_port);
-    snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
-    snd_seq_event_output_direct(mem->seq_handle, &ev);
+    if (have_ports) {
+      int i;
+      /* map MidiShare port to ALSA destinations */
+      for (i = 0; i < n_outputs; i++)
+	if (output_port[i] == port) {
+	  snd_seq_ev_set_dest(&ev, output_addr[i].client, output_addr[i].port);
+	  snd_seq_event_output_direct(mem->seq_handle, &ev);
+	}
+    } else {
+      snd_seq_ev_set_subs(&ev);
+      snd_seq_event_output_direct(mem->seq_handle, &ev);
+    }
   }
 }
 
@@ -244,7 +263,7 @@ static void KeyOffTask(long date, short refNum, long a1,long a2,long a3)
 
   MidiStreamPutEvent(f, e);
   count = midi_in(mem);
-  alsa_out(mem, count);
+  alsa_out(mem, count, e->port);
 }
 
 static void RcvAlarm(short ref)
@@ -258,7 +277,7 @@ static void RcvAlarm(short ref)
     /* decode MidiShare event */
     off = MidiStreamPutEvent(f, e);
     count = midi_in(mem);
-    alsa_out(mem, count);
+    alsa_out(mem, count, e->port);
     if (off) MidiTask(KeyOffTask, Date(off), ref, (long)off, (long)mem, 0);
     e = MidiGetEv(ref);
   }
@@ -330,7 +349,24 @@ static void *inputThread(void *ptr)
 	  int i;
 	  for (i = 0; i < count; i++) {
 	    MidiEvPtr e = MidiParseByte(f, mem->buf[i]);
-	    if (e) MidiSend(mem->ref, e);
+	    if (e) {
+	      if (have_ports) {
+		/* translate ALSA source to corresponding MidiShare port */
+		int port = -1, j;
+		for (j = 0; j < n_inputs; j++)
+		  if (ev->source.client == input_addr[j].client &&
+		      ev->source.port == input_addr[j].port &&
+		      input_port[j] >= 0) {
+		    port = input_port[j];
+		    break;
+		  }
+		if (port >= 0) {
+		  e->port = port;
+		  MidiSend(mem->ref, e);
+		}
+	      } else
+		MidiSend(mem->ref, e);
+	    }
 	  }
 	}
 	snd_seq_free_event(ev);
@@ -401,7 +437,7 @@ static void fatal(const char *msg)
 
 static void usage(void)
 {
-  fprintf(stderr, "Usage: %s [client-name] [-i id:port | -o id:port ...]\n",
+  fprintf(stderr, "Usage: %s [client-name] [-i id:port[/msport] | -o id:port[/msport] ...]\n",
 	  prog);
   exit(1);
 }
@@ -427,7 +463,7 @@ int main(int argc, char *argv[])
     case 'i':
       if (n_inputs >= MAXCONN)
 	fatal("Too many inputs.");
-      else
+      else 
 	inputs[n_inputs++] = optarg;
       break;
     case 'o':
