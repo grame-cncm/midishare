@@ -160,14 +160,14 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 # ifdef __POWERPC__
 # else
 
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr content)
 {
 	Boolean ret = false;
 	INT_OFF();
-	if (*taskPtr == content) {
-      	EvType(content) = typeDead;
-    	*taskPtr = 0;
-    	ret = true;
+		if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		ret = true;
 	}
 	INT_ON();
 	return ret;
