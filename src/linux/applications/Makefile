@@ -2,9 +2,11 @@
 DIRS = msconnect mscontrol msdisplay msecho msplayer mssync
 
 all:
+	make -C lib
 	for a in $(DIRS); do make -C $$a; done
 	
 clean:
+	make -i -C lib clean
 	for a in $(DIRS); do make -i -C $$a clean; done
 
 install:
