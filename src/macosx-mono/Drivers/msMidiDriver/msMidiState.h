@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame, Sony CSL-Paris 2001
+  Copyright © Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,14 +20,13 @@
   
 */
 
-#ifndef __msMidiInOut__
-#define __msMidiInOut__
+#ifndef __msMidiState__
+#define __msMidiState__
 
-#include "MidiShare.h"
 #include "msMidiDriver.h"
 
-
-MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e);
-void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon);
+char * GetProfileFullName (char * name);
+void SaveState (SlotPtr in, SlotPtr out, char* fullname);
+void LoadState (SlotPtr in, SlotPtr out, char* fullname);
 
 #endif

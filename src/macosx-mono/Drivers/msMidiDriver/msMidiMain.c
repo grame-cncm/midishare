@@ -25,13 +25,16 @@
 #include "msMidiDriver.h"
 #include "msMidiInOut.h"
 
-/*#include "msMMState.h" */
+#include "msMidiState.h" 
 #include "FilterUtils.h"
 #include "EventToMidiStream.h"
 #include "MidiStreamToEvent.h"
 
 #include <pthread.h>
 #include <CoreFoundation/CFRunLoop.h>
+
+static char * profileName = "msMidiDriver.ini";
+static char * fullProfileName = 0;
 
 void Start();
 void Stop();
@@ -48,17 +51,16 @@ ParseMethodTbl	gParseTbl  = { 0 };
 Status2TypeTbl	gTypeTbl  = { 0 };
 
 /* MacOSX Midi client */
-MIDIClientRef 	gClient = NULL;
+MIDIClientRef 		gClient = NULL;
 MIDIPortRef		gInPort = NULL;
 MIDIPortRef		gOutPort = NULL;
-static pthread_t 		gThread; 		// For NotificationProc 
-static long 			gReenter;	    // Notification reentrancy counter
-static Boolean 			gInit;
+static pthread_t 	gThread; 	// For NotificationProc 
+static long 		gReenter;	// Notification reentrancy counter
+static Boolean 		gInit;
 
 typedef void * ( * threadProcPtr) (void * ptr);
 
 #define TIME_OUT 30  // 30 second
-
 
 //____________________________________________________________
 pthread_t create_thread (int priority, threadProcPtr proc)
@@ -68,8 +70,7 @@ pthread_t create_thread (int priority, threadProcPtr proc)
 	if (!ret)
 		return thread;	
 	else {
-		//printf ("pthread_create failed: (%s)\n");
-    }
+        }
 	return 0;	
 }
 
@@ -86,17 +87,13 @@ void stopThread (pthread_t thread)
 {
 	void *threadRet; 
 	if (thread) {
-		printf (" stopThread ..\n");
 		pthread_cancel (thread);
-		printf (" pthread_cancel ..\n");
 		pthread_join (thread, &threadRet);
-		printf (" pthread_join ..\n");
 	}
 }
 
-
 //________________________________________________________________________________________
-void MyNotifyProc(const MIDINotification *message, void *refCon)
+void NotifyProc(const MIDINotification *message, void *refCon)
 {
         if (message->messageID == kMIDIMsgSetupChanged) {
 		if (gRefNum > 0 ) {
@@ -122,13 +119,13 @@ static Boolean InitMidiClient ()
 	OSStatus err;
 	//set_cancel();
 	
-	err = MIDIClientCreate(CFSTR("MidiShare"), MyNotifyProc, NULL, &gClient);
+	err = MIDIClientCreate(CFSTR("MidiShare"), NotifyProc, NULL, &gClient);
 	if (!gClient) {
 		printf("Can not open Midi client\n");
 		goto error;
 	}
 	
-	err = MIDIInputPortCreate(gClient, CFSTR("Input port"), MyReadProc, NULL, &gInPort);
+	err = MIDIInputPortCreate(gClient, CFSTR("Input port"), ReadProc, NULL, &gInPort);
 	if (!gInPort) {
 		printf("Can not open Midi in port\n");
 		goto error;
@@ -153,6 +150,7 @@ error :
 static void * MidiThread (void * ptr)
 {
 	if (InitMidiClient()) CFRunLoopRun();
+        return 0;
 }
 
 //_________________________________________________________
@@ -187,7 +185,7 @@ static void SetupFilter (MidiFilterPtr filter)
 //_________________________________________________________
 static void msWakeup (short refnum)
 {
-	int i,res;
+	int i;
 	
 	gThread = create_thread(0,MidiThread);
 	gReenter = -1;
@@ -205,8 +203,8 @@ static void msWakeup (short refnum)
 	
 	MidiSetRcvAlarm (refnum, RcvAlarm);
 	MidiSetApplAlarm (refnum, ApplAlarm);
-    SetupFilter (&gFilter);
-    MidiSetFilter (refnum, &gFilter);	
+        SetupFilter (&gFilter);
+        MidiSetFilter (refnum, &gFilter);	
 	MidiConnect (MidiShareDrvRef, refnum, true);
 	MidiConnect (refnum, MidiShareDrvRef, true);
 	MidiStreamInitMthTbl (gLinMethods);
@@ -219,7 +217,8 @@ static void msWakeup (short refnum)
 	AddSlots (refnum);
 	gInit = false;
 	
-	/*LoadState (gInSlots, gOutSlots); */
+        fullProfileName = GetProfileFullName (profileName);
+	LoadState (gInSlots, gOutSlots,fullProfileName); 
 	
 	return;
 	
@@ -240,9 +239,9 @@ error :
 
 static void msSleep (short refnum)
 {
-	/*SaveState (gInSlots, gOutSlots);*/
+	SaveState (gInSlots, gOutSlots,fullProfileName);
 	
-	//stopThread(gThread); // NE MARCHE PAS : A VOIR
+	//stopThread(gThread); Does not work
 	
 	if (gInPort) MIDIPortDispose(gInPort);
 	if (gOutPort) MIDIPortDispose(gOutPort);

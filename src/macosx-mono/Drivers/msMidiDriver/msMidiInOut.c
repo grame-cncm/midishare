@@ -22,18 +22,15 @@
 
 
 #include "msMidiInOut.h"
-#include "msMidiError.h"
-
+#include "lffifo.h"
 
 extern short gRefNum;
 
 // Buffer for sending
-static Byte gPacketBuffer [1024];
-static Byte gEvBuffer [16];
 
 static int min(a,b) {return (a<b)?a:b;}
-static void MyCompletionProc( MIDISysexSendRequest *request );
-	
+static void CompletionProc( MIDISysexSendRequest *request );
+
 //_________________________________________________________
 static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
 {
@@ -51,7 +48,7 @@ static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
 }
 
 //_________________________________________________________
-void SendSysExAux(SlotPtr slot)
+static void SendSysExAux(SlotPtr slot)
 {
 	int i,bytestosend;
 	unsigned char* ptr;
@@ -68,15 +65,15 @@ void SendSysExAux(SlotPtr slot)
 	slot->request.data = slot->data;
 	slot->request.bytesToSend = bytestosend;
 	slot->request.complete = FALSE;
-	slot->request.completionProc = MyCompletionProc;
+	slot->request.completionProc = CompletionProc;
 	slot->request.completionRefCon = slot;
 	
 	err = MIDISendSysex( &slot->request);
-    slot->sending = (err == noErr);
+        slot->sending = (err == noErr);
  }
  
 //_________________________________________________________
- MidiEvPtr SendSysEx(SlotPtr slot,MidiEvPtr e)
+static MidiEvPtr SendSysEx(SlotPtr slot,MidiEvPtr e)
 {
 	slot->remaining = (EvType(e) == typeSysEx) ? (MidiCountFields(e)+2) : MidiCountFields(e);
 	
@@ -85,44 +82,43 @@ void SendSysExAux(SlotPtr slot)
 	SendSysExAux(slot);
 	return e;
 }
- 
+
 //_________________________________________________________
- MidiEvPtr SendSmallEv(SlotPtr slot,MidiEvPtr e)
-{
-	MIDIPacketList* pktlist = (MIDIPacketList*)gPacketBuffer;
+static MidiEvPtr SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
+{ 
+	MIDIPacketList* pktlist = (MIDIPacketList*)state->packetBuffer;
 	MIDIPacket* packet = MIDIPacketListInit(pktlist);
-	unsigned char * ptr  = gEvBuffer;
+	unsigned char * ptr = state->evBuffer;
 	int  n = 0;
-	 
-	e = MidiStreamPutEvent (&slot->out, e);
-	while (MidiStreamGetByte (&slot->out, ptr++)) {n++;}
+  	 
+	e = MidiStreamPutEvent (&state->outsmall, e);
+	while (MidiStreamGetByte (&state->outsmall, ptr++)) {n++;}
 	
-	MIDIPacketListAdd(pktlist,sizeof(gPacketBuffer),packet,0,n,gEvBuffer);
+	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,0,n,state->evBuffer);
 	MIDISend(slot->port,slot->dest,pktlist);
 	
 	return e;
  }
 
 //_________________________________________________________
-static void MyCompletionProc( MIDISysexSendRequest *request )
+static void CompletionProc( MIDISysexSendRequest *request )
 {
     SlotPtr slot =  (SlotPtr)request->completionRefCon;
     MidiEvPtr ev;
     
     if (slot->remaining == 0){
         slot->sending = FALSE;
-        /*
+        
         while ((ev = (MidiEvPtr)fifoget(&slot->pending))) {
-        	// If typeSysEx or typeStream : send one, pending events will be sent by the CompletionProc
+            // If typeSysEx or typeStream : send one, pending events will be sent by the CompletionProc
             if ((EvType(ev) == typeSysEx) || (EvType(ev) == typeStream)) {
-            	MS2MM(slot,ev);
-	        	break;
-	        // Send all pending events
-	        }else{ 
-	        	MS2MM(slot,ev);
-	        }
+                    SendSysEx(slot,ev);
+                    break;
+            // Send all pending small events
+            }else{ 
+                    SendSmallEv(slot,ev,&slot->state2);
+            }
         }
-        */
          
     } else {
         SendSysExAux(slot);
@@ -130,24 +126,23 @@ static void MyCompletionProc( MIDISysexSendRequest *request )
 }
 
 //________________________________________________________________________________________
-MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e)
+ MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e)
 {
 	if ((EvType(e) >= typeClock) && (EvType(e) <= typeReset)){
-		return SendSmallEv(slot,e);
+		return SendSmallEv(slot,e,&slot->state1);
 	}else if (slot->sending) {
-		//fifoput(&slot->pending,(cell*)e);
-		MidiFreeEv(e);
+		fifoput(&slot->pending,(cell*)e);
 		return 0;
-	}else  if ((EvType(e) == typeSysEx) || (EvType(e) == typeStream)) {
+ 	}else  if ((EvType(e) == typeSysEx) || (EvType(e) == typeStream)) {
 		return SendSysEx(slot,e);
 	}else {
-		return SendSmallEv(slot,e);
+		return SendSmallEv(slot,e,&slot->state1);
 	}
 }
 
 
 //________________________________________________________________________________________
-void MyReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
+void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
 {
 	SlotPtr slot = (SlotPtr)connRefCon;
 	MIDIPacket *packet = (MIDIPacket *)pktlist->packet;	
