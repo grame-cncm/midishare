@@ -30,7 +30,6 @@ PyOpen(PyObject *self, PyObject *args)
 	return (!PyArg_ParseTuple(args, "s", &name)) ? NULL : Py_BuildValue("i", OpenPlayer(name));
 }
 
-
 static PyObject *
 PyClose(PyObject *self, PyObject *args)
 {
@@ -114,7 +113,7 @@ PySetRecordFilter(PyObject *self, PyObject *args)
 static PyObject *
 PySetPosBBU(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -140,13 +139,13 @@ PySetLoop(PyObject *self, PyObject *args)
 static PyObject *
 PySetLoopStartBBU(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
 PySetLoopEndBBU(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -200,19 +199,19 @@ PySetTempo(PyObject *self, PyObject *args)
 static PyObject *
 PySetSMPTEOffset(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyGetState(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyGetEndScore(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -251,7 +250,6 @@ PyGetTrack(PyObject *self, PyObject *args)
 	return (!PyArg_ParseTuple(args, "ii", &ref ,&track)) 
 			? NULL
 			: Py_BuildValue("i",GetTrackPlayer(ref,track));
-
 }
 
 static PyObject *
@@ -262,7 +260,6 @@ PySetAllTrack(PyObject *self, PyObject *args)
 			? NULL
 			: Py_BuildValue("i",SetAllTrackPlayer(ref, (MidiSeqPtr)seq, tpq));
 }
-
 
 static PyObject *
 PySetTrack(PyObject *self, PyObject *args)
@@ -315,13 +312,13 @@ PyInsertTrack(PyObject *self, PyObject *args)
 static PyObject *
 PySave(PyObject *self, PyObject *args)
 {
-	
-}
+	/* Not yet implemented */
+}	
 
 static PyObject *
 PyLoad(PyObject *self, PyObject *args)
 {
-	
+	/* Not yet implemented */
 }
 
 static PyMethodDef MidiPlayer_methods[] = {
