@@ -133,6 +133,7 @@ MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
 /*__________________________________________________________________________________*/
 MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 {
+#ifndef __Linux__  /* never called under Linux */
 	TApplPtr appl;
 	MidiEvPtr ev;
 	if( CheckRefNum( g, refnum)) {
@@ -140,14 +141,14 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 		if (fifosize (&g->appls[refnum]->dTasks)) {
 			ev = (MidiEvPtr)fifoget (&appl->dTasks);
 			if (ev) {
-				TTaskExtPtr task= (TTaskExtPtr)LinkST(ev);
                 /* you can assume that the calling process owns the deferred task ie : 
                    the task is located in its address space */
-                CallDTaskCode (appl->context, task, Date(ev), appl->refNum);
+                CallDTaskCode (appl->context, ev);
 				MSFreeEv (ev, FreeList(g->memory));		
 			}
 		}
 	}	
+#endif
 }
 
 
@@ -174,3 +175,11 @@ static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 
 # endif
 #endif /* __Macintosh__ */
+
+#ifdef __Linux__
+static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+{
+	return false;
+}
+#endif /* __Linux__ */
+
