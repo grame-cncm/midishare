@@ -4,7 +4,7 @@ KLIB   = libMidiShareKernel.so
 KOBJ   = ../msServerCommonLib.o
 OSOBJ  = ../msOSGlueLib.o
 
-INC = -I../common/Headers -I../osglue
+INC = -I../common/Headers -I../osglue -I../lib
 CFLAGS := -O3 -Wall -DMSKernel $(INC)
 CC = gcc
 

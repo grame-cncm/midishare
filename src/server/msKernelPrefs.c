@@ -20,6 +20,7 @@
   
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -30,14 +31,20 @@
 #ifdef WIN32
 	#include <windows.h>
 
-	#define pathSep           '\'
+	#define pathSep           '\\'
 	#define profileName       "midishare.ini"
+	#define defaultTimeMode	  kTimeModeMMSystem
 	#define defaultLog        "midishare.log"
 
 #else
 	#define pathSep           '/'
 	#define profileName       "/etc/midishare.conf"
 	#define defaultLog        "/var/log/midishare.log"
+#	ifdef linux
+		#define defaultTimeMode	  kTimeModeRTC
+#	else
+		#define defaultTimeMode	  kTimeModeAudio
+#	endif
 #endif
 
 #define memorySectionName "memory"
@@ -45,68 +52,148 @@
 #define timeSectionName   "time"
 #define logSectionName    "log"
 
-#define memSize           "size"
-#define timeMode          "mode"
-#define timeRes           "resolution"
-#define activeDrivers  	  "active"
-#define logFile           "file"
+#define memSizeStr        "size"
+#define timeModeStr       "mode"
+#define timeResStr        "resolution"
+#define audiodevStr       "audiodev"
+#define activeDriversStr  "active"
+#define logFileStr        "file"
 
-static msKernelPrefs gPrefs = 0;
+#define DriversSep        ','
 
 #define kDefaultSpace		40000
-#define kDefaultTimeMode	kTimeModeDefault
 #define kDefaultTimeRes		1
+#define kDefaultAudioDev	""
 
 #define DriverMaxEntry	2048
 
 static unsigned long GetMemSize ();
-static int TimeModeStr2TimeMode (char *str);
-static int GetTimeMode ();
-static int GetTimeRes ();
+static int  TimeModeStr2TimeMode (char *str);
+static int  GetTimeMode ();
+static int  GetTimeRes ();
 static void GetLog (char *buffer, int len);
+static void GetAudioDev (char *buffer, int len);
 static char * GetDrivers (char *buffer, int len);
+static void ScanDrivers (msKernelPrefs * prefs, char *buffer);
+static int  readnum (char *str);
 static void usage (char *name);
+static int  checkPrefs  (msKernelPrefs * prefs);
 
+static char * availableTimeModes[] = {
+/* order of the strings must not be changed : it corresponds 
+   to the enum declaration in msKernelPrefs.h */
+	"rtc",
+	"audio",
+	"mmsys",
+	0
+};
+
+static msKernelPrefs gPrefs = { 0 };
+
+//________________________________________________________________________
+// exported functions implementation
 //________________________________________________________________________
 msKernelPrefs * ReadPrefs ()
 {
-	char buffer[DriverMaxEntry], *drv; 
+	static char buffer[DriverMaxEntry];
 	
 	gPrefs.memory   = GetMemSize();
 	gPrefs.timeMode = GetTimeMode();
 	gPrefs.timeRes  = GetTimeRes();
 	gPrefs.drvCount = 0;
 	GetLog (gPrefs.logfile, sizeof(gPrefs.logfile));
+	GetAudioDev (gPrefs.audioDev, sizeof(gPrefs.audioDev));
 	if (GetDrivers (buffer, DriverMaxEntry)) {
+		ScanDrivers (&gPrefs, buffer);
 	}
 	return &gPrefs;
 }
 
 //________________________________________________________________________
+void LogPrefs (msKernelPrefs * prefs)
+{
+	char buffer[1024], *ptr, *dev="";
+	int i;
+	
+	sprintf (buffer, "Kernel memory size : %ld", prefs->memory);
+	LogWrite (buffer);
+	switch (prefs->timeMode) {
+		case kTimeModeRTC: 		ptr = "real time clock (/dev/rtc)";
+			break;
+		case kTimeModeAudio:	ptr = "audio using "; dev = prefs->audioDev;
+			break;
+		case kTimeModeMMSystem: ptr = "Windows MultiMedia Timer";
+			break;
+		default: 				ptr = "unknow time mode";
+	}
+	sprintf (buffer, "Time management    : %s%s", ptr, dev);
+	LogWrite (buffer);
+	sprintf (buffer, "Time resolution    : %d", (int)prefs->timeRes);
+	LogWrite (buffer);
+	sprintf (buffer, "Drivers count      : %d", (int)prefs->drvCount);
+	LogWrite (buffer);
+	LogWrite ("active:");
+	for (i=0; i<prefs->drvCount; i++) {
+		sprintf (buffer, "    %s", DrvName(prefs, i));
+		LogWrite (buffer);		
+	}
+}
+
+//________________________________________________________________________
 void AdjustPrefs (msKernelPrefs * prefs, int argc, char *argv[])
 {
-	int i;
+	int i; int val; char msg[256];
+	
 	for (i=1; i<argc; i++) {
 		char * ptr = argv[i];
 		
 		if (*ptr++ == '-') {
+			char c = *ptr;
 			ptr = argv[++i];
-			switch (*ptr) {
+
+			switch (c) {
+
 				case 'l':
-					strcpy (gPrefs.logfile, ptr);
+					strcpy (prefs->logfile, ptr);
 					break;
+
 				case 'm':
+					val = readnum (ptr);
+					if (val < 0) {
+						sprintf (msg, "-m option must be followed by a number");
+						goto err;
+					}
+					else 		 prefs->memory = (unsigned long)val;
 					break;
+
 				case 't':
+					val = TimeModeStr2TimeMode (ptr);
+					if (val < 0) {
+						sprintf (msg, "invalid value '%s' for -t option", ptr);
+						goto err;
+					}
 					break;
+
 				case 'r':
+					val = readnum (ptr);
+					if (val < 0) {
+						sprintf (msg, "-r option must be followed by a number");
+						goto err;
+					}
+					else 		 prefs->timeRes = (short)val;
 					break;
-				case default:
-					usage (argv[0]);
+
+				default:
+					sprintf (msg, "unknown option %c", c);
+					goto err;
 			}
 		}
 		else usage (argv[0]);
 	}
+	return;
+err:
+	LogWrite (msg);
+	usage (argv[0]);
 }
 
 //________________________________________________________________________
@@ -133,28 +220,64 @@ static void usage (char *str)
 static unsigned long GetMemSize ()
 {
 	unsigned long n;
-	n = get_private_profile_int (memorySectionName, memSize, kDefaultSpace, profileName);
+	n = get_private_profile_int (memorySectionName, memSizeStr, kDefaultSpace, profileName);
 	return  n ? n : kDefaultSpace;
 }
 
 //________________________________________________________________________
 static int TimeModeStr2TimeMode (char *str)
 {
+	char **ptr = availableTimeModes;
+	int mode = 0;
+	while (*ptr) {
+		if (!strcmp(str, *ptr++))
+			return mode;
+		mode++;
+	}
+	return -1;
+}
+
+//________________________________________________________________________
+static int checkPrefs (msKernelPrefs * prefs)
+{
+	int ret = 1;
+	
+	if (prefs->memory < 10000) {
+		LogWrite ("minimum kernel memory size is 10000");
+		prefs->memory = 10000;
+	}
+	
+#ifndef WIN32
+	if (prefs->timeMode == kTimeModeMMSystem) {
+		prefs->timeMode = defaultTimeMode;
+		LogWrite ("'mmsys' time mode only supported on Windows");
+		ret = 0;
+	}
+#endif
+	
+#ifndef linux
+	if (prefs->timeMode == kTimeModeRTC) {
+		prefs->timeMode = defaultTimeMode;
+		LogWrite ("'rtc' time mode only supported on Linux");
+		ret = 0;
+	}
+#endif
+	return ret;
 }
 
 //________________________________________________________________________
 static int GetTimeMode ()
 {
 	char buffer[256]; unsigned long n;
-	n = get_private_profile_string (timeSectionName, timeMode, "", buffer, 256, profileName);	
-	return  n ? TimeModeStr2TimeMode (buffer) : kDefaultTimeMode;
+	n = get_private_profile_string (timeSectionName, timeModeStr, "", buffer, 256, profileName);
+	return  n ? TimeModeStr2TimeMode (buffer) : defaultTimeMode;
 }
 
 //________________________________________________________________________
 static int GetTimeRes ()
 {
 	unsigned long n;
-	n = get_private_profile_int (timeSectionName, timeRes, kDefaultTimeRes, profileName);
+	n = get_private_profile_int (timeSectionName, timeResStr, kDefaultTimeRes, profileName);
 	return  n ? n : kDefaultTimeRes;
 }
 
@@ -162,67 +285,50 @@ static int GetTimeRes ()
 static void GetLog (char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (logSectionName, logFile, defaultLog, buffer, len, profileName);	
+	n = get_private_profile_string (logSectionName, logFileStr, defaultLog, buffer, len, profileName);	
 	if (!n) strcpy (buffer, defaultLog);
+}
+
+//________________________________________________________________________
+static void GetAudioDev (char *buffer, int len)
+{
+	unsigned long n;
+	n = get_private_profile_string (timeSectionName, audiodevStr, kDefaultAudioDev, buffer, len, profileName);	
+	if (!n) strcpy (buffer, kDefaultAudioDev);
 }
 
 //________________________________________________________________________
 static char * GetDrivers (char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (driverSectionName, activeDrivers, "", buffer, len, profileName);	
+	n = get_private_profile_string (driverSectionName, activeDriversStr, "", buffer, len, profileName);	
 	return  n ? buffer : 0;
 }
 
-
-static __inline Boolean DrvSeparator (c) { return ((c)==' ') || ((c)=='	'); }
 //________________________________________________________________________
-static char * NextDriver (char *ptr, Boolean first)
+static void ScanDrivers (msKernelPrefs * prefs, char *buffer)
 {
-	Boolean skipped = first;
-	while (*ptr) {
-		if (DrvSeparator(*ptr))	skipped = true;
-		else if (skipped)		return ptr;
-		ptr++;
-	}
-	return 0;
-}
-
-
-//________________________________________________________________________
-unsigned short CountDrivers()
-{
-	char * defaultEntry= "", buff[DriverMaxEntry];
-	unsigned long n; unsigned short count = 0;
-	n= get_private_profile_string (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, profileName);
-	if (n) {
-		char * ptr = NextDriver (buff, true);
-		while (ptr) {
-			count++;
-			ptr = NextDriver (ptr, false);
-		}
-	}
-	return count;
-}
-
-//________________________________________________________________________
-Boolean GetDriver(short index, char *dst, short bufsize)
-{
-	char * defaultEntry= "", buff[DriverMaxEntry], * ptr;
-	unsigned long n;
-
-	n= get_private_profile_string (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, profileName);
-	if (!n) return false;
-	ptr = NextDriver (buff, true);
-	while (index-- && ptr)
-		ptr = NextDriver (ptr, false);
-	if (!ptr) return false;
+	char *ptr = buffer, *enddrv;
 	
-	while (*ptr && !DrvSeparator(*ptr) && --bufsize)
-		*dst++ = *ptr++;
-	if (!bufsize) return false;
-	*dst = 0;
-	return true;
+	do {
+		enddrv = strchr (ptr, DriversSep);
+		if (*enddrv) {		
+			*enddrv = 0;
+			if (strlen (ptr))
+				prefs->drivers[prefs->drvCount++] = ptr;
+			ptr = ++enddrv;
+		}
+		else if (strlen (ptr))
+			prefs->drivers[prefs->drvCount++] = ptr;
+	} while (enddrv);
+}
+
+//________________________________________________________________________
+static int readnum (char *str)
+{
+	char *ptr = str;
+	if (!*ptr) return -1;
+	while (*ptr)
+		if (!isdigit(*ptr++)) return -1;
+	return atoi(str);
 }

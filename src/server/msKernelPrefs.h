@@ -27,13 +27,14 @@
 #include "msAppls.h"
 
 enum	{
- 	kTimeModeDefault,   //
 	kTimeModeRTC,       // only supported on linux
 	kTimeModeAudio,     // 
 	kTimeModeMMSystem   // only supported on windows
 };
 
-#define MaxLogName	512
+#define MaxLogName		512
+#define MaxAudioDevName	256
+
 typedef struct {
 	unsigned long memory;
 	int           timeMode;
@@ -41,12 +42,14 @@ typedef struct {
 	short         drvCount;
 	char *        drivers[MaxDrivers];
 	char          logfile[MaxLogName];
+	char          audioDev[MaxAudioDevName];
 } msKernelPrefs;
 
 //________________________________________________________________________
 msKernelPrefs * ReadPrefs   ();
 void            AdjustPrefs (msKernelPrefs * prefs, int argc, char *argv[]);
 char *          DrvName     (msKernelPrefs * prefs, short index);
+void 			LogPrefs    (msKernelPrefs * prefs);
 
 #endif
 
