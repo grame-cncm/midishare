@@ -67,10 +67,10 @@
 ;;;              #+:midishare conditional, and reformatted for standard
 ;;;              emacs buffer width of 74 character.
 ;;;   28-10-03   Rename type macro to evtype.
-;;;   21-11-03 : Converted to functional API. (HKT)
-;;;   29-01-04 : Make the MidiShare return 1 or 0 (instead of T and Nil)
-;;;   17-03-04 : Rename type macro to evtype in OpenMCL and CMUCL interfaces
-
+;;;   21-11-03   Converted to functional API. (HKT)
+;;;   29-01-04   Make the MidiShare return 1 or 0 (instead of T and Nil)
+;;;   17-03-04   Rename type macro to evtype in OpenMCL and CMUCL interfaces
+;;;   19-03-04   New MidiNewSmpteLocation, MidiFreeSmpteLocation, MidiNewSyncInfo, MidiFreeSyncInfo
 
 
 (in-package :cl-user)       
@@ -127,6 +127,8 @@
           "MIDISMPTE2TIME" "MIDICOUNTDRIVERS" "MIDIGETINDDRIVER" "MIDIGETDRIVERINFOS"
           "MIDIGETINDSLOT" "MIDIGETSLOTINFOS" "MIDICONNECTSLOT"
           "MIDIISSLOTCONNECTED"
+          "MIDINEWSMPTELOCATION" "MIDIFREESMPTELOCATION"
+          "MIDINEWSYNCINFO" "MIDIFREESYNCINFO"  
           "NULLPTRP" "NULLPTR" "LOAD-FRAMEWORK-BUNDLE" "GET-FUN-ADDR"
           "ADD-STARTUP-ACTION" "ADD-QUIT-ACTION"
            ))
@@ -1364,6 +1366,21 @@
    (ccl::ppc-ff-call (get-fun-addr "MidiGetIndSlot" *midishare*)
                      :signed-halfword port  :address slotRefNum 
                      :unsigned-byte))
+
+(defun MidiNewSmpteLocation ()
+  (ccl:make-record :TSmpteLocation))
+
+(defun MidiFreeSmpteLocation (location)
+  (ccl:dispose-record location))
+
+(defun MidiNewSyncInfo ()
+  (ccl:make-record :TSyncInfo))
+
+(defun MidiFreeSyncInfo (info)
+  (ccl:dispose-record info))
+
+
+
 ) ; END CCL-5.0
 
 #-CCL-5.0
@@ -2539,6 +2556,19 @@
 (defun MidiIsSlotConnected  (port slotRefNum)
   "Test a connection between a slot and a MidiShare logical port"
   (#_MidiIsSlotConnected port slotRefNum))
+
+(defun MidiNewSmpteLocation ()
+  (ccl::make-record :<ts>mpte<l>ocation))
+
+(defun MidiFreeSmpteLocation (location)
+  (ccl::dispose-record location))
+
+(defun MidiNewSyncInfo ()
+  (ccl::make-record :<ts>inc<i>nfo))
+
+(defun MidiFreeSyncInfo (location)
+  (ccl::dispose-record location))
+
 
 ;;;
 ;;; To Install and Remove the MidiShare Interface

@@ -13,6 +13,8 @@
 ;; 24-09-03 : Check the version of the library.
 ;; 28-10-03 : Rename type macro to evtype.
 ;; 04-11-03 : Check the seq pointer in apply-seq.
+;; 19-03-04 : Free the MidiShare sequence after use of midi-file-save, use the MidiFreeMidiFileInfos, 
+;;            MidiFreePlayerState and MidiFreePos functions
 ;; =====================================================================================
 
 ;;
@@ -68,7 +70,7 @@
 
 ;; Load a  Midifile (set YOUR pathname)
 
-(midi-file-load "/Volumes/Documents/MacOS9/MidiFileEx/allblues.mid" *seq* *info*)
+(midi-file-load "/Volumes/Document1/Documents/Sound/MidiFileEx/allblues.mid" *seq* *info*)
 (midi-file-load "Document1:Developpements:MidiFileEx:Labamba.mid" *seq* *info*)
 (midi-file-load "HD1200:MidiFileEx:ChopinNocturne4.2.mid" *seq* *info*)
 (midi-file-load "HD1200:MidiFileEx:BECAUSE.MID" *seq* *info*)
@@ -81,6 +83,10 @@
 
 
 (setalltrackplayer *player* *seq* (mf-clicks *info*))
+
+;; Free *info* record
+
+(MidiFreeMidiFileInfos *info*)
 
 
 ;;=====================
@@ -135,6 +141,10 @@
               (s-syncout *state*)))
 
  (print-state)
+
+;; Free *state* record
+
+(MidiFreePlayerState *state*)
 
 
 ;;======================
@@ -222,6 +232,11 @@
 
 ;; disable the loop
 (setloopplayer *player* kloopoff)
+
+
+;; Free *pos* record
+
+(MidiFreePos *pos*)
 
 
 ;; You can also use SETLOOPSTARTMSPLAYER and SETLOOPENDMSPLAYER
@@ -545,7 +560,6 @@
 ;; MidiFile management 
 ;;=====================
 
-(defvar *info*)
 (setq *info* (MidiNewMidiFileInfos)) 
 
 
@@ -575,6 +589,14 @@
 ;; with a empty Player. 
 
 (midi-file-save "/Lisp/import/saved-test.mid" *seq* *info*)
+
+;; The MidiShare sequence got with getalltrackplayer must now be desallocated
+
+(midifreeseq *seq*) 
+
+;; Free *info* record
+
+(MidiFreeMidiFileInfos *info*)
 
 
 ;;=========

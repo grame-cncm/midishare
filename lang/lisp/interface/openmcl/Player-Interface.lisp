@@ -18,6 +18,7 @@
 ;;   04/11/03 : Correct MCL 5.0 SetRecordModePlayer and 
 ;;              SetRecordFilterPlayer entry-points.
 ;;   21/11/03 : Converted to functional API. (HKT)
+;;   19/04/03 : Add MidiFreeMidiFileInfos, MidiFreePlayerState and MidiFreePos
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -46,8 +47,8 @@
           ForwardStepPlayer BackwardStepPlayer GetAllTrackPlayer
           GetTrackPlayer SetTrackPlayer SetAllTrackPlayer SetParamPlayer
           InsertAllTrackPlayer InsertTrackPlayer MidiFileSave
-          MidiFileLoad midi-file-save midi-file-load MidiNewMidiFileInfos
-          MidiNewPlayerState MidiNewPos MidiNewTSmpteLocation Version
+          MidiFileLoad midi-file-save midi-file-load MidiNewMidiFileInfos MidiFreeMidiFileInfos
+          MidiNewPlayerState MidiFreePlayerState MidiNewPos MidiFreePos Version
           )
         :midishare)
 
@@ -198,6 +199,9 @@
 (defun MidiNewPos ()
   (ccl:make-record :Pos))
 
+(defun MidiFreePos (pos)
+  (ccl:dispose-record pos))
+
 (defun p-bar (e &optional (d nil d?))
   (if d?
     (rset e :Pos.bar d)
@@ -234,6 +238,9 @@
 
 (defun MidiNewPlayerState ()
   (ccl:make-record :PlayerState))
+
+(defun MidiFreePlayerState (state)
+  (ccl:dispose-record state))
 
 (defun s-bar (e )
    (rref e :PlayerState.bar))
@@ -290,6 +297,9 @@
 
 (defun MidiNewMidiFileInfos ()
   (ccl:make-record :MidiFileInfos))
+
+(defun MidiFreeMidiFileInfos (info)
+  (ccl:dispose-record info))
   
 (defun mf-format (e &optional (d nil d?))
   (if d?
@@ -1032,15 +1042,20 @@
 (defun MidiNewMidiFileInfos ()
   (ccl::make-record :<m>idi<f>ile<i>nfos))
 
+(defun MidiFreeMidiFileInfos (info)
+  (ccl::dispose-record info))
+
 (defun MidiNewPlayerState ()
   (ccl::make-record :<p>layer<s>tate))
+
+(defun MidiFreePlayerState (state)
+  (ccl::dispose-record state))
 
 (defun MidiNewPos ()
   (ccl::make-record :<p>os))
 
-(defun MidiNewTSmpteLocation ()
-  (ccl::make-record :<ts>mpte<l>ocation))
-
+(defun MidiFreePos (pos)
+  (ccl::dispose-record pos))
 
 )
 
