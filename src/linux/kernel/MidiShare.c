@@ -45,6 +45,7 @@ void CallQuitAction (TApplContextPtr context);
 MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g);
+void      SetUserMode (short refnum, TClientsPtr g);
 
 //_________________________________________________________
 // DECLARATION DES VARIABLES GLOBALES
@@ -158,7 +159,8 @@ int mskOpen(unsigned long userptr)
 	
 	strncpy_from_user(buffer, args.name, MaxApplNameLen);
 	args.refnum = MSOpen (buffer, gMem);
-	
+	SetUserMode (args.refnum, Clients(gMem));
+		
 	if (copy_to_user((TMidiOpenArgs *)userptr, &args, sizeof(TMidiOpenArgs))) return -EFAULT;
 
 	return 0;	
