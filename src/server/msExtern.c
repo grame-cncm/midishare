@@ -35,6 +35,7 @@
 
 #include "msServerContext.h"
 #include "msRTListenProc.h"
+#include "msKernelPrefs.h"
 
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
 MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
@@ -45,6 +46,7 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
         return true;
 }
 
+static void * gDrvRefs[MaxDrivers] = { 0 };
 /*------------------------------------------------------------------------------*/
 /*                      Drivers loading                     					*/
 /*------------------------------------------------------------------------------*/
@@ -52,16 +54,51 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*------------------------------------------------------------------------------*/
 /*                      initializations : wakeup & sleep                        */
 /*------------------------------------------------------------------------------*/
+static void * LoadDriver (char *drvName) 
+{
+	printf ("load driver %s\n", drvName);
+#ifdef WIN32
+	return LoadLibrary (drvName);
+#endif
+}
+static void UnloadDriver (void * drvref) 
+{
+	printf ("unload driver %lx\n", (long)drvref);
+#ifdef WIN32
+	FreeLibrary ((HMODULE)drvref);
+#endif
+}
 
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
+	unsigned short i, n = CountDrivers ();
+	for (i=0; i<n; i++) {
+		gDrvRefs[i] = LoadDriver (GetDriverName(i));
+		if (!gDrvRefs[i]) 
+			fprintf (stderr, "LoadLibrary error %ld\n", (long)GetLastError());
+	}
 }
 
 
 /*------------------------------------------------------------------------------*/
 void SpecialSleep  (TMSGlobalPtr g)
 {
+	unsigned short i;
+	for (i=0; i<MaxDrivers; i++) {
+		if (gDrvRefs[i]) UnloadDriver(gDrvRefs[i]);
+		gDrvRefs[i] = 0;
+	}
+
+/*	WinDriverPtr next, drv = gWinRsrc.drivers;
+	gWinRsrc.drivers = 0;
+	while (drv) {
+		next = drv->next;
+		FreeLibrary (drv->libRef);
+		DisposeMemory (drv);
+		drv = next;
+	}
+*/
 }
 
 /*------------------------------------------------------------------------------*/
