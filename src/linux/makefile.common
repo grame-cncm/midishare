@@ -11,7 +11,7 @@ M = Memory
 S = Sorter
 D = Drivers
 
-SRC = $(C)/ms[^M]*.c $(K)/*.c $(M)/ms[^S]*.c $(S)/*.c
+SRC = $(C)/ms[^M]*.c $(K)/*.c $(M)/ms[^S]*.c $(S)/*.c $(D)/ms*.c
 
 OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
       $(C)/msFilter.o $(C)/msTasks.o $(C)/msXmtRcv.o \
@@ -49,7 +49,6 @@ Clients/msConnx.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
 Clients/msConnx.o: Headers/msMemory.h Headers/msDefs.h Headers/msConnx.h
 Clients/msFilter.o: Headers/msFilter.h Headers/msDefs.h Headers/msTypes.h
 Clients/msFilter.o: Headers/msMem.h
-Clients/msMail.o: Headers/msMail.h Headers/msTypes.h Headers/msSync.h
 Clients/msTasks.o: Headers/msTasks.h Headers/lflifo.h Headers/msTypes.h
 Clients/msTasks.o: Headers/msSync.h Headers/lffifo.h Headers/msDefs.h
 Clients/msTasks.o: Headers/msAppls.h Headers/msMemory.h Headers/msEvents.h
@@ -57,7 +56,7 @@ Clients/msTasks.o: Headers/msExtern.h Headers/msKernel.h Headers/msSorter.h
 Clients/msTasks.o: Headers/msDriver.h
 Clients/msXmtRcv.o: Headers/msXmtRcv.h Headers/msTypes.h Headers/msAppls.h
 Clients/msXmtRcv.o: Headers/lffifo.h Headers/msSync.h Headers/lflifo.h
-Clients/msXmtRcv.o: Headers/msMemory.h Headers/msDefs.h
+Clients/msXmtRcv.o: Headers/msMemory.h Headers/msDefs.h Headers/msEvents.h
 Kernel/msHandler.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
 Kernel/msHandler.o: Headers/lflifo.h Headers/msSync.h Headers/msKernel.h
 Kernel/msHandler.o: Headers/lffifo.h Headers/msAppls.h Headers/msMemory.h
@@ -83,8 +82,14 @@ Memory/msFields.o: Headers/msFields.h Headers/msDefs.h Headers/msTypes.h
 Memory/msMem.o: Headers/msMem.h Headers/msTypes.h
 Memory/msMemory.o: Headers/msDefs.h Headers/msTypes.h Headers/msMemory.h
 Memory/msMemory.o: Headers/lflifo.h Headers/msSync.h Headers/msMem.h
-Memory/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
-Memory/msSeq.o: Headers/lflifo.h Headers/msSync.h Headers/msEvents.h
 Sorter/msSorter.o: Headers/msSorter.h
-Drivers/msFrcv.o: Headers/msFrcv.h Headers/msDefs.h
-Drivers/msFxmt.o: Headers/msFxmt.h Headers/msDefs.h 
+Drivers/msFrcv.o: Headers/msFrcv.h Headers/msDefs.h Headers/msTypes.h
+Drivers/msFrcv.o: Headers/msKernel.h Headers/lffifo.h Headers/msSync.h
+Drivers/msFrcv.o: Headers/lflifo.h Headers/msAppls.h Headers/msMemory.h
+Drivers/msFrcv.o: Headers/msSorter.h Headers/msDriver.h Headers/msEvents.h
+Drivers/msFrcv.o: Headers/msXmtRcv.h
+Drivers/msFxmt.o: Headers/msFxmt.h Headers/msDefs.h Headers/msTypes.h
+Drivers/msFxmt.o: Headers/msKernel.h Headers/lffifo.h Headers/msSync.h
+Drivers/msFxmt.o: Headers/lflifo.h Headers/msAppls.h Headers/msMemory.h
+Drivers/msFxmt.o: Headers/msSorter.h Headers/msDriver.h Headers/msEvents.h
+Drivers/msFxmt.o: Headers/msXmtRcv.h
