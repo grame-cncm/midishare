@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		0249A665FF388DC511CA2CEA = {
 			isa = PBXApplicationReference;
@@ -38,7 +38,7 @@
 				F7FB6B170202042401D15A1F,
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 //040
 //041
@@ -156,6 +156,7 @@
 				05952DFCFFF02D1B11CA0E50,
 				05952DFDFFF02D1B11CA0E50,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 20286C29FDCF999611CA2CEA;
 			projectDirPath = "";
@@ -238,14 +239,14 @@
 				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
-				IMPLICITLY_INCLUDED_HEADERS = RadioHDHeader.h;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "/Users/fober/src/midishare/macosx-mono/applications/RadioHardDisk";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_LDFLAGS = "-lMidiShare";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = RadioHDHeader.h;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = RadioHDHeader.h;
 				PRODUCT_NAME = RadioHardDisk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -259,8 +260,8 @@
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = 0249A665FF388DC511CA2CEA;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -287,7 +288,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		20286C35FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -299,7 +299,7 @@
 				F7F1B30F020D353001A74E8A,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C36FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -308,7 +308,7 @@
 				F7219672020EA10D01053118,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C38FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -324,7 +324,7 @@
 				F7F1B310020D353001A74E8A,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3BFDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -334,7 +334,7 @@
 				F7F87D6B020C634E019D0CEB,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3CFDCF999611CA2CEA = {
 			fileRef = 20286C33FDCF999611CA2CEA;
@@ -377,12 +377,14 @@
 			refType = 2;
 		};
 		F7F1B30D020D352F01A74E8A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = states.c;
 			path = ../lib/states.c;
 			refType = 2;
 		};
 		F7F1B30E020D352F01A74E8A = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = states.h;
 			path = ../lib/states.h;
@@ -414,12 +416,14 @@
 			refType = 4;
 		};
 		F7F87C50020C55C4019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = profport.c;
 			path = ../../../lib/profport.c;
 			refType = 2;
 		};
 		F7F87C51020C55C4019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = profport.h;
 			path = ../../../lib/profport.h;
@@ -438,11 +442,13 @@
 			};
 		};
 		F7F87C9E020C563A019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msInetDriverAppl.h;
 			refType = 2;
 		};
 		F7F87C9F020C563A019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RadioHDFeedback.h;
 			refType = 2;
@@ -460,17 +466,20 @@
 			};
 		};
 		F7F87CA2020C56A3019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = implicit.h;
 			refType = 2;
 		};
 		F7F87CA4020C57FA019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NetTools.cpp;
 			path = ../../Drivers/msNet/common/NetTools.cpp;
 			refType = 2;
 		};
 		F7F87CA5020C57FA019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = NetTools.h;
 			path = ../../Drivers/msNet/common/NetTools.h;
@@ -490,9 +499,8 @@
 		};
 		F7F87CA8020C5DB0019D0CEB = {
 			isa = PBXLibraryReference;
-			name = ../libINet.a;
-			path = /libINet.a;
-			refType = 0;
+			path = ../libINet.a;
+			refType = 3;
 		};
 		F7F87CA9020C5DB0019D0CEB = {
 			buildPhases = (
@@ -505,14 +513,14 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				IMPLICITLY_INCLUDED_HEADERS = implicit.h;
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = implicit.h;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
 				PRODUCT_NAME = ../libINet.a;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
@@ -525,7 +533,6 @@
 			productInstallPath = /usr/local/lib;
 			productName = INetLib;
 			productReference = F7F87CA8020C5DB0019D0CEB;
-			shouldUseHeadermap = 0;
 		};
 		F7F87CAA020C5DB0019D0CEB = {
 			buildActionMask = 2147483647;
@@ -579,7 +586,7 @@
 				F7F87D64020C5F93019D0CEB,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F7F87CBE020C5DB0019D0CEB = {
 			buildActionMask = 2147483647;
@@ -616,21 +623,21 @@
 				F7F87D65020C5F93019D0CEB,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F7F87CC1020C5DB0019D0CEB = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F7F87CC2020C5DB0019D0CEB = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F7F87CC3020C5E58019D0CEB = {
 			children = (
@@ -653,15 +660,17 @@
 			);
 			isa = PBXGroup;
 			name = Network;
-			path = /Users/fober/src/midishare/lib/Network;
-			refType = 0;
+			path = ../../../lib/Network;
+			refType = 2;
 		};
 		F7F87CC4020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FTMA.cpp;
 			refType = 4;
 		};
 		F7F87CC5020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = HostTools.cp;
 			path = HostTools.cpp;
@@ -719,221 +728,265 @@
 			refType = 4;
 		};
 		F7F87CC7020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = EventToUDPStream.h;
 			refType = 4;
 		};
 		F7F87CC8020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FeedbackProvider.h;
 			refType = 4;
 		};
 		F7F87CC9020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FTMA.h;
 			refType = 4;
 		};
 		F7F87CCA020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Handle.h;
 			refType = 4;
 		};
 		F7F87CCB020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = HostTools.h;
 			refType = 4;
 		};
 		F7F87CCC020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ICMPHeader.h;
 			refType = 4;
 		};
 		F7F87CCD020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = INetAlert.h;
 			refType = 4;
 		};
 		F7F87CCE020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = InetTypes.h;
 			refType = 4;
 		};
 		F7F87CCF020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IPHeader.h;
 			refType = 4;
 		};
 		F7F87CD1020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareAppl.h;
 			refType = 4;
 		};
 		F7F87CD2020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareDriver.h;
 			refType = 4;
 		};
 		F7F87CD3020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareFilter.h;
 			refType = 4;
 		};
 		F7F87CD4020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareTasks.h;
 			refType = 4;
 		};
 		F7F87CD5020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiTools.h;
 			refType = 4;
 		};
 		F7F87CD6020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msInetLib.h;
 			refType = 4;
 		};
 		F7F87CD7020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SkewControler.h;
 			refType = 4;
 		};
 		F7F87CD8020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = StatesManager.h;
 			refType = 4;
 		};
 		F7F87CD9020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = StrConstants.h;
 			refType = 4;
 		};
 		F7F87CDA020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TICMPListener.h;
 			refType = 4;
 		};
 		F7F87CDB020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TICMPSocket.h;
 			refType = 4;
 		};
 		F7F87CDC020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TimeTools.h;
 			refType = 4;
 		};
 		F7F87CDD020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetAddress.h;
 			refType = 4;
 		};
 		F7F87CDE020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetControler.h;
 			refType = 4;
 		};
 		F7F87CDF020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetTasks.h;
 			refType = 4;
 		};
 		F7F87CE0020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiClient.h;
 			refType = 4;
 		};
 		F7F87CE1020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiInStream.h;
 			refType = 4;
 		};
 		F7F87CE2020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiOutStream.h;
 			refType = 4;
 		};
 		F7F87CE3020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiPacket.h;
 			refType = 4;
 		};
 		F7F87CE4020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiRemote.h;
 			refType = 4;
 		};
 		F7F87CE5020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiServer.h;
 			refType = 4;
 		};
 		F7F87CE6020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiSlot.h;
 			refType = 4;
 		};
 		F7F87CE7020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TNetInfos.h;
 			refType = 4;
 		};
 		F7F87CE8020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TPacket.h;
 			refType = 4;
 		};
 		F7F87CE9020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemote.h;
 			refType = 4;
 		};
 		F7F87CEA020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteAppl.h;
 			refType = 4;
 		};
 		F7F87CEB020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteMgr.h;
 			refType = 4;
 		};
 		F7F87CEC020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteSlot.h;
 			refType = 4;
 		};
 		F7F87CED020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TSocket.h;
 			refType = 4;
 		};
 		F7F87CEE020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TTCPListener.h;
 			refType = 4;
 		};
 		F7F87CEF020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TTCPSocket.h;
 			refType = 4;
 		};
 		F7F87CF0020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TUDPListener.h;
 			refType = 4;
 		};
 		F7F87CF1020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TUDPSocket.h;
 			refType = 4;
 		};
 		F7F87CF2020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TWANControler.h;
 			refType = 4;
 		};
 		F7F87CF3020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = UDPStreamToEvent.h;
 			refType = 4;
@@ -954,46 +1007,55 @@
 			refType = 4;
 		};
 		F7F87CF6020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = EventToUDPStream.c;
 			refType = 4;
 		};
 		F7F87CF7020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareAppl.cpp;
 			refType = 4;
 		};
 		F7F87CF8020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareDriver.cpp;
 			refType = 4;
 		};
 		F7F87CF9020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareFilter.cpp;
 			refType = 4;
 		};
 		F7F87CFA020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiShareTasks.cpp;
 			refType = 4;
 		};
 		F7F87CFB020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MidiTools.cpp;
 			refType = 4;
 		};
 		F7F87CFC020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiSlot.cpp;
 			refType = 4;
 		};
 		F7F87CFD020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = UDPStreamToEvent.c;
 			refType = 4;
 		};
 		F7F87CFE020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SkewControler.cpp;
 			refType = 4;
@@ -1008,11 +1070,13 @@
 			refType = 4;
 		};
 		F7F87D00020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ApplState.cpp;
 			refType = 4;
 		};
 		F7F87D01020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SlotState.cpp;
 			refType = 4;
@@ -1028,61 +1092,73 @@
 			refType = 4;
 		};
 		F7F87D03020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiClient.cpp;
 			refType = 4;
 		};
 		F7F87D04020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiServer.cpp;
 			refType = 4;
 		};
 		F7F87D05020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TWANControler.cpp;
 			refType = 4;
 		};
 		F7F87D06020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetControler.cpp;
 			refType = 4;
 		};
 		F7F87D07020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetTasks.cpp;
 			refType = 4;
 		};
 		F7F87D08020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiInStream.cpp;
 			refType = 4;
 		};
 		F7F87D09020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiOutStream.cpp;
 			refType = 4;
 		};
 		F7F87D0A020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TMidiRemote.cpp;
 			refType = 4;
 		};
 		F7F87D0B020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TPacket.cpp;
 			refType = 4;
 		};
 		F7F87D0C020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteAppl.cpp;
 			refType = 4;
 		};
 		F7F87D0D020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteMgr.cpp;
 			refType = 4;
 		};
 		F7F87D0E020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TRemoteSlot.cpp;
 			refType = 4;
@@ -1096,25 +1172,29 @@
 			);
 			isa = PBXGroup;
 			name = sockets;
-			path = "/Users/fober/src/midishare/macosx-mono/Drivers/msNet/sockets";
-			refType = 0;
+			path = ../../Drivers/msNet/sockets;
+			refType = 2;
 		};
 		F7F87D10020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TInetAddress.cpp;
 			refType = 4;
 		};
 		F7F87D11020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TNetInfos.cpp;
 			refType = 4;
 		};
 		F7F87D12020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TTCPSocket.cpp;
 			refType = 4;
 		};
 		F7F87D13020C5E58019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TUDPSocket.cpp;
 			refType = 4;
@@ -1577,6 +1657,7 @@
 			};
 		};
 		F7F87D60020C5F2F019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = FilterUtils.h;
 			path = ../../../lib/FilterUtils.h;
@@ -1589,12 +1670,14 @@
 			};
 		};
 		F7F87D62020C5F92019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = lflifo.h;
 			path = ../../Drivers/msNet/lflifo.h;
 			refType = 2;
 		};
 		F7F87D63020C5F92019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = lflifoppc.c;
 			path = ../../Drivers/msNet/lflifoppc.c;
@@ -1613,6 +1696,7 @@
 			};
 		};
 		F7F87D66020C6169019D0CEB = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = Handle.c;
 			path = ../../Drivers/msNet/common/Handle.c;
@@ -1636,21 +1720,25 @@
 			};
 		};
 		F7FB6B0E0202042401D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RadioHDAppl.cpp;
 			refType = 4;
 		};
 		F7FB6B0F0202042401D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RadioHDDriver.cpp;
 			refType = 4;
 		};
 		F7FB6B100202042401D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RadioHDFeedback.cpp;
 			refType = 4;
 		};
 		F7FB6B120202042401D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = RadioHD.r;
 			refType = 4;
@@ -1680,6 +1768,7 @@
 			};
 		};
 		F7FB6B60020239FE01D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = StateManager.cpp;
 			refType = 4;
@@ -1691,6 +1780,7 @@
 			};
 		};
 		F7FB6B6202023A5201D15A1F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = INetAlert.cp;
 			refType = 4;
