@@ -61,7 +61,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
 		if (drv) {
 			TDriverInfos infos;
-			setApplName (infos.name, kMidiShareName);
+			setName (infos.name, kMidiShareName);
 			infos.version = MSGetVersion (g);
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
 			Clients(g)->nbDrivers++;
@@ -156,7 +156,7 @@ MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
-		setApplName(g->appls[ref]->name, name);
+		setName(g->appls[ref]->name, name);
 		CallAlarm (ref, MIDIChgName, g);
 	}
 }
@@ -241,7 +241,7 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 /*____________________________________________________________________________*/
 void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short folder)
 {
-	setApplName(appl->name, name);	
+	setName(appl->name, name);	
 	appl->context = CreateApplContext();
 	appl->info = 0;
 	appl->folder = (uchar)folder;
@@ -276,7 +276,7 @@ void closeClient (short ref, TMSGlobalPtr g)
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
-void setApplName (MidiName dst, MidiName name)
+void setName (MidiName dst, MidiName name)
 {
 #ifdef PascalNames
 	int i, count = *name + 1;

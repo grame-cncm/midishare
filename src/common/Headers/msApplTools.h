@@ -34,7 +34,7 @@
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
 void closeClient (short ref, TMSGlobalPtr g);
 void makeDriver (TClientsPtr g, TApplPtr appl, short ref, TDriverInfos * infos, TDriverOperation *op);
-void setApplName (MidiName dst, MidiName name);
+void setName 	(MidiName dst, MidiName name);
 
 
 #endif
