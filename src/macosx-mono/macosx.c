@@ -41,9 +41,6 @@
 /* MacOSX specific resources          											*/
 
 #define SAMPLE_RATE 44100
-#define BUFFER_SIZE 64
-
-#define BUFFER_SIZE_INT (BUFFER_SIZE*10)
 #define AUDIO_MS_INT (SAMPLE_RATE/100)
 
 #define AUDIO_DEVICE "Built-in audio controller"
@@ -58,6 +55,7 @@ struct MacOSXDriver {
 static MacOSXDriverPtr gMacOSXDriver = { 0 };
 static PortAudioStream * gStream;
 static long gFrames = 0;
+static long gAudioSize = 0; // 10 * real size
 
 
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
@@ -74,6 +72,15 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*------------------------------------------------------------------------------*/
 
 typedef void (* DriverFun) ();
+
+/*------------------------------------------------------------------------------*/
+/*
+	Launch the MidiShare install script.
+*/
+Boolean CheckInstall()
+{
+	system("[ -x /Applications/MidiShare/.checkinstall ] && /Applications/MidiShare/.checkinstall");
+}
 
 /*------------------------------------------------------------------------------*/
 void *  LoadLibrary( const char *filename, const char *symbol)
@@ -124,8 +131,12 @@ static Boolean LoadDriver (char *drvName)
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
-       unsigned short i, n = CountDrivers ();
+       unsigned short i, n;
        char str[256];
+       
+       CheckInstall();
+
+	   n = CountDrivers ();
        for (i=0; i<n; i++) {
            if (GetDriver (i, str, 256))  LoadDriver (str);
        }
@@ -207,7 +218,7 @@ static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
 {
   	int i;
 	
-	gFrames += BUFFER_SIZE_INT;
+	gFrames += gAudioSize;
 	for (i = 0 ; i < gFrames/AUDIO_MS_INT ; i++) {
 		ClockHandler((TMSGlobalPtr)userData);
 	}
@@ -225,6 +236,9 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	int device;
     err = Pa_Initialize();
   	if( err != paNoError ) goto error_recovery;
+  	
+  	// Load audio sizr from the .ini file
+  	gAudioSize = LoadBufferSize()*10;
   	
   	// Look for the internal built-in sound device
   	for (device= 0 ; device<Pa_CountDevices();device++) {
@@ -244,7 +258,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 				paFloat32,     
 				NULL,
 				SAMPLE_RATE,
-				BUFFER_SIZE,    /* frames per buffer */
+				gAudioSize/10,    /* frames per buffer */
 				0,              /* number of buffers, if zero then use default minimum */
 				paClipOff,      /* we won't output out of range samples so don't bother clipping them */
 				AudioClockHandler,
