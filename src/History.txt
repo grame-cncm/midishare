@@ -22,6 +22,7 @@ v 1.86 	    : minor bug in MidiClose corrected (memory not released)
 
 Tags :
 ------------------------
+12/08/2002  server    : 'server' branch created for the server version development 
 26/07/2001  V186      : Release 1.86 for all platforms
 26/06/2001  dev       : Created a 'dev' tag for all platforms
 26/06/2001  V185      : Release 1.85 for all platforms
