@@ -18,14 +18,18 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - new fifo management
+
 */
 
 #ifndef __msAppls__
 #define __msAppls__
 
+#include "lffifo.h"
+#include "msMemory.h"
 #include "msTypes.h"
 #include "msDefs.h"
-#include "msMemory.h"
 
 /*------------------------------------------------------------------------*/
 /* constants definitions                                                  */
@@ -62,14 +66,6 @@ typedef struct TConnection{
 } TConnection;
 
 /*------------------------------------------------------------------------*/
-/* fifo structure                                                         */
-typedef struct TFifo {
-    MidiEvPtr       head;        /* fifo head     */
-    MidiEvPtr       tail;        /* fifo tail     */
-    ulong           count;       /* events count  */
-} TFifo, FAR *TFifoPtr;
-
-/*------------------------------------------------------------------------*/
 /* MidiShare application internal data structures                         */
 typedef struct TAppl{
     MSName          name;        /* the application name         */
@@ -83,8 +79,8 @@ typedef struct TAppl{
     TConnectionPtr  srcList;     /* intput applications list  */
     TConnectionPtr  dstList;     /* output applications list  */
 
-    TFifo           rcv;         /* received events fifo      */
-    TFifo           dTasks;      /* defered tasks fifo        */
+    fifo            rcv;         /* received events fifo      */
+    fifo            dTasks;      /* defered tasks fifo        */
  
     MidiFilterPtr   filter;      /* application filter        */
 } TAppl;
@@ -104,13 +100,7 @@ typedef struct TClients {
 /*--------------------------------------------------------------------------*/
 #define CheckRefNum( g, r)    ((r>=0) && (r<MaxAppls) && g->appls[r])
 
-#define RcvFifoHead(appl)     (appl->rcv.head)
-#define RcvFifoTail(appl)     (appl->rcv.tail)
-#define RcvFifoCount(appl)    (appl->rcv.count)
-
-#define DTasksFifoHead(appl)  (appl->dTasks.head)
-#define DTasksFifoTail(appl)  (appl->dTasks.tail)
-#define DTasksFifoCount(appl) (appl->dTasks.count)
-
+#define RcvFifoHead(appl)     (MidiEvPtr)(appl->rcv.head)
+#define DTasksFifoHead(appl)  (MidiEvPtr)(appl->dTasks.head)
 
 #endif

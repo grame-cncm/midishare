@@ -18,17 +18,18 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - new fifo management
+
 */
 
+#include "mem.h"
 #include "msAlarms.h"
 #include "msAppls.h"
 #include "msAppFun.h"
 #include "msConnx.h"
-#include "msEvents.h"
 #include "msExtern.h"
 #include "msInit.h"
-#include "msSync.h"
-#include "msTasks.h"
 #include "msXmtRcv.h"
 
 #ifdef PascalNames
@@ -46,7 +47,9 @@
 static void     setApplName     (TApplPtr ap, MidiName name);
 static Boolean  equalApplName   (TApplPtr ap, MidiName name);
 static void     makeAppl	    (TClientsPtr g, TApplPtr ap, short ref, MidiName n);
-static void     initFifo        (TFifoPtr fifo);
+
+static void RemAllDstCon (TApplPtr appl, lifo* freelist);
+static void RemAllSrcCon (TApplPtr appl, lifo* freelist);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -85,8 +88,8 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 		appl = clients->appls[ref];
 		
 		cnxChange = (appl->srcList != 0) || (appl->dstList != 0);
-		RemAllSrcCon (appl, Memory(g));
-		RemAllDstCon (appl, Memory(g));
+		RemAllSrcCon (appl, FreeList(Memory(g)));
+		RemAllDstCon (appl, FreeList(Memory(g)));
 		MSFlushEvs (ref, clients);
 		MSFlushDTasks (ref, clients);
 		FreeAppl (appl);
@@ -267,13 +270,6 @@ static Boolean equalApplName (TApplPtr ap, MidiName name)
 #endif
 }
 
-static void initFifo (TFifoPtr fifo)
-{
-	fifo->count = 0;
-	fifo->head = 0;
- 	fifo->tail = (MidiEvPtr)&fifo->head;
-}
-
 static void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 {
 	setApplName(appl, n);	
@@ -286,8 +282,8 @@ static void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 	appl->srcList = 0;
 	appl->dstList = 0;
 	appl->filter = 0;
-	initFifo (&appl->rcv);
-	initFifo (&appl->dTasks);
+	fifoinit (&appl->rcv);
+	fifoinit (&appl->dTasks);
 	g->appls[ref] = appl;
 	g->nbAppls++;
 }
