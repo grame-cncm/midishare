@@ -1,6 +1,6 @@
-INC		= ../Headers
-OPTIONS	= -D __Linux__
-LIB		= -Wl,-L../../library -lMidiShare
+INC	= ../Headers
+OPTIONS	= 
+LIB	= -Wl,-L../../library -lMidiShare
 
 
 all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock msPlayer
