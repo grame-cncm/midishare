@@ -20,7 +20,6 @@
   
 */
 
-#include "MidiShare.h"
 #include "msMidiDriver.h"
 #include "msMidiInOut.h"
 
