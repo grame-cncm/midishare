@@ -123,7 +123,7 @@ void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
 /*_________________________________________________________________________*/
 /* synchronization specific part                                           */
 /*_________________________________________________________________________*/
-Boolean CompareAndSwap (void **adr, void *compareTo, void *swapWith) 
+Boolean CompareAndSwap (register void **adr, register void *compareTo, register void *swapWith) 
 {
 	Boolean retcode = true;
 	INT_OFF();
@@ -197,10 +197,11 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 }
 
 /*__________________________________________________________________________*/
-void CloseTimeInterrupts(TMSGlobalPtr g)
+void CloseTimeInterrupts (TMSGlobalPtr g)
 {
+	QElemPtr task = (QElemPtr)&TimeTask(g);
 	INT_OFF();
-	RmvTime((QElemPtr)&TimeTask(g));
+	RmvTime(task);
 	INT_ON();
 }
 
