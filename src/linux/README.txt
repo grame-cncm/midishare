@@ -2,9 +2,9 @@
 MidiShare for Linux
 
 
-=====================
+===============
 Description
-=====================
+===============
 
 MidiShare on Linux is separated in a kernel module and a shared library.
 The kernel module contains the code used with kernel privilege : scheduler, Midi drivers,IAC...
@@ -21,10 +21,10 @@ The MidiShare source package contains:
 - Include  : the MidiShare.h file
 - kernel : the platform specific kernel code.
 - library : the MidiShare shared library code.
-- tests : Two test applications, usefull to test the MidiShare API. 
-- tools : Various MidiShare tools. 
+- tests : two test applications, usefull to test the MidiShare API. 
+- tools : various MidiShare tools. 
 
-
+=============
 Quick install
 =============
 
@@ -33,7 +33,7 @@ There are two possible compilation targets :
 - one without drivers which allows to test MidiShare applications, Inter Application Communication..
 - one with Midi drivers buit using ALSA (http://www.alsa-project.org)
 
-
+==========================================
 Compilation of MidiShare WITHOUT drivers
 ==========================================
 
@@ -61,18 +61,22 @@ make midishare-alsa
 This compile the MidiShare kernel with ALSA drivers (the MidiShareKernel.o kernel module) 
 and the shared MidiShare library (libMidiShare.so)
 
-You will have to download, compile and install Alsa drivers corresponding to your machine setup. 
+You will have to download, compile and install Alsa drivers corresponding to your machine setup.
+ 
+WARNING: To work properly with MidiShare, Alsa drivers have to be compiled with the OSS emulation ON,
+this option must be setup using the Alsa "configure" tool.
+
 Look at http://www.alsa-project.org for more information on ALSA drivers compilation and installation.
 
 To install the MidiShare kernel and library  and tools, you must have SU privilege:
 
 make install
 
-
+================================
 Checking MidiShare installation
 ================================
 
-cat proc/modules should show a "MidiShareKernel" modules installed.
+cat proc/modules should show a "MidiShareKernel" module installed.
 
 Some basic MidiShare functions are accessible directly in the shell. (They are defined on the tools folder) 
 To compile and install the tools:
@@ -87,9 +91,10 @@ To display the current MidiShare state (currently opened applications)
 
 MidiGetStat
 
-
+=========================
 Running MidiShare tests
 =========================
+
 Two test applications are available : test of MidiShare functions, and test of MidiShare event management. 
 They allow to check that MidiShare API correctly works. You must have SU privilege to run the test.
 
@@ -97,4 +102,9 @@ cd test
 
 ./TestFunctions
 ./TestEvents
+
+
+==================
+Known problems
+==================
 
