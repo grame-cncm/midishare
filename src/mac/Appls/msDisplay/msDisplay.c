@@ -82,6 +82,7 @@ static void InitEvNames (unsigned char *tbl[])
 	tbl[typeTimeSign] 	= "\pTimeSg ";
 	tbl[typeKeySign] 	= "\pKeySg  ";
 	tbl[typeSpecific] 	= "\pSpecif ";
+	tbl[typePortPrefix] = "\pPtPrfx ";
 
 	tbl[typeDead] 		= "\pDead   ";
 }
