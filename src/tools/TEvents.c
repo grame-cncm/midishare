@@ -23,11 +23,12 @@
 
 /*
  *
- * Utilitaire de test et validation d'une version de MidiShare
- * Test d'allocation et de transmission des événements MidiShare.
+ * Validation and test of MidiShare
+ * Event allocation and transmission test.
  *
  * GRAME	Mardi 8 Décembre 1992	DF
  *          Lundi 20 Septembre 1999 SL Adapation Linux (plus de MidiAvailEv)
+ * 		    English version 11/11/99 SL
  */
 
 #include <stdio.h>
@@ -109,7 +110,7 @@ char *gOK = " OK";
 #endif
 
 #define flush			fflush( stdout)
-#define noEvts			fprintf( stdout, "\nplus d'événement MidiShare disponible !\n")
+#define noEvts			fprintf( stdout, "\nno more MidiShare events !\n")
 #define ok				fprintf( stdout, "%s\n", gOK)
 
 
@@ -142,7 +143,7 @@ char *typeListe[] =
 
 
 
-/* ============================= déclarations de fonctions ========================*/
+/* ============================= functions declarations ========================*/
 
 typedef int (* GetEvFuncPtr)( MidiEvPtr e);
 
@@ -154,7 +155,7 @@ static int GetCtrl( MidiEvPtr e);
 static int GetNothing( MidiEvPtr e);
 
 
-/* ============= tableau des fonctions de récupération des événements =============*/
+/* ============= array of reception functions =============*/
 
 GetEvFuncPtr GetEvTable[] = {
 /*  0 */		GetNote, 	GetEvents, 	GetEvents, 	GetEvents, 	GetEvents,
@@ -226,14 +227,14 @@ static OpenAppls()
 {	
 	if( (r1= MidiOpen( ApplName)) < 0)
 	{
-		fprintf( stdout, "Impossible d'ouvrir une application MidiShare !\n");
-		fprintf( stdout, "Test interrompu !\n");
+		fprintf( stdout, "Impossible to open a MidiShare application !\n");
+		fprintf( stdout, "Interrupted test !\n");
 		return false;
 	}
 	if( (r2= MidiOpen( OtherName)) < 0)
 	{
-		fprintf( stdout, "Impossible d'ouvrir une application MidiShare !\n");
-		fprintf( stdout, "Test interrompu !\n");
+		fprintf( stdout, "Impossible to open a MidiShare application !\n");
+		fprintf( stdout, "Interrupted test !\n");
 		MidiClose( r1);
 		return false;
 	}
@@ -249,17 +250,17 @@ static CmpCommon( MidiEvPtr o, MidiEvPtr c, char *src)
 	int ret= true;
 	
 	if( EvType(o) != EvType(c)) {
-		fprintf( stdout, "\n%s : type de l'evt modifié: %d -> %d", src,
+		fprintf( stdout, "\n%s : modified event type : %d -> %d", src,
 					(int)EvType(o), (int)EvType(c));
 		ret= false;
 	}
 	if( ( EvType(o) < typeSongPos) && (Chan(o) != Chan(c))) {
-		fprintf( stdout, "\n%s : canal de l'evt modifié: %d -> %d", src,
+		fprintf( stdout, "\n%s : modified event channel : %d -> %d", src,
 					(int)Chan(o), (int)Chan(c));
 		ret= false;
 	}
 	if( Port(o) != Port(c)) {
-		fprintf( stdout, "\n%s : port de l'evt modifié: %d -> %d", src,
+		fprintf( stdout, "\n%s : modified event port : %d -> %d", src,
 					(int)Port(o), (int)Port(c));
 		ret= false;
 	}
@@ -275,7 +276,7 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 	f2= MidiCountFields( c);
 	if( f1!= f2)
 	{
-		fprintf( stdout, "\n%s : nbre de champs différent : %ld -> %ld", src,f1,f2);
+		fprintf( stdout, "\n%s : different number of fields : %ld -> %ld", src,f1,f2);
 		return false;
 	}
 	else if( !CmpCommon( o, c, src))
@@ -284,7 +285,7 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 	{
 		if( MidiGetField( o, i)!= MidiGetField( c, i))
 		{
-			fprintf( stdout, "\n%s : contenu modifié à l'indice %ld", src, i);
+			fprintf( stdout, "\n%s : modified value at index %ld", src, i);
 			return false;
 		}
 	}
@@ -298,7 +299,7 @@ static CompareEv( MidiEvPtr e, short refnum, char *src)
 	
 	if( get= MidiAvailEv( refnum))
 		return CmpEv( e, get, src);
-	else fprintf( stdout, "\n%s : MidiAvailEv renvoie nil ", src);
+	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
 
@@ -314,14 +315,14 @@ static CompareStream( MidiEvPtr e, short refnum, char *src)
 			EvType(get)= typeStream;
 		else
 		{
-			fprintf( stdout, "mauvais type : %d \n", EvType(get));
+			fprintf( stdout, "wrong type : %d \n", EvType(get));
 			return false;
 		}
 		f1= MidiCountFields( e)-1;
 		f2= MidiCountFields( get)+1;
 		if( f1!= f2)
 		{
-			fprintf( stdout, "\n%s : nbre de champs différent : %ld -> %ld", src,f1,f2);
+			fprintf( stdout, "\n%s : different number of fields : %ld -> %ld", src,f1,f2);
 			return false;
 		}
 		else if( !CmpCommon( e, get, src))
@@ -330,13 +331,13 @@ static CompareStream( MidiEvPtr e, short refnum, char *src)
 		{
 			if( MidiGetField( e, i)!= MidiGetField( get, i-1))
 			{
-				fprintf( stdout, "\n%s : contenu modifié à l'indice %ld", src, i);
+				fprintf( stdout, "\n%s : modified value at index %ld", src, i);
 				return false;
 			}
 		}
 		return true;
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv renvoie nil ", src);
+	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
 
@@ -352,7 +353,7 @@ static CompareCtrl14b( MidiEvPtr e)
 		v1= MidiGetField( a, 0L);
 		v2= MidiGetField( b, 0L);
 		if( v1!=1 || (v2!= 33))
-			fprintf( stdout, "reception de mauvais controleurs : %ld suivi de %ld\n",v1,v2);
+			fprintf( stdout, "reception of wrong controlers : %ld followed by %ld\n",v1,v2);
 		else
 		{
 			v2= MidiGetField( b, 1L);
@@ -365,7 +366,7 @@ static CompareCtrl14b( MidiEvPtr e)
 		MidiFreeEv( a);
 		MidiFreeEv( b);
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv renvoie nil ", "ext");
+	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
 
@@ -387,7 +388,7 @@ static CompareRegParam( MidiEvPtr e)
 		ret &= ((EvType(e)== typeRegParam) && (v1==101) && (v2==100))
 			|| ((v1==99) && (v2==98));
 		if( !ret)
-			fprintf( stdout, "\nreception de mauvais controleurs : %ld %ld %ld %ld"
+			fprintf( stdout, "\nreception of wrong controlers : %ld %ld %ld %ld"
 						, v1, v2, v3, v4);
 		else
 		{
@@ -405,7 +406,7 @@ static CompareRegParam( MidiEvPtr e)
 		MidiFreeEv( c);
 		MidiFreeEv( d);
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv renvoie nil ", "ext");
+	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
 
@@ -417,7 +418,7 @@ static GetEvents( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if(n != 1)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : %ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -430,7 +431,7 @@ static GetStream( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if( n != 1)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : %ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -443,7 +444,7 @@ static GetNothing( MidiEvPtr unused)
 	
 	n= MidiCountEvs( r2);
 	if( n)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : rcv=%ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : rcv=%ld ", n);
 	else ret= true;
 	return ret;
 }
@@ -456,7 +457,7 @@ static GetNoExt( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if( n!= 1)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : rcv=%ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : rcv=%ld ", n);
 	else ret= true;
 	if( n== 1)
 		ret &= CompareEv( e, r2, "int");
@@ -471,13 +472,13 @@ static GetPrivate( MidiEvPtr e)
 	
 	n= MidiCountEvs( r1);
 	if( n!=1)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : %ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
 	else ret= true;
 	if( n== 1)
 		ret &= CompareEv( e, r1, "int");
 	n= MidiCountEvs( r2);
 	if( n)
-		fprintf( stdout, "\nWarning : événement distribué à rcv\n");
+		fprintf( stdout, "\nWarning : event distributed at rcv\n");
 	return ret;
 }
 
@@ -494,7 +495,7 @@ static GetCtrl( MidiEvPtr e)
 	if( n2!= 1 || (type== typeCtrl14b && n1!= 2)
 			   || (type== typeNonRegParam && n1!= 4)
 			   || (type== typeRegParam && n1!= 4))
-		fprintf( stdout, "\nWarning : mauvais contenu des fifos : appl=%ld rcv=%ld ", n1,n2);
+		fprintf( stdout, "\nWarning : wrong fifos content : appl=%ld rcv=%ld ", n1,n2);
 	else ret= true;
 	if( type== typeCtrl14b && n1== 2)
 		ret &= CompareCtrl14b( e);
@@ -514,23 +515,23 @@ static CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 	
 	if( EvType(e1)!= typeKeyOn || EvType(e2)!= typeKeyOn)
 	{
-		fprintf( stdout, "\next : mauvais types : first=%d next=%d ", (int)EvType(e1), (int)EvType(e2));
+		fprintf( stdout, "\next : wrong types : first=%d next=%d ", (int)EvType(e1), (int)EvType(e2));
 		ret= false;
 	}
 	if( Vel(e2))
 	{
-		fprintf( stdout, "\next : note off : mauvaise vélocité : %d ", (int)Vel(e2));
+		fprintf( stdout, "\next : note off : wrong velocity : %d ", (int)Vel(e2));
 		ret= false;
 	}
 	dc= Date(e2) - Date(e1);
 	if( dc!= d)
 	{
-		fprintf( stdout, "\next : mauvaise durée : %d au lieu de %d ", (int)dc, (int)d);
+		fprintf( stdout, "\next : wrong duration : %d instead of %d ", (int)dc, (int)d);
 		ret= false;
 	}
 	if( Pitch(e1)!= Pitch(e2))
 	{
-		fprintf( stdout, "\next : mauvaise hauteur : %d et %d ", (int)Pitch(e1), (int)Pitch(e2));
+		fprintf( stdout, "\next : wrong pitch : %d and %d ", (int)Pitch(e1), (int)Pitch(e2));
 		ret= false;
 	}
 	EvType(e1)= typeNote;
@@ -546,7 +547,7 @@ static GetNote( MidiEvPtr e)
 	wait (Dur(e));
 	n= MidiCountEvs( r2);
 	if(n != 1)
-		fprintf( stdout, "\nWarning : mauvais contenu du fifo : %ld ", n);
+		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -586,7 +587,7 @@ static TestEvent( short i, Boolean display)
 		else 
 		{
 			/* remplissage au dela du nombre de champs de l'événement 	*/
-			/* ne doit normalement pas modifier l'événement				*/
+			/* shoul not modify  the event								*/
 			MidiSetField( e, MidiCountFields(e), 0L);
 			if( CmpEv( e, copy, "copy"))
 			{
@@ -611,7 +612,7 @@ static void ChanEvents()
 	short i;
 	
 	fprintf( stdout, "\nChannel events :\n");
-	/*											typeNote à typePitchWheel */
+	/*											typeNote until typePitchWheel */
 	for( i= typeNote; i<typeSongPos; i++)
 		if( TestEvent( i, true)) ok;
 		else fprintf( stdout, "\n");
@@ -623,7 +624,7 @@ static void CommonEvents()
 	short i;
 	
 	fprintf( stdout, "\nCommon events :\n");	
-	/*											typeSongPos à typeReset */
+	/*											typeSongPos until typeReset */
 	for( i= typeSongPos; i<typeSysEx; i++)
 		if( TestEvent( i, true)) ok;
 		else fprintf( stdout, "\n");
@@ -640,7 +641,7 @@ static Boolean SystemeEx()
 	/*											 			  typeSysEx */
 	if( !TestEvent( typeSysEx, true)) {fprintf( stdout, "\n"); return false;}
 
-	/*			  				test de l'événement jusqu'à la taille n */
+	/*			  				test of event until n */
 	if( !(e= MidiNewEv(typeSysEx))) { noEvts; return false;}
 	for( n=0; n<SizeMedSysEx; n++)
 	{
@@ -650,7 +651,7 @@ static Boolean SystemeEx()
 			MidiSendIm( r1, copy); wait( 40);
 			if( !GetEvents( e))
 			{
-				fprintf( stdout, "\n      boucle %d taille %ld\n", n+1, MidiCountFields(e));
+				fprintf( stdout, "\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				return false;
 			}
@@ -659,17 +660,17 @@ static Boolean SystemeEx()
 		}
 	}
 	fprintf( stdout, " 0-%ld ok", n); flush;
-	/*			  				test de l'événement pour la taille max */
+	/*			  				test of max for max length */
 	for( ; n< SizeMaxSysEx; n++)
 	{
 		MidiAddField( e, v++);
 		if( v>126) v=0; else v++;
 	}
-	fprintf( stdout, "\n      taille %ld", MidiCountFields(e)); flush;
+	fprintf( stdout, "\n      length %ld", MidiCountFields(e)); flush;
 	if( !(copy= MidiCopyEv( e)))  noEvts;
 	else 
 	{
-		fprintf( stdout, " copie"); flush;
+		fprintf( stdout, " copy"); flush;
 		if( CmpEv( e, copy, "copy")){
 			fprintf( stdout, " ok ");
 			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
@@ -696,7 +697,7 @@ static Boolean Stream()
 	/*											 			  typeStream */
 	if( !TestEvent( typeStream, true)) {fprintf( stdout, "\n"); return false;}
 
-	/*			  				test de l'événement jusqu'à la taille n */
+	/*			  				test of event until n */
 	if( !(e= MidiNewEv(typeStream))) { noEvts; return false;}
 	MidiAddField( e, (long)0xF0);
 	MidiAddField( e, (long)0xF7);
@@ -709,7 +710,7 @@ static Boolean Stream()
 			MidiSendIm( r1, copy); wait( 40);
 			if( !GetStream( e))
 			{
-				fprintf( stdout, "\n      boucle %d taille %ld\n", n+1, MidiCountFields(e));
+				fprintf( stdout, "\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				return false;
 			}
@@ -718,7 +719,7 @@ static Boolean Stream()
 		}
 	}
 	fprintf( stdout, " 0-%ld ok", n); flush;
-	/*			  				test de l'événement pour la taille max */
+	/*			  				test of max for max length */
 	MidiSetField( e, n-1, (long)nil);
 	for( ; n< SizeMaxSysEx-1; n++)
 	{
@@ -726,11 +727,11 @@ static Boolean Stream()
 		if( v>126) v=0; else v++;
 	}
 	MidiAddField( e, (long)0xF7);
-	fprintf( stdout, "\n      taille %ld", MidiCountFields(e)); flush;
+	fprintf( stdout, "\n      length %ld", MidiCountFields(e)); flush;
 	if( !(copy= MidiCopyEv( e)))  noEvts;
 	else 
 	{
-		fprintf( stdout, " copie"); flush;
+		fprintf( stdout, " copy"); flush;
 		if( CmpEv( e, copy, "copy")){
 			fprintf( stdout, " ok ");
 			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
@@ -772,7 +773,7 @@ static void Process()
 {
 	short i;
 	
-	fprintf( stdout, "\nProcess et DProcess :\n");	
+	fprintf( stdout, "\nProcess and DProcess :\n");	
 	/*													typePrivate */
 	for( i= typeProcess; i<typeQuarterFrame; i++)
 	{
@@ -786,8 +787,8 @@ static void QFToMidiFile()
 {
 	short i;
 	
-	fprintf( stdout, "\nQuarterFrame à RegParam :\n");	
-	/*													nQuarterFrame à RegParam */
+	fprintf( stdout, "\nQuarterFrame until RegParam :\n");	
+	/*													nQuarterFrame until RegParam */
 	for( i= typeQuarterFrame; i<=typeRegParam; i++)
 	{
 		if( TestEvent( i, true)) ok;
@@ -800,11 +801,11 @@ static void MidiFile()
 {
 	short i;
 	
-	fprintf( stdout, "\nEvénements MidiFile :\n");	
+	fprintf( stdout, "\nMidiFile events :\n");	
 	if( version < 160)
-		fprintf( stdout, "non implémentés !\n");	
+		fprintf( stdout, "not implemented !\n");	
 
-	/*												typeSeqNum à typeSpecific */
+	/*												typeSeqNum until typeSpecific */
 	else for( i= typeSeqNum; i<=typeSpecific; i++)
 	{
 		if( TestEvent( i, true)) ok;
@@ -818,17 +819,17 @@ static void Reserved()
 	short ret= true;
 	MidiEvPtr e;
 	
-	fprintf( stdout, "\nEvénements réservés :\n");	
-	/*												typeReserved à typeDead */
+	fprintf( stdout, "\nReserved events :\n");	
+	/*												typeReserved until typeDead */
 	fprintf( stdout, "    type %s : ", typeListe[typeReserved]); flush;
 	if( e= MidiNewEv(typeReserved)) 
 	{
-		fprintf( stdout, "\ntype %d : allocation renvoie %lx\n", (int)typeReserved, e);
+		fprintf( stdout, "\ntype %d : allocation return %lx\n", (int)typeReserved, e);
 		ret= false;
 	}
 	if( e= MidiNewEv( typeDead-1)) 
 	{
-		fprintf( stdout, "\ntype %d : allocation renvoie %lx\n", (int)typeDead-1, e);
+		fprintf( stdout, "\ntype %d : allocation return %lx\n", (int)typeDead-1, e);
 		ret= false;
 	}
 	if( ret) ok;
@@ -840,14 +841,14 @@ static void Reserved()
 /*______________________________________________________________________________*/
 main( int argc, char *argv[])
 {
-	fprintf( stdout, "\nAllocation, émission et reception des événements MidiShare.\n");
+	fprintf( stdout, "\nAllocation, emission and reception of MidiShare events.\n");
 	fprintf( stdout, "==========================================================\n");
 
 	if( MidiShare())
 	{
 		version= MidiGetVersion();
 		fprintf( stdout, "                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
-		fprintf( stdout, "\nAttention : MidiShare doit posséder au moins 10000 événements !\n");
+		fprintf( stdout, "\Warning : MidiShare must have at least 10000 events !\n");
 
 		if( OpenAppls())
 		{
@@ -869,7 +870,7 @@ main( int argc, char *argv[])
 		}
 
 	}
-	else fprintf( stdout, "MidiShare n'est pas installé !\n");
-	fprintf( stdout, "\nFin de test d'allocation, émission et reception des événements.\n");
+	else fprintf( stdout, "MidiShare is not installed !\n");
+	fprintf( stdout, "\nEnd of allocation test emission and reception of events.\n");
 	return 0;
 }
