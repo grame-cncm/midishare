@@ -55,34 +55,34 @@ class TDestructor {
 		TPlayerInterfacePtr 		fPlayer1;
 		TPlayerInterfacePtr 		fPlayer2;
 		TPlayerInterfacePtr 		fPlayer3;
-		TClockSenderPtr 			fClockSender;
+		TClockSenderPtr 		fClockSender;
 		TClockConverterPtr      	fClockConverter;
 		TLoopManagerPtr         	fLoopManager;
 		TScoreFollowerPtr       	fInserter;
-		TEventRecorderPtr			fRecorder;
-		TScoreStatePtr   			fScoreState;
+		TEventRecorderPtr		fRecorder;
+		TScoreStatePtr   		fScoreState;
 		TEventSenderInterfacePtr  	fEventSender;
-		TTimeManagerPtr				fTimeManager;
+		TTimeManagerPtr			fTimeManager;
 		
 	public:
 		
-		TDestructor(TPlayerSynchroniserPtr 		synchro,
-					TEventDispatcherPtr	 		receiver,
-					TSchedulerInterfacePtr 		scheduler,
-					TTickPlayerInterfacePtr 	tickplayer,
-					TChaserInterfacePtr 		chaser,
-					TPlayerInterfacePtr 		player1,
-					TPlayerInterfacePtr 		player2,
-					TPlayerInterfacePtr 		player3,
-					TClockSenderPtr 			clocksender,
-					TClockConverterPtr      	clockconverter,
-					TLoopManagerPtr         	loopmanager,
-					TScoreFollowerPtr       	inserter,
-					TEventRecorderPtr			recorder,
-					TScoreStatePtr   			scorestate,
-					TEventSenderInterfacePtr  	eventsender,
-					TTimeManagerPtr				timemanager
-					)
+		TDestructor(TPlayerSynchroniserPtr 	synchro,
+                            TEventDispatcherPtr	 	receiver,
+                            TSchedulerInterfacePtr 	scheduler,
+                            TTickPlayerInterfacePtr 	tickplayer,
+                            TChaserInterfacePtr 	chaser,
+                            TPlayerInterfacePtr 	player1,
+                            TPlayerInterfacePtr 	player2,
+                            TPlayerInterfacePtr 	player3,
+                            TClockSenderPtr 		clocksender,
+                            TClockConverterPtr      	clockconverter,
+                            TLoopManagerPtr         	loopmanager,
+                            TScoreFollowerPtr       	inserter,
+                            TEventRecorderPtr		recorder,
+                            TScoreStatePtr   		scorestate,
+                            TEventSenderInterfacePtr  	eventsender,
+                            TTimeManagerPtr		timemanager
+                            )
 
 		{
 			fSynchroniser = synchro;
@@ -116,7 +116,7 @@ class TDestructor {
 			if (fPlayer2)		delete(fPlayer2);
 			if (fPlayer3)		delete(fPlayer3);
 			if (fClockSender)	delete(fClockSender);
-			if (fClockConverter)delete(fClockConverter);
+			if (fClockConverter)	delete(fClockConverter);
 			if (fLoopManager)	delete(fLoopManager);
 			if (fInserter)		delete(fInserter);
 			if (fRecorder)		delete(fRecorder);
