@@ -141,14 +141,7 @@ class TEventModifier :public TEventDispatcher, public TTickPlayerInterface {
 		TEventModifier(TEventSenderInterfacePtr sender, TPlayerSynchroniserPtr synchro,
 		TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr successor) ;
 		
-		~TEventModifier()
-		{
-			delete(fIterator1);
-			delete(fIterator);
-			delete(fScore);
-			delete(fPlayTask);
-			delete(fChaser);
-		}
+		~TEventModifier();
 	
 		// Interface TEventDispatcher
 		void ReceiveEvents (MidiEvPtr e);	
