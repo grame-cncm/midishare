@@ -26,7 +26,11 @@
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
-	typedef char Boolean;
+#	define nil 0
+#	define flush    fflush(stdout)
+#	define print	printf
+#else
+#	define MSALARMAPI
 #endif
 
 #if macintosh
@@ -66,7 +70,8 @@ inline Boolean MidiShare() { return true; }
 #endif
 
 #include "TDrivers.h"
-#include "FilterUtils.h"
+//#include "FilterUtils.h"
+#define IsAcceptedBit(a,n)     ( ((char*) (a))[(n)>>3]  &   (1<<((n)&7)) )
 
 #define true	1
 #define false	0
@@ -94,10 +99,10 @@ MidiName		gSlot2 = "Slot 2";
 MidiName		NewName = "New Name";
 #endif
 
-static void wakeup (short refnum);
-static void sleep  (short refnum);
-static void silentwakeup (short refnum);
-static void silentsleep  (short refnum);
+static void MSALARMAPI wakeup (short refnum);
+static void MSALARMAPI sleep  (short refnum);
+static void MSALARMAPI silentwakeup (short refnum);
+static void MSALARMAPI silentsleep  (short refnum);
 static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos);
 
 TDriverOperation gDrvOp   	 = { wakeup, sleep, 0, 0, 0 };
@@ -109,33 +114,33 @@ MidiEvPtr		 gReceived   = 0;
 static pascal void RcvAlarm( short refnum)
 #endif
 #ifdef CTASKS
-void RcvAlarm( short refnum)
+void MSALARMAPI RcvAlarm( short refnum)
 #endif
 {
 	MidiEvPtr e;
 	while (e= MidiGetEv(refnum)) {
-		RefNum(e) = refnum;
+		RefNum(e) = (Byte)refnum;
 		Link(e) = gReceived;
 		gReceived = e;
 	}
 }
 
 /*____________________________________________________________________*/
-static void wakeup (short refnum) 
+static void MSALARMAPI wakeup (short refnum) 
 	{ print ("       wakeup called for ref %d\n", (int)refnum); }
-static void silentwakeup (short refnum) { 
+static void MSALARMAPI silentwakeup (short refnum) { 
 	MidiConnect (refnum, 127, true);
 	MidiConnect (127, refnum, true);
 }
 
-static void sleep (short refnum)
+static void MSALARMAPI sleep (short refnum)
 		{ print ("       sleep called for ref %d\n", (int)refnum); }
-static void silentsleep (short unused1) { }
+static void MSALARMAPI silentsleep (short unused1) { }
 
 /*____________________________________________________________________*/
 int Environment()
 {
-	int version, count, n, ref;
+	short version, count, n, ref;
 	
 	print ("\nGlobal MidiShare environment :\n");
 	print ("    MidiGetVersion : ");flush;
@@ -214,7 +219,7 @@ void OpenClose()
 /*____________________________________________________________________*/
 void WakeupSleep()
 {
-	int r1=0, r2=0, r3=0, r4;
+	short r1=0, r2=0, r3=0, r4;
 	
 	print ("\nWakeup and Sleep operations :\n");flush;
 	if (MidiCountAppls ()) {
@@ -252,7 +257,7 @@ void WakeupSleep()
 /*____________________________________________________________________*/
 void Infos()
 {
-	int r1=0, r2=0, r3, ref, n, i;
+	short r1=0, r2=0, r3, ref, n, i;
 	MidiName name; char *s;
 	TDriverInfos infos;
 	
@@ -307,7 +312,7 @@ void Infos()
 /*____________________________________________________________________*/
 void Connections()
 {
-	int r1=0, r2=0, r3;
+	short r1=0, r2=0, r3;
 	
 	print ("\nConnections :\n");flush;
 	r1 = MidiRegisterDriver(&gDrvInfo1, &gSilentOp);
@@ -366,7 +371,7 @@ static int EqualNames (MidiName n1, MidiName n2)
 /*____________________________________________________________________*/
 void Slots()
 {
-	int r1=0, i; SlotRefNum sref1, sref2, sr; Boolean ret;
+	short r1=0, i; SlotRefNum sref1, sref2, sr; Boolean ret;
 	TDriverInfos infos; TSlotInfos islot; char *s;
 	
 	print ("\nSlots management :\n");flush;
@@ -491,12 +496,12 @@ static void countReceived()
 }
 
 /*____________________________________________________________________*/
-static void send (short port, short ref, Boolean shouldReceive)
+static void sendev (short port, short ref, Boolean shouldReceive)
 {
 	long t;
 	MidiEvPtr e = MidiNewEv (typeNote);
 	if (e) {
-		Port(e) = port;
+		Port(e) = (Byte)port;
 		MidiSendIm (ref, e);
 		t= MidiGetTime ();
 		while ((MidiGetTime() -t) < 10)
@@ -517,7 +522,7 @@ static void send (short port, short ref, Boolean shouldReceive)
 /*____________________________________________________________________*/
 void SendingAndReceiving()
 {
-	int r1=0, r2=0, r3; SlotRefNum sref1, sref2; long free, n;
+	short r1=0, r2=0, r3; SlotRefNum sref1, sref2; long free, n;
 	
 	print ("\nSending and receiving :\n");flush;
 	r1 = MidiRegisterDriver(&gDrvInfo1, &gSilentOp);
@@ -525,8 +530,10 @@ void SendingAndReceiving()
 	r3 = MidiOpen (ApplName);
 	if (r3 < 0) print ("MidiOpen failed\n");
 	else {
-		if (!MidiIsConnected (r1, 127) || !MidiIsConnected (127, r1))
+		if (!MidiIsConnected (r1, 127) || !MidiIsConnected (127, r1)) {
+			free = MidiFreeSpace();
 			print ("Warning : driver not connected\n");
+		}
 		else {
 			MidiConnect (r3, 0, true);
 			MidiConnect (0, r3, true);
@@ -542,22 +549,22 @@ void SendingAndReceiving()
 			free = MidiFreeSpace();
 			print ("    Client to driver :\n");			
 			print ("       send to port 0 :\n");
-			send (0, r3, true);
+			sendev (0, r3, true);
 			print ("       send to port 1 :\n");
-			send (1, r3, false);
+			sendev (1, r3, false);
 			print ("       send to port 2 :\n");
-			send (2, r3, true);
+			sendev (2, r3, true);
 
 			print ("    Driver to client :\n");
 			print ("       send from slot %d:\n", (int)(sref1.slotRef));
-			send (sref1.slotRef, r1, true);
+			sendev (sref1.slotRef, r1, true);
 			print ("       send from slot %d:\n", (int)(sref2.slotRef));
-			send (sref2.slotRef, r1, true);
+			sendev (sref2.slotRef, r1, true);
 			MidiConnectSlot (0, sref2, false);
 			print ("       send from slot %d (disconnected)\n", (int)(sref2.slotRef));
-			send (sref2.slotRef, r1, false);
+			sendev (sref2.slotRef, r1, false);
 			print ("       send from slot %d (don't exist)\n", 50);
-			send (50, r1, false);
+			sendev (50, r1, false);
 		}
 		n = MidiFreeSpace();
 		if (n!=free) 

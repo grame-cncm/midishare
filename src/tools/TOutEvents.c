@@ -28,7 +28,11 @@
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
-#	define PROTOTYPE
+#	define nil 0
+#	define flush    fflush(stdout)
+#	define print	printf
+#else
+#	define MSALARMAPI
 #endif
 
 
@@ -176,8 +180,7 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void wait( int d)
 {
-	long time;
-	
+	unsigned long time;
 	time= MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
 }
@@ -337,7 +340,7 @@ static CompareStream( MidiEvPtr e, short refnum)
 			f1= MidiCountFields (e)-1;
 			f2= MidiCountFields (get)+1;
 			if( f1!= f2) {
-				print("\nWarning : fields count differs");
+				print("\nWarning : fields count differs : %ld -> %ld", f1, f2);
 				goto err;
 			}
 			else if( !CmpCommon (e, get))
@@ -470,7 +473,7 @@ static GetNote( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static void SetEvent( MidiEvPtr e, Boolean display)
+static void SetMSEvent( MidiEvPtr e, Boolean display)
 {
 	register long f, i, v=1;
 	
@@ -496,7 +499,7 @@ static TestEvent( short i, Boolean display)
 	e= MidiNewEv(i);
 	if( !e) noEvts;
 	else{
-		SetEvent (e, display);
+		SetMSEvent (e, display);
 		if( i== typeNote) Dur (e)= 2;
 		copy= MidiCopyEv( e);
 		

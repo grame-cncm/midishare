@@ -33,14 +33,15 @@
 
 #ifdef __Windows__
 #	include <stdio.h>
-#	include <String.h>
-#	include <StdLib.h>
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
-#	define PROTOTYPE
+#	define nil 0
+#	define flush    fflush(stdout)
+#	define print	printf
+#else
+#	define MSALARMAPI
 #endif
-
 
 #ifdef __Linux__
 #ifdef MODULE
@@ -195,9 +196,7 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void wait( int d)
 {
-	long time;
-	
-	time= MidiGetTime()+ d;
+	unsigned long time = MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
 }
 
@@ -516,7 +515,7 @@ static CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 		print("\next : note off : wrong velocity : %d ", (int)Vel(e2));
 		ret= false;
 	}
-	dc= Date(e2) - Date(e1);
+	dc= (short)(Date(e2) - Date(e1));
 	if( dc!= d)
 	{
 		print("\next : wrong duration : %d instead of %d ", (int)dc, (int)d);
@@ -546,7 +545,7 @@ static GetNote( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static void SetEvent( MidiEvPtr e, Boolean display)
+static void SetMidiEvent( MidiEvPtr e, Boolean display)
 {
 	register long f, i, v=1;
 	
@@ -573,7 +572,7 @@ static TestEvent( short i, Boolean display)
 	e= MidiNewEv(i);
 	if( !e) noEvts;
 	else{
-		SetEvent( e, display);
+		SetMidiEvent( e, display);
 		if( i== typeNote) Dur( e)= 2;
 		copy= MidiCopyEv( e);
 		if( !copy) noEvts;

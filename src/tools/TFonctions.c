@@ -34,7 +34,11 @@
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
-	typedef char Boolean;
+#	define nil 0
+#	define flush    fflush(stdout)
+#	define print	printf
+#else
+#	define MSALARMAPI
 #endif
 
 #if macintosh
@@ -101,7 +105,7 @@ MidiName TestName   = "Test";
 static pascal void RcvAlarm( short unused1)
 #endif
 #ifdef CTASKS
-void RcvAlarm( short unused1)
+void MSALARMAPI RcvAlarm( short unused1)
 #endif
 {
 }
@@ -112,7 +116,7 @@ void RcvAlarm( short unused1)
 static pascal void ApplAlarm( short unused1, long unused2)
 #endif
 #ifdef CTASKS
-void ApplAlarm( short unused1, long unused2)
+void MSALARMAPI ApplAlarm( short unused1, long unused2)
 #endif
 {
 }
@@ -120,7 +124,7 @@ void ApplAlarm( short unused1, long unused2)
 /*____________________________________________________________________*/
 short Environment()
 {
-	int version, count, n;
+	int version, count; short n;
 	
 	print ("\nGlobal MidiShare environment :\n");
 	print ("    MidiGetVersion : ");flush;
@@ -504,7 +508,7 @@ static long CountOfEvents( MidiSeqPtr s)
 static pascal void ApplyProc( MidiEvPtr e )
 #endif
 #ifdef CTASKS
-void ApplyProc( MidiEvPtr e )
+void MSALARMAPI ApplyProc( MidiEvPtr e )
 #endif
 {
 	if( EvType(e)== typeNote)
@@ -596,7 +600,7 @@ void Sending()
 {
 	MidiEvPtr e, copy, get;
 	short r;
-	long free, time, n, count;
+	unsigned long free, time, n, count;
 
 	print ("\nSending and receiving events :\n");
 	free= MidiFreeSpace();
@@ -620,7 +624,7 @@ void Sending()
 			MidiSendIm( refNum, copy);
 			time= MidiGetTime();
 			print ("%s\n", OK);
-			while( time== MidiGetTime());
+			while( time == MidiGetTime());
 			
 			print ("    MidiCountEvs : ");flush;
 			n= MidiCountEvs(r);
@@ -644,7 +648,7 @@ void Sending()
 			print ("    MidiSend : ");flush;
 			Date(copy)= time= MidiGetTime()+ 4;
 			MidiSend( refNum, copy);
-			while( MidiGetTime()<= time);
+			while( MidiGetTime()< time);
 			print ("%s\n", OK);
 			n= MidiCountEvs(r);
 			if( n!= 1)
@@ -662,7 +666,7 @@ void Sending()
 		print ("    MidiSendAt : ");flush;
 		MidiSendAt( refNum, e, time= MidiGetTime()+ 4);
 		print ("%s\n", OK);
-		while( MidiGetTime()<= time);
+		while( MidiGetTime()< time);
 		n= MidiCountEvs(r);
 		if( n!= 2)
 			print ("Warning : incoherent number of transmited events : %ld\n", n);
@@ -688,7 +692,7 @@ void Mail()
 	
 	print ("\nMail boxes :\n");
 	print ("    MidiReadSync : ");flush;
-	b= MidiReadSync( &a);
+	b= MidiReadSync(&a);
 	print ("%ld %s\n", b, OK);
 	if( a)
 		print ("Warning : non null value : %ld\n", a);
@@ -722,7 +726,7 @@ ApplContext gContext;
 static pascal void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 #ifdef CTASKS
-void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
+void MSALARMAPI MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 {
 	if( a1)
@@ -734,7 +738,7 @@ void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
 static pascal void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 #ifdef CTASKS
-void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
+void MSALARMAPI MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 {
 	gContext.res1 = true;
@@ -747,7 +751,7 @@ void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
 static pascal void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 #endif
 #ifdef CTASKS
-void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
+void MSALARMAPI MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 #endif
 {
 	gContext.res2 = true;
@@ -758,7 +762,7 @@ void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 static pascal void MyTask4( long time, short refnum, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
-void MyTask4( long time, short refnum, long a1,long a2,long a3)
+void MSALARMAPI MyTask4( long time, short refnum, long a1,long a2,long a3)
 #endif
 {
 	gContext.res1 = true;
@@ -771,7 +775,7 @@ void MyTask4( long time, short refnum, long a1,long a2,long a3)
 static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
-void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
+void MSALARMAPI MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 #endif
 {
 	print ("dtask rcv %ld %ld %ld ", a1, a2, a3);
@@ -781,7 +785,7 @@ void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 void Tasks( short isFreeMem)
 {
 	MidiEvPtr e;
-	long time, p1=0, p2=0, p3=0;
+	unsigned long time, p1=0, p2=0, p3=0;
 	
 	print ("\nTask Managing :\n");
 
@@ -1081,10 +1085,12 @@ void Close()
 /*____________________________________________________________________*/
 main()
 {
+	extern void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace);
 	print ("\nMidiShare functions test.\n");
 	print ("================================\n");
 	
 	if( MidiShare()) {
+//		MidiShareSpecialInit (40000);
 		if( !Environment()) return 1;
 		flush;
 		OpenClose(); flush;
@@ -1094,7 +1100,7 @@ main()
 		Sequences( true); flush;
 		Time(); flush;
 		Sending(); flush;
-//		Mail(); flush;
+		Mail(); flush;
 		Tasks(true); flush;
 		Synchro(); flush;
 		Tolerance(); flush;

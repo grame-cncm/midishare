@@ -23,12 +23,12 @@
 
 #ifdef __Windows__
 #	include <stdio.h>
-#	include <String.h>
-#	include <StdLib.h>
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
-#	define PROTOTYPE
+#	define nil 0
+#	define flush    fflush(stdout)
+#	define print	printf
 #endif
 
 
@@ -111,7 +111,6 @@ char *typeListe[] =
 /*148 */	"Specific",		"Reserved"
 };
 
-
 #ifdef _Filter_Direct_Access_
 #include "FilterUtils.h"
 static TFilter	myFilter;					/* application filter */
@@ -149,11 +148,9 @@ static void ResetFilter (void)
 }
 
 /*____________________________________________________________________*/
-static void wait( int v)
+static void wait( unsigned long v)
 {
-	long time;
-	
-	time= MidiGetTime();
+	unsigned long time = MidiGetTime();
 	while( (MidiGetTime() - time) < v);
 }
 
@@ -174,7 +171,7 @@ static MidiEvPtr GetReceived(void)
 static int TestEv( int i, short t1, short t2)
 {
 	MidiEvPtr e;
-	int n, result= true;
+	short n, result= true;
 	
 	for( n=t1; n<=t2; n++) {
 		e= MidiNewEv( n);
@@ -217,7 +214,7 @@ static void TestEvent( int i)
 /*____________________________________________________________________*/
 void Events( void)
 {
-	int i;
+	short i;
 	
 	print ("\nChecking events types\n");
 	print ("-----------------------------\n");
@@ -274,7 +271,7 @@ static void TestCanal( int i)
 /*____________________________________________________________________*/
 void Canaux( void)
 {
-	int i;
+	short i;
 	
 	print ("\nChecking channels\n");
 	print ("-----------------------------\n");
@@ -324,7 +321,7 @@ static void TestPort( int i)
 /*____________________________________________________________________*/
 void Ports( void)
 {
-	int i;
+	short i;
 	
 	print ("\nChecking ports\n");
 	print ("-----------------------------\n");
@@ -362,7 +359,6 @@ void Close (void)
 	MidiClose( refNum);
 }
 
-#include <Memory.h>
 /*____________________________________________________________________*/
 main(void)
 {
