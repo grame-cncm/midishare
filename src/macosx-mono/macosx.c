@@ -262,14 +262,22 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
                             AudioClockHandler,
                             g);
  
-	 if(err != paNoError) goto error_recovery;
+	 if(err != paNoError) {
+            Report("MidiShare", "Pa_OpenStream:", Pa_GetErrorText(err));
+            goto error_recovery;
+         }
+         
 	 err = Pa_StartStream(gStream);
-	 if(err != paNoError) goto error_recovery;
+	 if(err != paNoError) {
+            Report("MidiShare", "Pa_StartStream:", Pa_GetErrorText(err));
+            goto error_recovery;
+         }
+            
 	 return;
 	 
 error_recovery:
 
-	 Report("MidiShare", "cannot open audio timer", driverName);
+	 Report("MidiShare", "cannot open audio timer:", driverName);
 	 CloseTimeInterrupts(g);
 }
 
