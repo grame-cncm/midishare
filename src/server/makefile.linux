@@ -10,29 +10,37 @@
 #
 
 TARGET = midishared
-KLIB   = libMidiShare.so
-KOBJ   = ../msServerCommonLib.o
-OSOBJ  = ../msOSGlueLib.o
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o
+SLIB = ../msServerSharedLib.o
 
-INC = -I../common/Headers -I../osglue
-CFLAGS := -O3 -Wall -DMSKernel $(INC)
-LIB    := -lpthread -lportaudio -lstdc++
+COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
+COMINC := $(wildcard ../common/Headers/*.h)
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/unix/*.cpp)
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/include/*.h)
+
+LSRC = msIntHandler.c msPortAudio.c profport.c msExtern.c msKernelPrefs.c msMem.c
+LOBJ := $(patsubst %.c, %.o, $(LSRC)) 
+
+CFLAGS   := -O3 -Wall -DMSKernel -I../common/Headers -I../osglue
+CXXFLAGS := $(CFLAGS) -I../osglue/include
 CC = gcc
 
 SRC := $(wildcard *.c)
-OBJ := $(OSOBJ) $(KOBJ) $(patsubst %.c, %.o, $(SRC))
+OBJ := $(patsubst %.c, %.o, $(SRC))
 DEST = /usr/local/bin
 CONF = midishare.conf
 
 
 all : $(TARGET)
 
-lib : $(KLIB)
-
-$(TARGET) : makefile $(OBJ)
+$(TARGET) : makefile $(LIBS) $(OBJ)
 	make -C ../common
 	make -C ../osglue
-	$(CC) $(OBJ) $(LIB) -o $(TARGET)
+	$(CC) $(OBJ) $(LIBS) -lpthread -lportaudio -lstdc++ -o $(TARGET)
+
+shlib : $(SLIB)
+$(SLIB) : makefile $(LIBS) $(LOBJ)
+	ld -r $(LOBJ) -o $(SLIB)
 
 makefile: makefile.linux
 	cp makefile.linux makefile
@@ -54,16 +62,10 @@ clean:
 	make -C ../osglue clean
 	rm -f $(OBJ) $(TARGET) $(KLIB)*
 
-$(KLIB) : makefile $(KOBJ)
-	make -C ../common
-	$(CC) $(KOBJ) -shared -fPIC -W1,soname,$(KLIB).1 -o $(KLIB).1.0
-	[ -f $(KLIB).1 ] || ln -s $(KLIB).1.0 $(KLIB).1
-	[ -f $(KLIB) ]   || ln -s $(KLIB).1 $(KLIB)
+../msServerCommonLib.o: makefile $(COMSRC) $(COMINC)
+	make -C ../common server
 
-$(KOBJ) :
-	make -C ../common
-
-$(OSOBJ):
+../msOSGlueLib.o: makefile $(GLUESRC) $(GLUEINC)
 	make -C ../osglue
 
 # DO NOT DELETE
