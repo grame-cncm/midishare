@@ -25,6 +25,11 @@
 
 #include "results.h"
 
+#ifdef linux
+#define Start _Start
+#define Stop  _Stop
+#endif
+
 /* ----------------------------------*/
 /* constants definitions             */
 #define kProfileName  "msBenchDriver.ini"
