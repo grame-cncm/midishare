@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2002
+  Copyright © Grame 1999-2003
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,8 +20,8 @@
 
 */
 
-#ifndef __LFLIFO__
-#define __LFLIFO__
+#ifndef __lflifo__
+#define __lflifo__
 
 //
 /*****************************************************************
