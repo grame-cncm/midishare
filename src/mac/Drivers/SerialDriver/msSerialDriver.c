@@ -207,15 +207,10 @@ Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { SerialDriverName, 100, 0};
 	SlotRefNum sref; short refNum;
-	TDriverOperation op; 
+	TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
 	SerialDrvPtr data = GetData ();
 	
 	DataInit (data);
-	
-	op.wakeup = WakeUp;
-	op.sleep = Sleep;
-	op.slotInfo = SlotInfo; 
-
 	if (MidiGetNamedAppl (SerialDriverName) > 0) { // still running
 		doneFlag = true;
 		return true;

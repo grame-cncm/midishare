@@ -392,12 +392,9 @@ static void SetupFilter (MidiFilterPtr filter)
 Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { OMSDriverName, 100, 0};
-	short refNum; TDriverOperation op; 
+	short refNum; TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
 	StoragePtr mem = GetStorage();
 
-	op.wakeup = WakeUp;
-	op.sleep = Sleep;
-	op.slotInfo = SlotInfo; 
 	mem->refNum = 0;
 	mem->data = 0;
 

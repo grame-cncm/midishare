@@ -97,8 +97,8 @@ static void silentwakeup (short refnum);
 static void silentsleep  (short refnum);
 static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos);
 
-TDriverOperation gDrvOp   	 = { wakeup, sleep, slotInfo };
-TDriverOperation gSilentOp   = { silentwakeup, silentsleep, slotInfo };
+TDriverOperation gDrvOp   	 = { wakeup, sleep, slotInfo, 0, 0 };
+TDriverOperation gSilentOp   = { silentwakeup, silentsleep, slotInfo, 0, 0 };
 MidiEvPtr		 gReceived   = 0;
 
 /*____________________________________________________________________*/

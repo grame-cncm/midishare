@@ -203,13 +203,9 @@ static void SetupFilter (MidiFilterPtr filter)
 Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { QTDriverName, 100, 0};
-	short refNum; TDriverOperation op; 
+	short refNum; TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
 	DriverDataPtr data = GetData ();
 	
-	op.wakeup = WakeUp;
-	op.sleep = Sleep;
-	op.slotInfo = SlotInfo; 
-
 	if (MidiGetNamedAppl (QTDriverName) > 0) {
 		doneFlag = true;
 		return true;
