@@ -50,7 +50,7 @@
  *****************************************************************
  *****************************************************************/
 
-#if defined(linux)
+#if defined(i386) || defined(__ppc__)
 # include "lffifo_lifo.h"
 #elif defined(WIN32)
 # include "lffifo_lifo.h"
