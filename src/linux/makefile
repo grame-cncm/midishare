@@ -24,8 +24,8 @@ install: libinstall
 	install MidiShare.o $(MODF)
 	depmod -a
 	install MidiShare $(RC)/init.d
-	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S99MidiShare
-	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S99MidiShare
+	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
+	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
 	modprobe MidiShare
 
 #Compile applications, tools and drivers
