@@ -129,7 +129,7 @@ static ulong NewBlock (MSMemoryPtr g, ulong nbev)
 	
 	if (nbev > 0) {
 		unsigned long size = nbev * sizeof(TMidiEv) + sizeof(void*);
-		blk = AllocateMemory (kSharedMemory, size);
+		blk = (void **)AllocateMemory (kSharedMemory, size);
 		if (!blk) return 0;
 		lfpush ( BlockList(g), (cell*)blk);
 		cl = (MidiEvPtr)(blk+1);
