@@ -131,6 +131,8 @@ class TEventModifier :public TEventDispatcher, public TTickPlayerInterface {
 		
 		MidiEvPtr HandleKeyOn(MidiEvPtr ev, TFunPtr fun);
 		MidiEvPtr HandleKeyOff(MidiEvPtr ev, TFunPtr fun);
+		MidiEvPtr HandlePitchBend(MidiEvPtr ev, TFunPtr fun);
+		MidiEvPtr HandleVolume(MidiEvPtr ev, TFunPtr fun);
 		
 		short Range(short val, short min, short max) { return (val < min) ? min : (val > max) ? max : val;}
 		
