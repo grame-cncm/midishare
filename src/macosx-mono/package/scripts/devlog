@@ -1,0 +1,9 @@
+# list of the files that should be part of the install.log file
+# first column describe a folder root
+# second and third columns are used as 'find' options
+# for each line, a the command:
+#		find $column1 $column2 $column3
+# is issued
+
+../devroot/Applications/MidiShare+-depth+
+../devroot/usr/local/include+-type+f

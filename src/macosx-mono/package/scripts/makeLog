@@ -1,26 +1,16 @@
 #!/bin/sh
 #
 
-D=Distribution
-
-DIRS="Applications/MidiShare \
-	  System/Library/Frameworks \
-	  private/etc/MidiShare"
-
 function list() {
-	find $1 $2 -print | sed -e 's/^/\//'	
+	find $1 $2 $3 -print | sed -e 's/..\/.*root\//\//'	
 }
 
-cd Distribution
-for a in $DIRS
+for a in $(cat $1 | grep -v \#)
 do
-	list $a -depth
+	dir=$(echo $a | cut -d+ -f1)
+	opt1=$(echo $a | cut -d+ -f2)
+	opt2=$(echo $a | cut -d+ -f3)
+	list $dir $opt1 $opt2
 done
-
-list usr/lib "-type f"
-list usr/lib "-type l"
-list Library/Java/Extensions "-type f"
-
-echo $HOME/Library/Preferences/MidiShare
 
 exit 0

@@ -2,75 +2,26 @@
 #
 
 . ./content
+. ./functions
 
-function libname () {
-	lib=$1
-	ext=$2
-	echo $lib | sed -e "s/\.[0-9]\.[0-9]\.[0-9]\.$ext/\.$ext/"
-}
-
-function install () {
-	file=$1
-	src=$2
-	dst=$3
-	if [ -d $dst/$file ]
-	then
-		echo "$file is on the way"
-	else
-		echo " ok"
-		cp -R  $src/$file $dst || exit 0
-	fi
-}
-
-echo -n "creating midishare framework : "
-install MidiShare.framework ../build $DIST/System/Library/Frameworks
-
-echo -n "creating player framework : "
-install Player.framework ../../../libraries/player/macosx/build/ $DIST/System/Library/Frameworks
-
-echo creating application...
-for a in $appls
-do
-	echo -n "creating application $(basename $a .app) : "
-	install $(basename $a) $(dirname $a) $DIST/Applications/MidiShare
-done
-
+###########################################
+echo creating frameworks...
+process $FRMWKS
+###########################################
+echo creating applications...
+process $APPLS
+###########################################
 echo creating drivers...
-for a in $drivers
-do
-	echo -n "creating driver $(basename $a) : "
-	install $(basename $a) $(dirname $a) $DIST/usr/lib
-done
-
+process $DRIVERS
+###########################################
 echo creating java native libraries...
-for a in $java
-do
-	echo -n "creating library $(basename $a) : "
-	install $(basename $a) $(dirname $a) $DIST/usr/lib/java
-done
+process $JAVA
 
+###########################################
 echo creating symbolic links...
-h=$(pwd)
-cd Distribution/usr/lib
-for a in *.?.?.?.so
-do
-	link=$(libname $a so)
-	[ -f $link ] && rm $link
-	ln -s $a $link
-done
-
+cd $DIST/usr/lib
+makelinks so *.?.?.?.so
 cd java
-for a in *.?.?.?.jnilib
-do
-	link=$(libname $a jnilib)
-	[ -f $link ] && rm $link
-	ln -s $a $link
-done
-cd $h
-
-echo -n "creating grame.jar : "
-install grame.jar ../../../lang/java/native/macosx/build $DIST/Library/Java/Extensions/
-
-echo "--- midishare package ready ---"
+makelinks jnilib *.?.?.?.jnilib
 
 exit 0

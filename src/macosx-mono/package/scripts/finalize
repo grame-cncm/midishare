@@ -1,42 +1,50 @@
 #!/bin/sh
 #
 
-h=$(pwd)
+. ./content
 
-D=Distribution
+case $1 in 
+	"dist")
+		echo remove the .DS_Store files
+		find $DIST -name ".DS_Store" -exec rm -rf {} \;
+		
+		echo generates install.log
+		./makeLog instlog > install.log
+		mv install.log $DIST/Applications/MidiShare
+		
+		echo change rights
+		find $DIST -type d -exec chmod 755 {} \;
+		find $DIST -type f -exec chmod g+w {} \;
+		find $DIST -type f -exec chmod o-w {} \;
+		
+		chmod 775 $DIST/Applications
+		chmod 775 $DIST/System
+		
+		echo change owner
+		chown -R root:wheel $DIST/private
+		chown -R root:wheel $DIST/*
+		chown -R root:admin $DIST/Applications/*
+		
+		echo "protect .ini files"
+		chmod go-w $DIST/private/etc/MidiShare/defaults/*
+		;;
 
-APPLS=Applications
-JAVA=Library/Java/Extensions
-ETC=private/etc
-SYSTEM=System/Library/Frameworks
-USR=usr/lib/java
+	"dev")
+		echo generates dev install.log
+		./makeLog devlog > install.log
+		mv install.log $DEV/Applications/MidiShare/Developer
+		
+		echo change dev rights
+		find $DEV -type d -exec chmod 755 {} \;
+		find $DEV -type f -exec chmod g+w {} \;
+		find $DEV -type f -exec chmod o-w {} \;
+		
+		echo change dev owner
+		chown -R root:wheel $DEV
+		;;
 
-echo save distribution tree
-[ -d Distribution.save ] && rm -rf Distribution.save
-mv Distribution Distribution.save
-cp -R Distribution.save Distribution
-
-echo suppression des dossiers CVS
-find Distribution -depth -type d -name CVS -exec rm -rf {} \;
-
-echo remove the .DS_Store files
-find Distribution -name ".DS_Store" -exec rm -rf {} \;
-
-echo generates install.log
-./scripts/makeLog > install.log
-mv install.log Distribution/Applications/MidiShare
-
-echo verification des droits des fichiers et des dossiers
-find Distribution -type d -exec chmod 755 {} \;
-find Distribution -type f -exec chmod g+w {} \;
-find Distribution -type f -exec chmod o-w {} \;
-
-chown -R root:wheel private
-chown -R root:wheel Distribution/*
-chown -R root:admin Distribution/Applications/*
-
-chmod 775 Distribution/Applications
-chmod 775 Distribution/System
-
-echo "protection des fichiers .ini"
-chmod go-w Distribution/private/etc/MidiShare/defaults/*
+	*)
+		echo "finalize: undefined target"
+		echo "usage: finalize [ dist | dev ]"
+		;;
+esac

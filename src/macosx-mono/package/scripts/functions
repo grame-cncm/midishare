@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+
+function libname () {
+	lib=$1
+	ext=$2
+	echo $lib | sed -e "s/\.[0-9]\.[0-9]\.[0-9]\.$ext/\.$ext/"
+}
+
+function install () {
+	file=$1
+	src=$2
+	dst=$3
+	if [ -d $dst/$file ]
+	then
+		echo "$file is on the way"
+	else
+		echo " ok"
+		cp -R  $src/$file $dst || exit 0
+	fi
+}
+
+function process () {
+	while [ $1 ]
+	do
+		src=$1; shift
+		dst=$1; shift
+		echo -n "         $(basename $src): "
+		install $(basename $src) $(dirname $src) $dst
+	done
+}
+
+function makelinks () {
+	ext=$1; shift
+	while [ $1 ]
+	do
+		a=$1; shift
+		link=$(libname $a $ext)
+		[ -f $link ] && rm $link
+		echo -n "         $link -> $a: "
+		ln -s $a $link && echo ok
+	done
+}
+

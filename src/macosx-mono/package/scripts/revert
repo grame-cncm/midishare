@@ -1,9 +1,0 @@
-#!/bin/sh
-#
-
-echo restore distribution tree
-if [ -d Distribution.save ] 
-then
-	[ -d Distribution ] && rm -rf Distribution
-	mv Distribution.save Distribution
-fi
