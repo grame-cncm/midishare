@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+
+n="1 2 3 4 5 6 7 8 9 10"
+n="6 7 8 9 10"
+outdirs=bench
+outfile=bench
+outdrv=msBenchDriver
+
+function bench() {
+	count=$1
+	dir=$outdirs-$1
+	[ -d $dir ] || mkdir $dir
+	while [ $count -gt 0 ]
+	do
+		./msBenchAppl > $dir/$outfile-$count.out.txt 2>  $dir/$outfile-$count.sum.txt &
+		count=$(($count - 1))
+	done
+	sleep $(($1 + 1))
+	mv $outdrv.*.txt $dir
+}
+
+for a in $n
+do
+	echo bench with $a client
+	bench $a
+done
+
+echo end of bench

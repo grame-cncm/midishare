@@ -1,0 +1,240 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 38;
+	objects = {
+		D3F82BC304822EAE00053103 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3F82BC404822EAE00053103 = {
+			buildActionMask = 2147483647;
+			files = (
+				D3F82BCB04822EE400053103,
+				D3F82BCD04822EF000053103,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3F82BC504822EAE00053103 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3F82BC604822EAE00053103 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3F82BC704822EAE00053103 = {
+			buildPhases = (
+				D3F82BC304822EAE00053103,
+				D3F82BC404822EAE00053103,
+				D3F82BC504822EAE00053103,
+				D3F82BC604822EAE00053103,
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-lMidiShare";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = msBenchAppl;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXToolTarget;
+			name = msBenchAppl;
+			productInstallPath = /usr/local/bin;
+			productName = msBenchAppl;
+			productReference = D3F82BC804822EAE00053103;
+		};
+		D3F82BC804822EAE00053103 = {
+			isa = PBXExecutableFileReference;
+			path = msBenchAppl;
+			refType = 3;
+		};
+		D3F82BCA04822EE400053103 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = msBenchAppl.c;
+			path = ../msBenchAppl.c;
+			refType = 2;
+		};
+		D3F82BCB04822EE400053103 = {
+			fileRef = D3F82BCA04822EE400053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3F82BCD04822EF000053103 = {
+			fileRef = F5665025047FD2D10178F97B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
+//F50
+//F51
+//F52
+//F53
+//F54
+		F566501F047FD2940178F97B = {
+			children = (
+				F5665024047FD2BD0178F97B,
+				D3F82BCA04822EE400053103,
+				F5665025047FD2D10178F97B,
+				F566502C047FD3180178F97B,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		F5665021047FD2940178F97B = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F5665022047FD2940178F97B = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F5665023047FD2940178F97B = {
+			buildStyles = (
+				F5665021047FD2940178F97B,
+				F5665022047FD2940178F97B,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = F566501F047FD2940178F97B;
+			productRefGroup = F566502C047FD3180178F97B;
+			projectDirPath = "";
+			targets = (
+				F566502A047FD3180178F97B,
+				D3F82BC704822EAE00053103,
+			);
+		};
+		F5665024047FD2BD0178F97B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = msBenchDriver.c;
+			path = ../msBenchDriver.c;
+			refType = 2;
+		};
+		F5665025047FD2D10178F97B = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = results.c;
+			path = ../results.c;
+			refType = 2;
+		};
+		F5665026047FD3180178F97B = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5665027047FD3180178F97B = {
+			buildActionMask = 2147483647;
+			files = (
+				F566502E047FD4C30178F97B,
+				F566502F047FD4C30178F97B,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5665028047FD3180178F97B = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5665029047FD3180178F97B = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F566502A047FD3180178F97B = {
+			buildPhases = (
+				F5665026047FD3180178F97B,
+				F5665027047FD3180178F97B,
+				F5665028047FD3180178F97B,
+				F5665029047FD3180178F97B,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace -undefined suppress";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = msBenchDriver.dylib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = msBenchDriver;
+			productName = msBenchDriver;
+			productReference = F566502B047FD3180178F97B;
+		};
+		F566502B047FD3180178F97B = {
+			isa = PBXLibraryReference;
+			path = msBenchDriver.dylib;
+			refType = 3;
+		};
+		F566502C047FD3180178F97B = {
+			children = (
+				F566502B047FD3180178F97B,
+				D3F82BC804822EAE00053103,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		F566502E047FD4C30178F97B = {
+			fileRef = F5665024047FD2BD0178F97B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F566502F047FD4C30178F97B = {
+			fileRef = F5665025047FD2D10178F97B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = F5665023047FD2940178F97B;
+}
