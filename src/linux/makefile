@@ -18,7 +18,7 @@ install:
 	make -i -C library install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
 	if [ ! -f /etc/$(CONF) ]; then cp $(CONF) /etc/$(CONF); fi
-	insmod MidiShare
+	insmod MidiShare.o
 
 uninstall:
 	./checksu
