@@ -35,13 +35,16 @@ int msfd = -1;  /* the MidiShare Device file number */
 
 void MidiInstall()
 {
+	
   msfd = open("/dev/MidiShare", 0);
   if (msfd < 0) {
 	printf("Can't open /dev/MidiShare\n");
 	exit(-1);
   }
+  
   InitEvents ();
   InitMemory(Memory(gClients), 15000);
+  pthread_mutex_init(&gClients->mutex, NULL);
 }
 
 /*--------------------------------------------------------------------*/
