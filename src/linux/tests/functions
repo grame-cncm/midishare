@@ -1,35 +1,35 @@
 SRC = ../../tools
 INC = ../Include
+OD = obj
 MODOPTS=-DMODVERSIONS -D__Linux__  -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 MODINC=-I$(INC) -I../../common/Headers -I$(SRC)
 CC  = gcc
+MODULE = TestFModule
 
-OBJ = TFonctions.o TFunLoader.o
+OBJ = $(OD)/TFonctions.o $(OD)/TFLoader.o
 
-all : module TestFClient
+all : $(MODULE).o TFClient
 
-module : TestFModule.o
+$(MODULE).o : $(OBJ)
+	ld -m elf_i386 -r $(OBJ) -o $(MODULE).o
 
-TestFModule.o : $(OBJ)
-	ld -m elf_i386 -r TFonctions.o TFunLoader.o -o TestFModule.o
+$(OD)/TFonctions.o : $(SRC)/TFonctions.c $(SRC)/TFonctions.h
+	$(CC) $(SRC)/TFonctions.c $(MODINC) -c  $(MODOPTS)  -D__NO_VERSION__ -o $(OD)/TFonctions.o
 
-TFonctions.o : $(SRC)/TFonctions.c $(SRC)/TFonctions.h
-	$(CC) $(SRC)/TFonctions.c $(MODINC) -c  $(MODOPTS)  -D__NO_VERSION__ -o TFonctions.o
+$(OD)/TFLoader.o : TFLoader.c TFClient.h $(SRC)/TFonctions.h
+	$(CC) TFLoader.c $(MODINC) -c  $(MODOPTS) -o $(OD)/TFLoader.o
 
-TFunLoader.o : TFunLoader.c TFClient.h $(SRC)/TFonctions.h
-	$(CC) TFunLoader.c $(MODINC) -c  $(MODOPTS)
-
-TestFClient : TFunClient.c TFClient.h
-	$(CC) TFunClient.c -I$(INC) -lMidiShare -lpthread -o TestFClient
+TFClient : TFClient.c TFClient.h
+	$(CC) TFClient.c -I$(INC) -lMidiShare -lpthread -o TFClient
 
 
 install :
 	if [ ! -c /dev/TestFunctions ]; then mknod /dev/TestFunctions c 154 0; fi
-	insmod TestFModule.o
+	insmod $(MODULE).o
 
 uninstall : 
 	if [ -c /dev/TestFunctions ]; then rm /dev/TestFunctions; fi
-	rmmod TestFModule
+	rmmod $(MODULE)
 
 clean :
-	rm $(OBJ) TestFModule.o TestFClient 
+	rm $(OBJ) $(MODULE).o TFClient 

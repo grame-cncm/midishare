@@ -1,33 +1,34 @@
 SRC = ../../tools
 INC = ../Include
+OD = obj
 MODOPTS=-DMODVERSIONS -D__Linux__  -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 MODINC=-I$(INC) -I../../common/Headers -I$(SRC)
 CC  = gcc
+MODULE = TestEModule
+OBJ = $(OD)/TEvents.o $(OD)/TELoader.o
 
-OBJ = TEvents.o TEvtsLoader.o
+all : $(MODULE).o TEClient
 
-all : module TEvClient
-module : TestEModule.o
 
-TestEModule.o : $(OBJ)
-	ld -m elf_i386 -r $(OBJ) -o TestEModule.o
+$(MODULE).o : $(OBJ)
+	ld -m elf_i386 -r $(OBJ) -o $(MODULE).o
 
-TEvents.o : $(SRC)/TEvents.c $(SRC)/TEvents.h TEClient.h $(INC)/MidiShareKernel.h
-	$(CC) $(SRC)/TEvents.c $(MODINC) -c  $(MODOPTS) -D__NO_VERSION__ -o TEvents.o
+$(OD)/TEvents.o : $(SRC)/TEvents.c $(SRC)/TEvents.h TEClient.h $(INC)/MidiShareKernel.h
+	$(CC) $(SRC)/TEvents.c $(MODINC) -c  $(MODOPTS) -D__NO_VERSION__ -o $(OD)/TEvents.o
 
-TEvtsLoader.o : TEvtsLoader.c TEClient.h  $(SRC)/TEvents.h
-	$(CC) TEvtsLoader.c $(MODINC) -c  $(MODOPTS)
+$(OD)/TELoader.o : TELoader.c TEClient.h  $(SRC)/TEvents.h
+	$(CC) TELoader.c $(MODINC) -c  $(MODOPTS) -o $(OD)/TELoader.o
 
-TEvClient : TEvClient.c TEClient.h
-	$(CC) TEvClient.c -I$(INC) -lMidiShare -lpthread -o TEvClient
+TEClient : TEClient.c TEClient.h
+	$(CC) TEClient.c -I$(INC) -lMidiShare -lpthread -o TEClient
 
 install :
 	if [ ! -c /dev/TestEvents ]; then mknod /dev/TestEvents c 153 0; fi
-	insmod TestEModule.o
+	insmod $(MODULE).o
 
 uninstall : 
 	if [ -c /dev/TestEvents ]; then rm /dev/TestEvents; fi
-	rmmod TestEModule
+	rmmod $(MODULE)
 
 clean :
-	rm $(OBJ) TestEModule.o TEvClient
+	rm $(OBJ) $(MODULE).o TEClient
