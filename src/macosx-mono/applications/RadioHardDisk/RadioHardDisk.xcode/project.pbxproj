@@ -65,6 +65,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				OPTIMIZATION_CFLAGS = "-O0";
+				UNSTRIPPED_PRODUCT = YES;
 				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
@@ -241,7 +242,6 @@
 		};
 		20286C32FDCF999611CA2CEA = {
 			children = (
-				D354A7FE05BE86DA006B0B2F,
 				D3EED03A05BD92280036F237,
 				20286C33FDCF999611CA2CEA,
 				0249A669FF388E3911CA2CEA,
@@ -598,7 +598,6 @@
 				D354A7E805BE86BD006B0B2F,
 				D354A7E905BE86BD006B0B2F,
 				D354A7EA05BE86BD006B0B2F,
-				D354A7FF05BE86DA006B0B2F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -643,16 +642,71 @@
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		D354A7FE05BE86DA006B0B2F = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.framework;
-			name = MidiShare.framework;
-			path = ../../build/MidiShare.framework;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
+		D371576407CDEF6900AB379D = {
+			children = (
+				D371577B07CDEF6900AB379D,
+				D371577D07CDEF6900AB379D,
+				D371577E07CDEF6900AB379D,
+				D371578007CDEF6900AB379D,
+			);
+			isa = PBXGroup;
+			name = atomic;
+			path = "/Users/fober/Desktop/midishare-2.6-devbranch-bixeon-v10/src/common/atomic";
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
-		D354A7FF05BE86DA006B0B2F = {
-			fileRef = D354A7FE05BE86DA006B0B2F;
+		D371577B07CDEF6900AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = lflifo.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371577D07CDEF6900AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = lflifoppc.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371577E07CDEF6900AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = msAtomic.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371578007CDEF6900AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = msAtomicPPC.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371578C07CDEF6900AB379D = {
+			fileRef = D371577B07CDEF6900AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371578E07CDEF6900AB379D = {
+			fileRef = D371577D07CDEF6900AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371578F07CDEF6900AB379D = {
+			fileRef = D371577E07CDEF6900AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371579107CDEF6900AB379D = {
+			fileRef = D371578007CDEF6900AB379D;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -883,6 +937,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				LIBRARY_SEARCH_PATHS = "/Users/fober/Desktop/midishare-2.6-devbranch-bixeon-v10/src/common/atomic/benchs";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
@@ -953,7 +1008,10 @@
 				F7F87D40020C5E58019D0CEB,
 				F7F87D5F020C5E8F019D0CEB,
 				F7F87D61020C5F2F019D0CEB,
-				F7F87D64020C5F93019D0CEB,
+				D371578C07CDEF6900AB379D,
+				D371578E07CDEF6900AB379D,
+				D371578F07CDEF6900AB379D,
+				D371579107CDEF6900AB379D,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -990,7 +1048,6 @@
 				F7F87D5B020C5E58019D0CEB,
 				F7F87D5C020C5E58019D0CEB,
 				F7F87D5D020C5E58019D0CEB,
-				F7F87D65020C5F93019D0CEB,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2161,6 +2218,7 @@
 		};
 		F7F87D5E020C5E8F019D0CEB = {
 			children = (
+				D371576407CDEF6900AB379D,
 				F7F87CA2020C56A3019D0CEB,
 				F7F87D60020C5F2F019D0CEB,
 				F7F87D62020C5F92019D0CEB,
@@ -2211,18 +2269,6 @@
 			path = ../../Drivers/msNet/lflifoppc.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		F7F87D64020C5F93019D0CEB = {
-			fileRef = F7F87D62020C5F92019D0CEB;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F7F87D65020C5F93019D0CEB = {
-			fileRef = F7F87D63020C5F92019D0CEB;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F7F87D66020C6169019D0CEB = {
 			fileEncoding = 30;

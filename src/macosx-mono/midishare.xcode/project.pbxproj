@@ -222,7 +222,7 @@
 				HEADER_SEARCH_PATHS = ../common/Headers;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /System/Library/Frameworks;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "/Users/fober/Desktop/midishare-2.6-devbranch-bixeon-v9/src/common/atomic/benchs";
 				LIBRARY_STYLE = Dynamic;
 				OTHER_CFLAGS = "-I../lib";
 				OTHER_LDFLAGS = "-flat_namespace";
@@ -245,14 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D378408005BE6D8F00330AC7,
-				D3C0BEA905BE715F00152ABC,
-				D3C0BEAA05BE715F00152ABC,
-				D3C0BEAB05BE715F00152ABC,
-				D3C0BEAC05BE715F00152ABC,
-				D3C0BEAD05BE715F00152ABC,
-				D3C0BEAE05BE715F00152ABC,
-				D3C0BEAF05BE715F00152ABC,
-				D3C0BEB005BE715F00152ABC,
 				D3C0BEB105BE715F00152ABC,
 				D3C0BEB205BE715F00152ABC,
 				D3C0BEB305BE715F00152ABC,
@@ -280,6 +272,10 @@
 				D3C0BEC905BE715F00152ABC,
 				D3C0BECA05BE715F00152ABC,
 				D3C0BECB05BE715F00152ABC,
+				D371571F07CDD67100AB379D,
+				D371572207CDD67100AB379D,
+				D371572507CDD67100AB379D,
+				D371572707CDD67100AB379D,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +325,8 @@
 				D3C0BE7205BE712000152ABC,
 				D3BC0D9705BE761D005EBE0F,
 				4B102A2E05BE85DB007776E0,
+				D3093EDC07D5D0780010CB81,
+				D3093EDD07D5D0780010CB81,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,6 +365,36 @@
 //D32
 //D33
 //D34
+		D3093EDA07D5D0780010CB81 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = lffifoppc.c;
+			path = ../common/atomic/lffifoppc.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3093EDB07D5D0780010CB81 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = lflifoppc.c;
+			path = ../common/atomic/lflifoppc.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3093EDC07D5D0780010CB81 = {
+			fileRef = D3093EDA07D5D0780010CB81;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3093EDD07D5D0780010CB81 = {
+			fileRef = D3093EDB07D5D0780010CB81;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		D365891F05BD21F500DFCB64 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -440,6 +468,77 @@
 			settings = {
 			};
 		};
+		D37156EF07CDD67100AB379D = {
+			children = (
+				D3093EDA07D5D0780010CB81,
+				D3093EDB07D5D0780010CB81,
+				D371570307CDD67100AB379D,
+				D371570607CDD67100AB379D,
+				D371570907CDD67100AB379D,
+				D371570B07CDD67100AB379D,
+			);
+			isa = PBXGroup;
+			name = atomic;
+			path = ../common/atomic;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D371570307CDD67100AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = lffifo.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371570607CDD67100AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = lflifo.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371570907CDD67100AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = msAtomic.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371570B07CDD67100AB379D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = msAtomicPPC.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D371571F07CDD67100AB379D = {
+			fileRef = D371570307CDD67100AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371572207CDD67100AB379D = {
+			fileRef = D371570607CDD67100AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371572507CDD67100AB379D = {
+			fileRef = D371570907CDD67100AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D371572707CDD67100AB379D = {
+			fileRef = D371570B07CDD67100AB379D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		D378407E05BE6D8F00330AC7 = {
 			children = (
 				D378407F05BE6D8F00330AC7,
@@ -483,6 +582,7 @@
 		};
 		D3C0BE6405BE70ED00152ABC = {
 			children = (
+				D37156EF07CDD67100AB379D,
 				D3C0BE7105BE712000152ABC,
 				D3C0BE8505BE715F00152ABC,
 				D3EE860505BC621F00FE2FFB,
@@ -514,14 +614,6 @@
 		};
 		D3C0BE8505BE715F00152ABC = {
 			children = (
-				D3C0BE8605BE715F00152ABC,
-				D3C0BE8705BE715F00152ABC,
-				D3C0BE8805BE715F00152ABC,
-				D3C0BE8905BE715F00152ABC,
-				D3C0BE8A05BE715F00152ABC,
-				D3C0BE8B05BE715F00152ABC,
-				D3C0BE8C05BE715F00152ABC,
-				D3C0BE8D05BE715F00152ABC,
 				D3C0BE8E05BE715F00152ABC,
 				D3C0BE8F05BE715F00152ABC,
 				D3C0BE9005BE715F00152ABC,
@@ -555,70 +647,6 @@
 			path = ../common/Headers;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		D3C0BE8605BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lffifo.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8705BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lffifo_lifo.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8805BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lffifoMac.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8905BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifo.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8A05BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifoLinux.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8B05BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifoMac.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8C05BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifoppc.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		D3C0BE8D05BE715F00152ABC = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifoWin.h;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		D3C0BE8E05BE715F00152ABC = {
 			fileEncoding = 30;
@@ -835,54 +863,6 @@
 			path = msXmtRcv.h;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		D3C0BEA905BE715F00152ABC = {
-			fileRef = D3C0BE8605BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAA05BE715F00152ABC = {
-			fileRef = D3C0BE8705BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAB05BE715F00152ABC = {
-			fileRef = D3C0BE8805BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAC05BE715F00152ABC = {
-			fileRef = D3C0BE8905BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAD05BE715F00152ABC = {
-			fileRef = D3C0BE8A05BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAE05BE715F00152ABC = {
-			fileRef = D3C0BE8B05BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEAF05BE715F00152ABC = {
-			fileRef = D3C0BE8C05BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		D3C0BEB005BE715F00152ABC = {
-			fileRef = D3C0BE8D05BE715F00152ABC;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		D3C0BEB105BE715F00152ABC = {
 			fileRef = D3C0BE8E05BE715F00152ABC;

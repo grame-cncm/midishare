@@ -1,10 +1,10 @@
 
-OPTIONS = -Dmacintosh
+OPTIONS = -Dmacintosh -D__Types__
 INC = -I../macosx-mono
-LIB = ../macosx-mono/libmidishare.dylib
+LIB = -framework MidiShare
 CFLAGS := -O3 $(OPTIONS) $(INC)
 CC    = cc
-TESTS = TDrivers TEvents TFilters TFonctions TOutEvents
+TESTS = TFonctions TEvents TFilters TDrivers TOutEvents
 RES   = results
 
 all : $(TESTS)

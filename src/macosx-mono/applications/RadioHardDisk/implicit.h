@@ -28,6 +28,6 @@
 typedef unsigned char 	Boolean;
 typedef unsigned char 	Byte;
 typedef unsigned char * Ptr;
-typedef int				socklen_t;
+//typedef int				socklen_t;
 
 #endif
