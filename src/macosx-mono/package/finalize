@@ -3,25 +3,28 @@
 
 h=$(pwd)
 
+D=Distribution
+
+APPLS=Applications
+JAVA=Library/Java/Extensions
+ETC=private/etc
+SYSTEM=System/Library/Frameworks
+USR=usr/lib/java
+
 echo save distribution tree
 [ -d Distribution.save ] && rm -rf Distribution.save
 mv Distribution Distribution.save
 cp -R Distribution.save Distribution
 
-echo "creation des liens symboliques (dylib)"
-./linklibs
-
 echo suppression des dossiers CVS
-rm -f $(find Distribution -type d -name CVS)
+find Distribution -type d -name CVS -exec rm -rf {} \;
 
 echo remove the .DS_Store files
-rm -f $(find Distribution -name ".DS_Store")
+find Distribution -name ".DS_Store" -exec rm -rf {} \;
 
 echo generates install.log
-cd Distribution
-find . -depth -print | sed -e 's/^\.//' > ../install.log
-mv -f ../install.log Applications/MidiShare
-cd ..
+./makeLog > install.log
+mv install.log Distribution/Applications/MidiShare
 
 echo verification des droits des fichiers et des dossiers
 find Distribution -type d -exec chmod 755 {} \;
@@ -36,5 +39,4 @@ chmod 775 Distribution/Applications
 chmod 775 Distribution/System
 
 echo "protection des fichiers .ini"
-cd private/etc/MidiShare/defaults
-chmod go-w *
+chmod go-w Distribution/private/etc/MidiShare/defaults/*

@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+
+D=Distribution
+
+DIRS="Applications/MidiShare \
+	  System/Library/Frameworks \
+	  private/etc/MidiShare"
+
+function list() {
+	find $1 $2 -print | sed -e 's/^/\//'	
+}
+
+cd Distribution
+for a in $DIRS
+do
+	list $a -depth
+done
+
+list usr/lib "-type f"
+list usr/lib "-type l"
+list Library/Java/Extensions "-type f"
+
+echo $HOME/Library/Preferences/MidiShare
+
+exit 0

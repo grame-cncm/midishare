@@ -1,31 +1,38 @@
 #!/bin/sh
 #
 
-ilog=/Applications/MidiShare/install.log
-
-drvs=$(grep "/usr/lib" $ilog | grep ".so")
-jni=$(grep "/usr/lib" $ilog | grep ".jnilib")
-
-jar=/Library/Java/Extensions/grame.jar
-MidiShare=/Applications/MidiShare
-user=$HOME/Library/Preferences/MidiShare
-framework="/System/Library/Frameworks/MidiShare.framework /System/Library/Frameworks/Player.framework"
-etc="/private/etc/MidiShare"
-
 TRASH=$HOME/.Trash
 
-function uninstall {
-	for a in $*
+function remove () {
+	while [ $1 ]
 	do
-		[ -a $a ] && sudo mv -f $a $TRASH
+		a=$1
+		opt=f
+		[ -d $a ] && opt=rf
+		echo remove -$opt $a
+		rm -$opt $a
+		shift
 	done
 }
 
-uninstall $drvs
-uninstall $jni
-uninstall $MidiShare
-uninstall $framework
-uninstall $user
-uninstall $etc
+remove /Applications/MidiShare
+remove /System/Library/Frameworks/MidiShare.framework
+remove /System/Library/Frameworks/Player.framework
+
+remove /private/etc/MidiShare
+
+remove /usr/lib/java/libJMidi*.jnilib
+remove /usr/lib/java/libJPlayer*.jnilib
+
+remove /usr/lib/msLANDriver*.so
+remove /usr/lib/msWANDriver*.so
+remove /usr/lib/msMidiDriver*.so
+remove /usr/lib/msQTDriver*.so
+
+remove Library/Java/Extensions/grame.jar
+remove Library/Java/Extensions/grame.jar
+
+remove $HOME/Library/Preferences/MidiShare
+remove $HOME/.MidiShare
 
 exit 0
