@@ -21,6 +21,7 @@
 */
 
 
+#include <AppleEvents.h>
 #include <Dialogs.h>
 #include <DiskInit.h>
 #include <Events.h>
@@ -54,6 +55,15 @@ enum { AppleID = 128, FileID };
 
 /* dialog & alerts */
 enum { dialogID = 128, AlertID = 500 };
+
+/* high level event structure */
+typedef struct AppleEventRecord {
+	short 	what;
+	OSType 	evtClass;
+	long 	when;
+	OSType 	evtID;
+	short 	modifiers;
+} AppleEventRecord;
 
 /* Application name	*/
 #define ApplName 		"\pMidiShare QuickTime Driver"
@@ -151,11 +161,6 @@ static void SetUpMenus()
 }			
 
 /* -----------------------------------------------------------------------------*/
-static void DoIdle()
-{
-}
-
-/* -----------------------------------------------------------------------------*/
 static void ShowAbout()
 {										
 }
@@ -226,6 +231,13 @@ static void AdjustCursor()
 }
 
 /* -----------------------------------------------------------------------------*/
+static OSErr AEQuitHandler (const AppleEvent *aevt, AppleEvent *reply, UInt32 refcon)
+{
+	doneFlag = true;
+	return noErr;
+}
+
+/* -----------------------------------------------------------------------------*/
 static void Initialize()
 {
 	OSErr	err;
@@ -243,6 +255,8 @@ static void Initialize()
 	InitCursor(); 
 
 	FlushEvents(everyEvent, 0);
+	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
+							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 
 	if (!CheckQuickTime()) 		AlertUser ("\pQuickTime is required");
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
@@ -302,6 +316,9 @@ void main()
 						EndUpdate( (WindowPtr)myEvent.message );
 					}
 					break;
+			case kHighLevelEvent:
+				AEProcessAppleEvent (&myEvent);
+				break;
 		}
 	}
 	CloseMidi ();

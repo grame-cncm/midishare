@@ -151,11 +151,6 @@ static void SetUpMenus()
 }			
 
 /* -----------------------------------------------------------------------------*/
-static void DoIdle()
-{
-}
-
-/* -----------------------------------------------------------------------------*/
 static void ShowAbout()
 {										
 }
@@ -226,6 +221,13 @@ static void AdjustCursor()
 }
 
 /* -----------------------------------------------------------------------------*/
+static OSErr AEQuitHandler (const AppleEvent *aevt, AppleEvent *reply, UInt32 refcon)
+{
+	doneFlag = true;
+	return noErr;
+}
+
+/* -----------------------------------------------------------------------------*/
 static void Initialize()
 {
 	OSErr	err;
@@ -243,6 +245,8 @@ static void Initialize()
 	InitCursor(); 
 
 	FlushEvents(everyEvent, 0);
+	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
+							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 
 	if (!CheckOMS()) 			AlertUser ("\pOMS 2.00 or later is required");
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
@@ -302,6 +306,9 @@ void main()
 						EndUpdate( (WindowPtr)myEvent.message );
 					}
 					break;
+			case kHighLevelEvent:
+				AEProcessAppleEvent (&myEvent);
+				break;
 		}
 	}
 	CloseMidi ();
