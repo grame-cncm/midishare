@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - struct cell added
 
 */
 
@@ -33,6 +36,7 @@
 
 
 #ifdef __Macintosh__
+# include "MacTypes.h"
 # define MSFunctionType(type)   pascal type
 #else
 # define MSFunctionType(type)   type
@@ -45,6 +49,11 @@
 typedef unsigned long ulong;
 typedef unsigned char uchar;
 
+
+typedef struct cell {
+	struct cell* link;		/*+ next cell in the list +*/
+						    /*+ any data here		  +*/
+} cell;
 
 
 #endif
