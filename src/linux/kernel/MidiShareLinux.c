@@ -32,26 +32,26 @@
 #include "msEvents.h" 
 
 
-/*_________________________________________________________________________*/
+/*_______________________________________________________________________*/
 /* Linux desc structure                                                  */
-/*_________________________________________________________________________*/
+/*_______________________________________________________________________*/
+
 typedef struct TMachine {
-	struct tq_struct 	timerTask;  /* timer task */
-	struct wait_queue*  stopQueue;  /* stop queue (for cleanup_module ) */
+	struct tq_struct 	timerTask;  	/* timer task */
+	struct wait_queue*  	stopQueue;  	/* stop queue (for cleanup_module ) */
 	struct timeval		time;		/* for timer management */
 } TLinux, * TLinuxPtr;
 
 typedef struct {
-	fifo 				commands;		/* fifo of commands : task and alarms */
-	struct wait_queue*  commandsQueue;	/* to be used by the user real-time thead */
+	fifo 			commands;	/* fifo of commands : task and alarms */
+	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thead */
 	uchar wakeFlag;
 	
 } LinuxContext, * LinuxContextPtr;
 
 static void intrpt_routine(void * arg);
 
-
-#define GetCommand(c)	(&(((LinuxContextPtr)c)->commands))
+#define GetCommand(c)		(&(((LinuxContextPtr)c)->commands))
 #define GetCommandQueue(c)	(&(((LinuxContextPtr)c)->commandsQueue))
 
 /*_________________________________________________________________________*/  
@@ -59,6 +59,7 @@ static void intrpt_routine(void * arg);
 /*_________________________________________________________________________*/
 
 /*_________________________________________________________________________*/
+
 TApplContextPtr CreateApplContext ()
 {
 	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc (sizeof(LinuxContext), GFP_KERNEL);
@@ -69,6 +70,7 @@ TApplContextPtr CreateApplContext ()
 }
 
 /*_________________________________________________________________________*/
+
 void DisposeApplContext (TApplContextPtr context)
 {
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
@@ -80,10 +82,9 @@ void DisposeApplContext (TApplContextPtr context)
 		// free command fifo
 		
 		ev = (MidiEvPtr)fifoclear (&linuxContext->commands);
-		while( ev) {
+		while(ev) {
 			next= Link(ev);
-			lfpush (FreeList(Memory(gMem)), (cell *)ev);
-			//MSFreeCell(ev,FreeList(Memory(gMem)));  // A REVOIR
+			MSFreeCell(ev,FreeList(Memory(gMem))); 
 			ev= next;
 		}
 	}
@@ -102,6 +103,7 @@ static void wakeUp (TApplContextPtr context)
 }
 
 /*_________________________________________________________________________*/
+
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {
 	MidiEvPtr ev;
@@ -119,6 +121,7 @@ void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, l
 }
 
 /*_________________________________________________________________________*/
+
 void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 {
 	MidiEvPtr ev;
@@ -131,10 +134,10 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 		fifoput(GetCommand(context), (cell*)ev);
 		wakeUp(context);
 	}
-	
 }
 
 /*_________________________________________________________________________*/
+
 void CallQuit (TApplContextPtr context)
 {
 	wake_up(GetCommandQueue(context));
@@ -142,9 +145,9 @@ void CallQuit (TApplContextPtr context)
 
 
 /*_________________________________________________________________________*/
+
 void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev)
 {
-
 	if (ev) {
 		fifoput(GetCommand(context), (cell*)ev);
 		wakeUp(context);
@@ -152,28 +155,28 @@ void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev)
 }
 
 /*_________________________________________________________________________*/
-void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
-{
+/* not implemented */
 
-}
-
+void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e) {}
 
 /*_________________________________________________________________________*/
 /* synchronization specific part                                           */
 /*_________________________________________________________________________*/
+
 Boolean CompareAndSwap (void **adr, void *compareTo, void *swapWith) 
 {
 	return false;
 }
 
 /*__________________________________________________________________________*/
+
 MutexResCode OpenMutex  (MutexRef ref)	{ return kSuccess; }
 MutexResCode CloseMutex (MutexRef ref)	{ return kSuccess; }
-
 
 /*_________________________________________________________________________*/
 /* initialization part, including time task                                */
 /*_________________________________________________________________________*/
+
 static void InitMachine (TLinuxPtr machine)
 {
 	machine->timerTask.next = NULL; 				/* Next item in list - queue_task will do  this for us */
@@ -204,20 +207,23 @@ static void intrpt_routine(void * arg)
 	}
 	*/
 	
+	/* As the timer resolution is 100 HZ, does 10 ClockHandler per interrupt */ 
+	
 	for (i = 0; i<10; i++) {
 		ClockHandler(g);
 	}
 	
 	if (machine->stopQueue != NULL) 
-    	wake_up(&machine->stopQueue);   
+    		wake_up(&machine->stopQueue);   
   	else {
-    	queue_task(&machine->timerTask, &tq_timer);  
+    		queue_task(&machine->timerTask, &tq_timer);  
   	}
 	
 }
 
 
 /*__________________________________________________________________________*/
+
 void SpecialWakeUp (TMSGlobalPtr g)
 {
 	g->local = (void*)kmalloc (sizeof(TLinux), GFP_KERNEL);
@@ -225,14 +231,16 @@ void SpecialWakeUp (TMSGlobalPtr g)
 	
 }
 
+/*__________________________________________________________________________*/
+
 void SpecialSleep  (TMSGlobalPtr g)
 {
 	if (g->local) kfree (g->local);
 	g->local = 0;
 }
 
-
 /*__________________________________________________________________________*/
+
 void OpenTimeInterrupts (TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
@@ -241,6 +249,7 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 }
 
 /*__________________________________________________________________________*/
+
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
@@ -248,6 +257,7 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 }
 
 /*__________________________________________________________________________*/
+
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {
@@ -264,6 +274,7 @@ MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 }
 
 /*__________________________________________________________________________*/
+
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g)
 {	
 	if( CheckRefNum( g, refNum)) {
