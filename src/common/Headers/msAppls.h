@@ -53,9 +53,7 @@
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
 typedef FarPtr(void)				TApplContextPtr;
-typedef struct FarPtr(TConnections) TConnectionsPtr;
 typedef struct FarPtr(TAppl) 		TApplPtr;
-typedef struct FarPtr(TApplPublic) 	TApplPublicPtr;
 
 #ifdef PascalNames
 typedef unsigned char MSName[MaxApplNameLen];
@@ -68,7 +66,7 @@ typedef char MSName[MaxApplNameLen];
 
 typedef struct TConnections {
     char        dst[MaxAppls/8];    /* destination application */
-} TConnections;
+} TConnections, * TConnectionsPtr;
 
 enum { kClientFolder = 0, kDriverFolder = 255 };
 
@@ -79,7 +77,7 @@ typedef struct TApplPublic{
     short           refNum;      /* reference number             */
     short           drvidx;      /* driver specific info index   */
     TConnections    cnx;         /* intput/output connections    */
-} TApplPublic;
+} TApplPublic, * TApplPublicPtr;
 
 typedef struct TClientsPublic {
 	short         nbAppls;                /* current running clients count    */
@@ -87,7 +85,9 @@ typedef struct TClientsPublic {
 	TApplPublic   appls[MaxAppls];        /* client applications list         */
 	TDriverPublic drivers[MaxDrivers];    /* drivers specific information     */
 	SlotInfosPublic slots[MaxSlots];      /* drivers slots management         */
-} TClientsPublic;
+} TClientsPublic, * TClientsPublicPtr;
+
+#define CheckPublicRefNum( g, r)  ((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
 
 /*--------------------------------------------------------------------------*/
 /* public fields access macros                                              */
@@ -131,7 +131,6 @@ typedef struct TClients {
 #define CheckClientsCount(g)	((nbAppls(g) + nbDrivers(g)) < MaxAppls - 2)
 
 #define DTasksFifoHead(appl)  	 (MidiEvPtr)(appl->dTasks.head)
-#define GetApplPublicPtr(g, ref) g->appls[ref]->pub
 
 /*--------------------------------------------------------------------------*/
 /* functions                                                                */
@@ -151,11 +150,7 @@ typedef struct TAppl{
     ApplAlarmPtr    applAlarm;   /* the client application alarm */
 } TAppl;
 
-typedef struct FarPtr(TClientsPublic) 	TClientsPtr;
-
-#define CheckRefNum( g, r)       ((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
 #define CheckGlobRefNum( g, r)   ((r>=0) && (r<MaxAppls) && g->appls[r])
-#define GetApplPublicPtr(g, ref) &g->appls[ref]
 
 #endif /* MSKernel */
 

@@ -25,6 +25,8 @@
 
 #include "msAppls.h"
 
+#ifdef MSKernel
 void CallAlarm (short ref, int alarmCode, TClientsPtr g);
+#endif
 
 #endif

@@ -34,11 +34,12 @@
 
 #define FreeAppl(appl)		DisposeMemory(appl, kStdMemory)
 
+#ifdef MSKernel
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
 void closeClient (short ref, TMSGlobalPtr g);
 void makeDriver (TClientsPtr g, TDriverPtr appl, short ref, TDriverInfos * infos, TDriverOperation *op);
 void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g);
+#endif
 void setName 	(MidiName dst, MidiName name);
-
 
 #endif

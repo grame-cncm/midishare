@@ -30,28 +30,34 @@
 
 /*_______________________________________________________________*/
 /* drivers register & unregister */
+#ifdef MSKernel
 MSFunctionType(short) 	MSRegisterDriver   (TDriverInfos * infos, TDriverOperation *op, TMSGlobalPtr g);
 MSFunctionType(void) 	MSUnregisterDriver (short refnum, TMSGlobalPtr g);
+#endif
 
 /*_______________________________________________________________*/
 /* getting information on drivers */
-MSFunctionType(short)	MSCountDrivers	(TClientsPtr g);
-MSFunctionType(short)	MSGetIndDriver	(short index, TClientsPtr g);
-MSFunctionType(Boolean)	MSGetDriverInfos (short refnum, TDriverInfos * infos, TClientsPtr g);
+MSFunctionType(short)	MSCountDrivers	(TClientsPublicPtr g);
+MSFunctionType(short)	MSGetIndDriver	(short index, TClientsPublicPtr g);
+MSFunctionType(Boolean)	MSGetDriverInfos (short refnum, TDriverInfos * infos, TClientsPublicPtr g);
 
 /*_______________________________________________________________*/
 /* slots management */
+#ifdef MSKernel
 MSFunctionType(SlotRefNum) MSAddSlot 	  (short refnum, SlotName name, SlotDirection direction, TClientsPtr g);
-MSFunctionType(SlotRefNum) MSGetIndSlot	  (short refnum, short index, TClientsPtr g);
 MSFunctionType(void) 	MSSetSlotName 	  (SlotRefNum slot, SlotName name, TClientsPtr g);
 MSFunctionType(void)    MSRemoveSlot 	  (SlotRefNum slot, TClientsPtr g);
-MSFunctionType(Boolean)	MSGetSlotInfos 	  (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g);
-MSFunctionType(void)    MSConnectSlot	  (short port, SlotRefNum slot, Boolean state, TClientsPtr g);
-MSFunctionType(Boolean)	MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g);
+#endif
+MSFunctionType(SlotRefNum) MSGetIndSlot	  (short refnum, short index, TClientsPublicPtr g);
+MSFunctionType(Boolean)	MSGetSlotInfos 	  (SlotRefNum slot, TSlotInfos * infos, TClientsPublicPtr g);
+MSFunctionType(void)    MSConnectSlot	  (short port, SlotRefNum slot, Boolean state, TMSGlobalPtr g);
+MSFunctionType(Boolean)	MSIsSlotConnected (short port, SlotRefNum slot, TClientsPublicPtr g);
 
 /*_______________________________________________________________*/
 /* internal functions */
+#ifdef MSKernel
 void OpenDrivers	(TMSGlobalPtr g);
 void CloseDrivers	(TMSGlobalPtr g);
+#endif
 
 #endif

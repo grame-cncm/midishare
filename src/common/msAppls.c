@@ -63,22 +63,22 @@ static Boolean  equalApplName   (TApplPublicPtr ap, MidiName name);
 /*                        functions based on public memory                    */
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSCountAppls (TClientsPtr g)
+MSFunctionType(short) MSCountAppls (TClientsPublicPtr g)
 {
-	return nbAppls(g);
+	return g->nbAppls;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
+MSFunctionType(short) MSGetIndAppl (short index, TClientsPublicPtr g)
 {
 	short ref = -1;
 	
-	if (index>0 && index<= nbAppls(g)) {
+	if (index>0 && index<= g->nbAppls) {
 		TApplPublicPtr appl;
 		do { 
 			ref++;
-			appl = GetApplPublicPtr(g, ref);
-			if (appl && (appl->folder != kDriverFolder)) index--;
+			appl = &g->appls[ref];
+			if ((appl->refNum!=MIDIerrRefNum) && (appl->folder != kDriverFolder)) index--;
 		} while (index);
 		return ref;
 	}
@@ -86,21 +86,21 @@ MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
+MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPublicPtr g)
 {
 	short ref =0;
 	while (ref < MaxAppls && 
-		(UnusedAppl(g,ref) || !equalApplName(GetApplPublicPtr(g, ref), name))) {
+		((g->appls[ref].refNum == MIDIerrRefNum) || !equalApplName(&g->appls[ref], name))) {
 		ref++;
 	}
 	return (ref<MaxAppls) ? ref : (short)MIDIerrIndex;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
+MSFunctionType(MidiName) MSGetName(short ref, TClientsPublicPtr g)
 {
-	if (CheckRefNum(g,ref)) {
-		TApplPublicPtr appl = GetApplPublicPtr(g, ref);
+	if (CheckPublicRefNum(g,ref)) {
+		TApplPublicPtr appl = &g->appls[ref];
 		return ref ? appl->name : kMidiShareName;
 	} else {
 		return 0;
@@ -108,11 +108,11 @@ MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
+MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPublicPtr g)
 {
 	FarPtr(void) info = 0;
-	if (CheckRefNum(g,ref)) {
-		TApplPublicPtr appl = GetApplPublicPtr(g, ref);
+	if (CheckPublicRefNum(g,ref)) {
+		TApplPublicPtr appl = &g->appls[ref];
 		info = appl->info;
 	}
 	return info;

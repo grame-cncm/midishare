@@ -41,12 +41,12 @@ MSFunctionType(short)     MSOpen         (MidiName name, TMSGlobalPtr g);
 MSFunctionType(void)      MSClose        (short ref, TMSGlobalPtr g);
 
 /* functions based on public memory  */
-MSFunctionType(short)     MSCountAppls   (TClientsPtr g);
-MSFunctionType(short)     MSGetIndAppl   (short index, TClientsPtr g);
-MSFunctionType(short)     MSGetNamedAppl (MidiName name, TClientsPtr g);
+MSFunctionType(short)     MSCountAppls   (TClientsPublicPtr g);
+MSFunctionType(short)     MSGetIndAppl   (short index, TClientsPublicPtr g);
+MSFunctionType(short)     MSGetNamedAppl (MidiName name, TClientsPublicPtr g);
 
-MSFunctionType(MidiName)     MSGetName  (short ref, TClientsPtr g);
-MSFunctionType(FarPtr(void)) MSGetInfo  (short ref, TClientsPtr g);
+MSFunctionType(MidiName)     MSGetName  (short ref, TClientsPublicPtr g);
+MSFunctionType(FarPtr(void)) MSGetInfo  (short ref, TClientsPublicPtr g);
 
 /* commands handled by the server  */
 MSFunctionType(void)         MSSetName  (short ref, MidiName name, __localappltype g);

@@ -39,16 +39,20 @@
 #define FreeSlotInfo(info)	DisposeMemory(info, kStdMemory)
 
 #define CheckDriversCount(g)        (nbDrivers(g) < MaxDrivers - 1)
-#define CheckDriverRefNum( g, r)    (CheckRefNum(g, r) && (folder(g->appls[r])==kDriverFolder))
 #define CheckSlotRef(drv, ref)		((ref>=0) && (ref<MaxSlots) && drv->map[ref])
+
+#define CheckDriverRefNum( g, r)       (CheckRefNum(g, r) && (pub(g->appls[r], folder)==kDriverFolder))
+#define CheckDriverPublicRefNum( g, r) (CheckPublicRefNum(g, r) && (g->appls[r].folder==kDriverFolder))
+#define CheckSlotPublicRefNum( g, r)   (r<MaxSlots && (g->slots[r].slotRefNum!=MIDIerrRefNum))
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static void clearSlotCnx (char * cnx);
-static SlotInfosPtr findSlot (short ref, SlotInfosPtr slot, SlotInfosPtr * previous);
-static short getNextFreePublicDriver (TClientsPublic * cpub);
-static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name, SlotDirection direction, TClientsPtr g);
+#ifdef MSKernel
+	static void clearSlotCnx (char * cnx);
+	static SlotInfosPtr findSlot (short ref, SlotInfosPtr slot, SlotInfosPtr * previous);
+	static short getNextFreePublicDriver (TClientsPublic * cpub);
+	static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name, SlotDirection direction, TClientsPtr g);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -100,44 +104,6 @@ MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 	drv = Driver(clients->appls[ref]);
 	closeDriver (ref, drv, g);
 	closeClient (ref, g);
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(short) MSCountDrivers (TClientsPtr g)
-{
-	return nbDrivers(g);
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClientsPtr g)
-{
-	TApplPtr appl;
-	if (!CheckDriverRefNum(g, ref))
-		return false;
-
-	appl = g->appls[ref];
-	setName (infos->name, pub(appl,name));
-	infos->version = pub(Driver(appl),version);
-	infos->slots   = pub(Driver(appl),slotsCount);
-	infos->reserved[0] = infos->reserved[1] = 0;
-	return true;
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
-{
-	short ref = MaxAppls;
-	
-	if (index>0 && index<= nbDrivers(g)) {
-		TApplPtr appl;
-		do { 
-			ref--;
-			appl = g->appls[ref];
-			if (appl && (folder(appl) == kDriverFolder)) index--;
-		} while (index && ref);
-		return ref;
-	}
-	return MIDIerrIndex;
 }
 
 /*____________________________________________________________________________*/
@@ -218,21 +184,66 @@ MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 	}
 }
 
+#endif
+
 /*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g)
+MSFunctionType(short) MSCountDrivers (TClientsPublicPtr g)
 {
-	TDriverPtr drv; SlotInfosPtr sptr; 
-	int i; char * cnxPtr;
-	if (!CheckDriverRefNum(g, slot.drvRef))
+	return g->nbDrivers;
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClientsPublicPtr g)
+{
+	TApplPublicPtr appl;
+	TDriverPublicPtr drv;
+	
+	if (!CheckDriverPublicRefNum(g, ref))
 		return false;
 
-	drv = Driver(g->appls[slot.drvRef]);
-	sptr = findSlot(slot.slotRef, drv->slots, 0);
-	if (!sptr) return false;
+	appl = &g->appls[ref];
+	drv = &g->drivers[appl->drvidx];
+	setName (infos->name, appl->name);
+	infos->version = drv->version;
+	infos->slots   = drv->slotsCount;
+	infos->reserved[0] = infos->reserved[1] = 0;
+	return true;
+}
 
-	setName (infos->name, pub(sptr,name));
-	infos->direction = (SlotDirection)pub(sptr, direction);
-	cnxPtr = pub(sptr, cnx);
+/*____________________________________________________________________________*/
+MSFunctionType(short) MSGetIndDriver (short index, TClientsPublicPtr g)
+{
+	short ref = MaxAppls;
+	
+	if (index >= MaxSlots) return MIDIerrIndex;
+	
+	if (index>0 && index<= g->nbDrivers) {
+		TApplPublicPtr appl;
+		do { 
+			ref--;
+			appl = &g->appls[ref];
+			if ((appl->refNum!=MIDIerrRefNum) && (appl->folder==kDriverFolder)) index--;
+		} while (index && ref);
+		return ref;
+	}
+	return MIDIerrIndex;
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TClientsPublicPtr g)
+{
+	SlotInfosPublicPtr sptr; 
+	int i; char * cnxPtr;
+	
+	if (!CheckDriverPublicRefNum(g, slot.drvRef))
+		return false;
+	if (!CheckSlotPublicRefNum(g, slot.slotRef))
+		return false;
+
+	sptr = &g->slots[slot.slotRef];
+	setName (infos->name, sptr->name);
+	infos->direction = (SlotDirection)sptr->direction;
+	cnxPtr = sptr->cnx;
 	for (i=0; i<MaxPorts/8; i++, cnxPtr++) {
 		infos->cnx[i] = *cnxPtr;
 	}
@@ -242,39 +253,57 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPtr g)
+MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPublicPtr g)
 {
-	TDriverPtr drv; SlotRefNum slot;
-	SlotInfosPtr sptr;
+	SlotRefNum slot;
+	SlotInfosPublicPtr sptr;
 
 	slot.drvRef = refnum;
-	if (!CheckDriverRefNum(g, refnum)) {
+	if (!CheckDriverPublicRefNum(g, refnum)) {
 		slot.slotRef = MIDIerrRefNum;
 		return slot;
 	}
 
-	drv = Driver(g->appls[refnum]);
-	sptr = drv->slots;
+	sptr = g->slots;
 	*(long *)(&slot) = MIDIerrIndex;
-	if ((index > 0) && (index <= MaxSlots)) {
-		while (sptr) {
-			if (index == 1) {
-				slot.drvRef = refnum;
-				slot.slotRef = pub(sptr, slotRefNum);
-				break;
+	if (index>0 && index<= MaxSlots) {
+		do {
+			if (sptr->driverRefNum == refnum) {
+				index--;
 			}
-			index--;
-			sptr = sptr->next;
+		} while (index);
+		if (!index) {
+			slot.drvRef = sptr->driverRefNum;
+			slot.slotRef = sptr->slotRefNum;
 		}
 	}
 	return slot;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, TClientsPtr g)
+MSFunctionType(Boolean) MSIsSlotConnected (short port, SlotRefNum slot, TClientsPublicPtr g)
+{
+	SlotInfosPublicPtr sptr; 
+
+	if (!CheckDriverPublicRefNum(g, slot.drvRef))
+		return false;
+	if (!CheckSlotPublicRefNum(g, slot.slotRef))
+		return false;
+	if (port >= MaxPorts) 
+		return false;
+
+	sptr = &g->slots[slot.slotRef];
+	return IsAcceptedBit (sptr->cnx, port);
+}
+
+/*____________________________________________________________________________*/
+#ifdef MSKernel
+MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, TMSGlobalPtr env)
 {
 	TDriverPtr drv; SlotInfosPtr sptr;
 	short slotRef; Boolean change = false;
+	TClientsPtr g = Clients(env);
+	
 	slotRef = slot.slotRef;
 	if (!CheckDriverRefNum(g, slot.drvRef))
 		return;
@@ -297,29 +326,21 @@ MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, 
 	}
 }
 
-/*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g)
-{
-	TDriverPtr drv; SlotInfosPtr sptr;
-	if (!CheckDriverRefNum(g, slot.drvRef))
-		return false;
-	if (port >= MaxPorts) 
-		return false;
+#else
 
-	drv = Driver(g->appls[slot.drvRef]);
-	sptr = findSlot(slot.slotRef, drv->slots, 0);
-	if (sptr)
-		return IsAcceptedBit (pub(sptr,cnx), port);
-	return false;
+MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, TMSGlobalPtr g)
+{
 }
+#endif
 
 /*===========================================================================
   External functions
   =========================================================================== */
+#ifdef MSKernel
 void OpenDrivers (TMSGlobalPtr g) 
 {
 	TClientsPtr clients = Clients(g);
-	int ref, n = MSCountDrivers (clients) - 1;
+	int ref, n = pub(clients, nbDrivers) - 1;
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (folder(appl) == kDriverFolder)) {
@@ -333,12 +354,11 @@ void OpenDrivers (TMSGlobalPtr g)
 void CloseDrivers (TMSGlobalPtr g)
 {
 	TClientsPtr clients = Clients(g);
-	int ref, n = MSCountDrivers (clients) - 1;
+	int ref, n = pub(clients, nbDrivers) - 1;
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (folder(appl) == kDriverFolder)) {
 			DriverSleep (appl);
-//			appl->srcList = appl->dstList = 0;
 			n--;
 		}
 	}
@@ -467,3 +487,4 @@ static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name,
 		pub(slot,infos) = 0;
 		return ref;
 }
+#endif 

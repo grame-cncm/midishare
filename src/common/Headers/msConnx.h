@@ -30,9 +30,11 @@
 #include "msAppls.h"
 #include "msKernel.h"
 
+#ifdef MSKernel
 void RemAllDstCon (TApplPublicPtr appl);
+#endif
 
 MSFunctionType(void)    MSConnect     (short src, short dest, Boolean state, TMSGlobalPtr g);
-MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g);
+MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPublicPtr g);
 
 #endif

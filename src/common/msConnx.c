@@ -38,10 +38,10 @@
 /*===========================================================================
   MidiShare external functions implementation
 =========================================================================== */
-MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
+MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPublicPtr g)
 {
-	if( CheckRefNum(g,src) && CheckRefNum(g,dest) ) {
-		TApplPublicPtr appl = GetApplPublicPtr(g, src);
+	if( CheckPublicRefNum(g,src) && CheckPublicRefNum(g,dest) ) {
+		TApplPublicPtr appl = &g->appls[src];
 		TConnectionsPtr srcCnx = &appl->cnx;		
 		return IsAcceptedBit(srcCnx->dst, dest);
 	}
