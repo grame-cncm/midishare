@@ -38,4 +38,4 @@ uninstall :
 	rmmod $(MODULE)
 	
 clean :
-	rm $(APPL) $(CLIENT) $(MODULE).o $(OBJ)
+	rm -i $(APPL) $(CLIENT) $(MODULE).o $(OBJ)
