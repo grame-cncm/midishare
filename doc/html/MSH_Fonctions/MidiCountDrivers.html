@@ -1,0 +1,51 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiCountDrivers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiCountDrivers</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Gives the number of MidiShare drivers currently registered.</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    short <A HREF="MidiCountDrivers.html" TARGET="Page">MidiCountDrivers</A> ();</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="0"></P>
+
+<BLOCKQUOTE>
+  <P>The result is a 16-bit integer, the number of currently registered
+  drivers</P></BLOCKQUOTE>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Print the name of all the registered MidiShare drivers</P>
+  <PRE>void PrintDriverNames(void) 
+{ 
+    short ref; 
+    short i, n = <A HREF="MidiCountDrivers.html" TARGET="Page">MidiCountDrivers</A>(); 
+    
+    printf( &quot;List of MidiShare drivers :\n&quot; ); 
+    for( i = 1; i &lt;= n; i++ ) { 
+        ref = <A HREF="MidiGetIndDriver.html" TARGET="Page">MidiGetIndDriver</A>(i); 
+        printf(&quot;%i : %s \n&quot;, ref, <A HREF="MidiGetName.html"
+TARGET="Page">MidiGetName</A>( ref ) ); 
+    }
+}</PRE>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,49 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiUnregisterDriver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiUnregisterDriver</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>This is used for closing of a MidiShare driver. MidiShare
+  applications owning a &quot;context alarm&quot; will be informed
+  of this closing using the MIDICloseDriver alarm code.</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    void <A HREF="MidiUnregisterDriver.html" TARGET="Page">MidiUnregisterDriver</A> (short ref);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>ref</CODE>
+    <DD>a driver reference number, given by the corresponding <A
+    HREF="MidiRegisterDriver.html" TARGET="Page">MidiRegisterDriver</A>
+    call.
+    <DD>&nbsp;
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH="36" HEIGHT="40" 
+ALIGN="LEFT" NATURALSIZEFLAG="0"></P>
+
+<BLOCKQUOTE>
+  <P>when unregistering, a driver should take care of the following:
+  if MidiShare is active at unregister time, it will first put
+  the driver to sleep by calling the driver 'sleep' callback.
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

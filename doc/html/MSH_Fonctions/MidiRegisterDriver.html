@@ -1,0 +1,96 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiRegisterDriver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiRegisterDriver</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P><A HREF="MidiRegisterDriver.html" TARGET="Page">MidiRegisterDriver</A>
+  is similar to <A HREF="MidiOpen.html" TARGET="Page">MidiOpen</A>
+  except that the application is registered as a driver instead
+  of a regular MidiShare client. At register time, a driver should
+  give the necessary callbacks to be notified of the MidiShare
+  wakeup and sleep transitions. Any registered driver must call
+  the <A HREF="MidiUnregisterDriver.html" TARGET="Page">MidiUnregisterDriver</A>
+  function before leaving, by giving its reference number as an
+  argument. MidiShare can thus be aware of the precise number of
+  active Midi drivers. MidiShare applications owning a &quot;context
+  alarm&quot; will be informed of the new driver using the MIDIOpenDriver
+  alarm code</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>    short <A HREF="MidiRegisterDriver.html" TARGET="Page">MidiRegisterDriver</A> (TDriverInfos * inf, TDriverOperation *op);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>inf</CODE>
+    <DD>a pointer to a structure containing drivers information.
+    <DT><CODE>op</CODE>
+    <DD>a pointer to a structure containing the callbacks required
+    to be notified of the MidiShare state changes.
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>    typedef struct TDriverInfos {
+        DriverName  name;         <I><FONT COLOR="#0000af">/* the driver name */</FONT></I>
+        short       version;      <I><FONT COLOR="#0000af">/* its version number */</FONT></I>
+        short       slots;        <I><FONT COLOR="#0000af">/* ignored at register time */</FONT></I>
+        long        reserved[2];
+    } TDriverInfos;</PRE>
+  <P><B>Fields</B>: see <A HREF="MidiGetDriverInfos.html">MidiGetDriverInfos</A></P>
+  <PRE>
+    typedef struct TDriverOperation {
+        void         (* wakeup) (short refNum);
+        void         (* sleep)  (short refNum);
+        long         reserved[3];
+    } TDriverOperation;</PRE>
+  <P><B>Fields</B>:</P>
+  <UL>
+    <LI>wakeup : points to a function called by MidiShare at wakeup
+    time.
+    <LI>sleep : points to a function called by MidiShare at sleep
+    time.
+    <LI>reserved: reserved for future use. They should be set to
+    zero.
+  </UL>
+</BLOCKQUOTE>
+
+<PRE><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="0"></PRE>
+
+<BLOCKQUOTE>
+  <P>The result is a unique reference number identifying the driver.</P></BLOCKQUOTE>
+
+<PRE>
+<IMG SRC="../MSH_ArtWork/note.jpg" WIDTH="36" HEIGHT="40" ALIGN="LEFT"
+NATURALSIZEFLAG="0"></PRE>
+
+<BLOCKQUOTE>
+  <P>when registering, a driver should take care of the following:
+  if MidiShare is running at register time, the driver 'wakeup'
+  callback will be called before the <A HREF="MidiRegisterDriver.html"
+  TARGET="Page">MidiRegisterDriver</A> function return. Therefore,
+  a correct 'wakeup' callback implementation should not rely on
+  code executed after the <A HREF="MidiRegisterDriver.html" TARGET="Page">MidiRegisterDriver</A>
+  function.
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

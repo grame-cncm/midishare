@@ -1,0 +1,57 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiConnectSlot </TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiConnectSlot</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Make or remove a connection between a slot and a MidiShare
+  logical port. MidiShare applications owning a &quot;context alarm&quot;
+  will be informed of the connection change using the MIDIChgSlotConnect
+  alarm code.</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    void <A HREF="MidiConnectSlot.html" TARGET="Page">MidiConnectSlot</A> (short port, SlotRefNum slot, Boolean state);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>port</CODE>
+    <DD>a 16-bit integer, it is a MidiShare port number.
+    <DT><CODE>slot</CODE>
+    <DD>a 32-bit integer, it is the slot reference number.
+    <DT><CODE>state</CODE>
+    <DD>a Boolean value to specify whether the connection should
+    be done (true) or removed (false).
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH="36" HEIGHT="40" 
+ALIGN="LEFT" NATURALSIZEFLAG="0"></P>
+
+<BLOCKQUOTE>
+  <P>a slot may be connected to one or several ports. The connection
+  set determines the routing in the two directions:</P>
+  <UL>
+    <LI>from MidiShare to the drivers: every slot connected to a
+    port will get a copy of the events adressed to this port.
+    <LI>from the drivers to MidiShare: every port connected to a
+    slot will get a copy of the events received from this slot.
+  </UL>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>
