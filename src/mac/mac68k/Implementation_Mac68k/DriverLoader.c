@@ -20,9 +20,11 @@
 
 */
 
+#include <Errors.h>
 #include <Files.h>
 #include <Folders.h>
 #include <Memory.h>
+#include <Processes.h>
 #include <Resources.h>
 #include <string.h>
 
@@ -34,7 +36,7 @@
 #define MidiShareDrvRef		127
 #define MidiShareDrvFolder	"\pMidiShare Folder"
 #define maxMsgSize			26
-#define	MSDriverType		'Mshd'
+#define	MSDriverType		'APPL'
 #define	InitRsrcType		'INIT'
 #define	InitRsrcID			0
 
@@ -49,9 +51,7 @@
 typedef void (* DriverInitPtr) ();
 
 static DriverListPtr AllocateDriver ();
-static DriverInitPtr LoadInitRsrc (FSSpec *spec, long * memSize);
 static DriverListPtr Load1Driver (CInfoPBRec * pb);
-static void 		 Dispose1Driver (TMSGlobalPtr g, DriverListPtr drv);
 
 /* -----------------------------------------------------------------------------*/
 /* Loader external functions                                                    */
@@ -79,17 +79,6 @@ DriverListPtr LoadDrivers ()
 }
 
 /* -----------------------------------------------------------------------------*/
-void UnloadDrivers (TMSGlobalPtr g, DriverListPtr drv)
-{
-	DriverListPtr next;
-	while (drv) {
-		next = drv->next;
-		Dispose1Driver (g, drv);
-		drv = next;
-	}
-}
-
-/* -----------------------------------------------------------------------------*/
 Boolean FindDriversFolder (FSSpec *spec, short *numFiles) 
 {
 	CInfoPBRec paramBlock; 
@@ -111,77 +100,36 @@ Boolean FindDriversFolder (FSSpec *spec, short *numFiles)
 	return false;
 }
 
-/* -----------------------------------------------------------------------------*/
-static void Dispose1Driver (TMSGlobalPtr g, DriverListPtr drv)
-{
-	Ptr mem = drv->memory; TClientsPtr clients = Clients(g);
-	long low = (long)mem, high = low + drv->memSize;
-	
-	if (mem) {
-		short i, ref, n = MSCountDrivers(clients);
-		for (i=1; i<=n; i++) {
-			ref = MSGetIndDriver (i, clients);
-			if (ref != MIDIerrIndex) {
-				long wadr = (long)Wakeup(clients->appls[ref]);
-				if ((wadr > low) && (wadr < high))
-					MSUnregisterDriver (ref, g);
-			}
-		}
-		DisposePtr (mem);
-	}
-	DisposePtr ((Ptr)drv);
-}
 
 /* -----------------------------------------------------------------------------*/
 static DriverListPtr Load1Driver (CInfoPBRec * pb)
 {
-	FSSpec spec; OSErr err; DriverInitPtr fInit;
+	FSSpec spec; OSErr err; 
+	LaunchParamBlockRec l;
 	DriverListPtr drv = AllocateDriver ();
 	if (!drv) return 0;
 
 	err = FSMakeFSSpec(pb->hFileInfo.ioVRefNum, pb->hFileInfo.ioFlParID, 
 						pb->hFileInfo.ioNamePtr, &spec);
-	if (err != noErr) goto err;
-	fInit = LoadInitRsrc (&spec, &drv->memSize);
-	if (!fInit) goto err;
-	
-	drv->memory = (Ptr)fInit;
-	fInit();
-	return drv;
+	if (err != noErr) return 0;
 
-err:
-	DisposePtr ((Ptr)drv);
+	l.launchBlockID = extendedBlock;
+	l.launchEPBLength = extendedBlockLen;
+	l.launchFileFlags = 0;
+	l.launchControlFlags = launchNoFileFlags 
+						 | launchContinue 
+						 | launchUseMinimum;
+	l.launchAppSpec = &spec;
+	l.launchAppParameters = 0;
+	
+	err = LaunchApplication (&l);
+	if (err == memFullErr) {
+	}
 	return 0;
 }
 
 /* -----------------------------------------------------------------------------*/
 /* utilities                                                                    */
-/* -----------------------------------------------------------------------------*/
-static DriverInitPtr LoadInitRsrc (FSSpec *spec, long * memSize)
-{
-	Handle rh; short ref, current; 
-	Ptr mem = 0;
-	*memSize = 0;
-	
-	current = CurResFile();
-	ref = FSpOpenResFile(spec, fsRdPerm);
-	if (ref == -1) return 0;
-
-	UseResFile (ref);
-	rh = GetResource(InitRsrcType, InitRsrcID);
-	if (rh) {
-		Size size = InlineGetHandleSize (rh);
-		mem = NewPtrSys (size);
-		if (mem) {
-			memmove (mem, *rh, size);
-			*memSize = size;
-		}
-		ReleaseResource (rh);
-	}
-	UseResFile (current);
-	return (DriverInitPtr)mem;
-}
-
 /* -----------------------------------------------------------------------------*/
 OSErr GetCatInfos(CInfoPBRec *paramBlock, FSSpec *spec, short index)
 {
