@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,13 +16,12 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
-#ifndef __LFLIFO__
-#define __LFLIFO__
-
+#ifndef __lflifo__
+#define __lflifo__
 
 //
 /*****************************************************************
@@ -43,11 +42,11 @@
   
                            OPERATIONS
  ------------------------------------------------------------------
- lfinit(lifo* lf) 				: Initialise lifo lf to empty
-
- lfpush(lifo* lf, cell* cl)		: push cell cl on top of lifo lf
- lfpop(lifo* lf)-> cell*		: pop top cell of lf
- lfsize(lifo* lf) -> n			: number of cells in lifo lf
+ void          lfinit  (lifo* lf);
+ lifocell*     lfavail (lifo* lf);
+ unsigned long lfsize  (lifo * lf);
+ void          lfpush  (lifo * lf, lifocell * cl);
+ lifocell*     lfpop   (lifo * lf);
  ------------------------------------------------------------------
 
  Warning : all operations expect non-null lifo and cell pointers.
@@ -56,73 +55,43 @@
  *****************************************************************
  *****************************************************************/
 
-
+#include "msAtomic.h"
 
 /*****************************************************************
                            DATA STRUCTURES
  *****************************************************************/
- 
-typedef struct cell {
-	struct cell* link;		/*+ next cell in the list 	+*/
-							/*+ any data here			+*/
-} cell;
-
- 
- 
-#ifdef __Pentium__
-# define vtype volatile
+#ifndef __ppc__
+# define lfCount(name) unsigned long volatile name
 #else
-# define vtype 
+# define lfCount(name) long name[7]
 #endif
+
+typedef struct lifocell {
+	struct lifocell* volatile link;	/* next cell in the list */
+									/* any data here		 */
+} lifocell;
 
 typedef struct lifo {
-	vtype unsigned long	ic;		/*+ input (push) count	+*/
-	vtype 		  cell*	top;	/*+ top of the stack	+*/
-	vtype unsigned long	oc;		/*+ output (pop) count	+*/
-#ifdef __POWERPC__
-	long 	unused [5];		/* lifo size must be at least 32 bytes */
-							/* to avoid livelock in multiprocessor */
-#endif
+	lifocell * volatile top;	/* top of the stack          */
+	lfCount(oc);					/* used to avoid ABA problem */
+	TAtomic	count;
 } lifo;
 
-#ifdef __Windows__
-# define inline __inline
-#elif defined(__MacOSX__)
-#define inline __inline__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+ void          lfinit  (lifo* lf);
+ void          lfpush  (lifo * lf, lifocell * cl);
+ lifocell*     lfpop   (lifo * lf);
+
+#ifdef __cplusplus
+}
 #endif
 
 
-
-/****************************************************************
-                          OPERATIONS
- ****************************************************************/
-static inline void lfinit(lifo* lf)
-{
-	lf->ic = 0;		
-	lf->top = 0;
-	lf->oc = 0;
-}
-
-static inline cell* lfavail(lifo* lf) { 
-	return (cell*)lf->top;
-}
-
-#if defined(__linux__)
-# if defined(__powerpc)
-#  include "lflifoppc.h"
-# else
-#  include "lflifoLinux.h"
-# endif
-
-#elif defined(__Macintosh__) || defined(__MacOSX__)
-# if defined(__ppc__) && defined(__GNUC__)
-#  include "lflifoppc.h"
-# else
-#  include "lflifoMac.h"
-# endif
-
-#elif defined(__Windows__)
-# include "lflifoWin.h"
-#endif
+static inline lifocell* lfavail(lifo* lf) 		{ return (lifocell*)lf->top; }
+static inline unsigned long lfsize (lifo * lf) 	{ return lf->count.value; }
 
 #endif
