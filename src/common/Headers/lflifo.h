@@ -105,6 +105,7 @@ static inline void lfpush (lifo * lf, cell * cl)
 	__asm__ __volatile__ (
 		"# LFPUSH					\n\t"
 		"pushl	%%ebx				\n\t"
+		"pushl	%%ecx				\n\t"
 		"movl 0(%%esi), %%eax		\n\t"
 		"movl 4(%%esi), %%edx		\n"	
 		"1:\t"
@@ -113,10 +114,11 @@ static inline void lfpush (lifo * lf, cell * cl)
 		"movl %%edx, (%%ecx)		\n\t"
 		LOCK "cmpxchg8b (%%esi)		\n\t"
 		"jnz	1b					\n\t"
+		"popl	%%ecx				\n\t"
 		"popl	%%ebx				\n\t"
 		:/* no output */
 		:"S" (lf), "c" (cl)
-		:"memory", "eax", "ebx", "ecx", "edx");
+		:"memory", "eax", "edx");
 }
 
 static inline cell* lfpop (lifo * lf) 
@@ -125,6 +127,7 @@ static inline cell* lfpop (lifo * lf)
 	__asm__ __volatile__ (
 		"# LFPOP 					\n\t"
 		"pushl	%%ebx				\n\t"
+		"pushl	%%ecx				\n\t"
 		"movl 	4(%%esi), %%edx		\n\t"
 		"movl  	(%%esi), %%eax		\n\t"	
 		"testl	%%eax, %%eax		\n\t"
@@ -138,10 +141,11 @@ static inline cell* lfpop (lifo * lf)
 		"testl	%%eax, %%eax		\n\t"
 		"jnz	10b					\n"
 		"20:\t"
+		"popl	%%ecx				\n\t"
 		"popl	%%ebx				\n\t"
 		:"=a" (v)
 		:"S" (&lf->top)
-		:"memory", "ecx", "edx", "ebx" );
+		:"memory", "edx");
 	return v;
 }
 
