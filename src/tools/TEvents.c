@@ -85,13 +85,11 @@ inline Boolean MidiShare() { return true; }
 #ifdef PASCALNAME
 MidiName ApplName = "\pSender";
 MidiName OtherName = "\pReceiver";
-MidiName DriverName = "\pMidiShare";
 #endif
 
 #ifdef CNAME
 MidiName ApplName = "Sender";
 MidiName OtherName = "Receiver";
-MidiName DriverName = "MidiShare";
 #endif
 
 /* ========================= variables globales de l'application ==================*/
