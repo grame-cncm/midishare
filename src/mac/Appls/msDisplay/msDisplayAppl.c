@@ -292,7 +292,8 @@ static void DoMouseDown()
 				if (whichWindow != FrontWindow())
 					SelectWindow(whichWindow);
 				else if (whichWindow == myWindow)
-					DragWindow(whichWindow, myEvent.where, &dragRect);
+					while (StillDown())
+						;
 				break;
 	}
 }
