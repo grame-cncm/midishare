@@ -21,9 +21,9 @@
 
 */
 
-#ifdef __Windows__
+#ifdef WIN32
 #	include <stdio.h>
-#	include <MidiShare.h>
+#	include "MidiShare.h"
 #	define CNAME
 #	define CTASKS
 #	define nil 0

@@ -31,14 +31,15 @@
  * 		    English version 11/11/99 SL
  */
 
-#ifdef __Windows__
+#ifdef WIN32
 #	include <stdio.h>
-#	include <MidiShare.h>
+#	include "MidiShare.h"
 #	define CNAME
 #	define CTASKS
 #	define nil 0
 #	define flush    fflush(stdout)
 #	define print	printf
+#	define usleep(n)	Sleep(n/1000)
 #else
 #	define MSALARMAPI
 #endif
@@ -217,8 +218,8 @@ static void wait2( int d)
 	time= (i= t= MidiGetTime())+ d;
 	while( t<= time)
 	{
-		if( !((t-i)%10000))
-			print("."); flush;
+//		if( !((t-i)%10000))
+//			print("."); flush;
 		t= MidiGetTime();
 	}
 }
