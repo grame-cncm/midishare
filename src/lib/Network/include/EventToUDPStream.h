@@ -32,7 +32,9 @@
 #endif
 
 #ifdef WIN32
-#define inline _inline
+# ifndef inline
+#   define inline _inline
+# endif
 #endif
 
 /*------------------------------------------------------------------------*/
