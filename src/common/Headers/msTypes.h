@@ -28,7 +28,8 @@
 #define __msTypes__
 
 #ifdef __Macintosh__
-# include <MacTypes.h>
+# include <MacTypes.h>                                                          
+# define FAR
 # ifdef __POWERPC__
 # define MSFunctionType(type)   type
 # else 

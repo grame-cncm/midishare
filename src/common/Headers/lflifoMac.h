@@ -115,7 +115,6 @@ static inline unsigned long lfsize (lifo * lf)
 	return ic - oc;
 }
 
-# endif
-#endif /* __Macintosh__ */
+#endif 
 
 #endif
