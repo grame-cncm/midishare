@@ -15,46 +15,7 @@
 #define __MIDIFILE_H__
 
 #include <stdio.h>
-
-
-#ifdef __Linux__
-#define FAR
-#define NEAR
-#define MFAPI
 #include "GenericMidiShare.h"
-#define nil 0
-#define  errno  /* a revoir */
-#endif
-
-#ifdef __Macintosh__
-#include <GenericMidiShare.h>
-#define FAR
-#define NEAR
-#define MFAPI
-#endif
-
-#ifdef __Windows__
-#include <mshare.h>
-#define nil 0
-#ifdef WIN32
-
-#	ifdef __BuildLib__
-
-#		define MFAPI	__declspec(dllexport)
-
-#	else
-
-#		define MFAPI	__declspec(dllimport)
-
-#	endif
-
-#else
-
-#   define MFAPI WINAPI _export
-
-#endif
-
-#endif
 
 
 /*--------------------------------------------------------------------------*/
