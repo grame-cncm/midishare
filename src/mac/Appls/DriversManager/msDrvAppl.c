@@ -109,7 +109,8 @@ static Boolean TrackMouse (Point where, short modifiers)
 			if (portSelected >= 0) {
 				modifiers |= cmdKey;
 		  		LClick (where, modifiers, theList[i]);
-		  		ChangeConnect (theList[i]);
+		  		if (!ChangeConnect (theList[i]))
+					SelectPort (portSelected, false);
 		  	}
 		  	else {
 				modifiers = 0;
@@ -556,6 +557,13 @@ static void AdjustCursor()
 }
 
 /* -----------------------------------------------------------------------------*/
+static OSErr AEQuitHandler (const AppleEvent *aevt, AppleEvent *reply, UInt32 refcon)
+{
+	doneFlag = true;
+	return noErr;
+}
+
+/* -----------------------------------------------------------------------------*/
 static void Initialize()
 {
 	OSErr	err;
@@ -573,6 +581,8 @@ static void Initialize()
 	InitCursor(); 
 
 	FlushEvents(everyEvent, 0);
+	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
+							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 
 	if (!MidiShare()) 	AlertUser ("\pMidiShare is required");
 	if (MidiGetVersion() < 180) AlertUser ("\prequire MidiShare version 1.80 or later");
@@ -630,6 +640,9 @@ void main()
 					if (IsAppWindow ((WindowPtr)myEvent.message))
 						DoRedraw ((WindowPtr)myEvent.message);
 					break;
+			case kHighLevelEvent:
+				AEProcessAppleEvent (&myEvent);
+				break;
 		}
 	}
 	CloseMSConnect ();

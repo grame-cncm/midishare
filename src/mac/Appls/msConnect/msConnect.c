@@ -636,6 +636,13 @@ static void AdjustCursor()
 }
 
 /* -----------------------------------------------------------------------------*/
+static OSErr AEQuitHandler (const AppleEvent *aevt, AppleEvent *reply, UInt32 refcon)
+{
+	doneFlag = true;
+	return noErr;
+}
+
+/* -----------------------------------------------------------------------------*/
 static void Initialize()
 {
 	OSErr	err;
@@ -653,6 +660,8 @@ static void Initialize()
 	InitCursor(); 
 
 	FlushEvents(everyEvent, 0);
+	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
+							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 
 	if (!MidiShare()) 	AlertUser ("\pMidiShare is required");
 	if (!SetupMidi()) 	AlertUser ("\pMidiShare setup failed");
@@ -709,6 +718,9 @@ void main()
 					if (IsAppWindow ((WindowPtr)myEvent.message))
 						DoRedraw ((WindowPtr)myEvent.message);
 					break;
+			case kHighLevelEvent:
+				AEProcessAppleEvent (&myEvent);
+				break;
 		}
 	}
 	CloseMSConnect ();
