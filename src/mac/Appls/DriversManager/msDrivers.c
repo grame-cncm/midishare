@@ -181,6 +181,7 @@ static pascal void ApplAlarm (short refnum, long code)
         case MIDICloseDriver:       	
         case MIDIAddSlot:
         case MIDIRemoveSlot:
+        case MIDIChgSlotName:
 			chgDriver = true;
 			portSelected = -1;
         	break;
