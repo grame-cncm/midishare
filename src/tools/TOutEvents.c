@@ -344,7 +344,7 @@ static CompareStream( MidiEvPtr e, short refnum)
 				goto err;
 			for( i=1; i<f1; i++) {
 				if (MidiGetField (e, i) != MidiGetField (get, i-1)) {
-					fprintf( stdout, "\nWarning : event modified at position %ld", i);
+					print ("\nWarning : event modified at position %ld", i);
 					goto err;
 				}
 			}
