@@ -276,6 +276,12 @@ enum{   MIDIOpenAppl=1,
                 Byte unused[2];
 
             } keySign;
+            
+	    struct {            /* for paramchg & 14-bits ctrl  */
+            	short num;      /* param or ctrl num            */
+            	short val;      /* 14-bits value                */
+            } param;
+
 
             struct {            /* for MidiFile sequence number */
                 unsigned short number;
