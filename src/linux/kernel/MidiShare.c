@@ -553,14 +553,7 @@ int mskGetCommand(unsigned long userptr)
 	}
 	
 	mskGetEvAux(ev, &arg, (TMidiGetEvArgs* )userptr);
-	
-	/* to avoid conflict with ForgetTask */
-	
-	if(ev && EvType(ev) == typeProcess) {
-		EvType(ev) = typeDead;
-		LinkST(ev) = 0;
-	}
-	
+		
 	MSFreeEv(ev,FreeList(Memory(gMem)));
 	
 	return 0;
