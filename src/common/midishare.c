@@ -59,7 +59,7 @@ TMSGlobalPtr    gMem = &GlobalMem;
 #endif
 
 short  MidiGetVersion(void) {
-  	return MSGetVersion(gMem);
+    return MidiShare() ? MSGetVersion(gMem) : 0;
 }
 short  MidiCountAppls(void) {
  	return MSCountAppls(ClientsPub(gMem));
