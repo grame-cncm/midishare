@@ -35,7 +35,6 @@ typedef struct DriverList {
 } DriverList;
 
 DriverListPtr 	LoadDrivers ();
-void 			UnloadDrivers (TMSGlobalPtr g, DriverListPtr drv);
 Boolean 		FindDriversFolder (FSSpec *spec, short *numFiles);
 OSErr 			GetCatInfos (CInfoPBRec *paramBlock, FSSpec *spec, short index);
 
