@@ -68,7 +68,7 @@ this option must be setup using the Alsa "configure" tool.
 
 Look at http://www.alsa-project.org for more information on ALSA drivers compilation and installation.
 
-To install the MidiShare kernel and library  and tools, you must have SU privilege:
+To install the MidiShare kernel and library and tools, you must have SU privilege:
 
 make install
 
@@ -112,6 +112,9 @@ Known problems and limitations
 There is no yet a mechanism to synchronize the MidiShare time on the machine real-time clock.
 (Look at is MidiShareLinux. c in function intrpt_routine)
 
+- MidiShare callbacks (tasks and alarms) are executed in a separate (possibly real-time) thread. They are no more 
+guarantee that callback code is not interrupted by "normal" code as is was the case on Macintosh or Windows. 
+Thus some synchronization problems specific to the Linux platform have still to be solved.
 
 
 
