@@ -42,7 +42,6 @@
 		};
 		0867D691FE84028FC02AAC07 = {
 			children = (
-				D3BC0D9605BE761D005EBE0F,
 				D378407E05BE6D8F00330AC7,
 				08FB77ACFE841707C02AAC07,
 				089C1665FE841158C02AAC07,
@@ -88,8 +87,8 @@
 			fileEncoding = 10;
 			isa = PBXFileReference;
 			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = Resources/English.lproj/InfoPlist.strings;
+			name = InfoPlist.strings;
+			path = English.lproj/InfoPlist.strings;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -136,8 +135,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = text.xml;
-			name = Info.plist;
-			path = Resources/Info.plist;
+			path = Info.plist;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -319,7 +317,6 @@
 				D3658B7D05BD2B7700DFCB64,
 				D3658EB905BD730100DFCB64,
 				D3C0BE7205BE712000152ABC,
-				D3BC0D9705BE761D005EBE0F,
 				4B102A2E05BE85DB007776E0,
 				D3093EDC07D5D0780010CB81,
 				D3093EDD07D5D0780010CB81,
@@ -560,20 +557,6 @@
 				ATTRIBUTES = (
 					Public,
 				);
-			};
-		};
-		D3BC0D9605BE761D005EBE0F = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.exports;
-			path = _MidiShare.exp;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		D3BC0D9705BE761D005EBE0F = {
-			fileRef = D3BC0D9605BE761D005EBE0F;
-			isa = PBXBuildFile;
-			settings = {
 			};
 		};
 		D3C0BE6405BE70ED00152ABC = {
