@@ -939,11 +939,10 @@ void  MidiForgetTask  (MidiEvPtr *taskptr)
     TMidiForgetTaskArgs args;
 	
 	if (taskptr && *taskptr) {
-		args.taskptr = taskptr;
 		args.utask = 0;
+		args.taskptr = taskptr;
 		CALL(kMidiForgetTask,&args);
 		MSFreeEv(args.utask, FreeList(Memory(gClients)));
-		*taskptr = 0;
 	}
   
 }
