@@ -39,7 +39,7 @@ PyAddSeq(PyObject *self, PyObject *args)
 {
         int seq,ev;
 	if (!PyArg_ParseTuple(args, "ii", &seq,&ev)) return NULL;
-        MidiAddField((MidiSeqPtr)seq,(MidiEvPtr)ev);
+        MidiAddSeq((MidiSeqPtr)seq,(MidiEvPtr)ev);
         Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -104,7 +104,7 @@ static PyObject *
 PyCopyEv(PyObject *self, PyObject *args)
 {	
         int ev;
-	return (!PyArg_ParseTuple(args, "i", &ev)) ? NULL : Py_BuildValue("i", MidiCopyEv(ev));
+	return (!PyArg_ParseTuple(args, "i", &ev)) ? NULL : Py_BuildValue("i", MidiCopyEv((MidiEvPtr)ev));
 }
 
 static PyObject *
@@ -214,7 +214,7 @@ PyFreeSeq(PyObject *self, PyObject *args)
 {      
         int seq;
 	if (!PyArg_ParseTuple(args, "i", &seq)) return NULL;
-        MidiFreeEv ((MidiSeqPtr) seq);
+        MidiFreeSeq ((MidiSeqPtr) seq);
 	Py_INCREF(Py_None);
 	return Py_None;
 }
