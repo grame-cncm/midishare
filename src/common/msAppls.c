@@ -318,8 +318,11 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
 		    Driver(appl) = drv;
 		}
-//		MidiShareWakeup(g); Wakeup now done at channel initialization
+#ifdef __mono__
+		MidiShareWakeup(g); Wakeup now done at channel initialization
+#else
         OpenDrivers(g);
+#endif
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
 		    makeClient(clients, appl, MidiShareRef, kMidiShareName, kClientFolder);
