@@ -23,7 +23,7 @@
 #include "UScoreManager.h"
 #include "TTempoMapBuilder.h"
 #include "TPlayerMemento.h"
-#include "Umath.h"
+#include "UMath.h"
 #include "UMidi.h"
 
 #include <assert.h>
