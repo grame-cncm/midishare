@@ -27,7 +27,7 @@ uninstall:
 	if [ -f /etc/$(CONF) ]; then rm /etc/$(CONF); fi
 	make -C library uninstall 
 
-tools:
+tool:
 	make -i -C tools install 
 	make -C tests all
 
