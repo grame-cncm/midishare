@@ -36,7 +36,7 @@ all : $(TARGET)
 $(TARGET) : makefile $(LIBS) $(OBJ)
 	make -C ../common
 	make -C ../osglue
-	$(CC) $(OBJ) $(LIBS) -lpthread -lportaudio -lstdc++ -o $(TARGET)
+	$(CC) $(OBJ) $(LIBS) -lpthread -lportaudio -lstdc++ -ldl -o $(TARGET)
 
 shlib : $(SLIB)
 $(SLIB) : makefile $(LIBS) $(LOBJ)
