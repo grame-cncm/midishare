@@ -225,7 +225,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Dynamic;
 				OTHER_CFLAGS = "-I../lib";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
 				SECTORDER_FLAGS = "";
