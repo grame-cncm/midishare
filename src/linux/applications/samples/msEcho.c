@@ -142,7 +142,7 @@ void InstallFilter(void) {
 
  	for (i=0;i<256;i++) {
          	MidiAcceptType(myFilter,i,false);
-         	MidiAcceptPort(myFilter,i,false);
+         	MidiAcceptPort(myFilter,i,true);
  	}
   	MidiAcceptType(myFilter,typeNote,true);
   	MidiAcceptType(myFilter,typeKeyOn,true);
