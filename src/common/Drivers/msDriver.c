@@ -29,8 +29,10 @@
 #include "msMem.h"
 #include "msTypes.h"
 
-#define NewMap(size)		(PortMapPtr)AllocateMemory(kStdMemory, size)
+#define NewMap(size)	(PortMapPtr)AllocateMemory(kStdMemory, size)
+#define NewSlotInfo()	(SInfosPtr)AllocateMemory(kStdMemory, sizeof(SInfos))
 #define FreeMap(map)		DisposeMemory(map)
+#define FreeSlotInfo(info)	DisposeMemory(info)
 
 #define CheckDriverRefNum( g, r)    (CheckRefNum(g, r) && (g->appls[r]->folder==kDriverFolder))
 #define CheckSlotRef(drv, ref)		((ref>=0) && (ref<MaxSlots) && drv->map[ref])
@@ -40,8 +42,7 @@
   =========================================================================== */
 static void clearSlot2PortMap (char * map);
 static void clearPort2SlotMap (char * map);
-//static short CountSlots (TClientsPtr g);
-
+static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -69,18 +70,14 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 {
-	TDriverPtr drv; short i; TAppl saved;
+	TDriverPtr drv; TAppl saved;
 	TClientsPtr clients = Clients(g);	
 	if (!CheckDriverRefNum(clients, ref) || (ref == MidiShareDriverRef))
 		return;
 
 	saved = *clients->appls[ref];
-//	if (Clients(g)->nbAppls)
-//		DriverSleep (clients->appls[ref]);		
 	drv = Driver(clients->appls[ref]);
-	for (i = 0; i < MaxSlots; i++)
-		if (drv->map[i]) FreeMap(drv->map[i]);
-	closeClient (ref, g);
+	closeDriver (ref, drv, g);
 	clients->nbDrivers--;
 	if (Clients(g)->nbAppls) {			
 		DriverSleep (&saved);		
@@ -102,7 +99,7 @@ MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClie
 		return false;
 
 	appl = g->appls[ref];
-	setApplName (infos->name, appl->name);
+	setName (infos->name, appl->name);
 	infos->version = appl->driver->version;
 	infos->slots   = appl->driver->slotsCount;
 	infos->reserved[0] = infos->reserved[1] = 0;
@@ -127,7 +124,7 @@ MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, TClientsPtr g)
+MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, SlotName name, SlotDirection direction, TClientsPtr g)
 {
 	TDriverPtr drv; SlotRefNum slot;
 	
@@ -140,22 +137,42 @@ MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, TClientsPtr g)
 	drv = Driver(g->appls[drvRef]);
 	*(long *)(&slot) = MIDIerrSpace;
 	if (drv->slotsCount < MaxSlots) {
-		short ref; PortMapPtr map;
+		short ref; PortMapPtr map; SInfosPtr iPtr;
 		map = NewMap (sizeof(PortMap));
-		if (map) {
+		iPtr= NewSlotInfo();
+		if (map && iPtr) {
 			for (ref = 0; drv->map[ref]; ref++)
 				;
 			clearSlot2PortMap (map);
 			drv->map[ref] = map;
+			setName (iPtr->name, name);
+			iPtr->direction = direction;
+			drv->slotInfos[ref] = iPtr;
 			drv->slotsCount++;
 			slot.drvRef = drvRef;
 			slot.slotRef = ref;
 			if (g->nbAppls)
 				CallAlarm (drvRef, MIDIAddSlot, g);
 		}
+		else slot.slotRef = MIDIerrSpace;
 	}
 	return slot;	
 }
+
+/*____________________________________________________________________________*/
+MSFunctionType(void) MSSetSlotName (SlotRefNum slot, SlotName name, TClientsPtr g)
+{
+	TDriverPtr drv; SInfosPtr iPtr;
+	if (!CheckDriverRefNum(g, slot.drvRef))
+		return;
+	
+	drv = Driver(g->appls[slot.drvRef]);
+	iPtr = drv->slotInfos[slot.slotRef];
+	if (!iPtr) return;
+	setName (iPtr->name, name);
+	if (g->nbAppls)
+		CallAlarm (slot.drvRef, MIDIChgSlotName, g);
+}	
 
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
@@ -168,6 +185,7 @@ MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 	if (CheckSlotRef(drv, slot.slotRef)) {
 		slotRef = slot.slotRef;
 		FreeMap(drv->map[slotRef]);
+		FreeSlotInfo(drv->slotInfos[slot.slotRef]);
 		drv->map[slotRef] = 0;
 		for (i=0; i<MaxPorts; i++) {
 			RejectBit(drv->port[i], slotRef);
@@ -186,13 +204,16 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 		return false;
 
 	drv = Driver(g->appls[slot.drvRef]);
-	if (CheckSlotRef(drv, slot.slotRef) && drv->op.slotInfo) {
+	if (CheckSlotRef(drv, slot.slotRef)) {
 		short i; PortMapPtr map = drv->map[slot.slotRef];
+		SInfosPtr inf = drv->slotInfos[slot.slotRef];
 		for (i=0; i<PortMapSize; i++)
 			infos->cnx[i] = map[i];
 		infos->reserved[0] = 0;
 		infos->reserved[1] = 0;
-		return DriverSlotInfos (g->appls[slot.drvRef], slot, infos);
+		setName (infos->name, inf->name);
+		infos->direction = inf->direction;
+		return true;
 	}
 	return false;
 }
@@ -305,12 +326,14 @@ void makeDriver (TClientsPtr g, TApplPtr appl, short ref,
 	else {
 		drv->op.wakeup = 0;
 		drv->op.sleep = 0;
-		drv->op.slotInfo = 0;
+		drv->op.reserved[0] = drv->op.reserved[1] = drv->op.reserved[2] = 0;
 	}
 	drv->version = infos->version;
 	drv->slotsCount = 0;
-	for (i=0; i<MaxSlots; i++)
+	for (i=0; i<MaxSlots; i++) {
+		drv->slotInfos[i] = 0;
 		drv->map[i] = 0;
+	}
 	clearPort2SlotMap (&drv->port[0][0]);
 }
 
@@ -332,4 +355,15 @@ static void clearPort2SlotMap (char * map)
 		for (j=0; j< SlotMapSize; j++)
 			*map++ = 0;
 	}
+}
+
+/*____________________________________________________________________________*/
+static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g)
+{
+	short i;
+	for (i = 0; i < MaxSlots; i++) {
+		if (drv->slotInfos[i]) FreeSlotInfo(drv->slotInfos[i]);
+		if (drv->map[i]) FreeMap(drv->map[i]);
+	}
+	closeClient (ref, g);
 }

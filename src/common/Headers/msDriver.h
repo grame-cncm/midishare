@@ -34,19 +34,24 @@
 
 #define Driver(appl)	(appl->driver)
 #define Wakeup(appl)	Driver(appl)->op.wakeup
-#define Sleep(appl)	Driver(appl)->op.sleep
-#define SlotInfo(appl)	Driver(appl)->op.slotInfo
+#define Sleep(appl)		Driver(appl)->op.sleep
 
 typedef char PortMap[PortMapSize], * PortMapPtr;	
 typedef char SlotMap[SlotMapSize];	
+
+typedef struct SInfos {
+	SlotName 		name;
+	SlotDirection 	direction;
+} SInfos, * SInfosPtr;
 
 /*_______________________________________________________________*/
 typedef struct {
 	TDriverOperation op;
 	short	version;
 	short	slotsCount;
-	PortMapPtr map[MaxSlots];
-	char	   port[MaxPorts][SlotMapSize];
+	PortMapPtr	map[MaxSlots];
+	SInfosPtr 	slotInfos[MaxSlots];
+	char		port[MaxPorts][SlotMapSize];
 } TDriver, * TDriverPtr;
 
 #endif
