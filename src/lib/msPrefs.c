@@ -37,7 +37,7 @@
 #define driverSectionName "Drivers"
 #define audioSectionName  "Audio"
 #define bufferSize  "size"
-#define driverName  "driver"
+#define driverName  "audiodev"
 #define memDefault  "default"
 #define active  "active"
 #define disable "disable"
