@@ -4,15 +4,11 @@
 #include <stdio.h>
 #include <signal.h> 
 #include <pthread.h> 
-#include <unistd.h> 
 
 #include "MidiShare.h"
 #include "EventToMidiStream.h"
 #include "MidiStreamToEvent.h"
 
-
-//_______________________________________________________________________
-#define SIGDRVQUIT	SIGUSR1
 
 //_______________________________________________________________________
 // driver datas
@@ -34,7 +30,6 @@ typedef struct {
 } DrvMem, * DrvMemPtr;
 
 DrvMem gMem = { 0 };
-Boolean gDaemonMode = false;
 static inline DrvMemPtr GetData()	{ return &gMem; }
 
 //_______________________________________________________________________
@@ -65,9 +60,9 @@ static void FatalError (const char *msg)
 //_______________________________________________________________________
 static void usage (const char *name) 
 {
-	fprintf (stderr, "usage : %s [options] <device name>\n", name);
-	fprintf (stderr, "        options: -d run in daemon mode\n", name);
-	exit (1);
+	char str[256];
+	sprintf (str, "usage : %s <device name>\n", name);
+	FatalError (str);
 }
 
 
@@ -84,9 +79,9 @@ static int openDev (const char *name)
 {
 	int dev = open (name, O_RDWR);
 	if (dev == -1) {
-		fprintf (stderr, "can't open device \"%s\": ", name);
-		perror("");
-		exit (1);
+		char str[256];
+		sprintf (str, "can't open device \"%s\" (errno=%d)", name, errno);
+		FatalError (str);
 	}
 	return dev;
 }
@@ -164,18 +159,6 @@ static void SetupMidi (char *name, DrvMemPtr mem)
 }
 
 //_______________________________________________________________________
-static int getOpts (int argc, char *argv[])
-{
-	int dev = (argc == 3) ? 2 : 1;
-	if (argv[dev][0] == '-') usage (argv[0]);
-	if (argc == 3) {
-		if (strcmp (argv[1], "-d")) usage (argv[0]);
-		gDaemonMode = true;
-	}
-	return dev;
-}
-
-//_______________________________________________________________________
 static int checkQuit ()
 {
 	char c = getc(stdin);
@@ -184,18 +167,12 @@ static int checkQuit ()
 	return 0;
 }
 
-//_______________________________________________________________________
-void QuitHandler (int sigNum)
-{
-	pthread_exit (0);	
-}
 
 //_______________________________________________________________________
 static void * inputThread (void * ptr)
 {
 	DrvMemPtr mem = (DrvMemPtr)ptr;
 	StreamFifoPtr f = &mem->inFifo;
-	signal(SIGDRVQUIT, QuitHandler);
 	while (!mem->done) {
 		char c;
 		ssize_t n = read (mem->devId, &c, 1);
@@ -213,7 +190,15 @@ static void * inputThread (void * ptr)
 //_______________________________________________________________________
 static void ThreadCreate (DrvMemPtr mem)
 {
-	int  ret = pthread_create(&mem->inThread, NULL, inputThread, mem);
+	struct sched_param param;  
+	int  err, ret = pthread_create(&mem->inThread, NULL, inputThread, mem);
+	uid_t uid = getuid ();
+	
+	param.sched_priority = 99; /* 0 to 99  */
+        setuid (name_to_uid ("root")); 
+       	err = pthread_setschedparam(mem->inThread, SCHED_RR,  &param); 
+        setuid (uid);
+	
 	if (ret) {
 		char str[256];
 		sprintf (str, "pthread create failed with err code = %d", ret);
@@ -226,38 +211,25 @@ static void ThreadCreate (DrvMemPtr mem)
 static void run (DrvMemPtr mem, char * dev)
 {
 	void *threadRet;
-	if (!gDaemonMode) {
-		printf ("Midi driver anchored on \"%s\" is running\n", dev);
-		printf ("type 'q' to quit\n");
-		while (!mem->done)
-			mem->done = checkQuit();
-		pthread_kill (mem->inThread, SIGDRVQUIT);
-		pthread_join (mem->inThread, &threadRet);
-	}
-	else {
-		if (daemon (0, 0) == -1) {
-			perror ("can't run in daemon mode");
-		}
-		else while (!mem->done) {
-			sleep (10);
-		}
-	}
+	printf ("Midi driver anchored on \"%s\" is running\n", dev);
+	printf ("type 'q' to quit\n");
+	while (!mem->done)
+		mem->done = checkQuit();
+	pthread_cancel (mem->inThread);
+	pthread_join (mem->inThread, &threadRet);
 }
 
 //_______________________________________________________________________
 int main (int argc, char *argv[])
 {
-	short i;
 	DrvMemPtr mem = GetData();
 	
-	if ((argc > 3) || (argc < 2)) usage (argv[0]);
-	i = getOpts (argc, argv);
+	if (argc != 2) usage (argv[0]);
 	CheckMidiShare();
-	mem->devId = openDev (argv[i]);
-	SetupMidi (argv[i], mem);
+	mem->devId = openDev (argv[1]);
+	SetupMidi (argv[1], mem);
 	ThreadCreate (mem);
-	run (mem, argv[i]);
+	run (mem, argv[1]);
 	closeDriver (mem);
-MidiSendIm (0, MidiNewEv(typeEndTrack));
 	return 0;        
 }
