@@ -28,14 +28,12 @@
 /*****************************************************************************/
 
 #ifdef __Macintosh__
-		#include <midisharePPC.h>
-		/* New type definition */
-		typedef struct TFilter * MidiFilterPtr;
+	#include <midisharePPC.h>
+	/* New type definition */
+	typedef struct TFilter * MidiFilterPtr;
 #endif
 
-#ifdef __Linux__
-        #include "MidiShare.h"
-#endif
+
 
 #include "Player.h"
 #include "MidiPlayer.h"
