@@ -25,6 +25,7 @@
 #include <windows.h>
 #include <MidiShare.h>
 #include "msDrivers.h"
+#include "FilterUtils.h"
 
 // ------------------------------------------------------------------
 // Constants  - types
@@ -42,9 +43,10 @@
 enum { false, true };
 
 typedef short	RefList	[kMaxAppls];
-HBRUSH  gWhite, gRed, gBlue, gGreen;
+HBRUSH  gWhite, gRed, gBlue, gGreen, gGray;
 short gSelected=0; SlotRefNum gInfos; 
 BOOL gTextOn;
+char PortsMap[32];
 
 enum {
 	kxBox=145, kyBox=22, kwBox=160, khBox=160,
@@ -58,6 +60,8 @@ void 	 	AlertUser(LPCSTR);
 Boolean  	SetUpMidi(void);
 void		ShowConnections (HWND hDlg, short port);
 void		ShowSlotInfos (HWND hDlg, short index, BOOL in, BOOL selected);
+void		FramePort (HWND hDlg, short port);
+void		DrawPorts (HWND hDlg);
 
 void MSALARMAPI ApplAlarm(short,long);
 BOOL CALLBACKAPI msCnctDlg(HWND hDlg, UINT message, UINT wParam, LONG lParam);
@@ -107,6 +111,37 @@ void LoadState (void)
 	if (!dlgYPos || (dlgYPos < 0)) dlgYPos =  kDefaultYPos;
 }
 
+//________________________________________________________________________
+static void ResetPortMap ()
+{
+	short p;
+	for (p = 0; p < 32; p++) { PortsMap[p] = 0; }
+}
+
+//________________________________________________________________________
+static void IncludePortMap (char *map)
+{
+	short p;
+	for (p = 0; p < 32; p++) { PortsMap[p] |= map[p]; }
+}
+
+//________________________________________________________________________
+static void ResetOnePort (HWND hDlg, short port)
+{
+	LRESULT n; TSlotInfos sinf; short i;
+	RejectBit (PortsMap, port);
+	n = SendDlgItemMessage(hDlg, IDD_LB_SRC, LB_GETCOUNT,0,0);
+	for (i=0; i<n; i++) {
+		if (MidiGetSlotInfos (gInSlots[i], &sinf) && IsAcceptedBit (sinf.cnx, port))
+			AcceptBit (PortsMap, port);
+	}
+	n = SendDlgItemMessage(hDlg, IDD_LB_DST, LB_GETCOUNT,0,0);
+	for (i=0; i<n; i++) {
+		if (MidiGetSlotInfos (gOutSlots[i], &sinf) && IsAcceptedBit (sinf.cnx, port))
+			AcceptBit (PortsMap, port);
+	}
+}
+
 /* ------------------------------------------------------------------
 			application main
 ------------------------------------------------------------------ */
@@ -154,6 +189,7 @@ void AddSlots (HWND hDlg, short ref)
 		for (i=1; i<=infos.slots; i++) {
 			sref = MidiGetIndSlot (ref, i);
 			if (MidiGetSlotInfos (sref, &sinf)) {
+				IncludePortMap (sinf.cnx);
 				if (sinf.direction & MidiInputSlot) {
 					n = SendDlgItemMessage(hDlg, IDD_LB_SRC, LB_GETCOUNT,0,0);
 					SendDlgItemMessage(hDlg, IDD_LB_SRC, LB_ADDSTRING,0,(LPARAM)sinf.name);
@@ -177,6 +213,7 @@ BOOL Initialize (HWND hDlg)
 	gSelected= 0;
 	gInfos.slotRef = gInfos.drvRef = 0;
 	gTextOn = false;
+	ResetPortMap ();
 	SendDlgItemMessage(hDlg, IDD_LB_SRC, LB_RESETCONTENT,0,0L);
 	SendDlgItemMessage(hDlg, IDD_LB_DST, LB_RESETCONTENT,0,0L);
 	for (i=0; i<kMaxAppls; i++)
@@ -189,6 +226,7 @@ BOOL Initialize (HWND hDlg)
 	gRed = CreateSolidBrush(RGB (0xff,0,0));
 	gBlue = CreateSolidBrush(RGB (0,0,0xff));
 	gGreen = CreateSolidBrush(RGB (0,0xff,0));
+	gGray = CreateSolidBrush(RGB (0xb0,0xb0,0xb0));
 	SetDlgItemText (hDlg, IDC_INFOS, "");
 	InvalidateRect (hDlg, &rect, TRUE);
 	return TRUE ;
@@ -222,18 +260,27 @@ short MSRef2Index (HWND hDlg, SlotRefNum ref, BOOL in)
 /* ------------------------------------------------------------------
 	User connections  management
 	------------------------------------------------------------------ */
+static void ToogleSlot (HWND hDlg, SlotRefNum ref, short port)
+{
+	if (ref.slotRef >= 0) {
+		RECT rect = {kxBox, kyBox, kxBox+kwBox, kyBox+khBox};
+		Boolean state = !MidiIsSlotConnected (port, ref);
+		MidiConnectSlot (port, ref, state);
+		if (state) AcceptBit (PortsMap, port);
+		else ResetOnePort (hDlg, port);
+		DrawPorts (hDlg);
+	}
+}
+
 void CnxManagement (HWND hDlg, WORD ctrl)
 {
-	SlotRefNum ref; short sel;
+	short sel;
 
 	switch (ctrl) {
 		case IDD_LB_SRC:
 			sel = (short)SendDlgItemMessage (hDlg, IDD_LB_SRC, LB_GETCARETINDEX,0,0L);
 			if (gSelected) {
-				short port = gSelected-1;
-				ref = Index2MSRef (sel, true);
-				if (ref.slotRef >= 0)
-					MidiConnectSlot (port, ref, (Boolean)!MidiIsSlotConnected (port, ref));
+				ToogleSlot (hDlg, Index2MSRef (sel, true), (short)(gSelected-1));
 			}
 			else ShowSlotInfos (hDlg, sel, true, 
 				(BOOL)SendDlgItemMessage (hDlg, IDD_LB_SRC, LB_GETSEL,sel,0L));
@@ -241,10 +288,7 @@ void CnxManagement (HWND hDlg, WORD ctrl)
 		case IDD_LB_DST :
 			sel = (short)SendDlgItemMessage (hDlg, IDD_LB_DST, LB_GETCARETINDEX,0,0L);
 			if (gSelected) {
-				short port = gSelected-1;
-				ref = Index2MSRef (sel, false);
-				if (ref.slotRef >= 0)
-					MidiConnectSlot (port, ref, (Boolean)!MidiIsSlotConnected (port, ref));
+				ToogleSlot (hDlg, Index2MSRef (sel, false), (short)(gSelected-1));
 			}
 			else ShowSlotInfos (hDlg, sel, false,
 				(BOOL)SendDlgItemMessage (hDlg, IDD_LB_DST, LB_GETSEL,sel,0L));
@@ -281,6 +325,16 @@ BOOL ProcessPrivateMessage (HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 //_____________________________________________________________________________
+void FramePort (HWND hDlg, short port)
+{
+	short x = kxBox+(kwBox * (port%16));
+	short y = kyBox+(khBox * (port/16));
+	RECT rect = {x, y, x+kwBox, y+khBox};
+	InflateRect (&rect, 1, 1);
+	InvalidateRect (hDlg, &rect, TRUE);
+}
+
+//_____________________________________________________________________________
 void DrawPorts (HWND hDlg)
 {
 	RECT rect = {kxBox, kyBox, kxBox+kwBox, kyBox+khBox};
@@ -292,10 +346,12 @@ void DrawPorts (HWND hDlg)
 	for (i=0; i<16; i++) {
 		SetRect(&rect, kxBox, kyBox+offset, kxBox+kwPort, kyBox+khPort+offset);
 		InflateRect (&rect, -kIn, -kIn);
-		for(j=0; j<16; j++){
-			n++;
-			FillRect (dc, &rect, (n==gSelected) ? gRed :
-			(gInfos.drvRef && MidiIsSlotConnected ((short)(n-1), gInfos)) ? gGreen : gWhite);
+		for(j=0; j<16; j++, n++){
+			FillRect (dc, &rect, (n+1==gSelected) ? gRed :
+			(gInfos.drvRef && MidiIsSlotConnected (n, gInfos)) ? gGreen : gWhite);
+			InflateRect (&rect, 1, 1);
+			FrameRect (dc, &rect, IsAcceptedBit(PortsMap, n) ? gBlue : gGray);
+			InflateRect (&rect, -1, -1);
 			OffsetRect (&rect, kwPort, 0);
 		}
 		offset += kwPort;
