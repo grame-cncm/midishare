@@ -39,9 +39,6 @@
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
 	InitEvents ();
-#ifdef __Linux__
-	InitStructTbl();
-#endif
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
