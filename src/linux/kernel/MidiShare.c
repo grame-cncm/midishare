@@ -49,7 +49,7 @@
 #include "msFilter.h"
 
 //_________________________________________________________
-void CallQuit (TApplContextPtr context);
+void CallQuitAction (TApplContextPtr context);
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g);
 
@@ -171,7 +171,45 @@ int mskOpen(unsigned long userptr)
 	return 0;	
 }
 
+
 /*__________________________________________________________________________________*/
+/*
+ User : MidiClose 				
+ 
+ 	Call (mskQuit)				----> kernel mskQuit  	---> Quit event 
+	
+ 	[wait for Real Time thread exit]	
+ 		
+ 							<------------------  User Real-Time thread exit
+
+	Call(mskClose)
+						----> kernel mskClose 
+						      
+						      Free kernel structure
+						<----
+	Free user structure
+	
+	End
+
+*/
+
+/*__________________________________________________________________________________*/
+
+int mskQuitAction(unsigned long userptr)
+{
+	TMidiCloseArgs args;
+	TClientsPtr clients = Clients(gMem);
+	TApplPtr appl;
+	
+	if (copy_from_user(&args, (TMidiCloseArgs *)userptr, sizeof(TMidiCloseArgs))) return -EFAULT;
+	appl = clients->appls[args.refnum];
+	CallQuitAction(appl->context);	
+	
+	return 0;	
+}
+
+/*__________________________________________________________________________________*/
+
 int mskClose(unsigned long userptr)
 {
 	TMidiCloseArgs args;
@@ -179,9 +217,7 @@ int mskClose(unsigned long userptr)
 	TApplPtr appl;
 	
 	if (copy_from_user(&args, (TMidiCloseArgs *)userptr, sizeof(TMidiCloseArgs))) return -EFAULT;
-	
 	appl = clients->appls[args.refnum];
-	CallQuit(appl->context);	
 	MSClose (args.refnum,gMem);
 	
 	return 0;	

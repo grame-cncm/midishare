@@ -45,7 +45,7 @@ typedef struct TMachine {
 typedef struct {
 	fifo 			commands;	/* fifo of commands : task and alarms */
 	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thead */
-	uchar wakeFlag;
+	Boolean wakeFlag;
 	
 } LinuxContext, * LinuxContextPtr;
 
@@ -58,6 +58,21 @@ static void intrpt_routine(void * arg);
 /* application specific part: context, alarm, tasks                        */
 /*_________________________________________________________________________*/
 
+void FreeCommandFifo(TApplContextPtr context)
+{
+	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
+	MidiEvPtr ev, next;
+	
+	/* free command fifo */
+		
+	ev = (MidiEvPtr)fifoclear (&linuxContext->commands);
+	while(ev) {
+		next= Link(ev);
+		MSFreeCell(ev,FreeList(Memory(gMem))); 
+		ev= next;
+	}
+}
+
 /*_________________________________________________________________________*/
 
 TApplContextPtr CreateApplContext ()
@@ -65,7 +80,7 @@ TApplContextPtr CreateApplContext ()
 	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc (sizeof(LinuxContext), GFP_KERNEL);
 	fifoinit(&ptr->commands);
 	ptr->commandsQueue = 0;
-	ptr->wakeFlag = 0;
+	ptr->wakeFlag = false;
 	return ptr;
 }
 
@@ -73,20 +88,9 @@ TApplContextPtr CreateApplContext ()
 
 void DisposeApplContext (TApplContextPtr context)
 {
-	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
-	MidiEvPtr ev, next;
-	
 	if (context) {
+		FreeCommandFifo(context);
 		kfree (context);
-		
-		// free command fifo
-		
-		ev = (MidiEvPtr)fifoclear (&linuxContext->commands);
-		while(ev) {
-			next= Link(ev);
-			MSFreeCell(ev,FreeList(Memory(gMem))); 
-			ev= next;
-		}
 	}
 }
 
@@ -96,9 +100,9 @@ static void wakeUp (TApplContextPtr context)
 {
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	
-	if (linuxContext->wakeFlag==0){
+	if (!linuxContext->wakeFlag){
 		wake_up(GetCommandQueue(context));
-		linuxContext->wakeFlag = 1;	
+		linuxContext->wakeFlag = true;	
 	}
 }
 
@@ -108,7 +112,7 @@ void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, l
 {
 	MidiEvPtr ev;
 	
-	/* put and applAlarm event in the application command fifo  */
+	/* put an applAlarm event in the application command fifo  */
 	
 	ev = MSNewEv(typeApplAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
@@ -126,7 +130,7 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 {
 	MidiEvPtr ev;
 	
-	/* put and rcvAlarm event in the application command fifo  */
+	/* put a rcvAlarm event in the application command fifo  */
 	
 	ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
@@ -138,9 +142,22 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 
 /*_________________________________________________________________________*/
 
-void CallQuit (TApplContextPtr context)
+void CallQuitAction (TApplContextPtr context)
 {
-	wake_up(GetCommandQueue(context));
+	MidiEvPtr ev;
+	
+	/* Free command fifo */
+	
+	FreeCommandFifo(context);
+	
+	/* put a Quit event in the application command fifo  */
+	
+	ev = MSNewEv(typeReset,FreeList(Memory(gMem)));  // A REVOIR
+
+	if (ev) {
+		fifoput(GetCommand(context), (cell*)ev);
+		wakeUp(context);
+	}
 }
 
 
@@ -218,7 +235,6 @@ static void intrpt_routine(void * arg)
   	else {
     		queue_task(&machine->timerTask, &tq_timer);  
   	}
-	
 }
 
 
@@ -228,7 +244,6 @@ void SpecialWakeUp (TMSGlobalPtr g)
 {
 	g->local = (void*)kmalloc (sizeof(TLinux), GFP_KERNEL);
 	if (g->local) InitMachine (g->local);
-	
 }
 
 /*__________________________________________________________________________*/
@@ -265,7 +280,7 @@ MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 		LinuxContextPtr context = (LinuxContextPtr)appl->context;
 		
 		if (fifosize(&context->commands) == 0){
-			context->wakeFlag=0;
+			context->wakeFlag = false;
 			sleep_on(&context->commandsQueue);
 		} 
 		return (MidiEvPtr)fifoget(&context->commands);

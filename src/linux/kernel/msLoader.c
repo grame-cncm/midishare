@@ -252,7 +252,10 @@ static void initMthTable() {
 	KernelMthTable[kMidiIsAcceptedPort ] = mskIsAcceptedPort;
 	KernelMthTable[kMidiIsAcceptedType ] = mskIsAcceptedType;
 		
+	KernelMthTable[kMidiQuit ] = mskQuitAction;
+	
 	KernelMthTable[kMidiReset ] = MidiReset;
+	
 }
 
 

@@ -43,15 +43,15 @@
 
 #define kMidiGetSyncInfo	5
 #define kMidiSetSyncMode 	6
-#define kMidiGetExtTime     8   
+#define kMidiGetExtTime     	8   
 #define kMidiInt2ExtTime	9
 #define kMidiExt2IntTime	10
 #define kMidiTime2Smpte		11
 #define kMidiSmpte2Time		12
 #define kMidiGetTimeAddr	13
 
-#define kMidiOpen 			14
-#define kMidiClose 			15
+#define kMidiOpen 		14
+#define kMidiClose 		15
 
 #define kMidiGetName 		16
 #define kMidiSetName		17
@@ -76,9 +76,9 @@
 
 #define kMidiNewCell		33
 #define kMidiFreeCell		34
-#define kMidiNewEv 			35
-#define kMidiCopyEv			36
-#define kMidiFreeEv			37
+#define kMidiNewEv 		35
+#define kMidiCopyEv		36
+#define kMidiFreeEv		37
 #define kMidiSetField		38
 #define kMidiGetField		39
 #define kMidiAddField		40
@@ -93,26 +93,26 @@
 #define kMidiGetTime 		47
 
 #define kMidiSendIm 		48
-#define kMidiSend			49
-#define kMidiSendAt			50
+#define kMidiSend		49
+#define kMidiSendAt		50
 
 #define kMidiCountEvs		51
-#define kMidiGetEv			52
+#define kMidiGetEv		52
 #define kMidiAvailEv		53
 #define kMidiFlushEvs 		54
 
 #define kMidiReadSync		55
 #define kMidiWriteSync		56
 
-#define kMidiCall			57
-#define kMidiTask			58
-#define kMidiDTask 			59
+#define kMidiCall		57
+#define kMidiTask		58
+#define kMidiDTask 		59
 #define kMidiForgetTask		60
 #define kMidiCountDTasks	61
 #define kMidiFlushDTasks	62
 #define kMidiExec1DTask 	63
 
-#define kMidiShare			64
+#define kMidiShare		64
 
 #define kMidiGetCommand 	65
 #define kMidiGetDTask 		66
@@ -123,14 +123,15 @@
 #define kMidiAcceptChan 	69
 #define kMidiAcceptPort		70
 #define kMidiAcceptType		71
-#define kMidiIsAcceptedChan 72
-#define kMidiIsAcceptedPort 73
-#define kMidiIsAcceptedType 74
+#define kMidiIsAcceptedChan 	72
+#define kMidiIsAcceptedPort 	73
+#define kMidiIsAcceptedType 	74
 
-#define kMidiReset 			75
+#define kMidiReset 		75
+#define kMidiQuit 		76
 
 
-#define kMaxMth			    76
+#define kMaxMth			77
 
 
 /* data structures for ioctl calls */ 
@@ -569,6 +570,9 @@ int mskAcceptType (unsigned long userptr);
 int mskIsAcceptedChan (unsigned long userptr);
 int mskIsAcceptedPort (unsigned long userptr);
 int mskIsAcceptedType (unsigned long userptr);
+
+int mskQuitAction (unsigned long userptr);
+
 
 extern TMSGlobalPtr	gMem;
 
