@@ -12,4 +12,4 @@ MidiShare Kernel To Do List / Wish List
 
 ------------------------------------------------------------------------------
 last modified: Monday, 12-Jul-1999
-	- Dominique Fober fober@rd.grame.fr
+	- Dominique Fober fober@grame.fr

@@ -29,7 +29,7 @@ Kernel development rules
   kernel changes and improvements.
   To subscribe, send the following:
      subscribe midishare-kernel <optionnal email>
-  in the body of a message to majordomo@rd.grame.fr
+  in the body of a message to majordomo@grame.fr
 
 - modifications, improvements or extensions of the source code should be discussed and
   posted to the midishare-kernel mailing list.
