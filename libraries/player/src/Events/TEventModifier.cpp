@@ -76,13 +76,19 @@ TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr su
 	fSynchroniser = synchro;
 	fScheduler = scheduler;
 	fRunningState = state;
+	
+	// Initialisation 
+	
 	fScore = new TPlayerScore();
 	fIterator = new TScoreIterator(fScore);
 	fIterator1 = new TScoreIterator(fScore);
 	fPlayTask = new TPlayTask1(this);	
 	fChaser = new TChaserIterator(fScore, sender);
+	
 	fTransSeq = 0;
 	fLast_task_ticks = 0;
+	
+	Init();
 }
 
 /*----------------------------------------------------------------------------*/
@@ -214,7 +220,9 @@ void TEventModifier::Init()
 	fIterator->Init();
 	fIterator1->Init();
 	fChaser->Init();
+	
 	fTransSeq = 0;
+	fLast_task_ticks = 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -223,7 +231,8 @@ void TEventModifier::Start(){ ScheduleTickTask(fIterator->CurDate()); }
 	
 /*--------------------------------------------------------------------------*/
 
-void TEventModifier::Stop (){ 
+void TEventModifier::Stop ()
+{ 
 	fPlayTask->Forget(); 
 	
 	// Init the chaser each time
