@@ -98,7 +98,7 @@ SOURCE=..\..\..\lib\MidiStreamToEvent.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\mshare32.lib
+SOURCE=..\..\VCProject\Release\mshare32.lib
 # End Source File
 # Begin Source File
 
