@@ -70,7 +70,7 @@
 #include "msSync.h" 
 #include "msEvents.h" 
 #include "msAppFun.h" 
-
+#include "msMem.h" 
 /*_______________________________________________________________________*/
 /* Linux desc structure                                                  */
 /*_______________________________________________________________________*/
@@ -300,7 +300,7 @@ void CallDTaskCode  (TApplContextPtr c, MidiEvPtr e)
 /* synchronization specific part                                           */
 /*_________________________________________________________________________*/
 
-Boolean CompareAndSwap (void **adr, void *compareTo, void *swapWith) 
+Boolean MSCompareAndSwap (void **adr, void *compareTo, void *swapWith) 
 {
 	return false;
 }
@@ -448,5 +448,34 @@ unsigned int MSPoll(short refNum, TClientsPtr g, struct file * f, poll_table * w
 	
 	return mask; 
 }
+
+/*__________________________________________________________________________*/
+
+Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+{
+	if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		return true;
+	}
+	return false;
+}
+
+/*_________________________________________________________________________*/
+/* memory allocation implementation                                        */
+/*_________________________________________________________________________*/
+
+FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
+{ 
+	return (void*)kmalloc(size,GFP_KERNEL);
+}
+
+/*_________________________________________________________________________*/
+
+void DisposeMemory  (FarPtr(void) memPtr)
+{
+	if (memPtr) kfree(memPtr);
+}
+
 
 
