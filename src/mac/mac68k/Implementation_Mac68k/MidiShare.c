@@ -31,6 +31,7 @@
 #include "msAppFun.h"
 #include "msConnx.h"
 #include "msDispatch.h"
+#include "msDrvFun.h"
 #include "msEvents.h"
 #include "msFields.h"
 #include "msFilter.h"
@@ -100,6 +101,46 @@ MSFunctionType(ApplAlarmPtr) MGetApplAlarm (short refNum, TMSGlobalPtr g) {
 
 MSFunctionType(void) MSetApplAlarm (short refNum, ApplAlarmPtr alarm, TMSGlobalPtr g) {
   MSSetApplAlarm (refNum,alarm, Clients(g));
+}
+
+/*------------------------------- Drivers management --------------------------*/
+
+MSFunctionType(short) MCountDrivers (TMSGlobalPtr g) {
+  return MSCountDrivers (Clients(g));
+}
+
+MSFunctionType(short) MGetIndDriver (short index, TMSGlobalPtr g) {
+  return MSGetIndDriver (index, Clients(g));
+}
+
+MSFunctionType(Boolean) MGetDriverInfos (short refnum, TDriverInfos * infos, TMSGlobalPtr g) {
+  return MSGetDriverInfos (refnum, infos, Clients(g));
+}
+
+/*-------------------------------- Slots management ---------------------------*/
+
+MSFunctionType(SlotRefNum) MAddSlot (short refnum, TMSGlobalPtr g) {
+  return MSAddSlot (refnum, Clients(g));
+}
+
+MSFunctionType(SlotRefNum) MGetIndSlot (short refnum, short index, TMSGlobalPtr g) {
+  return MSGetIndSlot (refnum, index, Clients(g));
+}
+
+MSFunctionType(void) MRemoveSlot (SlotRefNum slot, TMSGlobalPtr g) {
+  MSRemoveSlot (slot, Clients(g));
+}
+
+MSFunctionType(Boolean) MGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TMSGlobalPtr g) {
+  return MSGetSlotInfos (slot, infos, Clients(g));
+}
+
+MSFunctionType(void) MConnectSlot (short port, SlotRefNum slot, Boolean state, TMSGlobalPtr g) {
+  MSConnectSlot (port, slot, state, Clients(g));
+}
+
+MSFunctionType(Boolean) MIsSlotConnected (short port, SlotRefNum slot, TMSGlobalPtr g) {
+  return MSIsSlotConnected (port, slot, Clients(g));
 }
 
 
