@@ -1,0 +1,1 @@
+There folder should contains the MidiShare-Interface.lisp and Player-Interface.lisp with Macintosh line endings. Due to problem using CVS tools, there are removed and must be added here only when making a distribution
