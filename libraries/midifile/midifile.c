@@ -25,6 +25,8 @@
  * v118 [Nov 23,98]    SL bug correction in write_tempo function
  * v119 [Sept 23,99]   SL use of MDF_Header_SIZE and MDF_Trk_SIZE to avoid alignement problems for data structures
  * v120 [Jan 1,00]     JJC bug correction in write_SeqNum and MidiFileCloseTrack functions
+ * v121 [Dec 4,00]     SL remove the obsolete __MWERKS__ tag
+
 
  */
 
@@ -42,7 +44,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	120				/* source code version 			*/
+#define SRC_VERSION	121				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -826,14 +828,10 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 			ret= FlushKeyOff( fd);				/* write the remaining keyOff	*/
 			if( fgetpos( fd->fd, &offset2))	 	/* get the end track location 	*/
 				return false;
-//			trkLen= LongVal(offset2- offset1);	/* get the track length			*/
-#if __MWERKS__
-			trkLen= offset2._Off - offset1._Off;	/* get the track length			*/
-			offset1._Off -= offset_trkLen;
-#else
+
 			trkLen= LongVal((long)(offset2- offset1));	/* get the track length			*/
 			offset1-= offset_trkLen;
-#endif
+
 			if( fsetpos( fd->fd, &offset1))	 	/* to track length position 	*/
 				return false;
 												/* update the track length 		*/
