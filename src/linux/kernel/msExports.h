@@ -25,6 +25,7 @@
 
 #include "msAppFun.h"
 #include "msConnx.h"
+#include "msDrvFun.h"
 #include "msEvents.h"
 #include "msFields.h"
 #include "msFilter.h"
