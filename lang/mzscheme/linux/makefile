@@ -1,6 +1,6 @@
 FLAGS = ++ccf -D__Linux__ 
 TARGET = mzshare.so 
-TARGET1= libmzplayer.so.1.0
+TARGET1= mzplayer.so
 SRC =../src
 
 all:	$(TARGET) $(TARGET1)
