@@ -12,7 +12,6 @@ common:
 	make -C ../common/Memory
 	make -C library
 
-
 install:
 	./checksu
 	make -i -C library install
@@ -20,17 +19,18 @@ install:
 	if [ ! -f /etc/$(CONF) ]; then cp $(CONF) /etc/$(CONF); fi
 	insmod MidiShare.o
 
+appls:
+	make -f appls
+
+test:
+	make -C tests all
+
 uninstall:
 	./checksu
 	rmmod MidiShare || echo module not installed
 	if [ -c /dev/MidiShare ]; then rm /dev/MidiShare; fi
 	if [ -f /etc/$(CONF) ]; then rm /etc/$(CONF); fi
 	make -C library uninstall 
-
-tool:
-	make -i -C tools install 
-	make -C tests all
-
 dep:
 	make -i -C ../common/Memory dep 
 	make -i -C ../common dep 
@@ -42,4 +42,3 @@ clean:
 	make -i -C ../common clean 
 	make -i -C kernel clean 
 	make -i -C library clean 
-	make -i -C tools clean 
