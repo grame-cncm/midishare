@@ -46,6 +46,19 @@ MSFunctionType(void) 			MSetRcvAlarm (short refNum, RcvAlarmPtr alarm, TMSGlobal
 MSFunctionType(ApplAlarmPtr) 	MGetApplAlarm (short refNum, TMSGlobalPtr g);
 MSFunctionType(void) 			MSetApplAlarm (short refNum, ApplAlarmPtr alarm, TMSGlobalPtr g);
 
+/*------------------------------- Drivers management --------------------------*/
+MSFunctionType(short) 		MCountDrivers (TMSGlobalPtr g);
+MSFunctionType(short) 		MGetIndDriver (short index, TMSGlobalPtr g);
+MSFunctionType(Boolean) 	MGetDriverInfos (short refnum, TDriverInfos * infos, TMSGlobalPtr g);
+
+/*-------------------------------- Slots management ---------------------------*/
+MSFunctionType(SlotRefNum) 	MAddSlot (short refnum, TMSGlobalPtr g);
+MSFunctionType(SlotRefNum) 	MGetIndSlot (short refnum, short index, TMSGlobalPtr g);
+MSFunctionType(void) 		MRemoveSlot (SlotRefNum slot, TMSGlobalPtr g);
+MSFunctionType(Boolean) 	MGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TMSGlobalPtr g);
+MSFunctionType(void) 		MConnectSlot (short port, SlotRefNum slot, Boolean state, TMSGlobalPtr g);
+MSFunctionType(Boolean) 	MIsSlotConnected (short port, SlotRefNum slot, TMSGlobalPtr g);
+
 /*------------------------- Inter-Application Connections ---------------------*/
 MSFunctionType(void) 		MConnect(short src, short dest , Boolean state, TMSGlobalPtr g);
 MSFunctionType(Boolean) 	MIsConnected(short src, short dest, TMSGlobalPtr g);
