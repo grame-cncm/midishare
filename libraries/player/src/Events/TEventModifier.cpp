@@ -67,12 +67,15 @@ MidiEvPtr TFun::RemoveEvent( MidiEvPtr e)
 }
 
 /*----------------------------------------------------------------------------*/
+
 TEventModifier::TEventModifier(TEventSenderInterfacePtr sender, TPlayerSynchroniserPtr synchro, 
-	TSchedulerInterfacePtr	scheduler,  TEventDispatcherPtr successor) :TEventDispatcher(successor)
+TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr successor) 
+	:TEventDispatcher(successor)
 {
 	fEventUser = sender;
 	fSynchroniser = synchro;
 	fScheduler = scheduler;
+	fRunningState = state;
 	
 	// Initialisation 
 	
@@ -82,16 +85,18 @@ TEventModifier::TEventModifier(TEventSenderInterfacePtr sender, TPlayerSynchroni
 	fPlayTask = new TPlayTask1(this);	
 	fChaser = new TChaserIterator(fScore, sender);
 	
-	fTransSeq = 0;
-	fLast_task_ticks = 0;
-	
-	Init();
+	InitScore();
+	InitAux();
 }
 
 /*----------------------------------------------------------------------------*/
 
 TEventModifier::~TEventModifier()
 {
+	// Delete list of transformation
+	
+	InitFun();  
+	
 	// Warning : fScore must be desallocated the last 
 	
 	delete(fIterator1);
@@ -107,37 +112,39 @@ void TEventModifier::ReceiveEvents(MidiEvPtr e)
 {
 	MidiEvPtr e1;
 		
-	switch (EvType(e)) {
-		
-			case typeNote:
-				if (isFunOn() && (e1 = UMidi::NoteToKeyOff(e))) {
-					Modify(MidiCopyEv(e));   // keyOn
-					Modify(e1);  			 // keyOff
-				}
-				break;
-				
-			case typeKeyOn:
-			case typeKeyOff:
-				if (isFunOn()) { Modify(MidiCopyEv(e));}
-				break;
-				
-			case typeFunOn:
-				InsertFun(e);
-				break;
-				
-			case typeFunOff:
-				RemoveFun(Generation(e));
-				break;
+	if (fRunningState->IsRunning()) {
+	
+		switch (EvType(e)) {
 			
-			/*
-			A REVOIR
-			default:
-				fEventUser->CopyAndUseEvent(e,Date(e));
-				break;
-			*/
+				case typeNote:
+					if (isFunOn() && (e1 = UMidi::NoteToKeyOff(e))) {
+						Modify(MidiCopyEv(e));   // keyOn
+						Modify(e1);  			 // keyOff
+					}
+					break;
+					
+				case typeKeyOn:
+				case typeKeyOff:
+					if (isFunOn()) { Modify(MidiCopyEv(e));}
+					break;
+					
+				case typeFunOn:
+					InsertFun(e);
+					break;
+					
+				case typeFunOff:
+					RemoveFun(Generation(e));
+					break;
 				
+				/*
+				A REVOIR
+				default:
+					fEventUser->CopyAndUseEvent(e,Date(e));
+					break;
+				*/
+					
+		}
 	}
-
 	TEventDispatcher::ReceiveEvents(e);
 }
 
@@ -188,36 +195,57 @@ void TEventModifier::RemoveFun(ULONG generation)
 
 /*--------------------------------------------------------------------------*/
 	
-void TEventModifier::Init()
+void TEventModifier::InitScore()
 {
 	MidiSeqPtr seq = MidiNewSeq();
 	MidiEvPtr ev = MidiNewEv(typeEndTrack);
-	TFunPtr next,cur = fTransSeq;
+	
+	assert(seq);
+	assert(ev);
 	
 	// Put an empty seq with a last event with "infinite" date in the score
 	
-	if (seq && ev) {
-		Date(ev) = MAXLONG;
-		MidiAddSeq(seq,ev);
-		fScore->SetAllTrack(seq); 
-	}
-	
-	// Delete list of transformation
-	
+	Date(ev) = MAXLONG;
+	MidiAddSeq(seq,ev);
+	fScore->SetAllTrack(seq); 
+}
+
+/*--------------------------------------------------------------------------*/
+
+void TEventModifier::InitFun()  
+{
+	TFunPtr next,cur = fTransSeq;
+
 	while(cur) {
 		next = cur->GetNext();
 		delete(cur);
 		cur = next;
 	}
 	
+	fTransSeq = 0;
+}
+
+/*--------------------------------------------------------------------------*/
+	
+void TEventModifier::InitAux()
+{
 	// Initialisation 
 	
 	fIterator->Init();
 	fIterator1->Init();
 	fChaser->Init();
 	
-	fTransSeq = 0;
 	fLast_task_ticks = 0;
+	fTransSeq = 0;
+}
+
+/*--------------------------------------------------------------------------*/
+	
+void TEventModifier::Init()
+{
+	InitScore();
+	InitFun();  
+	InitAux();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -328,7 +356,7 @@ Dans une interruption, les taches sont effectuŽes avant l'alarme de reception:
 
 - jeu de events par la tache de jeu
 - alarme de reception : insertion ˆ la mme date 
-	jeu des events ˆ cette date ==> les events dŽja dans la sŽquence sont jouŽs 2 fois  
+  jeu des events ˆ cette date ==> les events dŽja dans la sŽquence sont jouŽs 2 fois  
 	
 Solution : variable fLast_task_ticks qui contient la dernire date des ŽvŽnements 
 dans la tache de jeu, si on insre ˆ la mme date, la date d'insertion est dŽcalŽe de 1.
@@ -342,15 +370,17 @@ void TEventModifier::Modify(MidiEvPtr ev)
 	TFunPtr next, fun = fTransSeq;
 	MidiEvPtr transEv;
 	TEventPtr curEv;
+	
+	// Date minimum d'insertion des evs transformŽs
 	ULONG min_date_ticks = MAXLONG;
-	ULONG cur_date_ticks = fSynchroniser->ConvertMsToTick(Date(ev));
+	
+	// La date d'insertion est au moins celle des derniers evs jouŽs +1
+	ULONG cur_date_ticks =  UTools::Max (fSynchroniser->ConvertMsToTick(Date(ev)),fLast_task_ticks+1) ;
 	
 	// Force le refnum
 	RefNum(ev) = trackNum;
 	
-	// Si des events ˆ cette date ont ŽtŽ jouŽs, dŽcale la date d'insertion de 1
-	if (cur_date_ticks == fLast_task_ticks) cur_date_ticks++;
-	
+
 	while(fun) {
 	
 		next = fun->GetNext();
@@ -363,8 +393,7 @@ void TEventModifier::Modify(MidiEvPtr ev)
 				if (Vel(ev) == 0) {
 					transEv = HandleKeyOff(ev, fun);
 				}else{	
-					if (fun->isStartFun())  
-						transEv = HandleKeyOn(ev, fun);
+					if (fun->isStartFun()) transEv = HandleKeyOn(ev, fun);
 				}
 				break;
 		
