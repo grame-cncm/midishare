@@ -283,8 +283,8 @@ void LoadState()
         data->fftsize = LoadConfigNum("Configuration", "FFT", GetProfileFullName(kProfileName),512);
         data->tune = LoadConfigNum("Configuration", "Tune", GetProfileFullName(kProfileName),440);
         data->buffers = LoadConfigNum("Configuration", "Buffers", GetProfileFullName(kProfileName),5);
-        data->noisein = LoadConfigNum("Configuration", "NoiseIn", GetProfileFullName(kProfileName),30);
-        data->noiseout = LoadConfigNum("Configuration", "NoiseOut", GetProfileFullName(kProfileName),20);
+        data->noisein = LoadConfigNum("Configuration", "LevelIn", GetProfileFullName(kProfileName),30);
+        data->noiseout = LoadConfigNum("Configuration", "LevelOut", GetProfileFullName(kProfileName),20);
         data->vol = LoadConfigNum("Configuration", "Vol", GetProfileFullName(kProfileName),1);
         data->bend = LoadConfigNum("Configuration", "Bend", GetProfileFullName(kProfileName),1);
         data->bendlength = LoadConfigNum("Configuration", "BendLength", GetProfileFullName(kProfileName),0);
