@@ -22,6 +22,7 @@
 */
 
 #include "TLog.h"
+#include "TThreads.h"
 #include "msThreads.h"
 #include "msServerInit.h"
 

@@ -22,8 +22,9 @@
 
 */
 
+#include <stdio.h>
+
 #ifdef linux
-	#include <stdio.h>
 	#include <sys/types.h>
 	#include <sys/stat.h>
 	#include <sys/ioctl.h>

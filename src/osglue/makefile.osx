@@ -1,10 +1,13 @@
 
-SRC = $(wildcard unix/*.cpp glue/*.cpp *.cpp)
-OBJ = $(patsubst %.cpp, %.o, $(SRC))
+LSRC = $(wildcard *.cpp)
+USRC = $(wildcard unix/*.cpp)
+GSRC = $(wildcard glue/*.cpp)
+SRC  = $(LSRC) $(USRC) $(GSRC)
+OBJ  = $(patsubst %.cpp, %.o, $(SRC))
 
 CFLAGS = -O3 -Iinclude -Iglue -Wall
 CXXFLAGS = $(CFLAGS)
-CXX = c++
+#VPATH = glue unix
 
 OUT = ../msOSGlueLib.o
 
@@ -14,15 +17,22 @@ $(OUT) : $(OBJ)
 	ld -r -o $(OUT) $(OBJ)
 
 makefile: makefile.osx
-	cp -f makefile.osx makefile
-	rm -f $(OBJ) $(OUT)
+	cat makefile.readme makefile.osx > makefile
 	make dep
 
 clean:
 	rm -f $(OBJ) $(OUT)
 
-dep:
-	mkdep -f __dep__ $(CFLAGS) $(SRC)
-	cat makefile.osx __dep__ > makefile
-	rm -f __dep__
+dep: makefile
+	cat makefile.readme makefile.osx > makefile
+	make -s outdep >> makefile
+
+outdep: makefile
+	mkdep -f __out__ $(CFLAGS) $(LSRC)
+	mkdep -f __dep__ $(CFLAGS) $(USRC)
+	sed -e 's/^\([^ ]*\.o\)/unix\/\1/' __dep__ >> __out__
+	mkdep -f __dep__ $(CFLAGS) $(GSRC)
+	sed -e 's/^\([^ ]*\.o\)/glue\/\1/' __dep__ >> __out__
+	cat __out__
+	rm -f __dep__ __out__
 

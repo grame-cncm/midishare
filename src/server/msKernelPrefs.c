@@ -280,7 +280,8 @@ char * DrvName (msKernelPrefs * prefs, short index)
 static void usage (char *str)
 {
 	char buffer[1024], * name = strrchr (str, pathSep);
-	name = name ? ++name : str;
+	if (name) name++;
+	else name = str;
 	sprintf (buffer, "usage: %s %s\n", name, kArgs);
 	LogWrite (buffer);
 	exit (1);

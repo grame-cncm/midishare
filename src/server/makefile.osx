@@ -4,37 +4,32 @@
 # the default target compiles the midishare server as a single 
 # executable file named 'midishared'
 #
-# it's however possible to compile the kernel as a shared library
-# using the target 'lib'. In this case, the midishare services
-# are available as mono-process services.
-#
 
 TARGET = midishared
-KLIB   = libMidiShare.dylib
 
-KOBJ   = ../msServerCommonLib.o
-OSOBJ  = ../msOSGlueLib.o
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o PortAudioLib.o
 
-INC = -I../common/Headers -I../osglue -I../lib
-CFLAGS := -O3 -Wall -D__MacOSX__  -DMSKernel $(INC)
+COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
+COMOBJ := $(patsubst ../common/%.c, ../common/sobj/%.o, $(COMSRC))
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
+GLUEOBJ := $(patsubst %.cpp, %.o, $(GLUESRC))
+PASRC := $(wildcard portaudio/*.c portaudio/pa_common/*.c)
+PAOBJ := $(patsubst %.c, %.o, $(PASRC)) 
+
+CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
+CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
+VPATH = ../common ../common/server ../osglue ../osglue/glue ../osglue/unix
 CC = gcc
 
 SRC := $(wildcard *.c)
-OBJ := $(OSOBJ) $(KOBJ) $(patsubst %.c, %.o, $(SRC)) 
+OBJ := $(patsubst %.c, %.o, $(SRC)) 
 DEST = /usr/local/bin
 
-all : $(TARGET)
-
-lib : $(KLIB)
-
-$(TARGET) : makefile $(OBJ)
-	make -C ../common
-	make -C ../osglue
-	$(CC) $(OBJ) -lpthread -lstdc++ -o $(TARGET)
-
+$(TARGET) : makefile $(LIBS) $(OBJ)
+	$(CC) $(LIBS) $(OBJ) -lpthread -lstdc++  -framework CoreAudio -o $(TARGET)
+	
 makefile: makefile.osx
-	cp makefile.osx makefile
-	rm -f $(OBJ) $(TARGET)
+	cat makefile.readme makefile.osx > makefile
 	make dep
 
 install: $(TARGET)
@@ -45,24 +40,28 @@ uninstall:
 	rm -rf $(DEST)/$(TARGET)
 	rm -rf /etc/$(CONF)
 
-dep:
-	mkdep -a -f makefile $(CFLAGS) $(SRC)
+dep: makefile
+	cat makefile.readme makefile.osx > makefile
+	mkdep -a -f makefile $(CFLAGS) -Iportaudio/pa_common $(SRC)
+	mkdep -a -f makefile $(CFLAGS) $(COMSRC)
+	mkdep -a -f makefile $(CXXFLAGS) $(GLUESRC)
 
-clean:
-	make -C ../common clean
-	make -C ../osglue clean
-	rm -f $(OBJ) $(TARGET) $(KLIB)*
+clean: makefile
+	rm -f $(OBJ) $(TARGET)
 
-$(KLIB) : makefile $(KOBJ)
-	make -C ../common
-	$(CC) $(KOBJ) -shared -fPIC -W1,soname,$(KLIB).1 -o $(KLIB).1.0
-	[ -f $(KLIB).1 ] || ln -s $(KLIB).1.0 $(KLIB).1
-	[ -f $(KLIB) ]   || ln -s $(KLIB).1 $(KLIB)
+../msServerCommonLib.o: makefile $(COMOBJ)
+	make -C ../common server
 
-$(KOBJ) :
-	make -C ../common
-
-$(OSOBJ):
+../msOSGlueLib.o: makefile $(GLUEOBJ)
 	make -C ../osglue
+
+PortAudioLib.o: $(PAOBJ)
+	ld -r -o PortAudioLib.o $(PAOBJ)
+
+# specific rules to differentiate portaudio options
+msPortAudio.o: msPortAudio.c
+	$(CC) $(CFLAGS) -Iportaudio/pa_common $< -c -o $@
+portaudio/%.o: portaudio/%.c
+	$(CC) -O3 -Wall -Iportaudio/pa_common $< -c -o $@
 
 # DO NOT DELETE
