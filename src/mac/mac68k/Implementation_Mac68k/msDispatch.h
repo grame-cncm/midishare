@@ -18,6 +18,9 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - mail boxes functions finalization
+   
 */
 
 #ifndef __msDispatch__
@@ -73,6 +76,10 @@ MSFunctionType(void) 		MApplySeq(MidiSeqPtr s, ApplyProcPtr proc, TMSGlobalPtr g
 MSFunctionType(void) 	MSendIm(short refNum, MidiEvPtr e, TMSGlobalPtr g);
 MSFunctionType(void) 	MSend(short refNum, MidiEvPtr e, TMSGlobalPtr g);
 MSFunctionType(void) 	MSendAt(short refNum, MidiEvPtr e, unsigned long d, TMSGlobalPtr g);
+
+/*----------------------------------- Mail boxes ------------------------------*/
+MSFunctionType(FarPtr(void))    MReadSync(FarPtr(void) FAR * adrMem, TMSGlobalPtr g);
+MSFunctionType(FarPtr(void))    MWriteSync(FarPtr(void) FAR * adrMem, FarPtr(void) val, TMSGlobalPtr g);
 
 /*----------------------------------- Receiving -------------------------------*/
 MSFunctionType(unsigned long) 	MCountEvs(short refNum, TMSGlobalPtr g);

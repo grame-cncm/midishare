@@ -18,6 +18,9 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - mail boxes functions finalization
+
 */
 
 #include "msDispatch.h"
@@ -61,7 +64,7 @@ asm void MSFunctionsTbl() {
 		dc.l doNothing,		MNewSeq,		MAddSeq,		MFreeSeq			/* 0x1c */
 		dc.l MClearSeq,		MApplySeq,		MSGetTime,		MSendIm				/* 0x20 */
 		dc.l MSend,			MSendAt,		MCountEvs,		MGetEv				/* 0x24 */
-		dc.l MAvailEv,		MFlushEvs,		MSReadSync,		MSWriteSync			/* 0x28 */
+		dc.l MAvailEv,		MFlushEvs,		MReadSync,		MWriteSync			/* 0x28 */
 		dc.l MCall,			MTask,			MDTask,			MForgetTask			/* 0x2c */
 		dc.l MCountDTasks,	MFlushDTasks,	MExec1DTask,	MNewCell			/* 0x30 */
 		dc.l MFreeCell,		MTotalSpace,	MGrowSpace,		MSSpecialInit		/* 0x34 */
