@@ -38,7 +38,7 @@ typedef struct {
 
 #define GetAppl(r) 		(CheckGlobRefNum(gMem, r)) ? Appls(gMem)[r] : 0
 #define ApplContext(r) 	(CheckGlobRefNum(gMem, r)) ? (msApplContextPtr)Appls(gMem)[r]->context : 0
-#define NewApplContext() 	AllocateMemory (sizeof(msApplContextPtr))
+#define NewApplContext() 	(msApplContextPtr)AllocateMemory (sizeof(msApplContextPtr))
 #define FreeApplContext(c) 	DisposeMemory (c)
 
 #endif

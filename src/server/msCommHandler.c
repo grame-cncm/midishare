@@ -90,14 +90,14 @@ static void SetFilter (short ref, MidiEvPtr e)
 /*____________________________________________________________________________*/
 static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 {
-    char name[256]; short ref=0;
+    char name[256]; short ref=0; msApplContextPtr context;
 	
 	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
 	if (!reply) { 
 		LogWrite ("NetMidiOpen: MidiShare memory allocation failed");
 		goto err;
 	}
-	msApplContextPtr context = NewApplContext();
+	context = NewApplContext();
 	if (!context) { 
 		LogWrite ("NetMidiOpen: memory allocation failed\n");
 		goto err;
@@ -257,7 +257,7 @@ static void CloseOneClientChannel (CommChansPtr pl)
 }
 
 /*____________________________________________________________________________*/
-cdeclAPI(void) CloseAllClientChannels ()
+cdeclAPI(void) CloseAllClientChannels(void)
 {
     CommChansPtr pl = gCCList;
     while (pl) {

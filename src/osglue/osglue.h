@@ -26,7 +26,7 @@
 
 #ifdef WIN32
 #include <windows.h>
-typedef void (__cdecl * AtExitProcPtr)();
+typedef void (__cdecl * AtExitProcPtr)(void);
 #define cdeclAPI(type)	type __cdecl
 
 #else

@@ -30,10 +30,25 @@
 
 #define kDefaultCLientSpace	60000
 
+static TMSGlobalPublic gPubMem;
+static msKernelPrefs prefs = { 
+	kDefaultCLientSpace,
+#ifdef WIN32
+	kTimeModeMMSystem,
+#else
+	kTimeModeAudio,
+#endif
+	1, 						// timeRes
+	{ 0 },
+	"",
+	"Built-in audio controller"
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+	msKernelPrefs * gPrefs = &prefs;
 	extern TMSGlobalPtr gMem;
 	short MidiGetLibVersion () ;
 	void  MSInitialize () ;
@@ -76,17 +91,6 @@ LibMain::~LibMain ()
 	CloseMemory(Memory(gMem));
 }
 #endif
-
-static TMSGlobalPublic gPubMem;
-static msKernelPrefs prefs = { 
-	kDefaultCLientSpace,
-	kTimeModeAudio,
-	1, 						// timeRes
-	{ 0 },
-	"",
-	"Built-in audio controller"
-};
-msKernelPrefs * gPrefs = &prefs;
 
 /*____________________________________________________________________________*/
 static msKernelPrefs * init ()

@@ -33,8 +33,6 @@
 #include "msSharedMem.h"
 #include "msThreads.h"
 
-extern TMSGlobalPtr gMem;
-
 #define kCommBuffSize	2048
 
 typedef struct StreamDesc * StreamDescPtr;
@@ -66,6 +64,8 @@ typedef struct {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern TMSGlobalPtr gMem;
 
 Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g);
 Boolean RTSend (MidiEvPtr e, TMSGlobalPtr g);

@@ -26,6 +26,7 @@
 #ifdef WIN32
 	#include "TMsgChan.h"
 	typedef TMsgChan	MPChan;
+#	define snprintf(dst, len, format, src, i) wsprintf (dst, format, src, i);
 #	define kServerAddr	0
 #	define sprintf			wsprintf
 #else

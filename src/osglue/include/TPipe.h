@@ -24,9 +24,10 @@
 #ifndef __msPipe__
 #define __msPipe__
 
+#include <string.h>
+
 #ifdef WIN32
 	#include <Windows.h>
-
 	typedef HANDLE	PipeHandler;
 #else
 	typedef int		PipeHandler;
@@ -62,7 +63,7 @@ class TPipe
 		long	BuffSize ()		{ return fBuffSize; }
 
 	private:
-		void	SetName (const char * name) { snprintf (fName, kMaxPipeName-1, "%s", name); }
+		void	SetName (const char * name) { strncpy ((char *)name, fName, kMaxPipeName); }
 
 		PipeHandler fPipe;		// the pipe handler
 		long		fBuffSize;	// pipe buffer size
