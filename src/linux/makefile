@@ -43,9 +43,9 @@ libuninstall:
 
 uninstall: libuninstall
 	rm -f /etc/$(CONF)
-	rmmod MidiShare
 	rm -f $(MODF)/MidiShare.o
 	rm -f $(INIT)/MidiShare $(RC)/rc[35].d/*MidiShare
+	rmmod MidiShare
 	
 dep:
 	make -i -C ../common/Memory dep 
