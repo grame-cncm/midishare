@@ -37,6 +37,25 @@ typedef struct {
 	ThreadProcPtr	proc;
 } BaseThreadArg, * BaseThreadArgPtr;
 
+#ifndef linux
+#include <mach/thread_act.h>
+
+//_____________________________________________________________________
+static void sigActions (int sig)
+{
+printf ("signal %d received: pthread_exit\n", sig);
+	pthread_exit (0);
+}
+
+static void setSigStop ()
+{
+	struct sigaction sa;
+	sa.sa_handler = sigActions;
+	sigemptyset (&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction (SIGSTOP, &sa, 0);
+}
+#endif
 
 //_____________________________________________________________________
 static void * baseThreadProc (void * ptr)
@@ -142,7 +161,9 @@ void TThreads::Stop ()
 		pthread_cancel (fThread);
 		pthread_join (fThread, &threadRet);
 #else
-	// MacOSX pthread_cancel not implemented in Darwin 5.5
+	// MacOSX pthread_cancel not implemented in Darwin 5.5, 6.4
+		mach_port_t machThread = pthread_mach_thread_np (fThread);
+		thread_terminate (machThread);
 #endif
 		fThread = 0;
 	}
