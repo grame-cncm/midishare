@@ -1,0 +1,56 @@
+
+TARGET = midishared
+KLIB   = libMidiShareKernel.so
+KOBJ   = ../msServerCommonLib.o
+OSOBJ  = ../msOSGlueLib.o
+
+INC = -I../common/Headers -I../osglue
+CFLAGS := -O3 -Wall -DMSKernel $(INC)
+CC = gcc
+
+SRC := $(wildcard *.c) 
+OBJ := $(OSOBJ) $(patsubst %.c, %.o, $(SRC)) 
+DEST = /usr/lib
+
+
+all : $(KLIB) $(TARGET)
+
+$(KLIB) : makefile $(KOBJ)
+	make -C ../common
+	$(CC) $(KOBJ) -shared -fPIC -W1,soname,$(KLIB).1 -o $(KLIB).1.0
+	[ -f $(KLIB).1 ] || ln -s $(KLIB).1.0 $(KLIB).1
+	[ -f $(KLIB) ]   || ln -s $(KLIB).1 $(KLIB)
+
+$(TARGET) : makefile $(OBJ)
+	make -C ../osglue
+	$(CC) $(OBJ) -L. -lMidiShareKernel -lpthread -o $(TARGET)
+
+makefile: makefile.linux
+	cp makefile.linux makefile
+	rm -f $(OBJ) $(TARGET)
+
+install: $(KLIB) 
+	cp -f $(KLIB).1.0 $(DEST)/$(KLIB).1.0
+	[ -f $(DEST)/$(KLIB) ]   || ln -s $(DEST)/$(KLIB).1 $(DEST)/$(KLIB)
+	[ -f $(DEST)/$(KLIB).1 ] || ln -s $(DEST)/$(KLIB).1.0 $(DEST)/$(KLIB).1
+
+uninstall: 
+	[ -f $(DEST)/$(KLIB) ]     || rm -f $(DEST)/$(KLIB)
+	[ -f $(DEST)/$(KLIB).1 ]   || rm -f $(DEST)/$(KLIB).1
+	[ -f $(DEST)/$(KLIB).1.0 ] || rm -f $(DEST)/$(KLIB).1.0
+
+dep: makefile
+	makedepend -- $(CFLAGS) --  -DMSKernel -Y -m $(SRC)
+
+clean:
+	make -C ../common clean
+	make -C ../osglue clean
+	rm -f $(OBJ) $(TARGET) $(KLIB)*
+
+$(KOBJ) :
+	make -C ../common
+
+$(OSOBJ):
+	make -C ../osglue
+
+# DO NOT DELETE
