@@ -34,11 +34,11 @@ class TLoopManager {
 
 	private:
 		
-        TScoreFollower	fFollower;
-        TScoreMarker	fLoopEndMarker;
-        TPlayerScorePtr fScore;
-         Boolean 		fLoopState;
-		ULONG            fLoopStart;
+        TScoreObjFollower	fFollower;
+        TScoreMarker		fLoopEndMarker;
+        TPlayerScorePtr		fScore;
+        Boolean			fLoopState;
+        ULONG			fLoopStart;
 	
 	public:
 		

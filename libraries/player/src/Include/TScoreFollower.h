@@ -26,7 +26,7 @@
 // Class TScoreFollower 
 //----------------------
 /*!
-\brief  Uses a TScoreIterator to move a TScoreVisitor on a TScore object.
+\brief  Generic score follower : uses a TScoreIterator to move a TScoreVisitor on a TScore object.
 */
 
 class TScoreFollower {
@@ -44,25 +44,79 @@ class TScoreFollower {
 	
 	protected:
 	
-		TTempoMapVisitor 	fTempoVisitor;
-		TScoreIterator		fIterator;
+                virtual TTempoMapVisitor& GetVisitor() = 0;
+                virtual TScoreIterator& GetIterator() = 0;
 		
-	public :
+	public:
 	
- 		TScoreFollower(TScorePtr score, ULONG tpq):fTempoVisitor(tpq),fIterator(score){}
- 		TScoreFollower(TScoreIterator& iterator, TTempoMapVisitor& tempovisitor):fTempoVisitor(tempovisitor),fIterator(iterator){} 
-		virtual ~TScoreFollower (){}
+ 		TScoreFollower(){}
+ 		virtual ~TScoreFollower (){}
  		
-		void Init (){fIterator.Init(); fTempoVisitor.Init();}
+		void Init();
 		
  		TEventPtr SetPosTicks (ULONG date_ticks); 
  		TEventPtr SetPosBBU (const TPos& pos);
  		TEventPtr SetPosMs (ULONG date_ms);
  		
- 		ULONG GetPosTicks() {return fTempoVisitor.CurDateTicks();}
+ 		ULONG GetPosTicks();
+};
+
+typedef TScoreFollower FAR * TScoreFollowerPtr;
+
+//-------------------------
+// Class TScoreObjFollower 
+//--------------------------
+/*!
+\brief  A score follower that use TTempoMapVisitor and TScoreIterator objects.
+*/
+
+class TScoreObjFollower : public TScoreFollower{
+
+	private:
+	
+                TScoreIterator		fIterator;
+		TTempoMapVisitor 	fTempoVisitor;
+	 
+        protected:
+                 
+                TTempoMapVisitor& GetVisitor() {return fTempoVisitor;}
+                TScoreIterator& GetIterator() {return fIterator;}
+		
+	public:
+	
+ 		TScoreObjFollower(TScorePtr score, ULONG tpq):fIterator(score),fTempoVisitor(tpq){}
+ 		virtual ~TScoreObjFollower(){}
+};
+
+typedef TScoreObjFollower FAR * TScoreObjFollowerPtr;
+
+
+//-------------------------
+// Class TScoreRefFollower 
+//--------------------------
+/*!
+\brief  A score follower that use TTempoMapVisitor and TScoreIterator references.
+*/
+
+class TScoreRefFollower : public TScoreFollower{
+
+	private:
+	
+                TScoreIterator&		fIterator;
+		TTempoMapVisitor& 	fTempoVisitor;
+	   
+        protected:
+                 
+                TTempoMapVisitor& GetVisitor() {return fTempoVisitor;}
+                TScoreIterator& GetIterator() {return fIterator;}
+		
+	public:
+	
+ 		TScoreRefFollower(TScoreIterator& iterator, TTempoMapVisitor& visitor):fIterator(iterator),fTempoVisitor(visitor){}
+ 		virtual ~TScoreRefFollower(){}
 };
 
 
-typedef TScoreFollower FAR * TScoreFollowerPtr;
+typedef TScoreRefFollower FAR * TScoreRefFollowerPtr;
 
 #endif

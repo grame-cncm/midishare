@@ -41,8 +41,8 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 	
 		TSchedulerInterfacePtr 	fScheduler;
 		TRunningStatePtr        fState;
-		ULONG  					fOffset;
-		TTempoMapVisitor	 	fTempoVisitor;
+		ULONG  			fOffset;
+		TTempoMapVisitor	fTempoVisitor;
 			
 	public:
 		
@@ -120,14 +120,13 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 
 	private:
 	
-		TTempoTask		fTempoTask;
+		TTempoTask	fTempoTask;
 		TScoreIterator	fIterator;
-		TScoreFollower  fFollower;
+		TScoreRefFollower fFollower;
 		
 		void  PlaySlice ();	
 	
 	public:
-	
 		
 		TPlayerSynchroniserInt(TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
 			:TPlayerSynchroniser(scheduler,state,tpq),fTempoTask(this),fIterator(score),fFollower(fIterator,fTempoVisitor){}
@@ -202,7 +201,6 @@ typedef TPlayerSynchroniserClock FAR * TPlayerSynchroniserClockPtr;
 class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 
 	public:
-	
 		
 		TPlayerSynchroniserExt(TSchedulerInterfacePtr scheduler,  TRunningStatePtr state, ULONG tpq)
 			:TPlayerSynchroniser(scheduler,state,tpq){} 

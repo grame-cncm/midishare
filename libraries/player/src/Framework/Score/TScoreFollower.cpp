@@ -21,17 +21,23 @@
  		
 /*--------------------------------------------------------------------------*/
 
+void  TScoreFollower::Init (){GetVisitor().Init(); GetIterator().Init();}
+
+ULONG TScoreFollower::GetPosTicks() {return GetVisitor().CurDateTicks();}
+
+/*--------------------------------------------------------------------------*/
+
 TEventPtr TScoreFollower::SetPosBBU (const TPos& pos)
 {
-	if (!fIterator.IsFirstEv() && fTempoVisitor.SupEq (fIterator.CurDate(), pos)){
+	if (!GetIterator().IsFirstEv() && GetVisitor().SupEq (GetIterator().CurDate(), pos)){
 		SetPosBBUBackward(pos);
 		SetPosBBUForward(pos);
 	}else{
 		SetPosBBUForward(pos);
 	}
 	
-	fTempoVisitor.UpdateBBU(pos);
-	return fIterator.CurEv();
+	GetVisitor().UpdateBBU(pos);
+	return GetIterator().CurEv();
 }
 /*--------------------------------------------------------------------------*/
 
@@ -39,30 +45,30 @@ TEventPtr TScoreFollower::SetPosMs (ULONG date_ms)
 {
 	ULONG date_ten_micro = date_ms * 100;
 	
-	if (!fIterator.IsFirstEv() && (fTempoVisitor.SupEq(fIterator.CurDate(),date_ten_micro))) {
+	if (!GetIterator().IsFirstEv() && (GetVisitor().SupEq(GetIterator().CurDate(),date_ten_micro))) {
 		SetPosMicroBackward(date_ten_micro);
 		SetPosMicroForward(date_ten_micro);
 	}else{
 		SetPosMicroForward(date_ten_micro);
 	}
 	
-	fTempoVisitor.UpdateTenMicroSec(date_ten_micro);
-	return fIterator.CurEv();
+	GetVisitor().UpdateTenMicroSec(date_ten_micro);
+	return GetIterator().CurEv();
 }
 
 /*--------------------------------------------------------------------------*/
 
 TEventPtr TScoreFollower::SetPosTicks (ULONG date_ticks)
 {
-	if (!fIterator.IsFirstEv() && (fIterator.CurDate() >= date_ticks)) {
+	if (!GetIterator().IsFirstEv() && (GetIterator().CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
 		SetPosTicksForward(date_ticks);
 	}else{
 		SetPosTicksForward(date_ticks);
 	}
 	
-	fTempoVisitor.UpdateTicks(date_ticks);
-	return fIterator.CurEv();
+	GetVisitor().UpdateTicks(date_ticks);
+	return GetIterator().CurEv();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -74,9 +80,9 @@ TEventPtr TScoreFollower::SetPosTicks (ULONG date_ticks)
 void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
 {
 	do {
-		fIterator.CurEv()->Accept(&fTempoVisitor,false); 
-		fIterator.PrevEv(); 
-	} while (!fIterator.IsFirstEv() && (fIterator.CurDate() >= date_ticks));
+		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
+		GetIterator().PrevEv(); 
+	} while (!GetIterator().IsFirstEv() && (GetIterator().CurDate() >= date_ticks));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -87,9 +93,9 @@ void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
 
 void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
 {
-	while (!fIterator.IsLastEv() && fIterator.CurDate() < date_ticks){ 
-		fIterator.CurEv()->Accept(&fTempoVisitor,true);
-		fIterator.NextEv();
+	while (!GetIterator().IsLastEv() && GetIterator().CurDate() < date_ticks){ 
+		GetIterator().CurEv()->Accept(&GetVisitor(),true);
+		GetIterator().NextEv();
 	}
 }
 
@@ -102,9 +108,9 @@ void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
 void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
 {
 	do {
-		fIterator.CurEv()->Accept(&fTempoVisitor,false); 
-		fIterator.PrevEv();
-	} while (!fIterator.IsFirstEv() && (fTempoVisitor.SupEq(fIterator.CurDate(),date_ten_micro)));
+		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
+		GetIterator().PrevEv();
+	} while (!GetIterator().IsFirstEv() && (GetVisitor().SupEq(GetIterator().CurDate(),date_ten_micro)));
 }	
 
 /*--------------------------------------------------------------------------*/
@@ -115,9 +121,9 @@ void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
 
 void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
 {
-	while (!fIterator.IsLastEv() && fTempoVisitor.Inf(fIterator.CurDate(), date_ten_micro)){ 
-		fIterator.CurEv()->Accept(&fTempoVisitor,true);
-		fIterator.NextEv();
+	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), date_ten_micro)){ 
+		GetIterator().CurEv()->Accept(&GetVisitor(),true);
+		GetIterator().NextEv();
 	}
 }
 
@@ -130,9 +136,9 @@ void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
 void TScoreFollower::SetPosBBUBackward (const TPos& pos)
 {
 	do {
-		fIterator.CurEv()->Accept(&fTempoVisitor,false); 
-		fIterator.PrevEv();
-	} while (!fIterator.IsFirstEv() && fTempoVisitor.SupEq (fIterator.CurDate(), pos));
+		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
+		GetIterator().PrevEv();
+	} while (!GetIterator().IsFirstEv() && GetVisitor().SupEq (GetIterator().CurDate(), pos));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -143,9 +149,9 @@ void TScoreFollower::SetPosBBUBackward (const TPos& pos)
 
 void TScoreFollower::SetPosBBUForward (const TPos& pos)
 {
-	while (!fIterator.IsLastEv() && fTempoVisitor.Inf(fIterator.CurDate(), pos)){	
-		fIterator.CurEv()->Accept(&fTempoVisitor,true);
-		fIterator.NextEv();
+	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), pos)){	
+		GetIterator().CurEv()->Accept(&GetVisitor(),true);
+		GetIterator().NextEv();
 	}
 }
 	

@@ -29,7 +29,7 @@
 \brief  A utility class to insert sequence of events in the score.
 */
 
-class TScoreInserter  :public TScoreFollower{
+class TScoreInserter : public TScoreObjFollower{
 
 	private:
 	
@@ -37,7 +37,7 @@ class TScoreInserter  :public TScoreFollower{
 		
 	public:
  
- 		TScoreInserter(TPlayerScorePtr score, ULONG tpq):TScoreFollower(score,tpq),fScore(score){}
+ 		TScoreInserter(TPlayerScorePtr score, ULONG tpq):TScoreObjFollower(score,tpq),fScore(score){}
  		virtual ~TScoreInserter(){}
  		
  		long InsertAllTrack(MidiSeqPtr s);

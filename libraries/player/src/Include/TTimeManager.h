@@ -29,13 +29,13 @@
  Provides time conversion functions.
 */ 
 
-class TTimeManager :public TScoreFollower{
+class TTimeManager : public TScoreObjFollower{
 
 	private:
 	
 		TScorePtr fScore;
 			
-	public :
+	public:
  
  		TTimeManager(TScorePtr sc, ULONG tpq);
  		virtual ~TTimeManager(){}

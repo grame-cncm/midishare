@@ -25,7 +25,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreFollower(score,tpq),fScore(score)
+TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreObjFollower(score,tpq),fScore(score)
 {
 	// Prepare the score for fast forward/backward moves
 	TTempoMapBuilder fTempomap;
@@ -37,7 +37,7 @@ TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreFollower(score,tp
 const TPos  TTimeManager::ConvertTickToBBU (ULONG date_tick) 
 { 
 	SetPosTicks(date_tick);
-	return fTempoVisitor.CurDateBBU();
+	return GetVisitor().CurDateBBU();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -45,7 +45,7 @@ const TPos  TTimeManager::ConvertTickToBBU (ULONG date_tick)
 ULONG   TTimeManager::ConvertBBUToTick(const TPos& pos) 
 { 
 	SetPosBBU(pos);
-	return fTempoVisitor.CurDateTicks();
+	return  GetVisitor().CurDateTicks();
 }
 	
 /*--------------------------------------------------------------------------*/
@@ -53,7 +53,7 @@ ULONG   TTimeManager::ConvertBBUToTick(const TPos& pos)
 ULONG  TTimeManager::ConvertTickToMs (ULONG date_tick) 
 { 
 	SetPosTicks(date_tick);
-	return fTempoVisitor.CurDateMicro()/100;
+	return GetVisitor().CurDateMicro()/100;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -61,7 +61,7 @@ ULONG  TTimeManager::ConvertTickToMs (ULONG date_tick)
 ULONG  TTimeManager::ConvertMsToTick (ULONG date_ms)   
 { 
 	SetPosMs (date_ms);
-	return fTempoVisitor.CurDateTicks();
+	return GetVisitor().CurDateTicks();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -69,7 +69,7 @@ ULONG  TTimeManager::ConvertMsToTick (ULONG date_ms)
 ULONG TTimeManager::GetTempo (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor.GetTempo();
+	return GetVisitor().GetTempo();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -77,7 +77,7 @@ ULONG TTimeManager::GetTempo (ULONG date_tick)
 short TTimeManager::GetNum (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor.GetNum();
+	return GetVisitor().GetNum();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -85,7 +85,7 @@ short TTimeManager::GetNum (ULONG date_tick)
 short TTimeManager::GetDenom (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor.GetDenom();
+	return GetVisitor().GetDenom();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -93,7 +93,7 @@ short TTimeManager::GetDenom (ULONG date_tick)
 short TTimeManager::GetNClocks (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor.GetNClocks();
+	return GetVisitor().GetNClocks();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -101,6 +101,6 @@ short TTimeManager::GetNClocks (ULONG date_tick)
 short TTimeManager::GetN32nd (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor.GetN32nd();
+	return GetVisitor().GetN32nd();
 }
 

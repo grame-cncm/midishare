@@ -28,28 +28,28 @@
 */ 
 
 
-class TScoreState :public TScoreFollower {
+class TScoreState : public TScoreObjFollower {
 	
 	public:
  
- 		TScoreState(TScorePtr score, ULONG tpq):TScoreFollower(score,tpq){}
+ 		TScoreState(TScorePtr score, ULONG tpq):TScoreObjFollower(score,tpq){}
  		virtual ~TScoreState (){}
  	
 		void FillState(PlayerStatePtr state, ULONG date_ticks) 
 		{
 			SetPosTicks(date_ticks);
 	
-			TPos pos = fTempoVisitor.CurDateBBU();
-			state->date = fTempoVisitor.CurDateMicro() / 100;
+			TPos pos = GetVisitor().CurDateBBU();
+			state->date = GetVisitor().CurDateMicro() / 100;
 			
 			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
 			state->unit = (short)pos.GetUnit() + 1;
 			
-			state->tsnum = fTempoVisitor.GetNum ();
-			state->tsdenom = fTempoVisitor.GetDenom ();
-			state->tsclick= fTempoVisitor.GetNClocks();
-			state->tsquarter = fTempoVisitor.GetN32nd();
+			state->tsnum = GetVisitor().GetNum ();
+			state->tsdenom = GetVisitor().GetDenom ();
+			state->tsclick= GetVisitor().GetNClocks();
+			state->tsquarter = GetVisitor().GetN32nd();
 		} 
 };
 
