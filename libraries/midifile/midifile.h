@@ -146,7 +146,7 @@ typedef struct midiFILE{			/* MIDI file descriptor		*/
 					/*                 b.8-14 = frame count per sec         */
 					/*			       b.0-7  = tick count per frame        */
 	FILE 	*fd;					/* standard file descriptor             */	
-	fpos_t  trkHeadOffset;			/* track header offset                  */
+	long  	trkHeadOffset;			/* track header offset                  */
 									/* nil if the track is closed           */
 	long	_cnt;					/* count for end track detection		*/
 	MidiSeqPtr keyOff;				/* keyOff coming from typeNote events   */
