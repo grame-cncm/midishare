@@ -27,29 +27,36 @@
 #include "msServerInit.h"
 
 /*____________________________________________________________________________*/
-void init (int argc, char *argv[])
+static msKernelPrefs * init (int argc, char *argv[])
 {
 	msCmdLinePrefs args;
 	msKernelPrefs * prefs;
 	
 	ReadArgs (&args, argc, argv);
-	prefs = ReadPrefs (args.conffile ? args.conffile : 0);
-	OpenLog (args.logfile ? args.logfile : prefs->logfile);
-	AdjustPrefs (prefs, &args);
-	LogPrefs (prefs);
+	prefs = ReadPrefs (args.conffile ? args.conffile : 0, &args);
+	if (prefs->logfile[0]) OpenLog (prefs->logfile);
+	LogWrite ("MidiShare is starting...");
+	CheckPrefs (prefs);
+	return prefs;
 }
 
 /*____________________________________________________________________________*/
 int main (int argc, char *argv[])
 {
 	TMSGlobalPublic * pubMem;
+	msKernelPrefs * prefs;
+	
 	OpenLog (0);
-	init (argc, argv);
+	prefs = init (argc, argv);
+	LogPrefs (prefs);
 	pubMem = msServerInit (sizeof(TMSGlobalPublic), true);
 	if (pubMem) {
-		char msg[512]; int version;
+		int version;
+		char msg[512];
+
+		/* never call any MidiShare function before MidiShareSpecialInit */
 		MidiShareSpecialInit (40000, pubMem);
-		version = MidiGetVersion ();
+		version = MidiGetVersion();
 		sprintf (msg, "MidiShare Server v.%d.%02d is running", version/100, version%100);
 		LogWrite (msg);
 		printf ("press return to quit\n");
@@ -57,7 +64,7 @@ int main (int argc, char *argv[])
 		msServerClose ();
 	}
 	else {
-		fprintf (stderr, "Cannot launch MidiShare server: initialization failed!\n");
+		LogWrite ("Cannot launch MidiShare server: initialization failed!");
 		return 1;
 	}
 	return 0;

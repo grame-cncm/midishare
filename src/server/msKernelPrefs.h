@@ -34,6 +34,7 @@ enum	{
 
 #define MaxLogName		512
 #define MaxAudioDevName	256
+#define kNoLog			(char *)-1
 
 typedef struct {
 	unsigned long memory;
@@ -55,10 +56,10 @@ typedef struct {
 
 
 //________________________________________________________________________
-msKernelPrefs * ReadPrefs   (const char * conffile);
 void            ReadArgs    (msCmdLinePrefs * prefs, int argc, char *argv[]);
-void            AdjustPrefs (msKernelPrefs * prefs, msCmdLinePrefs * args);
+msKernelPrefs * ReadPrefs   (const char * conffile, msCmdLinePrefs *cmdLine);
 char *          DrvName     (msKernelPrefs * prefs, short index);
+void 			CheckPrefs  (msKernelPrefs * prefs);
 void 			LogPrefs    (msKernelPrefs * prefs);
 
 #endif

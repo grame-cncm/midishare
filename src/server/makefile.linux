@@ -1,43 +1,50 @@
+#
+# midishare kernel makefile (c) Grame 2002
+#
+# the default target compiles the midishare server as a single 
+# executable file named 'midishared'
+#
+# it's however possible to compile the kernel as a shared library
+# using the target 'lib'. In this case, the midishare services
+# are available as mono-process services.
+#
 
 TARGET = midishared
-KLIB   = libMidiShareKernel.so
+KLIB   = libMidiShare.so
 KOBJ   = ../msServerCommonLib.o
 OSOBJ  = ../msOSGlueLib.o
 
-INC = -I../common/Headers -I../osglue -I../lib
+INC = -I../common/Headers -I../osglue
 CFLAGS := -O3 -Wall -DMSKernel $(INC)
 CC = gcc
 
-SRC := $(wildcard *.c) ../lib/profport.c
-OBJ := $(OSOBJ) $(patsubst %.c, %.o, $(SRC))
-DEST = /usr/lib
+SRC := $(wildcard *.c)
+OBJ := $(OSOBJ) $(KOBJ) $(patsubst %.c, %.o, $(SRC))
+DEST = /usr/local/bin
+CONF = midishare.conf
 
 
-all : $(KLIB) $(TARGET)
+all : $(TARGET)
 
-$(KLIB) : makefile $(KOBJ)
-	make -C ../common
-	$(CC) $(KOBJ) -shared -fPIC -W1,soname,$(KLIB).1 -o $(KLIB).1.0
-	[ -f $(KLIB).1 ] || ln -s $(KLIB).1.0 $(KLIB).1
-	[ -f $(KLIB) ]   || ln -s $(KLIB).1 $(KLIB)
+lib : $(KLIB)
 
 $(TARGET) : makefile $(OBJ)
+	make -C ../common
 	make -C ../osglue
-	$(CC) $(OBJ) -L. -lMidiShareKernel -lpthread -o $(TARGET)
+	$(CC) $(OBJ) -lpthread -o $(TARGET)
 
 makefile: makefile.linux
 	cp makefile.linux makefile
 	rm -f $(OBJ) $(TARGET)
+	make dep
 
-install: $(KLIB) 
-	cp -f $(KLIB).1.0 $(DEST)/$(KLIB).1.0
-	[ -f $(DEST)/$(KLIB) ]   || ln -s $(DEST)/$(KLIB).1 $(DEST)/$(KLIB)
-	[ -f $(DEST)/$(KLIB).1 ] || ln -s $(DEST)/$(KLIB).1.0 $(DEST)/$(KLIB).1
+install: $(TARGET)
+	install -d -s $(TARGET) $(DEST) 
+	install -d  $(CONF) /etc 
 
 uninstall: 
-	[ -f $(DEST)/$(KLIB) ]     || rm -f $(DEST)/$(KLIB)
-	[ -f $(DEST)/$(KLIB).1 ]   || rm -f $(DEST)/$(KLIB).1
-	[ -f $(DEST)/$(KLIB).1.0 ] || rm -f $(DEST)/$(KLIB).1.0
+	rm -rf $(DEST)/$(TARGET)
+	rm -rf /etc/$(CONF)
 
 dep: makefile
 	makedepend -- $(CFLAGS) --  -DMSKernel -Y -m $(SRC)
@@ -46,6 +53,12 @@ clean:
 	make -C ../common clean
 	make -C ../osglue clean
 	rm -f $(OBJ) $(TARGET) $(KLIB)*
+
+$(KLIB) : makefile $(KOBJ)
+	make -C ../common
+	$(CC) $(KOBJ) -shared -fPIC -W1,soname,$(KLIB).1 -o $(KLIB).1.0
+	[ -f $(KLIB).1 ] || ln -s $(KLIB).1.0 $(KLIB).1
+	[ -f $(KLIB) ]   || ln -s $(KLIB).1 $(KLIB)
 
 $(KOBJ) :
 	make -C ../common

@@ -48,13 +48,26 @@
 #	endif
 #endif
 
-#define kArgs "[-c initfile -l logfile -m memSize -t timeMode -r timeRes]"
+#define kArgs "\
+[-c initfile -l logfile -m memSize -t timeMode -r timeRes]\n\
+          -c initfile: read preferences from 'initfile'\n\
+          -l logfile : log messages into 'logfile'\n\
+                       uses stderr if 'logfile' is 'nolog'\n\
+          -m memSize : use 'memSize' for kernel memory size\n\
+          -t timeMode: used for time management\n\
+                       possible values for time mode are:\n\
+                       'rtc'   real time clock (/dev/rtc) (linux only)\n\
+                       'audio' audio interrupts (via portaudio)\n\
+                       'mmsys' windows multi-medio timer (windows only)\n\
+          -r timeRes : defines the time resolution in ms"
 
+// sections names declarations
 #define memorySectionName "memory"
 #define driverSectionName "drivers"
 #define timeSectionName   "time"
 #define logSectionName    "log"
 
+// entry names declarations
 #define memSizeStr        "size"
 #define timeModeStr       "mode"
 #define timeResStr        "resolution"
@@ -64,8 +77,12 @@
 
 #define DriversSep        ','
 
+// various definitions concerning default values and system minimum requirements
 #define kDefaultSpace		40000
+#define kMinSpace			10000
 #define kDefaultTimeRes		1
+#define kMinTimeRes			1
+#define kMaxTimeRes			2
 #define kDefaultAudioDev	""
 
 #define DriverMaxEntry	2048
@@ -81,6 +98,7 @@ static void ScanDrivers (msKernelPrefs * prefs, char *buffer);
 static int  readnum (char *str);
 static void usage (char *name);
 static int  checkPrefs  (msKernelPrefs * prefs);
+static char * chop (char *str);
 
 static char * availableTimeModes[] = {
 /* order of the strings must not be changed : it corresponds 
@@ -96,22 +114,57 @@ static msKernelPrefs gPrefs = { 0 };
 //________________________________________________________________________
 // exported functions implementation
 //________________________________________________________________________
-msKernelPrefs * ReadPrefs (const char * conffile)
+msKernelPrefs * ReadPrefs (const char * conffile, msCmdLinePrefs *cmdLine)
 {
 	static char buffer[DriverMaxEntry];
 	
-	char * confName = conffile ? conffile : profileName;
+	char * confName = conffile ? (char *)conffile : profileName;
 
-	gPrefs.memory   = GetMemSize(confName);
-	gPrefs.timeMode = GetTimeMode(confName);
-	gPrefs.timeRes  = GetTimeRes(confName);
+	gPrefs.memory   = (cmdLine->memory == -1) ? GetMemSize(confName) : cmdLine->memory;
+
+	gPrefs.timeMode = (cmdLine->timeMode < 0) ? GetTimeMode(confName) : cmdLine->timeMode;
+	gPrefs.timeRes  = (cmdLine->timeRes < 0) ? GetTimeRes(confName) : cmdLine->timeRes;
 	gPrefs.drvCount = 0;
-	GetLog (confName, gPrefs.logfile, sizeof(gPrefs.logfile));
+	if (cmdLine->logfile && (cmdLine->logfile != kNoLog))
+		 strncpy (gPrefs.logfile, cmdLine->logfile, MaxLogName);
+	else if (cmdLine->logfile == kNoLog)
+		gPrefs.logfile[0] = 0;
+	else
+		GetLog (confName, gPrefs.logfile, MaxLogName);
 	GetAudioDev (confName, gPrefs.audioDev, sizeof(gPrefs.audioDev));
 	if (GetDrivers (confName, buffer, DriverMaxEntry)) {
 		ScanDrivers (&gPrefs, buffer);
 	}
 	return &gPrefs;
+}
+
+//________________________________________________________________________
+void CheckPrefs  (msKernelPrefs * prefs)
+{
+	if (prefs->memory < kMinSpace) {
+		prefs->memory = kMinSpace;
+		LogWrite ("Warning: desired memory space adjusted to minimum memory space.");
+	}
+	if ((prefs->timeRes < kMinTimeRes) || (prefs->timeRes > kMaxTimeRes)) {
+		prefs->timeRes = kDefaultTimeRes;
+		LogWrite ("Warning: time resolution adjusted to a default supported value.");
+	}
+#if defined(WIN32)
+	if (prefs->timeMode != kTimeModeMMSystem) {
+		prefs->timeMode = kTimeModeMMSystem;
+		LogWrite ("Warning: only windows multi-media timer supported for time mode.");
+	}
+#elif defined(linux)
+	if (prefs->timeMode == kTimeModeMMSystem) {
+		prefs->timeMode = kTimeModeRTC;
+		LogWrite ("Warning: windows multi-media timer not supported on linux.");
+	}
+#else
+	if (prefs->timeMode != kTimeModeAudio) {
+		prefs->timeMode = kTimeModeAudio;
+		LogWrite ("Warning: only audio time sync. supported for time mode.");
+	}
+#endif
 }
 
 //________________________________________________________________________
@@ -138,21 +191,11 @@ void LogPrefs (msKernelPrefs * prefs)
 	sprintf (buffer, "Drivers count      : %d", (int)prefs->drvCount);
 	LogWrite (buffer);
 	if (prefs->drvCount) {
-		LogWrite ("  active:");
 		for (i=0; i<prefs->drvCount; i++) {
-			sprintf (buffer, "     %s", DrvName(prefs, i));
+			sprintf (buffer, "   %s", DrvName(prefs, i));
 			LogWrite (buffer);		
 		}
 	}
-}
-
-//________________________________________________________________________
-void AdjustPrefs (msKernelPrefs * prefs, msCmdLinePrefs * args)
-{
-	if (args->logfile) strncpy (prefs->logfile, args->logfile, MaxLogName);
-	if (args->memory != -1) prefs->memory = args->memory;
-	if (args->timeMode > 0) prefs->timeMode = args->timeMode;
-	if (args->timeRes > 0) prefs->timeRes = args->timeRes;
 }
 
 //________________________________________________________________________
@@ -179,7 +222,8 @@ void ReadArgs (msCmdLinePrefs * prefs, int argc, char *argv[])
 				case 'c': 	prefs->conffile = ptr;
 					break;
 
-				case 'l': 	prefs->logfile = ptr;
+				case 'l': 	
+					prefs->logfile = strcmp(ptr, "nolog") ? ptr : kNoLog;
 					break;
 
 				case 'm':
@@ -197,6 +241,7 @@ void ReadArgs (msCmdLinePrefs * prefs, int argc, char *argv[])
 						sprintf (msg, "invalid value '%s' for -t option", ptr);
 						goto err;
 					}
+					else prefs->timeMode = val;
 					break;
 
 				case 'r':
@@ -235,7 +280,7 @@ char * DrvName (msKernelPrefs * prefs, short index)
 static void usage (char *str)
 {
 	char buffer[1024], * name = strrchr (str, pathSep);
-	if (!name) name = str;
+	name = name ? ++name : str;
 	sprintf (buffer, "usage: %s %s\n", name, kArgs);
 	LogWrite (buffer);
 	exit (1);
@@ -255,8 +300,9 @@ static int TimeModeStr2TimeMode (char *str)
 	char **ptr = availableTimeModes;
 	int mode = 0;
 	while (*ptr) {
-		if (!strcmp(str, *ptr++))
+		if (!strcmp (str, *ptr))
 			return mode;
+		ptr++;
 		mode++;
 	}
 	return -1;
@@ -331,11 +377,19 @@ static char * GetDrivers (char *file, char *buffer, int len)
 }
 
 //________________________________________________________________________
+static char * chop (char *str)
+{
+	while (*str && ((*str == ' ') || (*str == '\t'))) str++;
+	return str;
+}
+
+//________________________________________________________________________
 static void ScanDrivers (msKernelPrefs * prefs, char *buffer)
 {
 	char *ptr = buffer, *enddrv;
 	
 	do {
+		ptr = chop(ptr);
 		enddrv = strchr (ptr, DriversSep);
 		if (enddrv && *enddrv) {		
 			*enddrv = 0;
