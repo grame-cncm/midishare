@@ -24,10 +24,8 @@
 //	TPlayerMemento.h			    
 // ===========================================================================
 
-
 #ifndef __TPlayerMemento__
 #define __TPlayerMemento__
-
 
 #include "TPlayer.h"
 
@@ -37,7 +35,6 @@
 /*!
 \brief	Save and restore the Player state between synchro changes.
 */
-
 
 class TPlayerMemento {
 
@@ -79,11 +76,8 @@ class TPlayerMemento {
 			}
 		}
 			
-		//void DefaultState(TPlayerPtr player){player->fTrackTable->Clear();}
 		void DefaultState(TPlayerPtr player){player->fTrackTable.Clear();}
-		
 };
-
 
 typedef TPlayerMemento FAR * TPlayerMementoPtr;
 

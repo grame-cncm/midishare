@@ -3,18 +3,22 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01205B2801560F457F000001 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaVM.framework;
 			path = /System/Library/Frameworks/JavaVM.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		01205B34015611757F000001 = {
-			isa = PBXLibraryReference;
+			explicitFileType = "compiled.mach-o.dylib";
+			isa = PBXFileReference;
 			path = libJPlayer.1.1.1.jnilib;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		01205B35015611757F000001 = {
 			buildPhases = (
@@ -85,6 +89,8 @@
 			};
 		};
 		01F12F4CFEC8CE2211DB9C8B = {
+			buildSettings = {
+			};
 			buildStyles = (
 				0E20B662001FAFA711DB9C8B,
 				0E20B663001FAFA711DB9C8B,
@@ -108,6 +114,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		01F12F4FFEC8CEF111DB9C8B = {
 			children = (
@@ -116,6 +123,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //010
 //011
@@ -128,19 +136,22 @@
 //0E3
 //0E4
 		0E20B662001FAFA711DB9C8B = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		0E20B663001FAFA711DB9C8B = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -159,11 +170,7 @@
 			buildActionMask = 12;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
@@ -181,9 +188,11 @@
 		F53C10A50208445201053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = MidiPlayer.c;
 			path = ../../src/Java/MidiPlayer.c;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F53C10A60208445201053105 = {
 			fileRef = F53C10A50208445201053105;
@@ -192,10 +201,12 @@
 			};
 		};
 		F5BE677003EAD97F01053105 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = Player.framework;
 			path = /System/Library/Frameworks/Player.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5BE677503EAD97F01053105 = {
 			fileRef = F5BE677003EAD97F01053105;
@@ -206,9 +217,11 @@
 		F5BE677603EAD9F901053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = Player.h;
 			path = /System/Library/Frameworks/Player.framework/Headers/Player.h;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5BE677703EAD9F901053105 = {
 			fileRef = F5BE677603EAD9F901053105;

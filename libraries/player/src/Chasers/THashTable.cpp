@@ -33,7 +33,7 @@
 
 /*--------------------------------------------------------------------------*/
                                                     
-void THashTable::Init(){ for (short i = 0; i< kMaxHashCode; i++) {fHashTable[i] = 0;}}
+void THashTable::Init() {for (short i = 0; i< kMaxHashCode; i++) {fHashTable[i] = 0;}}
 
 /*--------------------------------------------------------------------------*/
 
@@ -47,7 +47,7 @@ void THashTable::Free()
 
 /*--------------------------------------------------------------------------*/
 
-void THashTable::InsertEvent( MidiEvPtr ev)
+void THashTable::InsertEvent(MidiEvPtr ev)
 {
 	MidiEvPtr e = MidiCopyEv(ev);
 

@@ -37,7 +37,7 @@ long TLoopManager::SetLoopStartTicks(ULONG date_ticks)
 {
 	if (date_ticks  > GetLoopEndTicks()){
 		return  kErrSequencer;
-	}else {
+	} else {
 		fFollower.SetPosTicks(date_ticks);
 		fLoopStart = date_ticks;
 		return kNoErr;
@@ -66,7 +66,7 @@ long TLoopManager::SetLoopEndTicks(ULONG date_ticks)
 {
 	date_ticks -= kLoopEndOffset; // To avoid glitch when looping 
 	if (date_ticks < GetLoopStartTicks()) {
-		return  kErrSequencer;
+		return kErrSequencer;
 	} else {
 		fLoopEndMarker.Remove(fScore);
 		TEventPtr cur = fFollower.SetPosTicks(date_ticks);

@@ -20,13 +20,11 @@
 
 */
 
-
 // ===========================================================================
 //	TPlayerScore.cpp			    
 // ===========================================================================
 // The internal score : a PlayerScore contains at least one Tempo event, one 
 // TimeSign event and ont EndScore event
-
 
 #include "TPlayerScore.h"
 #include "TScoreIterator.h"
@@ -36,8 +34,6 @@
 #include "UDebug.h"
 #include "UMidi.h"
 #include "UMath.h"
-
-
 
 /*----------------------------------------------------------------------------*/
 
@@ -108,10 +104,8 @@ void TPlayerScore::RemoveEvent(TEventPtr ev)
 	assert(ev);
 	
 	if (ev->fPrev && ev->fNext) { // If the event is inserted
-	
 		if (ev->fNext == fScoreEnd) 			  
 			AdjustEndDate(ev->fPrev->GetDate());  
-			
 		TScore::RemoveEvent(ev);
 	}
 }

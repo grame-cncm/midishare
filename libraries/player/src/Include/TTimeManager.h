@@ -20,18 +20,14 @@
 
 */
 
-
 // ===========================================================================
 //	TTimeManager.cpp			    
 // ===========================================================================
 
-
 #ifndef __TTimeManager__
 #define __TTimeManager__
 
- 
 #include "TScoreFollower.h"
-
 
 //--------------------
 // Class TTimeManager 
@@ -41,7 +37,7 @@
  Provides time conversion functions.
 */ 
 
-class TTimeManager : public TScoreObjFollower{
+class TTimeManager : public TScoreObjFollower {
 
 	private:
 	
@@ -65,9 +61,7 @@ class TTimeManager : public TScoreObjFollower{
 		short GetDenom(ULONG date_tick);
 		short GetNClocks(ULONG date_tick);
 		short GetN32nd(ULONG date_tick);
-	
 };
-
 
 typedef TTimeManager FAR * TTimeManagerPtr;
 

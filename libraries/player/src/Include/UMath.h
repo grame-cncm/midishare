@@ -20,10 +20,8 @@
 
 */
 
-
 #ifndef __UMATH__
 #define __UMATH__
-
 
 #ifdef __Macintosh__
 	#ifndef LONG_MAX
@@ -40,7 +38,7 @@
 
 class UMath {
 
-	public :
+	public:
 		
 		static long Min (long a, long b) { if (a < b) return a; else return b;}
 		static long Max (long a, long b) { if (a >= b) return a; else return b;}
@@ -49,35 +47,34 @@ class UMath {
 
 		static long Abs (long a) { if (a < 0) return -a; else return a;}
 		
-		#ifdef __Macintosh__ 
+#ifdef __Macintosh__ 
+
+	#ifdef  __MacOS9__
+		#include <ToolUtils.h>
+		#include <FixMath.h>
+
+		#ifdef __MacOS9__
+			static long CalcLong (long a, long b, long c) 
+			{
+				wide res;
+				long remainder;
+				WideMultiply(a, b, &res);
+				return WideDivide(&res,c,&remainder);
+			}
 		
-			#ifdef  __MacOS9__
-				#include <ToolUtils.h>
-				#include <FixMath.h>
-
-				#ifdef __MacOS9__
-					static long CalcLong (long a, long b, long c) 
-					{
-						wide res;
-						long remainder;
-						WideMultiply(a, b, &res);
-						return WideDivide(&res,c,&remainder);
-					}
-				
-				#else
-					static long CalcLong (long a, long b, long c) 
-					{
-						long temp;
-						Int64Bit res;
-						LongMul(a, b, &res);
-						temp = res.hiLong*(LONG_MAX%c);
-						return res.hiLong * (LONG_MAX/c) + temp/c  + res.loLong/c + ((temp%c + res.loLong%c)>(c>>2) ? 1 : 0) ;
-					}
-			#endif
-			
-			#endif
-		#endif
+		#else
+			static long CalcLong (long a, long b, long c) 
+			{
+				long temp;
+				Int64Bit res;
+				LongMul(a, b, &res);
+				temp = res.hiLong*(LONG_MAX%c);
+				return res.hiLong * (LONG_MAX/c) + temp/c  + res.loLong/c + ((temp%c + res.loLong%c)>(c>>2) ? 1 : 0) ;
+			}
+	#endif
+	
+	#endif
+#endif
 };
-
 
 #endif

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	Umidi.h			    
 // ===========================================================================
@@ -28,10 +27,8 @@
 #ifndef __UMidi__
 #define __UMidi__
 
-
 #include "GenericMidiShare.h"
 #include "TPlayerConstants.h"
-
 
 ///------------
 // Class UMidi
@@ -40,9 +37,9 @@
 \brief	Midi utilities : various MidiShare sequence management functions.
 */
 
-class UMidi{
+class UMidi {
 
- public :
+ public:
  
 	static MidiSeqPtr 	TrsfNoteToKeyOn (MidiSeqPtr src);
 	
@@ -65,7 +62,6 @@ class UMidi{
 	static Boolean 		IsEmpty(MidiSeqPtr s);
 	static void 		DelEndTrack(MidiSeqPtr seq);
 	static void 		RemoveEv(MidiSeqPtr seq, MidiEvPtr e);
-
 };
 
 #endif

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	Umidi.cpp			    
 // ===========================================================================
@@ -67,35 +66,35 @@ MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr dest)
 
 	e = First (dest);
 	while (e) {
-			if (EvType(e) == typeNote) {
-				// A typeKeyOff ev is build and add to seq
-				if (e1 = MidiCopyEv(e)){
-					EvType(e1) = typeKeyOff;	// Type change
-					Vel(e1) = 64;			// velocity
-					Date(e1) = Date(e1) + Dur(e); // Date + Duration
-					// insert in dest after  e
-					ei = e;
-					while (ei)
+		if (EvType(e) == typeNote) {
+			// A typeKeyOff ev is build and add to seq
+			if (e1 = MidiCopyEv(e)){
+				EvType(e1) = typeKeyOff;	// Type change
+				Vel(e1) = 64;				// velocity
+				Date(e1) = Date(e1) + Dur(e); // Date + Duration
+				// insert in dest after  e
+				ei = e;
+				while (ei)
+				{
+					n = Link(ei);
+					if(!n || Date(e1) <= Date(n))
 					{
-						n = Link(ei);
-						if(!n || Date(e1) <= Date(n))
-						{
-							// Insert e1 after ei and before n
-							Link(ei) = e1;
-							Link(e1) = n;
-							break;
-						}
-						ei = n;
+						// Insert e1 after ei and before n
+						Link(ei) = e1;
+						Link(e1) = n;
+						break;
 					}
-					if (!n) Last (dest) = e1;
-
-				}else {
-					return 0;
+					ei = n;
 				}
-				// typeNote is replaced by a typeKeyOn
-				EvType(e) = typeKeyOn;			// Type change
-			}	
-			e = Link(e);
+				if (!n) Last (dest) = e1;
+
+			}else {
+				return 0;
+			}
+			// typeNote is replaced by a typeKeyOn
+			EvType(e) = typeKeyOn;	// Type change
+		}	
+		e = Link(e);
 	}
 	return dest;
 }

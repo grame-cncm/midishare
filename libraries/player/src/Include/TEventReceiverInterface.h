@@ -20,11 +20,9 @@
 
 */
 
-
 // ==============================
 //	TEventReceiverInterface.h		
 // ==============================
-
 
 #ifndef __TEventReceiverInterface__
 #define __TEventReceiverInterface__
@@ -38,7 +36,7 @@
  \brief Interface for an object which receive incoming events.
 */
 
-class TEventReceiverInterface  {
+class TEventReceiverInterface {
 
 	public:
 	
@@ -56,7 +54,7 @@ typedef TEventReceiverInterface FAR * TEventReceiverInterfacePtr;
  \brief An object that implements the TEventReceiverInterface and a <B> Chain of responsability pattern </B>.
 */
 
-class TEventDispatcher : public TEventReceiverInterface{
+class TEventDispatcher : public TEventReceiverInterface {
 
 	private:
 	
@@ -64,19 +62,18 @@ class TEventDispatcher : public TEventReceiverInterface{
 
 	public:
 	
-		TEventDispatcher() { fSuccessor = 0;}
-		TEventDispatcher(TEventDispatcher* successor){ fSuccessor = successor;}
+		TEventDispatcher() {fSuccessor = 0;}
+		TEventDispatcher(TEventDispatcher* successor){fSuccessor = successor;}
 		virtual ~TEventDispatcher(){}
 		
-		void SetSuccessor(TEventDispatcher* successor){ fSuccessor = successor;}
+		void SetSuccessor(TEventDispatcher* successor){fSuccessor = successor;}
 	
 		virtual void ReceiveEvents(MidiEvPtr e)
 		{ 
-			if (fSuccessor) { fSuccessor->ReceiveEvents(e); } else { MidiFreeEv(e);}
+			if (fSuccessor) {fSuccessor->ReceiveEvents(e); } else {MidiFreeEv(e);}
 		}
 		
 };
-
 
 typedef TEventDispatcher FAR * TEventDispatcherPtr;
 

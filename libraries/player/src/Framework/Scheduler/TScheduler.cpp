@@ -31,7 +31,6 @@
 // The scheduler maintains a list of pending tasks, rescheduling them if
 // necessary after a Tempo change.
 
-
 #include "TScheduler.h"
 #include "UMidi.h"
 #include "UTools.h"
@@ -50,20 +49,20 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 	
 	for (short line = 0 ; line<TableLength; line++) {fTaskTable[line] = 0;}
 		
-	#if defined (__Macintosh__) && defined (__MacOS9__)
-		fUPPExecuteTask = NewTaskPtr(ExecuteTask);
-	#else
-		fUPPExecuteTask = (TaskPtr)ExecuteTask;
-	#endif
+#if defined (__Macintosh__) && defined (__MacOS9__)
+	fUPPExecuteTask = NewTaskPtr(ExecuteTask);
+#else
+	fUPPExecuteTask = (TaskPtr)ExecuteTask;
+#endif
 }
 
 /*--------------------------------------------------------------------------*/
 
-TScheduler::~TScheduler ()
+TScheduler::~TScheduler()
 { 
-	#if defined (__Macintosh__) && defined (__MacOS9__)
-		if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
-	#endif
+#if defined (__Macintosh__) && defined (__MacOS9__)
+	if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
+#endif
 	
 	TTicksTaskPtr task;
 	
@@ -105,7 +104,7 @@ void TScheduler::ScheduleTickTask(TTicksTaskPtr task, ULONG date_ticks)
 // Internal functions
 /*--------------------------------------------------------------------------*/
 
-void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms) 
+void TScheduler::ExecuteTaskInt(TTicksTaskPtr task, ULONG date_ms) 
 {
 	RemoveTask(task);
 	task->Clear(); // Important
@@ -123,7 +122,7 @@ void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms)
 void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 {
 	if (fSynchro->IsSchedulable(task->GetDate())) {
-    		task->Kill(); // Important
+		task->Kill(); // Important
 		fMidiAppl->NewMidiTask(fUPPExecuteTask, fSynchro->ConvertTickToMs(task->GetDate()),(long)this,(long)task,0, &task->fTask);
 	}
 }		
@@ -132,7 +131,7 @@ void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 // Real-Time callback
 /*--------------------------------------------------------------------------*/
 
-void MSALARMAPI ExecuteTask (ULONG date_ms, short refnum, long scheduler, long task, long a3) 
+void MSALARMAPI ExecuteTask(ULONG date_ms, short refnum, long scheduler, long task, long a3) 
 {
 	((TSchedulerPtr)scheduler)->ExecuteTaskInt((TTicksTaskPtr)task,date_ms);
 }

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TRunningPlayer.cpp		    
 // ===========================================================================
@@ -99,7 +98,7 @@ void TRunningPlayer::PlaySliceBackward()
 
 /*----------------------------------------------------------------------------*/
 
-void TRunningPlayer::SetPosTicks (ULONG date_ticks) 
+void TRunningPlayer::SetPosTicks(ULONG date_ticks) 
 { 
 	if (fRunningState->IsRunning()){
 		fPlayer->Stop();

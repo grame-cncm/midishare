@@ -20,11 +20,9 @@
 
 */
 
-
 // ===========================================================================
 //	TEventReceiver.h			    
 // ===========================================================================
-
 
 #ifndef __TEventReceiver__
 #define __TEventReceiver__
@@ -34,7 +32,6 @@
 #include "TPlayerInterface.h"
 #include "TClockConverter.h"
 
-
 //-----------------------
 // Class TEventReceiver 
 //-----------------------
@@ -42,15 +39,15 @@
 	\brief A TEventReceiver object handles incoming events.
 */
 
-class TEventReceiver :public TEventDispatcher {
+class TEventReceiver : public TEventDispatcher {
 
 	protected:
 		
 		TPlayerInterfacePtr  fPlayer;
 		TLoopManagerPtr      fLoopManager;
 	
-	 	void ReceiveLoopEnd (MidiEvPtr e);
-	 	void ReceiveStop (MidiEvPtr e);
+	 	void ReceiveLoopEnd(MidiEvPtr e);
+	 	void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -58,7 +55,7 @@ class TEventReceiver :public TEventDispatcher {
 			:TEventDispatcher(successor),fPlayer(player),fLoopManager(loopmanager){}
 		virtual ~TEventReceiver(){}
 	
-		virtual void ReceiveEvents (MidiEvPtr e);
+		virtual void ReceiveEvents(MidiEvPtr e);
 };
 
 
@@ -69,17 +66,17 @@ class TEventReceiver :public TEventDispatcher {
 	\brief A TEventReceiver object used for clock synchronization.
 */
 
-class TClockEventReceiver :public TEventReceiver {
+class TClockEventReceiver : public TEventReceiver {
 
 	private:
 		
 		TClockConverterPtr fClockConverter;
 	
-		void ReceiveSongPos (MidiEvPtr e);
-		void ReceiveClock (MidiEvPtr e);
-		void ReceiveStart (MidiEvPtr e);
-		void ReceiveContinue (MidiEvPtr e);
-		void ReceiveStop (MidiEvPtr e);
+		void ReceiveSongPos(MidiEvPtr e);
+		void ReceiveClock(MidiEvPtr e);
+		void ReceiveStart(MidiEvPtr e);
+		void ReceiveContinue(MidiEvPtr e);
+		void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -87,7 +84,7 @@ class TClockEventReceiver :public TEventReceiver {
 			:TEventReceiver(player,loopmanager,successor),fClockConverter(converter){}
 		virtual ~TClockEventReceiver(){}
 	
-		void ReceiveEvents (MidiEvPtr e);
+		void ReceiveEvents(MidiEvPtr e);
 };
 
 
@@ -98,11 +95,11 @@ class TClockEventReceiver :public TEventReceiver {
 	\brief A TEventReceiver object used for external tempo synchronization.
 */
 
-class TExtEventReceiver :public TEventReceiver {
+class TExtEventReceiver : public TEventReceiver {
 
 	private:
 	
-		void ReceiveTempo (MidiEvPtr e);
+		void ReceiveTempo(MidiEvPtr e);
 
 	public:
 	
@@ -111,7 +108,6 @@ class TExtEventReceiver :public TEventReceiver {
 		virtual ~TExtEventReceiver(){}
 	
 		void ReceiveEvents (MidiEvPtr e);
-		
 };
 
 //--------------------------
@@ -121,12 +117,12 @@ class TExtEventReceiver :public TEventReceiver {
 	\brief A TEventReceiver object used for SMPTE synchronization.
 */
 
-class TSMPTEEventReceiver :public TEventReceiver {
+class TSMPTEEventReceiver : public TEventReceiver {
 
 	private:
 	
-		void ReceiveStart (MidiEvPtr e);
-		void ReceiveStop (MidiEvPtr e);
+		void ReceiveStart(MidiEvPtr e);
+		void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -134,9 +130,7 @@ class TSMPTEEventReceiver :public TEventReceiver {
 			:TEventReceiver(player,loopmanager,successor){}
 		virtual ~TSMPTEEventReceiver(){}
 	
-		void ReceiveEvents (MidiEvPtr e);
-		
+		void ReceiveEvents(MidiEvPtr e);
 };
 
- 
 #endif

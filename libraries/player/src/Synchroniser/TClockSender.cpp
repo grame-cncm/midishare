@@ -28,10 +28,8 @@
 //	Manage Midi events related to Clock synchronization
 //
 
-
 #include "TClockSender.h"
 #include "UTools.h"
-
 
 /*--------------------------------------------------------------------------*/
 
@@ -63,7 +61,7 @@ void TClockSender::Cont(ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-/* Internal functions
+// Internal functions
 /*--------------------------------------------------------------------------*/
 
 void TClockSender::NextClock (ULONG date_ms) 

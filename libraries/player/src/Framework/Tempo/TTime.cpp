@@ -32,7 +32,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-void TTime::Init (ULONG tpq)
+void TTime::Init(ULONG tpq)
 {
 	fTicks_per_quarter = fTick_per_beat = tpq;
 	fBeat_per_bar = kDefaultBar; 
@@ -41,7 +41,7 @@ void TTime::Init (ULONG tpq)
 
 /*--------------------------------------------------------------------------*/
 
-const TPos TTime::ConvertTicksToBBUInBar (ULONG nb_ticks)
+const TPos TTime::ConvertTicksToBBUInBar(ULONG nb_ticks)
 {	
 	ULONG bar,beat,unit;
 
@@ -64,7 +64,7 @@ ULONG TTime::ConvertBBUToTicksInBar(const TPos& pos)
 // or timesign representation is the same for both positions
 /*--------------------------------------------------------------------------*/
 
- const TPos TTime::Add ( const TPos& p1, const TPos& p2)
+ const TPos TTime::Add(const TPos& p1, const TPos& p2)
  {
 	ULONG temp;
 	ULONG bar,beat,unit;
@@ -81,7 +81,7 @@ ULONG TTime::ConvertBBUToTicksInBar(const TPos& pos)
 
 /*--------------------------------------------------------------------------*/
 
-const TPos TTime::Normalize( const TPos& p1)
+const TPos TTime::Normalize(const TPos& p1)
 { 
 	ULONG temp;
 	ULONG bar,beat,unit;
@@ -95,7 +95,7 @@ const TPos TTime::Normalize( const TPos& p1)
 
 /*--------------------------------------------------------------------------*/
 
-const TPos TTime::Normalize1 (const TPos& p1)
+const TPos TTime::Normalize1(const TPos& p1)
 { 
 	ULONG bar,beat,unit;
 	
@@ -107,7 +107,7 @@ const TPos TTime::Normalize1 (const TPos& p1)
 
 /*--------------------------------------------------------------------------*/
 
-const TPos TTime::Sub (const TPos& p1, const TPos& p2)
+const TPos TTime::Sub(const TPos& p1, const TPos& p2)
 {
 	Normalize1 (p1);
 	return TPos ( p1.fBar - p2.fBar, p1.fBeat - p2.fBeat , p1.fUnit - p2.fUnit);
@@ -135,7 +135,7 @@ Boolean TTime::Inf (const TPos& p1, const  TPos& p2)
 
 /*--------------------------------------------------------------------------*/
 
-Boolean TTime::InfEq (const TPos& p1, const TPos& p2)
+Boolean TTime::InfEq(const TPos& p1, const TPos& p2)
 {
 	if (p1.fBar == p2.fBar)  Normalize(p2); 
 
@@ -155,7 +155,7 @@ Boolean TTime::InfEq (const TPos& p1, const TPos& p2)
 
 /*--------------------------------------------------------------------------*/
 
-Boolean TTime::Sup (const TPos& p1 , const TPos& p2)
+Boolean TTime::Sup(const TPos& p1, const TPos& p2)
 {
 	if (p1.fBar == p2.fBar)  Normalize(p2); 
 
@@ -174,7 +174,7 @@ Boolean TTime::Sup (const TPos& p1 , const TPos& p2)
 
 /*--------------------------------------------------------------------------*/
 
-Boolean TTime::SupEq (const TPos& p1 , const TPos& p2)
+Boolean TTime::SupEq(const TPos& p1, const TPos& p2)
 {
 	if (p1.fBar == p2.fBar)  Normalize(p2); 
 

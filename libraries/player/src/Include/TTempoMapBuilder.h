@@ -20,15 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TTempoMapBuilder.h		    
 // ===========================================================================
 
-
 #ifndef __TTempoMapBuilder__
 #define __TTempoMapBuilder__
-
 
 #include "TScoreVisitorInterface.h"
 #include "TPlayerConstants.h"
@@ -40,8 +37,7 @@
   \brief Used for the score TempoMap construction
 */
 
-
-class TTempoMapBuilder :public TScoreVisitorInterface {
+class TTempoMapBuilder : public TScoreVisitorInterface {
 
 	private:
 	
@@ -53,7 +49,7 @@ class TTempoMapBuilder :public TScoreVisitorInterface {
 		TTempoMapBuilder():fLastTempo(0),fLastTs(0){}
 		virtual ~TTempoMapBuilder(){}
 	
-		void Visite (TTempo* ev, Boolean  forward)
+		void Visite(TTempo* ev, Boolean  forward)
 		{
 			if (fLastTempo) {
 				ev->SetTempoBackward(Tempo(fLastTempo));
@@ -63,7 +59,7 @@ class TTempoMapBuilder :public TScoreVisitorInterface {
 			fLastTempo = ev->MidiEvent();
 		}
 		
-		void Visite (TTimeSign* ev, Boolean  forward)
+		void Visite(TTimeSign* ev, Boolean  forward)
 		{
 			if (fLastTs) {
 				ev->SetBNum(TSNum(fLastTs));
@@ -78,8 +74,6 @@ class TTempoMapBuilder :public TScoreVisitorInterface {
 			}
 			fLastTs = ev->MidiEvent();
 		}
-
 };
-
 
 #endif

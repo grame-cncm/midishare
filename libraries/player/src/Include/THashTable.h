@@ -39,7 +39,7 @@
 \brief  A Midi event hashtable used for chase.
 */
 
-class THashTable{
+class THashTable {
 
 	private:
 

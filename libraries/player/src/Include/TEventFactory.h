@@ -29,7 +29,6 @@
 
 #include "TEvent.h"
 
-
 //---------------------
 // Class TEventFactory 
 //---------------------
@@ -38,7 +37,6 @@
 */
 
 typedef  TEventPtr  (*mthptr)(MidiEvPtr e);
-
 
 class TEventFactory {
 

@@ -25,14 +25,11 @@
 //	TChaserIterator.h			    
 // ===========================================================================
 
-
 #ifndef __TChaserIterator__
 #define __TChaserIterator__
-
  
 #include "TChaserVisitor.h"
 #include "TScoreIterator.h"
-
 
 //------------------------
 // Class TChaserInterface
@@ -69,7 +66,7 @@ typedef TChaserInterface FAR * TChaserInterfacePtr;
     events that occurred previously in the tracks.
 */ 
 
-class TChaserIterator :public TChaserInterface{
+class TChaserIterator :public TChaserInterface {
 
 	private:
 	

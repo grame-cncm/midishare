@@ -91,8 +91,7 @@
 			sourceTree = "<group>";
 		};
 		08FB77AAFE841565C02AAC07 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
@@ -258,7 +257,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Player</string>
 	<key>CFBundleGetInfoString</key>
-	<string>2.06</string>
+	<string>2.07</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -270,19 +269,18 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.06</string>
+	<string>2.07</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.6</string>
+	<string>2.0.7</string>
 </dict>
 </plist>
 ";
 		};
 		4B9C4E73048F342700A8728E = {
 			explicitFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			path = Player.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -550,8 +548,6 @@
 //4F3
 //4F4
 		4F0BB7EC011F40E904CA0E50 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -565,8 +561,6 @@
 			name = Development;
 		};
 		4F0BB7ED011F40E904CA0E50 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -595,8 +589,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5EC6D2A03E83BC901053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = ../../../../../../../../../System/Library/Frameworks/CoreAudio.framework;

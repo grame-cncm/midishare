@@ -20,16 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	 UTools.h 			    
 // ===========================================================================
  
-
-
 #ifndef __UTools__
 #define __UTools__
- 
 
 #include "TPlayerConstants.h"
 
@@ -48,7 +44,6 @@ class UTools {
 		static void  MidiPrintText ( char * s);
 		static ULONG Min (ULONG a, ULONG b) {return (a <b) ? a : b;}
 		static ULONG Max (ULONG a, ULONG b) {return (a >=b) ? a : b;}
-	
 };
 
 #endif

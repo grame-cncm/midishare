@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TClockSender.h		    
 // ===========================================================================
@@ -32,7 +31,6 @@
 #include "TClockConverter.h"
 #include "TEventSenderInterface.h"
 
-
 //------------------
 // Class TClockTask 
 //------------------
@@ -41,7 +39,7 @@
   \brief Task to send clocks events.
 */
 
-class TClockTask :public TTicksTask {
+class TClockTask : public TTicksTask {
 
 	friend class TClockSender;
 
@@ -65,7 +63,7 @@ typedef TClockTask FAR * TClockTaskPtr;
 	\brief Manage Midi events related to Clock synchronization.
 */
 
-class TClockSender{
+class TClockSender {
 
 	friend class TClockTask;
 
@@ -95,6 +93,5 @@ class TClockSender{
 };
 
 typedef TClockSender FAR * TClockSenderPtr;
-
 
 #endif

@@ -23,8 +23,6 @@
 #include "Python.h"
 #include <Player.h>
 
-
-
 static PyObject *
 PyOpen(PyObject *self, PyObject *args)
 {
@@ -42,8 +40,6 @@ PyClose(PyObject *self, PyObject *args)
 	Py_INCREF(Py_None);
 	return Py_None;
 }
-
-
 
 static PyObject *
 PyStart(PyObject *self, PyObject *args)
@@ -75,7 +71,6 @@ PyPause(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyStop(PyObject *self, PyObject *args)
 {
@@ -85,7 +80,6 @@ PyStop(PyObject *self, PyObject *args)
 	Py_INCREF(Py_None);
 	return Py_None;
 }
-
 
 static PyObject *
 PySetRecordMode(PyObject *self, PyObject *args)
@@ -107,7 +101,6 @@ PyRecord(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySetRecordFilter(PyObject *self, PyObject *args)
 {
@@ -117,7 +110,6 @@ PySetRecordFilter(PyObject *self, PyObject *args)
 	Py_INCREF(Py_None);
 	return Py_None;
 }
-
 
 static PyObject *
 PySetPosBBU(PyObject *self, PyObject *args)
@@ -135,7 +127,6 @@ PySetPosMs(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySetLoop(PyObject *self, PyObject *args)
 {
@@ -146,20 +137,17 @@ PySetLoop(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySetLoopStartBBU(PyObject *self, PyObject *args)
 {
 	
 }
 
-
 static PyObject *
 PySetLoopEndBBU(PyObject *self, PyObject *args)
 {
 	
 }
-
 
 static PyObject *
 PySetLoopStartMs(PyObject *self, PyObject *args)
@@ -170,7 +158,6 @@ PySetLoopStartMs(PyObject *self, PyObject *args)
 			:  Py_BuildValue("i", SetLoopStartMsPlayer(ref, date));
 }
 
-
 static PyObject *
 PySetLoopEndMs(PyObject *self, PyObject *args)
 {
@@ -179,8 +166,6 @@ PySetLoopEndMs(PyObject *self, PyObject *args)
 			? NULL
 			:  Py_BuildValue("i",SetLoopEndMsPlayer(ref, date));
 }
-
-
 
 static PyObject *
 PySetSynchroIn(PyObject *self, PyObject *args)
@@ -202,7 +187,6 @@ PySetSynchroOut(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySetTempo(PyObject *self, PyObject *args)
 {
@@ -213,13 +197,11 @@ PySetTempo(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySetSMPTEOffset(PyObject *self, PyObject *args)
 {
 	
 }
-
 
 static PyObject *
 PyGetState(PyObject *self, PyObject *args)
@@ -227,13 +209,11 @@ PyGetState(PyObject *self, PyObject *args)
 	
 }
 
-
 static PyObject *
 PyGetEndScore(PyObject *self, PyObject *args)
 {
 	
 }
-
 
 static PyObject *
 PyForwardStep(PyObject *self, PyObject *args)
@@ -245,7 +225,6 @@ PyForwardStep(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyBackwardStep(PyObject *self, PyObject *args)
 {
@@ -256,7 +235,6 @@ PyBackwardStep(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyGetAllTrack(PyObject *self, PyObject *args)
 {
@@ -265,7 +243,6 @@ PyGetAllTrack(PyObject *self, PyObject *args)
 			? NULL
 			: Py_BuildValue("i",GetAllTrackPlayer(ref));
 }
-
 
 static PyObject *
 PyGetTrack(PyObject *self, PyObject *args)
@@ -306,7 +283,6 @@ PySetParam(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyGetParam(PyObject *self, PyObject *args)
 {
@@ -315,7 +291,6 @@ PyGetParam(PyObject *self, PyObject *args)
 			? NULL
 			: Py_BuildValue("i",GetParamPlayer(ref, track, param));
 }
-
 
 static PyObject *
 PyInsertAllTrack(PyObject *self, PyObject *args)
@@ -327,7 +302,6 @@ PyInsertAllTrack(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyInsertTrack(PyObject *self, PyObject *args)
 {
@@ -338,13 +312,11 @@ PyInsertTrack(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PySave(PyObject *self, PyObject *args)
 {
 	
 }
-
 
 static PyObject *
 PyLoad(PyObject *self, PyObject *args)

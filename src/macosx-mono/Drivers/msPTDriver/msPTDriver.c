@@ -46,11 +46,11 @@ typedef float SAMPLE;
 /* data structures                   */
 
 typedef struct {
-        short			refNum;
-        SlotRefNum 		slotRef;
-        pitchtrackerPtr 	pitchTracker;
-        PortAudioStream *	stream;
-        Boolean             	connected;
+	short			refNum;
+	SlotRefNum 		slotRef;
+	pitchtrackerPtr 	pitchTracker;
+	PortAudioStream *	stream;
+	Boolean         connected;
 	Boolean			autoQuit;
 	Boolean 		sflag;
 	long			tune;
@@ -62,12 +62,12 @@ typedef struct {
 	long 			bend;
 	long			fftsize;
 	long			dynamic;
-        long 			old_bendlength;
+	long 			old_bendlength;
 	long			old_vol;  // valeur du dernier volume envoyŽ
 	long			old_bend; // valeur du dernier bend envoyŽ
 	long			numInput;
 	long			numOutput;
-	SAMPLE	     		monoTable [BUFFER_SIZE];
+	SAMPLE	     	monoTable [BUFFER_SIZE];
 	
 } DriverData, * DriverDataPtr;
 
@@ -75,23 +75,23 @@ typedef struct {
 /* functions declarations            */
 
 DriverData gData;
-static inline DriverDataPtr GetData ()	{return &gData;}
-static void AudioSleep (); 
-static void AudioStart ();
+static inline DriverDataPtr GetData()	{return &gData;}
+static void AudioSleep(); 
+static void AudioStart();
 
 /* ---------------------------------------*/
 /* utilities                      	  */
 /* ---------------------------------------*/
 static MidiEvPtr KeyOn(short pitch, short vel)
 {
-        MidiEvPtr e;
+	MidiEvPtr e;
 
-  	if ((e = MidiNewEv( typeKeyOn ))!=0){
-            Chan(e) = 0;      
-            Port(e) = 0;
-            MidiSetField(e,0,pitch);
-            MidiSetField(e,1,vel);
-        }
+  	if ((e = MidiNewEv(typeKeyOn)) != 0) {
+		Chan(e) = 0;      
+		Port(e) = 0;
+		MidiSetField(e,0,pitch);
+		MidiSetField(e,1,vel);
+	}
         
   	return e;
 };
@@ -101,13 +101,13 @@ static MidiEvPtr CtrlChange(short val)
 {
   	MidiEvPtr e;
         
-  	if ((e = MidiNewEv(typeCtrlChange))!=0){
-            Chan(e) = 0;
-            Port(e) = 0;
-            MidiSetField(e,0,7);
-            MidiSetField(e,1,val);
-        }
-        
+  	if ((e = MidiNewEv(typeCtrlChange)) != 0) {
+		Chan(e) = 0;
+		Port(e) = 0;
+		MidiSetField(e,0,7);
+		MidiSetField(e,1,val);
+	}
+	
  	return e;
 };
 
@@ -121,12 +121,12 @@ static MidiEvPtr PitchWheel(short wheel)
 
 	wheel = (wheel>max) ? max : (wheel<min) ? min : wheel;
 
-	if ((e = MidiNewEv(typePitchWheel)) !=0){
-	  Date(e) = 0;        
-	  Chan(e) = 0;        
-	  Port(e) = 0;
-	  MidiSetField(e,0,(wheel+offset) & 0x7F);    	
-	  MidiSetField(e,1,(wheel+offset)>>7 & 0x7F);    
+	if ((e = MidiNewEv(typePitchWheel)) !=0 ) {
+		Date(e) = 0;        
+		Chan(e) = 0;        
+		Port(e) = 0;
+		MidiSetField(e,0,(wheel+offset) & 0x7F);    	
+		MidiSetField(e,1,(wheel+offset)>>7 & 0x7F);    
 	}
         
 	return e;
@@ -137,7 +137,7 @@ static MidiEvPtr BendSensitivity(short val)
 {
     MidiEvPtr e;
 
-    if ((e = MidiNewEv(typeRegParam))!= 0){
+    if ((e = MidiNewEv(typeRegParam)) != 0){
         Chan(e) = 0;        
         Port(e) = 0;
         MidiSetField(e,0,0);    
@@ -150,50 +150,48 @@ static MidiEvPtr BendSensitivity(short val)
 
 /* -----------------------------------------------------------------------------*/
 static int inputCallback(void *inputBuffer, void *outputBuffer,
-                                        unsigned long framesPerBuffer,
+						unsigned long framesPerBuffer,
 				        PaTimestamp outTime, void *userData)
 {
 	PitchEv res;
 	DriverData* data = GetData();
 	SAMPLE* in = ((SAMPLE*)inputBuffer);
-        int i;	
+	int i;	
          	
 	if (in && data->refNum > 0 && data->connected) { 
       
-                // Transform in a mono buffer : keep the left input
+		// Transform in a mono buffer : keep the left input
 		for (i = 0; i< framesPerBuffer; i++) {
-                    data->monoTable[i] = in[data->numInput*i];
-                }
+			data->monoTable[i] = in[data->numInput*i];
+		}
                 
-                res = loadPitch_float(data->pitchTracker, data->monoTable);
+		res = loadPitch_float(data->pitchTracker, data->monoTable);
 		
-		if (res.isEv == 1){
-                    if (res.Off != 0) MidiSendIm(data->refNum,KeyOn(res.Off,0));
-                    if (res.On != 0) MidiSendIm(data->refNum,KeyOn(res.On,res.Vol));
-	        
-                    if ((res.Vol != 0) && (res.Vol != data->old_vol) && data->vol) {
-                	MidiSendIm(data->refNum,CtrlChange(res.Vol));
-	        	data->old_vol = res.Vol;
-                    }
-                    if ((res.Bend != 0) && (res.Bend != data->old_bend) && data->bend) {
-	        	MidiSendIm(data->refNum,PitchWheel(res.Bend));
-	        	data->old_bend = res.Bend;
-                    }
-                }
-	    
-                // If bend state changed 
-                if (data->bendlength != data->old_bendlength){
-                    MidiSendIm(data->refNum,BendSensitivity(data->bendlength));
-                    data->old_bendlength = data->bendlength;
-                }
-                
+		if (res.isEv == 1) {
+			if (res.Off != 0) MidiSendIm(data->refNum,KeyOn(res.Off,0));
+			if (res.On != 0) MidiSendIm(data->refNum,KeyOn(res.On,res.Vol));
+
+			if ((res.Vol != 0) && (res.Vol != data->old_vol) && data->vol) {
+				MidiSendIm(data->refNum,CtrlChange(res.Vol));
+				data->old_vol = res.Vol;
+			}
+			if ((res.Bend != 0) && (res.Bend != data->old_bend) && data->bend) {
+				MidiSendIm(data->refNum,PitchWheel(res.Bend));
+				data->old_bend = res.Bend;
+			}
+		}
+
+		// If bend state changed 
+		if (data->bendlength != data->old_bendlength){
+			MidiSendIm(data->refNum,BendSensitivity(data->bendlength));
+			data->old_bendlength = data->bendlength;
+		}
 	}
 	return 0;
 }
 
-
 /* -----------------------------------------------------------------------------*/
-static void FlushReceivedEvents (short r){MidiFlushEvs (r);}
+static void FlushReceivedEvents (short r) {MidiFlushEvs (r);}
 
 /* -----------------------------------------------------------------------------*/
 /* Driver required callbacks                                                    */
@@ -216,7 +214,7 @@ static void AudioStart()
 {
 	PaError err;
 	DriverDataPtr data = GetData();
-        data->connected = true;
+	data->connected = true;
 	err = Pa_StartStream(data->stream);
 	if (err != paNoError) Pa_Terminate();
 }
@@ -228,8 +226,8 @@ static void AudioStart()
 	DriverDataPtr data = GetData();
 	const PaDeviceInfo* info;
 	
-        data->pitchTracker = createPitch(buffersize, data->fftsize);
-        if (!data->pitchTracker) goto error;
+	data->pitchTracker = createPitch(buffersize, data->fftsize);
+	if (!data->pitchTracker) goto error;
       	
 	err = Pa_Initialize();
 	if(err != paNoError) goto error;       
@@ -244,20 +242,20 @@ static void AudioStart()
 	data->numOutput = 2;
 	
 	err = Pa_OpenStream(&data->stream,
-                            Pa_GetDefaultInputDeviceID(),
-                            data->numInput ,
-                            PA_SAMPLE_TYPE,
-                            NULL,
-                            paNoDevice,
-                            0,
-                            PA_SAMPLE_TYPE,
-                            NULL,
-                            SAMPLE_RATE,
-                            buffersize,  //  frames per buffer 
-                            0,           //  number of buffers, if zero then use default minimum 
-                            paClipOff,       
-                            inputCallback,
-                            0);
+						Pa_GetDefaultInputDeviceID(),
+						data->numInput ,
+						PA_SAMPLE_TYPE,
+						NULL,
+						paNoDevice,
+						0,
+						PA_SAMPLE_TYPE,
+						NULL,
+						SAMPLE_RATE,
+						buffersize,  //  frames per buffer 
+						0,           //  number of buffers, if zero then use default minimum 
+						paClipOff,       
+						inputCallback,
+						0);
         
 	if (err != paNoError) goto error;
 	return true;
@@ -279,33 +277,33 @@ static void AudioSleep()
 /* -----------------------------------------------------------------------------*/
 void LoadState()
 {
-        DriverDataPtr data = GetData();
-        
-        data->fftsize = LoadConfigNum("Configuration", "FFT", GetProfileFullName(kProfileName),512);
-        data->tune = LoadConfigNum("Configuration", "Tune", GetProfileFullName(kProfileName),440);
-        data->buffers = LoadConfigNum("Configuration", "Buffers", GetProfileFullName(kProfileName),5);
-        data->levelin = LoadConfigNum("Configuration", "LevelIn", GetProfileFullName(kProfileName),50);
-        data->levelout = LoadConfigNum("Configuration", "LevelOut", GetProfileFullName(kProfileName),40);
-        data->vol = LoadConfigNum("Configuration", "Vol", GetProfileFullName(kProfileName),1);
-        data->bend = LoadConfigNum("Configuration", "Bend", GetProfileFullName(kProfileName),1);
-        data->bendlength = LoadConfigNum("Configuration", "BendLength", GetProfileFullName(kProfileName),0);
-        data->dynamic = LoadConfigNum("Configuration", "Dynamic", GetProfileFullName(kProfileName),50);
+	DriverDataPtr data = GetData();
+	
+	data->fftsize = LoadConfigNum("Configuration", "FFT", GetProfileFullName(kProfileName),512);
+	data->tune = LoadConfigNum("Configuration", "Tune", GetProfileFullName(kProfileName),440);
+	data->buffers = LoadConfigNum("Configuration", "Buffers", GetProfileFullName(kProfileName),5);
+	data->levelin = LoadConfigNum("Configuration", "LevelIn", GetProfileFullName(kProfileName),50);
+	data->levelout = LoadConfigNum("Configuration", "LevelOut", GetProfileFullName(kProfileName),40);
+	data->vol = LoadConfigNum("Configuration", "Vol", GetProfileFullName(kProfileName),1);
+	data->bend = LoadConfigNum("Configuration", "Bend", GetProfileFullName(kProfileName),1);
+	data->bendlength = LoadConfigNum("Configuration", "BendLength", GetProfileFullName(kProfileName),0);
+	data->dynamic = LoadConfigNum("Configuration", "Dynamic", GetProfileFullName(kProfileName),50);
 }
 
 /* -----------------------------------------------------------------------------*/
 void SaveState()
 {
-        DriverDataPtr data = GetData();
-        
-        SaveConfigNum("Configuration", "FFT", data->fftsize , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "Tune",  data->tune , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "Buffers",  data->buffers , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "LevelIn",  data->levelin , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "LevelOut",  data->levelout , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "Vol",  data->vol , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "Bend",  data->bend , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "BendLength",  data->bendlength , GetProfileFullName(kProfileName));
-        SaveConfigNum("Configuration", "Dynamic",  data->dynamic , GetProfileFullName(kProfileName));
+	DriverDataPtr data = GetData();
+	
+	SaveConfigNum("Configuration", "FFT", data->fftsize , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "Tune",  data->tune , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "Buffers",  data->buffers , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "LevelIn",  data->levelin , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "LevelOut",  data->levelout , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "Vol",  data->vol , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "Bend",  data->bend , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "BendLength",  data->bendlength , GetProfileFullName(kProfileName));
+	SaveConfigNum("Configuration", "Dynamic",  data->dynamic , GetProfileFullName(kProfileName));
 }
 
 
@@ -328,22 +326,22 @@ Boolean SetUpMidi()
 	
 	refNum = MidiRegisterDriver(&infos, &op);
 	if (refNum == MIDIerrSpace) return false;
-        data->slotRef = MidiAddSlot(refNum, PTSlotName, MidiInputSlot);
+	data->slotRef = MidiAddSlot(refNum, PTSlotName, MidiInputSlot);
      
 	MidiSetRcvAlarm(refNum, FlushReceivedEvents);	
-        LoadSlot("Input Slots", GetProfileFullName(kProfileName),PTDriverName);
-            
-        setFieldPitch(data->pitchTracker,NB_NOTE,data->buffers);
-        setFieldPitch(data->pitchTracker,TUNE,data->tune);
-        setFieldPitch(data->pitchTracker,TRESH_IN,data->levelin);
-        setFieldPitch(data->pitchTracker,TRESH_OUT,data->levelout);
-        setFieldPitch(data->pitchTracker,LENGTH_BEND,data->bendlength);
-        setFieldPitch(data->pitchTracker,VOLUME,data->dynamic);
- 
-        //MidiSetApplAlarm (refNum, NewApplAlarmPtr(ApplAlarm));	
+	LoadSlot("Input Slots", GetProfileFullName(kProfileName),PTDriverName);
+		
+	setFieldPitch(data->pitchTracker,NB_NOTE,data->buffers);
+	setFieldPitch(data->pitchTracker,TUNE,data->tune);
+	setFieldPitch(data->pitchTracker,TRESH_IN,data->levelin);
+	setFieldPitch(data->pitchTracker,TRESH_OUT,data->levelout);
+	setFieldPitch(data->pitchTracker,LENGTH_BEND,data->bendlength);
+	setFieldPitch(data->pitchTracker,VOLUME,data->dynamic);
+
+	//MidiSetApplAlarm (refNum, NewApplAlarmPtr(ApplAlarm));	
        
 	data->refNum = refNum;
-    	MidiSendIm(data->refNum,BendSensitivity(data->bendlength));
+	MidiSendIm(data->refNum,BendSensitivity(data->bendlength));
 	
 	return true;
 }
@@ -355,10 +353,10 @@ void CloseMidi()
 	short ref = data->refNum;
 	data->refNum = 0;
 	if (ref > 0) {
-                SaveSlot("Input Slots", GetProfileFullName(kProfileName),PTDriverName);
-                SaveState();
-                MidiUnregisterDriver(ref);
-        }
+		SaveSlot("Input Slots", GetProfileFullName(kProfileName),PTDriverName);
+		SaveState();
+		MidiUnregisterDriver(ref);
+	}
 }
 
 /* -----------------------------------------------------------------------------*/

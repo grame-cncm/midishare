@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TTimeConverter.cpp			    
 // ===========================================================================
@@ -32,7 +31,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-void TTimeConverter::Init (ULONG tpq) 
+void TTimeConverter::Init(ULONG tpq) 
 {
  	fLast_timesign = 0;
  	fLast_pos.Init();
@@ -45,7 +44,7 @@ void TTimeConverter::Init (ULONG tpq)
 
 /*--------------------------------------------------------------------------*/
 
-void TTimeConverter::Init () 
+void TTimeConverter::Init() 
 {
  	fLast_timesign = 0;
  	fLast_pos.Init();
@@ -57,14 +56,14 @@ void TTimeConverter::Init ()
 
 /*--------------------------------------------------------------------------*/
 
-void TTimeConverter::Update (MidiEvPtr ts)
+void TTimeConverter::Update(MidiEvPtr ts)
 {
 	Update(Date(ts), TSNum(ts), TSDenom(ts), TSClocks(ts), TS32nd(ts));
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TTimeConverter::Update (ULONG date_ticks, short num, short denom, short clock , short N32nd)
+void TTimeConverter::Update(ULONG date_ticks, short num, short denom, short clock , short N32nd)
 {
 	if ((num != fNumerator)   	// Update values only if the TimeSign has changed
 		|| (denom != fDenominator)
@@ -97,7 +96,7 @@ void TTimeConverter::Update (ULONG date_ticks, short num, short denom, short clo
 
 /*--------------------------------------------------------------------------*/
  
- TPos TTimeConverter::ConvertTickToBBU (ULONG date_ticks) 	
+ TPos TTimeConverter::ConvertTickToBBU(ULONG date_ticks) 	
  {
  	if (date_ticks >= fLast_timesign) {
 		return fInt.Add (fLast_pos, fInt.ConvertTicksToBBUInBar(date_ticks - fLast_timesign));
@@ -108,7 +107,7 @@ void TTimeConverter::Update (ULONG date_ticks, short num, short denom, short clo
  
 /*--------------------------------------------------------------------------*/
 
-ULONG TTimeConverter::ConvertBBUToTick (const TPos& pos)	
+ULONG TTimeConverter::ConvertBBUToTick(const TPos& pos)	
 {
 	if (fInt.SupEq(pos,fLast_pos))  {
 		return fLast_timesign + fInt.ConvertBBUToTicksInBar(fInt.Sub (pos, fLast_pos));

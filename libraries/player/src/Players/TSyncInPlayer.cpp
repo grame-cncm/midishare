@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TSyncInPlayer.cpp	   			 
 // ===========================================================================
@@ -41,7 +40,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-TSyncInPlayer::TSyncInPlayer (TPlayerSynchroniserPtr synchroniser,
+TSyncInPlayer::TSyncInPlayer(TPlayerSynchroniserPtr synchroniser,
                             TTickPlayerInterfacePtr player,
                             TChaserInterfacePtr chaser)
 {
@@ -95,7 +94,7 @@ void TSyncInPlayer::Cont()
 
 /*----------------------------------------------------------------------------*/
 
-void TSyncInPlayer::SetPosTicks (ULONG date_ticks)
+void TSyncInPlayer::SetPosTicks(ULONG date_ticks)
 {
 	fSynchroniser->SetPosTicks(date_ticks);
 	fTickPlayer->SetPosTicks(date_ticks);

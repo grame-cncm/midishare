@@ -20,11 +20,9 @@
 
 */
 
-
 // ===========================================================================
 //	TScoreState.h			    
 // ===========================================================================
-
 
 #ifndef __TScoreState__
 #define __TScoreState__
@@ -39,7 +37,6 @@
 	\brief For displaying purpose : get the current state.
 */ 
 
-
 class TScoreState : public TScoreObjFollower {
 	
 	public:
@@ -53,19 +50,18 @@ class TScoreState : public TScoreObjFollower {
 	
 			TPos pos = GetVisitor().CurDateBBU();
 			state->date = GetVisitor().CurDateMicro() / 100;
-                        state->ticks = date_ticks;
+			state->ticks = date_ticks;
 			
 			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
-			state->unit = (short)pos.GetUnit() + 1;
+			state->unit = (short)pos.GetUnit();
 			
-			state->tsnum = GetVisitor().GetNum ();
-			state->tsdenom = GetVisitor().GetDenom ();
+			state->tsnum = GetVisitor().GetNum();
+			state->tsdenom = GetVisitor().GetDenom();
 			state->tsclick= GetVisitor().GetNClocks();
 			state->tsquarter = GetVisitor().GetN32nd();
 		} 
 };
-
 
 typedef TScoreState FAR * TScoreStatePtr;
 

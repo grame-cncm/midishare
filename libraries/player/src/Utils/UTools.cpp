@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	 UTools.cpp 			    
 // ===========================================================================
@@ -28,13 +27,12 @@
 //	Utilities functions
 // 
 
-
 #include "UTools.h"
 #include "GenericMidiShare.h"
 
 /*----------------------------------------------------------------------------*/
 
-void UTools::SendVal (ULONG val)
+void UTools::SendVal(ULONG val)
 {
 	MidiEvPtr  e ;
 
@@ -46,7 +44,7 @@ void UTools::SendVal (ULONG val)
 
 /*----------------------------------------------------------------------------*/
 
-void UTools::MidiPrintText ( char * s)
+void UTools::MidiPrintText( char * s)
 {
 	MidiEvPtr e;
 	ULONG c = 0;

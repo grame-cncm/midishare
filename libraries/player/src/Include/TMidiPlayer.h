@@ -20,15 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TMidiPlayer.h			    
 // ===========================================================================
 
-
 #ifndef __TEventPlayer__
 #define __TEventPlayer__
-
 
 #include "TEventSenderInterface.h"
 #include "TMidiAppl.h"
@@ -41,7 +38,7 @@
 \brief	Midi events output management.
 */
 
-class TMidiPlayer :public TEventSenderInterface{
+class TMidiPlayer : public TEventSenderInterface {
 
 	private:
 	

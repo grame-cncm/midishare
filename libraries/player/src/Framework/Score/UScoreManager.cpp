@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	UScoreManager.cpp			    
 // ===========================================================================
@@ -28,12 +27,11 @@
 //	Utility functions for score management
 //
 
-
 #include "UScoreManager.h"
 
 /*----------------------------------------------------------------------------*/
 	
-void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun) 
+void UScoreManager::Apply(TScorePtr score, TScoreVisitorInterfacePtr fun) 
 {
 	TScoreIterator it(score);
 	TEventPtr cur;
@@ -42,7 +40,7 @@ void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun)
 	
 /*----------------------------------------------------------------------------*/
 	
-void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun,ULONG begin, ULONG end) 
+void UScoreManager::Apply(TScorePtr score, TScoreVisitorInterfacePtr fun,ULONG begin, ULONG end) 
 {
 	TScoreIterator it(score);
 	TEventPtr cur;

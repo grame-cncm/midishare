@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TPlayerFactory.cpp			    
 // ===========================================================================
@@ -182,7 +181,7 @@ void TPlayerFactory::DestroyPlayer(TGenericPlayerInterfacePtr* player)
 	TGenericPlayerInterfacePtr tmp = *player;
 	*player = 0; // To avoid access at Interrupt Level
 	
-	if(tmp) {
+	if (tmp) {
 		delete(fDestructor);
 		delete(tmp);
 		fDestructor = 0;

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TScoreIterator.cpp		    
 // ===========================================================================
@@ -40,7 +39,7 @@ TScoreIterator::TScoreIterator():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLa
 
 TScoreIterator::TScoreIterator(TScorePtr score):fScore(score),fNextIt(0) 
 {
-        assert(fScore);
+	assert(fScore);
 	fScore->AttachIterator(this);
 	Init();
 }
@@ -49,7 +48,7 @@ TScoreIterator::TScoreIterator(TScorePtr score):fScore(score),fNextIt(0)
 
 TScoreIterator::TScoreIterator(TScorePtr score, TEventPtr cur):fScore(score),fNextIt(0) 
 { 
-        assert(fScore);
+	assert(fScore);
 	fScore->AttachIterator(this);
 	Init(cur);
 }
@@ -58,7 +57,7 @@ TScoreIterator::TScoreIterator(TScorePtr score, TEventPtr cur):fScore(score),fNe
 
 TScoreIterator::~TScoreIterator()
 {
-        assert(fScore);
+	assert(fScore);
 	Detach();
 	fScore->DetachIterator(this);
 }
@@ -222,7 +221,7 @@ TEventPtr TScoreIterator::PrevDateEv()
 
 /*----------------------------------------------------------------------------*/
 
-TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
+TEventPtr TScoreIterator::SetPosTicks(ULONG date_ticks)
 {
 	if (!IsFirstEv() && (CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
@@ -235,14 +234,14 @@ TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
 
 /*----------------------------------------------------------------------------*/
 
-void TScoreIterator::SetPosTicksBackward (ULONG date_ticks)
+void TScoreIterator::SetPosTicksBackward(ULONG date_ticks)
 {
 	do {PrevEv();} while (!IsFirstEv() && (CurDate() >= date_ticks));
 }
 
 /*----------------------------------------------------------------------------*/
 
-void TScoreIterator::SetPosTicksForward (ULONG date_ticks)
+void TScoreIterator::SetPosTicksForward(ULONG date_ticks)
 {
 	while (!IsLastEv() && (CurDate() < date_ticks)) {NextEv();}
 }

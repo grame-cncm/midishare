@@ -117,10 +117,6 @@ SOURCE=.\msPTDriver.h
 # End Group
 # Begin Source File
 
-SOURCE=..\..\..\..\..\..\..\..\develop\lib\mshare32.lib
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\..\..\..\..\develop\lib\PitchTracker.lib
 # End Source File
 # Begin Source File
@@ -134,6 +130,10 @@ SOURCE=..\..\..\..\..\..\..\..\develop\lib\RFFTW2st.lib
 # Begin Source File
 
 SOURCE=..\..\..\..\..\..\..\..\develop\lib\FFTW2st.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\VCProject\Release\mshare32.lib
 # End Source File
 # End Target
 # End Project

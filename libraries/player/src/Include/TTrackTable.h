@@ -25,14 +25,11 @@
 //	TTrackTable.h			    
 // ===========================================================================
 
-
 #ifndef __TTrackTable__
 #define __TTrackTable__
 
- 
 #include "GenericMidiShare.h"
 #include "TPlayerConstants.h"
-
 
 //-------------------
 // Class TTrackTable 
@@ -41,9 +38,7 @@
 	\brief Tracks management.
 */
 
-
 class TTrackTable {
-
 
 	private:	
 	
@@ -63,7 +58,6 @@ class TTrackTable {
 		 	}
 		 	
 		};
-
 		
 		TTrack 	fTracktable[kMaxTrack];   	// Track table
 		long 	fSolo;			    	// Number of solo tracks
@@ -93,7 +87,6 @@ class TTrackTable {
 		}
 				
 		Boolean IsOffTrack(short tracknum) {return (!IsOnTrack(tracknum));}
-	
 };
 
 typedef  TTrackTable FAR * TTrackTablePtr;

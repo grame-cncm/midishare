@@ -24,7 +24,6 @@
 //	TPlayerScore.h			    
 // ===========================================================================
 
-
 #ifndef __TPlayerScore__
 #define __TPlayerScore__
 
@@ -40,8 +39,7 @@
  TTimeSign event and one EndScore event.
 */
 
-
-class TPlayerScore :public TScore{
+class TPlayerScore : public TScore {
 
 	private:
 		
@@ -89,8 +87,6 @@ class TPlayerScore :public TScore{
 
 typedef class TPlayerScore  FAR * TPlayerScorePtr;
 
-
 #define IsScore(t)  (((EvType(t))<typePrivate || (EvType(t))>typeDProcess) && (EvType(t))!=typeEndTrack)
-
 
 #endif

@@ -24,14 +24,11 @@
 //	TSliceVisitor.h			    
 // ===========================================================================
 
-
 #ifndef __TSliceVisitor__
 #define __TSliceVisitor__
-
  
 #include "TScoreVisitorInterface.h"
 #include "TEventSenderInterface.h"
-
 
 //---------------------
 // Class TSliceVisitor 
@@ -42,8 +39,7 @@
   with a fixed duration.
 */
 
-
-class TSliceVisitor :public TScoreVisitorInterface {
+class TSliceVisitor  :public TScoreVisitorInterface {
 	
 	private:
 	
@@ -64,7 +60,6 @@ class TSliceVisitor :public TScoreVisitorInterface {
 				fUser->UseEvent(note, MidiGetTime());
 			}
  		}
- 	
 };
 
 typedef TSliceVisitor FAR * TSliceVisitorPtr;

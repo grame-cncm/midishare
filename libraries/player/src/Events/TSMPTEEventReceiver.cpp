@@ -27,9 +27,7 @@
 //	Event receiver in kSMPTESync mode
 // 
 
-
 #include "TEventReceiver.h"
-
 
 /*----------------------------------------------------------------------------*/
 

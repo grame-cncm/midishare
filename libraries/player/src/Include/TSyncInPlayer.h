@@ -20,24 +20,21 @@
 
 */
 
-
 // ===========================================================================
 //	TSyncInPlayer.h	   			 
 // ===========================================================================
 
 #ifndef __TSynchroPlayer__
 #define __TSynchroPlayer__
-
  
 #include "TTickPlayer.h"
 #include "TChaserIterator.h"
 #include "TPlayerSynchroniser.h"
 #include "TPlayerInterface.h"
 
-
-//-----------------------
+//---------------------
 // Class TSyncInPlayer 
-//-----------------------
+//---------------------
 /*!
   \brief A TSyncInPlayer is the basic synchronisable player.
 
@@ -51,7 +48,7 @@
 */  
 
 
-class TSyncInPlayer :public TPlayerInterface{
+class TSyncInPlayer : public TPlayerInterface {
 	
 	 private:
 	
@@ -82,6 +79,5 @@ class TSyncInPlayer :public TPlayerInterface{
 };
 
 typedef TSyncInPlayer FAR * TSynchroPlayerPtr;
-
 
 #endif

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TEventTable.h			 
 // ===========================================================================
@@ -30,7 +29,6 @@
 
 #include "THashTable.h"
 #include "TEventSenderInterface.h"
-
 
 //-------------------
 // Class TEventTable 
@@ -84,7 +82,7 @@ typedef TEventTable FAR * TEventTablePtr;
    \brief A Midi event hashtable used for KeyOff chase.
 */
 
-class TKeyOnTable : public TEventTable{
+class TKeyOnTable : public TEventTable {
 
 	public:
 	
@@ -113,7 +111,6 @@ class TKeyOnTable : public TEventTable{
 
 typedef TKeyOnTable FAR * TKeyOnTablePtr;
 
-
 //------------------------
 // Class TCtrlChangeTable 
 //------------------------
@@ -121,7 +118,7 @@ typedef TKeyOnTable FAR * TKeyOnTablePtr;
    \brief A Midi event hashtable used for CtrlChange chase.
 */
 
-class TCtrlChangeTable : public TEventTable{
+class TCtrlChangeTable : public TEventTable {
 
 	private:
 
@@ -153,6 +150,5 @@ class TCtrlChangeTable : public TEventTable{
 };
 
 typedef TCtrlChangeTable FAR * TCtrlChangeTablePtr;
-
 
 #endif

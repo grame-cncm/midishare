@@ -20,10 +20,8 @@
 
 */
 
-
 #ifndef __UDebug__
 #define __UDebug__
-
 
 #ifdef __DEBUG__
 
@@ -42,6 +40,5 @@
 #else
 	#define assert(b)
 #endif
-
 
 #endif

@@ -20,8 +20,6 @@
 
 */
 
-
-
 // ===========================================================================
 //	TPlayer.cpp			    
 // ===========================================================================
@@ -29,7 +27,6 @@
 //	The main class which implements all functions from the API
 // 
 // 
-
 
 #include "TPlayer.h"
 #include "UScoreManager.h"
@@ -62,9 +59,6 @@ TPlayer::TPlayer():fFactory(this)
 
 /*--------------------------------------------------------------------------*/
 // Create shared objects
-/*--------------------------------------------------------------------------*/
-
-
 /*--------------------------------------------------------------------------*/
 
 /*
@@ -128,7 +122,7 @@ void TPlayer::Cont() {fPlayer->Cont();}
 // Position
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetPosBBU(PosPtr pos) {fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit - 1));}
+void TPlayer::SetPosBBU(PosPtr pos) {fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit));}
 
 /*--------------------------------------------------------------------------*/
 
@@ -337,14 +331,14 @@ void TPlayer::SetLoop(Boolean state) {fLoopManager->SetLoop(state);}
 
 long TPlayer::SetLoopStartBBU(PosPtr pos) 
 {	
-	return fLoopManager->SetLoopStartBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit - 1));
+	return fLoopManager->SetLoopStartBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit));
 }
 	 
 /*--------------------------------------------------------------------------*/
 
 long TPlayer::SetLoopEndBBU(PosPtr pos) 
 {
-	return fLoopManager->SetLoopEndBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit - 1));
+	return fLoopManager->SetLoopEndBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit));
 }
 
 /*--------------------------------------------------------------------------*/

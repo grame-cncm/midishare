@@ -20,18 +20,15 @@
 
 */
 
-
 // ===========================================================================
 //	TMidiAppl.h			    
 // ===========================================================================
-
 
 #ifndef __TMidiAppl__
 #define __TMidiAppl__
 
 #include "GenericMidiShare.h"
 #include "TPlayerConstants.h"
-
 
 //-----------------
 // Class TMidiTask 
@@ -72,7 +69,7 @@ typedef TMidiTask FAR * TMidiTaskPtr;
   \brief A Class to wrap a MidiShare application.
 */
 
-class TMidiAppl{
+class TMidiAppl {
 
 	friend class TMidiTask;
 	
@@ -100,19 +97,15 @@ class TMidiAppl{
 		#endif
 	#endif
 	
-	
 	#ifdef __MSWindows__
 		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3,MidiEvPtr* adr);
 		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
 	#endif
-
 		
 	#ifdef __Linux__
 		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3,MidiEvPtr* adr);
 		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
 	#endif
-	
-	
 	
 		short fRefnum;
 		MidiFilterPtr fFilter;
@@ -154,12 +147,11 @@ class TMidiAppl{
 		// Prototypes for Midi Callbacks
 		/*--------------------------------------------------------------------------*/
 
-		static  void MSALARMAPI GenericTask (ULONG date, short refnum, long a1, long a2, long a3);
+		static  void MSALARMAPI GenericTask(ULONG date, short refnum, long a1, long a2, long a3);
 		static  void MSALARMAPI GenericReceiveAlarm(short ref);	
 		static  void MSALARMAPI GenericApplAlarm(short ref, long code);	
 		
 };
-
 
 typedef TMidiAppl FAR * TMidiApplPtr;
 

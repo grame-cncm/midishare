@@ -28,13 +28,12 @@
   \brief An interface for players.
 */
 
-
 #ifndef __TGenericPlayerInterface__
 #define __TGenericPlayerInterface__
 
 //--------------------------------
 // Class TGenericPlayerInterface 
-//-------------------------------
+//--------------------------------
 
 class TGenericPlayerInterface {
 	

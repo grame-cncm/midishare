@@ -30,7 +30,6 @@
 #ifndef __TPlayerInterface__
 #define __TPlayerInterface__
 
-
 //------------------------
 // Class TPlayerInterface 
 //------------------------
@@ -59,6 +58,5 @@ class TPlayerInterface {
 };
 
 typedef TPlayerInterface FAR * TPlayerInterfacePtr;
-
 
 #endif

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TSMPTEPlayer.cpp	   			 
 // ===========================================================================
@@ -30,7 +29,6 @@
 
 #include "TSMPTEPlayer.h"
 #include "UDebug.h"
-
 
 /*----------------------------------------------------------------------------*/
 
@@ -97,7 +95,7 @@ void TSMPTEPlayer::PlaySliceBackward()
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEPlayer::SetPosTicks (ULONG date_ticks) 
+void TSMPTEPlayer::SetPosTicks(ULONG date_ticks) 
 { 
  	if (fRunningState->IsRunning()){
 		fPlayer->Stop();
@@ -143,17 +141,17 @@ ULONG TSMPTEPlayer::GetTempo() {return fPlayer->GetTempo();}
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEPlayer::ReceiveEvents (MidiEvPtr e) {fPlayer->ReceiveEvents(e);}
+void TSMPTEPlayer::ReceiveEvents(MidiEvPtr e) {fPlayer->ReceiveEvents(e);}
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEPlayer::SetPosBBU (const TPos& pos) {fPlayer->SetPosBBU(pos);}
+void TSMPTEPlayer::SetPosBBU(const TPos& pos) {fPlayer->SetPosBBU(pos);}
 	
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEPlayer::SetPosMs (ULONG date_ms) {fPlayer->SetPosMs(date_ms);}
+void TSMPTEPlayer::SetPosMs(ULONG date_ms) {fPlayer->SetPosMs(date_ms);}
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTETask::Execute (TMidiApplPtr appl, ULONG date) {fPlayer->Start();}
+void TSMPTETask::Execute(TMidiApplPtr appl, ULONG date) {fPlayer->Start();}
 	

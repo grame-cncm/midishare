@@ -20,11 +20,9 @@
 
 */
 
-
 // ===========================================================================
 //	TEventSenderInterface.h			    
 // ===========================================================================
-
 
 #ifndef __TEventSenderInterface__
 #define __TEventSenderInterface__
@@ -38,8 +36,7 @@
 \brief Interface for events users.
 */
 
-
-class TEventSenderInterface{
+class TEventSenderInterface {
 
 	public:
 	
@@ -56,6 +53,5 @@ class TEventSenderInterface{
 };
 
 typedef TEventSenderInterface FAR * TEventSenderInterfacePtr;
-
 
 #endif

@@ -1,4 +1,4 @@
-lisp/
+interface/
 	Contains the Lisp FFI to MidiShare and Player library.
         Defines a MidiShare Lisp package and exports 
 	the MidiShare API. Also defines #+midishare 
@@ -7,6 +7,7 @@ lisp/
 		OpenMCL 0.13/OS X
 		MCL 5.0/OS X
 		MCL 4.2/MacOS 9.2
+		ACL 6.2/Windows
 
 openmcl/
 	The FFI databases for OpenMCL. Copy the

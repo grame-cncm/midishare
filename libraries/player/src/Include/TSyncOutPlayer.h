@@ -20,18 +20,15 @@
 
 */
 
-
 // ===========================================================================
 //	TSyncOutPlayer.h	   			 
 // ===========================================================================
-
 
 #ifndef __TSyncOutPlayer__
 #define __TSyncOutPlayer__
 
 #include "TSyncInPlayer.h"
 #include "TClockSender.h"
-
 
 //----------------------
 // Class TSyncOutPlayer
@@ -41,7 +38,6 @@
   A TSyncOutPlayer use the Decorator pattern. Additionnal behaviours are added 
   dynamically on the TPlayerInterface object being decorated.
 */
-
 
 class TSyncOutPlayer :public TPlayerInterface {
 	
@@ -65,14 +61,12 @@ class TSyncOutPlayer :public TPlayerInterface {
 		void PlaySliceForward();
  		void PlaySliceBackward() ;
 
-		void SetPosTicks (ULONG date_ticks) ;
+		void SetPosTicks(ULONG date_ticks) ;
 		ULONG GetPosTicks();
 		
-		void SetTempo (ULONG tempo);
-		ULONG GetTempo ();
-		void RcvClock (ULONG date_ms);
-		
-};
- 
+		void SetTempo(ULONG tempo);
+		ULONG GetTempo();
+		void RcvClock(ULONG date_ms);
+}; 
 
 #endif

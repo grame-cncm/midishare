@@ -6,8 +6,7 @@
 	objectVersion = 39;
 	objects = {
 		4B97CB84050CC71A00053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
@@ -98,8 +97,6 @@
 			sourceTree = "<group>";
 		};
 		F567580D01FDA3E101053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -112,8 +109,6 @@
 			name = Development;
 		};
 		F567580E01FDA3E101053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -153,8 +148,7 @@
 			};
 		};
 		F5CF083D03E97E7301053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
@@ -178,9 +172,8 @@
 		};
 		F5EFF91701FDA40901053105 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
-			path = msQTDriver.1.0.3.so;
+			isa = PBXFileReference;
+			path = msQTDriver.1.0.4.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -203,7 +196,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.3.so;
+				PRODUCT_NAME = msQTDriver.1.0.4.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -267,8 +260,7 @@
 			};
 		};
 		F5EFF91F01FDA46601053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = QuickTime.framework;
 			path = /System/Library/Frameworks/QuickTime.framework;

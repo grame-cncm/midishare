@@ -24,15 +24,12 @@
 //	TTickPlayer.h			    
 // ===========================================================================
 
-
 #ifndef __TTickPlayer__
 #define __TTickPlayer__
 
- 
 #include "TScoreIterator.h"
 #include "TSliceVisitor.h"
 #include "TScheduler.h"
-
 
 //----------------------------
 // Class TTickPlayerInterface 
@@ -69,7 +66,7 @@ typedef TTickPlayerInterface FAR * TTickPlayerInterfacePtr;
   \brief Task to play events at the same date.
 */
 
-class TPlayTask :public TTicksTask{
+class TPlayTask : public TTicksTask {
 
 	friend class TTickPlayer;
 
@@ -85,7 +82,6 @@ class TPlayTask :public TTicksTask{
 
 typedef TPlayTask FAR * TPlayTaskPtr;
 
-
 //-------------------
 // Class TTickPlayer 
 //-------------------
@@ -93,7 +89,7 @@ typedef TPlayTask FAR * TPlayTaskPtr;
 \brief	Player using date in ticks. 
 */
 
-class TTickPlayer : public TTickPlayerInterface{
+class TTickPlayer : public TTickPlayerInterface {
 
 	friend class TPlayTask;
 	
@@ -118,14 +114,13 @@ class TTickPlayer : public TTickPlayerInterface{
 		void Stop();	
 		void Cont(ULONG date_ticks);
 		
- 		void PlaySliceForward ();
- 		void PlaySliceBackward ();
+ 		void PlaySliceForward();
+ 		void PlaySliceBackward();
  		
- 		ULONG GetPosTicks () ;
- 		void  SetPosTicks (ULONG date_ticks);
+ 		ULONG GetPosTicks() ;
+ 		void  SetPosTicks(ULONG date_ticks);
   };
 
 typedef TTickPlayer FAR * TTickPlayerPtr;
-
 
 #endif

@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TClockConverter.h			    
 // ===========================================================================
@@ -32,9 +31,7 @@
 #include <math.h>
 
 #ifndef round
-#ifdef __MSWindows__
-static float round(float val){return (float)floor(val+0.5f);}
-#endif
+//static float round(float val){return (float)floor(val+0.5f);}
 #endif
 
 //-----------------------
@@ -43,7 +40,6 @@ static float round(float val){return (float)floor(val+0.5f);}
 /*!
 	\brief Conversion functions between values in clocks, songpos to ticks (and vice-versa).
 */
-
 
 class TClockConverter {
 
@@ -79,8 +75,6 @@ class TClockConverter {
 		}
 };
 
-
 typedef TClockConverter FAR * TClockConverterPtr;
-
 
 #endif

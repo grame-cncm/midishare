@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TScoreMarker.h			    
 // ===========================================================================
@@ -40,7 +39,6 @@
   Markers are directly inserted in the score and MUST be removed before destroying the score.
 */
 
-
 class TScoreMarker {
 
 	private:
@@ -59,7 +57,7 @@ class TScoreMarker {
 		}
 		
 		// The marker MUST be removed from the score before destroying it.
-		virtual ~TScoreMarker () {if (fEvent) delete (fEvent);}
+		virtual ~TScoreMarker() {if (fEvent) delete (fEvent);}
 		
 		void Insert(TScorePtr score, TEventPtr prev, ULONG date_ticks)
 		{ 
@@ -69,11 +67,8 @@ class TScoreMarker {
 		void Remove (TScorePtr score){score->RemoveEvent(fEvent);}
 		Boolean IsInserted(){return fEvent->fPrev && fEvent->fNext;}
 		ULONG GetDateTicks(){return Date(fEvent->MidiEvent());}
-		
 };
 
-
 typedef TScoreMarker FAR * TScoreMarkerPtr;
-
 
 #endif

@@ -136,7 +136,7 @@ typedef struct PlayerState{
 	short state;
 	short syncin;
 	short syncout;
-        long ticks;
+	long ticks;
 }PlayerState;
 
 /*--------------------------------------------------------------------------*/

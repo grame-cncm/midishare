@@ -1,25 +1,26 @@
 
 Versions:
 ------------------------
-v 1.72      : new MidiShare kernel first release
-v 1.80      : kernel with drivers management
-v 1.81      : bug in MSClearSeq corrected
-		    internal changes in drivers management
-v 1.82      : bug in MSSend corrected
-			internal change in slot infos management
-			Macintosh release : obsolete function MidiGetPortState returns true
-v 1.83      : Linux release : bug in differed task management corrected
-v 1.84      : Macintosh release : filters functions entry points added
-			don't bring launched driver applications to front 
-v 1.85 	    : PortPrefix MIDIFile event added
-v 1.86 	    : minor bug in MidiClose corrected (memory not released)
-			Linux release : signals are not patched any more, exceptions are now
-			handled using device close function.
-			Windows release : search midishare.ini file first in application 
-			directory then when not found, in windows directory
-v 1.87      : MacOSX release: framework version
-			extends time management to timer mode
-			comments supported in conf. files			          
+v 1.88  : mutex support in MSOpen and MSClose
+v 1.87  : MacOSX release: framework version
+		  extends time management to timer mode
+		  comments supported in conf. files			  
+v 1.86 	: minor bug in MidiClose corrected (memory not released)
+		  Linux release : signals are not patched any more, exceptions are now
+		  handled using device close function.
+		  Windows release : search midishare.ini file first in application 
+		  directory then when not found, in windows directory
+v 1.85 	: PortPrefix MIDIFile event added
+v 1.84  : Macintosh release : filters functions entry points added
+		  don't bring launched driver applications to front 
+v 1.83  : Linux release : bug in differed task management corrected
+v 1.82  : bug in MSSend corrected
+		  internal change in slot infos management
+		  Macintosh release : obsolete function MidiGetPortState returns true
+v 1.81  : bug in MSClearSeq corrected
+		  internal changes in drivers management
+v 1.80  : kernel with drivers management
+v 1.72  : new MidiShare kernel first release
 
 
 Tags :

@@ -24,7 +24,6 @@
 //	TTempoConverter.cpp		    
 // ===========================================================================
 
-
 #include "TTempoConverter.h"
 #include "UMath.h"
 #include "UTools.h"
@@ -36,7 +35,7 @@
  \param tpq is the tick_per_quarter value.
 */
 
-void TTempoConverter::Init (ULONG tpq) 
+void TTempoConverter::Init(ULONG tpq) 
 {
 	assert (tpq > 0);
 	
@@ -53,7 +52,7 @@ void TTempoConverter::Init (ULONG tpq)
  \brief Inits with the current Tick_Per_Quarter value.
 */
 
-void TTempoConverter::Init () 
+void TTempoConverter::Init() 
 {
 	fLast_tempo_ten_micro = 0;
 	fTempo = kDefaultTempo;
@@ -69,7 +68,7 @@ void TTempoConverter::Init ()
  \param tempo is the tempo in micro-sec per quarter note.
 */
 
-void TTempoConverter::Update (ULONG date_ticks, ULONG tempo) 
+void TTempoConverter::Update(ULONG date_ticks, ULONG tempo) 
 {
 	ULONG newtempo = tempo/10; 
 	
@@ -90,7 +89,7 @@ void TTempoConverter::Update (ULONG date_ticks, ULONG tempo)
  \return The result is the date in 10 micro-sec.
 */
 
-ULONG TTempoConverter::ConvertTickToMicroSec (ULONG date_ticks)
+ULONG TTempoConverter::ConvertTickToMicroSec(ULONG date_ticks)
 {
 	ULONG delta ;
     
@@ -117,7 +116,7 @@ ULONG TTempoConverter::ConvertTickToMicroSec (ULONG date_ticks)
  \return The result is the date in ticks.
 */
 
-ULONG TTempoConverter::ConvertMicroSecToTick (ULONG date_ten_micro)
+ULONG TTempoConverter::ConvertMicroSecToTick(ULONG date_ten_micro)
 {
 	if (date_ten_micro >= fLast_tempo_ten_micro){
 		return fLast_tempo +  ConvertMicroSecToTicksAux(date_ten_micro - fLast_tempo_ten_micro);
@@ -133,7 +132,7 @@ ULONG TTempoConverter::ConvertMicroSecToTick (ULONG date_ten_micro)
  \return The result is the date in milliseconds.
 */
 
-ULONG TTempoConverter::ConvertTickToMs  (ULONG date_ticks) {return ConvertTickToMicroSec (date_ticks) / 100;}
+ULONG TTempoConverter::ConvertTickToMs(ULONG date_ticks) {return ConvertTickToMicroSec (date_ticks) / 100;}
 
 /*--------------------------------------------------------------------------*/
 /*!
@@ -142,14 +141,14 @@ ULONG TTempoConverter::ConvertTickToMs  (ULONG date_ticks) {return ConvertTickTo
  \return The result is the date in ticks.
 */
 
-ULONG TTempoConverter::ConvertMsToTick  (ULONG date_ms) {return ConvertMicroSecToTick (date_ms * 100);}		
+ULONG TTempoConverter::ConvertMsToTick(ULONG date_ms) {return ConvertMicroSecToTick (date_ms * 100);}		
 
 
 /*--------------------------------------------------------------------------*/
 // Internal functions
 /*--------------------------------------------------------------------------*/
 
-ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
+ULONG TTempoConverter::ConvertTicksToMicroSecAux(ULONG ticks)
 {
 	return ticks * fTen_micro_sec_per_tick +  (ticks * fTen_micro_sec_per_tick_remain) / fTicks_per_quarter;
 }
@@ -159,7 +158,7 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
 #ifdef __Macintosh__
 
 	#ifdef __MacOS9__
-	ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+	ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 	{	
 		if (fTempo) {
 			return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
@@ -168,7 +167,7 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
 	    }
 	}
 	#else
-	ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+	ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 	{	
 		if (fTempo) {
 			return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
@@ -184,7 +183,7 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
 
 #ifdef __MSWindows__
 
-ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 {	
 	if (fTempo) {
 		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
@@ -199,7 +198,7 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 
 #ifdef __Linux__
 
-ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 {	
 	if (fTempo) {
 		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);

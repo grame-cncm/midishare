@@ -20,14 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TTempoMapVisitor.cpp		    
 // ===========================================================================
 //
 // TTempoMapVisitor: an object used to maintain the current Tempo and TimeSign state
 // and give conversion functions 
-
 
 #include "TTempoMap.h"
 #include "UTools.h"
@@ -45,7 +43,7 @@ TTempoMap::TTempoMap(ULONG tpq)
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::Init () 
+void TTempoMap::Init() 
 {
 	fTempoConverter.Init(); 
 	fTimeConverter.Init();
@@ -56,7 +54,7 @@ void TTempoMap::Init ()
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::UpdateBBU (const TPos& pos) 
+void TTempoMap::UpdateBBU(const TPos& pos) 
 {
 	fCurdate_ticks = fTimeConverter.ConvertBBUToTick (pos);
 	fCur_date_ten_micro = fTempoConverter.ConvertTickToMicroSec(fCurdate_ticks);	
@@ -65,7 +63,7 @@ void TTempoMap::UpdateBBU (const TPos& pos)
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::UpdateTicks (ULONG date_ticks)
+void TTempoMap::UpdateTicks(ULONG date_ticks)
 {
 	fCur_date_ten_micro = fTempoConverter.ConvertTickToMicroSec(date_ticks);	
 	fCurdate_ticks =  date_ticks;
@@ -74,7 +72,7 @@ void TTempoMap::UpdateTicks (ULONG date_ticks)
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::UpdateTenMicroSec (ULONG date_ten_micro) 
+void TTempoMap::UpdateTenMicroSec(ULONG date_ten_micro) 
 {
 	fCur_date_ten_micro =  date_ten_micro;	
 	fCurdate_ticks =  fTempoConverter.ConvertMicroSecToTick (date_ten_micro);
@@ -83,5 +81,5 @@ void TTempoMap::UpdateTenMicroSec (ULONG date_ten_micro)
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::UpdateMs (ULONG date_ms) { UpdateTenMicroSec(date_ms*100);}
+void TTempoMap::UpdateMs(ULONG date_ms) { UpdateTenMicroSec(date_ms*100);}
 	

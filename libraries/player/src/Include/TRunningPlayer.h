@@ -20,19 +20,15 @@
 
 */
 
-
 // ===========================================================================
 //	TRunningPlayer.h		    
 // ===========================================================================
 
-
 #ifndef __TRunningPlayer__
 #define __TRunningPlayer__
 
-
 #include "TSyncInPlayer.h"
 #include "TRunningState.h"
-
 
 //----------------------
 // Class TRunningPlayer
@@ -44,7 +40,7 @@
  depending of the current running state, read in the TRunningState object. 
 */
 
-class TRunningPlayer :public TPlayerInterface {
+class TRunningPlayer : public TPlayerInterface {
 	
 	 private:
 	 
@@ -53,7 +49,7 @@ class TRunningPlayer :public TPlayerInterface {
 	 	
 	  public:
 	  	
-	 	TRunningPlayer (TPlayerInterfacePtr player, TRunningStatePtr state);
+	 	TRunningPlayer(TPlayerInterfacePtr player, TRunningStatePtr state);
 	 	virtual ~TRunningPlayer(){}
 	  
 		void Start();
@@ -71,8 +67,6 @@ class TRunningPlayer :public TPlayerInterface {
 		ULONG GetTempo();
 		
 		void  RcvClock(ULONG date_ms);
-		
 };
- 
 
 #endif

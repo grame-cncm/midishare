@@ -20,15 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TScoreIterator.cpp		    
 // ===========================================================================
 
-
 #ifndef __TScoreIterator__
 #define __TScoreIterator__
-
 
 #include "TScore.h"
 
@@ -39,15 +36,14 @@
 \brief  An iterator on a TScore object.
 */
 
-
 class TScoreIterator {
 
 	friend class TScore;
 	
 	private:
 	 
-		void SetPosTicksForward (ULONG date_ticks);
-		void SetPosTicksBackward (ULONG date_ticks);
+		void SetPosTicksForward(ULONG date_ticks);
+		void SetPosTicksBackward(ULONG date_ticks);
 	
 	protected:
 	
@@ -63,9 +59,9 @@ class TScoreIterator {
 	
 	public:	
 	
-		TScoreIterator ();
-		TScoreIterator (TScorePtr score);
-		TScoreIterator (TScorePtr score,TEventPtr cur);
+		TScoreIterator();
+		TScoreIterator(TScorePtr score);
+		TScoreIterator(TScorePtr score,TEventPtr cur);
 		
 		virtual ~TScoreIterator();
 		
@@ -88,11 +84,10 @@ class TScoreIterator {
 		TEventPtr NextDateEv();
 		TEventPtr PrevDateEv();
 		
-		TEventPtr SetPosTicks (ULONG date_ticks);
+		TEventPtr SetPosTicks(ULONG date_ticks);
 };
 
 typedef class TScoreIterator  FAR * TScoreIteratorPtr;
-
 
 //-----------------------
 // Class TScoreIterator1 
@@ -101,20 +96,20 @@ typedef class TScoreIterator  FAR * TScoreIteratorPtr;
 \brief  An iterator on a TScore object that will not be attached to the score.
 */
 
-class TScoreIterator1 :public TScoreIterator {
+class TScoreIterator1 :	public TScoreIterator {
 		
 		public:
 		
 			virtual ~TScoreIterator1(){}
 		
-			TScoreIterator1 (TScorePtr score) 
+			TScoreIterator1(TScorePtr score) 
 			{
 				fScore = score; 
 				fNextIt = 0;
 				Init();
 			}
 
-			TScoreIterator1 (TScorePtr score,TEventPtr cur) 
+			TScoreIterator1(TScorePtr score,TEventPtr cur) 
 			{ 
 				fScore = score;
 				fNextIt = 0;

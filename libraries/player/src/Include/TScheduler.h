@@ -20,16 +20,13 @@
 
 */
 
-
 // ===========================================================================
 //	TScheduler.h		    
 // ===========================================================================
 
-
 #ifndef __TScheduler__
 #define __TScheduler__
 
- 
 #include "TMidiAppl.h"
 #include "TSynchroniserInterface.h"
 
@@ -43,7 +40,7 @@ class TTicksTask;
  \brief An interface for Schedulers.
 */
 
-class TSchedulerInterface{
+class TSchedulerInterface {
 
 	public:
 	
@@ -56,9 +53,9 @@ class TSchedulerInterface{
 
 typedef TSchedulerInterface FAR * TSchedulerInterfacePtr;
 
-//-----------------------
+//-------------------
 // Class TScheduler 
-//-----------------------
+//-------------------
 
 /*
 
@@ -84,7 +81,6 @@ are used in a more demanding use.
 
 #define TableLength 8
 
-
 /*!
  \brief A TScheduler object allows to schedule Tasks which dates are in ticks, using a
  synchroniser object to convert dates in ticks in dates in millisecond.
@@ -92,7 +88,7 @@ are used in a more demanding use.
  necessary after a Tempo change.
 */
 
-class TScheduler :public TSchedulerInterface{
+class TScheduler : public TSchedulerInterface {
 
 	friend class TTicksTask;
 
@@ -101,11 +97,11 @@ class TScheduler :public TSchedulerInterface{
 		ULONG 		fTaskIndex;
 		TTicksTask* fTaskTable[TableLength];
 		
-		#if defined (__Macintosh__) && defined (__MacOS9__)
-			UPPTaskPtr fUPPExecuteTask;
-		#else
-			TaskPtr fUPPExecuteTask;
-		#endif
+	#if defined (__Macintosh__) && defined (__MacOS9__)
+		UPPTaskPtr fUPPExecuteTask;
+	#else
+		TaskPtr fUPPExecuteTask;
+	#endif
 		
 		void ScheduleRealTime(TTicksTask* task);
 		void RemoveTask(TTicksTask* task);
@@ -129,8 +125,7 @@ class TScheduler :public TSchedulerInterface{
  		// Internal functions made public to be called from tasks
  		
  		void ExecuteTaskInt(TTicksTask* task, ULONG date);		
- 		
-   };
+};
 
 typedef TScheduler FAR * TSchedulerPtr;
 
@@ -169,8 +164,8 @@ class TTicksTask {
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
 		
-		void Clear () {fTask = 0;}
-		void Kill () {MidiForgetTask(&fTask);}
+		void Clear() {fTask = 0;}
+		void Kill() {MidiForgetTask(&fTask);}
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
@@ -182,13 +177,12 @@ class TTicksTask {
 		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
-		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
+		void Forget() { if (IsRunning ()) fStatus = kTaskForget;}
 		
-		Boolean IsRunning () 	{return (fStatus == kTaskRunning);}
-		Boolean IsIdle () 	 	{return (fStatus == kTaskIdle);}
+		Boolean IsRunning() 	{return (fStatus == kTaskRunning);}
+		Boolean IsIdle() 	 	{return (fStatus == kTaskIdle);}
 		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
-	
 };
 
 typedef TTicksTask FAR * TTicksTaskPtr;
@@ -197,8 +191,8 @@ typedef TTicksTask FAR * TTicksTaskPtr;
 // Prototypes for Real-time callback
 //-----------------------------------
 
-void MSALARMAPI ScheduleTask (ULONG date, short refnum, long a1, long a2, long a3); 
-void MSALARMAPI ReScheduleTask (ULONG date, short refnum, long a1, long a2, long a3); 
-void MSALARMAPI ExecuteTask (ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ScheduleTask(ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ReScheduleTask(ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ExecuteTask(ULONG date, short refnum, long a1, long a2, long a3); 
 
 #endif

@@ -20,16 +20,13 @@
 
 */
 
-
 // ===========================================================================
 //	TTime.h			    
 // ===========================================================================
 
-
 #ifndef __TTime__
 #define __TTime__
 
- 
 #include "TPlayerConstants.h"
 #include "GenericMidiShare.h"
 
@@ -43,7 +40,7 @@ class TTime;
 	\brief Position in Bar Beat Unit representation
 */
 
-class TPos{
+class TPos {
 
 	friend class TTime;
 	
@@ -67,7 +64,6 @@ class TPos{
 
 typedef TPos FAR * TPosPtr;
 
-
 //-------------
 // Class TTime
 //-------------
@@ -75,7 +71,7 @@ typedef TPos FAR * TPosPtr;
 	\brief Algebra for Bar Beat Unit representation 
 */
 
-class TTime{
+class TTime {
 
 	friend class TTimeConverter;
 
@@ -86,27 +82,26 @@ class TTime{
 		ULONG fTick_per_bar;
 		ULONG fTicks_per_quarter; 
 		
-		const TPos Normalize (const TPos& p1);
-		const TPos Normalize1 (const TPos& p1);
+		const TPos Normalize(const TPos& p1);
+		const TPos Normalize1(const TPos& p1);
 		
 	public :
 	
 		TTime() {Init(kDefaultTpq);}
 		virtual ~TTime() {}
 	
-		void Init (ULONG tick);
+		void Init(ULONG tick);
 		
-		const TPos ConvertTicksToBBUInBar (ULONG nb_ticks);
+		const TPos ConvertTicksToBBUInBar(ULONG nb_ticks);
 		ULONG ConvertBBUToTicksInBar(const TPos& pos);
 		
-		const TPos 	Add (const TPos& p1, const TPos& p2);
-		const TPos 	Sub (const TPos& p1, const TPos& p2);
+		const TPos 	Add(const TPos& p1, const TPos& p2);
+		const TPos 	Sub(const TPos& p1, const TPos& p2);
 		
-		Boolean Inf (const TPos& p1, const TPos& p2);
-		Boolean Sup (const TPos& p1, const TPos& p2);
-		Boolean InfEq (const TPos& p1, const TPos& p2);
-		Boolean SupEq (const TPos& p1, const TPos& p2);
-
+		Boolean Inf(const TPos& p1, const TPos& p2);
+		Boolean Sup(const TPos& p1, const TPos& p2);
+		Boolean InfEq(const TPos& p1, const TPos& p2);
+		Boolean SupEq(const TPos& p1, const TPos& p2);
 };
 
 typedef TTime FAR * TTimePtr;

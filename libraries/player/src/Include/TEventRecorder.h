@@ -20,15 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TEventRecorder.cpp			    
 // ===========================================================================
 
-
 #ifndef __TEventRecorder__
 #define __TEventRecorder__
-
  
 #include "TScoreIterator.h"
 #include "TEventReceiverInterface.h"
@@ -42,8 +39,7 @@
 \brief	Recording management.
 */
 
-
-class TEventRecorder :public TEventDispatcher {
+class TEventRecorder : public TEventDispatcher {
 
 	private:
 		
@@ -60,27 +56,26 @@ class TEventRecorder :public TEventDispatcher {
 		void ReceiveDefaultEvent(MidiEvPtr e);
 		void EraseTrack();
 		
-		Boolean	AcceptEv (MidiEvPtr e) 	{ return MidiIsAcceptedType(fRecFilter,EvType(e));}
-		Boolean IsRecording () 			{ return (fRecordtrack > 0);}
-		Boolean IsErasing () 			{ return (fRecordmode == kEraseOn);}
+		Boolean	AcceptEv(MidiEvPtr e) 	{return MidiIsAcceptedType(fRecFilter,EvType(e));}
+		Boolean IsRecording() 			{return (fRecordtrack > 0);}
+		Boolean IsErasing() 			{return (fRecordmode == kEraseOn);}
 	
 	public:
 	
 		TEventRecorder(TPlayerScorePtr score, TPlayerSynchroniserPtr synchro, TRunningStatePtr state, TEventDispatcherPtr successor);
 		virtual ~TEventRecorder();
 	
-		void SetRecordMode (short state);
-		short GetRecordMode (){return fRecordmode;}
-		void SetRecordTrack (short tracknum);
-		short GetRecordTrack () {return fRecordtrack;}
-		void SetRecordFilter (MidiFilterPtr filter);
+		void SetRecordMode(short state);
+		short GetRecordMode(){return fRecordmode;}
+		void SetRecordTrack(short tracknum);
+		short GetRecordTrack() {return fRecordtrack;}
+		void SetRecordFilter(MidiFilterPtr filter);
 		MidiFilterPtr GetRecordFilter (){return fRecFilter;}
 		
-		void ReceiveEvents (MidiEvPtr e);	
+		void ReceiveEvents(MidiEvPtr e);	
 	
 };
 
 typedef TEventRecorder FAR * TEventRecorderPtr;
-
 
 #endif

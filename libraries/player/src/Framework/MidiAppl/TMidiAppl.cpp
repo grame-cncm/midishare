@@ -32,7 +32,7 @@
 #include "TMidiAppl.h"
 
 /*--------------------------------------------------------------------------*/
-void MSALARMAPI TMidiAppl::GenericTask (ULONG date, short refnum, long a1, long a2, long a3) 
+void MSALARMAPI TMidiAppl::GenericTask(ULONG date, short refnum, long a1, long a2, long a3) 
 {
 
 	TMidiApplPtr appl = (TMidiApplPtr)a1;
@@ -58,7 +58,7 @@ void MSALARMAPI TMidiAppl::GenericApplAlarm(short ref, long code)
 
 /*--------------------------------------------------------------------------*/
 
-short TMidiAppl::Open (MidiName name) 
+short TMidiAppl::Open(MidiName name) 
 {
 	short i;
 		
@@ -207,8 +207,6 @@ void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long 
 #ifdef __Linux__
 	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date,  long a1,long a2,long a3)
 #endif
-
-
 {
 	MidiCall(routine,date,fRefnum,a1,a2,a3);
 }

@@ -40,8 +40,7 @@
   PitchBend, Sysex and Tune events.
 */
 
-
-class TChaserVisitor :public  TScoreVisitorInterface{
+class TChaserVisitor : public  TScoreVisitorInterface {
 
 	private:
 		/*! Event user */
@@ -84,7 +83,6 @@ class TChaserVisitor :public  TScoreVisitorInterface{
 		void ChaseOn (ULONG date_ticks);
 		void ChaseOff (ULONG date_ticks);
 };
-
 
 typedef TChaserVisitor FAR * TChaserVisitorPtr;
 

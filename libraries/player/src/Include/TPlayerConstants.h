@@ -20,24 +20,20 @@
 
 */
 
-
-
 // ===========================================================================
 //	TPlayerConstants.h			    
 // ===========================================================================
 //
 //	Players constants
 
-
 #ifndef __TPlayerConstants__
 #define __TPlayerConstants__
-
 
 //-----------------------
 // Version Number 
 //-----------------------
 
-#define kVersion 206
+#define kVersion 207
 
 //-----------------------
 // MidiShare memory limit
@@ -55,7 +51,6 @@
 #define	kErrMemory	-4		// No more System Memory 			        
 #define kErrSequencer	-5		// Sequencer error			            
 
-
 //-----------------------
 // Tracks Description 
 //-----------------------
@@ -65,7 +60,6 @@
 #define kNoTrack -1             // For record management 
 
 #define kTempoMap  0            // Number of the TempoMap track
-
 
 #define kEraseOff 	0
 #define kEraseOn 	1
@@ -88,7 +82,6 @@ enum loopState {kLoopOn = 0, kLoopOff};
 
 #define TrackNum(e) RefNum(e)
 #define kMaxTpq 500
-
 
 //-----------------------
 // For HashTables (Chase)
@@ -114,7 +107,6 @@ enum loopState {kLoopOn = 0, kLoopOff};
 #define kDefaultClocks 		0
 #define kDefaultN32 		0
 	
-
 //-----------------------
 // Private Events
 //-----------------------
@@ -146,8 +138,6 @@ enum playerOutput {kMidiShare = 0, kQuickTime, KMaxOutput};
 //-----------------------
 
 typedef unsigned long ULONG;
-
-
 
 #endif
 

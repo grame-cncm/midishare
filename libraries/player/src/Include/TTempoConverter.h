@@ -24,7 +24,6 @@
 //	TTempoConverter.h		    
 // ===========================================================================
 
-
 #ifndef __TTempoConverter__
 #define __TTempoConverter__
 
@@ -83,10 +82,8 @@ class TTempoConverter {
 		\return The result is current tempo in micro-sec per quarter note.
 		*/
 		ULONG GetTempo() {return fTempo * 10;}
-		
 };
 
 typedef TTempoConverter FAR * TTempoConverterPtr;
-
 
 #endif

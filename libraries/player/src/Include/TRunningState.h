@@ -20,15 +20,12 @@
 
 */
 
-
 // ===========================================================================
 //	TRunningState.h			    
 // ===========================================================================
 
-
 #ifndef __TRunningState__
 #define __TRunningState__
-
 
 //---------------------
 // Class TRunningState
@@ -59,10 +56,8 @@ class TRunningState {
 		void SetPause() 	{fStatus = kPause;}
 		
 		short GetState() {return fStatus;}
-
 };
 
 typedef TRunningState FAR * TRunningStatePtr;
-
 
 #endif

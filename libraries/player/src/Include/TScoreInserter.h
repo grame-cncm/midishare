@@ -20,19 +20,15 @@
 
 */
 
-
 // ===========================================================================
 //	TScoreInserter.cpp			    
 // ===========================================================================
 
-
 #ifndef __TScoreInserter__
 #define __TScoreInserter__
 
- 
 #include "TScoreFollower.h"
 #include "TPlayerScore.h"
-
 
 //----------------------
 // Class TScoreFollower 
@@ -41,7 +37,7 @@
 \brief  A utility class to insert sequence of events in the score.
 */
 
-class TScoreInserter : public TScoreObjFollower{
+class TScoreInserter : public TScoreObjFollower {
 
 	private:
 	
@@ -55,7 +51,6 @@ class TScoreInserter : public TScoreObjFollower{
  		long InsertAllTrack(MidiSeqPtr s);
  		long InsertTrack(short tracknum, MidiSeqPtr s);
 };
-
 
 typedef TScoreInserter FAR * TScoreInserterPtr;
 

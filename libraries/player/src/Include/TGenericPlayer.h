@@ -20,11 +20,9 @@
 
 */
 
-
 // ===========================================================================
 //	TGenericPlayer.h			    
 // ===========================================================================
-
 
 #ifndef __TGenericPlayer__
 #define __TGenericPlayer__
@@ -48,7 +46,7 @@
 */
 
 
-class TGenericPlayer : public TGenericPlayerInterface{
+class TGenericPlayer : public TGenericPlayerInterface {
 
 	private :
 	
@@ -94,7 +92,6 @@ class TGenericPlayer : public TGenericPlayerInterface{
 };
 
 typedef TGenericPlayer FAR * TGenericPlayerPtr;
-
 
 #endif
 

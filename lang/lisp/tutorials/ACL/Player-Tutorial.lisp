@@ -1,21 +1,13 @@
+
+
 ;; =====================================================================================
-;;  Copyright © Grame 1996-2004
+;; The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
+;; 1996-2000, and is distributed as Open Source software under the Artistic License;
+;; see the file "Artistic" that is included in the distribution for details.
 ;;
-;;  This library is free software; you can redistribute it and modify it under 
-;;  the terms of the GNU Library General Public License as published by the 
-;;  Free Software Foundation version 2 of the License, or any later version.
-;;
-;;  This library is distributed in the hope that it will be useful, but
-;;  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-;;  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
-;;  for more details.
-;;
-;;  You should have received a copy of the GNU Library General Public License
-;;  along with this library; if not, write to the Free Software
-;;  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-;;
-;;  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-;;  research@grame.fr
+;; Grame : Computer Music Research Laboratory
+;; Web : http://www.grame.fr/Research
+;; E-mail : MidiShare@rd.grame.fr
 ;;
 ;; History:
 ;; 
@@ -27,6 +19,42 @@
 ;; You must load the file Player_Interface.lisp before using this tutorial
 ;;
 
+;; <<Begin modification by [RS]
+(if (not (find-package "MIDISHARE"))
+    (progn
+      (setf system:*load-search-list*
+	(append '(:first "e:/saugier/local/code/midishare-bind/")
+		system:*load-search-list*
+		)
+	)
+      (load "MidiShare-Interface.lisp" :verbose t)
+      )
+  )
+
+(load "MidiShare-Interface.lisp" :verbose t)
+
+(load "Player-Interface.lisp" :verbose t)
+
+(print (list-all-packages))
+
+(defun print-package-symbols(pkg &optional (show-internal-syms nil))
+  "Prints the list of symbols contained in the package named pkg-name."
+  (let ((sym-list ()))
+    (if show-internal-syms
+	(do-symbols (x pkg) (push x sym-list))
+      (do-external-symbols (x pkg) (push x sym-list))
+      )
+    (format t "List of symbols in package ~A:~%" (package-name pkg))
+    (dolist (x (sort sym-list #'string<))
+      (format t "~A~%" x))
+    )
+  )
+
+(print-package-symbols "MIDISHARE")
+
+;; >>End modification by [RS]
+
+
 
 ;; Use the MIDISHARE package to have acces to all MidiShare and Player librariry symbols
 
@@ -34,7 +62,7 @@
 
 ;; You must check if MidiShare is installed before using the Player library
 
-(midishare) 
+(midishare)
 
 ;; You can check the Player library version
 
@@ -76,6 +104,7 @@
 
 ;; Load a  Midifile (set YOUR pathname)
 
+(midi-file-load "E:\\saugier\\local\\music\\midi\\canyon.mid" *seq* *info*)
 (midi-file-load "/Volumes/Documents/MacOS9/MidiFileEx/allblues.mid" *seq* *info*)
 (midi-file-load "Document1:Developpements:MidiFileEx:Labamba.mid" *seq* *info*)
 (midi-file-load "HD1200:MidiFileEx:ChopinNocturne4.2.mid" *seq* *info*)
@@ -86,6 +115,14 @@
 ;;
 ;; (You can  set directly a MidiShare sequence  "built from scratch"  in a player 
 ;; Look at the Track management  example)
+
+
+(mf-clicks *info*)
+
+(print *player*)
+
+(print *seq*)
+
 
 
 (setalltrackplayer *player* *seq* (mf-clicks *info*))
@@ -142,7 +179,7 @@
   (format t  "SyncOut : ~2d  ~%" 
               (s-syncout *state*)))
 
- (print-state)
+(print-state)
 
 
 ;;======================
@@ -184,7 +221,7 @@
 ;; forwardstepplayer at the end of the sequence
 ;; or backwardstepplayer at the beginning of the sequence.
 
-(forwardstepplayer  *player*  kStepPlay)  
+(forwardstepplayer  *player*  kStepPlay)
 
 (backwardstepplayer  *player*  kStepPlay)  
 
@@ -210,7 +247,7 @@
   (p-unit *pos* unit)
   (setloopendbbuplayer *player* *pos*))
 
-(set-loopend-bbu-player 15 1 1)
+(set-loopend-bbu-player 3 1 1)
 
 (defun set-loopstart-bbu-player (bar beat unit)
   (p-bar *pos* bar)
@@ -218,7 +255,7 @@
   (p-unit *pos* unit)
   (setloopstartbbuplayer *player* *pos*))
 
-(set-loopstart-bbu-player 5 1 1)
+(set-loopstart-bbu-player 1 1 1)
 
 
 ;; enable the loop
@@ -267,23 +304,23 @@
 
 (defun apply-seq (seq fun)
   (do ((ev (firstev seq) (link ev)))
-      ((%null-ptr-p ev))
+      ((eq ev 0))
    (funcall fun ev)))
 
 
 ;; Fonctions to print a Midi event in textual format
 
 (defun midi-string-ev (e &optional (f 4))
-  (unless (%null-ptr-p e)
+  (unless (eq e 0)
     (list 
     (format nil "~A ~3D/~4A ~A ~:a" 
                 (midi-string-date (date e)) 
                 (port e) (chan e) 
-                (midi-string-type (type e)) 
+                (midi-string-type (evtype e)) 
                 (midi-list-fields e f)))))
 
 (defun midi-list-fields (e &optional (n 4))
-  (if (or (and (>= (type e) typeTextual) (<= (type e) typeCuePoint)) (= (type e) typeSpecific))
+  (if (or (and (>= (evtype e) typeTextual) (<= (evtype e) typeCuePoint)) (= (evtype e) typeSpecific))
     (text e)
     (let (l)
       (dotimes (i (min n (midicountfields e)))
@@ -363,7 +400,7 @@
 (defun add-track (seq tracknum pitch startdate)
   (dotimes (i 500)
     (let ((ev (midinewev typenote)))
-      (unless (%null-ptr-p ev)
+      (unless (eq ev 0)
         (midisetfield ev 0 pitch)
         (midisetfield ev 1 80)
         (midisetfield ev 2 125)
@@ -388,7 +425,7 @@
   (let ((seq (midinewseq)))
     (dotimes (i 50)
       (let ((ev (midinewev typenote)))
-        (unless (ccl:%null-ptr-p ev)
+        (unless (eq ev 0)
           (midisetfield ev 0 72)
           (midisetfield ev 1 80)
           (midisetfield ev 2 125)
@@ -564,7 +601,7 @@
 
 ;; Fill a MidiShare sequence with the MidiFile
 
-(midi-file-load "/Lisp/import/test.midi" *seq* *info*)
+(midi-file-load "e:\\saugier\\local\\music\\midi\\canyon.mid" *seq* *info*)
 
 ;;===================
 ;; Save a MidiFile 
@@ -581,7 +618,7 @@
 ;; in the MidiFile header or set to 500 if you start your session
 ;; with a empty Player. 
 
-(midi-file-save "/Lisp/import/saved-test.mid" *seq* *info*)
+(midi-file-save "e:\\saugier\\local\\music\\midi\\fromlisp.mid" *seq* *info*)
 
 
 ;;=========

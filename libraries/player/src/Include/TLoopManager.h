@@ -75,9 +75,7 @@ class TLoopManager {
 		
 		ULONG GetLoopEndTicks() 	{return fLoopEndMarker.GetDateTicks()+kLoopEndOffset;}
 		ULONG GetLoopStartTicks() 	{return fLoopStart;}
-	
 };
-
 
 typedef TLoopManager FAR * TLoopManagerPtr;
 

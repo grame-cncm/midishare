@@ -20,7 +20,6 @@
 
 */
 
-
 // ===========================================================================
 //	TTempoMap.h		    
 // ===========================================================================
@@ -29,10 +28,8 @@
 #ifndef __TTempoMap__
 #define __TTempoMap__
 
-
 #include "TTempoConverter.h"
 #include "TTimeConverter.h"
-
 
 //-----------------
 // Class TTempoMap
@@ -73,6 +70,11 @@ class TTempoMap {
 		short GetDenom()   {return fTimeConverter.GetDenom();}
 		short GetNClocks()  {return fTimeConverter.GetNClocks();}
 		short GetN32nd()    {return fTimeConverter.GetN32nd();}
+		
+		void SetNum(short val)     {fTimeConverter.SetNum(val);}
+		void SetDenom(short val)   {fTimeConverter.SetDenom(val);}
+		void SetNClocks(short val)  {fTimeConverter.SetNClocks(val);}
+		void SetN32nd(short val)    {fTimeConverter.SetN32nd(val);}
 			
 		ULONG GetTempo()   {return fTempoConverter.GetTempo();}
 		void SetTempo(ULONG date_ticks,ULONG tempo) {fTempoConverter.Update(date_ticks,tempo);}
@@ -100,10 +102,8 @@ class TTempoMap {
 		Boolean Sup(ULONG date_ticks, const TPos& pos) 		{return  fTimeConverter.Sup(fTimeConverter.ConvertTickToBBU(date_ticks), pos);}
 		Boolean InfEq(ULONG date_ticks, const TPos& pos) 	{return  fTimeConverter.InfEq(fTimeConverter.ConvertTickToBBU(date_ticks), pos);}
 		Boolean Inf(ULONG date_ticks, const TPos& pos) 		{return  fTimeConverter.Inf(fTimeConverter.ConvertTickToBBU(date_ticks), pos);}
-		
 };
 
 typedef TTempoMap FAR * TTempoMapPtr;
-
 
 #endif

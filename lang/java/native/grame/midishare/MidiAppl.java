@@ -37,7 +37,6 @@
 package grame.midishare;
 
 import grame.midishare.MidiTask;
-import com.apple.mrj.jdirect.CompletionRoutineNotifier;
 import java.util.*;
 
 
@@ -48,8 +47,7 @@ a thread which is in charge of the management of incoming Midi events,
 application context alarms and tasks.  
 */
 
-
-public class MidiAppl{
+public class MidiAppl {
 
 		static final int typeTask 	= 19;
 		static final int typeAlarm 	= 20;
@@ -238,52 +236,17 @@ public class MidiAppl{
 				}
 			}
 		}
-						
-}
-
-
-
-/**
-This class allows a simpler manipulation of MidiShare applications in Java. 
-A MidiNativeAppl instance is associated to a MidiShare application. Java code for
-Alarms and Tasks is <b> directly called from the native side</b>. 
-Use this class with caution  : since Java code is called from a native real-time thread, 
-it has to be fast otherwise the application may ruin real-time performances of the machine.
-*/
-public class MidiNativeAppl extends MidiAppl{
-
-		/**
- 		* Constructor.
-		*/
-		public MidiNativeAppl() {}
-	
-		/* WARNING : this method must not :
-			- be declared private since MidiNativeAppl could not overwrite it
-			- be declared protected otherwise a derived class could overwrite it by error.
-		*/
-	
-		void Init123456789() 
-		{
-			mode = kNativeMode;
-			appl = new MidiApplNative();
-		}
-		
 }
 
 
 /**
  Internal use
 */
-class MidiApplImpl{
+class MidiApplImpl {
 
 		void Open(MidiAppl appl){}
 		void Close(){}
 }
-
-/**
- Internal use
-*/
-final class MidiApplNative extends MidiApplImpl {}
 
 
 /**
@@ -312,7 +275,7 @@ final class MidiApplPolling extends MidiApplImpl {
 /**
  Internal use : polling thread
 */
-final class MidiPollingThread extends Thread{
+final class MidiPollingThread extends Thread {
 		private MidiAppl appl;
 
 		MidiPollingThread (MidiAppl appl){
