@@ -27,15 +27,16 @@
 */
 
 
-#include <linux/kernel.h>
 
 #ifdef MODULE
 # ifdef MODVERSIONS
 # include <linux/modversions.h>
 # endif
+#define EXPORT_SYMTAB
 #include <linux/module.h>
 #endif
 
+#include <linux/kernel.h>
 #include <linux/fs.h>		/* for devices	*/
 #include <asm/uaccess.h>	/* for put_user	*/
 #include <linux/sched.h>	/* for current 	*/
@@ -52,6 +53,8 @@ typedef int (*KernelMth) (unsigned long userptr);
 static KernelMth KernelMthTable[kMaxMth];
 
 void MidiShareSpecialInit(unsigned long defaultSpace);  /* A REVOIR */
+
+MODULE_SUPPORTED_DEVICE("midishare");
 
 /*__________________________________________________________________________________*/
 /* -- display functions */
@@ -306,4 +309,5 @@ void cleanup_module()
 	if (unregister_chrdev(kMidiShareMajor, kMidiShareName) < 0) prnt("Error when closing MidiShare module");
 }
 
+#include "msExports.h"
 
