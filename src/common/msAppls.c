@@ -24,6 +24,8 @@
 
 */
 
+#include <stdio.h>
+
 #include "msAlarms.h"
 #include "msAppls.h"
 #include "msAppFun.h"
@@ -32,6 +34,7 @@
 #include "msDriver.h"
 #include "msDrvFun.h"
 #include "msEvents.h"
+#include "msFilter.h"
 #include "msInit.h"
 #include "msMem.h"
 #include "msMemory.h"
@@ -142,9 +145,17 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		Date(e) = g->pub->time;
 		e = MSSendSync (0, e, g);
 		if (!e) return MIDIerrComm;
-		
-		if (EvType(e) == typeMidiOpenRes)
+
+        if (EvType(e) == typeMidiOpenRes) {
+            TApplPtr appl = NewAppl (sizeof(TAppl));
 			ref = RefNum(e);
+            fifoinit (&appl->rcv);
+            fifoinit (&appl->dTasks);
+            appl->filter = 0;
+            appl->rcvAlarm = 0;
+            appl->applAlarm = 0;
+            g->appls[ref] = appl;
+        }
 		else ref = MIDIerrComm;
 		MSFreeEv (e, &g->memory.freeList);
 	}
@@ -154,13 +165,18 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
-{	
-	MidiEvPtr e = MSNewEv (typeMidiClose, &g->memory.freeList);
-	if (e) {
-		Date(e) = g->pub->time;
-		MSSendSync (ref, e, g);
-	}
-	CloseComm(g);
+{
+    if (CheckGlobRefNum(g,ref)) {
+        MidiEvPtr e = MSNewEv (typeMidiClose, &g->memory.freeList);
+        if (e) {
+            if (MSGetFilter(ref, g)) MSSetFilter (ref, 0, g);
+            Date(e) = g->pub->time;
+            MSSendSync (ref, e, g);
+            FreeAppl (g->appls[ref]);
+            g->appls[ref] = 0;
+        }
+        CloseComm(g);
+    }
 }
 
 /*____________________________________________________________________________*/
@@ -190,14 +206,19 @@ MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TMSGlobalPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TMSGlobalPtr g)
 {
-	if (CheckGlobRefNum(g,ref)) {
-		MidiEvPtr e = MSNewEv (typeMidiSetFilter, &g->memory.freeList);
+    if (CheckGlobRefNum(g,ref)) {
+        MidiEvPtr e;
+        
+        if (!g->appls[ref]->filter && !filter) return;
+        
+        e = MSNewEv (typeMidiSetFilter, &g->memory.freeList);
 		if (e) {
-            void * fid =  GetShMemID(filter);
 #ifdef WIN32
+            char * fid =  filter ? GetShMemID(filter) : "";
 			string2ev (e, (char *)fid, &g->memory.freeList);
 #else
-            e->info.longField = *(long *)fid;
+            long * fid =  filter ? GetShMemID(filter) : 0;
+            e->info.longField = fid ? *fid : 0;
 #endif
 			Date(e) = g->pub->time;
 			MSSendSync (ref, e, g);
@@ -208,6 +229,17 @@ MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TMSGlobalPtr g
  
 /*____________________________________________________________________________*/
 /*                            functions locally handled                       */
+/*____________________________________________________________________________*/
+
+/*____________________________________________________________________________*/
+MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TMSGlobalPtr g)
+{
+    if (CheckGlobRefNum(g,ref)) {
+        return g->appls[ref]->filter;
+    }
+    return 0;
+}
+
 /*____________________________________________________________________________*/
 MSFunctionType(RcvAlarmPtr) MSGetRcvAlarm(short ref, TMSGlobalPtr g)
 {
@@ -234,15 +266,6 @@ MSFunctionType(void) MSSetApplAlarm(short ref, ApplAlarmPtr alarm, TMSGlobalPtr 
 	if (CheckGlobRefNum(g,ref)) {
 		g->appls[ref]->applAlarm = alarm;
 	}
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TMSGlobalPtr g)
-{
-	if (CheckGlobRefNum(g,ref)) {
-		return g->appls[ref]->filter;
-	}
-	return 0;
 }
 
 #ifdef PascalNames

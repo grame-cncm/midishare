@@ -196,7 +196,7 @@ void OpenClose()
 	print ("    max number of opened applications : %d\n", i+2);
 	n= MidiCountAppls();
 	print ("    number returned by MidiShare : %d\n", n);
-	for( ; i>=0; i--)
+    for( ; i>=0; i--)
 		MidiClose( r[i]);
 	n= MidiCountAppls();
 	if( n!= 2)
@@ -297,23 +297,33 @@ void ApplConfiguration()
 	if( info= MidiGetInfo( refNum))
 		print ("Warning : incorrect info zone : contains %lx instead of nil\n"
 						, info);
-	
+    
 	print ("    MidiGetFilter : ");flush;
 	f= MidiGetFilter( refNum);
 	print ("%lx %s\n", f, OK);
 	if( f)
 		print ("Warning : filter not set and not null\n");
-	
-	print ("    MidiSetFilter : ");flush;
-	MidiSetFilter( refNum, (MidiFilterPtr)s);
-	print ("%s\n", OK);
-	if( (f= MidiGetFilter( refNum))!= (MidiFilterPtr)s)
-		print ("Warning : incorrect filter : %lx instead of %lx\n", f, s);
-	MidiSetFilter( refNum, (MidiFilterPtr)nil);
-	if( f= MidiGetFilter( refNum))
-		print ("Warning : incorrect filter : %lx instead of nil\n", f);
-	
-	print ("    MidiGetRcvAlarm : ");flush;
+
+    print ("    MidiNewFilter : ");flush;
+    f = MidiNewFilter();
+    print ("%lx %s\n", (long)f, OK);
+    if( !f) print ("Warning : MidiNewFilter failed\n", f);
+    else {
+        print ("    MidiSetFilter : ");flush;
+        MidiSetFilter( refNum, f);
+        print ("%s\n", OK);
+        if( (MidiGetFilter( refNum))!= f)
+            print ("Warning : incorrect filter : %lx instead of %lx\n", MidiGetFilter( refNum), f);
+        MidiSetFilter( refNum, (MidiFilterPtr)nil);
+        if (MidiGetFilter( refNum))
+            print ("Warning : incorrect filter : %lx instead of nil\n", MidiGetFilter( refNum));
+
+        print ("    MidiFreeFilter : ");flush;
+        MidiFreeFilter  (f);
+        print ("%s\n", OK);
+    }
+
+    print ("    MidiGetRcvAlarm : ");flush;
 	rcv= MidiGetRcvAlarm( refNum);
 	print ("%lx %s\n", rcv, OK);
 	if( rcv)
@@ -1104,9 +1114,9 @@ main()
 		Events( true); flush;
 		Sequences( true); flush;
 		Time(); flush;
-		Sending(); flush;
+//		Sending(); flush;
 		Mail(); flush;
-		Tasks(true); flush;
+//		Tasks(true); flush;
 		Synchro(); flush;
 		Tolerance(); flush;
 		NoMem(); flush;

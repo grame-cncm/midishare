@@ -46,7 +46,7 @@
 #endif
 
 typedef struct {
-	ShMem * shmem;
+	TShMem * shmem;
 	void * shmemPtr;
 } ServerEnv, *ServerEnvPtr;
 
@@ -105,7 +105,7 @@ void * msServerInit (int shmemSize)
 	setSigActions();
 	atexit (msExit);
 #endif
-	gEnv.shmem = new ShMem (&gLog);
+	gEnv.shmem = new TShMem (&gLog);
 	if (!gEnv.shmem) goto err;
 	gEnv.shmemPtr = gEnv.shmem->Create (kShMemId, shmemSize);
 	if (!gEnv.shmemPtr) goto err;

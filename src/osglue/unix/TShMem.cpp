@@ -38,7 +38,7 @@
 
 
 //__________________________________________________________________________
-ShMem::ShMem (TLog * log) 
+TShMem::TShMem (TLog * log) 
 {
 	fMemAddr = 0;
 	fHandler = SHMErr;
@@ -47,13 +47,13 @@ ShMem::ShMem (TLog * log)
 }
 
 //__________________________________________________________________________
-ShMem::~ShMem () 
+TShMem::~TShMem () 
 {
 	Close ();
 }
 
 //__________________________________________________________________________
-void * ShMem::Create (MemID id, unsigned long size) 
+void * TShMem::Create (MemID id, unsigned long size) 
 {
 	void * ptr = 0;
 	
@@ -71,7 +71,7 @@ void * ShMem::Create (MemID id, unsigned long size)
 }
 
 //__________________________________________________________________________
-void * ShMem::Open (MemID id) 
+void * TShMem::Open (MemID id) 
 {
 	if (Get (id, 0, OtherPerm)) {
 		return Attach ();
@@ -80,7 +80,7 @@ void * ShMem::Open (MemID id)
 }
 
 //__________________________________________________________________________
-int ShMem::Get (key_t id, unsigned long size, int flags) {
+int TShMem::Get (key_t id, unsigned long size, int flags) {
 	fHandler = shmget (id, (int)size, flags);
 	if (fHandler == SHMErr) {
 		if (fLog) fLog->WriteErr ("shmget failed:");
@@ -90,7 +90,7 @@ int ShMem::Get (key_t id, unsigned long size, int flags) {
 }
 
 //__________________________________________________________________________
-void * ShMem::Attach () {
+void * TShMem::Attach () {
 	if (fMemAddr) return fMemAddr;
 	
 	void * memPtr = (void *)shmat (fHandler, 0, fCreated ? OwnerAttachPerm : OtherAttachPerm);
@@ -103,7 +103,7 @@ void * ShMem::Attach () {
 }
 
 //__________________________________________________________________________
-void ShMem::Detach () {
+void TShMem::Detach () {
 	if (!fMemAddr) return;
 	if (shmdt ((char *)fMemAddr) == SHMErr)
 		if (fLog) fLog->WriteErr ("shmdt failed:");
@@ -111,7 +111,7 @@ void ShMem::Detach () {
 }
 
 //__________________________________________________________________________
-void ShMem::Close () {
+void TShMem::Close () {
 	Detach ();
 	if (fCreated && (fHandler != SHMErr)) {
 		struct shmid_ds desc;

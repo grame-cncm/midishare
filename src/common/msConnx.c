@@ -55,7 +55,7 @@ MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TMSGlobalP
 		e->info.cnx.dst = dest;
 		CnxState(e) = state;
 		Date(e) = g->pub->time;
-		MSSend (0, e, g);
+		MSSendSync (0, e, g);
 	}
 }
 

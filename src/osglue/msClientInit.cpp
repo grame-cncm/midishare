@@ -30,7 +30,7 @@
 #include "TShMem.h"
 
 typedef struct {
-	ShMem * shmem;
+	TShMem * shmem;
 	void * shmemPtr;
 } ClientEnv, *ClientEnvPtr;
 
@@ -51,7 +51,7 @@ static void msExit ()
 //___________________________________________________________________
 void *	GetPubMemory ()
 {
-    if (!gEnv.shmem) gEnv.shmem = new ShMem ();
+    if (!gEnv.shmem) gEnv.shmem = new TShMem ();
     if (!gEnv.shmem) return 0;
 #ifndef WIN32
 	atexit (msExit);

@@ -1,9 +1,9 @@
 
 OPTIONS = -Dmacintosh -D__Types__
-LIB = -lmidishare
+LIB = -lMidiShare
 CFLAGS := -O3 $(OPTIONS)
 CC    = cc
-TESTS = TDrivers TEvents TFilters TFonctions TOutEvents
+TESTS = TEvents TEventsLib TFilters TFonctions TOutEvents TDrivers 
 RES   = results
 
 all : makefile $(TESTS)
@@ -13,6 +13,9 @@ TDrivers : TDrivers.c TDrivers.h
 	
 TEvents : TEvents.c TEvents.h
 	$(CC) $(CFLAGS) $(LIB) TEvents.c -o TEvents
+	
+TEventsLib : TEventsLib.c TEvents.h
+	$(CC) $(CFLAGS) $(LIB) TEventsLib.c -o TEventsLib
 
 TFilters : TFilters.c TFilters.h
 	$(CC) $(CFLAGS) $(LIB) TFilters.c -o TFilters

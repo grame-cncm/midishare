@@ -448,24 +448,21 @@ main( int argc, char *argv[])
 {
 	print("\nAllocation, emission and reception of MidiShare events.\n");
 	print("========================================================\n");
-        version = MidiGetLibVersion ();
-        print("               MidiShare Library version %d.%02d\n", (int)version/100, (int)version%100);
-        print("\nWarning : client must have at least 10000 events !\n");
+    version = MidiGetLibVersion ();
+    print("               MidiShare Library version %d.%02d\n", (int)version/100, (int)version%100);
+    print("\nWarning : client must have at least 10000 events !\n");
 
-     if (!MidiShare())  print ("MidiShare isn't installed!\n");
-     else print ("MidiShare version %d\n", MidiGetVersion ());
-    return 0;
-       ChanEvents(); flush;
-        CommonEvents(); flush;			
-        SystemeEx(); flush;
-        Stream(); flush;
-        Private(); flush;
-        Process(); flush;
-        QFToMidiFile(); flush;
-        MidiFile(); flush;
-        Internals(); flush;
-        Fonctions(); flush;
-        Reserved(); flush;
+    ChanEvents(); flush;
+    CommonEvents(); flush;			
+    SystemeEx(); flush;
+    Stream(); flush;
+    Private(); flush;
+    Process(); flush;
+    QFToMidiFile(); flush;
+    MidiFile(); flush;
+    Internals(); flush;
+    Fonctions(); flush;
+    Reserved(); flush;
 
 	print("\nEnd of allocation emission and reception test of events.\n");
 	return 0;

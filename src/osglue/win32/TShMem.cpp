@@ -34,7 +34,7 @@
 #define OtherAttachPerm		FILE_MAP_READ
 
 //__________________________________________________________________________
-ShMem::ShMem (TLog * log) 
+TShMem::TShMem (TLog * log) 
 {
 	fMemAddr = 0;
 	fHandler = SHMErr;
@@ -43,13 +43,13 @@ ShMem::ShMem (TLog * log)
 }
 
 //__________________________________________________________________________
-ShMem::~ShMem () 
+TShMem::~TShMem () 
 {
 	Close ();
 }
 
 //__________________________________________________________________________
-void * ShMem::Create (MemID id, unsigned long size) 
+void * TShMem::Create (MemID id, unsigned long size) 
 {
 	void * ptr = 0;
 	LPSECURITY_ATTRIBUTES sec = 0;
@@ -71,7 +71,7 @@ void * ShMem::Create (MemID id, unsigned long size)
 }
 
 //__________________________________________________________________________
-void * ShMem::Open (MemID id) 
+void * TShMem::Open (MemID id) 
 {
 	void *ptr = 0;
 	if (Get (id, 0, OtherPerm)) {
@@ -82,7 +82,7 @@ void * ShMem::Open (MemID id)
 }
 
 //__________________________________________________________________________
-int ShMem::Get (MemID id, unsigned long size, int flags) 
+int TShMem::Get (MemID id, unsigned long size, int flags) 
 {
 	BOOL inheritflag = FALSE;
 	fHandler = OpenFileMapping (flags, inheritflag, id);
@@ -94,7 +94,7 @@ int ShMem::Get (MemID id, unsigned long size, int flags)
 }
 
 //__________________________________________________________________________
-void * ShMem::Attach () {
+void * TShMem::Attach () {
 	if (fMemAddr) return fMemAddr;	
 	if (fHandler) {
 		DWORD accessRights = fCreated ? OwnerAttachPerm : OtherAttachPerm;
@@ -106,7 +106,7 @@ void * ShMem::Attach () {
 }
 
 //__________________________________________________________________________
-void ShMem::Detach () {
+void TShMem::Detach () {
 	if (!fMemAddr) return;	
 	if (!UnmapViewOfFile (fMemAddr))
 		if (fLog) fLog->WriteErr ("UnmapViewOfFile failed:");
@@ -114,11 +114,11 @@ void ShMem::Detach () {
 }
 
 //__________________________________________________________________________
-void ShMem::Close () {
+void TShMem::Close () {
 	Detach ();
 	if (fHandler) {
 		if (!CloseHandle (fHandler))
-			if (fLog) fLog->WriteErr ("ShMem::Remove CloseHandle failed:");
+			if (fLog) fLog->WriteErr ("TShMem::Close CloseHandle failed:");
 		fHandler = 0;
 	}
 	fCreated = FALSE;

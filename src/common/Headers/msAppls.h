@@ -142,7 +142,7 @@ short GetIndClient (short index, short folderRef, TClientsPtr g);
 /*------------------------------------------------------------------------*/
 /* MidiShare client private application data structures                   */
 typedef struct TAppl{
-	TApplPublic *   pub;
+//	TApplPublic *   pub;
     fifo            rcv;         /* received events fifo         */
     fifo            dTasks;      /* defered tasks fifo           */
     MidiFilterPtr   filter;      /* server mapping of the filter */

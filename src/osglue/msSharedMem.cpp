@@ -26,7 +26,7 @@
 
 SharedMemHandler msSharedMemCreate(ShMemID id, unsigned long size, void ** memPtr)
 {
-    ShMem * shm = new ShMem();
+    TShMem * shm = new TShMem();
     if (shm) {
         void *mem = shm->Create(id, size);
         if (mem) *memPtr = mem;
@@ -40,7 +40,7 @@ SharedMemHandler msSharedMemCreate(ShMemID id, unsigned long size, void ** memPt
 
 SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr)
 {
-    ShMem * shm = new ShMem();
+    TShMem * shm = new TShMem();
     if (shm) {
         void * ptr = shm->Open (id);
         if (ptr) *memPtr = ptr;
@@ -55,7 +55,7 @@ SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr)
 void msSharedMemClose (SharedMemHandler shmh)
 {
     if (shmh) {
-        ShMem * shm = (ShMem *)shmh;
+        TShMem * shm = (TShMem *)shmh;
         shm->Close();
         delete shm;
     }

@@ -94,7 +94,11 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) tbl[i]= Data4ParseMth;
 	tbl[typeMidiSetName]   = VarLenParseMth;
 	tbl[typeMidiSetInfo]   = Data4ParseMth;
-	tbl[typeMidiSetFilter] = VarLenParseMth;
+#ifdef WIN32
+    tbl[typeMidiSetFilter] = VarLenParseMth;
+#else
+    tbl[typeMidiSetFilter] = Data4ParseMth;
+#endif
 }
 
 /*____________________________________________________________________________*/

@@ -113,7 +113,7 @@ static inline cell* lfavail(lifo* lf) {
 
 #elif defined(macintosh) || defined(__MacOSX__)
 # if defined(__ppc__) && defined(__GNUC__)
-#  include "lflifoppc.h"
+#  include "lflifolinuxppc.h"
 # else
 #  include "lflifoMac.h"
 # endif

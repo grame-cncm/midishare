@@ -46,11 +46,11 @@ class TLog;
 //   owner has read/write permission (granted by the Create method)
 //   others have read only permission (granted by the Open method)
 //___________________________________________________________________
-class ShMem
+class TShMem
 {
 	public:
-		 	 ShMem (TLog * log = 0);
-	virtual ~ShMem ();
+		 	 TShMem (TLog * log = 0);
+	virtual ~TShMem ();
 			
 		void *	Create 	(MemID id, unsigned long size);
 		void *	Open 	(MemID id);

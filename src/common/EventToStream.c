@@ -66,15 +66,19 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 	lin[typeSpecific]      = VarLenLinearizeMth;
 	lin[typePortPrefix]    = Data4LinearizeMth;
 	
-/*  alarms are handled localy both in client and server modes
+/*  alarms are handled localy both in client and server modes */
 	lin[typeRcvAlarm]      = NullLinearizeMth;
 	lin[typeApplAlarm]     = NullLinearizeMth;
-*/
+
 	lin[typeMidiOpen]      = VarLenLinearizeMth;
 	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) lin[i]= Data4LinearizeMth;
 	lin[typeMidiSetName]   = VarLenLinearizeMth;
 	lin[typeMidiSetInfo]   = Data4LinearizeMth;
-	lin[typeMidiSetFilter] = VarLenLinearizeMth;
+#ifdef WIN32
+    lin[typeMidiSetFilter] = VarLenLinearizeMth;
+#else
+    lin[typeMidiSetFilter] = Data4LinearizeMth;
+#endif
 }
 
 void msStreamInit (Ev2StreamPtr f, msStreamMthTbl lin, void *buffer, unsigned short size)
@@ -203,7 +207,7 @@ static Boolean VarLenContinuation (Ev2StreamPtr f, MidiEvPtr e)
 	MidiSEXPtr sx = (MidiSEXPtr)e;
 	long *ptr = (long *)f->loc;
 	int i;
-	
+
 	while (f->nextCount) {
 		if (StreamFreeSpace(f) >= VLCellSize) {
 			long *data = (long *)sx->data;
@@ -224,7 +228,7 @@ static Boolean VarLenContinuation (Ev2StreamPtr f, MidiEvPtr e)
 
 static Boolean VarLenLinearizeMth (Ev2StreamPtr f, MidiEvPtr e)
 {
-	long len = CountCells (e) * VLCellSize;
+    long len = CountCells (e) * VLCellSize;
 	if (StreamFreeSpace(f) >= sizeof(long)) {
 		MidiEvPtr firstcell = (MidiEvPtr)Link(LinkSE(e));
 		long * ptr = (long *)f->loc;
