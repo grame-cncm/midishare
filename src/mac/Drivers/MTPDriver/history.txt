@@ -1,0 +1,7 @@
+
+MidiTimePiece Driver changes history
+====================================
+
+v 1.01 : internal changes in slot infos management - require MidiShare v1.82 or later
+
+v 1.00 : first release
