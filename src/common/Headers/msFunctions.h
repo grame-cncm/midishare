@@ -161,8 +161,8 @@ extern "C" {
 
 /*------------------------------- Drivers management --------------------------*/
 #ifdef MSKernel
-  short          MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op);
-  void           MidiUnregisterDriver (short refnum);
+  MSAPI(short)          MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op);
+  MSAPI(void)           MidiUnregisterDriver (short refnum);
 #endif
   MSAPI(short)          MidiCountDrivers     (void);
   MSAPI(short)          MidiGetIndDriver     (short index);
@@ -170,9 +170,9 @@ extern "C" {
 
 /*-------------------------------- Slots management ---------------------------*/
 #ifdef MSKernel
-  SlotRefNum     MidiAddSlot     (short refnum, MidiName name, SlotDirection direction);
-  void           MidiSetSlotName (SlotRefNum slot, MidiName name);
-  void           MidiRemoveSlot  (SlotRefNum slot);
+  MSAPI(SlotRefNum)     MidiAddSlot     (short refnum, MidiName name, SlotDirection direction);
+  MSAPI(void)           MidiSetSlotName (SlotRefNum slot, MidiName name);
+  MSAPI(void)           MidiRemoveSlot  (SlotRefNum slot);
 #endif
   MSAPI(SlotRefNum)     MidiGetIndSlot  (short refnum, short index);
   MSAPI(Boolean)        MidiGetSlotInfos    (SlotRefNum slot, TSlotInfos * infos);
