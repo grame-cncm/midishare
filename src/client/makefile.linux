@@ -8,12 +8,12 @@ LIBS = ../msClientCommonLib.o ../msOSGlueLib.o
 
 COMSRC := $(wildcard ../common/*.c)
 COMINC := $(wildcard ../common/Headers/*.h)
-GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
-GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/unix/*.cpp)
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/include/*.h)
 
 CFLAGS   := -O3 -Wall -I../common/Headers -I../osglue
-CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
-VPATH = ../common ../osglue ../osglue/glue ../osglue/unix
+CXXFLAGS := $(CFLAGS) -I../osglue/include
+VPATH = ../common ../osglue ../osglue/unix
 CC = gcc
 
 SRC := $(wildcard *.c)
