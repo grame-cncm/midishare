@@ -210,7 +210,23 @@ void InitEvents ()
 	InitAddFieldMth		( AddFieldMethodTbl );
 }
 
+#ifdef __Macintosh__
+#	define NewProcessEv		NewPrivateEv
+#	define FreeProcessEv	FreePrivateEv
+#	define CopyProcessEv	CopyPrivateEv
+#	define CountFProcessEv	Count4Fields
+#	define SetFProcessEv	SetFPrivateEv
+#	define GetFProcessEv	GetFPrivateEv
+#endif
 
+#ifdef __Linux__
+#	define NewProcessEv		NewSmallEv
+#	define FreeProcessEv	FreeSmallEv
+#	define CopyProcessEv	CopySmallEv
+#	define CountFProcessEv	CountFUndefEv
+#	define SetFProcessEv	SetFUndefEv
+#	define GetFProcessEv	GetFUndefEv
+#endif
 
 /*===========================================================================
   Internal functions implementation
@@ -223,14 +239,19 @@ static void InitNewEvMth( NewEvMethodPtr *table)
 
   for (i=typeNote;i<=typeReset;i++)            table[i]= NewSmallEv;
   for (i=typeSysEx;i<=typeStream;i++)          table[i]= NewSexEv;
-  for (i=typePrivate;i<=typeDProcess;i++)      table[i]= NewPrivateEv;
+  for (i=typePrivate;i<typeProcess;i++)        table[i]= NewPrivateEv;
   for (i=typeCtrl14b;i<=typeSeqNum;i++)        table[i]= NewSmallEv;
   for (i=typeTextual;i<=typeCuePoint;i++)      table[i]= NewSexEv;
   for (i=typeChanPrefix;i<=typeKeySign;i++)    table[i]= NewSmallEv;
   for (i=typeReserved;i<=typeLastReserved;i++) table[i]= NewUndefEv;
   table[typeQuarterFrame] = NewSmallEv;
   table[typeSpecific]     = NewSexEv;
-  table[typeDead]         = NewPrivateEv;
+  table[typeRcvAlarm]     = NewSmallEv;
+  table[typeApplAlarm]    = NewSmallEv;
+  
+  table[typeProcess] 	= NewProcessEv;
+  table[typeDProcess] 	= NewProcessEv;
+  table[typeDead]    	= NewProcessEv; 
 }
 
 /*__________________________________________________________________________________*/
@@ -240,15 +261,19 @@ static void InitFreeEvMth( FreeEvMethodPtr *table)
 
   for (i=typeNote;i<=typeReset;i++)            table[i]= FreeSmallEv;
   for (i=typeSysEx;i<=typeStream;i++)          table[i]= FreeSexEv;
-  for (i=typePrivate;i<=typeDProcess; i++)     table[i]= FreePrivateEv;
+  for (i=typePrivate;i<typeProcess; i++)       table[i]= FreePrivateEv;
   for (i=typeCtrl14b;i<=typeSeqNum;i++)        table[i]= FreeSmallEv;
   for (i=typeTextual;i<=typeCuePoint;i++)      table[i]= FreeSexEv;
   for (i=typeChanPrefix;i<=typeKeySign;i++)    table[i]= FreeSmallEv;
   for (i=typeReserved;i<=typeLastReserved;i++) table[i]= FreeUndefEv;
   table[typeQuarterFrame] = FreeSmallEv;
   table[typeSpecific]     = FreeSexEv;
-  table[typeDead]         = FreePrivateEv;
-
+  table[typeRcvAlarm]     = FreeSmallEv;
+  table[typeApplAlarm]    = FreeSmallEv;
+  
+  table[typeProcess] 	= FreeProcessEv;
+  table[typeDProcess] 	= FreeProcessEv;
+  table[typeDead]       = FreeProcessEv;
 }
 
 /*__________________________________________________________________________________*/
@@ -258,15 +283,19 @@ static void InitCopyEvMth( CopyEvMethodPtr *table)
 
   for (i=typeNote;i<=typeReset;i++)            table[i]= CopySmallEv;
   for (i=typeSysEx;i<=typeStream;i++)          table[i]= CopySexEv;
-  for (i=typePrivate;i<=typeDProcess;i++)      table[i]= CopyPrivateEv;
+  for (i=typePrivate;i<typeProcess;i++)        table[i]= CopyPrivateEv;
   for (i=typeCtrl14b;i<=typeSeqNum;i++)        table[i]= CopySmallEv;
   for (i=typeTextual;i<=typeCuePoint;i++)      table[i]= CopySexEv;
   for (i=typeChanPrefix;i<=typeKeySign;i++)    table[i]= CopySmallEv;
   for (i=typeReserved;i<=typeLastReserved;i++) table[i]= CopyUndefEv;
   table[typeQuarterFrame] = CopySmallEv;
   table[typeSpecific]     = CopySexEv;
-  table[typeDead]         = CopyPrivateEv;
-
+  table[typeRcvAlarm]     = CopySmallEv;
+  table[typeApplAlarm]    = CopySmallEv;
+  
+  table[typeProcess] 	= CopyProcessEv;
+  table[typeDProcess] 	= CopyProcessEv;
+  table[typeDead]       = CopyProcessEv;  
 }
 
 /*__________________________________________________________________________________*/
@@ -279,7 +308,7 @@ static void InitCountFieldsMth( CountFieldsMethodPtr *table)
   for(i=typePitchWheel;i<=typeSongPos;i++)    table[i]= Count2Fields;
   for(i=typeClock;i<=typeReset;i++)           table[i]= Count0Field;
   for(i=typeSysEx;i<=typeStream;i++)          table[i]= CountFSexEv;
-  for(i=typePrivate;i<=typeDProcess;i++)      table[i]= Count4Fields;
+  for(i=typePrivate;i<typeProcess;i++)        table[i]= Count4Fields;
   for(i=typeQuarterFrame;i<=typeRegParam;i++) table[i]= Count2Fields;
   for(i=typeTextual;i<=typeCuePoint;i++)      table[i]= CountFSexEv;
   for(i=typeReserved;i<=typeLastReserved;i++) table[i]= CountFUndefEv;
@@ -293,8 +322,12 @@ static void InitCountFieldsMth( CountFieldsMethodPtr *table)
   table[typeTimeSign]    = Count4Fields;
   table[typeKeySign]     = Count2Fields;
   table[typeSpecific]    = CountFSexEv;
-  table[typeDead]        = Count4Fields;
-
+  table[typeRcvAlarm]    = CountFUndefEv;
+  table[typeApplAlarm]   = Count1Field;
+  
+  table[typeProcess] 	= CountFProcessEv;
+  table[typeDProcess] 	= CountFProcessEv;
+  table[typeDead]       = CountFProcessEv;
 }
 
 /*__________________________________________________________________________________*/
@@ -304,7 +337,7 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
 
   for(i=typeNote; i<= typeReset;i++)          table[i]= SetFSmallEv;
   for(i=typeSysEx;i<=typeStream;i++)          table[i]= SetFSexEv;
-  for(i=typePrivate;i<=typeDProcess;i++)      table[i]= SetFPrivateEv;
+  for(i=typePrivate;i<typeProcess;i++)        table[i]= SetFPrivateEv;
   for(i=typeCtrl14b;i<=typeSeqNum;i++)        table[i]= SetF2_16Ev;
   for(i=typeTextual;i<=typeCuePoint;i++)      table[i]= SetFSexEv;
   for(i=typeChanPrefix;i<=typeEndTrack;i++)	  table[i]= SetFSmallEv;
@@ -315,8 +348,12 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
   table[typeTimeSign]     = SetFTimeSign;
   table[typeKeySign]      = SetFKeySign;
   table[typeSpecific]     = SetFSexEv;
-  table[typeDead]         = SetFPrivateEv;
-
+  table[typeRcvAlarm]     = SetFUndefEv;
+  table[typeApplAlarm]    = SetFTempo;
+  
+  table[typeProcess] 	= SetFUndefEv;
+  table[typeDProcess] 	= SetFUndefEv;
+  table[typeDead]       = SetFUndefEv;
 }
 
 /*__________________________________________________________________________________*/
@@ -326,7 +363,7 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
 
   for(i=typeNote;i<=typeReset;i++)            table[i]= GetFSmallEv;
   for(i=typeSysEx;i<=typeStream;i++)          table[i]= GetFSexEv;
-  for(i=typePrivate;i<=typeDProcess;i++)      table[i]= GetFPrivateEv;
+  for(i=typePrivate;i<typeProcess;i++)        table[i]= GetFPrivateEv;
   for(i=typeCtrl14b;i<=typeSeqNum;i++)        table[i]= GetF2_16Ev;
   for(i=typeTextual;i<=typeCuePoint;i++)      table[i]= GetFSexEv;
   for(i=typeChanPrefix;i<=typeEndTrack;i++)   table[i]= GetFSmallEv;
@@ -337,8 +374,12 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
   table[typeTimeSign]     = GetFTimeSign;
   table[typeKeySign]      = GetFKeySign;
   table[typeSpecific]     = GetFSexEv;
-  table[typeDead]         = GetFPrivateEv;
-
+  table[typeRcvAlarm]     = GetFUndefEv;
+  table[typeApplAlarm]    = GetFTempo;
+  
+  table[typeProcess] 	= GetFUndefEv;
+  table[typeDProcess] 	= GetFUndefEv;
+  table[typeDead]       = GetFUndefEv;
 }
 
 /*__________________________________________________________________________________*/
@@ -353,7 +394,12 @@ static void InitAddFieldMth (AddFieldMethodPtr *table)
   for(i=typeChanPrefix;i<=typeKeySign;i++)    table[i]= AddNoField;
   for(i=typeReserved;i<=typeLastReserved;i++) table[i]= AddFUndefEv;
   table[typeSpecific] = AddFSexEv;
+  table[typeRcvAlarm] = AddNoField;
+  table[typeApplAlarm]= AddNoField;
   table[typeDead]     = AddNoField;
+  
+  table[typeProcess] = AddNoField;
+  table[typeDProcess] = AddNoField;
 }
 
 /*__________________________________________________________________________________
