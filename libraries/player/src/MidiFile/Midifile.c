@@ -28,12 +28,14 @@
  * v116 [Nov 27, 96]   DF  32 bits version
  * v117 [Sept 11,97]   SL conversion fonctions ShortVal and LongVal use now usigned values
  * v118 [Nov 23,98]    SL bug correction in write_tempo function
+ * v119 [Sept 23,99]   SL use of MDF_Header_SIZE and MDF_Trk_SIZE to avoid alignement problems for data structures
+
  */
 
 #include <StdLib.h>
 #include <String.h>
 
-#include "MidiFile.h"
+#include "Midifile.h"
 
 #ifdef __Macintosh__
 #include <Errno.h>
@@ -41,18 +43,18 @@
 
 
 /*--------------------------------------------------------------------------*/
-/* constants                                                                                                                            */
-#define MDF_MThd        "MThd"                  /* file header                  */
-#define MDF_MTrk        "MTrk"                  /* track header                 */
-#define SRC_VERSION     118                     /* source code version          */
-#define MDF_VERSION 	100                     /* MIDI File format version     */
-#define offset_ntrks    10                      /* tracks count offset  related */
-                                                /* to the beginning of the file */
-#define offset_trkLen   4                       /* track length offset related  */
-                                                /* to the header header         */
+/* constants																*/
+#define MDF_MThd	"MThd"			/* file header					*/
+#define MDF_MTrk	"MTrk"			/* track header					*/
+#define SRC_VERSION	119				/* source code version 			*/
+#define MDF_VERSION 100				/* MIDI File format version 	*/
+#define offset_ntrks	10			/* tracks count offset	related */
+									/* to the beginning of the file */
+#define offset_trkLen	4			/* track length offset related	*/
+									/* to the header header			*/
 
 /*--------------------------------------------------------------------------*/
-/* functions declaration                                                                                                        */
+/* functions declaration													*/
 static MidiEvPtr mdf_ignoreEv( MIDIFilePtr fd, long len);
 static MidiEvPtr read_undef( MIDIFilePtr fd, short status);
 static MidiEvPtr read_sysex( MIDIFilePtr fd, short status);
@@ -256,29 +258,50 @@ static long  LongVal (long val)  { return val;}
 static short ShortVal(short val) { return val;}
 #endif
 
-#ifdef __Windows__
+#ifdef __Windows__ 
 static unsigned short ShortVal(unsigned short val)
 {
-        unsigned short converted= 0;
+	unsigned short converted= 0;
 
-        converted= (val & 0xff) << 8;
-        converted|= (val & 0xff00) >> 8;
-        return converted;
+	converted= (val & 0xff) << 8;
+	converted|= (val & 0xff00) >> 8;
+	return converted;
 }
 
 static unsigned long  LongVal (long val)
 {
-        unsigned long converted= 0;
+	unsigned long converted= 0;
 
-        converted=  (unsigned long)ShortVal((unsigned short)(val & 0xffff)) << 16;
-        converted|= ShortVal((unsigned short)((val & 0xffff0000)>>16));
-        return converted;
+	converted=  (unsigned long)ShortVal((unsigned short)(val & 0xffff)) << 16;
+	converted|= ShortVal((unsigned short)((val & 0xffff0000)>>16));
+	return converted;
+}
+#endif
+
+#ifdef  __Linux__
+static unsigned short ShortVal(unsigned short val)
+{
+	unsigned short converted= 0;
+
+	converted= (val & 0xff) << 8;
+	converted|= (val & 0xff00) >> 8;
+	return converted;
+}
+
+static unsigned long  LongVal (long val)
+{
+	unsigned long converted= 0;
+
+	converted=  (unsigned long)ShortVal((unsigned short)(val & 0xffff)) << 16;
+	converted|= ShortVal((unsigned short)((val & 0xffff0000)>>16));
+	return converted;
 }
 #endif
 
 
+
 /*--------------------------------------------------------------------------*/
-/* Reading and writing variable length coded datas                          */
+/* Reading and writing variable length coded datas							*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
@@ -330,109 +353,108 @@ static Boolean WriteVarLen( unsigned long val, FILE *fd)
 /*--------------------------------------------------------------------------*/
 static Boolean ReadMdfHeader( MIDIFilePtr fd)
 {
-        MDF_Header h;
-        Boolean ret= true;                                                      /* return code          */
-        
-        
-        if( fread( &h, sizeof( MDF_Header),1, fd->fd)== 1) {    /* read the header  */
-                if( strncmp( h.id, MDF_MThd, 4) || LongVal(h.len)!= 6) {
-                        MidiFile_errno= MidiFileErrFrmt;/* bad file format  */
-                        ret= false;
-                }
-                else {
-                        fd->format= ShortVal(h.format);                 /* file format          */
-                        fd->ntrks= ShortVal(h.ntrks);                   /* tracks count         */
-                        fd->time= ShortVal(h.time);                     /* time representation  */
-                }
-        }
-        else ret= false;
-        return ret;
+	MDF_Header h;
+	Boolean ret= true;							/* return code 		*/
+	
+	if( fread( &h, MDF_Header_SIZE,1, fd->fd)== 1) {	/* read the header  */
+		if( strncmp( h.id, MDF_MThd, 4) || LongVal(h.len)!= 6) {
+			MidiFile_errno= MidiFileErrFrmt;/* bad file format		*/
+			ret= false;
+		}
+		else {
+			fd->format= ShortVal(h.format);			/* file format 			*/
+			fd->ntrks= ShortVal(h.ntrks);				/* tracks count 		*/
+			fd->time= ShortVal(h.time);				/* time representation	*/
+		}
+	}
+	else ret= false;
+	return ret;
 }
 
 /*--------------------------------------------------------------------------*/
 static Boolean Create_mdfHeader( MIDIFilePtr fd,  short format, short time)
 {
-        MDF_Header h;
-        Boolean ret;                                            /* return code        */
-        
-        strcpy( h.id, MDF_MThd);                                /* copy the header    */
-        h.len= LongVal(6);                                      /* datas length       */
-        h.ntrks= 0;                                                             /* tracks count = 0             */
-        h.format= ShortVal(format);                                             /* file format                  */
-        h.time= ShortVal(time);                                                 /* time representation  */
-        ret= (fwrite( &h, sizeof( MDF_Header), 1, fd->fd)== 1);
-        return ret;
+	MDF_Header h;
+	Boolean ret;						/* return code 		*/
+
+	strcpy( h.id, MDF_MThd);				/* copy the header		*/
+	h.len= LongVal(6);								/* datas length			*/
+	h.ntrks= 0;								/* tracks count = 0		*/
+	h.format= ShortVal(format);						/* file format			*/
+	h.time= ShortVal(time);							/* time representation	*/
+	ret= (fwrite( &h, MDF_Header_SIZE, 1, fd->fd)== 1);
+	return ret;
 }
 
 
 
 /*--------------------------------------------------------------------------*/
-/* Reading and writing a track header                                                                           */
+/* Reading and writing a track header										*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 static Boolean ReadTrkHeader( FILE *fd,  MDF_Trk *h)
 {
-        Boolean ret= true;                              /* return code          */
-        
-        if( fread( h, sizeof( MDF_Trk), 1, fd)== 1)     /* reading header       */
-        {
-                if( strncmp( h->id, MDF_MTrk, 4))
-                {
-         h->len= LongVal (h->len);
-                        MidiFile_errno= MidiFileErrFrmt;  /* bad file                     */
-                        ret= false;
-                }
-        }
-        else ret= false;
-        return ret;
+	Boolean ret= true;								/* return code 		*/
+	if( fread( h, MDF_Trk_SIZE, 1, fd)== 1)  	/* reading header	*/
+	{
+		
+		if( strncmp( h->id, MDF_MTrk, 4))
+		{
+		 	h->len= LongVal (h->len);
+			MidiFile_errno= MidiFileErrFrmt;		/* bad file			*/
+			ret= false;
+		}
+	}
+	else ret= false;
+	return ret;
 }
 
 /*--------------------------------------------------------------------------*/
 static Boolean Create_trkHeader( FILE *fd,  long len)
 {
-        Boolean ret= true;                                                      /* return code          */
-        MDF_Trk h;                                                              /* track header         */
+	Boolean ret= true;								/* return code 		*/
+	MDF_Trk h;										/* track header		*/
 
-        strcpy( h.id, MDF_MTrk);                                                /* copy the header      */
-        h.len= LongVal(len);                                                    /* datas length         */
-        ret= (fwrite( &h, sizeof( MDF_Trk), 1, fd)== 1);
-        return ret;
+	strcpy( h.id, MDF_MTrk);						/* copy the header	*/
+	h.len= LongVal(len);										/* datas length		*/
+	ret= (fwrite( &h, MDF_Trk_SIZE, 1, fd)== 1);
+	return ret;
 }
 
 
 /*--------------------------------------------------------------------------*/
-/* Functions to locate within the file                                                                          */
+/* Functions to locate within the file										*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
 Boolean MFAPI MidiFileChooseTrack( MIDIFilePtr fd, short trackIndex)
 {
-        MDF_Trk h;
+	MDF_Trk h;
 
-        MidiFile_errno= MidiFileNoErr;
-        if( trackIndex >= fd->ntrks)
-        {
-                MidiFile_errno= MidiFileErrNoTrack;
-                return false;
-        }
-        if( fseek( fd->fd, sizeof( MDF_Header), SEEK_SET))      /* pos = piste 0        */
-                return false;
-        while( trackIndex--)
-                if( !ReadTrkHeader( fd->fd, &h) || fseek( fd->fd, LongVal (h.len), SEEK_CUR))
-                        return false;
-        return true;
+	MidiFile_errno= MidiFileNoErr;
+	if( trackIndex >= fd->ntrks)
+	{
+		MidiFile_errno= MidiFileErrNoTrack;
+		return false;
+	}
+	if( fseek( fd->fd, MDF_Header_SIZE, SEEK_SET))	/* pos = piste 0	*/
+		return false;
+	while( trackIndex--)
+		if( !ReadTrkHeader( fd->fd, &h) || fseek( fd->fd, LongVal (h.len), SEEK_CUR))
+			return false;
+	return true;
 }
 
 
 /*--------------------------------------------------------------------------*/
-/*                                                                                                                                                      */
-/*                                             Functions to write events                                                */
-/*                                                                                                                                                      */
+/*																			*/
+/* 					       Functions to write events						*/
+/*																			*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-/*      Writing meta-events                                                                                                             */
+/* 	Writing meta-events														*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/

@@ -1,29 +1,60 @@
-/*===========================================================================
-* The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-* 1996-1999, and is distributed as Open Source software under the Artistic License;
-* see the file "Artistic" that is included in the distribution for details.
-*
-* Grame : Computer Music Research Laboratory
-* Web : http://www.grame.fr/Research
-* E-mail : MidiShare@rd.grame.fr
-* ===========================================================================
-*/
+/* ===========================================================================
+   This file is Copyright (c) Grame, Computer Music Research Laboratory 
+   1996-1999, and is distributed as Open Source software under the Artistic License;
+   see the file "Artistic" that is included in the distribution for details.
 
-
-/*
+   Grame : Computer Music Research Laboratory
+   Web : http://www.grame.fr/Research
+   E-mail : MidiShare@rd.grame.fr
+   ===========================================================================
  *	MIDIFILE.H
  *	MIDI Files	version 1.00
- *	constants and data structures
- *
- *	c GRAME 91-95 Dominique Fober
- *  Please, report comments and bugs to msh@rd.grame.fr
  */
  
-#ifndef __MIDIFILE__
-#define __MIDIFILE__
+#ifndef __MIDIFILE_H__
+#define __MIDIFILE_H__
 
 #include <stdio.h>
-#include "GenericMidiShare.h"
+
+
+#ifdef __Linux__
+#define FAR
+#define NEAR
+#define MFAPI
+#include "MidiShare.h"
+#define nil 0
+#define  errno  /* a revoir */
+#endif
+
+#ifdef __Macintosh__
+#include <GenericMidiShare.h>
+#define FAR
+#define NEAR
+#define MFAPI
+#endif
+
+#ifdef __Windows__
+#include <mshare.h>
+#define nil 0
+#ifdef WIN32
+
+#	ifdef __BuildLib__
+
+#		define MFAPI	__declspec(dllexport)
+
+#	else
+
+#		define MFAPI	__declspec(dllimport)
+
+#	endif
+
+#else
+
+#   define MFAPI WINAPI _export
+
+#endif
+
+#endif
 
 
 /*--------------------------------------------------------------------------*/
@@ -42,12 +73,13 @@ enum { midifile0= 0, midifile1, midifile2};
 
 /*--------------------------------------------------------------------------*/
 /* opening modes for existing files											*/
-#define MidiFileRead	0					/* reading the file				*/
-#define MidiFileAppend	1					/* appening to the file			*/
+#define MidiFileRead	0			/* reading the file				*/
+#define MidiFileAppend	1			/* appening to the file			*/
 
 
 /*--------------------------------------------------------------------------*/
 /* time definition															*/
+
 #define TicksPerQuarterNote	0
 #define Smpte24				24
 #define Smpte25				25
@@ -88,15 +120,6 @@ enum { midifile0= 0, midifile1, midifile2};
 /* datas structures															*/
 /*--------------------------------------------------------------------------*/
 
-#ifdef __Macintosh__
-
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=mac68k
-#endif
-
-#endif
-
-
 typedef struct MDF_Header{			/* the file header structure	*/
 	char 	id[4];					/* header id					*/
 	long	len;					/* datas length ( = 6 )			*/
@@ -111,14 +134,14 @@ typedef struct MDF_Trk{				/* track header structure		*/
 	unsigned long	len;			/* datas length 				*/
 }MDF_Trk;
 
-typedef struct midiFILE{			/* MIDI file descriptor			*/
+typedef struct midiFILE{			/* MIDI file descriptor		*/
 	short 	format;					/* file format					*/
-	unsigned short ntrks;			/* number of tracks				*/
+	unsigned short ntrks;			/* number of tracks					*/
 	short	time;					/* time representation			*/
-									/* for MIDI time: tick count per quarter note           */
-									/* for smpte time: b. 15  = 1                           */
-									/*                 b.8-14 = frame count per sec         */
-									/*			       b.0-7  = tick count per frame        */
+					/* for MIDI time: tick count per quarter note           */
+					/* for smpte time: b. 15  = 1                           */
+					/*                 b.8-14 = frame count per sec         */
+					/*			       b.0-7  = tick count per frame        */
 	FILE 	*fd;					/* standard file descriptor             */	
 	fpos_t  trkHeadOffset;			/* track header offset                  */
 									/* nil if the track is closed           */
@@ -136,14 +159,6 @@ typedef struct MDF_versions{
 	short 	MidiFile;				/* MIDI file format version				*/
 }MDF_versions;
 
-
-#ifdef __Macintosh__
-
-#if PRAGMA_ALIGN_SUPPORTED
-#pragma options align=reset
-#endif
-
-#endif
 
 /*--------------------------------------------------------------------------*/
 /* error codes								 								*/
@@ -163,21 +178,25 @@ typedef struct MDF_versions{
 /* some macros															*/
 
 #ifdef __cplusplus
-	inline Boolean isTrackOpen( midiFILE *fd) { return (fd)->opened; }
+inline Boolean isTrackOpen( midiFILE *fd) { return (fd)->opened; }
 
-	inline short smpte(MDF_Header *f)					{ return ((f)->time & 0x8000); }
-	inline short frame_par_sec(MDF_Header *f)			{ return (((f)->time & 0x8000) >> 8); }
-	inline short ticks_par_frame(MDF_Header *f)			{ return ((f)->time & 0xFF); }
-	inline short ticks_par_quarterNote(MDF_Header *f)	{ return (f)->time; }
+inline short smpte(MDF_Header *f)					{ return ((f)->time & 0x8000); }
+inline short frame_par_sec(MDF_Header *f)			{ return (((f)->time & 0x8000) >> 8); }
+inline short ticks_par_frame(MDF_Header *f)			{ return ((f)->time & 0xFF); }
+inline short ticks_par_quarterNote(MDF_Header *f)	{ return (f)->time; }
 #else
-	#define isTrackOpen(fd)	((fd)->opened)
+#define isTrackOpen(fd)	((fd)->opened)
 
-	#define smpte(f)					((f)->time & 0x8000)
-	#define frame_par_sec(f)			(((f)->time & 0x8000) >> 8)
-	#define ticks_par_frame(f)			((f)->time & 0xFF)
-	#define ticks_par_quarterNote(f)	(f)->time
+#define smpte(f)					((f)->time & 0x8000)
+#define frame_par_sec(f)			(((f)->time & 0x8000) >> 8)
+#define ticks_par_frame(f)			((f)->time & 0xFF)
+#define ticks_par_quarterNote(f)	(f)->time
+
 #endif
 
+
+#define MDF_Header_SIZE 14
+#define MDF_Trk_SIZE 	8
 
 
 /*--------------------------------------------------------------------------*/
@@ -187,7 +206,15 @@ typedef struct MDF_versions{
 extern "C" {
 #endif
 
+#ifdef WIN32
+
+MFAPI const MDF_versions FAR * MidiFileGetVersion(void);
+#else
+
 const MDF_versions FAR * MFAPI MidiFileGetVersion(void);
+
+#endif
+
 
 /*-------------------------------- opening and closing the MIDI files ------*/
 MIDIFilePtr MFAPI MidiFileOpen  (const char FAR *filename, short mode);
@@ -210,11 +237,10 @@ Boolean    MFAPI MidiFileWriteTrack( MIDIFilePtr fd, MidiSeqPtr seq);
 
 /*-------------------------------- error codes access ----------------------*/
 int        MFAPI MidiFileGetMFErrno (void);
-//int        MFAPI MidiFileGetErrno   (void);
+int        MFAPI MidiFileGetErrno   (void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-
