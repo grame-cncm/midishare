@@ -58,9 +58,10 @@ typedef struct {
 //________________________________________________________________________
 void            ReadArgs    (msCmdLinePrefs * prefs, int argc, char *argv[]);
 msKernelPrefs * ReadPrefs   (const char * conffile, msCmdLinePrefs *cmdLine);
-char *          DrvName     (msKernelPrefs * prefs, short index);
-void 			CheckPrefs  (msKernelPrefs * prefs);
-void 			LogPrefs    (msKernelPrefs * prefs);
+short			CountDrivers();
+char *          GetDriverName  (short index);
+void 			CheckPrefs  ();
+void 			LogPrefs    ();
 
 #endif
 

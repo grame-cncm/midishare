@@ -126,11 +126,10 @@ msKernelPrefs * ReadPrefs (const char * conffile, msCmdLinePrefs *cmdLine)
 	gPrefs.timeMode = (cmdLine->timeMode < 0) ? GetTimeMode(confName) : cmdLine->timeMode;
 	gPrefs.timeRes  = (cmdLine->timeRes < 0) ? GetTimeRes(confName) : cmdLine->timeRes;
 	gPrefs.drvCount = 0;
+	gPrefs.logfile[0] = 0;
 	if (cmdLine->logfile && (cmdLine->logfile != kNoLog))
 		 strncpy (gPrefs.logfile, cmdLine->logfile, MaxLogName);
-	else if (cmdLine->logfile == kNoLog)
-		gPrefs.logfile[0] = 0;
-	else
+	else if (cmdLine->logfile != kNoLog)
 		GetLog (confName, gPrefs.logfile, MaxLogName);
 	GetAudioDev (confName, gPrefs.audioDev, sizeof(gPrefs.audioDev));
 	if (GetDrivers (confName, buffer, DriverMaxEntry)) {
@@ -140,8 +139,10 @@ msKernelPrefs * ReadPrefs (const char * conffile, msCmdLinePrefs *cmdLine)
 }
 
 //________________________________________________________________________
-void CheckPrefs  (msKernelPrefs * prefs)
+void CheckPrefs  ()
 {
+	msKernelPrefs * prefs = &gPrefs;
+
 	if (prefs->memory < kMinSpace) {
 		prefs->memory = kMinSpace;
 		LogWrite ("Warning: desired memory space adjusted to minimum memory space.");
@@ -169,10 +170,10 @@ void CheckPrefs  (msKernelPrefs * prefs)
 }
 
 //________________________________________________________________________
-void LogPrefs (msKernelPrefs * prefs)
+void LogPrefs ()
 {
 	char *ptr, *dev="";
-	short i;
+	short i; msKernelPrefs * prefs = &gPrefs;
 	
 	LogWrite ("Kernel memory size : %ld", prefs->memory);
 	switch (prefs->timeMode) {
@@ -189,7 +190,7 @@ void LogPrefs (msKernelPrefs * prefs)
 	LogWrite ("Drivers count      : %d", (int)prefs->drvCount);
 	if (prefs->drvCount) {
 		for (i=0; i<prefs->drvCount; i++) {
-			LogWrite ("   %s", DrvName(prefs, i));		
+			LogWrite ("   %s", GetDriverName(i));		
 		}
 	}
 }
@@ -263,8 +264,15 @@ err:
 }
 
 //________________________________________________________________________
-char * DrvName (msKernelPrefs * prefs, short index)
+short CountDrivers(msKernelPrefs * prefs)
 {
+	return gPrefs.drvCount;
+}
+
+//________________________________________________________________________
+char * GetDriverName (short index)
+{
+	msKernelPrefs * prefs = &gPrefs;
 	if (index < 0) return 0;
 	if (index >= prefs->drvCount) return 0;
 	return prefs->drivers[index];
@@ -353,7 +361,7 @@ static void GetLog (char *file, char *buffer, int len)
 {
 	unsigned long n;
 	n = get_private_profile_string (logSectionName, logFileStr, defaultLog, buffer, len, file);	
-	if (!n) strcpy (buffer, defaultLog);
+//	if (!n) strcpy (buffer, defaultLog);
 }
 
 //________________________________________________________________________

@@ -23,7 +23,6 @@
 
 #include "msFunctions.h"
 #include "msKernel.h"
-//#include "msKernelPrefs.h"
 #include "msInit.h"
 #include "msServerInit.h"
 #include "msServerContext.h"
@@ -62,7 +61,7 @@ static msKernelPrefs * init (int argc, char *argv[])
 	prefs = ReadPrefs (args.conffile ? args.conffile : 0, &args);
 	if (prefs->logfile[0]) OpenLog (prefs->logfile);
 	LogWrite ("MidiShare is starting...");
-	CheckPrefs (prefs);
+	CheckPrefs ();
 	return prefs;
 }
 
@@ -71,7 +70,7 @@ int main (int argc, char *argv[])
 {
 	contextInit (&gContext);
 	gContext.prefs = init (argc, argv);
-	LogPrefs (gContext.prefs);
+	LogPrefs ();
 	InitSignal (); 
 	gContext.sharedmem = InitShMem (sizeof(TMSGlobalPublic));
 	if (gContext.sharedmem) {
