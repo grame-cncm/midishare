@@ -41,29 +41,6 @@ static void add(GtkWidget *box, GtkWidget *obj)
 	gtk_box_pack_start_defaults (GTK_BOX (box), obj);
 }
 
-static void add_control(GtkWidget* mbox, gchar* name, GtkObject* adjustment)
-{
-	GtkWidget	*hbox, *label, *scale, *spin;
-	
-	hbox = gtk_hbox_new (FALSE, 10);
-	label = gtk_label_new(name);
-	gtk_label_set_justify (GTK_LABEL (label),GTK_JUSTIFY_LEFT);
-  	gtk_widget_set_usize (GTK_WIDGET (label), 40, 20);
-	
-  	scale = gtk_hscale_new (GTK_ADJUSTMENT (adjustment));
-	gtk_scale_set_draw_value(GTK_SCALE(scale), FALSE);
-  	gtk_widget_set_usize (GTK_WIDGET (scale), 150, 20);
-	spin = gtk_spin_button_new(GTK_ADJUSTMENT (adjustment), 0.5, 0);
- 	gtk_widget_set_usize (GTK_WIDGET (spin), 60, 20);
-
-	gtk_box_pack_start(GTK_BOX (hbox), label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX (hbox), scale, TRUE, TRUE,0);
-	gtk_box_pack_start(GTK_BOX (hbox), spin, FALSE, FALSE,0);
-	
-	add(mbox, hbox);
-}
-
-
 /****************************************************************************
  					redrawButtons															
 *****************************************************************************/
@@ -80,7 +57,6 @@ static void redrawButtons()
 	gtk_widget_set_sensitive(stop, !st);
 	gtk_widget_set_sensitive(pause1, !st);
 }
-
 
 
 /****************************************************************************
@@ -115,16 +91,15 @@ void pausePlayer( GtkWidget *widget,gpointer   data )
 
 void synchroPlayer( GtkWidget *button,char*  data )
 {
-	if (GTK_TOGGLE_BUTTON(button) == gInternalSync)
+	if (GTK_BUTTON(button) == GTK_BUTTON(gInternalSync))
 		SetSynchroInPlayer(gRefNum, kInternalSync);
 	
-	if (GTK_TOGGLE_BUTTON(button) == gClockSync)
+	if (GTK_BUTTON(button) == GTK_BUTTON(gClockSync))
 		SetSynchroInPlayer(gRefNum, kClockSync);
 
-	if (GTK_TOGGLE_BUTTON(button) == gSMPTESync)
+	if (GTK_BUTTON(button) == GTK_BUTTON(gSMPTESync))
 		SetSynchroInPlayer(gRefNum, kSMPTESync);
 }
-
 
 
 /****************************************************************************
@@ -267,20 +242,20 @@ void synchroPlayer( GtkWidget *button,char*  data )
          gtk_container_add (GTK_CONTAINER (frame), bbox);
 
          gBar = gtk_entry_new();
-	 gtk_entry_set_max_length(gBar,4);
-	 gtk_entry_set_text(gBar,"1");
+	 gtk_entry_set_max_length(GTK_ENTRY(gBar),4);
+	 gtk_entry_set_text(GTK_ENTRY(gBar),"1");
 	 gtk_widget_set_usize(gBar, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gBar,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gBar,FALSE,0,0);
  	 gBeat = gtk_entry_new();
-	 gtk_entry_set_text(gBeat,"1");
-	 gtk_entry_set_max_length(gBeat,4);
+	 gtk_entry_set_text(GTK_ENTRY(gBeat),"1");
+	 gtk_entry_set_max_length(GTK_ENTRY(gBeat),4);
          gtk_widget_set_usize(gBeat, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gBeat,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gBeat,FALSE,0,0);
 	 gUnit = gtk_entry_new();
-	 gtk_entry_set_max_length(gUnit,4);
-	 gtk_entry_set_text(gUnit,"1");
+	 gtk_entry_set_max_length(GTK_ENTRY(gUnit),4);
+	 gtk_entry_set_text(GTK_ENTRY(gUnit),"1");
 	 gtk_widget_set_usize(gUnit, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gUnit,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gUnit,FALSE,0,0);
 
          return(frame);
 }
@@ -306,20 +281,20 @@ GtkWidget *createDateMSBox( gint  horizontal,
          gtk_container_add (GTK_CONTAINER (frame), bbox);
 
          gMin = gtk_entry_new();
-	 gtk_entry_set_max_length(gMin,4);
-	 gtk_entry_set_text(gMin,"0");
+	 gtk_entry_set_max_length(GTK_ENTRY(gMin),4);
+	 gtk_entry_set_text(GTK_ENTRY(gMin),"0");
 	 gtk_widget_set_usize(gMin, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gMin,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gMin,FALSE,0,0);
  	 gSec = gtk_entry_new();
-	 gtk_entry_set_text(gSec,"0");
-	 gtk_entry_set_max_length(gSec,4);
+	 gtk_entry_set_text(GTK_ENTRY(gSec),"0");
+	 gtk_entry_set_max_length(GTK_ENTRY(gSec),4);
          gtk_widget_set_usize(gSec, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gSec,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gSec,FALSE,0,0);
 	 gMilli = gtk_entry_new();
-	 gtk_entry_set_max_length(gMilli,4);
-	 gtk_entry_set_text(gMilli,"0");
+	 gtk_entry_set_max_length(GTK_ENTRY(gMilli),4);
+	 gtk_entry_set_text(GTK_ENTRY(gMilli),"0");
 	 gtk_widget_set_usize(gMilli, 30 ,16);
-         gtk_box_pack_start (GTK_CONTAINER (bbox), gMilli,FALSE,0,0);
+         gtk_box_pack_start (GTK_BOX (bbox), gMilli,FALSE,0,0);
 
          return(frame);
 }
@@ -329,7 +304,6 @@ GtkWidget *createDateMSBox( gint  horizontal,
 /****************************************************************************
 					Periodical fucntion
 *****************************************************************************/
-
 
 gint displayState( gpointer data )
 {
@@ -346,18 +320,20 @@ gint displayState( gpointer data )
         hh = t%60; 
     
 	sprintf(buffer,"%d",state.bar);
-	gtk_entry_set_text(gBar,buffer );
+	gtk_entry_set_text(GTK_ENTRY(gBar),buffer );
 	sprintf(buffer,"%d",state.beat);
-	gtk_entry_set_text(gBeat, buffer);
+	gtk_entry_set_text(GTK_ENTRY(gBeat), buffer);
 	sprintf(buffer,"%d",state.unit);
-	gtk_entry_set_text(gUnit, buffer);
+	gtk_entry_set_text(GTK_ENTRY(gUnit), buffer);
 
-	sprintf(buffer, "%d", mn);
-	gtk_entry_set_text(gMin, buffer);
-	sprintf(buffer, "%d", ss);
-	gtk_entry_set_text(gSec, buffer);
-	sprintf(buffer, "%d", nnn);
-	gtk_entry_set_text(gMilli, buffer);
+	sprintf(buffer, "%ld", mn);
+	gtk_entry_set_text(GTK_ENTRY(gMin), buffer);
+	sprintf(buffer, "%ld", ss);
+	gtk_entry_set_text(GTK_ENTRY(gSec), buffer);
+	sprintf(buffer, "%ld", nnn);
+	gtk_entry_set_text(GTK_ENTRY(gMilli), buffer);
+
+	redrawButtons();
 
         return TRUE;
 }
@@ -371,8 +347,12 @@ int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *vbox;
  	MidiFileInfos info;
-	PlayerState state;
 
+	if (argc!=2) {
+		printf("Usage : msplayer <midifile> \n");
+		return 0;
+	}
+	
 	// Initialisations
 	gtk_init (&argc, &argv);
 
@@ -389,24 +369,23 @@ int main(int argc, char *argv[] )
 	gtk_window_set_title(GTK_WINDOW(window), "msPlayer");
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
-	vbox = gtk_vbox_new (FALSE, 10);
 
-	gtk_box_pack_start (GTK_BOX (vbox),
-                  createDateBBUBox (TRUE, "Date : Bar Beat Unit", 1, 15, 20, GTK_BUTTONBOX_START),
-                             TRUE, TRUE, 0);
-
-	gtk_box_pack_start (GTK_BOX (vbox),
-                  createDateMSBox (TRUE, "Date : Min Sec Ms", 1, 15, 20, GTK_BUTTONBOX_START),
-                             TRUE, TRUE, 0);
-
-
-	gtk_box_pack_start (GTK_BOX (vbox),
-                  createSynchroBox (TRUE, "Synchro", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
-                             TRUE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox),
-                  createTransportBox (TRUE, "Transport", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
-                             TRUE, TRUE, 0);
-
+	vbox = gtk_table_new(3,5, TRUE);
+	gtk_table_attach(GTK_TABLE(vbox),createDateBBUBox (TRUE, "Date : Bar Beat Unit", 1, 15, 20, GTK_BUTTONBOX_START),
+                              0,3,0,1,GTK_EXPAND,GTK_EXPAND, 5,5);
+	
+	
+	gtk_table_attach(GTK_TABLE(vbox),createDateMSBox (TRUE, "Date : Min Sec Ms", 1, 15, 20, GTK_BUTTONBOX_START),
+                              0,3,1,2,GTK_EXPAND,GTK_EXPAND, 5,5);
+	
+	
+	gtk_table_attach(GTK_TABLE(vbox), createSynchroBox (FALSE, "Synchro", 5, 40, 20, GTK_BUTTONBOX_START),
+                              3,5,0,2,GTK_EXPAND,GTK_EXPAND, 5,5);
+	
+	
+	gtk_table_attach(GTK_TABLE(vbox),createTransportBox (TRUE, "Transport", 5, 40, 20, GTK_BUTTONBOX_SPREAD),
+                              0,5,2,3,GTK_EXPAND,GTK_EXPAND, 5,5);
+	
 	
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
