@@ -125,13 +125,29 @@ void TMidiAppl::Close()
 	#else
 		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr)
 	#endif
+	
+	MidiEvPtr ev;
+	MidiSTPtr ext;
+	ev= MidiNewEv(typeProcess);
+	
+ 	if( ev) {
+ 		Date(ev)= date;
+		RefNum(ev)= fRefnum;
+		ext= LinkST(ev);
+		ext->ptr1= (Ptr)routine;
+		ext->ptr2= (Ptr)a1;
+		ext->ptr3= (Ptr)a2;
+		ext->ptr4= (Ptr)a3;
+		*adr = ev;
+		MidiSend(fRefnum,ev);
+	}else
+		*adr = 0;
 
 #endif
 
 
 #ifdef __MSWindows__
 	void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long a3,MidiEvPtr* adr)
-#endif
 
 {
 	MidiEvPtr ev;
@@ -151,6 +167,9 @@ void TMidiAppl::Close()
 	}else
 		*adr = 0;
 }
+
+#endif
+
 
 #ifdef __Linux__
 
