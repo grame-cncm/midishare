@@ -31,6 +31,48 @@
 #include "msLog.h"
 
 //*____________________________________________________________________________*/
+static void RejectClient  (TApplPtr appl)
+{
+	msApplContextPtr  ac = (msApplContextPtr)appl->context;
+	CommunicationChan cc = ac->chan;
+
+	if (ac->filterh) msSharedMemClose(ac->filterh);
+	MidiClose (pub(appl, refNum));
+	CCDec (cc);
+	FreeApplContext(ac);
+}
+
+//*____________________________________________________________________________*/
+void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
+{
+	msApplContextPtr  ac = (msApplContextPtr)appl->context;
+	CommunicationChan cc = ac->chan;
+	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
+	Ev2StreamPtr stream = &rt->stream;
+    long n; short len;
+
+	msStreamStart (stream);
+	RefNum(alarm) = (uchar)pub(appl, refNum);
+    if (!msStreamPutEvent (stream, alarm)) {
+        LogWriteErr ("CallNetSendAlarm failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
+    }
+    else {
+        len = msStreamSize(stream);
+        n = CCRTWrite (cc, rt->wbuff, len);
+        if (n != len) goto failed;
+    }
+    MidiFreeEv (alarm);
+	return;
+
+failed:
+    /* in case of failure, the client should be rejected */
+	/* and the client application closed */
+    MidiFreeEv (alarm);
+	LogWriteErr ("CCRTWrite failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
+	RejectClient (appl);
+}
+
+//*____________________________________________________________________________*/
 void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 {
 	msApplContextPtr  ac = (msApplContextPtr)appl->context;
@@ -69,10 +111,7 @@ failed:
     /* in case of failure, the client should be rejected */
 	/* and the client application closed */
 	LogWriteErr ("CCRTWrite failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
-	if (ac->filterh) msSharedMemClose(ac->filterh);
-	MidiClose (pub(appl, refNum));
-	CCDec (cc);
-	FreeApplContext(ac);
+	RejectClient (appl);
 }
 
 /*____________________________________________________________________________*/
