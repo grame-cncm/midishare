@@ -14,7 +14,7 @@ Installation guide
 The Player source package contains:
 
 - src : the source code for all platforms.
-- linux  : linux specific files, interface for java
+- linux : linux specific files, interface for java
 
 
 ==========================================
@@ -38,13 +38,14 @@ make install
 Compilation of Player library for JAVA
 ==========================================
 
-You should have compiled MidiShare kernel and library before compiled the Player library.
+You should have compiled MidiShare kernel and library before compiling the Player library.
 Look at http://www.grame.fr/MidiShare/SCPP/SCPP.html for more informations.
 
-You must have the JAVA JDK installed on your machine. Look at http://java.sun.com/ 
+You must have the Java JDK installed on your machine. Look at http://java.sun.com/ 
 for more informations.
 
-Edit the makefile and change the INC2 and INC3 pathnames to match your environnement
+To compile the JNI interface, some Java JNI specific include files are needed. Edit the makefile 
+and change the INC2 and INC3 pathnames to match your environnement.
 
 In the linux folder:
 
@@ -58,15 +59,15 @@ Installation
 ===============
 
 To install the Player library for JAVA, you must copy the libJPlayer.so in your jdkxx/lib
-folder. It's strongly recommended to native threads vm in conjunction with JNI.
+folder. It's strongly recommended to use native threads vm in conjunction with JNI.
 
 =================
 Known problems
-==================
+=================
 
 - They are still synchronization problems in MidiShare and in the Player library that may crash applications
 which use the Player library.
 
 - The Player library has been successfully used with the SUN JRE 1.2.2 version for Linux used in native thread
-mode. Use or other JVM implementation may work...or not.
+mode. Use of other JVM implementation may work...or not.
 
