@@ -22,6 +22,8 @@
    
  	 [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
 	 [22-06-01] SL - Remove signal handling code, now done in the kernel module
+	 [03-07-01] SL - Add field access functions
+	 
 
 */
 
@@ -122,7 +124,7 @@ void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 
 MidiEvPtr MidiGetCommand(short ref );
 
-void* event_handler(void* arg) 
+void* CmdHandler(void* arg) 
 {
 	TAppl* appl = (TAppl*) arg;
 	int refNum = appl->refNum;
@@ -331,7 +333,7 @@ long* MidiGetTimeAddr ()
 			makeAppl(gClients, appl, args.refnum, name); 
 			
 			param.sched_priority = 99; /* 0 to 99  */
-			pthread_create(&appl->rcvThread,NULL,event_handler,(void*)appl);
+			pthread_create(&appl->rcvThread,NULL,CmdHandler,(void*)appl);
 						
 			setuid (name_to_uid ("root")); 
    			err = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
@@ -1166,3 +1168,36 @@ void MidiSetSlotName (SlotRefNum slot, MidiName name)
 	args.name = name;
 	CALL(kMidiSetSlotName,&args);
 }
+
+
+/*--------------------------------------------------------------------*/
+/* Field access functions */
+/*--------------------------------------------------------------------*/
+
+MidiEvPtr  MidiGetLink (MidiEvPtr e)                  { return Link(e); }
+void       MidiSetLink (MidiEvPtr e, MidiEvPtr next)  { Link(e) = next; }
+
+long  MidiGetDate   (MidiEvPtr e)                { return Date(e); }
+void  MidiSetDate   (MidiEvPtr e, ulong date)    { Date(e) = date; }
+short MidiGetRefNum (MidiEvPtr e)                { return RefNum(e); }
+void  MidiSetRefNum (MidiEvPtr e, short ref)     { RefNum(e) = (Byte)ref; }
+short MidiGetType   (MidiEvPtr e)                { return EvType(e); }
+void  MidiSetType   (MidiEvPtr e, short type)    { EvType(e) = (Byte)type; }
+short MidiGetChan   (MidiEvPtr e)                { return Chan(e); }
+void  MidiSetChan   (MidiEvPtr e, short chan)    { Chan(e) = (Byte)chan; }
+short MidiGetPort   (MidiEvPtr e)                { return Port(e); }
+void  MidiSetPort   (MidiEvPtr e, short port)    { Port(e) = (Byte)port; }
+
+long  MidiGetData0 (MidiEvPtr e)            { return Data(e)[0]; }
+long  MidiGetData1 (MidiEvPtr e)            { return Data(e)[1]; }
+long  MidiGetData2 (MidiEvPtr e)            { return Data(e)[2]; }
+long  MidiGetData3 (MidiEvPtr e)            { return Data(e)[3]; }
+void  MidiSetData0 (MidiEvPtr e, long v)    { Data(e)[0] = (Byte)v; }
+void  MidiSetData1 (MidiEvPtr e, long v)    { Data(e)[1] = (Byte)v; }
+void  MidiSetData2 (MidiEvPtr e, long v)    { Data(e)[2] = (Byte)v; }
+void  MidiSetData3 (MidiEvPtr e, long v)    { Data(e)[3] = (Byte)v; }
+
+MidiEvPtr  MidiGetFirstEv (MidiSeqPtr seq)               { return seq->first; }
+void       MidiSetFirstEv (MidiSeqPtr seq, MidiEvPtr e)  { seq->first = e; }
+MidiEvPtr  MidiGetLastEv  (MidiSeqPtr seq)               { return seq->last; }
+void       MidiSetLastEv  (MidiSeqPtr seq, MidiEvPtr e)  { seq->last = e; }
