@@ -98,11 +98,11 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 	clients->nbAppls--;
 	if (clients->nbAppls == 1) {
 		FreeAppl(clients->appls[MidiShareRef]);
+		FreeAppl(clients->appls[MidiShareDriverRef]);
 		clients->appls[MidiShareRef] = 0;
 		clients->appls[MidiShareDriverRef] = 0;
 		clients->nbAppls = 0;
 		MidiShareSleep(g);
-		FreeAppl(clients->appls[MidiShareDriverRef]);
 		clients->nbDrivers--;
 	} else {
 		CallAlarm(ref, MIDICloseAppl, clients);
