@@ -65,8 +65,8 @@ void MidiShareWakeup (TMSGlobalPtr g)
 
 void MidiShareSleep (TMSGlobalPtr g) 
 {
-	CloseDrivers(g);
     CloseTimeInterrupts (g);
+	CloseDrivers(g);
     CloseMemory (Memory(g));
     SpecialSleep (g);
 }
