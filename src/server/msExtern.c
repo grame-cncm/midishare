@@ -37,7 +37,7 @@
 #include "msRTListenProc.h"
 #include "msKernelPrefs.h"
 
-#if defined(__MacOSX__)
+#if defined(__MacOSX__) || defined(linux)
 #	include "dlfcn.h"
 typedef Boolean (* Start) ();
 typedef void (* Stop) ();
@@ -66,7 +66,7 @@ static void * LoadDriver (char *drvName)
 	printf ("load driver %s\n", drvName);
 	return LoadLibrary (drvName);
 
-#elif defined(__MacOSX__)
+#elif defined(__MacOSX__) || defined(linux)
 	void * handle = dlopen(drvName,RTLD_LAZY);
 	Start fun; Boolean res;
 	
@@ -88,7 +88,7 @@ static void UnloadDriver (void * drvref)
 	printf ("unload driver %lx\n", (long)drvref);
 	FreeLibrary ((HMODULE)drvref);
 
-#elif defined(__MacOSX__)
+#elif defined(__MacOSX__) || defined(linux)
 	Stop fun = (Stop) dlsym(drvref, "_Stop");
 	printf ("unload driver %lx\n", (long)drvref);
 	if (fun) (*fun)(); 
