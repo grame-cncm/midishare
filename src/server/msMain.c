@@ -20,6 +20,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "msFunctions.h"
 #include "msKernel.h"
@@ -38,6 +39,15 @@ static void MainClientServerProc (CommunicationChan cc)
 {
     if (!gMem->running) MidiShareWakeup (gMem);
 	NewClientChannel (cc);
+}
+
+/*____________________________________________________________________________*/
+static cdeclAPI(void) sigActions (int sig)
+{
+	LogWrite ("signal %d received", sig);
+	LogWrite ("server exit...");
+	msServerClose ();
+	exit (1);
 }
 
 /*____________________________________________________________________________*/
@@ -71,7 +81,8 @@ int main (int argc, char *argv[])
 	contextInit (&gContext);
 	gContext.prefs = init (argc, argv);
 	LogPrefs ();
-	InitSignal (); 
+	msThreadSigInit (sigActions);
+	CleanState ();
 	gContext.sharedmem = InitShMem (sizeof(TMSGlobalPublic));
 	if (gContext.sharedmem) {
 		/* never call any MidiShare function before MidiShareSpecialInit */
