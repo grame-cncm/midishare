@@ -18,16 +18,18 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - mail box functions finalization
+
 */
 
 #ifndef __msMail__
 #define __msMail__
 
 #include "msTypes.h"
-#include "msKernel.h"
 
 /* MidiShare functions interface */
-MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem, TMSGlobalPtr g);
-MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val, TMSGlobalPtr g);
+MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem);
+MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val);
 
 #endif

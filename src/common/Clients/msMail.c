@@ -18,6 +18,9 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - mail box functions finalization
+
 */
 
 #include "msMail.h"
@@ -26,7 +29,7 @@
 /*----------------------------------------------------------------------------*/
 /* 				- MidiReadSync - read and clear an address   				  */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem, TMSGlobalPtr g)
+MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem)
 {
 	FarPtr(void) content;
 	
@@ -39,7 +42,7 @@ MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem, TMSGlobalPtr
 /*----------------------------------------------------------------------------*/
 /* 				- MidiWriteSync - test and write an address				      */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val, TMSGlobalPtr g)
+MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val)
 {
 	FarPtr(void) content;
 	
