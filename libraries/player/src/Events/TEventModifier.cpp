@@ -455,7 +455,6 @@ void TEventModifier::Modify(MidiEvPtr ev)
 			// Insertion
 			
 			if (curEv = fIterator1->SetPosTicks(Date(transEv))) {
-				UTools::SendVal(curEv->GetType());
 				// si insertion a la meme date qu'un ev existant, insere deriere
 				if (Date(transEv) == fIterator1->CurDate()) {
 					fScore->InsertAfterEvent(curEv, TEventFactory::GenericCreateEvent(transEv));
