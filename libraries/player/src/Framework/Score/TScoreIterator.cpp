@@ -22,7 +22,7 @@
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator ():fScore(0),fCur(0),fCurDate(0),fNextIt(0),fFirst(false),fLast(false){} 
+TScoreIterator::TScoreIterator ():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLast(false),fNextIt(0){} 
 
 /*----------------------------------------------------------------------------*/
 
