@@ -94,7 +94,7 @@ static void setSigActions ()
 }
 #endif
 
-int msServerInit (int shmemSize, int debug)
+void * msServerInit (int shmemSize, int debug)
 {
 #ifndef WIN32
 	setSigActions();
@@ -109,11 +109,11 @@ int msServerInit (int shmemSize, int debug)
 	if (!gEnv.shmem) goto err;
 	gEnv.shmemPtr = gEnv.shmem->Create (kShMemId, shmemSize);
 	if (!gEnv.shmemPtr) goto err;
-	return true;
+	return gEnv.shmemPtr;
 	
 err:
 	msServerClose ();
-	return false;
+	return 0;
 }
 
 void msServerClose()

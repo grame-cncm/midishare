@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 /* global initialization */
-int  msServerInit (int shmemSize, int debug);
+void * msServerInit (int shmemSize, int debug);
 void msServerClose();
 
 /* log facilities */
