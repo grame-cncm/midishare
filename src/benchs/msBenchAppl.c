@@ -120,7 +120,7 @@ static void TimeTask (long date, short refNum, long a1,long a2,long a3)
 	TimeType t;
 
 	if (gFlag)
-		fprintf (stderr, "TimeTask called with gFlag=%ld\n", gFlag);
+		fprintf (stderr, "%d: TimeTask called with gFlag=%ld\n", refNum, gFlag);
 	gTask = 0;
 	getTime(t);
 	storeTime (gLastCall, t);
