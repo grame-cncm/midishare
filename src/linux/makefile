@@ -8,9 +8,8 @@ midishare-alsa: common
 	make -C kernel -f make-alsa
 
 common:
-	if [ ! -f ../common/makefile ]; then cp makefile.common ../common/makefile; fi
-	if [ ! -x checksu ]; then chmod +x checksu; fi
 	make -C ../common
+	make -C ../common/Memory
 	make -C library
 
 
@@ -21,17 +20,26 @@ install:
 	if [ ! -f /etc/$(CONF) ]; then cp $(CONF) /etc/$(CONF); fi
 	insmod MidiShare
 
-tools :
+uninstall:
+	./checksu
+	rmmod MidiShare || echo module not installed
+	if [ -c /dev/MidiShare ]; then rm /dev/MidiShare; fi
+	if [ -f /etc/$(CONF) ]; then rm /etc/$(CONF); fi
+	make -C library uninstall 
+
+tools:
 	make -i -C tools install 
 	make -C tests all
 
-uninstall:
-	./checksu
-	rmmod MidiShare
+dep:
+	make -i -C ../common/Memory dep 
+	make -i -C ../common dep 
+	make -i -C kernel dep 
+	make -i -C library dep 
 	
 clean:
+	make -i -C ../common/Memory clean 
 	make -i -C ../common clean 
 	make -i -C kernel clean 
 	make -i -C library clean 
 	make -i -C tools clean 
-	rm ../common/makefile
