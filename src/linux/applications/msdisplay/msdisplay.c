@@ -170,6 +170,7 @@ int main(int argc, char *argv[] )
 	StripPath (argv[0], applName);
 	
 	CheckMidiShare (applName);
+	gRefNum = MidiOpen(applName);
 	MidiConnect (0,gRefNum,1);
 
 	// User interface construction
@@ -183,12 +184,7 @@ int main(int argc, char *argv[] )
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
 	
-	// Connexion of signal
-	gtk_signal_connect(
-			GTK_OBJECT(window), "delete_event", 
-			GTK_SIGNAL_FUNC(my_delete_action), NULL
-	);
-	
+	// Connexion of signal	
 	gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
