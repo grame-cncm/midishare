@@ -25,7 +25,7 @@
 /* MidiAppl.c : interface to MidiShare 
 /*
 /* MidiShare home page 		: http://www.grame.fr/MidiShare/
-/* MidiShare/Java home page : http://www.grame.fr/MidiShare/Develop/Java.html
+/* MidiShare/Java home page 	: http://www.grame.fr/MidiShare/Develop/Java.html
 /*
 /* Bug & comments treport 	: MidiShare@rd.grame.fr
 /*	
@@ -35,6 +35,11 @@
 
 #ifdef __Macintosh__
 #include "MidiSharePPC.h"
+#endif
+
+#ifdef __Linux__
+	#include "MidiShare.h"
+	#define MSALARMAPI
 #endif
 
 #include "MidiAppl.h"
@@ -59,7 +64,7 @@ MSALARMAPI void  ApplAlarm( short ref,long code)
 {
 	MidiEvPtr e;
 
-	if (e = MidiNewEv(typeAlarm)) {
+	if ((e = MidiNewEv(typeAlarm))) {
 		MidiSetField(e,0,code);
 		MidiSendIm (ref+128, e);
 	}
@@ -68,7 +73,7 @@ MSALARMAPI void  ApplAlarm( short ref,long code)
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
-  (JNIEnv *, jobject, jint ref) {
+  (JNIEnv * env , jobject obj, jint ref) {
   
 	#if GENERATINGCFM
 		UPPJApplAlarmPtr =  NewApplAlarmPtr(ApplAlarm);
@@ -83,7 +88,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
-  (JNIEnv *, jobject, jint ref) {
+  (JNIEnv * env, jobject obj, jint ref) {
 
 	#if GENERATINGCFM
 		if (MidiGetApplAlarm (ref)) DisposeRoutineDescriptor ((UPPApplAlarmPtr) MidiGetApplAlarm (ref));
