@@ -22,6 +22,8 @@
 */
 
 #include <stdio.h>
+#include <string.h>
+
 #include "msDefs.h"
 #include "msFunctions.h"
 #include "EventToStream.h"
@@ -91,7 +93,7 @@ char *typeListe[] =
 
 /* ============================= functions declarations ========================*/
 /*______________________________________________________________________________*/
-static int StreamInit(int buffSize)
+static void StreamInit(int buffSize)
 {
 	msStreamParseInitMthTbl (gParseTbl);
 	msStreamParseInit (&gStream2Ev, gParseTbl, gBuffer, buffSize);
@@ -445,7 +447,7 @@ static int GetLoop (MidiEvPtr e, int size)
 /*______________________________________________________________________________*/
 static void TestSuite4 (int type)
 {
-	MidiEvPtr e=0; int err, n=0, r=0, tmp;
+	MidiEvPtr e=0; int n=0, r=0;
 
 	print("\n    type %s : ", typeListe[type]); flush;
 	msStreamStart (&gEv2Stream);
@@ -480,6 +482,16 @@ end:
 /*______________________________________________________________________________*/
 static void TestSuite5 (int buffSize)
 {
+/*
+	The basic idea is to simulate situations that can occur with pipe communication:
+	 a receiver may get several messages in its read buffer if the sender has a 
+	 higher priority. Depending also on the buffer sizes, the last message put in 
+	 the receiver buffer may be partial; it means that the next buffer won't 
+	 include the expected header.
+	The simulation makes use of 2 different streams, based on the same buffer;
+	the second stream starts at the end of the first one. Partial messages are
+	simulated 
+*/
 	MidiEvPtr e=0; int n=0, n2, r=0;
     Ev2StreamRec stream2;
 
@@ -511,12 +523,13 @@ static void TestSuite5 (int buffSize)
         printf ("ok");
 
     printf ("\n    checking with uncomplete streams 2 : ");
-	r = GetLoop (e, n + n2 - 8);
-    if (r != 1) printf ("\nwarning: 1 events expected, read %d" ,r);
-	r = GetLoop (e, n + msStreamSize(&stream2));
-    if (r != 1) printf ("\nwarning: 1 events expected, read %d" ,r);
-	else 
-        printf ("ok");
+	r = GetLoop (e, n + n2 - 12);
+    if (r != 1) printf ("\nwarning: 1 event expected, read %d" ,r);
+	else printf ("ev 1 ok ");
+	bcopy (&gBuffer[n + n2 - 12], gBuffer, 12);
+	r = GetLoop (e, 12);
+    if (r != 1) printf ("\nwarning: 1 event expected, read %d" ,r);
+	else printf ("- ev 2 ok");
 
 	MidiFreeEv(e);
 }
@@ -533,7 +546,7 @@ main( int argc, char *argv[])
     print("\nWarning : memory must be least 10000 events !\n");
 
     if( Initialize()) {
- /*       print("\nTest suite with buffer size=%ld%s", kBufferSize, s);
+        print("\nTest suite with buffer size=%ld%s", kBufferSize, s);
         gLoopTest = false;
         gEvCount = 1;
         TestSuite1 ();
@@ -554,7 +567,7 @@ main( int argc, char *argv[])
         TestSuite4 (typeNote);
         TestSuite4 (typePrivate);
         TestSuite4 (typeSysEx);
-*/
+
         StreamInit (kMediumBufferSize);
         print("\n\nTest suite with multiple streams per buffer%s", s); flush;
         TestSuite5 (kMediumBufferSize);
