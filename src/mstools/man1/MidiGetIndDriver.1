@@ -1,0 +1,23 @@
+.\" Copyright (c) 2003
+.\"	Grame - Computer Music Research Laboratory
+.\"
+.\"     @(#)MidiGetIndDriver.1	1.0 (Grame) 20/05/03
+.\"
+.TH MIDIGETINDDRIVER 1 "20 May 2003" "" "MidiShare User's Manual"
+.SH NAME
+.B MidiGetIndDriver 
+- gives the reference of number of a MidiShare driver from is order number.
+.SH SYNOPSIS
+.BI MidiGetIndDriver " index 
+.SH DESCRIPTION
+.B MidiGetIndDriver
+returns the reference of number of a MidiShare driver from is order
+number. The " index " argument should be a number between 1 and the 
+total number of running clients. Uses 
+.B MidiCountDrivers 
+to fetch this total number.
+.PP
+.SH "SEE ALSO"
+.BR MidiCountDrivers (1),
+.BR MidiGetNamedAppl (1),
+
