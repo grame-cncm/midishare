@@ -25,37 +25,35 @@
 /* MidiAppl.c : interface to MidiShare 
 /*
 /* MidiShare home page 		: http://www.grame.fr/MidiShare/
-/* MidiShare/Java home page 	: http://www.grame.fr/MidiShare/Develop/Java.html
+/* MidiShare/Java home page : http://www.grame.fr/MidiShare/Develop/Java.html
 /*
 /* Bug & comments treport 	: MidiShare@rd.grame.fr
 /*	
 /* History : 20/07/96 suppression des fonction SetData et GetData : utilisation de MidiSetField
-/*   		
+/*           19/03/02 thread bloquant sur MacOS9
+/*		
 /*****************************************************************************/
 
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
 		#include <MidiShare.h>
-                UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
-                UPPApplAlarmPtr UPPJApplAlarmPtr ;
+		static const ProcessSerialNumber gJavaProcess;
+        UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
+        UPPApplAlarmPtr UPPJApplAlarmPtr ;
 	#else
 		#include <MidiShare.h>
-                RcvAlarmPtr UPPJRcvAlarmPtr ;
-                ApplAlarmPtr UPPJApplAlarmPtr ;
+        RcvAlarmPtr UPPJRcvAlarmPtr ;
+        ApplAlarmPtr UPPJApplAlarmPtr ;
 	#endif
 #endif
 
 #ifdef __Linux__
 	#include "MidiShare.h"
 	#define MSALARMAPI
-	 RcvAlarmPtr UPPJRcvAlarmPtr ;
-         ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
 
 #ifdef WIN32
 	#include <MidiShare.h>
-	 RcvAlarmPtr UPPJRcvAlarmPtr ;
-         ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
 
 #include "MidiAppl.h"
@@ -67,6 +65,22 @@ void  MSALARMAPI ApplAlarm( short ref,long code);
 /*--------------------------------------------------------------------------*/
 
 #define typeAlarm 20
+
+/*--------------------------------------------------------------------------*/
+
+#if defined (__Macintosh__) && defined(__MacOS9__)
+	void MSALARMAPI ReceiveAlarm( short ref)
+	{
+		UniversalProcPtr proc = MidiGetInfo(ref);
+		
+		if (proc) {
+			CallUniversalProc(proc, 0);
+			WakeUpProcess(&gJavaProcess);
+		}
+	}
+#endif
+
+/*--------------------------------------------------------------------------*/
 
 void  MSALARMAPI ApplAlarm( short ref,long code)
 {
@@ -84,7 +98,11 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
   (JNIEnv * env , jobject obj, jint ref) {
   
 	#if defined( __Macintosh__) && defined( __MacOS9__)
-		UPPJApplAlarmPtr =  NewApplAlarmPtr(ApplAlarm);
+		UPPJApplAlarmPtr = NewApplAlarmPtr(ApplAlarm);
+		// For blocking thread 
+		UPPJRcvAlarmPtr = NewRcvAlarmPtr(ReceiveAlarm);
+		GetCurrentProcess(&gJavaProcess);
+		MidiSetRcvAlarm(ref,UPPJRcvAlarmPtr);
 	#else
 		UPPJApplAlarmPtr =  ApplAlarm;
 	#endif
