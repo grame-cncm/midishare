@@ -26,8 +26,11 @@
 #ifndef __LFFIFO__
 #define __LFFIFO__
 
-#include "msTypes.h"
+//#include "msTypes.h"
 #include "msSync.h"
+#ifdef __Pentium__
+#include "lflifo.h"
+#endif
 
 /*****************************************************************
  *****************************************************************
@@ -55,22 +58,45 @@
 /*****************************************************************
                            DATA STRUCTURES
  *****************************************************************/
-#ifdef __Pentium__
-# define vtype	volatile
-#else
-# define vtype
+
+#ifdef __Macintosh__
+typedef struct fifo {
+	cell*			head;		/* the fifo head */
+	unsigned long	count;		/* cells count   */
+	cell*			tail;	    /* the fifo tail */
+} fifo;
 #endif
 
+#ifdef __Pentium__
 typedef struct fifo {
-	vtype 		  cell*	head;		/* the fifo head */
-	vtype unsigned long	count;		/* cells count   */
-	vtype 		  cell*	tail;	    /* the fifo tail */
+	lifo in;
+	lifo out;	
 } fifo;
+
+
+#ifdef __SMP__
+#	define LOCK "lock ; "
+#else
+#	define LOCK ""
+#endif
+
+#endif
 
 
 /****************************************************************
                           OPERATIONS
  ****************************************************************/
+
+/* Macintosh implementation */
+#ifdef __Macintosh__
+# ifdef __POWERPC__
+# else
+
+static inline cell* fifoavail (fifo * ff) 
+{
+	return ff->head;
+}
+
 static inline void fifoinit(fifo* ff)
 {
 	ff->count = 0;
@@ -82,10 +108,6 @@ static inline unsigned long fifosize (fifo * ff)
 {
 	return ff->count;
 }
-
-#ifdef __Macintosh__
-# ifdef __POWERPC__
-# else
 
 static inline void fifoput (fifo * ff, cell * c) 
 {
@@ -125,5 +147,82 @@ static inline cell* fifoclear (fifo * ff)
 
 # endif
 #endif  /* __Macintosh__ */
+
+/* Pentium processors implementation */
+#ifdef __Pentium__
+
+static inline unsigned long fifosize (fifo * ff) 
+{
+	return lfsize(&ff->in) + lfsize(&ff->out);
+}
+
+static inline void fifoinit(fifo* ff)
+{
+	lfinit(&ff->in);		
+	lfinit(&ff->out);	
+}
+
+static inline void fifoput (fifo * ff, cell * cl) 
+{
+	lfpush(&ff->in, cl);
+}
+
+static inline cell* fifoget (fifo * ff) 
+{
+	cell * v1, * v2;
+	lifo * in = &ff->in;
+	lifo * out = &ff->out;
+	
+	v1 = lfpop(out);
+	
+	if (!v1){
+		v1 = lfpop(in);
+		if (v1) {
+			while ((v2 = lfpop(in))) { 
+				lfpush(out, v1); 
+				v1 = v2;
+			}
+		}
+	}
+	return v1;
+}
+
+static inline cell* fifoavail (fifo * ff) 
+{
+	cell * v1, * v2;
+	lifo * in = &ff->in;
+	lifo * out = &ff->out;
+	
+	v1 = lfavail(out);
+	
+	if (v1){
+		return v1;
+	}else {
+		while ((v2 = lfpop(in))) { lfpush(out, v2); }
+		return lfavail(out);
+	}
+}
+
+
+static inline cell* fifoclear (fifo * ff) 
+{
+	cell* next, *cur;
+	cell* first = fifoget(ff);
+	
+	if (first==0) return 0;
+	
+	cur = first;
+	
+	while ((next = fifoget(ff))) {
+		cur->link = next;
+		cur = next;
+	}
+	cur->link = 0;
+	
+	fifoinit (ff);
+	return first;
+}
+
+#endif /* __Pentium__ */
 
 #endif

@@ -96,6 +96,10 @@ static inline void lfinit(lifo* lf)
 #define LOCK ""
 #endif
 
+static inline cell* lfavail(lifo* lf) { 
+	return (cell*)lf->top;
+}
+
 static inline void lfpush (lifo * lf, cell * cl) 
 {
 	__asm__ __volatile__ (
