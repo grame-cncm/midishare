@@ -123,7 +123,6 @@ static void LoadSlot (char * section, char* fullname)
 			for (i=0; i<c; i++) {
 				short port = GetCnx (buff, i);
 				if (port != CnxError) {
-					Boolean input = infos.direction & MidiInputSlot;
 					MidiConnectSlot (port, refNum, true);
 				}
 			}
