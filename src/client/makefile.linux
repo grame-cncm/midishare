@@ -1,0 +1,58 @@
+#
+# midishare client library makefile (c) Grame 2002
+#
+
+TARGET = libMidiShare.so
+
+LIBS = ../msClientCommonLib.o ../msOSGlueLib.o
+
+COMSRC := $(wildcard ../common/*.c)
+COMINC := $(wildcard ../common/Headers/*.h)
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
+
+CFLAGS   := -O3 -Wall -I../common/Headers -I../osglue
+CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
+VPATH = ../common ../osglue ../osglue/glue ../osglue/unix
+CC = gcc
+
+SRC := $(wildcard *.c)
+OBJ := $(patsubst %.c, %.o, $(SRC)) libMain.o
+DEST = /usr/lib
+
+$(TARGET).1.0 : makefile $(LIBS) $(OBJ)
+	$(CC) $(OBJ) $(LIBS) -g -lpthread -lstdc++ -shared -Wl,-soname,$(TARGET).1 -o $(TARGET).1.0
+	
+makefile: makefile.linux
+	cat makefile.readme makefile.linux > makefile
+	make dep
+
+install: $(TARGET).1.0
+	install -C $(TARGET).1.0 $(DEST) 
+	install -C ../linux/Include/MidiShare.h /usr/local/include
+	if [ ! -f $(DEST)/$(TARGET) ]; 	 then ln -s $(DEST)/$(TARGET).1 $(DEST)/$(TARGET); fi
+	if [ ! -f $(DEST)/$(TARGET).1 ]; then ln -s $(DEST)/$(TARGET).1.0 $(DEST)/$(TARGET).1; fi
+
+uninstall: 
+	[ -f /usr/local/include/MidiShare.h ] && rm -f /usr/local/include/MidiShare.h
+	[ -f $(DEST)/$(TARGET) ] && rm -f $(DEST)/$(TARGET)
+	[ -f $(DEST)/$(TARGET).1 ] && rm -f $(DEST)/$(TARGET).1
+	[ -f $(DEST)/$(TARGET).1.0 ] && rm -f $(DEST)/$(TARGET).1.0
+
+
+dep:
+	cat makefile.readme makefile.linux > makefile
+	makedepend -- $(CFLAGS) --  -Y -m $(SRC)
+
+clean:
+	make -C ../common cclean
+	make -C ../osglue clean
+	rm -f $(OBJ) $(TARGET).*
+
+../msClientCommonLib.o: makefile $(COMSRC) $(COMINC)
+	make -C ../common client
+
+../msOSGlueLib.o: makefile $(GLUESRC) $(GLUEINC)
+	make -C ../osglue
+
+# DO NOT DELETE
