@@ -1,5 +1,5 @@
 /*
- * $Id: pa_mac_core.c,v 1.1.2.3 2002/04/05 11:07:55 letz Exp $
+ * $Id: pa_mac_core.c,v 1.1.2.4 2003/09/03 13:57:31 letz Exp $
  * pa_mac_core.c
  * Implementation of PortAudio for Mac OS X Core Audio
  *
@@ -71,12 +71,12 @@ O- FIFO between input and output callbacks if different devices, like in pa_mac.
 #define PA_TRACE_RUN             (0)
 #define PA_TRACE_START_STOP      (1)
 
-#define PA_MIN_LATENCY_MSEC      (1)
+#define PA_MIN_LATENCY_MSEC      (0)
 #define MIN_TIMEOUT_MSEC         (1000)
 
 #define PRINT(x) { printf x; fflush(stdout); }
 #define ERR_RPT(x) PRINT(x)
-#define DBUG(x)    /* PRINT(x) /**/
+#define DBUG(x)    /* PRINT(x) */
 #define DBUGX(x)   /* PRINT(x) /**/
 
 // define value of isInput passed to CoreAudio routines
@@ -712,6 +712,7 @@ OSStatus appIOProc (AudioDeviceID  inDevice, const AudioTimeStamp*  inNow,
 // printf("Num input Buffers: %d; Num output Buffers: %d.\n", inInputData->mNumberBuffers,	outOutputData->mNumberBuffers);
 
 	while (past) {
+            DBUG(("appIOProc: \n"));
 	    /* Has someone asked us to abort by calling Pa_AbortStream()? */
 	    if( past->past_StopNow )
 	    {
@@ -1052,6 +1053,7 @@ PaError PaHost_StartEngine( internalPortAudioStream *past )
     
     sNumStreams++;
     if (sNumStreams == 1) {
+            DBUG(("AudioDeviceAddIOProc: \n"));
 
 	    // Associate an IO proc with the device and pass a pointer to the audio data context
 	    err = AudioDeviceAddIOProc(pahsc->pahsc_AudioDeviceID, (AudioDeviceIOProc)appIOProc, sStreamList);
