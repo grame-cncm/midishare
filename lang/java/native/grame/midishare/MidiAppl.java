@@ -38,6 +38,7 @@ package grame.midishare;
 
 import grame.midishare.MidiTask;
 import com.apple.mrj.jdirect.CompletionRoutineNotifier;
+import java.util.*;
 
 
 /**
@@ -52,9 +53,8 @@ public class MidiAppl{
 
 		static final int typeTask 	= 19;
 		static final int typeAlarm 	= 20;
-		
-		private  Thread thread = null;
-		final TaskTable tasktable = new TaskTable();
+
+		private MidiApplImpl appl;	
 		
 		/**
  		* The MidiShare application reference number associated to the object.
@@ -71,8 +71,6 @@ public class MidiAppl{
 		private native final int  	ApplOpen(int ref);
 		private native final void  	ApplClose(int ref);
 		
-	 	native final int  	GetCommand(int ref);
-	
 		
 		/**
 		The <b>ReceiveAlarm</b> method is automatically called 
@@ -99,16 +97,7 @@ public class MidiAppl{
 
 		public void ApplAlarm(int code) {}
 			
-		synchronized final void ExecuteTask(int date, int i)
-		{
-			MidiTask task = tasktable.removeTask(i);
-			if (task != null) {
-				task.setIdle();
-				task.Execute(this,date);
-			}
-		}
-		
-		
+			
 		/**
 		Schedule a MidiTask object to be executed at a given date.
 		Task objects are instances of the MidiTask (or derived) class. 
@@ -119,33 +108,26 @@ public class MidiAppl{
 		scheduled.
 		*@see grame.midishare.MidiTask  	 
 		*/
-
-		public synchronized final boolean ScheduleTask(MidiTask task, int date)
+		
+		public final boolean ScheduleTask(MidiTask task, int date)
 		{
 			if (task.isIdle()) {
-		
-				int ev = Midi.NewEv(typeTask);
-				int line = tasktable.insertTask(task);
-			
-				if ((ev != 0) && (line > 0)) {
-					Midi.SetField(ev,0,line);
-					Midi.SendAt(refnum, ev, date);
-					task.setRunning(this,line);
-					return true;
-				}else {
-					if (ev != 0) Midi.FreeEv(ev);
-      				return false;
-      			}
-      		}else{
+				return (ScheduleTask(task,date,refnum) != 0);
+			}else{
       			return false;
       		}
 		}
+		
+		/**
+ 		* Schedule a native task.
+		*/
+		private native int ScheduleTask (MidiTask task, int date, int ref);
 		
 		
 		/**
  		* Constructor.
 		*/
-		public MidiAppl(){}
+		public MidiAppl(){appl = MidiFactory.MakeApplImp();}
 	
 		/**
 		The <b>Open</B> method applied on an previously allocated MidiAppl instance, opens the
@@ -172,7 +154,8 @@ public class MidiAppl{
 				}
 
 	    		if ((filter = Midi.NewFilter()) == 0) throw new MidiException ("Filter allocation error");
-				if (ApplOpen(refnum) == 0) throw new MidiException ("Allocation error");
+	    		
+	    		if (ApplOpen(refnum) == 0) throw new MidiException ("Allocation error");
 
 	     		for (i = 0 ; i<256; i++) {
 	                Midi.AcceptPort(filter, i, 1);
@@ -180,27 +163,13 @@ public class MidiAppl{
 	            }
 	                    
 	            for (i = 0 ; i<16; i++) { Midi.AcceptChan(filter, i, 1); }
+	            
 	   			Midi.SetFilter(refnum, filter);
-				
-				/*
-				try {
-					System.out.println(" TRY MidiThread2");
-					thread = new MidiThread2(this); // Thread avec MidiGetCommand (Linux)
-					thread.start();
-				}catch (Exception e)  {
-					System.out.println(e);
-				*/
-					try {
-						thread = new MidiThread1(this); // Thread with aynchronous notification from interrupt (Macintosh)
-						thread.start();
-					}catch(Throwable ex) {
-						thread = new MidiThread(this);
-						thread.start();
-					}
-				//}
+	   			appl.Open(this);
 				
 	    	}
 		}
+		
 		
 		/**
 		The <b>Close</b> method applied on an previously allocated MidiAppl instance, closes the
@@ -209,11 +178,6 @@ public class MidiAppl{
 
 		public void Close()
 		{
-			try {
-			 	thread.interrupt();
-        	 	thread.join();
-        	}catch (InterruptedException e) {}
-		
 			if (filter != 0){
 				Midi.SetFilter(refnum, 0);
 				Midi.FreeFilter(filter);
@@ -225,267 +189,123 @@ public class MidiAppl{
 				Midi.Close(refnum);
 				refnum = -1; 
 			}
-		}
 			
-	}
-
-
-
-
-final class MidiThread extends  Thread{
-		private MidiAppl appl;
-
-		MidiThread (MidiAppl appl){
-		  super ("MidiThread");
-		  this.appl = appl;
-		  setPriority(MAX_PRIORITY);
+		 	appl.Close();
 		}
-
-		public void run() {
-			int ev;
-
-			while (true) {
-				while ((ev = Midi.GetEv(appl.refnum)) != 0) {
-					switch (Midi.GetType(ev)){
-
-						case MidiAppl.typeTask:
-							appl.ExecuteTask(Midi.GetDate(ev), Midi.GetField(ev,0));
-							Midi.FreeEv(ev);
-							break;
-
-						case MidiAppl.typeAlarm:
-							appl.ApplAlarm(Midi.GetField(ev,0));
-						  	Midi.FreeEv(ev);
-						  	break;
-                     
-						default:
-						  appl.ReceiveAlarm(ev);
-						  break;
-						}
-				}
-				try{
-					sleep(50);
-				}catch (InterruptedException e) {
-					System.err.println("Thread QUIT");
-					return;
+		
+		
+		/**
+ 		* Midi event loop called by a polling thread or directly from the native side.
+		*/
+		
+		void MidiEventLoop() 
+		{
+			int ev,n;
+			
+			// Execute pending tasks
+			for (n = Midi.CountDTasks(refnum); n > 0; n--) Midi.Exec1DTask(refnum);
+		
+			// Handle incoming events
+			while ((ev = Midi.GetEv(refnum)) != 0) {
+				switch (Midi.GetType(ev))
+				{
+					case MidiAppl.typeAlarm:
+						ApplAlarm(Midi.GetField(ev,0));
+					  	Midi.FreeEv(ev);
+					  	break;
+                 
+					default:
+					  	ReceiveAlarm(ev);
+					  	break;
 				}
 			}
 		}
- }
- 
- /*
- 
- final class MidiThread extends  Thread{
-		private MidiAppl appl;
-		private int refnum;
-	
-		MidiThread (MidiAppl appl){
-		  super ("MidiThread");
-		  this.appl = appl;
-		  refnum = appl.refnum;
-		  setPriority(MAX_PRIORITY);
-		}
-
-		public native void  threadsuspend();
-	
-		public void run() {
-			int ev;
-
-			while (true) {
-				System.out.println("OOOOOOOOOOO");
-				while(Midi.AvailEv(refnum) == 0 ) {Thread.yield();} ?? marche pas sur MAC
-			
-				System.out.println("EVENT");
-				while ((ev = Midi.GetEv(refnum)) != 0) {
-					switch (Midi.GetType(ev)){
-
-						case MidiAppl.typeTask:
-							appl.ExecuteTask(Midi.GetDate(ev), Midi.GetField(ev,0));
-							Midi.FreeEv(ev);
-							break;
-
-						case MidiAppl.typeAlarm:
-							appl.ApplAlarm(Midi.GetField(ev,0));
-						  	Midi.FreeEv(ev);
-						  	break;
-                     
-						default:
-						  appl.ReceiveAlarm(ev);
-						  break;
-						}
-				}
-				
-				try{
-					sleep(50);
-				}catch (Exception e) {
-					System.out.println("Error: MidiTread stopped");
-					System.out.println(e);
-				}
-				
-			}
-		}
- }
- */
- 
- final class MidiThread1 extends  Thread{
-		private MidiAppl appl;
-		private IOCompletionUPP ioCompletionUPP;
-		
-		
-		MidiThread1 (MidiAppl appl){
-		  super ("MidiThread");
-		  this.appl = appl;
-		  setPriority(MAX_PRIORITY);
-		  // Set up notification routine
-		  ioCompletionUPP = new IOCompletionUPP(this);
-		  Midi.SetInfo(appl.refnum, ioCompletionUPP.getUPP());
-		}
-
-		public synchronized void  run() {
-			int ev;
-
-			while (true) {
-				try {
-					wait();
-					while ((ev = Midi.GetEv(appl.refnum)) != 0) {
-						switch (Midi.GetType(ev)){
-
-							case MidiAppl.typeTask:
-								appl.ExecuteTask(Midi.GetDate(ev), Midi.GetField(ev,0));
-								Midi.FreeEv(ev);
-								break;
-
-							case MidiAppl.typeAlarm:
-								appl.ApplAlarm(Midi.GetField(ev,0));
-							  	Midi.FreeEv(ev);
-							  	break;
-	                     
-							default:
-							  appl.ReceiveAlarm(ev);
-							  break;
-							}
-					}
-					
-				} catch (InterruptedException e) {
-					//System.err.println("Thread QUIT");
-					return;
-				}
-			}
-			
-		}
- }
- 
- 
- 
- /* Thread for Linux */
- 
-  final class MidiThread2 extends  Thread{
-		private MidiAppl appl;
-		private int refnum;	
-		
-		MidiThread2 (MidiAppl appl){
-		  super ("MidiThread");
-		  this.appl = appl;
-		  refnum = appl.refnum;
-		  setPriority(MAX_PRIORITY);
- 		}
-
-		public synchronized void  run() {
-			int ev;
-		
-			while (true) {
-			
-				System.out.println("RUN ");
-				
-				while ((ev = appl.GetCommand(refnum)) != 0) {
-				
-					System.out.println("GetCommand "+ Midi.GetType(ev));
-					
-					switch (Midi.GetType(ev)){
-
-						case 150:
-							appl.ApplAlarm(Midi.GetField(ev,0));
-						  	Midi.FreeEv(ev);
-						  	break;
-                     
-						default:
-						  while  ((ev = Midi.GetEv(refnum)) != 0) {
-						  
-						  	switch (Midi.GetType(ev)){
-						  
-						  		case MidiAppl.typeTask:
-									appl.ExecuteTask(Midi.GetDate(ev), Midi.GetField(ev,0));
-									Midi.FreeEv(ev);
-									break;
-
-						  		default:
-						  			appl.ReceiveAlarm(ev);
-						  			break;
-						  	}
-						  }
-						  break;
-					}
-				}
-			}
-		}
- }
- 
- 
- 
- 
- /**
- * An IOCompletionUPP is a CompletionRoutineNotifier suitable for use with async
- * I/O calls, such as PBReadAsync and PBWriteAsync. Typically it is constructed
- * with a reference to an <code>IOParam</code> object, which uses the completion routine
- * from a synchronized method and calls wait.
- */
-final class IOCompletionUPP extends CompletionRoutineNotifier {
-	private static final int uppIOCompletionProcInfo = 0;
-
-	public IOCompletionUPP(Object monitor) {
-		super(uppIOCompletionProcInfo, monitor);
-	}
-	
-	public final int getUPP() {
-		return getPointer();
-	}
+						
 }
 
+/**
+ Internal use
+*/
+class MidiApplImpl{
+
+		void Open(MidiAppl appl){}
+		void Close(){}
+}
+
+/**
+ Internal use
+*/
+final class MidiApplDirect extends MidiApplImpl {}
 
 
 /**
-Internal class used to manage tasks
+ Internal use
+*/
+final class MidiApplPolling extends MidiApplImpl {
+
+		Thread thread ;
+			
+		void Open(MidiAppl appl)
+		{
+			thread = new MidiPollingThread(appl);
+			thread.start();
+		}
+		
+		void Close()
+		{
+			try {
+			 	thread.interrupt();
+	    	 	thread.join();
+	    	}catch (InterruptedException e) {}
+		}
+							
+}
+
+/**
+ Internal use : polling thread
+*/
+final class MidiPollingThread extends Thread{
+		private MidiAppl appl;
+
+		MidiPollingThread (MidiAppl appl){
+		  	super ("MidiThread");
+		  	this.appl = appl;
+		  	setPriority(MAX_PRIORITY);
+		}
+
+		public void run() {
+			while (true) {
+				try{
+					appl.MidiEventLoop();
+					sleep(50);
+				}catch (InterruptedException e) {
+					return;
+				}
+			}
+		}
+ }
+ 
+ 
+/**
+ Internal use : create the correct MidiApplImpl object for the running JVM
+ MidiApplImpl can use polling or direct Java code call.
 */
 
-final class TaskTable  {
-		static final int LENGTH = 256;
-		final MidiTask 	tasktable[]  = new MidiTask[LENGTH]; 
-		final int 		indicetable[] =  new int[LENGTH];
 
+final class MidiFactory {
 
-		TaskTable(){
-			for (int i =0; i<LENGTH-1 ;i++) { indicetable[i]= i+1;}
-			indicetable[LENGTH-1]= -1;
+	final static Properties machine;
+
+	static final MidiApplImpl MakeApplImp()
+	{
+		if (machine.getProperty("os.name").equals("Mac OS")){
+			return new MidiApplPolling();
+		}else{
+			return new MidiApplDirect();
 		}
-			
-		final int insertTask(MidiTask task) {
-			int line = indicetable[0];
-		
-			if (line > 0) {
-				indicetable[0] =  indicetable[line];
-      			tasktable[line] = task;
-			}
-      		return line;
-		}
-		
-		final MidiTask removeTask(int line) {
-			indicetable[line] = indicetable[0];
-			indicetable[0]= line;
-			MidiTask res = tasktable[line];
-			tasktable[line] = null;
-			return res;
-		}
-		
-		final void clearTask(int line) { tasktable[line] = null;}
-		
- }
+	}
+
+	static {
+		machine = System.getProperties();
+	}
+}

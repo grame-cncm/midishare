@@ -41,6 +41,7 @@
 /* 130: Functions for drivers management
 /* 131: New PortPrefix event type
 /* 132: New RemoveEv function
+/* 133: Direct call of Java code for MacOSX
 /*****************************************************************************/
 
 
@@ -54,12 +55,11 @@ import java.util.*;
 The basic interface between MidiShare and Java. MidiShare entry points are implemented as static methods. 
 All functions are not available because of some compatibility problems between Java and C. 
 For perfomances reasons, MidiShare events, sequences and filters are manipulated at <b>int</b> type in Java. 
-An introduction on MidiShare can be found <A HREF = "MSH_intro.html">here</A>.
 */
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  132;
+	public   static  int  Version =  133;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
