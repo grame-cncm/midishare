@@ -78,12 +78,14 @@ class TMidiAppl{
 		
 	public :
 	
-	#if defined (__Macintosh__) && defined (__MacOS9__)
-		void NewMidiTask(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
-		void NewMidiCall(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3);
-	#else
-		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
-		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
+	#if defined (__Macintosh__) 
+		#if defined (__MacOS9__)
+			void NewMidiTask(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
+			void NewMidiCall(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3);
+		#else
+			void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
+			void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
+		#endif
 	#endif
 	
 	
@@ -91,8 +93,8 @@ class TMidiAppl{
 		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3,MidiEvPtr* adr);
 		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
 	#endif
-	
-	
+
+		
 	#ifdef __Linux__
 		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3,MidiEvPtr* adr);
 		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
