@@ -33,15 +33,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "dlfcn.h"
+#include <dlfcn.h>
 
-#include "portaudio.h"
+#include <CoreAudio/CoreAudio.h>
+#include <AudioToolbox/AudioConverter.h>
 
 /*------------------------------------------------------------------------------*/
 /* MacOSX specific resources          						*/
 
-#define SAMPLE_RATE 44100
-#define AUDIO_MS_INT (SAMPLE_RATE/100)
 #define DriverMaxEntry	512
 
 typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
@@ -52,9 +51,11 @@ struct MacOSXDriver {
 };
 
 static MacOSXDriverPtr gMacOSXDriver = { 0 };
-static PortAudioStream * gStream;
 static long gFrames = 0;
 static long gAudioSize = 0; // 10 * real size
+static long gSampleRate = 0; 
+static long gAudioMsInt = 0;
+static AudioDeviceID gCoreDeviceID;
 
 MutexResCode msOpenMutex  (MutexRef ref) {return kSuccess;}
 MutexResCode msCloseMutex (MutexRef ref) {return kSuccess;}
@@ -100,7 +101,6 @@ void *  LoadLibrary(const char *filename, const char *symbol)
 }
 
 /*------------------------------------------------------------------------------*/
-
 void FreeLibrary(void * handle, const char *symbol)
 { 
 	Stop fun;
@@ -117,12 +117,12 @@ static Boolean LoadDriver(char *drvName)
         if (!mem) return false;
         
         mem->next = gMacOSXDriver;
-        mem->handle = LoadLibrary(drvName,"_Start");
+        mem->handle = LoadLibrary(drvName,"Start");
         
         if (mem->handle) {
             gMacOSXDriver = mem;
         }else {
-            DisposeMemory (mem);
+            DisposeMemory(mem);
             return false;
         }
       
@@ -150,7 +150,7 @@ void SpecialSleep(TMSGlobalPtr g)
         gMacOSXDriver = 0;
         while (drv) {
                 next = drv->next;
-                FreeLibrary (drv->handle,"_Stop");
+				FreeLibrary (drv->handle,"Stop");
                 DisposeMemory (drv);
                 drv = next;
         }
@@ -207,104 +207,234 @@ void DriverSleep(TApplPtr appl)
 }
 
 /*__________________________________________________________________________*/
-/*      Interrupt handlers                                                                                                              */
-/*__________________________________________________________________________*/
+/*      Interrupt handlers  : using CoreAudio                                                                                                            /*__________________________________________________________________________*/
 
-static int AudioClockHandler(void *inputBuffer, void *outputBuffer,
-                             unsigned long framesPerBuffer,
-                             PaTimestamp outTime, void *userData)
+static OSStatus AudioClockHandler(AudioDeviceID inDevice, 
+                                const AudioTimeStamp * inNow,
+                                const AudioBufferList * inInputData, 
+                                const AudioTimeStamp * inInputTime,
+                                AudioBufferList * outOutputData,
+                                const AudioTimeStamp * inOutputTime,
+                                void * inClientData)
 {
-   	gFrames += gAudioSize;
+    gFrames += gAudioSize;
  	
-	while (gFrames>=AUDIO_MS_INT) {
-		ClockHandler((TMSGlobalPtr)userData);
-		gFrames-=AUDIO_MS_INT;
-	}
-     	
- 	return 0; 
+    while (gFrames >= gAudioMsInt) {
+        ClockHandler((TMSGlobalPtr)inClientData);
+        gFrames -= gAudioMsInt;
+    }
+    
+    return kAudioHardwareNoError; 
 }
+
+/*_________________________________________________________________________*/
+/*
+Get the device nominal sample rate.
+*/
+static bool GetSampeRate(AudioDeviceID inDeviceID, long* sr)
+{
+    Float64 sampleRate = 0;
+    Boolean isInput = false;
+    UInt32 theSize = sizeof(Float64);
+    
+    OSStatus err = AudioDeviceGetProperty(inDeviceID, 0, isInput, 
+                            kAudioDevicePropertyNominalSampleRate, &theSize, &sampleRate);
+    if (err != kAudioHardwareNoError) return false;	                            
+    *sr = (long)sampleRate;                                                
+    return true;
+}
+
+/*_________________________________________________________________________*/
+/*
+Check that the wanted buffer size can be used, otherwise returns the nearer possible
+buffer size.
+*/
+static bool GetBufferSize(AudioDeviceID inDeviceID, long* buffersize)
+{
+    Boolean isInput = false;
+    UInt32 theSize = sizeof(AudioValueRange);		
+    AudioValueRange range;
+    OSStatus err = AudioDeviceGetProperty(inDeviceID, 0, isInput, 
+            kAudioDevicePropertyBufferFrameSizeRange, &theSize, &range);				
+    if (err != kAudioHardwareNoError) return false;
+    
+    if ((*buffersize < range.mMinimum) || (*buffersize > range.mMaximum)) { 
+        char size[64];
+        sprintf (size, "%ld",*buffersize);
+        Report("MidiShare", "Unsupported buffer size:", size);
+        *buffersize = (*buffersize < range.mMinimum) ? range.mMinimum : range.mMaximum;
+        sprintf (size, "%ld",*buffersize);
+        Report("MidiShare", "Use new buffer size:", size);
+    }
+    return true;
+}
+
+/*_________________________________________________________________________*/
+static bool SetBufferSize( AudioDeviceID devID, long buffersize)
+{
+    UInt32 dataSize = sizeof(UInt32);
+    UInt32 ioBufferSize = buffersize;
+   
+    OSStatus err = AudioDeviceSetProperty( devID, 0, 0, false,
+                            kAudioDevicePropertyBufferFrameSize, dataSize,
+                            &ioBufferSize);
+                            
+    return (err == kAudioHardwareNoError);
+}
+
+/*_________________________________________________________________________*/
+static bool GetDefaultDeviceID(char* driver_name, AudioDeviceID* id)
+{
+    UInt32 theSize = sizeof(AudioDeviceID);
+    UInt32 outSize;
+    Boolean  outWritable;
+    OSStatus err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &theSize, id);
+    if (err != kAudioHardwareNoError) return false;
+    
+    err =  AudioDeviceGetPropertyInfo(*id, 0, true, kAudioDevicePropertyDeviceName, &outSize, &outWritable);
+    if (err != kAudioHardwareNoError) return false;    
+    
+    err = AudioDeviceGetProperty(*id, 0, true,  kAudioDevicePropertyDeviceName, &outSize, (void *) driver_name);
+    return (err == kAudioHardwareNoError);
+}
+
+/*_________________________________________________________________________*/
+static bool GetDeviceID(char* driver_name, AudioDeviceID* id)
+{
+    OSStatus err = noErr;
+    UInt32   outSize;
+    Boolean  outWritable;
+    int      numCoreDevices;
+    AudioDeviceID * coreDeviceIDs;
+    bool res = false;
+    int i;
+    
+    // Find out how many Core Audio devices there are, if any
+    outSize = sizeof(outWritable);
+    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
+    if (err != kAudioHardwareNoError) return false;
+       
+    // Calculate the number of device available
+    numCoreDevices = outSize/sizeof(AudioDeviceID);
+
+    // Bail if there aren't any devices
+    if (numCoreDevices < 1)  return false;
+    
+    // Make space for the devices we are about to get
+    coreDeviceIDs = (AudioDeviceID *) malloc(outSize);
+
+    // Get an array of AudioDeviceIDs
+    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &outSize, (void *)coreDeviceIDs);
+    if (err != kAudioHardwareNoError) return false;
+ 
+    // Look for the CoreAudio device corresponding to the wanted driver
+    char coreaudio_name[256];
+    
+    for (i = 0; i<numCoreDevices; i++) {
+    
+        err =  AudioDeviceGetPropertyInfo(coreDeviceIDs[i], 0, true, 
+            kAudioDevicePropertyDeviceName, &outSize, &outWritable);
+        
+        if (err != kAudioHardwareNoError) return false;
+        
+        err = AudioDeviceGetProperty(coreDeviceIDs[i], 0, true, 
+            kAudioDevicePropertyDeviceName, &outSize, (void *) coreaudio_name);
+     
+        if (err != kAudioHardwareNoError) return false;
+          
+        if (strcmp(coreaudio_name,driver_name) == 0) {
+            *id = coreDeviceIDs[i];
+            res = true;
+            break;
+        }
+    }
+    
+    free(coreDeviceIDs);
+    return res;
+}
+
 
 /*_________________________________________________________________________*/
 void OpenTimeInterrupts(TMSGlobalPtr g)
 {
-	PaError err;
-	const PaDeviceInfo* info;
-        int bufferSize = LoadBufferSize(); // Load audio size from the .ini file
-        int device;
-        char driverName[DriverMaxEntry];
-        
-        err = Pa_Initialize();
-  	if(err != paNoError) goto error_recovery;
-  	
-  	gAudioSize = bufferSize*10;
-        LoadDriverName(driverName,DriverMaxEntry);
+    OSStatus err;
+    long bufferSize;
+    char driverName[DriverMaxEntry];
+    
+    bufferSize = LoadBufferSize(); 		// Load audio size from the .ini file
+    LoadDriverName(driverName,DriverMaxEntry);  // Load driver name from the .ini file
+    
+    if (!GetDeviceID(driverName, &gCoreDeviceID)) {
+        Report("MidiShare", "CoreAudio device not found:", driverName);
+        if (GetDefaultDeviceID(driverName,&gCoreDeviceID)) {
+            Report("MidiShare", "Use CoreAudio default system device:", driverName);
+        }else{
+            Report("MidiShare", "CoreAudio default system device can not be found","");
+            goto error;
+        }
+    }
+    
+    if (!GetBufferSize(gCoreDeviceID,&bufferSize)){
+        Report("MidiShare", "Cannot get buffer size range", "");
+        goto error;
+    }
+    
+    if (!SetBufferSize(gCoreDeviceID,bufferSize)){
+        Report("MidiShare", "Cannot set buffer size range", "");
+        goto error;
+    }
 
-  	// Look for the internal built-in sound device
-  	for (device = 0; device<Pa_CountDevices(); device++) {
-                info = Pa_GetDeviceInfo(device);
-                if ((strcmp (driverName,info->name) == 0) && (info->maxOutputChannels)) break;
-  	}
-   
-	// Open Audio stream
-        err = Pa_OpenStream(&gStream,
-                            paNoDevice,		/* default input device */
-                            0,         		/* no input */
-                            paFloat32, 	
-                            NULL,
-                            device, 			
-                            2,       		/* stereo output */
-                            paFloat32,     
-                            NULL,
-                            SAMPLE_RATE,
-                            bufferSize,     /* frames per buffer */
-                            0,              /* number of buffers, if zero then use default minimum */
-                            paClipOff,      /* we won't output out of range samples so don't bother clipping them */
-                            AudioClockHandler,
-                            g);
- 
-	 if(err != paNoError) {
-            Report("MidiShare", "Pa_OpenStream:", Pa_GetErrorText(err));
-            goto error_recovery;
-         }
-         
-	 err = Pa_StartStream(gStream);
-	 if(err != paNoError) {
-            Report("MidiShare", "Pa_StartStream:", Pa_GetErrorText(err));
-            goto error_recovery;
-         }
-            
-	 return;
+    if (!GetSampeRate(gCoreDeviceID,&gSampleRate)) {
+        Report("MidiShare", "Cannot get sample rate value", "");
+        goto error;
+    }
+    
+    gAudioMsInt = gSampleRate/100;
+    gAudioSize = bufferSize*10;
+    
+    err = AudioDeviceAddIOProc(gCoreDeviceID, AudioClockHandler, g);
+    if (err != kAudioHardwareNoError) goto error;
+    
+    err = AudioDeviceStart(gCoreDeviceID, AudioClockHandler);
+    if (err != kAudioHardwareNoError) goto error;
+
+    return;
 	 
-error_recovery:
-
-	 Report("MidiShare", "cannot open audio timer:", driverName);
-	 CloseTimeInterrupts(g);
+error:
+    Report("MidiShare", "cannot open audio timer:", driverName);
+    CloseTimeInterrupts(g);
 }
 
 /*_________________________________________________________________________*/
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
-	if(gStream) Pa_CloseStream(gStream);
-	Pa_Terminate();
+    OSStatus err = AudioDeviceStop(gCoreDeviceID, AudioClockHandler);
+    if (err != kAudioHardwareNoError) goto error;
+    
+    err = AudioDeviceRemoveIOProc(gCoreDeviceID, AudioClockHandler);
+    if (err != kAudioHardwareNoError) goto error;
+    
+    return;
+    
+error:
+    Report("MidiShare", "cannot close audio timer:","");
 }
-
 
 /*_________________________________________________________________________*/
 Boolean ForgetTaskSync(MidiEvPtr * taskPtr, MidiEvPtr content)
 {
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false; 
-	// return CompareAndSwap (taskPtr, content, 0);
+    if (*taskPtr == content) {
+        EvType(content) = typeDead;
+        *taskPtr = 0;
+        return true;
+    }
+    return false; 
+    // return CompareAndSwap (taskPtr, content, 0);
 }
-
 
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory(MemoryType type, unsigned long size){return (void*)malloc(size);}
+FarPtr(void) AllocateMemory(MemoryType type, unsigned long size) {return (void*)malloc(size);}
 void DisposeMemory(FarPtr(void) memPtr) {if (memPtr) free(memPtr);}
 

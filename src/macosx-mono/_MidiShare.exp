@@ -84,23 +84,4 @@ _MidiSetPortState
 _MidiShareSpecialInit
 
 _LoadBufferSize
-_Pa_Initialize
-_Pa_Terminate
-_Pa_GetHostError
-_Pa_GetErrorText
-_Pa_CountDevices
-_Pa_GetDefaultInputDeviceID
-_Pa_GetDefaultOutputDeviceID
-_Pa_GetDeviceInfo
-_Pa_OpenStream
-_Pa_OpenDefaultStream
-_Pa_CloseStream
-_Pa_StartStream
-_Pa_StopStream
-_Pa_AbortStream
-_Pa_StreamActive
-_Pa_StreamTime
-_Pa_GetCPULoad
-_Pa_GetMinNumBuffers
-_Pa_Sleep
-_Pa_GetSampleSize
+_LoadLibrary
