@@ -3,6 +3,7 @@ MidiShare changes history
 =========================
 
 v 1.84 : filters functions entry points added
+		 don't bring launched drivers applications to front 
 
 v 1.82 : bug in MSSend corrected
 		 internal change in slot infos management
