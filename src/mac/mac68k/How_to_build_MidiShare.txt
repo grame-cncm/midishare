@@ -12,8 +12,8 @@ What you will need:
 
 1. About 1 MB free disk space for the source and binaries after compilation.
 
-2. An installation of CodeWarrior Pro 4 or later. The MidiShare sources
-   compile with CodeWarrior Pro 4. For more information, see Metrowerks
+2. An installation of CodeWarrior Pro 5 or later. The MidiShare sources
+   compile with CodeWarrior Pro 5. For more information, see Metrowerks
    web site at <http://www.metrowerks.com>.
 
 3. The MidiShare source code distibution.
@@ -23,8 +23,14 @@ What you will need:
 Compiling MidiShare
 ----------------
 
-Open the "MidiShare Application.prj" project in the "mac68k" folder.
-Do a 'Make'. Go and get (quickly) a cup of coffee. Come back, and enjoy !
+Compiling MidiShare as a standalone application :
+	Open the "MidiShare_Application.prj" project in the "mac68k" folder.
+	Do a 'Make'. Go and get (quickly) a cup of coffee. Come back, and enjoy !
 
+Compiling MidiShare as a control panel :
+	Open the "Midishare_Ctrl_Panel.prj" project in the "mac68k" folder.
+	Make sure that the 'MidiShare' target is selected.
+	Do a 'Make'. Go and get (quickly) a cup of coffee. Come back, drop MidiShare
+	on your System Folder, restart and enjoy !
 
 ------------------------------------------------------------------------------
