@@ -96,8 +96,15 @@ class TMidiAppl{
 	#endif
 	
 	
+	#ifdef __Linux__
+		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3,MidiEvPtr* adr);
+		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
+	#endif
+	
+	
+	
 		short fRefnum;
-		FilterPtr fFilter;
+		MidiFilterPtr fFilter;
 		
 		TMidiAppl() 
 		{ 
