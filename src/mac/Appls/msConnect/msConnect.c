@@ -23,6 +23,7 @@
 
 #include <Dialogs.h>
 #include <DiskInit.h>
+#include <Devices.h>
 #include <Events.h>
 #include <Files.h>
 #include <Fonts.h>
@@ -31,9 +32,11 @@
 #include <Menus.h>
 #include <OSUtils.h>
 #include <Packages.h>
+#include <Patches.h>
 #include <QuickDraw.h>
 #include <Resources.h>
 #include <SegLoad.h>
+#include <Sound.h>
 #include <TextEdit.h>
 #include <ToolUtils.h>
 #include <Traps.h>
@@ -301,7 +304,7 @@ static Boolean TrapAvailable(short	trapNum, short tType)
 			return(false);				/*   these machines					*/
 		}
 	}
-	return NGetTrapAddress(trapNum, tType) != GetTrapAddress(_Unimplemented);
+	return NGetTrapAddress(trapNum, tType) != NGetTrapAddress(_Unimplemented, tType);
 }
 
 static Boolean IsAppWindow (WindowPtr wind)
@@ -483,7 +486,7 @@ static void ShowAbout()
 	DialogPtr myDialog;
 	short Hit;
 
-	myDialog = GetNewDialog(AboutID, NULL, (void *)(-1));
+	myDialog = GetNewDialog(AboutID, NULL, (WindowPtr)(-1));
 	if (myDialog) {
 		ModalDialog(NULL, &Hit);
 		DisposeDialog(myDialog);
@@ -521,7 +524,9 @@ static void DoCommand(long mResult)
 			break;
 
 		case PortsID:
+#ifndef __POWERPC__
 			MidiSetPortState(theItem - 1, ~MidiGetPortState(theItem - 1));
+#endif
 			break;
 	}
 	HiliteMenu(0);  
@@ -533,7 +538,11 @@ static void SetPortMark(void)
 	short port, chk;
 
 	for (port = ModemPort; port <= PrinterPort; port++) {
+#ifdef __POWERPC__
+		chk = noMark;
+#else
 		chk =  MidiGetPortState(port) ? checkMark : noMark;
+#endif
 		SetItemMark (myMenus[PortsMenu], port + 1, chk);
 	}
 }
