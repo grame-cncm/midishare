@@ -23,6 +23,10 @@
               mem allocation functions moved to mem.c
 
 */
+  
+#ifdef MODVERSIONS
+#include <linux/modversions.h>
+#endif
 
 #include <linux/slab.h>
 #include <linux/poll.h>
@@ -312,7 +316,6 @@ unsigned int MSPoll(short refNum, TClientsPtr g, struct file * f, poll_table * w
 	if( CheckRefNum( g, refNum)) {
 		TApplPtr appl = g->appls[refNum]; 
 		LinuxContextPtr context = (LinuxContextPtr)appl->context;
-		prnt("poll wait \n");
 		poll_wait(f, &context->commandsQueue, wait);
 		mask |= POLLIN | POLLRDNORM;  
 	}
