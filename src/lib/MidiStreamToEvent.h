@@ -85,6 +85,7 @@ typedef struct StreamFifo{
 
 
 /*------------------------------------------------------------------------*/
+void	 	MidiParseError(StreamFifoPtr f);
 void 		MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl);
 void 		MidiParseReset(StreamFifoPtr f);
 void 		MidiParseInitMthTbl (ParseMethodTbl tbl);
