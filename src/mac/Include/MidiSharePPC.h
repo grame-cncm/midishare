@@ -139,6 +139,19 @@ long		MidiCountDTasks (short refnum);
 void		MidiFlushDTasks (short refnum);
 void		MidiExec1DTask 	(short refnum);
 
+
+/*---------------------------------- Filters ----------------------------------*/
+MidiFilterPtr MidiNewFilter  (void);
+void		MidiFreeFilter (MidiFilterPtr);
+
+void		MidiAcceptPort(MidiFilterPtr f, short port, Boolean state);
+void		MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state);
+void		MidiAcceptType(MidiFilterPtr f, short type, Boolean state);
+
+Boolean 	MidiIsAcceptedPort(MidiFilterPtr f, short port);
+Boolean 	MidiIsAcceptedChan(MidiFilterPtr f, short chan);
+Boolean 	MidiIsAcceptedType(MidiFilterPtr f, short type);
+
 /*----------------------------------- MidiShare -------------------------------*/
 Boolean 	MidiShare();
 

@@ -396,6 +396,28 @@ enum {
 	uppProcInfoType23 = kPascalStackBased
 						| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(SlotRefNum)))
 						| STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(char *)))
+	,					
+	/* MidiNewFilter */
+	uppProcInfoType24 = kPascalStackBased
+						| RESULT_SIZE (SIZE_CODE(sizeof(MidiFilterPtr)))
+	,
+	/* MidiFreeFilter */
+	uppProcInfoType25 = kPascalStackBased
+						| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(MidiFilterPtr)))
+	,					
+	/* MidiAcceptPort, MidiAcceptChan, MidiAcceptType */
+	uppProcInfoType26 = kPascalStackBased
+						| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(MidiFilterPtr)))
+						| STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(short)))
+						| STACK_ROUTINE_PARAMETER(3, SIZE_CODE(sizeof(Boolean)))
+
+	,					
+	/* MidiIsAcceptedPort, MidiIsAcceptedChan, MidiIsAcceptedType */
+	uppProcInfoType27 = kPascalStackBased
+						| RESULT_SIZE (SIZE_CODE(sizeof(Boolean)))
+						| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(MidiFilterPtr)))
+						| STACK_ROUTINE_PARAMETER(2, SIZE_CODE(sizeof(short)))
+					
 				
 };
 
@@ -517,6 +539,17 @@ static short CodeMidiForgetTask[]		={0x702F, 0x2078, 0x00B8, 0x4ED0};
 static short CodeMidiCountDTasks[]		={0x7030, 0x2078, 0x00B8, 0x4ED0};
 static short CodeMidiFlushDTasks[]		={0x7031, 0x2078, 0x00B8, 0x4ED0};
 static short CodeMidiExec1DTask[]		={0x7032, 0x2078, 0x00B8, 0x4ED0};
+
+/*---------------------------------- Filter ----------------------------*/
+
+static short CodeMidiNewFilter[]		={0x7051, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiFreeFilter[]		={0x7052, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiAcceptPort[] 		={0x7053, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiAcceptChan[]		={0x7054, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiAcceptType[]		={0x7055, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiIsAcceptedPort[]	={0x7056, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiIsAcceptedChan[]	={0x7057, 0x2078, 0x00B8, 0x4ED0};
+static short CodeMidiIsAcceptedType[]	={0x7058, 0x2078, 0x00B8, 0x4ED0};
 
 
 /*------------------------------- Drivers management --------------------------*/
@@ -793,6 +826,33 @@ static short CodeSetSlotName[]			={0x704F, 0x2078, 0x00B8, 0x4ED0};
 
 #define MidiExec1DTask(r)		\
 	CallUniversalProc((UniversalProcPtr)CodeMidiExec1DTask, uppProcInfoType2,(r))
+
+
+/*---------------------------------- Filters ----------------------------*/
+
+#define MidiNewFilter()		\
+	(MidiFilterPtr)CallUniversalProc((UniversalProcPtr)CodeMidiNewFilter, uppProcInfoType24)
+
+#define MidiFreeFilter(f)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiFreeFilter, uppProcInfoType25,(f))
+
+#define MidiAcceptPort(f,p,s)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiAcceptPort, uppProcInfoType26,(f),(p),(s))
+
+#define MidiAcceptChan(f,p,s)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiAcceptChan, uppProcInfoType26,(f),(p),(s))
+	
+#define MidiAcceptType(f,p,s)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiAcceptType, uppProcInfoType26,(f),(p),(s))
+
+#define MidiIsAcceptedPort(f,p)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiIsAcceptedPort, uppProcInfoType27,(f),(p))
+
+#define MidiIsAcceptedChan(f,p)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiIsAcceptedChan, uppProcInfoType27,(f),(p))
+	
+#define MidiIsAcceptedType(f,p)		\
+	CallUniversalProc((UniversalProcPtr)CodeMidiIsAcceptedType, uppProcInfoType27,(f),(p))
 
 
 /*-------------------------------- Drivers management ---------------------------*/
