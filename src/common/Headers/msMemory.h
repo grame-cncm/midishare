@@ -55,8 +55,16 @@ MSFunctionType(unsigned long) MSFreeSpace    (MSMemoryPtr g);
 MSFunctionType(unsigned long) MSTotalSpace   (MSMemoryPtr g);
 
 /* private memory management functions */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void     InitMemory  (MSMemoryPtr g, unsigned long defaultSpace);
 Boolean  OpenMemory  (MSMemoryPtr g);
 void     CloseMemory (MSMemoryPtr g);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

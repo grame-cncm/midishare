@@ -60,8 +60,9 @@ typedef unsigned char uchar;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
+#ifndef __cplusplus
 	enum { false = 0, true };
-
+# endif
 #elif defined(macintosh)
 #	include <mactypes.h> 
 

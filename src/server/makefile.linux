@@ -16,6 +16,7 @@ OSOBJ  = ../msOSGlueLib.o
 
 INC = -I../common/Headers -I../osglue
 CFLAGS := -O3 -Wall -DMSKernel $(INC)
+LIB    := -lpthread -lportaudio -lstdc++
 CC = gcc
 
 SRC := $(wildcard *.c)
@@ -31,11 +32,10 @@ lib : $(KLIB)
 $(TARGET) : makefile $(OBJ)
 	make -C ../common
 	make -C ../osglue
-	$(CC) $(OBJ) -lpthread -o $(TARGET)
+	$(CC) $(OBJ) $(LIB) -o $(TARGET)
 
 makefile: makefile.linux
 	cp makefile.linux makefile
-	rm -f $(OBJ) $(TARGET)
 	make dep
 
 install: $(TARGET)

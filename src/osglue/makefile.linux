@@ -4,7 +4,7 @@ OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
 CFLAGS = -O3 -Iinclude -Iglue -Wall
 CXXFLAGS = $(CFLAGS)
-CC = gcc
+CC = g++
 
 OUT = ../msOSGlueLib.o
 
