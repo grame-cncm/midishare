@@ -1,5 +1,5 @@
 
-TARGET = ../MidiShareKernel.o
+TARGET = ../MidiShare.o
 OPTIONS=-DMODVERSIONS -D__Linux__ -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 INC = ../../common/Headers
 CFLAGS := -O6 -Wall $(OPTIONS)  -I$(INC)
