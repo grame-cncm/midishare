@@ -43,7 +43,7 @@
 #	define MSALARMAPI
 #endif
 
-#ifdef __Linux__
+#ifdef __linux__
 #ifdef MODULE
 # 	ifdef MODVERSIONS
 # 		include <linux/modversions.h>

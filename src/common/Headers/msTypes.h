@@ -62,7 +62,7 @@ typedef unsigned long ulong;
 	enum { false = 0, true };
 #endif
 
-#ifdef __Linux__
+#ifdef __linux__
 #	include <linux/types.h>
 #	define FAR
 

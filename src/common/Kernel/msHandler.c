@@ -223,7 +223,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
 				ProcessCall( appl, ev);		    /* execute the task				*/
-#ifndef __Linux__
+#ifndef __linux__
 				MSFreeEv( ev, FreeList(mem));
 #endif
 			}

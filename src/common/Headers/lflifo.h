@@ -107,7 +107,7 @@ static inline cell* lfavail(lifo* lf) {
 	return (cell*)lf->top;
 }
 
-#if defined(__Linux__)
+#if defined(__linux__)
 # if defined(__ppc__)
 #  include "lflifoppc.h"
 # else

@@ -46,7 +46,7 @@
 #	define  MSALARMAPI	CALLBACK
 #endif
 
-#ifdef __Linux__
+#ifdef __linux__
 #   define  ALARMTYPE
 #	define  MSALARMAPI
 #	define  FAR
