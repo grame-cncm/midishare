@@ -25,53 +25,62 @@
 
 #define inline __inline__
 
-static /*inline*/ void lfpush (register lifo * lf, register cell * cl) 
+
+static inline void lfpush (register lifo * lf, register cell * cl) 
 {
-	asm (
-		"# LFPUSH \n"
-		"	addi	%0, %0, 4    \n"
-        ".loop:               	 \n"
-		"	lwarx	r9, 0, %0    \n"       
-		"	stw	    r9, 0(%1)    \n"   
-		"	sync                 \n"   
-		"	stwcx.	%1, 0, %0    \n"  	                     
-		"	bne-	.loop     	 \n"  
-		"	addi	%0, %0, 4    \n"
-	    ".inc:                    \n"
-		"	lwarx	r9, 0, %0    \n"   
-        "	addi	r9, r9, 1    \n"  
-		"	sync                 \n"  
-		"	stwcx.	r9, 0, %0    \n"
-		"	bne-	.inc          \n"
-        :  : "r" (lf), "r" (cl) : "r9", "r0"
-	);
+  register volatile long t1;
+  register long t2=0;
+  asm volatile (
+	  "# LFPUSH \n"
+	  "0: 				      \n"
+	  "   lwarx   %0, %3, %1  \n"		
+	  "   stw	  %0, 0(%2)   \n"	
+	  "   sync  			  \n"	
+	  "   stwcx.  %2, %3, %1  \n"						   
+	  "   bne-    0b	      \n"  
+	  "0:				      \n"
+	  "   lwarx   %0, %3, %4  \n"		
+	  "   addi    %0, %0, 1	  \n"  
+	  "   sync  			  \n"  
+	  "   stwcx.  %0, %3, %4  \n"
+	  "   bne-    0b		  \n"
+	  : "=r" (t1)
+	  : "r" (&lf->top), "r" (cl), "r" (t2), "r" (&lf->oc), "0" (t1)
+	  : "r0" 		/* prevents using r0 because of the ambiguity of 'addi' coding: */
+	  				/* gcc version 2.95.3 20010315 (release - Linux-Mandrake 8.0 for PPC) */
+					/* compiles the instruction "addi 0, 0, n" as li 0, n */
+  );
 }
 
-static /*inline*/ cell* lfpop (register lifo * lf) 
+static inline cell* lfpop (register lifo * lf) 
 {
 	register cell * result;
-	asm (
-        "# LFPOP				\n"
-        "	addi	%1, %1, 4	\n"
-        "poploop:				\n"
-		"	lwarx	r9, 0, %1	\n"         /* creates a reservation on lf    */
-		"	cmpwi	r9, 0		\n"         /* test if the lifo is empty      */
-		"	beq-	empty		\n"
-		"	lwz		r10, 0(r9)	\n"         /* next cell in b                */
+	register volatile long a, b;
+	register long c=0;
+	asm volatile (
+       "# LFPOP					\n"
+        "0:						\n"
+		"	lwarx	%4, %1, %2	\n"         /* creates a reservation on lf    */
+		"	cmpwi	%4, 0		\n"         /* test if the lifo is empty      */
+		"	beq-	1f		\n"
+		"	lwz		%5, 0(%4)	\n"         /* next cell in b                */
         "	sync            	\n"         /* synchronize instructions       */
-		"	stwcx.	r10, 0, %1	\n"         /* if the reservation is not altered */
+		"	stwcx.	%5, %1, %2	\n"         /* if the reservation is not altered */
                                             /* modify lifo top                */
-		"	bne-	poploop  	\n"         /* otherwise: loop and try again  */
-		"	addi	%1, %1, 4	\n"
-        "dec:					\n"
-		"	lwarx	r10, 0, %1	\n"         /* creates a reservation on lf->count */
-        "	addi	r10, r10, -1	\n"         /* dec count                      */
+		"	bne-	0b  		\n"         /* otherwise: loop and try again  */
+        "0:						\n"
+		"	lwarx	%5, %1, %3	\n"         /* creates a reservation on lf->count */
+        "	addi	%5, %5, -1	\n"         /* dec count                      */
 		"	sync            	\n"         /* synchronize instructions       */
-		"	stwcx.	r10, 0, %1	\n"         /* conditionnal store             */
-		"	bne-	dec			\n"
-        "empty:				\n"
-		"	mr		%0, r9		\n"
-        :"=r" (result) : "r" (lf) : "r9", "r10", "r0"
+		"	stwcx.	%5, %1, %3	\n"         /* conditionnal store             */
+		"	bne-	0b			\n"
+        "1:						\n"
+		"	mr		%0, %4		\n"
+       :"=r" (result), "=r" (c)
+	   : "r" (&lf->top), "r" (&lf->oc), "r" (a), "r" (b), "1" (c)
+	   : "r0" 		/* prevents using r0 because of the ambiguity of 'addi' coding: */
+	  				/* gcc version 2.95.3 20010315 (release - Linux-Mandrake 8.0 for PPC) */
+					/* compiles the instruction "addi 0, 0, n" as li 0, n */
 	);
 	return result;
 }
