@@ -44,7 +44,7 @@ class TChaserVisitor :public  TScoreVisitorInterface{
 		/*! Hashtable for ChanPress */
 		TEventTable   		fChanpresstable;	
 		/*! Hashtable for PitchBend */
-		TPitchWheelTable   	fPitchwheeltable;	
+		TEventTable   		fPitchwheeltable;	
 		/*! Hashtable for ProgChange */
 		TEventTable   		fProgchangetable;	
 		/*! Hashtable for Sysex */

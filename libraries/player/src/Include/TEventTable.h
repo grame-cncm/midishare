@@ -46,20 +46,20 @@ class TEventTable {
 	
 		virtual ~TEventTable(){}
 		
-		virtual void ChaseOn (TEventSenderInterfacePtr user , ULONG date_ms) 
+		virtual void ChaseOn(TEventSenderInterfacePtr user , ULONG date_ms) 
 		{
 			MidiEvPtr cur,e;
 			
 			for (short i = 0; i < kMaxHashCode; i++) {
-				cur =  fHashTable.GetLine(i);
+				cur = fHashTable.GetLine(i);
 				while (cur) {
-					if ((e = MidiCopyEv(cur))){ user->UseEvent(e,date_ms);}
+					if ((e = MidiCopyEv(cur))){user->UseEvent(e,date_ms);}
 					cur = Link(cur);
 				}
 			}
 		}
 		
-		virtual void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) {}
+		virtual void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) {}
 				
 };
 
@@ -72,15 +72,15 @@ typedef TEventTable FAR * TEventTablePtr;
    \brief A Midi event hashtable used for KeyOff chase.
 */
 
-class TKeyOnTable  :public TEventTable{
+class TKeyOnTable : public TEventTable{
 
 	public:
 	
 		virtual ~TKeyOnTable(){}
 
-		void ChaseOn (TEventSenderInterfacePtr user, ULONG date_ms) {}
+		void ChaseOn(TEventSenderInterfacePtr user, ULONG date_ms) {}
 	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) 
+		void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) 
 		{
 			MidiEvPtr cur,e;
 			
@@ -101,40 +101,6 @@ class TKeyOnTable  :public TEventTable{
 
 typedef TKeyOnTable FAR * TKeyOnTablePtr;
 
-//------------------------
-// Class TPitchWheelTable
-//------------------------
-/*!
-   \brief A Midi event hashtable used for PitchWheel chase.
-*/
-
-class TPitchWheelTable  :public TEventTable{
-
-	public:
-	
-		virtual ~TPitchWheelTable(){}
-	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) 
-		{
-			MidiEvPtr cur,e;
-			
-			for (short i = 0; i < kMaxHashCode; i++) {
-				cur =  fHashTable.GetLine(i);
-				while (cur) {
-					if ((e = MidiCopyEv(cur))){
-						MidiSetField(e,0,0);
-						MidiSetField(e,1,64);
-						user->UseEvent(e,date_ms);
-					}
-					cur = Link(cur);
-				}
-			}
-		}		
-				
-};
-
-typedef TPitchWheelTable FAR * TPitchWheelTablePtr;
-
 
 //------------------------
 // Class TCtrlChangeTable 
@@ -143,7 +109,7 @@ typedef TPitchWheelTable FAR * TPitchWheelTablePtr;
    \brief A Midi event hashtable used for CtrlChange chase.
 */
 
-class TCtrlChangeTable  :public TEventTable{
+class TCtrlChangeTable : public TEventTable{
 
 	private:
 
@@ -153,18 +119,18 @@ class TCtrlChangeTable  :public TEventTable{
 		
 	public:
 	
-		TCtrlChangeTable() {for (short i = 0; i <kMaxCtrl; i++) {fCtrldefault [i] = 0;}}
+		TCtrlChangeTable() {for (short i = 0; i < kMaxCtrl; i++) {fCtrldefault [i] = 0;}}
 		virtual ~TCtrlChangeTable(){}
 	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) 
+		void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) 
 		{
 			MidiEvPtr cur,e;
 			
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur =  fHashTable.GetLine(i);
 				while (cur) {
-					if (IsSustain (cur) && (e = MidiCopyEv(cur))){ 	
-						MidiSetField(e,1, fCtrldefault[64]); 		// Default value
+					if (IsSustain(cur) && (e = MidiCopyEv(cur))){ 	
+						MidiSetField(e,1,fCtrldefault[64]); 		// Default value
 						user->UseEvent(e,date_ms);
 					}
 					cur = Link(cur);
