@@ -32,7 +32,9 @@ static void InitHorloge( TMSGlobalPtr g)
 {
 	THorlogePtr h = &g->currTime;
     h->time        = 0; 
-    h->reenterCount = -1; 
+    h->reenterCount = -1;
+    h->offset = 0;
+    h->adjustCount = kClockAdjustCount;
 }
 
 /*===========================================================================

@@ -40,11 +40,20 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 typedef struct THorloge  FAR *  THorlogePtr;
 typedef FarPtr(void)			THost;   /* reserved for platform dependant
                                             storage */
+
 /*------------------------------------------------------------------------*/
 /* realtime clock */
+typedef struct {
+	long	sec;
+	long	usec;
+} TimeInfo, *TimeInfoPtr;
+
 typedef struct THorloge{
 	 unsigned long  time;         /* la date sur 32 bits (millisecondes)  */
 	 long           reenterCount; /* count of clockHandler reenters       */
+	 TimeInfo		rtOffset;     /* offset to real time clock            */
+	 long			adjustCount;  /* clocks adjustment count              */
+	 long			offset;       /* current real-time clock offset       */
 } THorloge;
 
 /*___________________________________*/
@@ -65,9 +74,12 @@ typedef struct TMSGlobal {
 #define Clients(g)       	(&g->clients)
 #define Memory(g)           (&g->memory)
 #define CurrTime(g)         (g->currTime.time)
+#define TimeOffset(g)       (g->currTime.rtOffset)
 #define Appls(g)       		(g->clients.appls)
 #define ActiveAppl(g)       (g->clients.activesAppls)
 #define NextActiveAppl(g)   (g->clients.nextActiveAppl)
+
+#define kClockAdjustCount	1000
 
 /*--------------------------------------------------------------------------*/
 /* function declaration                                                     */

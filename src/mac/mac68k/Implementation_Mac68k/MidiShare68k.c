@@ -45,6 +45,7 @@ typedef struct TMachine {
     Boolean    virtualMemory;      /* virtual memory is active    */
     SysEnvRec  env;
     TMTask     tm;                 /* Time Manager task record    */
+    long       freq;               /* task frequency parameter    */
 } TMac, * TMacPtr;
 
 typedef struct {
@@ -54,6 +55,7 @@ typedef struct {
 #define GetContext(c)	(((Mac68kContextPtr)c)->a5Reg)
 #define TimeTask(g)		(((TMacPtr)g->local)->tm)
 #define Drivers(g)		(((TMacPtr)g->local)->drivers)
+#define Freq(g)			(((TMacPtr)g->local)->freq)
 
 #define stateFile  "\pMidiShare state"
 enum { kStateCreator = 'Mshr', kStateType = 'msst' };
@@ -191,6 +193,7 @@ static void InitMachine (TMacPtr mach)
 		else
 			 mach->virtualMemory= false;
 	}
+	mach->freq = -1000;
 }
 
 /*__________________________________________________________________________*/
@@ -198,7 +201,7 @@ static pascal void timeManagerTask(void)
 {
 	TMSGlobalPtr *ptr = *(TMSGlobalPtr **) MidiShareVector;
 	TMSGlobalPtr g = *(--ptr);
-	PrimeTime((QElemPtr)&TimeTask(g), 1);
+	PrimeTime((QElemPtr)&TimeTask(g), Freq(g));
 	ClockHandler(g); 
 }
 
@@ -223,13 +226,30 @@ void SpecialSleep  (TMSGlobalPtr g)
 /*__________________________________________________________________________*/
 /* time interrrupt management                                               */
 /*__________________________________________________________________________*/
+void AdjustTimer (THost context, long offset, long period)
+{
+	TMacPtr mac = (TMacPtr)context;
+	long newfreq = (mac->freq * period) / (period + offset);
+	mac->freq = (mac->freq + newfreq) / 2;
+}
+
+long RealTimeOffset (THorlogePtr h)
+{
+	UnsignedWide cur; unsigned long t;
+	Microseconds (&cur);
+	t  = (cur.hi - h->rtOffset.sec) * 1000;
+	t += (cur.lo - h->rtOffset.usec) / 1000;
+	return t - h->time;
+}
+
 void OpenTimeInterrupts (TMSGlobalPtr g)
 {
 	TimeTask(g).tmAddr = NewTimerProc(timeManagerTask);
 	TimeTask(g).tmWakeUp = 0;
 	TimeTask(g).tmReserved = 0;
+	Microseconds((UnsignedWide *)&TimeOffset(g));
 	InsXTime ((QElemPtr)&TimeTask(g));
-	PrimeTime((QElemPtr)&TimeTask(g), -1000);
+	PrimeTime((QElemPtr)&TimeTask(g), Freq(g));
 }
 
 void CloseTimeInterrupts (TMSGlobalPtr g)

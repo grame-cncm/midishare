@@ -55,6 +55,22 @@ void ClockHandler (TMSGlobalPtr g)
 		 return;
 	 }
 
+	if (!--h->adjustCount) {
+		h->offset = RealTimeOffset (h) - 1;
+		h->adjustCount = kClockAdjustCount;
+	}
+	if (h->offset) {
+		AdjustTimer (g->local, h->offset, kClockAdjustCount);
+		if (h->offset < 0) {
+			h->reenterCount--;
+			h->offset++;
+			return;
+		}
+		else if (h->offset > 0) {
+			h->offset--;
+			h->reenterCount++;
+		}
+	}
 	 do {
 		 h->time++;
 		 e = (TDatedEvPtr)fifoclear (SorterList(g));
@@ -65,7 +81,7 @@ void ClockHandler (TMSGlobalPtr g)
 		 	RcvAlarmLoop(g);
 		 }
 
-	}while( h->reenterCount--);
+	} while( h->reenterCount--);
 }
 
 
