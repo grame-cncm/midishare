@@ -158,7 +158,7 @@ Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos)
 	Boolean ret = false;
 	
 	if (context->status) {
-		if (SlotInfo(appl)) ret = SlotInfo(appl)(appl->refNum, infos);
+		if (SlotInfo(appl)) ret = SlotInfo(appl)(slot, infos);
 	}
 	else {
 	}
