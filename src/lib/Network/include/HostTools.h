@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2001
+  Copyright © Grame 2001 - 2002
   Copyright © Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
@@ -54,44 +54,5 @@ class HostTools
 		static StringPtr PStrCat (Str255 s1, Str255 s2, Str255 dst);
 #endif
 };
-
-//________________________________________________________________________
-inline strPtr HostTools::HostName (char *host)
-{
-#if macintosh
-	static unsigned char s[256]; 
-	unsigned char n=0, *ptr = &s[1];
-
-	while (*host && (n < 255)){
-		*ptr++ = *host++;
-		n++;
-	}
-	s[0] = n;
-	return s;
-#else 
-	return host;
-#endif
-}
-
-//________________________________________________________________________
-inline char * HostTools::HostName ()
-{
-#if macintosh
-	StringHandle h;
-	unsigned char *s; short resFile;
-
-	resFile= CurResFile();
-	UseResFile( nil);
-	h= GetString (kMachineNameID);
-	s=  h ? *h : "\punknown";
-	s[s[0]+1] = 0;
-	UseResFile( resFile);
-	return (char *)&s[1];
-#else 
-	static char s[kMaxName];
-	int ret = gethostname(s, kMaxName); 
-	return (ret == -1) ? (char *)"unknown" : s;
-#endif
-}
 
 #endif
