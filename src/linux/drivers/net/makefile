@@ -2,7 +2,7 @@
 CXX  = gcc
 INC = -I../../Include -I../../../lib/Network/include
 NETLIB = ../../../lib/Network/msNetDriverLib.o
-LIB = $(NETLIB) -lMidiShare -lpthread
+LIB = $(NETLIB) -Wl,-L../../library -lMidiShare -lpthread
 CXXFLAGS = -g $(INC) -D__Pentium__
 CFLAGS = $(CXXFLAGS)
 
