@@ -42,7 +42,7 @@ Boolean Get1DriverState (short refNum, short slotsCount, void *buff, long buffsi
 	
 	for (i=1; i<=slotsCount; i++) {
 		sref = MidiGetIndSlot (refNum, i);
-		if ((sref > 0) && MidiGetSlotInfos (sref, &sInfos)) {
+		if ((sref.slotRef >= 0) && MidiGetSlotInfos (sref, &sInfos)) {
 			if (buffsize >= sizeof(sInfos)) {
 				buff = memcopy (&sInfos, buff, sizeof(sInfos));
 				buffsize -= sizeof(sInfos);
@@ -98,7 +98,7 @@ void Set1DriverState (short refNum, short slotsCount, void * ptr, long size)
 
 	for (i=1; i<=slotsCount; i++) {
 		sref = MidiGetIndSlot (refNum, i);
-		if ((sref > 0) && MidiGetSlotInfos (sref, &sInfos)) {
+		if ((sref.slotRef >= 0) && MidiGetSlotInfos (sref, &sInfos)) {
 			RestoreSlot (sref, &sInfos, ptr, size);
 		}
 	}

@@ -324,8 +324,8 @@ void DoIdle()
 
 		do {
 			sref = MidiGetIndSlot (data->refNum, 1);
-			if (sref > 0) MidiRemoveSlot (sref);
-		} while (sref > 0);
+			if (sref.slotRef >= 0) MidiRemoveSlot (sref);
+		} while (sref.slotRef >= 0);
 		
 		IOSetup (MySignature, InputPortID, data);
 
@@ -486,7 +486,7 @@ static OSErr GetOutputPorts(DriverDataPtr data)
 	numNodeOut(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeOut(data); i++) {			
 		sref = MidiAddSlot (data->refNum);
-		if (sref < 0) return 1;
+		if (sref.slotRef < 0) return 1;
 		slot2OutIndex(data)[Slot(sref)] = i;
 		slot2OMSOut(data)[Slot(sref)] = (*h)->info[i].ioRefNum;
 	}
@@ -505,7 +505,7 @@ static OSErr GetInputPorts (DriverDataPtr data)
 	numNodeIn(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeIn(data); i++) {	
 		sref = MidiAddSlot (data->refNum);
-		if (sref < 0) return 1;
+		if (sref.slotRef < 0) return 1;
 		slot2InIndex(data)[Slot(sref)] = i;
 		slot2OMSIn(data)[Slot(sref)] =  (*h)->info[i].ioRefNum;
 	}

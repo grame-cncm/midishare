@@ -90,9 +90,9 @@ static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 	unsigned char * name = 0;
 	SerialDrvPtr data = GetData ();
 	if (infos) {
-		if (slot == data->slot[kModem])
+		if (slot.slotRef == data->slot[kModem].slotRef)
 			name = modem;
-		else if (slot == data->slot[kPrinter])
+		else if (slot.slotRef == data->slot[kPrinter].slotRef)
 			name = printer;
 	 	if (name) {
 			PStrCpy (name, infos->name);
@@ -109,7 +109,7 @@ static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 static pascal void ReceiveEvents (short r)
 {
 	SerialDrvPtr data = GetData ();
-	SCCPtr scc; MidiEvPtr e = MidiGetEv(r);
+	SCCPtr scc; MidiEvPtr last, e = MidiGetEv(r);
 	Boolean rcv[2];
 
 	rcv[0] = rcv[1] = false;
@@ -119,8 +119,9 @@ static pascal void ReceiveEvents (short r)
 		if (scc && scc->state) {
 			Link(e) = 0;
 			INT_OFF();
-			Link(scc->seq.last) = e;
+			last = scc->seq.last;
 			scc->seq.last = e;
+			Link(last) = e;
 			INT_ON();
 			rcv[i] = true;
 		}
@@ -198,7 +199,7 @@ static void DataInit (SerialDrvPtr data)
 	for (i=0; i<2; i++) {
 		data->scc[i].checkTask = 0;
 		data->scc[i].state = false;
-		data->slot[i] = -1;
+		data->slot[i].slotRef = -1;
 	}
 }
 
@@ -222,12 +223,12 @@ Boolean SetUpMidi ()
 
 	data->refNum = refNum;
 	sref = MidiAddSlot (refNum);
-	if (sref >= 0) {
+	if (sref.slotRef >= 0) {
 		data->slot[kModem] = sref;
 		data->slotIndex[Slot(sref)] = kModem;
 	}
 	sref = MidiAddSlot (refNum);
-	if (sref >= 0) {
+	if (sref.slotRef >= 0) {
 		data->slot[kPrinter] = sref;
 		data->slotIndex[Slot(sref)] = kPrinter;
 	}

@@ -124,7 +124,7 @@ static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 {
 	Str32 name = "\pQuickTime GM Synth";
 	DriverDataPtr data = GetData ();
-	if (infos && (slot == data->slotRef)) {
+	if (infos && (slot.slotRef == data->slotRef.slotRef)) {
 		PStrCpy (name, infos->name);
 		infos->direction = MidiOutputSlot;
 		return true;

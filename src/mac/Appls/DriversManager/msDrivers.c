@@ -121,7 +121,8 @@ static SlotRefNum GetIndSlot (short ref, short index, short direction)
 			}
 		}
 	}
-	return -1;
+	sref.slotRef = -1;
+	return sref;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -133,32 +134,36 @@ static void RefreshPortProc (SlotRefNum sref, TSlotInfos * slotInfo, long refcon
 }
 
 /* -----------------------------------------------------------------------------*/
-static SlotRefNum Cell2Slot (ListHandle list, Cell * c)
+static void Cell2Slot (ListHandle list, Cell * c, SlotRefNum *sref)
 {
 	short i, ref;
 	short direction =  (list == theList[SrcL]) ? MidiInputSlot : MidiOutputSlot;
 	
 	ref = MidiGetIndDriver (ListIndexToDrvIndex (c->v, list));
-	if (ref < 0) 	return -1;
+	if (ref < 0) 	sref->slotRef = -1;
 	i = ListIndexToSlotIndex(c->v, list);
-	if (i <= 0) 	return -1;
-	return GetIndSlot (ref, i, direction);
+	if (i <= 0) 	sref->slotRef = -1;
+	*sref = GetIndSlot (ref, i, direction);
 }
 
 /* -----------------------------------------------------------------------------*/
 static SlotRefNum LastClickedSlot (ListHandle list, Cell * c)
 {
+	SlotRefNum sref;
 	*c = LLastClick (list);
-	return Cell2Slot (list, c);
+	Cell2Slot (list, c, &sref);
+	return sref;
 }
 
 /* -----------------------------------------------------------------------------*/
 static SlotRefNum LastSelectedSlot (ListHandle list, Cell * c)
 {
+	SlotRefNum sref;
+	sref.slotRef = -1;
 	c->h = c->v = 0;
 	if (LGetSelect (true, c, list))
-		return Cell2Slot (list, c);
-	return -1;
+		Cell2Slot (list, c, &sref);
+	return sref;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -302,7 +307,7 @@ Boolean ChangeConnect (ListHandle list)
 	SlotRefNum sref = LastClickedSlot (list, &c);
 	
 	if (portSelected < 0) return false;	
-	if (sref < 0) return false;
+	if (sref.slotRef < 0) return false;
 	MidiConnectSlot (portSelected, sref, LGetSelect (false, &c, list));
 	RefreshPortMap ();
 	return true;
@@ -410,7 +415,7 @@ Boolean ListPorts (ListHandle list, Boolean fromClick)
 	ListHandle alt = (list == theList[SrcL]) ? theList[DstL] : theList[SrcL];
 	SlotRefNum sref = fromClick ? LastClickedSlot (list, &c) : LastSelectedSlot(list, &c);
 	
-	if (sref < 0) goto reset;
+	if (sref.slotRef < 0) goto reset;
 	if (LGetSelect (false, &c, list)) {
 		if (MidiGetSlotInfos (sref, &slotInfo)) {
 			for (i = 0; i < 32; i++) {

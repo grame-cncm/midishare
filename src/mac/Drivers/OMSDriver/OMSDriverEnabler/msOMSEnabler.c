@@ -159,7 +159,7 @@ static void DoIdle()
 	if (ref > 0) {
 		TSlotInfos sInfos;
 		SlotRefNum sref = MidiGetIndSlot (ref, 1);
-		if (sref > 0) {
+		if (sref.slotRef >= 0) {
 			MidiGetSlotInfos (sref, &sInfos);
 			doneFlag = true;
 		}
