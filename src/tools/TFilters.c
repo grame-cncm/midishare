@@ -87,7 +87,8 @@ MidiName ApplName = "\pFiltres";
 MidiName ApplName = "Filtres";
 #endif
 
-#define LastPort 32
+#define LastPort 	32
+#define kWaitTime 	10
 
 /* =========================== events names ===========================*/
 char *typeListe[] =
@@ -162,14 +163,15 @@ static void wait( unsigned long v)
 /*____________________________________________________________________*/
 static MidiEvPtr GetReceived(void)
 {
-	long n;
+	long n; MidiEvPtr e;
 	
 	if( (n= MidiCountEvs( refNum)) > 1) {
 		print ("\nwarning: %ld evts recus\n", n);
 		MidiFlushEvs( refNum);
 		return 0;
 	}
-	return MidiGetEv( refNum);
+	e = MidiGetEv( refNum);
+	return e;
 }
 
 /*____________________________________________________________________*/
@@ -182,7 +184,7 @@ static int TestEv( int i, short t1, short t2)
 		e= MidiNewEv( n);
 		if( e) {
 			MidiSendIm( refNum, e);
-			wait( 2);
+			wait( kWaitTime);
 			e= GetReceived();
 			if( e) {
 				if( n== i) {
@@ -251,7 +253,7 @@ static void TestCanal( int i)
 		if( e) {
 			Chan(e)= n;
 			MidiSendIm( refNum, e);
-			wait( 2);
+			wait( kWaitTime);
 			e= GetReceived();
 			if( e) {
 				if( n== i) {
@@ -301,7 +303,7 @@ static void TestPort( int i)
 		if( e) {
 			Port(e)= n;
 			MidiSendIm( refNum, e);
-			wait( 2);
+			wait( kWaitTime);
 			e= GetReceived();
 			if( e) {
 				if( n== i) {
@@ -350,8 +352,9 @@ int Open (void)
 			Close ();
 			return false;
 		}
-		MidiConnect( refNum, refNum, true);
 		MidiSetFilter( refNum, myFilterPtr);
+		MidiConnect( refNum, refNum, true);
+		wait (50);
 		return true;
 	}
 	return false;

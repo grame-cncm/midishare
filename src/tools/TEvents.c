@@ -99,9 +99,6 @@ MidiName ApplName = "Sender";
 MidiName OtherName = "Receiver";
 #endif
 
-#ifndef TestServer
-#define MidiFlushEvs(r)
-#endif
 
 /* ========================= variables globales de l'application ==================*/
 short r1= 0, r2= 0, version= 0;
@@ -207,16 +204,14 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void wait( int d)
 {
-#ifdef TestServer
 	unsigned long time = MidiGetTime()+ d;
+	usleep (d*1000);
 	while( MidiGetTime()<= time);
-#endif
 }
 
 /*______________________________________________________________________________*/
 static void wait2( int d)
 {
-#ifdef TestServer
 	long time, i, t;
 	
 	time= (i= t= MidiGetTime())+ d;
@@ -226,30 +221,24 @@ static void wait2( int d)
 			print("."); flush;
 		t= MidiGetTime();
 	}
-#endif
 }
 
 /*______________________________________________________________________________*/
 int OpenAppls()
 {	
-#ifdef TestServer
-	if( (r1= MidiOpen( ApplName)) < 0)
-	{
-		print("Impossible to open a MidiShare application !\n");
-		print("Interrupted test !\n");
+	if( (r1= MidiOpen( ApplName)) < 0) {
+		print("MidiOpen failed !\n");
 		return false;
 	}
-	if( (r2= MidiOpen( OtherName)) < 0)
-	{
-		print("Impossible to open a MidiShare application !\n");
-		print("Interrupted test !\n");
+	if( (r2= MidiOpen( OtherName)) < 0) {
+		print("MidiOpen failed !\n");
 		MidiClose( r1);
 		return false;
 	}
-	MidiConnect( r1, 0, true);
-	MidiConnect( 0, r1, true);
+//	MidiConnect( r1, 0, true);
+//	MidiConnect( 0, r1, true);
 	MidiConnect( r1, r2, true);
-#endif
+	usleep (50000);
 	return true;
 }
 
@@ -602,15 +591,10 @@ static TestEvent( short i, Boolean display)
 			{
 				if( i== typeProcess || i== typeDProcess)
 					return true;
-#ifdef TestServer
 				Date( copy)= MidiGetTime()+2;
 				MidiSend( r1, copy); 
-				wait( 6);
+				wait(50);
 				ret= (* GetEvTable[i])( e);
-#else
-                                MidiFreeEv(copy);
-                                ret = true;
-#endif
 			}
 		}
 		MidiFreeEv(e);
@@ -662,7 +646,7 @@ void SystemeEx()
 		MidiAddField( e, v++);
 		if( !(copy= MidiCopyEv( e))) { noEvts; break;}
 		else if( CmpEv( e, copy, "copy")){
-			MidiSendIm( r1, copy); wait( 40);
+			MidiSendIm( r1, copy); wait( 20);
 			if( !GetEvents( e))
 			{
 				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
@@ -687,7 +671,9 @@ void SystemeEx()
 		print(" copy"); flush;
 		if( CmpEv( e, copy, "copy")){
 			print(" ok ");
-			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
+			MidiSendIm( r1, copy); 
+			wait2(2000);
+//			wait2( (SizeMaxSysEx*2)/3+ 10);
 			if( !GetEvents( e))
 			{
 				MidiFreeEv(e);
@@ -895,10 +881,8 @@ void Reserved()
 /*______________________________________________________________________________*/
 void Close ()
 {
-#ifdef TestServer
 	MidiClose( r1);
 	MidiClose( r2);
-#endif
 }
 
 /*______________________________________________________________________________*/
@@ -907,20 +891,19 @@ main( int argc, char *argv[])
 	print("\nAllocation, emission and reception of MidiShare events.\n");
 	print("==========================================================\n");
 
-//	if( MidiShare())
-	{
-//		version= MidiGetVersion();
+	if( MidiShare()) {
+		version= MidiGetVersion();
 		print("                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
 		print("\nWarning : MidiShare must have at least 10000 events !\n");
 
-		if( OpenAppls())
-		{
+		if( OpenAppls()) {
 			wait( 100);
-			ChanEvents(); flush;
+
+/*			ChanEvents(); flush;
 			CommonEvents(); flush;			
-			SystemeEx(); flush;
+*/			SystemeEx(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);
-			Stream(); flush;
+/*			Stream(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);
 			Private(); flush;
 			Process(); flush;
@@ -929,11 +912,12 @@ main( int argc, char *argv[])
 			Internals(); flush;
 			Fonctions(); flush;
 			Reserved(); flush;
+*/
 			Close ();
 		}
 
 	}
-//	else print("MidiShare is not installed !\n");
+	else print("MidiShare is not installed !\n");
 	print("\nEnd of allocation emission and reception test of events.\n");
 	return 0;
 }

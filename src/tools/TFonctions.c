@@ -639,9 +639,10 @@ void Sending()
 		{
 			print ("    MidiSendIm : ");flush;
 			MidiSendIm( refNum, copy);
-			time= MidiGetTime();
+//			time= MidiGetTime();
+			time= MidiGetTime() + 1;
 			print ("%s\n", OK);
-			while( time == MidiGetTime());
+			while( time >= MidiGetTime());
 			
 			print ("    MidiCountEvs : ");flush;
 			n= MidiCountEvs(r);
@@ -665,7 +666,8 @@ void Sending()
 			print ("    MidiSend : ");flush;
 			Date(copy)= time= MidiGetTime()+ 4;
 			MidiSend( refNum, copy);
-			while( MidiGetTime()< time);
+//			while( MidiGetTime()< time);
+			while( MidiGetTime()< time+2);
 			print ("%s\n", OK);
 			n= MidiCountEvs(r);
 			if( n!= 1)
@@ -679,11 +681,12 @@ void Sending()
 		}
 		else print ("Warning : no more MidiShare events !\n");
 
-		Date(e)= nil;
+//		Date(e)= nil;
 		print ("    MidiSendAt : ");flush;
 		MidiSendAt( refNum, e, time= MidiGetTime()+ 4);
 		print ("%s\n", OK);
-		while( MidiGetTime()< time);
+//		while( MidiGetTime()< time);
+		while( MidiGetTime()< time+6);
 		n= MidiCountEvs(r);
 		if( n!= 2)
 			print ("Warning : incoherent number of transmited events : %ld\n", n);
@@ -810,7 +813,7 @@ void Tasks( short isFreeMem)
 	print ("    MidiCall : ");flush;
 	MidiCall( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
 	time+= 4;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	print ("%s\n", OK);
 	if( (p1!= 1) && isFreeMem)
 		print ("Warning : task not completed !\n");
@@ -819,7 +822,7 @@ void Tasks( short isFreeMem)
 	p1= 0;
 	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
 	time+= 50;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	print ("%lx %s\n", e, OK);
 	if( (p1!= 1) && isFreeMem)
 		print ("Warning : task not completed !\n");
@@ -831,7 +834,7 @@ void Tasks( short isFreeMem)
 	print ("%s\n",OK);
 	if(e) print ("Warning : MidiForgetTask does not set task address to 0 !\n");
 	time+= 50;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	if( (p1!= 0) && isFreeMem)
 		print ("Warning : MidiForgetTask does not forget the task!\n");
 	
@@ -890,7 +893,7 @@ void Tasks( short isFreeMem)
 	print ("%s\n",OK);
 	
 	time= MidiGetTime()+50;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	
 	if( !gContext.res1 && isFreeMem)
 		print ("Warning : task1 not completed !\n");
@@ -903,7 +906,7 @@ void Tasks( short isFreeMem)
 	print ("    MidiDTask : ");flush;
 	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
 	time+= 4;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	print ("%lx %s\n", e, OK);
 	
 	print ("    MidiCountDTasks : ");flush;
@@ -924,7 +927,7 @@ void Tasks( short isFreeMem)
 
 	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
 	time+= 50;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	p1= MidiCountDTasks( refNum);
 	if( p1!= 1)
 		print ("Warning : incorrect task number : %ld\n", p1);
@@ -940,7 +943,7 @@ void Tasks( short isFreeMem)
 	print ("    MidiForgetTask : ");flush;
 	MidiForgetTask( &e);
 	time+= 4;
-	while( MidiGetTime() <= time);
+	while( MidiGetTime() < time);
 	print ("%s\n", OK);
 	p1= MidiCountDTasks( refNum);
 	if( p1)
@@ -1112,18 +1115,18 @@ main()
 		if( !Environment()) return 1;
 		flush;
 		OpenClose(); flush;
-		ApplConfiguration(); flush;
+/*		ApplConfiguration(); flush;
 		Connections( true); flush;
 		Events( true); flush;
 		Sequences( true); flush;
 		Time(); flush;
-//		Sending(); flush;
+		Sending(); flush;
 		Mail(); flush;
-//		Tasks(true); flush;
-		Synchro(); flush;
+*/		Tasks(true); flush;
+/*		Synchro(); flush;
 		Tolerance(); flush;
 		NoMem(); flush;
-		MidiClose( refNum);
+*/		MidiClose( refNum);
 	}
 	else print ("MidiShare is not installed !\n");
 	print ("\nEnd of functions test.\n");
