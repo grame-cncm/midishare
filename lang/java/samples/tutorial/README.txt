@@ -13,6 +13,7 @@ connections and send Midi events.
 
 To compile the Tutorial part1 :
 
+javac AppletFrame.java   
 javac TutorialPartl.java
 
 To launch the Tutorial part1 :
