@@ -41,6 +41,8 @@ MSFunctionType(void)       MSSetField    (MidiEvPtr e, unsigned long f, long v);
 MSFunctionType(long)       MSGetField    (MidiEvPtr e, long f);
 MSFunctionType(long)       MSCountFields (MidiEvPtr e);
 MSFunctionType(void)       MSAddField    (MidiEvPtr e, long v, lifo* freelist);
+MSFunctionType(MidiEvPtr)  MSNewCellFunction (lifo* freelist);
+MSFunctionType(void)       MSFreeCellFunction (MidiEvPtr e, lifo* freelist);
 
 /* initialization function */
 void InitEvents ();
