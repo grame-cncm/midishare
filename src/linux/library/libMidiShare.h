@@ -61,7 +61,7 @@ typedef struct TTaskExt
 #define CALL(index,args) \
 	 {int err; if (msfd < 0) MidiInstall();\
 	 err = ioctl(msfd, (index), args); \
-	 if (err < 0) { printf("(index) ioctl failed: %d\n", err);  exit(-1); }}
+	 if (err < 0) { printf("ioctl failed index %d file %s line %d\n", index, __FILE__, __LINE__);  exit(-1); }}
 
 
 /*__________________________________________________________________________________*/
