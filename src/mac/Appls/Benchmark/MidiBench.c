@@ -339,14 +339,15 @@ long DoBench (short benchNum)
 
 void InitBenchLoop(void)
 {
-  unsigned long elapsed, d1, d2;
+	long elapsed=0;
 
-  benchLoop = 0;
-  GetDateTime(&d1);
-  reference();
-  GetDateTime(&d2);
-  elapsed = d2 - d1;
-  benchLoop = 180 / (elapsed ? elapsed : 1);
+	benchLoop = 1;
+	do {
+	  	benchMark1 (&elapsed);
+	  	if (elapsed) break;
+		else benchLoop++;
+	} while (benchLoop < 20); 
+	benchLoop *= 180000 / (elapsed ? elapsed : 1);
 }
 
 void CloseBenchs (void)
