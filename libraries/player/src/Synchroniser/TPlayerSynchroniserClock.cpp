@@ -49,7 +49,7 @@ void TPlayerSynchroniserClock::Cont (ULONG date_ticks)
 { 
 	fTempoVisitor->Init(); // Important  (Tempo Map must be re-initialized)
 	fTempoVisitor->UpdateTicks(date_ticks);
-	fClock_count = fClockConverter->ConvertTickToClock(date_ticks);
+	fClock_count = (ULONG)fClockConverter->ConvertTickToClock((float)date_ticks);
 	fNextdate_ticks = date_ticks;
 	fState->SetWaiting();
 }
@@ -89,7 +89,7 @@ void TPlayerSynchroniserClock::RcvNextClock (ULONG date_ms)
 void TPlayerSynchroniserClock::NextClock (ULONG date_ms)
 {
  	fRcv_clock = date_ms;
- 	fNextdate_ticks = fClockConverter->ConvertClockToTick(++fClock_count);
+ 	fNextdate_ticks = (ULONG)fClockConverter->ConvertClockToTick((float(++fClock_count)));
  	fScheduler->ReScheduleTasks();
 }
 
@@ -109,5 +109,5 @@ ULONG TPlayerSynchroniserClock::GetPosTicks ()
 
 void TPlayerSynchroniserClock::SetPosTicks (ULONG date_ticks)
 {
-	 fTempoVisitor->UpdateTicks(fClockConverter->ConvertTickToTickAtPrevClock(date_ticks));
+	 fTempoVisitor->UpdateTicks((ULONG)fClockConverter->ConvertTickToTickAtPrevClock((float)date_ticks));
 }

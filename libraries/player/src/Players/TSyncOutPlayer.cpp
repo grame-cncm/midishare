@@ -65,8 +65,8 @@ void TSyncOutPlayer::Cont()
 	// Set the pos on the previous Clock or SongPos
 	
 	ULONG new_date_ticks = (fNeedSongPos) 
-		? fClockConverter->ConvertTickToTickAtPrevSP(fPlayer->GetPosTicks())
-		: fClockConverter->ConvertTickToTickAtPrevClock(fPlayer->GetPosTicks());
+		? (ULONG) fClockConverter->ConvertTickToTickAtPrevSP((float)fPlayer->GetPosTicks())
+		: (ULONG) fClockConverter->ConvertTickToTickAtPrevClock((float)fPlayer->GetPosTicks());
 	
 	fPlayer->SetPosTicks(new_date_ticks);
 	fPlayer->Cont();
@@ -80,7 +80,7 @@ void TSyncOutPlayer::Cont()
 void TSyncOutPlayer::PlaySliceForward()  
 { 
 	fPlayer->PlaySliceForward();
-	ULONG new_date_ticks = fClockConverter->ConvertTickToTickAtPrevSP(fPlayer->GetPosTicks());
+	ULONG new_date_ticks = (ULONG)fClockConverter->ConvertTickToTickAtPrevSP((float)fPlayer->GetPosTicks());
 	fClocksender->SendSongPos(new_date_ticks);
 	fNeedSongPos = true;
 }
@@ -90,7 +90,7 @@ void TSyncOutPlayer::PlaySliceForward()
 void TSyncOutPlayer::PlaySliceBackward() 
 { 
 	fPlayer->PlaySliceBackward();
-	ULONG new_date_ticks = fClockConverter->ConvertTickToTickAtPrevSP(fPlayer->GetPosTicks());
+	ULONG new_date_ticks = (ULONG)fClockConverter->ConvertTickToTickAtPrevSP((float)fPlayer->GetPosTicks());
 	fClocksender->SendSongPos(new_date_ticks); 
 	fNeedSongPos = true;
 }
@@ -101,7 +101,7 @@ void TSyncOutPlayer::SetPosTicks (ULONG date_ticks)
 { 
 	// Set the pos on the previous SongPos
 	
-	ULONG new_date_ticks = fClockConverter->ConvertTickToTickAtPrevSP(date_ticks);
+	ULONG new_date_ticks = (ULONG)fClockConverter->ConvertTickToTickAtPrevSP((float)date_ticks);
 	fPlayer->SetPosTicks(new_date_ticks);
 	fClocksender->SendSongPos(new_date_ticks);
 	fNeedSongPos = false;

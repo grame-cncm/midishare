@@ -62,7 +62,7 @@ void TClockSender::Stop()
 void TClockSender::Cont(ULONG date_ticks)
 {
 	fEventUser->SendEvent(MidiNewEv(typeContinue),MidiGetTime());
-	fClockCount = fClockConverter->ConvertTickToClock(date_ticks);
+	fClockCount = (ULONG)fClockConverter->ConvertTickToClock((float)date_ticks);
 	fScheduler->ScheduleTickTask(fClockTask, date_ticks);
 }
 
@@ -74,7 +74,7 @@ void TClockSender::NextClock (ULONG date_ms)
 {
 	fClockCount++;
 	fEventUser->SendEvent(MidiNewEv(typeClock),date_ms);
-	fScheduler->ScheduleTickTask(fClockTask, fClockConverter->ConvertClockToTick(fClockCount));
+	fScheduler->ScheduleTickTask(fClockTask, (ULONG)fClockConverter->ConvertClockToTick((float)fClockCount));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -82,7 +82,7 @@ void TClockSender::NextClock (ULONG date_ms)
 void TClockSender::SendSongPos(ULONG date_ticks)
 {
 	if (MidiEvPtr e = MidiNewEv(typeSongPos)) {
-		ULONG pos = fClockConverter->ConvertTickToSongPos(date_ticks);
+		ULONG pos = (ULONG)fClockConverter->ConvertTickToSongPos((float)date_ticks);
 		MidiSetField(e,0,pos & 0x7F);
 		MidiSetField(e,1,(pos>>7) & 0x7F);
 		fEventUser->SendEvent(e,MidiGetTime());     
@@ -93,5 +93,5 @@ void TClockSender::SendSongPos(ULONG date_ticks)
 
 ULONG TClockSender::GetPosTicks() 
 {
-	return (fClockCount == 0) ? 0 : fClockConverter->ConvertClockToTick(fClockCount - 1);
+	return (fClockCount == 0) ? 0 : (ULONG)fClockConverter->ConvertClockToTick((float)(fClockCount - 1));
 }

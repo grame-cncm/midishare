@@ -159,7 +159,7 @@ void UMidi::SetRefnum(MidiSeqPtr src,short refnum)
 	MidiEvPtr cur = FirstEv(src);
 	
 	while (cur) {
-		RefNum(cur) = refnum;
+		RefNum(cur) = (Byte)refnum;
 		cur = Link(cur);
 	}
 }

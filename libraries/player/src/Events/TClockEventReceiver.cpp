@@ -66,5 +66,5 @@ void TClockEventReceiver::ReceiveContinue(MidiEvPtr e) {fPlayer->Cont();}
 void TClockEventReceiver::ReceiveSongPos(MidiEvPtr e) 
 {
 	ULONG songpos = (MidiGetField(e,0) + (MidiGetField(e,1)<<7));
-	fPlayer->SetPosTicks(fClockConverter->ConvertSongPosToTick(songpos));
+	fPlayer->SetPosTicks((ULONG)fClockConverter->ConvertSongPosToTick((float)songpos));
 }

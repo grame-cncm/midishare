@@ -156,7 +156,7 @@ void TMidiAppl::Close()
 	
  	if( ev) {
  		Date(ev)= date;
-		RefNum(ev)= fRefnum;
+		RefNum(ev)= (Byte)fRefnum;
 		ext= LinkST(ev);
 		ext->ptr1= (Ptr)routine;
 		ext->ptr2= (Ptr)a1;

@@ -85,7 +85,7 @@ enum loopState {kLoopOn = 0, kLoopOff};
 #define MatchEvent(e1,e2) ((Pitch((e1)) == Pitch((e2))) && (RefNum ((e1)) == RefNum ((e2))) && (Chan ((e1))== Chan ((e2))) &&(Port ((e1)) == Port ((e2))))
 #define MatchEvent1(e1,e2) ((RefNum ((e1)) == RefNum ((e2))) && (Chan ((e1))== Chan ((e2))) && (Port ((e1))== Port ((e2))))
 
-#define HashCode(h,c) (((h) & 0x0F) + ((c) & 0x0F << 4))
+#define HashCode(h,c) (Byte)(((h) & 0x0F) + ((c) & 0x0F << 4))
 #define kMaxHashCode 256
 
 //-----------------------------------
