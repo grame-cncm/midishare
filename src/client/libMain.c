@@ -34,6 +34,21 @@ extern TMSGlobalPtr gMem;
 extern void MSInitialize(void);
 
 //#pragma CALL_ON_MODULE_BIND MSInitialize 
+#ifdef WIN32
+void main () {}
+//_________________________________________________________
+BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+{
+	switch (fdwReason) {
+		case DLL_PROCESS_ATTACH:
+			MSInitialize ();
+			break;
+		case DLL_PROCESS_DETACH:
+			break;
+	 }
+    return TRUE;
+}
+#endif
 
 /*____________________________________________________________________________*/
 void MSInitialize() {
