@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2001
+  Copyright © Grame 2001-2002
   Copyright © Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
@@ -28,6 +28,12 @@
 #include "TNetInfos.h"
 #include "TInetAddress.h"
 
+#ifdef __powerpc__
+#define kBroadcastMask	0xff
+#else
+#define kBroadcastMask	0xff000000
+#endif
+
 extern int errno, h_errno;
 //____________________________________________________________
 TNetInfos::TNetInfos (short port)
@@ -47,7 +53,7 @@ TNetInfos::TNetInfos (short port)
 	fLocal.sin_family = fBroadcast.sin_family = addr.GetAddress()->sin_family;
 	fLocal.sin_port = fBroadcast.sin_port = port;
 	IPField(fLocal) = addr.GetIP();
-	IPField(fBroadcast) = IPField(fLocal) | 0xff000000;
+	IPField(fBroadcast) = IPField(fLocal) | kBroadcastMask;
 
 	fMTU = 1500;
 	fError = noErr;
