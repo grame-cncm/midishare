@@ -79,6 +79,7 @@ typedef struct {
 	DriverDataPtr	data;
 	short			refNum;
 	TFilter         filter;
+	Boolean	*		autoQuit;
 } Storage, * StoragePtr;
 
 
@@ -200,6 +201,16 @@ static void InitSlotsTables (DriverDataPtr data)
 }
 
 /* -----------------------------------------------------------------------------*/
+static void RemoveSlots (DriverDataPtr data)
+{
+	SlotRefNum sref;
+	do {
+		sref = MidiGetIndSlot (data->refNum, 1);
+		if (sref.slotRef >= 0) MidiRemoveSlot (sref);
+	} while (sref.slotRef >= 0);
+}
+
+/* -----------------------------------------------------------------------------*/
 /* Driver required callbacks                                                    */
 /* -----------------------------------------------------------------------------*/
 static void WakeUpEnable (DriverDataPtr data)
@@ -235,11 +246,7 @@ static void WakeUp (short r)
 	MidiParseInitTypeTbl (data->s2t);
 	MidiParseInit (&data->rcv, data->rTbl, data->s2t);
 
-#ifndef __BackgroundOnly__
 	WakeUpEnable (data);
-#else 
-	data->voidSlot = MidiAddSlot (r, "\ptmp", 0);
-#endif
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -265,10 +272,11 @@ static void Sleep (short r)
 
 	if (mem->refNum)
 		SaveDriverState (r, StateFile, MySignature, StateType);
-#ifdef __BackgroundOnly__	
-	CloseMidi ();
-	doneFlag = true;
-#endif
+	if (*mem->autoQuit) {	
+		CloseMidi ();
+		doneFlag = true;
+	}
+	else RemoveSlots (data);		
 	if (data) {
 		DisposeOMSMemory (data);
 		OMSDispose (MySignature, data);
@@ -280,7 +288,7 @@ static void Sleep (short r)
 /* -----------------------------------------------------------------------------*/
 void DoIdle()
 {
-	DriverDataPtr data = GetData (); SlotRefNum sref;
+	DriverDataPtr data = GetData ();
 	
 	if (data && data->reloadOMS) {
 		short n = (*OMSInputNodes(data))->numNodes;
@@ -289,11 +297,7 @@ void DoIdle()
 		DisposePtr ((Ptr)ConnectionParams(data));
 		InitSlotsTables (data);
 
-		do {
-			sref = MidiGetIndSlot (data->refNum, 1);
-			if (sref.slotRef >= 0) MidiRemoveSlot (sref);
-		} while (sref.slotRef >= 0);
-		
+		RemoveSlots (data);		
 		IOSetup (MySignature, InputPortID, data);
 
 		RestoreDriverState (data->refNum, StateFile);
@@ -356,7 +360,7 @@ static void SetupFilter (MidiFilterPtr filter)
 }
 
 /* -----------------------------------------------------------------------------*/
-Boolean SetUpMidi ()
+Boolean SetUpMidi (Boolean *autoQuit)
 {
 	TDriverInfos infos = { OMSDriverName, 100, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
@@ -364,6 +368,7 @@ Boolean SetUpMidi ()
 
 	mem->refNum = 0;
 	mem->data = 0;
+	mem->autoQuit = autoQuit;
 
 	if (MidiGetNamedAppl (OMSDriverName) > 0) { // still running
 		doneFlag = true;
