@@ -14,14 +14,12 @@ common:
 
 install:
 	./checksu
-	make -C library -f install -i
+	make -i -C library -f install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
 	insmod MidiShareKernel
-	make -C tools public -i
-	make -C tests all
 
 tools :
-	make -C tools all
+	make -i -C tools public 
 	make -C tests all
 
 uninstall:
@@ -29,8 +27,8 @@ uninstall:
 	rmmod MidiShareKernel
 	
 clean:
-	make -C ../common clean -i
-	make -C kernel clean -i
-	make -C library clean -i
-	make -C tools clean -i
+	make -i -C ../common clean 
+	make -i -C kernel clean 
+	make -i -C library clean 
+	make -i -C tools clean 
 	rm ../common/makefile
