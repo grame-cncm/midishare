@@ -1,5 +1,5 @@
 
-DIRS = msconnect mscontrol msdisplay msecho msplayer mssync msclock samples radio-hd-server
+DIRS = msconnect mscontrol msdisplay msecho mssync msclock samples radio-hd-server
 
 all:
 	make -C lib
