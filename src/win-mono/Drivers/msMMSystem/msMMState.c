@@ -93,13 +93,13 @@ static void LoadSlot (SlotPtr slot, char * section)
 //________________________________________________________________________
 void LoadState (SlotPtr in, SlotPtr out)
 {
-	while (in) {
-		LoadSlot (in, inSlotSectionName);
-		in = in->next;
-	}
 	while (out) {
 		LoadSlot (out, outSlotSectionName);
 		out = out->next;
+	}
+	while (in) {
+		LoadSlot (in, inSlotSectionName);
+		in = in->next;
 	}
 }
 
