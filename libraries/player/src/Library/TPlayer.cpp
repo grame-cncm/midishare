@@ -217,11 +217,7 @@ void TPlayer::SetPosMs (long date_ms) { fPlayer->SetPosMs(date_ms); }
  	
  	if ((res = fInserter->InsertAllTrack(s)) == kNoErr) { 
  		if (fRunningState->IsIdle()) {
- 			if (date_ticks < cur_date_ticks){
- 				fPlayer->SetPosTicks(date_ticks);
- 			}else{
- 				fPlayer->SetPosTicks(cur_date_ticks);
- 			}
+ 			fPlayer->SetPosTicks(UMath::Min(date_ticks,cur_date_ticks));
  			fPlayer->Cont();
  		}
  	}
@@ -240,11 +236,7 @@ long TPlayer::InsertTrack(short tracknum,MidiSeqPtr s)
  	
  	if ((res = fInserter->InsertTrack(tracknum,s)) == kNoErr) { 
  		if (fRunningState->IsIdle()) {
- 			if (date_ticks < cur_date_ticks) {
- 				fPlayer->SetPosTicks(date_ticks);
- 			}else{
- 				fPlayer->SetPosTicks(cur_date_ticks);
- 			}
+ 			fPlayer->SetPosTicks(UMath::Min(date_ticks,cur_date_ticks));
  			fPlayer->Cont();
  		}
  	}
