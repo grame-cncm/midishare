@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+
+LIB=../../lib
+INC=../Include
+
+echo creating $LIB/makefile
+cp make.lib   $LIB/makefile
+
+echo creating $LIB/make.module
+cp make.module $LIB
+
+echo making aliases
+cd $INC
+ln -s $LIB/*.h .
+
+cd $LIB
+for a in [^k]*.c
+do
+	[ -h k$a ] || ln -s $a k$a
+done
+
+echo making dependencies
+make dep >/dev/null 2>&1
+
+echo end of lib configure
+

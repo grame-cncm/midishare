@@ -1,0 +1,27 @@
+
+TARGET = ../linux/lib/msUtilities.o
+OPTIONS = -D__Linux__ -D__Pentium__
+INC = -I../linux/Include
+CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
+CC = gcc
+
+SRC = *.c
+OBJ = MidiPrint.o EventToMidiStream.o MidiStreamToEvent.o msDrvUtils.o 
+
+$(TARGET) : $(OBJ)
+	ld -m elf_i386 -r -o $(TARGET) $(OBJ)
+	make -f make.module
+
+module: 
+	make -f make.module
+
+dep:
+	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
+	make -f make.module dep
+
+clean:
+	rm $(OBJ) $(TARGET)
+	make -f make.module clean
+
+
+# DO NOT DELETE
