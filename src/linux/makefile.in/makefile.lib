@@ -4,13 +4,13 @@ FLAGS := -O0 -Wall -g -D_REENTRANT -D_LOOSE_KERNEL_NAMES -D__Pentium__
 LOBJ = lib
 CC = gcc
 LD = ld
-CFLAGS := $(FLAGS) -fPIC -I../Headers
+CFLAGS := $(FLAGS)  -I../Headers
 
 OBJ = $(LOBJ)/msMemory.o $(LOBJ)/msEvents.o $(LOBJ)/msSeq.o 
 SRC = msMemory.c msEvents.c msSeq.c msMem.c
 
 $(TARGET) :  $(OBJ)
-	$(LD) $(OBJ) -g -fPIC -r -o $(TARGET)
+	$(LD) $(OBJ) -g  -r -o $(TARGET)
 
 dep:
 	makedepend -- $(CFLAGS) -- -p$(LOBJ)/ -Y -m $(SRC)
