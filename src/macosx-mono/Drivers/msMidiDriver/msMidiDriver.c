@@ -32,15 +32,15 @@ extern ParseMethodTbl	gParseTbl;
 extern Status2TypeTbl	gTypeTbl;
 
 /* MacOSX Midi client */
-extern MIDIPortRef	gInPort;
-extern MIDIPortRef	gOutPort;
-extern MIDIClientRef 	gClient;
+extern MIDIPortRef gInPort;
+extern MIDIPortRef gOutPort;
+extern MIDIClientRef gClient;
 
 //_________________________________________________________
-static SlotPtr NewSlot (){ return malloc (sizeof(Slot)); }
+static SlotPtr NewSlot () {return malloc (sizeof(Slot));}
 
 //_________________________________________________________
-static void FreeSlot (SlotPtr slot){free (slot); }
+static void FreeSlot (SlotPtr slot) {free (slot);}
 
 //_________________________________________________________
 static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpointRef src)
@@ -53,16 +53,12 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpo
 		return 0;
 	}
 	slot->src = src;
-	slot->sending = FALSE;
-	MidiStreamInit (&slot->state1.outsmall, gLinMethods);
-    MidiStreamInit (&slot->state2.outsmall, gLinMethods);
-	MidiStreamInit (&slot->outsysex, gLinMethods);
+	MidiStreamInit (&slot->state.outsmall, gLinMethods);
+  	MidiStreamInit (&slot->outsysex, gLinMethods);
 	MidiParseInit (&slot->in, gParseTbl, gTypeTbl);
-	fifoinit(&slot->pending);
 	slot->next = 0;
 	return slot;
 }
-
 
 //_________________________________________________________
 // Find the device model associated to a MIDIEndpointRef
@@ -84,7 +80,7 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel, int strlen)
         if (err == noErr) {
             
             if (!CFStringGetCString(pmodel, gmodel, strlen, 0)) {
-                printf("GetModel error : string too long\n");
+                fprintf(stderr, "GetModel error : string too long\n");
                 return false;
             }
             CFRelease(pmodel);
@@ -93,23 +89,22 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel, int strlen)
 
             for (j = 0; j < m; j++) {
             
-                    ref = MIDIDeviceGetEntity(dev,j);
-                    o = MIDIEntityGetNumberOfSources(ref);
-                    p = MIDIEntityGetNumberOfDestinations(ref);
-                    
-                    for (k = 0; k < o; k++) {
-                            if (MIDIEntityGetSource(ref,k) == device) return true;
-                    }
-                    
-                    for (k = 0; k < p; k++) {
-                            if (MIDIEntityGetDestination(ref,k) == device) return true;
-                    }
+				ref = MIDIDeviceGetEntity(dev,j);
+				o = MIDIEntityGetNumberOfSources(ref);
+				p = MIDIEntityGetNumberOfDestinations(ref);
+				
+				for (k = 0; k < o; k++) {
+					if (MIDIEntityGetSource(ref,k) == device) return true;
+				}
+				
+				for (k = 0; k < p; k++) {
+					if (MIDIEntityGetDestination(ref,k) == device) return true;
+				}
             }
         }
     }
 	return false;
 }	
-
 
 //_________________________________________________________
 void AddSlots (short refNum)
@@ -141,9 +136,9 @@ void AddSlots (short refNum)
             
             slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
             if (slot) {
-                    slot->next = gInSlots;
-                    gInSlots = slot;
-                    // No connection with the source : done by the application alarm
+				slot->next = gInSlots;
+				gInSlots = slot;
+				// No connection with the source : done by the application alarm
             }
         }
 	}
@@ -168,15 +163,14 @@ void AddSlots (short refNum)
             
             slot = CreateSlot (refNum, slotname, MidiOutputSlot, 0);
             if (slot) {
-                    slot->port = gOutPort;
-                    slot->dest = dest;
-                    slot->next = gOutSlots;
-                    gOutSlots = slot;
+				slot->port = gOutPort;
+				slot->dest = dest;
+				slot->next = gOutSlots;
+				gOutSlots = slot;
             }
         }
 	}
  }	
-
 
 //_________________________________________________________
 void RemoveSlotList (SlotPtr slot, Boolean input)
@@ -213,32 +207,44 @@ static SlotPtr FindSlot (SlotPtr list, short port)
 }
 
 //_________________________________________________________
-void KOffTask( long date, short ref, long a1,long a2,long a3)
-{
-	MidiEvPtr e = (MidiEvPtr)a1;
-	MS2MM ((SlotPtr)a2, e);
-}
-
-//_________________________________________________________
-void RcvAlarm  (short refNum )
+void SendEvents1 (short refNum)
 {
 	SlotPtr slot = 0;
-	MidiEvPtr e = MidiGetEv (refNum);
-    
-        while (e) {
+	MidiEvPtr e;
+	
+	while ((e = MidiGetEv (refNum))) {
 		if (!slot || (Slot(slot->refNum) != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
-                        e = MS2MM (slot, e);
-			if (e)
-				MidiTask (KOffTask, Date(e), refNum, (long)e, (long)slot, 0);
+			if (!MS2MM (refNum, slot, e)) return; 
 		}else{
 			MidiFreeEv(e);
 		}
-			
-		e = MidiGetEv (refNum);
 	}
 }
+
+//_________________________________________________________
+void SendEvents2 (short refNum)
+{
+	SlotPtr slot = 0;
+	MidiEvPtr e;
+	
+	while ((e = MidiGetEv (refNum))) {
+		if (!slot || (Slot(slot->refNum) != Port(e)))
+			slot = FindSlot(gOutSlots, Port(e));
+		if (slot) {
+			if (!MS2MM (refNum, slot, e)) return;  // A SysEx is sent 
+		}else{
+			MidiFreeEv(e);
+		}
+	}
+	
+	MidiSetRcvAlarm(refNum,RcvAlarm);
+	MidiSendIm(refNum, MidiNewEv(typeRestart));
+}
+
+//_________________________________________________________
+void RcvAlarm (short refNum) {SendEvents1(refNum);}
 
 //_________________________________________________________
 static Boolean IsSlotConnected (SlotRefNum sref)
@@ -249,7 +255,6 @@ static Boolean IsSlotConnected (SlotRefNum sref)
 	}
 	return false;
 }
-
 
 //_________________________________________________________
 static void OpenInputSlot (SlotPtr slot)
