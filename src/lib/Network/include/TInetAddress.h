@@ -31,9 +31,9 @@
 class TInetAddress
 {
 	public:
-		 TInetAddress (InetSvcRef ref=0);
-		 TInetAddress (char *host, InetSvcRef ref=0);
-		 TInetAddress (IPNum ip, InetSvcRef ref=0);
+		 TInetAddress (InetServiceRef ref=0);
+		 TInetAddress (char *host, InetServiceRef ref=0);
+		 TInetAddress (IPNum ip, InetServiceRef ref=0);
 	virtual ~TInetAddress () {}
 	
 			IPAddrPtr	GetAddress () 	{ return &fAddr; }
@@ -55,9 +55,9 @@ class TInetAddress
 		void	NameCopy (char *dst, char *src);
 		
 		IPAddr 			fAddr;
-		InetDomainName	fHostName;
-		InetDomainName	fRealName;
-		InetSvcRef		fRefNum;
+		INetDomainName	fHostName;
+		INetDomainName	fRealName;
+		InetServiceRef	fRefNum;
 };
 
 #endif

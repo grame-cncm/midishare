@@ -44,8 +44,8 @@ class RemoteState
 			 	 RemoteState () {}
 		virtual ~RemoteState () {}
 	
-		virtual Handle	GetState () = 0;
-		virtual void 	SetState (Handle h) = 0;
+		virtual INetHandle	GetState () = 0;
+		virtual void 	SetState (INetHandle h) = 0;
 		virtual void 	Alarm 	 (short refnum, short srcref, short changeCode) = 0;
 		virtual long 	ID 	 	 () = 0;
 };
@@ -72,14 +72,14 @@ class ApplState : public RemoteState
 			 	 ApplState (short refNum);
 		virtual ~ApplState ();
 	
-		Handle	GetState ();
-		void	SetState (Handle h);
+		INetHandle	GetState ();
+		void	SetState (INetHandle h);
 		void 	Alarm 	 (short refnum, short srcref, short changeCode);
 		long 	ID 	 	 ();
 				
 	private:
-		void		ReadCnx (Handle h, CnxDescPtr *dest);
-		void		WriteCnx (Handle h, CnxDescPtr cnx);
+		void		ReadCnx (INetHandle h, CnxDescPtr *dest);
+		void		WriteCnx (INetHandle h, CnxDescPtr cnx);
 
 		void		RestoreState (short refNum);
 
@@ -94,7 +94,7 @@ class ApplState : public RemoteState
 		void		AddCnx 	(short with, CnxDescPtr *dest);
 		void		RmvCnx 	(short with, CnxDescPtr *dest);
 		CnxDescPtr	NewCnx 	(short with);
-		CnxDescPtr	NewCnx 	(Handle with);
+		CnxDescPtr	NewCnx 	(INetHandle with);
 		CnxDescPtr	NewCnx 	();
 		void		FreeCnx (CnxDescPtr cnx);
 		long		MemSize (CnxDescPtr list);
@@ -103,7 +103,7 @@ class ApplState : public RemoteState
 		void		Reset ();
 
 		Boolean 	fIgnoreAlarm;
-		Handle 		fMemory;
+		INetHandle 	fMemory;
 		CnxDescPtr	fIn, fOut;
 		short		fRefNum;
 };
@@ -116,15 +116,15 @@ class SlotState : public RemoteState
 			 	 SlotState (TRemoteSlot * slots);
 		virtual ~SlotState ();
 	
-		Handle	GetState ();
-		void 	SetState (Handle h);
+		INetHandle	GetState ();
+		void 	SetState (INetHandle h);
 		void 	Alarm 	 (short refnum, short srcref, short changeCode);
 		long 	ID 	 	 ();
 
 	private:
 		void RestoreSlot  (SlotRefNum slot, char *cnx);
 
-		Handle 			fMemory;
+		INetHandle 		fMemory;
 		TRemoteSlot * 	fSlots;
 };
 
