@@ -68,13 +68,15 @@ void TPlayerSynchroniserInt::PlaySlice ()
 
 /*--------------------------------------------------------------------------*/
 
+void TPlayerSynchroniserInt::Init (){ fFollower->Init(); }
+
+/*--------------------------------------------------------------------------*/
+
 void TPlayerSynchroniserInt::Start ()
 { 
 	fState->SetRunning(); // before  ScheduleTickTask
-	fFollower->Init();
 	fOffset = MidiGetTime();
 	fScheduler->ScheduleTickTask(fTempoTask, fIterator->CurDate()); 
-	
 }	
 
 /*--------------------------------------------------------------------------*/

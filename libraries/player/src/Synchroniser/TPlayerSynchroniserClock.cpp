@@ -24,11 +24,17 @@
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::Start ()
+void TPlayerSynchroniserClock::Init ()
 { 
 	fTempoVisitor->Init();
 	fNextdate_ticks = 0;
 	fClock_count = 0;
+}	
+
+/*--------------------------------------------------------------------------*/
+
+void TPlayerSynchroniserClock::Start ()
+{ 
 	fOffset = MidiGetTime();
 	fState->SetWaiting();
 }	

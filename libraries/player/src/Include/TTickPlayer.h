@@ -35,6 +35,7 @@ class TTickPlayerInterface {
  
  		virtual ~TTickPlayerInterface() {}
  		
+ 		virtual void Init() = 0;
  		virtual void Start() = 0;
 		virtual void Stop() = 0;
 		virtual void Cont(ULONG date_ticks) = 0;
@@ -72,6 +73,7 @@ class TTickPlayer : public TTickPlayerInterface{
  		TTickPlayer(TScorePtr score, TEventSenderInterfacePtr user, TSchedulerInterfacePtr scheduler);
  		~TTickPlayer();
  		
+ 		void Init();
  		void Start();
 		void Stop();	
 		void Cont(ULONG date_ticks);

@@ -53,6 +53,10 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 		
 		virtual ~TPlayerSynchroniser(){}
 		
+		// Initialisation
+		
+		virtual void Init() {}
+		
 		// Time conversion
 		
 		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
@@ -106,7 +110,8 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 	
 		TPlayerSynchroniserInt(TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq);
 		virtual ~TPlayerSynchroniserInt();
-
+		
+		void Init();
 		void Start();
  		void Stop();
  		void Cont(ULONG date_ticks);
@@ -162,6 +167,7 @@ class TPlayerSynchroniserClock :public TPlayerSynchroniser{
 			delete(fClockConverter); 
 		}
 	
+		void Init();
 		void Start();
 		void Stop();
  		void Cont(ULONG date_ticks);
@@ -203,6 +209,7 @@ class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 		} 
 		~TPlayerSynchroniserExt(){ delete(fTempoVisitor);}
 		
+		void Init();
 		void Start();
 		void Stop();
  		void Cont(ULONG date_ticks);

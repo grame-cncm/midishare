@@ -79,11 +79,11 @@ void TTickPlayer::PlaySlice (ULONG date_ms)
 
 /*--------------------------------------------------------------------------*/
 
-void TTickPlayer::Start ()
-{ 
-	fIterator->Init();
-	fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate()); 
-}
+void TTickPlayer::Init () {fIterator->Init();}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::Start (){ fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate()); }
 
 /*--------------------------------------------------------------------------*/
 

@@ -21,13 +21,14 @@
 #include "UTools.h"
 #include "UDebug.h"
 
-//-----------------------------
-// Class TPlayerSynchroniserExt 
-//-----------------------------
+/*--------------------------------------------------------------------------*/
+
+void TPlayerSynchroniserExt::Init () { fTempoVisitor->Init(); }
+
+/*--------------------------------------------------------------------------*/
 
 void TPlayerSynchroniserExt::Start ()
 { 
-	fTempoVisitor->Init();
 	fOffset = MidiGetTime();
 	fState->SetRunning();
 }	

@@ -32,6 +32,7 @@ class TSynchroniserInterface {
 		
 		virtual ~TSynchroniserInterface() {};
 		
+		virtual void Init() = 0;
 		virtual ULONG ConvertTickToMs(ULONG date_tick) = 0;
 		virtual ULONG ConvertMsToTick (ULONG date_ms) = 0;
 		
