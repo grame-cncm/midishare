@@ -6,9 +6,9 @@
 	objectVersion = 39;
 	objects = {
 		4B97CB84050CC71A00053105 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
 			refType = 0;
@@ -25,15 +25,33 @@
 //4B2
 //4B3
 //4B4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3EE810805BC09E200FE2FFB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = versions.txt;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F50
 //F51
 //F52
 //F53
 //F54
 		F5240F1A0208005601053105 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = profport.c;
 			path = ../../../lib/profport.c;
 			refType = 2;
@@ -63,6 +81,7 @@
 		};
 		F567580C01FDA3E101053105 = {
 			children = (
+				D3EE810805BC09E200FE2FFB,
 				F5EFF92601FDA77301053105,
 				F5EFF91D01FDA41501053105,
 				F5240F1A0208005601053105,
@@ -104,18 +123,18 @@
 			name = Deployment;
 		};
 		F58CAEE8020ADF9B01053105 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = msDriverState.c;
 			path = ../lib/msDriverState.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
 		F58CAEE9020ADF9B01053105 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = msDriverState.h;
 			path = ../lib/msDriverState.h;
 			refType = 2;
@@ -134,9 +153,9 @@
 			};
 		};
 		F5CF083D03E97E7301053105 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
 			refType = 0;
@@ -158,10 +177,10 @@
 			sourceTree = "<group>";
 		};
 		F5EFF91701FDA40901053105 = {
-			expectedFileType = "compiled.mach-o.bundle";
+			explicitFileType = "compiled.mach-o.dylib";
 			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
-			path = msQTDriver.1.0.2.so;
+			path = msQTDriver.1.0.3.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -184,7 +203,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.2.so;
+				PRODUCT_NAME = msQTDriver.1.0.3.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -234,9 +253,9 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF91D01FDA41501053105 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = msQTDriver.c;
 			refType = 4;
 			sourceTree = "<group>";
@@ -248,9 +267,9 @@
 			};
 		};
 		F5EFF91F01FDA46601053105 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = QuickTime.framework;
 			path = /System/Library/Frameworks/QuickTime.framework;
 			refType = 0;
@@ -263,18 +282,18 @@
 			};
 		};
 		F5EFF92301FDA4CC01053105 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = QuickTimeMusic.h;
 			path = /System/Library/Frameworks/QuickTime.framework/Versions/A/Headers/QuickTimeMusic.h;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
 		F5EFF92601FDA77301053105 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = msQTDriver.h;
 			refType = 4;
 			sourceTree = "<group>";

@@ -6,9 +6,9 @@
 	objectVersion = 39;
 	objects = {
 		4B97CB95050CC7B400053105 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
 			refType = 0;
@@ -31,6 +31,24 @@
 //4B2
 //4B3
 //4B4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3EE80E405BC096F00FE2FFB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = versions.txt;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F70
 //F71
 //F72
@@ -54,89 +72,89 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F7219674020EB73001053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = Handle.c;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F7219675020EB73001053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = INetAlert.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F7219676020EB73001053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = lflifo.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
 		F7219677020EB73001053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = lflifoppc.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
 		F7219678020EB73001053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = misc.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F7219679020EB73001053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = msNetDriver.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721967A020EB73001053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = NetTools.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721967B020EB73001053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = NetTools.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721967C020EB73001053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OSXFeedback.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721967D020EB73001053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OSXFeedback.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721967E020EB73001053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = StateManager.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -284,17 +302,17 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F7219696020EB75B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = msWANDriver.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F7219697020EB75B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = msWANMain.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -310,17 +328,17 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F7219699020EB75B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = msLANDriver.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F721969A020EB75B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = msLANMain.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -368,6 +386,7 @@
 		};
 		F727EA280209364501053118 = {
 			children = (
+				D3EE80E405BC096F00FE2FFB,
 				F7219695020EB75B01053118,
 				F7219698020EB75B01053118,
 				F7219676020EB73001053118,
@@ -420,18 +439,18 @@
 			sourceTree = "<group>";
 		};
 		F727EA2C0209389101053118 = {
-			expectedFileType = "compiled.mach-o.bundle";
+			explicitFileType = "compiled.mach-o.dylib";
 			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
-			path = msLANDriver.1.0.1.so;
+			path = msLANDriver.1.0.2.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F727EA2D0209389101053118 = {
-			expectedFileType = "compiled.mach-o.bundle";
+			explicitFileType = "compiled.mach-o.dylib";
 			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
-			path = msWANDriver.1.0.1.so;
+			path = msWANDriver.1.0.2.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -456,7 +475,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msLANDriver.1.0.1.so;
+				PRODUCT_NAME = msLANDriver.1.0.2.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -608,7 +627,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msWANDriver.1.0.1.so;
+				PRODUCT_NAME = msWANDriver.1.0.2.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -765,9 +784,9 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F727EA390209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = FTMA.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -822,329 +841,329 @@
 			sourceTree = "<group>";
 		};
 		F727EA3B0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = EventToUDPStream.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA3C0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FeedbackProvider.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA3D0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FTMA.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA3E0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = Handle.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA3F0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = HostTools.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA410209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = INetAlert.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA420209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = InetTypes.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA430209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IPHeader.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA450209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MidiShareAppl.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA460209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MidiShareDriver.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA470209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MidiShareFilter.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA480209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MidiShareTasks.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA490209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MidiTools.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA4A0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = msInetLib.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA4B0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = SkewControler.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA4C0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = StatesManager.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA4D0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = StrConstants.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA500209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TimeTools.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA510209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TInetAddress.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA520209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TInetControler.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA530209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TInetTasks.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA540209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiClient.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA550209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiInStream.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA560209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiOutStream.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA570209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiPacket.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA580209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiRemote.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA590209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiServer.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5A0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TMidiSlot.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5B0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TNetInfos.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5C0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TPacket.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5D0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TRemote.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5E0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TRemoteAppl.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA5F0209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TRemoteMgr.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA600209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TRemoteSlot.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA610209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TSocket.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA620209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TTCPListener.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA630209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TTCPSocket.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA640209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TUDPListener.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA650209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TUDPSocket.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA660209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = TWANControler.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA670209391401053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = UDPStreamToEvent.h;
 			refType = 4;
 			sourceTree = "<group>";
@@ -1166,73 +1185,73 @@
 			sourceTree = "<group>";
 		};
 		F727EA690209391401053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = EventToUDPStream.c;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6A0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = MidiShareAppl.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6B0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = MidiShareDriver.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6C0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = MidiShareFilter.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6D0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = MidiShareTasks.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6E0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = MidiTools.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA6F0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiSlot.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA700209391401053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = UDPStreamToEvent.c;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA710209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = SkewControler.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -1248,17 +1267,17 @@
 			sourceTree = "<group>";
 		};
 		F727EA730209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = ApplState.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA740209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = SlotState.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -1275,97 +1294,97 @@
 			sourceTree = "<group>";
 		};
 		F727EA760209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiClient.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA770209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiServer.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA780209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TWANControler.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA790209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TInetControler.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7A0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TInetTasks.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7B0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiInStream.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7C0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiOutStream.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7D0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TMidiRemote.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7E0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TPacket.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA7F0209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TRemoteAppl.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA800209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TRemoteMgr.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EA810209391401053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TRemoteSlot.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -2055,9 +2074,9 @@
 			};
 		};
 		F727EB0F020942D301053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = FilterUtils.h;
 			path = ../../../lib/FilterUtils.h;
 			refType = 2;
@@ -2098,33 +2117,33 @@
 			sourceTree = SOURCE_ROOT;
 		};
 		F727EB1D0209488B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TInetAddress.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EB1E0209488B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TNetInfos.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EB1F0209488B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TTCPSocket.cpp;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F727EB200209488B01053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = TUDPSocket.cpp;
 			refType = 4;
 			sourceTree = "<group>";
@@ -2212,17 +2231,17 @@
 			};
 		};
 		F727EB700209827201053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = lflifo.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
 		F727EB710209827201053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = lflifoppc.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
@@ -2246,9 +2265,9 @@
 			};
 		};
 		F727EB85020988D501053118 = {
-			expectedFileType = sourcecode.cpp.cpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = HostTools.cpp;
 			path = ../../../lib/Network/HostTools.cpp;
 			refType = 2;
@@ -2345,18 +2364,18 @@
 			};
 		};
 		F727EB9A02098A2801053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = profport.c;
 			path = ../../../lib/profport.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
 		F727EB9B02098A2801053118 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = profport.h;
 			path = ../../../lib/profport.h;
 			refType = 2;

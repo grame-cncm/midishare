@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#define MidiShareDirectory ".MidiShare"
+#define MidiShareDirectory "Library/Preferences/MidiShare"
 
 #define kMaxEntryLen	1024
 #define PortMaxEntry	10

@@ -25,6 +25,24 @@
 //4B2
 //4B3
 //4B4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3EE80D105BC089000FE2FFB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = versions.txt;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F50
 //F51
 //F52
@@ -90,6 +108,7 @@
 		};
 		F54A7D7401FC77AF01053105 = {
 			children = (
+				D3EE80D105BC089000FE2FFB,
 				F54A7D7701FC781301053105,
 				F569F8E6020573BA01053105,
 				F569F8E7020573BA01053105,
@@ -167,7 +186,7 @@
 			explicitFileType = "compiled.mach-o.dylib";
 			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
-			path = msMidiDriver.1.0.4.so;
+			path = msMidiDriver.1.0.5.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -192,7 +211,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.4.so;
+				PRODUCT_NAME = msMidiDriver.1.0.5.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
