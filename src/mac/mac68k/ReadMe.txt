@@ -17,4 +17,4 @@ Notes for the Macintosh 68k implementation
 
 To provide
 ----------
-- build of the current implementation as a control panel
+- build of the current implementation as a control panel : DF done on 17/01/2000
