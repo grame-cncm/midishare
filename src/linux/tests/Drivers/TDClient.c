@@ -67,6 +67,7 @@ main()
 	FOpenClose();
 	FWakeupSleep();
 	FInfos();
+	FConnections();
 	FSlots();
 	FSendingAndReceiving();
 
