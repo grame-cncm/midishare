@@ -181,5 +181,19 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 
 #endif
 
+/*--------------------------------------------------------------------------*/
+
+#ifdef __Linux__
+
+ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+{	
+	if (fTempo) {
+		return ((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo;
+	}else{
+		return 1;
+    }
+}
+
+#endif
 
 
