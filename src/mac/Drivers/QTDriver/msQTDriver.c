@@ -27,6 +27,7 @@
 #include "MidiShare.h"
 #include "msQTDriver.h"
 #include "SavingState.h"
+#include "FilterUtils.h"
 
 /* ----------------------------------*/
 /* constants definitions             */

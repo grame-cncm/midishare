@@ -29,6 +29,7 @@
 #include "MidiShare.h"
 #include "MidiStreamToEvent.h"
 #include "msOMSDriver.h"
+#include "FilterUtils.h"
 #include "SavingState.h"
 
 #include "OMS.h"
@@ -321,7 +322,6 @@ static pascal void ReceiveEvents (short r)
 	}
 
 	p = OMSPacket(data);
-
 	e = MidiGetEv (r);
 	while (e) {
 		i.cont = 0;
@@ -331,8 +331,9 @@ static pascal void ReceiveEvents (short r)
 			contFlag = EvToOMSPacket (&i, p, data);
 			if (p->len) {
 				short ioRefNum = slot2OMSOut(data)[Port(e)];
-				if (ioRefNum >= 0)
+				if (ioRefNum >= 0) {
 					OMSWritePacket255 (p, ioRefNum, OutputPortRefNum(data));
+				}
 			}
 		} while( contFlag);
 		MidiFreeEv(e);

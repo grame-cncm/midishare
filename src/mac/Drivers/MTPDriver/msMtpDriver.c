@@ -19,12 +19,13 @@
   grame@grame.fr
 
 */
+
 #include <Gestalt.h>
 #include "MidiShare.h"
 #include "msMtpDriverAppl.h"
 #include "SavingState.h"
 #include "SCC.h"
-#include "MidiPrint.h"
+#include "FilterUtils.h"
 
 /* ----------------------------------*/
 /* constants definitions             */

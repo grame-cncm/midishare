@@ -27,6 +27,7 @@
 #include "msSerialDriverAppl.h"
 #include "SavingState.h"
 #include "SCC.h"
+#include "FilterUtils.h"
 
 /* ----------------------------------*/
 /* constants definitions             */
