@@ -50,16 +50,16 @@ typedef struct MidiContext {
 typedef struct slot Slot, *SlotPtr;
 struct slot {
 	SlotPtr		next;
-	SlotRefNum	refNum;		// the MidiShare slot refnum
-	Ev2StreamRec out;
-	Ev2StreamRec outsysex;
-	StreamFifo	in;
+	SlotRefNum	refNum;						// The MidiShare slot refnum
+	Ev2StreamRec out;						// Linearisation structure for small events
+	Ev2StreamRec outsysex;					// Linearisation structure for SysEx events
+	StreamFifo	in;						    // Midi parser structure
 
-	MIDIEndpointRef src ;   				// MacOSX Midi src for input slots
-	MIDIPortRef		port;					// MacOSX Midi client ouput port
-	MIDIEndpointRef	dest;					// MacOSX Midi client slot destination
-	MIDISysexSendRequest request; 			// MacOSX sysEx management structure
-	unsigned char data[MAX_SYSEX_BYTES];  	// For sysEx sending
+	MIDIEndpointRef src ;   				// Midi src for input slots
+	MIDIPortRef		port;					// Midi client ouput port
+	MIDIEndpointRef	dest;					// Midi client slot destination
+	MIDISysexSendRequest request; 			// SysEx management structure
+	unsigned char data[MAX_SYSEX_BYTES];  	// For SysEx completion routine
 	int	  remaining;			  			// Bytes remaining to send
 	Boolean	 sending;			  			// SysEx sending state
 	//fifo	 pending;						// Pending events to be sent
