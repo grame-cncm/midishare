@@ -33,6 +33,7 @@ extern "C" {
 #endif
 
 	/* global initialization */
+	void 	CleanState		();
 	void 	InitSignal		();
 	void * 	InitShMem 		(int shmemSize);
 	int 	InitMeetingPoint(TMSGlobalPtr g, NewClientProcPtr proc);
