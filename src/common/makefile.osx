@@ -1,0 +1,157 @@
+
+STARGET = ../msServerCommonLib.o
+CTARGET = ../msClientCommonLib.o
+TARGET = $(STARGET) $(CTARGET)
+INC = Headers
+CFLAGS := -O3 -Wall -D__MacOSX__ -I$(INC)
+CC = cc
+SOUTDIR = sobj
+COUTDIR = cobj
+
+SSRC := $(wildcard *.c) 
+SOBJ := $(patsubst %.c, $(SOUTDIR)/%.o, $(SSRC))
+CSRC := msTime.c	msFilter.c 	msMail.c 	msSmpte.c   msEvents.c \
+		msMemory.c  msFields.c  msSeq.c     msInit.c    msConnx.c  \
+		msAppls.c   
+#		msTasks.c
+COBJ := $(patsubst %.c, $(COUTDIR)/%.o, $(CSRC))
+OBJ  := $(COBJ) $(SOBJ)
+
+$(SOUTDIR)/%.o: %.c
+	$(CC) -c $(CFLAGS) -DMSKernel $< -o $@
+
+$(COUTDIR)/%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+all : $(TARGET)
+
+$(STARGET) : makefile $(SOBJ)
+	ld -r -o $(STARGET) $(SOBJ)
+
+$(CTARGET) : makefile $(COBJ)
+	ld -r -o $(CTARGET) $(COBJ)
+
+makefile: makefile.osx
+	[ -d $(SOUTDIR) ] || mkdir $(SOUTDIR)
+	[ -d $(COUTDIR) ] || mkdir $(COUTDIR)
+	cp makefile.osx makefile
+	rm -f $(SOBJ)  $(COBJ) $(TARGET)
+
+dep: makefile
+	makedepend -- $(CFLAGS) --  -DMSKernel -Y -p $(SOUTDIR)/ -m $(SSRC)
+	makedepend -- $(CFLAGS) -- -Y -p $(COUTDIR)/ -a -m $(CSRC)
+
+clean:
+	rm -f $(OBJ) $(TARGET)
+
+# DO NOT DELETE
+
+sobj/msAlarms.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+sobj/msAlarms.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+sobj/msAlarms.o: Headers/msTypes.h Headers/msDriver.h Headers/msExtern.h
+sobj/msAlarms.o: Headers/msKernel.h Headers/msSorter.h Headers/msTasks.h
+sobj/msAppls.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+sobj/msAppls.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+sobj/msAppls.o: Headers/msTypes.h Headers/msDriver.h Headers/msAppFun.h
+sobj/msAppls.o: Headers/msKernel.h Headers/msSorter.h Headers/msApplTools.h
+sobj/msAppls.o: Headers/msConnx.h Headers/msDrvFun.h Headers/msExtern.h
+sobj/msAppls.o: Headers/msTasks.h Headers/msInit.h Headers/msMem.h
+sobj/msAppls.o: Headers/msXmtRcv.h
+sobj/msConnx.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+sobj/msConnx.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+sobj/msConnx.o: Headers/msTypes.h Headers/msDriver.h Headers/msConnx.h
+sobj/msDriver.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+sobj/msDriver.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+sobj/msDriver.o: Headers/msTypes.h Headers/msDriver.h Headers/msApplTools.h
+sobj/msDriver.o: Headers/msKernel.h Headers/msSorter.h Headers/msDrvFun.h
+sobj/msDriver.o: Headers/msExtern.h Headers/msTasks.h Headers/msMem.h
+sobj/msEvents.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
+sobj/msEvents.o: Headers/lflifo.h
+sobj/msFields.o: Headers/msFields.h Headers/msDefs.h Headers/msTypes.h
+sobj/msFilter.o: Headers/msFilter.h Headers/msDefs.h Headers/msTypes.h
+sobj/msFilter.o: Headers/msMem.h
+sobj/msHandler.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
+sobj/msHandler.o: Headers/lflifo.h Headers/msKernel.h Headers/lffifo.h
+sobj/msHandler.o: Headers/msAppls.h Headers/msMemory.h Headers/msDriver.h
+sobj/msHandler.o: Headers/msSorter.h Headers/msExtern.h Headers/msTasks.h
+sobj/msInit.o: Headers/msAppFun.h Headers/msKernel.h Headers/lffifo.h
+sobj/msInit.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+sobj/msInit.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+sobj/msInit.o: Headers/msSorter.h Headers/msInit.h Headers/msDrvFun.h
+sobj/msInit.o: Headers/msEvents.h Headers/msExtern.h Headers/msTasks.h
+sobj/msInit.o: Headers/msTime.h
+sobj/msMail.o: Headers/msMail.h Headers/msTypes.h Headers/msSync.h
+sobj/msMemory.o: Headers/msDefs.h Headers/msTypes.h Headers/msMemory.h
+sobj/msMemory.o: Headers/lflifo.h Headers/msMem.h
+sobj/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
+sobj/msSeq.o: Headers/lflifo.h Headers/msEvents.h
+sobj/msSmpte.o: Headers/msSmpte.h Headers/msTypes.h Headers/msKernel.h
+sobj/msSmpte.o: Headers/lffifo.h Headers/msDefs.h Headers/msAppls.h
+sobj/msSmpte.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+sobj/msSmpte.o: Headers/msSorter.h
+sobj/msSorter.o: Headers/msSorter.h
+sobj/msTasks.o: Headers/msTasks.h Headers/lflifo.h Headers/lffifo.h
+sobj/msTasks.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+sobj/msTasks.o: Headers/msMemory.h Headers/msDriver.h Headers/msEvents.h
+sobj/msTasks.o: Headers/msExtern.h Headers/msKernel.h Headers/msSorter.h
+sobj/msTasks.o: Headers/msSync.h
+sobj/msTime.o: Headers/msTime.h Headers/msKernel.h Headers/lffifo.h
+sobj/msTime.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+sobj/msTime.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+sobj/msTime.o: Headers/msSorter.h
+sobj/msXmtRcv.o: Headers/msXmtRcv.h Headers/msTypes.h Headers/msAppls.h
+sobj/msXmtRcv.o: Headers/lffifo.h Headers/msMemory.h Headers/lflifo.h
+sobj/msXmtRcv.o: Headers/msDefs.h Headers/msDriver.h Headers/msEvents.h
+
+cobj/msAlarms.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+cobj/msAlarms.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+cobj/msAlarms.o: Headers/msTypes.h Headers/msDriver.h Headers/msExtern.h
+cobj/msAlarms.o: Headers/msKernel.h Headers/msSorter.h Headers/msTasks.h
+cobj/msDriver.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+cobj/msDriver.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+cobj/msDriver.o: Headers/msTypes.h Headers/msDriver.h Headers/msApplTools.h
+cobj/msDriver.o: Headers/msKernel.h Headers/msSorter.h Headers/msDrvFun.h
+cobj/msDriver.o: Headers/msExtern.h Headers/msTasks.h Headers/msMem.h
+cobj/msFilter.o: Headers/msFilter.h Headers/msDefs.h Headers/msTypes.h
+cobj/msFilter.o: Headers/msMem.h
+cobj/msMail.o: Headers/msMail.h Headers/msTypes.h Headers/msSync.h
+cobj/msSmpte.o: Headers/msSmpte.h Headers/msTypes.h Headers/msKernel.h
+cobj/msSmpte.o: Headers/lffifo.h Headers/msDefs.h Headers/msAppls.h
+cobj/msSmpte.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+cobj/msSmpte.o: Headers/msSorter.h
+cobj/msTime.o: Headers/msTime.h Headers/msKernel.h Headers/lffifo.h
+cobj/msTime.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+cobj/msTime.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+cobj/msTime.o: Headers/msSorter.h
+cobj/msAppls.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+cobj/msAppls.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+cobj/msAppls.o: Headers/msTypes.h Headers/msDriver.h Headers/msAppFun.h
+cobj/msAppls.o: Headers/msKernel.h Headers/msSorter.h Headers/msApplTools.h
+cobj/msAppls.o: Headers/msConnx.h Headers/msDrvFun.h Headers/msExtern.h
+cobj/msAppls.o: Headers/msTasks.h Headers/msInit.h Headers/msMem.h
+cobj/msAppls.o: Headers/msXmtRcv.h
+cobj/msEvents.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
+cobj/msEvents.o: Headers/lflifo.h
+cobj/msMemory.o: Headers/msDefs.h Headers/msTypes.h Headers/msMemory.h
+cobj/msMemory.o: Headers/lflifo.h Headers/msMem.h
+cobj/msSorter.o: Headers/msSorter.h
+cobj/msXmtRcv.o: Headers/msXmtRcv.h Headers/msTypes.h Headers/msAppls.h
+cobj/msXmtRcv.o: Headers/lffifo.h Headers/msMemory.h Headers/lflifo.h
+cobj/msXmtRcv.o: Headers/msDefs.h Headers/msDriver.h Headers/msEvents.h
+cobj/msConnx.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+cobj/msConnx.o: Headers/msMemory.h Headers/lflifo.h Headers/msDefs.h
+cobj/msConnx.o: Headers/msTypes.h Headers/msDriver.h Headers/msConnx.h
+cobj/msFields.o: Headers/msFields.h Headers/msDefs.h Headers/msTypes.h
+cobj/msInit.o: Headers/msAppFun.h Headers/msKernel.h Headers/lffifo.h
+cobj/msInit.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+cobj/msInit.o: Headers/msMemory.h Headers/lflifo.h Headers/msDriver.h
+cobj/msInit.o: Headers/msSorter.h Headers/msInit.h Headers/msDrvFun.h
+cobj/msInit.o: Headers/msEvents.h Headers/msExtern.h Headers/msTasks.h
+cobj/msInit.o: Headers/msTime.h
+cobj/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
+cobj/msSeq.o: Headers/lflifo.h Headers/msEvents.h
+cobj/msTasks.o: Headers/msTasks.h Headers/lflifo.h Headers/lffifo.h
+cobj/msTasks.o: Headers/msDefs.h Headers/msTypes.h Headers/msAppls.h
+cobj/msTasks.o: Headers/msMemory.h Headers/msDriver.h Headers/msEvents.h
+cobj/msTasks.o: Headers/msExtern.h Headers/msKernel.h Headers/msSorter.h
+cobj/msTasks.o: Headers/msSync.h
