@@ -32,6 +32,7 @@ TRemoteSlot::TRemoteSlot (IPNum id, short drvRef)
 {
 	fSeq = 0;
 	fID = id;
+	fSlotsState = 0;
 }
 
 //____________________________________________________________
@@ -41,6 +42,7 @@ Boolean TRemoteSlot::Open (MidiName name, Boolean wantFilter)
 		return false;
 	if (!fOutSlot.Open (name, MidiOutputSlot))
 		return false;
+
 	fSeq = MidiNewSeq ();
 	if (!fSeq) return false;
 	
@@ -62,11 +64,11 @@ void TRemoteSlot::Close ()
 		delete fSlotsState;
 		fSlotsState = 0;
 	}
+	if (fSeq) MidiFreeSeq (fSeq);
+	fSeq = 0;
 	fInSlot.Close ();
 	fOutSlot.Close ();
-	if (fSeq) MidiFreeSeq (fSeq);
 	fRefNum = undefinedRefNum;
-	fSeq = 0;
 }
 
 //____________________________________________________________
