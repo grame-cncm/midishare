@@ -1,10 +1,16 @@
 
 TARGET = libPlayer.so.1.0
+TARGETJAVA = libJPlayer.so
+
 LIB = /usr/lib/libPlayer.so
 INC=../src/Include 
 INC1=./
+
+INC2=/home/letz/jdk117/include
+INC3=/home/letz/jdk117/include/genunix
+
 SRC =../src
-OPTIONS=-D__Linux__
+OPTIONS=-D__Linux__ -D_REENTRANT
 MODCFLAGS := -O6 -Wall -DLINUX 
 FLAGS=-fPIC -c  -g -O2
 CC = gcc
@@ -18,20 +24,25 @@ TClockSender.o TPlayerSynchroniserClock.o TPlayerSynchroniserExt.o TPlayerSynchr
 TTrackTable.o UMidi.o UTools.o Tmtrack.o Midifile.o \
 TEventFactory.o  TMidiAppl.o TScheduler.o TScore.o TScoreFollower.o TScoreIterator.o\
 UScoreManager.o TTempoConverter.o TTempoMap.o TTempoMapVisitor.o TTime.o \
-TTimeConverter.o TTimeManager.o
+TTimeConverter.o TTimeManager.o 
  
+OBJJAVA = $(OBJ) MidiPlayer.o
  
 $(TARGET) :   $(OBJ)
-	$(CC)  $(OBJ) -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
+	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
 
 install: $(LIB).1.0
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
 	if [ ! -f $(LIB).1 ]; then ln -s $(LIB).1.0 $(LIB).1; fi
 
+java : $(OBJJAVA)
+	$(CC)  $(OBJJAVA) -lMidiShare -shared -fPIC -W1,soname,libJPlayer.so.1 -o $(TARGETJAVA)
 
 $(LIB).1.0 : $(TARGET)
 	cp $(TARGET)   $(LIB).1.0
 
+MidiPlayer.o : Java/MidiPlayer.c Java/MidiPlayer.h
+	$(CC) Java/MidiPlayer.c   -I$(INC) -I$(INC1) -I$(INC2) -I$(INC3)  $(OPTIONS) $(FLAGS) 
 	
 
 TChaserIterator.o : $(SRC)/Chasers/TChaserIterator.cpp
