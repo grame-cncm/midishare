@@ -22,28 +22,31 @@
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator ():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLast(false),fNextIt(0){} 
+TScoreIterator::TScoreIterator():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLast(false),fNextIt(0){} 
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator (TScorePtr score):fScore(score),fNextIt(0) 
+TScoreIterator::TScoreIterator(TScorePtr score):fScore(score),fNextIt(0) 
 {
+        assert(fScore);
 	fScore->AttachIterator(this);
 	Init();
 }
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator (TScorePtr score, TEventPtr cur):fScore(score),fNextIt(0) 
+TScoreIterator::TScoreIterator(TScorePtr score, TEventPtr cur):fScore(score),fNextIt(0) 
 { 
+        assert(fScore);
 	fScore->AttachIterator(this);
 	Init(cur);
 }
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::~TScoreIterator ()
+TScoreIterator::~TScoreIterator()
 {
+        assert(fScore);
 	Detach();
 	fScore->DetachIterator(this);
 }
@@ -51,10 +54,10 @@ TScoreIterator::~TScoreIterator ()
 /*----------------------------------------------------------------------------*/
 
 TEventPtr 	TScoreIterator::CurEv() 	{return fCur;}
-MidiEvPtr 	TScoreIterator::CurMidiEv() {return fCur->MidiEvent();}
+MidiEvPtr 	TScoreIterator::CurMidiEv() 	{return fCur->MidiEvent();}
 ULONG 		TScoreIterator::CurDate() 	{return fCur ? fCur->GetDate() : 0;}
-Boolean 	TScoreIterator::IsFirstEv() {return fFirst;}
-Boolean 	TScoreIterator::IsLastEv()  {return fLast;}
+Boolean 	TScoreIterator::IsFirstEv() 	{return fFirst;}
+Boolean 	TScoreIterator::IsLastEv()  	{return fLast;}
 		
 /*----------------------------------------------------------------------------*/
 // Set the cur pos on the first event
@@ -63,10 +66,10 @@ Boolean 	TScoreIterator::IsLastEv()  {return fLast;}
 void TScoreIterator::Init()
 {
 	fCurDate = 0;
-	fFirst = fLast =  false;
+	fFirst = fLast = false;
 	if (fScore->fLast) {  				// Non empty 
 		fCur = fScore->fLast->fNext; 	// Set fCur on the first ev
-	}else {
+	}else{
 		fCur = 0;  // Empty score
 	}
 }
@@ -98,12 +101,11 @@ void TScoreIterator::ItemsRemoved(TEventPtr ev)
 				return;
 			}else
 				fCur = fCur->fPrev;
-		}else {
+		}else{
 			fCur = fCur->fNext;
 		}
 		
 		assert(fCur);
-	
 		fCurDate = fCur->GetDate();
 	}
 }
@@ -114,7 +116,7 @@ void TScoreIterator::Detach()
 {
 	fCurDate = 0;
 	fCur = 0;    	
-	fFirst = fLast =  false;
+	fFirst = fLast = false;
 }
 
 /*------------------------------------------------------------------------------------*/
@@ -131,7 +133,7 @@ TEventPtr TScoreIterator::NextEv()
 		fCurDate = ev->GetDate();
 		if (ev == fScore->fLast) {
 			fLast = true;
-		}else {
+		}else{
 			fFirst = false;
 			fCur = fCur->fNext;
 		}
@@ -154,7 +156,7 @@ TEventPtr TScoreIterator::PrevEv()
 		fCurDate = ev->GetDate();
 		if (ev == fScore->fLast->fNext) {
 			fFirst = true;
-		}else {
+		}else{
 			fLast = false;
 			fCur = fCur->fPrev;
 		}
@@ -179,8 +181,7 @@ TEventPtr TScoreIterator::NextDateEv()
 			return 0;
 		}else 
 			return NextEv();
-	}else {
-		
+	}else{
 		return ev;
 	}
 }
@@ -231,6 +232,6 @@ void TScoreIterator::SetPosTicksBackward (ULONG date_ticks)
 
 void TScoreIterator::SetPosTicksForward (ULONG date_ticks)
 {
-	while (!IsLastEv() && (CurDate() < date_ticks)){NextEv();}
+	while (!IsLastEv() && (CurDate() < date_ticks)) {NextEv();}
 }
 
