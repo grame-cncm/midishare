@@ -74,16 +74,6 @@ void SetLoadDates( MidiFileInfosPtr infos, MidiSeqPtr s);
 int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i);
 void ReturnTimeInfos( register midiFILE *fd, MidiFileInfosPtr infos);
 
-void SetSeqPort (MidiSeqPtr se);
-short GetPortFromString(MidiEvPtr e);
-MidiSeqPtr WritePortInfo (MidiSeqPtr seq);
-Boolean IsNormalEv(MidiEvPtr e);
-Boolean CheckPort(MidiEvPtr e);
-void BuildTable(MidiSeqPtr seq, MidiEvPtr* table);
-MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq);
-MidiEvPtr CheckEvType (MidiSeqPtr src, short type);
-Boolean MFAPI MidiFileWriteTrack1( MIDIFilePtr fd, MidiSeqPtr seq);
-							  
 #ifdef __Macintosh__
 	#pragma export on
 #endif

@@ -105,38 +105,6 @@ char trackListe[maxTrack];					/* liste des pistes à écrire 	*/
 }
 
 /*--------------------------------------------------------------------------*/
-/* 		restore l'information de port										*/
-/*--------------------------------------------------------------------------*/
- void SetSeqPort( MidiSeqPtr seq)
-{
-	register MidiEvPtr ev, prev, tmp;
-	register port = 0;
-	
-	prev= nil;
-	ev= seq->first;
-	while( ev)
-	{
-		if( EvType(ev)== typePortPrefix && Link(ev))	/* evt fin de piste		*/
-		{												/* n'est pas le dernier */
-			port = PortPrefix(ev);
-			if( prev)									/* n'est pas le premier	*/
-				Link(prev)= Link(ev);					/* mod. le chainage		*/
-			else										/* sinon				*/
-				seq->first= Link(ev);					/* suivant= premier		*/
-			tmp= Link(ev);								/* sauve le suivant		*/
-			MidiFreeEv(ev);								/* libère l'evt			*/
-			ev= tmp;									/* evt courant=suivant	*/
-		}
-		else 
-		{	Port (ev) = port;  							/* attribue le port courant */
-			prev= ev;
-			ev= Link(ev);
-		}
-	}
-}
-
-
-/*--------------------------------------------------------------------------*/
  char *GetBeginKey( register char *buff)
 {
 	register char *start= nil;
@@ -201,7 +169,6 @@ char trackListe[maxTrack];					/* liste des pistes à écrire 	*/
 /* renvoie le numéro de référence d'un evt SeqName transféré dans un buffer */
  short GetEvRef( char *buff, int keyLen, short numPiste)	
 {
-	//register short refNum, i=nil;
 	register short refNum, i=0;
 	register char *tmp;
 	char strRef[4];
@@ -339,6 +306,109 @@ char trackListe[maxTrack];					/* liste des pistes à écrire 	*/
 	}
 }
 
+/*--------------------------------------------------------------------------*/
+/* when events are at the same date, events from e1 will be before events from e2 */
+
+static MidiEvPtr AddSeqOrder( register MidiEvPtr e1, register MidiEvPtr e2, Boolean order)
+{
+	register MidiEvPtr next;
+	
+	while( next= Link(e1))					/* tant qu'une sequence n'est pas finie */
+	{
+		if (order) {						/* les evenements de e1 seront AVANT ceux de e2 */
+		
+			if( Date(next) <= Date(e2))		/* date inferieure dans la même seq */
+				e1= next;					/* rien a faire : on continue		*/
+			else							/* sinon							*/
+			{
+				Link( e1)= e2;				/* on linke avec l'autre sequence	*/
+				e1= e2;						/* et on les inverse				*/
+				e2= next;
+				order = !order; 			
+			}
+			
+		}else{								/* les evenements de e1 seront APRES ceux de e2 */
+		
+			if( Date(next) < Date(e2))		/* date inferieure STRICTE dans la même seq */
+				e1= next;					/* rien a faire : on continue		*/
+			else							/* sinon							*/
+			{
+				Link( e1)= e2;				/* on linke avec l'autre sequence	*/
+				e1= e2;						/* et on les inverse				*/
+				e2= next;
+				order = !order;
+			}
+		}
+	}
+	
+	if( Link(e1)= e2)			/* linke avec la fin de l'autre sequence 	*/
+		while( Link(e2))
+			e2= Link(e2);
+	return e2;					/* et renvoie le dernier evt de la sequence */
+}
+
+/*--------------------------------------------------------------------------*/
+/* when events are at the same date, events from src will be before events from dest */
+
+static void MixeSeqOrder( MidiSeqPtr src, MidiSeqPtr dest)
+{
+	register MidiEvPtr firstSrc, firstDest;
+	
+	if( dest && src)							/* dest et src existent		*/
+	{
+		if( firstSrc= src->first)				/* src non vide				*/
+		{
+			if( !(firstDest= dest->first))		/* si destination est vide	*/
+			{
+				dest->first= firstSrc;			/* recopie du premier et	*/
+				dest->last= src->last;			/* dernier evt de src		*/
+			}
+			else if( Date(firstSrc) <= Date(firstDest))
+												/* 1ier evt source precede	*/
+			{									/* le 1ier evt destination	*/
+				dest->first= firstSrc;			/* range dans destination	*/
+				dest->last= AddSeqOrder( firstSrc, firstDest, true);	/* et chainage	*/
+			}
+			else dest->last= AddSeqOrder( firstDest, firstSrc, false);	/* et chainage	*/
+		}
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+static Boolean TrsfNoteToKeyOn (MidiSeqPtr dest)
+{
+	MidiSeqPtr seq = MidiNewSeq();
+	MidiEvPtr e,e1;
+
+	e = First (dest);
+	
+	if (seq){
+		while (e) {
+			if (EvType(e) == typeNote) {
+				if (e1 = MidiCopyEv(e)){
+					EvType(e1) = typeKeyOff;	// Type change
+					Vel(e1) = 64;
+					Date(e1) = Date(e1) + Dur(e); 
+					MidiAddSeq(seq,e1);
+				}else {
+					MidiFreeSeq(seq);
+					return false;
+				}
+				EvType(e) = typeKeyOn;			// Type change
+			}	
+			e = Link(e);
+		}
+		
+		MixeSeqOrder (seq,dest); 			/* mixage avec ordre (seq < dest), pour que les KeyOff soient inseres au bon endroit */ 
+		seq->first= seq->last= nil;			/* sauvegarde des evts		*/
+		MidiFreeSeq( seq);
+		
+		return true;
+		
+	}else
+		return false;
+}
+
 
 /*--------------------------------------------------------------------------*/
 /*				Codage de tempo et TimeSign 								*/
@@ -346,7 +416,7 @@ char trackListe[maxTrack];					/* liste des pistes à écrire 	*/
 
 /*--------------------------------------------------------------------------*/
 
-MidiEvPtr CheckEvType (MidiSeqPtr src, short type)
+static MidiEvPtr CheckEvType (MidiSeqPtr src, short type)
 {
 	MidiEvPtr e = FirstEv(src);
 
@@ -359,7 +429,7 @@ MidiEvPtr CheckEvType (MidiSeqPtr src, short type)
 
 /*--------------------------------------------------------------------------*/
 
-MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq) 
+static MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq) 
 {
 	MidiEvPtr e1, e2;
 
@@ -401,6 +471,37 @@ MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq)
 }
 
 
+/*--------------------------------------------------------------------------*/
+/*				Codage de l'info de port									*/
+/*--------------------------------------------------------------------------*/
+
+static void SetSeqPort( MidiSeqPtr seq)
+{
+	register MidiEvPtr ev, prev, tmp;
+	register port = 0;
+	
+	prev= nil;
+	ev= seq->first;
+	while( ev)
+	{
+		if( EvType(ev) == typePortPrefix && Link(ev))	/* evt port 			*/
+		{												/* n'est pas le dernier */
+			port = PortPrefix(ev);
+			if( prev)									/* n'est pas le premier	*/
+				Link(prev)= Link(ev);					/* mod. le chainage		*/
+			else										/* sinon				*/
+				seq->first= Link(ev);					/* suivant= premier		*/
+			tmp= Link(ev);								/* sauve le suivant		*/
+			MidiFreeEv(ev);								/* libere l'evt			*/
+			ev= tmp;									/* evt courant=suivant	*/
+		}
+		else 
+		{	Port (ev) = port;  							/* attribue le port courant */
+			prev= ev;
+			ev= Link(ev);
+		}
+	}
+}
 
 /*--------------------------------------------------------------------------*/
 
@@ -474,31 +575,6 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
-static Boolean WritePortPrefix( register midiFILE *fd, register MidiEvPtr prev, short port)
-{
-	register MidiEvPtr ev;
-	register Boolean ret= false;
-	MidiSeqPtr seq;
-	
-	if (MidiGetVersion() < 185) {
-		return true;  /* Teste la version de MidiShare */ 
-	}else if( ev= MidiNewEv( typePortPrefix)){	/* alloue un evt port prefix	*/
-		Link(ev)= nil;
-		PortPrefix(ev) = port;
-		
-		if( prev)						/* s'il y a un événement avant	*/
-			Date(ev)= Date(prev);		/* positionne sa date			*/
-		else
-			Date(ev)= 0;
-			
-		ret= MidiFileWriteEv( fd, ev);	/* écrit l'événement			*/
-		MidiFreeEv( ev);				/* et le libère					*/
-	}else 
-		MidiFile_errno= MidiFileErrEvs;
-	return ret;
-}
-
-/*--------------------------------------------------------------------------*/
  Boolean WriteEndTrack( register midiFILE *fd, register MidiEvPtr prev)
 {
 	register MidiEvPtr ev;
@@ -565,20 +641,12 @@ static Boolean WritePortPrefix( register midiFILE *fd, register MidiEvPtr prev, 
 {
 	register Boolean firstName= true, ret= true;
 	register MidiEvPtr ev, lastWrite= nil;
-	register short port = 0;
 
 	ev= seq->first;
 	while( ev && ret)
 	{
 		if( RefNum(ev)== ref)
 		{
-			/* Ecrit un changement de port */
-			if (Port(ev) != port) {
-				port = Port(ev);
-				ret = WritePortPrefix(fd,lastWrite,port);
-				if (!ret) return ret;
-			}
-			
 			if( firstName && EvType(ev)== typeSeqName)
 			{
 				ret= WriteSeqName( fd, ev, ref, numPiste);
@@ -602,20 +670,12 @@ static Boolean WritePortPrefix( register midiFILE *fd, register MidiEvPtr prev, 
 	register Boolean firstName= true, ret= true;
 	register MidiEvPtr ev, lastWrite= nil;
 	register short type;
-	register short port = 0;
 
 	ev= seq->first;
 	while( ev && ret)
 	{
 		if( RefNum(ev)== ref)
 		{
-			/* Ecrit un changement de port */
-			if (Port(ev) != port) {
-				port = Port(ev);
-				ret = WritePortPrefix(fd,lastWrite,port);
-				if (!ret) return ret;
-			}
-			
 			type= EvType(ev);
 			if( !IsTempoMap( type))		/* n'appartient pas à la tempo map	*/
 			{
@@ -696,6 +756,49 @@ static Boolean WritePortPrefix( register midiFILE *fd, register MidiEvPtr prev, 
 	}
 }
 
+
+/*--------------------------------------------------------------------------*/
+static Boolean AddPortPrefix(MidiSeqPtr seq)
+{
+    register MidiEvPtr ev1,ev2,prev;
+    register short portTable[maxTrack];
+    int i;
+    
+    ev1= seq->first;
+    prev = 0;
+    
+    for (i = 0; i<maxTrack; i++) portTable[i] = 0;
+    
+    if (MidiGetVersion() >= 185) 
+    {
+    	while( ev1)
+    	{
+		   	/* ecrit un changement de port */
+			if (Port(ev1) != portTable[RefNum(ev1)]) {
+				portTable[RefNum(ev1)] = Port(ev1);
+				
+				if  ((ev2= MidiNewEv( typePortPrefix))){
+					PortPrefix(ev2) = Port(ev1);
+					Port(ev2) = Port(ev1);
+					RefNum(ev2) = RefNum(ev1); 	/* sur la meme piste */
+					Date(ev2) = Date(ev1);
+					if (prev) 
+						Link(prev) = ev2;
+					else
+						seq->first = ev2;
+					Link(ev2) = ev1;
+				}else
+					return false;
+			}
+			
+			prev = ev1;
+       		ev1= Link(ev1);
+		}
+	}
+  
+  	return true;
+}
+
 /*--------------------------------------------------------------------------*/
  void pCopy( register char *dest, register char * src)
 {
@@ -758,36 +861,6 @@ static Boolean WritePortPrefix( register midiFILE *fd, register MidiEvPtr prev, 
 }
 
 /*--------------------------------------------------------------------------*/
-Boolean MFAPI MidiFileWriteTrack1( MIDIFilePtr fd, MidiSeqPtr seq)
-{
-	register MidiEvPtr ev, lastWrite= nil;
-	Boolean ret= true;
-	short port = 0;
-	
-	MidiFile_errno= MidiFileNoErr;
-	if( !MidiFileNewTrack( fd))	  				/* write the track header 	*/
-		return false;
-
-	ev= seq->first;
-	while( ev && ret)
-	{
-		/* Ecrit un changement de port */
-		if (Port(ev) != port) {
-			port = Port(ev);
-			ret = WritePortPrefix(fd,lastWrite,port);
-			if (!ret) return ret;
-		}
-		ret= MidiFileWriteEv( fd, ev);				/* write the event		*/
-		lastWrite= ev;
-		ev= Link( ev);								/* next event			*/
-	}
-
-	if( !MidiFileCloseTrack( fd))				/* update the track header	*/
-		ret= false;								/* and the file header		*/
-	return ret;
-}
-
-/*--------------------------------------------------------------------------*/
 
  void SetLoadDates( MidiFileInfosPtr infos, MidiSeqPtr s)
 {
@@ -811,7 +884,6 @@ Boolean MFAPI MidiFileWriteTrack1( MIDIFilePtr fd, MidiSeqPtr seq)
 /*--------------------------------------------------------------------------*/
 
 int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
-
 {
 	char Cname[256];
 	midiFILE *fd;
@@ -826,6 +898,14 @@ int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 
 	InitTrackListe();					  /* init la liste des pistes à nil	*/
 	cCopy (Cname, name);
+	
+	/* codage des ports */
+	if (!TrsfNoteToKeyOn(seq)) {		/* transformation des notes an couple KeyOn/KeyOff 	*/
+		return MidiFileErrEvs;
+	}
+	if (!AddPortPrefix(seq)) {			/* ajout d'evenements PortPrefix a chaque changement de port */
+		return MidiFileErrEvs;
+	}
  
 	if( fd= MidiFileCreate( Cname, infos->format, infos->timedef, infos->clicks))
 	{
@@ -834,7 +914,7 @@ int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 			AnalyseSeq( fd, seq);				/* analyse de la séquence 	*/
 			t= WriteTracks( fd, seq);			/* écrit les pistes			*/
 		}
-		else t= MidiFileWriteTrack1( fd, seq);	/* format 0 avec port		*/
+		else t= MidiFileWriteTrack( fd, seq);	/* format 0					*/
 		if( !t)									/* il y a eu une erreur		*/
 		{
 			if( MidiFile_errno!= MidiFileNoErr)
@@ -870,7 +950,6 @@ int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 
 /*--------------------------------------------------------------------------*/
 int  EXPORT MidiFileLoad( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
-
 {
 	char Cname[256];
 	register midiFILE *fd;					/* descripteur du fichier MidiFile	*/
