@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /Zp2 /MTd /W3 /GX /Zi /Od /I "..\src\Include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /Zp2 /MTd /W3 /GX /Zi /Od /I "..\src\Include" /I "." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
 # SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
@@ -155,10 +155,6 @@ SOURCE=..\src\Framework\Events\TEventFactory.cpp
 # Begin Group "MidiAppl"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\src\Framework\MidiAppl\Filter.c
-# End Source File
 # Begin Source File
 
 SOURCE=..\src\Framework\MidiAppl\TMidiAppl.cpp
@@ -331,8 +327,6 @@ SOURCE=..\src\Utils\UMidi.cpp
 
 !ELSEIF  "$(CFG)" == "Player32 - Win32 Debug"
 
-# ADD CPP /I "..\src\Include"
-
 !ENDIF 
 
 # End Source File
@@ -346,8 +340,6 @@ SOURCE=..\src\Utils\UTools.cpp
 # SUBTRACT CPP /X
 
 !ELSEIF  "$(CFG)" == "Player32 - Win32 Debug"
-
-# ADD CPP /I "..\src\Include"
 
 !ENDIF 
 
