@@ -547,11 +547,20 @@ int mskGetCommand(unsigned long userptr)
 	if (copy_from_user(&arg, (TMidiGetEvArgs* )userptr, sizeof(TMidiGetEvArgs))) return -EFAULT;
 	
 	/* check that the event is not a forgeted task */
+	
 	while ((ev = MSGetCommand(arg.r, Clients(gMem))) && (EvType(ev) == typeDead)) {
 		MSFreeEv(ev,FreeList(Memory(gMem)));
 	}
 	
 	mskGetEvAux(ev, &arg, (TMidiGetEvArgs* )userptr);
+	
+	/* to avoid conflict with ForgetTask */
+	
+	if(ev && EvType(ev) == typeProcess) {
+		EvType(ev) = typeDead;
+		LinkST(ev) = 0;
+	}
+	
 	MSFreeEv(ev,FreeList(Memory(gMem)));
 	
 	return 0;
@@ -676,22 +685,20 @@ int mskTask(unsigned long userptr){
 int mskDTask(unsigned long userptr){ return mskTask(userptr);}
 
 /*__________________________________________________________________________________*/
-
+/*
 static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 {
+	
 	Boolean ret = false;
-	//INT_OFF();
 	
 	if (*taskPtr == content) {
-      	EvType(content) = typeDead;
-		/*
-    	*taskPtr = 0;
-		*/
-    	ret = true;
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		ret = true;
 	}
-	//INT_ON();
 	return ret;
 }
+*/
 
 /*__________________________________________________________________________________*/
 
@@ -704,11 +711,16 @@ int mskForgetTask (unsigned long userptr){
 	
 	ktask = args.taskptr ? *args.taskptr : 0;
 	
-	if (ktask && ((EvType(ktask) == typeProcess) || (EvType(ktask) == typeDProcess))) {
-      	ForgetTaskSync (args.taskptr, ktask);
+	if (ktask && ((EvType(ktask) == typeProcess) || (EvType(ktask) == typeDProcess)))
+	 {
+      		/* clean the usertask pointer */
+		
+		EvType(ktask) = typeDead;
+		args.utask = (MidiEvPtr)LinkST(ktask);
+		LinkST(ktask) = 0;
+		*args.taskptr = 0;
 	}
 	
-	args.utask = (MidiEvPtr)LinkST(ktask);
 	if (copy_to_user((TMidiForgetTaskArgs *)userptr, &args, sizeof(TMidiForgetTaskArgs))) return -EFAULT;
 			
 	return 0 ;
