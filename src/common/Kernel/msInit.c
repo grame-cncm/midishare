@@ -46,7 +46,7 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 187;
+	return 188;
 }
 
 
