@@ -158,6 +158,16 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroOut
  */
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
   (JNIEnv *, jclass, jint, jint);
+  
+/*
+ * Class:     grame_midishare_player_MidiPlayer
+ * Method:    SetTempoFactor
+ * Signature: (IF)V
+ */
+
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempoFactor
+	(JNIEnv *, jclass, jint, jfloat);
+
 
 /*
  * Class:     grame_midishare_player_MidiPlayer

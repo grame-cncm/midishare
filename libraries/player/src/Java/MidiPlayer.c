@@ -277,13 +277,22 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroOut
  	SetSynchroOutPlayer(refnum,  syncstate);
   }
   
-  /*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tempo){
 
  	SetTempoPlayer(refnum,  tempo);
  }
+ 
+/*--------------------------------------------------------------------------*/
+ 
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempoFactor
+	(JNIEnv *, jclass, jint refnum, jfloat factor){
+
+ 	SetTempoFactorPlayer(refnum,  factor);
+ }
+
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSMPTEOffset
