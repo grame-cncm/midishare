@@ -296,15 +296,16 @@ void CloseMSConnect (void)
 }
 
 /* -----------------------------------------------------------------------------*/
-void ChangeConnect (ListHandle list)
+Boolean ChangeConnect (ListHandle list)
 {
 	Cell c;
 	SlotRefNum sref = LastClickedSlot (list, &c);
 	
-	if (portSelected < 0) return;	
-	if (sref < 0) return;
+	if (portSelected < 0) return false;	
+	if (sref < 0) return false;
 	MidiConnectSlot (portSelected, sref, LGetSelect (false, &c, list));
 	RefreshPortMap ();
+	return true;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -403,7 +404,7 @@ void ShowSrcDest (short port)
 }
 
 /* -----------------------------------------------------------------------------*/
-void ListPorts (ListHandle list, Boolean fromClick)
+Boolean ListPorts (ListHandle list, Boolean fromClick)
 {
 	TSlotInfos slotInfo; short i; Cell c;
 	ListHandle alt = (list == theList[SrcL]) ? theList[DstL] : theList[SrcL];
@@ -418,13 +419,14 @@ void ListPorts (ListHandle list, Boolean fromClick)
 		}
 		ClearSelectInList (alt);
 		InvalPortArea ();
-		return;
+		return true;
 	}
 
 reset:
 	ClearSelectInList (alt);
 	ResetSlotsMap ();
 	InvalPortArea ();
+	return false;
 }
 
 /* -----------------------------------------------------------------------------*/
