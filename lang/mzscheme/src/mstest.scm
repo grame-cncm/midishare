@@ -1,5 +1,5 @@
 ;; For macintosh
-(load-extension "MidiShare.so")
+(load-extension "mzshare.so")
 
 
 ;; For Windows
@@ -12,7 +12,7 @@
 
 (define (send-note ref note time)
   (let ((ev (midi-new-ev 0)))
-    (when (midi-ev? ev)
+    (when ev
     (midi-set-chan! ev 0)
     (midi-set-port! ev 0)
     (midi-set-field! ev 0 note)
