@@ -741,10 +741,15 @@ int mskGetDTask(unsigned long userptr)
 
 	if (copy_from_user(&arg, (TMidiGetEvArgs* )userptr, sizeof(TMidiGetEvArgs))) return -EFAULT;
 	
-	ev = MSGetDTask(arg.r, Clients(gMem));
-	mskGetEvAux(ev, &arg, (TMidiGetEvArgs*)userptr);
-	MSFreeEv(ev,FreeList(Memory(gMem)));
-	
+	if (arg.d == 2) {
+		ev = MSGetDTask(arg.r, Clients(gMem));
+		mskGetEvAux(ev, &arg, (TMidiGetEvArgs*)userptr);
+		MSFreeEv(ev,FreeList(Memory(gMem)));
+	}
+	else {
+		arg.u = 2;
+		copy_to_user((TMidiGetEvArgs* )userptr, &arg, sizeof(TMidiGetEvArgs));
+	}
 	return 0;
 }
 
