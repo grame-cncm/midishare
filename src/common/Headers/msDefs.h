@@ -117,7 +117,7 @@
 #define typeMidiSetInfo    157
 #define typeMidiSetFilter  158
 
-#define typeReserved       160   /*160..254 reserved for future extensions */
+#define typeReserved       159   /*159..254 reserved for future extensions */
 
 #define typeDead           255   /* dead Task or DTask                     */
 

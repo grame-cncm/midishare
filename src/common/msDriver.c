@@ -267,11 +267,14 @@ MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPubl
 	sptr = g->slots;
 	*(long *)(&slot) = MIDIerrIndex;
 	if (index>0 && index<= MaxSlots) {
+		short n = 0;
 		do {
-			if (sptr->driverRefNum == refnum) {
-				index--;
+			if ((sptr->driverRefNum == refnum) && (sptr->slotRefNum != MIDIerrRefNum)) {
+				if (!--index) break;
 			}
-		} while (index);
+			sptr++;
+			n++;
+		} while (n < MaxSlots);
 		if (!index) {
 			slot.drvRef = sptr->driverRefNum;
 			slot.slotRef = sptr->slotRefNum;
