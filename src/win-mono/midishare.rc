@@ -54,8 +54,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,8,4,1
- PRODUCTVERSION 1,8,4,1
+ FILEVERSION 1,8,5,1
+ PRODUCTVERSION 1,8,5,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -70,14 +70,18 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
+            VALUE "Comments", "\0"
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", "MidiShare Kernel - Mono Application Release\0"
-            VALUE "FileVersion", "1, 8, 4, 1\0"
+            VALUE "FileVersion", "1, 8, 5, 1\0"
             VALUE "InternalName", "Mono Client MidiShare\0"
             VALUE "LegalCopyright", "Copyright Grame, Sony CSL Paris © 2001\0"
+            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "mshare32.dll\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "MidiShare\0"
-            VALUE "ProductVersion", "1, 8, 4, 1\0"
+            VALUE "ProductVersion", "1, 8, 5, 1\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
