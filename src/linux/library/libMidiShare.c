@@ -90,7 +90,6 @@ void FreeList1( MidiEvPtr l)
 
 MidiEvPtr MidiGetEvAux(short ref, int command)
 {
-	int            	err;
 	TMidiGetEvArgs 	arg;
 	MidiEvPtr	c;
 	
@@ -196,8 +195,6 @@ void* event_handler(void* arg)
 short MidiGetVersion() 
 {
    TMidiGetVersionArgs 	args;
-   int err;
-   
    CALL(kMidiGetVersion,&args);
    return (short)args.version;
 }
@@ -210,8 +207,6 @@ short MidiGetVersion()
 short MidiCountAppls() 
 {
    TMidiCountApplsArgs 	args;
-   int err;
-
    CALL(kMidiCountAppls,&args);
    return (short)args.count;
 }
@@ -223,11 +218,10 @@ short MidiCountAppls()
 short MidiGetIndAppl(short index) 
 {
    TMidiGetIndApplArgs 	args;
-   int err;
 
    args.index = index;
    CALL(kMidiGetIndAppl,&args);
-   return (short)args.refnumres;
+   return (short)args.refnum;
 }
 
 /********************/
@@ -237,7 +231,6 @@ short MidiGetIndAppl(short index)
 short MidiGetNamedAppl(MidiName name)  
 {
    TMidiGetNamedApplArgs args;
-   int err;
 
    args.name = name;
    CALL(kMidiGetNamedAppl,&args);
@@ -250,8 +243,6 @@ short MidiGetNamedAppl(MidiName name)
 
 void MidiGetSyncInfo(SyncInfoPtr p)  
 {
-   int err;
-
    CALL(kMidiGetSyncInfo,p);
 }
 
@@ -263,7 +254,6 @@ void MidiGetSyncInfo(SyncInfoPtr p)
 void MidiSetSyncMode(unsigned short mode)  
 {
    TMidiSetSyncModeArgs args;
-   int err;
 
    args.mode = mode;
    CALL(kMidiSetSyncMode,&args);
@@ -277,8 +267,6 @@ void MidiSetSyncMode(unsigned short mode)
 long MidiGetExtTime ()  
 {
    TMidiGetExtTimeArgs args;
-   int err;
-
    CALL(kMidiGetExtTime,&args);
    return args.time;
 }
@@ -291,8 +279,6 @@ long MidiGetExtTime ()
 long MidiInt2ExtTime (long date)  
 {
    TMidiInt2ExtTimeArgs args;
-   int err;
-
    args.datein = date;
    CALL(kMidiInt2ExtTime,&args);
    return args.dateout;
@@ -306,8 +292,6 @@ long MidiInt2ExtTime (long date)
 long MidiExt2IntTime (long date)  
 {
    TMidiExt2IntTimeArgs args;
-   int err;
-
    args.datein = date;
    CALL(kMidiExt2IntTime,&args);
    return args.dateout;
@@ -321,7 +305,6 @@ long MidiExt2IntTime (long date)
 void MidiTime2Smpte (long time, short format, SmpteLocPtr loc)  
 {
    TMidiTime2SmpteArgs args;
-   int err;
 
    args.time = time;
    args.format = format;
@@ -337,7 +320,6 @@ void MidiTime2Smpte (long time, short format, SmpteLocPtr loc)
 long MidiSmpte2Time (SmpteLocPtr loc)  
 {
    TMidiSmpte2TimeArgs args;
-   int err;
 
    args.loc = loc;
    CALL(kMidiSmpte2Time,&args);
@@ -352,7 +334,6 @@ long MidiSmpte2Time (SmpteLocPtr loc)
 long* MidiGetTimeAddr ()  
 {
    TMidiGetTimeAddrArgs args;
-   int err;
 
    CALL(kMidiGetTimeAddr,&args);
    return args.timeadr;
@@ -411,7 +392,6 @@ long* MidiGetTimeAddr ()
 void MidiClose (short ref)
 {
 	TMidiCloseArgs 	args;
-    int            	err;
 	TApplPtr 	appl;
 	
 	pthread_mutex_lock(&gClients->mutex);
@@ -450,8 +430,7 @@ void MidiClose (short ref)
 MidiName MidiGetName(short ref)
 {
   TMidiGetNameArgs args;
-  int err;
-  
+
   args.refnum = ref;
   args.name = gClients->nameTable[ref];
   CALL(kMidiGetName,&args);
@@ -465,7 +444,6 @@ MidiName MidiGetName(short ref)
 void MidiSetName (short ref, MidiName name)
 {
   TMidiSetNameArgs args;
-  int err;
   
   args.refnum = ref;
   args.name = name;
@@ -505,7 +483,6 @@ void MidiSetInfo (short ref ,void * info)
 MidiFilterPtr MidiGetFilter (short ref)
 {
   TMidiGetFilterArgs args;
-  int err;
   
   args.refnum = ref;
   CALL(kMidiGetFilter ,&args);
@@ -520,7 +497,6 @@ MidiFilterPtr MidiGetFilter (short ref)
 void MidiSetFilter (short ref, MidiFilterPtr filter)
 {
   TMidiSetFilterArgs args;
-  int err;
   
   args.refnum = ref;
   args.filter = filter;
@@ -545,7 +521,6 @@ RcvAlarmPtr MidiGetRcvAlarm (short ref)
 void MidiSetRcvAlarm (short ref,RcvAlarmPtr alarm)
 {
 	TMidiSetRcvAlarmArgs args;
-	int err;
 	
 	if (CheckRefNum(gClients,ref)) {
 		args.refnum = ref;
@@ -573,7 +548,6 @@ ApplAlarmPtr MidiGetApplAlarm (short ref)
 void MidiSetApplAlarm (short ref,ApplAlarmPtr alarm)
 {
 	TMidiSetApplAlarmArgs args;
-	int err;
 	
 	if (CheckRefNum(gClients,ref)) {
 		args.refnum = ref;
@@ -590,8 +564,7 @@ void MidiSetApplAlarm (short ref,ApplAlarmPtr alarm)
 void MidiConnect (short src,short dest , Boolean state)
 {
   TMidiConnectArgs args;
-  int err;
-  
+   
   args.src = src;
   args.dest = dest;
   args.state = state;
@@ -606,7 +579,6 @@ void MidiConnect (short src,short dest , Boolean state)
 Boolean MidiIsConnected  (short src,short dest)
 {
   TMidiIsConnectedArgs args;
-  int err;
   
   args.src = src;
   args.dest = dest;
@@ -622,7 +594,6 @@ Boolean MidiIsConnected  (short src,short dest)
 Boolean MidiGetPortState (short port)
 {
   TMidiGetPortStateArgs args;
-  int err;
   
   args.port = port;
   CALL(kMidiGetPortState ,&args);
@@ -743,8 +714,7 @@ void MidiApplySeq (MidiSeqPtr s, ApplyProcPtr proc){  MSApplySeq(s,proc); }
 void MidiSetPortState (short port,Boolean state)
 {
   TMidiSetPortStateArgs args;
-  int err;
-  
+   
   args.port = port;
   args.state = state;
   CALL(kMidiSetPortState ,&args);
@@ -758,8 +728,6 @@ void MidiSetPortState (short port,Boolean state)
 unsigned long MidiGetTime()
 {
   TMidiGetTimeArgs 	args;
-  int            	err;
-  
   CALL(kMidiGetTime ,&args);
   return args.time;
 }
@@ -770,8 +738,6 @@ unsigned long MidiGetTime()
 
 void MidiSendIm (short ref, MidiEvPtr e)
 {
-	int  err;
-	
 	if (e) {
 		RefNum(e) = ref;
 		CALL(kMidiSendIm ,e);
@@ -786,8 +752,6 @@ void MidiSendIm (short ref, MidiEvPtr e)
 		
 void MidiSend (short ref, MidiEvPtr e)
 {
-	int  err;
-	
 	if (e) {
 		RefNum(e) = ref;
 		CALL(kMidiSend ,e);
@@ -801,8 +765,6 @@ void MidiSend (short ref, MidiEvPtr e)
 
 void MidiSendAt (short ref, MidiEvPtr e, long d)
 {
-	int  err;
-	
 	if (e) {
 		RefNum(e) = ref;
 		Date(e) = d;
@@ -819,7 +781,6 @@ void MidiSendAt (short ref, MidiEvPtr e, long d)
 long MidiCountEvs (short ref)
 {
   TMidiCountEvsArgs args;
-  int err;
   
   args.refnum = ref;
   CALL(kMidiCountEvs ,&args);
@@ -843,7 +804,6 @@ MidiEvPtr MidiAvailEv   (short ref)  {return MidiGetEvAux(ref, kMidiAvailEv); }
 void MidiFlushEvs   (short ref)
 {
   TMidiFlushEvsArgs args;
-  int err;
   
   args.refnum = ref;
   CALL(kMidiFlushEvs ,&args);
@@ -856,7 +816,6 @@ void MidiFlushEvs   (short ref)
 void* MidiReadSync (void* adr)
 {
   TMidiReadSyncArgs args;
-  int err;
   
   args.adr = adr;
   CALL(kMidiReadSync ,&args);
@@ -871,7 +830,6 @@ void* MidiReadSync (void* adr)
 void* MidiWriteSync (void* adr, void* val)
 {
   TMidiWriteSyncArgs args;
-  int err;
   
   args.adr = adr;
   args.val = val;
@@ -886,7 +844,6 @@ void* MidiWriteSync (void* adr, void* val)
 
 void MidiCall (TaskPtr routine, long date, short ref, long a1,long a2,long a3)
 {
-	int  err;
   	MidiEvPtr ev;
 	MidiSTPtr ext;
 	
@@ -909,7 +866,6 @@ void MidiCall (TaskPtr routine, long date, short ref, long a1,long a2,long a3)
 
 MidiEvPtr MidiTask   (TaskPtr routine, long date, short ref, long a1,long a2,long a3)
 {
-	int  err;
   	MidiEvPtr ev;
 	MidiSTPtr ext;
 	TMidiTaskArgs args;
@@ -940,7 +896,6 @@ MidiEvPtr MidiTask   (TaskPtr routine, long date, short ref, long a1,long a2,lon
 
 MidiEvPtr MidiDTask   (TaskPtr routine, long date, short ref, long a1,long a2,long a3)
 {
-	int  err;
   	MidiEvPtr ev;
 	MidiSTPtr ext;
 	TMidiDTaskArgs args;
@@ -970,7 +925,6 @@ MidiEvPtr MidiDTask   (TaskPtr routine, long date, short ref, long a1,long a2,lo
 
 void  MidiForgetTask  (MidiEvPtr *taskptr)
 {
-	int  err;
     	TMidiForgetTaskArgs args;
 	
 	if (taskptr && *taskptr) {
@@ -987,7 +941,6 @@ void  MidiForgetTask  (MidiEvPtr *taskptr)
 long MidiCountDTasks (short ref)
 {
   TMidiCountDTasksArgs args;
-  int err;
   
   args.refnum = ref;
   CALL(kMidiCountDTasks,&args);
@@ -1001,7 +954,6 @@ long MidiCountDTasks (short ref)
 void MidiFlushDTasks  (short ref)
 {
   TMidiFlushDTasksArgs args;
-  int err;
   
   args.refnum = ref;
   CALL(kMidiFlushDTasks,&args);  
@@ -1029,8 +981,6 @@ void MidiExec1DTask   (short ref)
 MidiFilterPtr MidiNewFilter ()
 {
   TMidiNewFilterArgs args;
-  int err;
-  
   CALL(kMidiNewFilter,&args);
   return args.filter;
   
@@ -1043,7 +993,6 @@ MidiFilterPtr MidiNewFilter ()
 void MidiFreeFilter (MidiFilterPtr filter)
 {
   TMidiFreeFilterArgs args;
-  int err;
   args.filter = filter;
   CALL(kMidiFreeFilter,&args);
   
@@ -1056,7 +1005,7 @@ void MidiFreeFilter (MidiFilterPtr filter)
 void MidiAcceptChan (MidiFilterPtr filter, short chan , Boolean state )
 {
   TMidiAcceptChanArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = chan;
   args.state = state;
@@ -1071,7 +1020,7 @@ void MidiAcceptChan (MidiFilterPtr filter, short chan , Boolean state )
 void MidiAcceptPort (MidiFilterPtr filter, short port , Boolean state )
 {
   TMidiAcceptPortArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = port;
   args.state = state;
@@ -1086,7 +1035,7 @@ void MidiAcceptPort (MidiFilterPtr filter, short port , Boolean state )
 void MidiAcceptType (MidiFilterPtr filter, short type , Boolean state )
 {
   TMidiAcceptTypeArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = type;
   args.state = state;
@@ -1100,7 +1049,7 @@ void MidiAcceptType (MidiFilterPtr filter, short type , Boolean state )
 Boolean MidiIsAcceptedChan (MidiFilterPtr filter, short chan )
 {
   TMidiIsAcceptedChanArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = chan;
   CALL(kMidiIsAcceptedChan,&args);
@@ -1114,7 +1063,7 @@ Boolean MidiIsAcceptedChan (MidiFilterPtr filter, short chan )
 Boolean MidiIsAcceptedPort (MidiFilterPtr filter, short port )
 {
   TMidiIsAcceptedPortArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = port;
   CALL(kMidiIsAcceptedPort,&args);
@@ -1128,7 +1077,7 @@ Boolean MidiIsAcceptedPort (MidiFilterPtr filter, short port )
 Boolean MidiIsAcceptedType (MidiFilterPtr filter, short type )
 {
   TMidiIsAcceptedTypeArgs args;
-  int err;
+
   args.filter = filter;
   args.generic = type;
   CALL(kMidiIsAcceptedType,&args);
@@ -1151,7 +1100,6 @@ Boolean MidiShare ()
 
 void MidiReset () 
 {
-  int err;
   TMidiCloseArgs args;
   CALL(kMidiReset,&args);
 }
@@ -1162,8 +1110,8 @@ void MidiReset ()
 /*--------------------------------------------------------------------*/
 short MidiRegisterDriver (TDriverInfos * infos, TDriverOperation *op)
 {
-	TMidiRegisterDriverArgs args;
-/*  args.infos = *infos;
+/*	TMidiRegisterDriverArgs args;
+  	args.infos = *infos;
   	args.op.wakeup = 0;
   	args.op.sleep = 0;
   	args.op.slotInfo = 0;
@@ -1265,7 +1213,7 @@ Boolean MidiIsSlotConnected	(short port, SlotRefNum slot)
 static void panic ()
 {
 	TMidiCloseArgs args;
-	int i, err;
+	int i;
 	for (i=0; i<MaxAppls; i++) {
 		if (gClients->appls[i]) {
 			args.refnum = gClients->appls[i]->refNum;
