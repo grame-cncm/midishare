@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -13,13 +13,12 @@
 #define __PLAYER__
 
 /*------------------------------------------------------------------*/
-/*  Player: a library to develop  multi-tracks synchronisable
-/*			MidiShare sequencers
+/*  Player: a library to develop  multi-tracks synchronisable MidiShare sequencers
 /*
 /*  version 1.00
-/*  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions
-/*  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, 
-/*						    new SetTempoPlayer function
+/*  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions.
+/*  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, new SetTempoPlayer function.
+/*  version 2.06  24/10/03  New SetPosTicks and Version functions.
 /*
 /*------------------------------------------------------------------*/
 
@@ -60,8 +59,8 @@ enum loop {kLoopOn = 0, kLoopOff};
 /* Step Playing */
 /*--------------------------------------------------------------------------*/
 
-#define kStepPlay  		1
-#define kStepMute  		0
+#define kStepPlay  	1
+#define kStepMute  	0
 
 /*--------------------------------------------------------------------------*/
 /* Synchronisation */
@@ -76,11 +75,11 @@ enum sendsynchro{kNoSyncOut = 0, kClockSyncOut};
 
 enum midifiletypes	{midifile0 = 0, midifile1, midifile2};
 
-#define TicksPerQuarterNote		0
-#define Smpte24				    24
-#define Smpte25				    25
-#define Smpte29				    29
-#define Smpte30				    30
+#define TicksPerQuarterNote	0
+#define Smpte24			24
+#define Smpte25			25
+#define Smpte29			29
+#define Smpte30			30
 
 
 /*--------------------------------------------------------------------------*/
@@ -89,11 +88,11 @@ enum midifiletypes	{midifile0 = 0, midifile1, midifile2};
  // for the player
  /*--------------------------------------------------------------------------*/
 
-#define PLAYERnoErr 			-1		/* no error			                    */
-#define PLAYERerrAppl			-2		/* Unable to open MidiShare application	*/
-#define PLAYERerrEvent  		-3		/* No more MidiShare Memory 		    */
-#define PLAYERerrMemory			-4		/* No more Mac Memory 			        */
-#define PLAYERerrSequencer		-5		/* Sequencer error			            */
+#define PLAYERnoErr 		-1		/* no error			        */
+#define PLAYERerrAppl		-2		/* Unable to open MidiShare application	*/
+#define PLAYERerrEvent  	-3		/* No more MidiShare Memory 		*/
+#define PLAYERerrMemory		-4		/* No more Mac Memory 			*/
+#define PLAYERerrSequencer	-5		/* Sequencer error			*/
 
 
  /*--------------------------------------------------------------------------*/
@@ -141,9 +140,9 @@ typedef struct Pos{
 typedef struct MidiFileInfos  * MidiFileInfosPtr;
 typedef struct MidiFileInfos
 {
-	long format;		/* file format				    */
-	long timedef;		/* time representation			*/
-	long clicks;		/* ticks per quarter/frame		*/
+	long format;		/* file format			*/
+	long timedef;		/* time representation		*/
+	long clicks;		/* ticks per quarter/frame	*/
 	long tracks;		/* tracks number             	*/
 
 }MidiFileInfos;
@@ -155,6 +154,10 @@ typedef struct MidiFileInfos
 extern "C" {
 #endif
 
+// Version
+short Version();
+	 
+// Opening/Closing
 
 short  OpenPlayer(MidiName name);
 void   ClosePlayer(short refnum);
@@ -172,11 +175,11 @@ void  SetRecordModePlayer(short refnum, short state) ;
 void  RecordPlayer(short refnum, short tracknum);
 void  SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 
-
 // Position management
 
 void  SetPosBBUPlayer(short refnum, PosPtr pos);
 void  SetPosMsPlayer(short refnum, long date_ms);
+void  SetPosTicksPlayer(short refnum, long date_ticks);
 
 // Loop management
 
@@ -186,7 +189,6 @@ long   SetLoopEndBBUPlayer(short refnum, PosPtr pos);
 long   SetLoopStartMsPlayer(short refnum, long date_ms);
 long   SetLoopEndMsPlayer(short refnum, long date_ms);
 
-
 // Synchronisation management
 
 void  SetSynchroInPlayer(short refnum, short state);
@@ -194,18 +196,15 @@ void  SetSynchroOutPlayer(short refnum,short state);
 void  SetSMPTEOffsetPlayer(short refnum, SmpteLocPtr smptepos);
 void  SetTempoPlayer(short refnum, long tempo);
 
-
 // State management
 
 void   GetStatePlayer(short refnum, PlayerStatePtr playerstate);
 void   GetEndScorePlayer(short refnum, PlayerStatePtr playerstate);
 
-
 // Step playing 
 
 void   ForwardStepPlayer(short refnum, short state);
 void   BackwardStepPlayer(short refnum, short state);
-
 
 // Tracks management
 
@@ -220,7 +219,6 @@ short  GetParamPlayer(short refnum, short tracknum, short param);
 
 long   InsertAllTrackPlayer(short refnum, MidiSeqPtr s);
 long   InsertTrackPlayer(short refnum, short tracknum, MidiSeqPtr s);
-
 
 // Midifile management
 
