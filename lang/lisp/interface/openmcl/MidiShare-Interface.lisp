@@ -1938,6 +1938,9 @@
 ;;; Macros for accessing MidiShare Events data structures
 ;;;
 
+(defun nullptrp (p) (ccl:%null-ptr-p p))
+(defun nullptr () (ccl:%null-ptr))
+
 ;;;   Functions common to every type of event
 
 (defun link (e &optional (d nil d?))
