@@ -24,12 +24,9 @@
 	      
    [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
    [22-06-01] SL - New CloseAll function to close remaining application associated with a file descriptor
+   [04-04-05] YO - Removed modversions dependencies 
              
 */
-  
-#ifdef MODVERSIONS
-#include <config/modversions.h>
-#endif
 
 /* centralizing compatibility issues between 2.0, 2.2, 2.4 */
 

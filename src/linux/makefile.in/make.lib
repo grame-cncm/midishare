@@ -2,8 +2,9 @@
 TARGET = ../linux/lib/msUtilities.o
 OPTIONS = -D__Pentium__
 INC = -I../linux/Include
-CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
-CC = gcc
+#CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
+#CC = gcc
+CFLAGS := -O3 -Wall $(CFLAGS) $(OPTIONS) $(INC)
 
 SRC = *.c
 OBJ = MidiPrint.o EventToMidiStream.o MidiStreamToEvent.o msDrvUtils.o 

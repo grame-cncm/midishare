@@ -1,14 +1,16 @@
 
-CXX  = gcc
+#CXX  = gcc
 INC = -I../../linux/Include/ -I./include -I../../common/Headers  -I../../common/atomic
-CXXFLAGS = -g $(INC) -D__Pentium__ -O3 -Wall
+#CXXFLAGS = -g $(INC) -D__Pentium__ -O3 -Wall
+CXXFLAGS = $(CXXFLAGS) $(INC) -D__Pentium__ -O3 -Wall
 CFLAGS = $(CXXFLAGS)
+
 
 CPPSRC = $(wildcard *.cpp Midi/*.cpp state/*.cpp TCP/*.cpp)
 CSRC   = $(wildcard Midi/*.c ../common/atomic/lflifo.c)
 SRC =	$(CSRC) $(CPPSRC)
 
-OBJ   = $(patsubst %.cpp, %.o, $(CPPSRC))) $(patsubst %.c, %.o, $(CSRC)))
+OBJ   = $(patsubst %.cpp, %.o, $(CPPSRC)) $(patsubst %.c, %.o, $(CSRC))
 
 Target = msNetDriverLib.o
 

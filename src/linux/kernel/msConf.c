@@ -17,13 +17,13 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  
+  [04-04-05] YO - Removed modversions dependencies 
 
 */
 
 #ifdef MODULE
-#ifdef MODVERSIONS
-# include <config/modversions.h>
-#endif
 #define malloc(size)	kmalloc(size, GFP_KERNEL)
 #define free			kfree
 #endif

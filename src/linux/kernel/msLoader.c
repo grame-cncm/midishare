@@ -22,6 +22,7 @@
   [22-06-01] SL - The device close function calls mskCloseAll to close all
    		  remaining application associated with a file descriptor
   [06-01-05] YO - Kernel 2.6 module, dynamic major, sysfs support, module_get/put
+  [04-04-05] YO - Removed modversions dependencies 
 */
 
 
@@ -41,9 +42,6 @@
 
 
 #ifdef MODULE
-# ifdef MODVERSIONS
-# include <config/modversions.h>
-# endif
 #define EXPORT_SYMTAB
 #include <linux/module.h>
 #endif

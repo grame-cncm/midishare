@@ -12,7 +12,7 @@ midishare: kernel
 	make -f appls 
 
 kernel: common
-	make  -C kernel -f Makefile 
+	make  -C kernel
 
 common:
 	make -C ../common 
@@ -25,8 +25,8 @@ install: libinstall clientsinstall
 	/sbin/depmod -a
 	install MidiShare $(RC)/init.d
 	install -m 644 midishare-udev.permissions $(UDEV)
-	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
-	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
+	ln -sf $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
+	ln -sf $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
 	/sbin/modprobe midishare
 
 uninstall: libuninstall clientsuninstall
@@ -39,7 +39,7 @@ uninstall: libuninstall clientsuninstall
 clean:
 	make -i -C ../common/Memory clean 
 	make -i -C ../common clean 
-	make -i -C kernel clean -f Makefile 
+	make -i -C kernel clean 
 	make -i -C library clean 
 	make -f appls clean
 

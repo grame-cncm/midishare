@@ -1,8 +1,9 @@
 
 TARGET = msApplsLib.o
-CFLAGS := -I../../Include -Wall -O6 `gtk-config --cflags`
+CFLAGS := $(CFLAGS) -I../../Include `gtk-config --cflags`
+#CFLAGS := -I../../Include -Wall -O6 `gtk-config --cflags`
 OBJ  = msApplsTools.o
-CC   = gcc
+#CC   = gcc
 
 all : $(TARGET)
   
