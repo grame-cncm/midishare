@@ -26,6 +26,7 @@
 #include <mmsystem.h>
 
 #include "msMMError.h"
+#include "msMMError.h"
 
 #define kGetErrorTextBuf	256
 
@@ -40,16 +41,20 @@ static char *DateString ()
 }
 
 //_________________________________________________________
-static char *makeErrString (char *s, int errCode, short in)
+static char *makeErrString (char *s, SlotRefNum ref, int errCode, short in)
 {
+	static char out[1024];
 	char buff[kGetErrorTextBuf];
-	static char out[512];
+	TSlotInfos infos;
 
 	if(in)
 		midiInGetErrorText(errCode, buff, kGetErrorTextBuf);
 	else
 		midiOutGetErrorText(errCode, buff, kGetErrorTextBuf);
-	wsprintf (out, "%s %s : %s\n", DateString(), s, buff);
+	infos.name[0] = 0;
+	MidiGetSlotInfos (ref, &infos);
+	wsprintf (out, "%s %s : %s error %d\n\t%s\n", 
+				DateString(), infos.name, s, errCode, buff);
 	return out;
 }
 
@@ -66,9 +71,9 @@ static char * ErrFilePath ()
 }
 
 //_________________________________________________________
-void MMError (char *s, int errCode, short in)
+void MMError (char *s, SlotRefNum ref, int errCode, short in)
 {
-	char * string = makeErrString(s, errCode, in);
+	char * string = makeErrString(s, ref, errCode, in);
 	char * errFile = ErrFilePath ();
 	if (errFile) {
 		HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,

@@ -111,7 +111,7 @@ static MidiEvPtr LMS2MM (SlotPtr slot, MidiEvPtr e)
 	}
 	return 0;
 err:
-	MMError ("midiOutLongMsg", res, false);
+	MMError ("midiOutLongMsg", slot->refNum, res, false);
 	MidiStreamReset (&slot->out);
 	return 0;
 }
@@ -129,7 +129,7 @@ MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e)
 			;
 		res = midiOutShortMsg (slot->mmHandle, data);
 		if (res != MMSYSERR_NOERROR)
-			MMError ("midiOutShortMsg", res, false);
+			MMError ("midiOutShortMsg", slot->refNum, res, false);
 	}
 	return e;
 }

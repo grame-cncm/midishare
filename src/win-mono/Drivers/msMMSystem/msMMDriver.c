@@ -187,7 +187,7 @@ static void OpenInputSlot (SlotPtr slot)
 	if (ret == MMSYSERR_NOERROR) {
 		slot->mmHandle = h;
 		if (!InitHeaders (slot)) {
-			MMError ("memory allocation failed", 0, true);
+			MMError ("memory allocation failed", slot->refNum, 0, true);
 			midiInClose (h);
 			return;
 		}
@@ -198,17 +198,17 @@ static void OpenInputSlot (SlotPtr slot)
 			if (ret == MMSYSERR_NOERROR) {
 				ret= midiInStart (h);
 				if (ret == MMSYSERR_NOERROR) return;
-				else MMError ("midiInStart", ret, true);
+				else MMError ("midiInStart", slot->refNum, ret, true);
 			}
-			else MMError ("midiInAddBuffer", ret, true);
+			else MMError ("midiInAddBuffer", slot->refNum, ret, true);
 			CloseSlot (slot, true);
 		}
 		else {
-			MMError ("midiInPrepareHeader", ret, true);
+			MMError ("midiInPrepareHeader", slot->refNum, ret, true);
 			midiInClose (h);
 		}
 	}
-	else MMError ("midiInOpen", ret, true);
+	else MMError ("midiInOpen", slot->refNum, ret, true);
 }
 
 //_________________________________________________________
@@ -220,16 +220,16 @@ static void OpenOutputSlot (SlotPtr slot)
 		MMRESULT res;
 		slot->mmHandle = h;
 		if (!InitHeaders (slot)) {
-			MMError ("memory allocation failed", 0, false);
+			MMError ("memory allocation failed", slot->refNum, 0, false);
 			midiOutClose (h);
 			return;
 		}
 		res = midiOutPrepareHeader(h, slot->header, sizeof(MIDIHDR)); 
 		if (res != MMSYSERR_NOERROR)
-			MMError ("midiOutPrepareHeader", res, false);
+			MMError ("midiOutPrepareHeader", slot->refNum, res, false);
 		else slot->header->dwUser = 1;
 	}
-	else MMError ("midiOutOpen", ret, false);
+	else MMError ("midiOutOpen", slot->refNum, ret, false);
 }
 
 //_________________________________________________________
@@ -239,7 +239,7 @@ void OpenSlot (SlotPtr slot, Boolean inputSlot)
 	else OpenOutputSlot (slot);
 }
 
-#define CheckErr(res,function,in) if (res != MMSYSERR_NOERROR) MMError (function, res, in)
+#define CheckErr(res,ref,function,in) if (res != MMSYSERR_NOERROR) MMError (function, ref, res, in)
 //_________________________________________________________
 static void CloseSlot (SlotPtr slot, Boolean inputSlot)
 {
@@ -249,14 +249,14 @@ static void CloseSlot (SlotPtr slot, Boolean inputSlot)
 		HMIDIIN h = (HMIDIIN)slot->mmHandle;
 		slot->header->dwUser = 0;
 		res = midiInStop (h);
-		CheckErr(res, "midiInStop", true);
+		CheckErr(res, slot->refNum, "midiInStop", true);
 		res = midiInReset(h);
-		CheckErr(res, "midiInReset", true);
+		CheckErr(res, slot->refNum, "midiInReset", true);
 		res = midiInUnprepareHeader(h, slot->header, sizeof(MIDIHDR)); 
-		CheckErr(res, "midiInUnprepareHeader", true);
+		CheckErr(res, slot->refNum, "midiInUnprepareHeader", true);
 		do {
 			res= midiInClose (h);
-			CheckErr(res, "midiInClose", true);
+			CheckErr(res, slot->refNum, "midiInClose", true);
 			if (res == MIDIERR_STILLPLAYING)
 				midiInReset(h);
 			Sleep (10);
@@ -267,12 +267,12 @@ static void CloseSlot (SlotPtr slot, Boolean inputSlot)
 		HMIDIOUT h = (HMIDIOUT)slot->mmHandle;
 		res = midiOutReset (h); 
 		if (res != MMSYSERR_NOERROR)
-			MMError ("midiOutReset", res, false);
+			MMError ("midiOutReset", slot->refNum, res, false);
 		midiOutUnprepareHeader (h, slot->header, sizeof(MIDIHDR)); 
 		do {
 			res= midiOutClose (h);
 			if (res != MMSYSERR_NOERROR)
-				MMError ("midiOutClose", res, false);
+				MMError ("midiOutClose", slot->refNum, res, false);
 			Sleep (10);
 			retry++;
 		} while ((res == MIDIERR_STILLPLAYING) && (retry < 10));
