@@ -110,20 +110,6 @@ void DriverSleep (TApplPtr appl)
 }
 
 /*_________________________________________________________________________*/
-Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos)
-{
-	Boolean ret = false;
-	TApplContextPtr context = appl->context;
-	if (SlotInfo(appl)) {
-		SlotInfoPtr slotInf = SlotInfo(appl);
-		long oldContext = SetContextRegister (GetContext(context));
-   		ret = slotInf (slot, infos);
-		SetContextRegister (oldContext);
-	}
-	return ret;
-}
-
-/*_________________________________________________________________________*/
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {
 	long oldContext = SetContextRegister (GetContext(context));
