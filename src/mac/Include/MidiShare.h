@@ -354,18 +354,21 @@ enum{	MIDIOpenAppl=1,
 		SlotName 		name;
 		SlotDirection 	direction;
 		char 			cnx[32];	// bit field : 256 ports connection state
+		long			reserved[2];
 	} TSlotInfos;
 
 	typedef struct TDriverOperation {
 		void 		(* wakeup) (short refNum);
 		void 		(* sleep)  (short refNum);
 		Boolean 	(* slotInfo)  (SlotRefNum slot, TSlotInfos * infos);
+		long		reserved[2];
 	} TDriverOperation;
 
 	typedef struct TDriverInfos {
 		DriverName  name;
 		short 		version;
 		short 		slots;			// slots count - ignored at register time
+		long		reserved[2];
 	} TDriverInfos;
 
 
