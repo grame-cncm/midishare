@@ -1,8 +1,8 @@
 
-SRC = $(wildcard unix/*.cpp glue/*.cpp *.cpp)
+SRC = $(wildcard unix/*.cpp *.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
-CFLAGS = -O3 -Iinclude -Iglue -Wall
+CFLAGS = -O3 -Iinclude -Wall
 CXXFLAGS = $(CFLAGS)
 CC = g++
 

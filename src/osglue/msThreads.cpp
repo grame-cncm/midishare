@@ -29,9 +29,14 @@ msThreadPtr msThreadCreate (ThreadProcPtr proc, void * arg, int priority)
 {
 	TThreads * thread = new TThreads ();
 	if (thread) {
-        if (thread->Create (proc, arg, priority) != TThreads::ThreadNoErr) {
-			delete thread;
-			thread = 0;
+        int ret = thread->Create (proc, arg, priority);
+		switch (ret) {
+			case TThreads::SetPriorityFailed:
+			case TThreads::ThreadNoErr:
+				break;
+			default:
+				delete thread;
+				thread = 0;
 		}
 	}
 	return (msThreadPtr)thread;
