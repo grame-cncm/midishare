@@ -39,20 +39,19 @@
 #include "msTime.h"
 #include "msXmtRcv.h"
 
-#include <stdio.h>
-
+#include "msPrefs.h"
 
 TMSGlobal       GlobalMem = { 0 };
 TMSGlobalPtr    gMem = &GlobalMem;
 
 Boolean 		gInitLib = false;
 
-// To imporve : use of a global iniialisation entry point
+// To improve : use of a global iniialisation entry point
 #define __MSInitialize() \
 { \
    	if (!gInitLib) { \
   		gInitLib = true; \
-  		MSSpecialInit (40000, gMem); \
+  		MSSpecialInit (LoadSpace(), gMem); \
   	}  \
  } \
 
