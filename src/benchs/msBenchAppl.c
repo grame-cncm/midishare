@@ -30,6 +30,7 @@
 # include <windows.h>
 # define sleep(n)  Sleep(n)
 #else
+# include <signal.h>
 # include <unistd.h>
 # define sleep(n)  usleep(n*1000)
 #endif
@@ -73,15 +74,12 @@ int gCount  = 1500;
 long gLastTime = 0;
 long gFlag = 0;
 
-#include <mach/mach_time.h>
 static void TimeTask (long date, short refNum, long a1,long a2,long a3);
 
 //___________________________________________________________________
 static void benchSigHandler(int sig)
 {
-	long long int t = mach_absolute_time();
-	fprintf (stderr, "client %d: signal %d received [%lx, %lx] at time %lld\n",
-		(int)gRef, sig, (long)TimeTask, (long)InitTask, t);
+	fprintf (stderr, "client %d: signal %d received\n", (int)gRef, sig);
 	exit (1);
 }
 
