@@ -13,3 +13,6 @@ $(cappl) : % : %.c
 
 clean :
 	rm $(cppappl) $(cappl)
+
+install :
+	cp $(cppappl) $(cappl) /usr/local/bin
