@@ -88,6 +88,142 @@ LINK32=link.exe
 
 # Name "RadioHardDisk - Win32 Release"
 # Name "RadioHardDisk - Win32 Debug"
+# Begin Group "common"
+
+# PROP Default_Filter ""
+# Begin Group "Midi"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\EventToUDPStream.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\MidiShareAppl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\MidiShareDriver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\MidiShareFilter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\MidiShareTasks.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\MidiTools.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\TMidiSlot.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Midi\UDPStreamToEvent.c
+# End Source File
+# End Group
+# Begin Group "state"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\state\ApplState.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\state\SlotState.cpp
+# End Source File
+# End Group
+# Begin Group "TCP"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Tcp\TMidiClient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Tcp\TMidiServer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\Tcp\TWANControler.cpp
+# End Source File
+# End Group
+# Begin Group "sockets"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Drivers\msNetDrivers\lib\sockets\TInetAddress.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Drivers\msNetDrivers\lib\sockets\TNetInfos.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Drivers\msNetDrivers\lib\sockets\TTCPSocket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Drivers\msNetDrivers\lib\sockets\TUDPSocket.cpp
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\FTMA.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Drivers\msNetDrivers\Handle.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\SkewControler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TInetControler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TInetTasks.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TMidiInStream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TMidiOutStream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TMidiRemote.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TPacket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TRemoteAppl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TRemoteMgr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\lib\Network\TRemoteSlot.cpp
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\bmp1500.bmp
@@ -127,10 +263,6 @@ SOURCE=.\StateManager.cpp
 # Begin Source File
 
 SOURCE=..\..\VCProject\Release\mshare32.lib
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Drivers\msNetDrivers\lib\msNetLib.lib
 # End Source File
 # End Target
 # End Project
