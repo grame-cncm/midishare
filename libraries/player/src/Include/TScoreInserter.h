@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TScoreInserter.cpp			    
 // ===========================================================================
-/*!
-\brief  A utility class to insert sequence of events in the score.
-*/
 
 
 #ifndef __TScoreInserter__
@@ -25,9 +22,12 @@
 #include "TPlayerScore.h"
 
 
-//-----------------------
+//----------------------
 // Class TScoreFollower 
-//-----------------------
+//----------------------
+/*!
+\brief  A utility class to insert sequence of events in the score.
+*/
 
 class TScoreInserter  :public TScoreFollower{
 
@@ -35,13 +35,13 @@ class TScoreInserter  :public TScoreFollower{
 	
 		TPlayerScorePtr fScore;
 		
-	public :
+	public:
  
- 		TScoreInserter(TPlayerScorePtr score, ULONG tpq) :TScoreFollower(score,tpq){ fScore = score;}
- 		~TScoreInserter () {}
+ 		TScoreInserter(TPlayerScorePtr score, ULONG tpq):TScoreFollower(score,tpq),fScore(score){}
+ 		virtual ~TScoreInserter(){}
  		
  		long InsertAllTrack(MidiSeqPtr s);
- 		long InsertTrack(short tracknum,MidiSeqPtr s);
+ 		long InsertTrack(short tracknum, MidiSeqPtr s);
 };
 
 

@@ -12,18 +12,6 @@
 // ===========================================================================
 //	TSyncInPlayer.h	   			 
 // ===========================================================================
-/*!
-  \brief A TSyncInPlayer is the basic synchronisable player.
-
-  A TSyncInPlayer uses three components :
-  <UL>
- 	<LI> a tickplayer : plays the score where dates are in ticks
- 	<LI> a synchroniser : provides ticks ==> millisecond conversion
-  	<LI> a chaser : maintain the "event to chase" state and send events when necessary (start, stop)
-  </UL>
-  Changing the synchronizer object allows to change the synchronization behaviour of the TSyncInPlayer.
-*/  
-
 
 #ifndef __TSynchroPlayer__
 #define __TSynchroPlayer__
@@ -38,6 +26,18 @@
 //-----------------------
 // Class TSyncInPlayer 
 //-----------------------
+/*!
+  \brief A TSyncInPlayer is the basic synchronisable player.
+
+  A TSyncInPlayer uses three components :
+  <UL>
+ 	<LI> a tickplayer : plays the score where dates are in ticks
+ 	<LI> a synchroniser : provides ticks ==> millisecond conversion
+  	<LI> a chaser : maintain the "event to chase" state and send events when necessary (start, stop)
+  </UL>
+  Changing the synchronizer object allows to change the synchronization behaviour of the TSyncInPlayer.
+*/  
+
 
 class TSyncInPlayer :public TPlayerInterface{
 	
@@ -50,7 +50,7 @@ class TSyncInPlayer :public TPlayerInterface{
 	 public:
 	 	
 	  	TSyncInPlayer (TPlayerSynchroniserPtr sy, TTickPlayerInterfacePtr pl, TChaserInterfacePtr ch);
-	 	virtual ~TSyncInPlayer (){}
+	 	virtual ~TSyncInPlayer(){}
 	 
 		void Start();
 		void Stop();
@@ -70,7 +70,6 @@ class TSyncInPlayer :public TPlayerInterface{
 };
 
 typedef TSyncInPlayer FAR * TSynchroPlayerPtr;
-
 
 
 #endif

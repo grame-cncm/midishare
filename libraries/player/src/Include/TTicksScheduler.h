@@ -11,9 +11,6 @@
 // ===========================================================================
 //	TTickScheduler.h		  
 // ===========================================================================
-//
-//   Combines a scheduler and a synchroniser.
-//
 
 #ifndef __TTickScheduler__
 #define __TTickScheduler__
@@ -23,9 +20,13 @@
 #include "TSynchroniserInterface.h"
 #include "TMidiAppl.h"
 
-//-----------------------
+//----------------------
 // Class TTickScheduler 
-//-----------------------
+//----------------------
+/*!
+	\brief  Combines a scheduler and a synchroniser.
+*/
+
 
 class TTicksScheduler  :public TSynchroniserInterface, public TSchedulerInterface{
 

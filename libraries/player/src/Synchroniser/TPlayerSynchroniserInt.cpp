@@ -20,99 +20,81 @@
 #include "UTools.h"
 #include "UDebug.h"
 
-
 /*--------------------------------------------------------------------------*/
 
- TPlayerSynchroniserInt::TPlayerSynchroniserInt (TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state,ULONG tpq) 
-	: TPlayerSynchroniser(scheduler,state,tpq)
-{  
-	fTempoTask = new TTempoTask (this);
-	fIterator = new TScoreIterator(score);
-	fTempoVisitor = new TTempoMapVisitor(tpq);
-	fFollower = new TScoreFollower(fIterator,fTempoVisitor);
-}
-
-
-/*--------------------------------------------------------------------------*/
-		
-TPlayerSynchroniserInt::~TPlayerSynchroniserInt() 
-{
- 	delete(fTempoTask);
- 	//The follower destroy fTempoVisitor and fIterator
- 	delete(fFollower);
-}
-
-/*--------------------------------------------------------------------------*/
-
-void TPlayerSynchroniserInt::PlaySlice () 
+void TPlayerSynchroniserInt::PlaySlice() 
 {
 	TEventPtr cur; 
-	if (!fIterator->IsLastEv()) {
+	if (!fIterator.IsLastEv()){
 	
-		ULONG cur_tempo = fTempoVisitor->GetTempo();
+		ULONG cur_tempo = fTempoVisitor.GetTempo();
 	
 		// For all events at the same date
-		while ((cur = fIterator->NextDateEv())){
-			cur->Accept(fTempoVisitor,true);
+		while ((cur = fIterator.NextDateEv())){
+			cur->Accept(&fTempoVisitor,true);
 		}
 		
 		// If Tempo has changed, update the Scheduler
-		if (cur_tempo != fTempoVisitor->GetTempo()){ 
+		if (cur_tempo != fTempoVisitor.GetTempo()){ 
 			fScheduler->ReScheduleTasks(); 
 		}
 		
 		// Schedule the PlayTask for the date of the next events
-		fScheduler->ScheduleTickTask(fTempoTask, fIterator->CurDate());
+		fScheduler->ScheduleTickTask(&fTempoTask, fIterator.CurDate());
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserInt::Init (){ fFollower->Init(); }
+void TPlayerSynchroniserInt::Init(){fFollower.Init();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserInt::Start ()
+void TPlayerSynchroniserInt::Start()
 { 
 	fState->SetRunning(); // before  ScheduleTickTask
 	fOffset = MidiGetTime();
-	fScheduler->ScheduleTickTask(fTempoTask, fIterator->CurDate()); 
+	fScheduler->ScheduleTickTask(&fTempoTask, fIterator.CurDate()); 
 }	
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserInt::Stop () 
+void TPlayerSynchroniserInt::Stop() 
 { 
-	fTempoTask->Forget();
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
+	fTempoTask.Forget();
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	fState->SetIdle();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserInt::Cont (ULONG date_ticks) 
+void TPlayerSynchroniserInt::Cont(ULONG date_ticks) 
 { 
 	fState->SetRunning(); // before ScheduleTickTask
 	SetPosTicks(date_ticks);
-	fOffset = MidiGetTime() - fTempoVisitor->CurDateMs();
-	fScheduler->ScheduleTickTask(fTempoTask, fIterator->CurDate()); 
+	fOffset = MidiGetTime() - fTempoVisitor.CurDateMs();
+	fScheduler->ScheduleTickTask(&fTempoTask, fIterator.CurDate()); 
 }
 
 /*--------------------------------------------------------------------------*/
 
-Boolean TPlayerSynchroniserInt::IsSchedulable (ULONG date_ticks) {return fState->IsRunning();}
+Boolean TPlayerSynchroniserInt::IsSchedulable(ULONG date_ticks) {return fState->IsRunning();}
 
 /*--------------------------------------------------------------------------*/
 
-ULONG TPlayerSynchroniserInt::GetPosTicks () 
+ULONG TPlayerSynchroniserInt::GetPosTicks() 
 {
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
-	return fTempoVisitor->CurDateTicks();
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
+	return fTempoVisitor.CurDateTicks();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void  TPlayerSynchroniserInt::SetPosTicks (ULONG date_ticks)
+void  TPlayerSynchroniserInt::SetPosTicks(ULONG date_ticks)
 {  
-	fFollower->SetPosTicks(date_ticks);
+	fFollower.SetPosTicks(date_ticks);
 }
+
+/*--------------------------------------------------------------------------*/
+
+void TTempoTask::Execute (TMidiApplPtr appl, ULONG date) {fSynchroniser->PlaySlice();}

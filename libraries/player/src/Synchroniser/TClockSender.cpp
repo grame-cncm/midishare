@@ -20,22 +20,6 @@
 #include "TClockSender.h"
 #include "UTools.h"
 
-/*--------------------------------------------------------------------------*/
-
-TClockSender::TClockSender(
-	TSchedulerInterfacePtr scheduler, 
-	TClockConverterPtr converter,
-	TEventSenderInterfacePtr user)
-{
-	fScheduler = scheduler;
-	fClockConverter = converter;
-	fEventUser = user;
-	fClockTask = new TClockTask(this);
-}
-
-/*--------------------------------------------------------------------------*/
-
-TClockSender::~TClockSender(){delete(fClockTask);}
 
 /*--------------------------------------------------------------------------*/
 
@@ -44,14 +28,14 @@ void TClockSender::Start()
 	Stop();
 	fClockCount = 0;
 	fEventUser->SendEvent(MidiNewEv(typeStart),MidiGetTime());
-	fScheduler->ScheduleTickTask(fClockTask, 0);
+	fScheduler->ScheduleTickTask(&fClockTask, 0);
 }
 
 /*--------------------------------------------------------------------------*/
 
 void TClockSender::Stop() 
 { 
-	fClockTask->Forget();
+	fClockTask.Forget();
 	fEventUser->SendEvent(MidiNewEv(typeStop),MidiGetTime());
 }
 
@@ -63,7 +47,7 @@ void TClockSender::Cont(ULONG date_ticks)
 {
 	fEventUser->SendEvent(MidiNewEv(typeContinue),MidiGetTime());
 	fClockCount = (ULONG)fClockConverter->ConvertTickToClock((float)date_ticks);
-	fScheduler->ScheduleTickTask(fClockTask, date_ticks);
+	fScheduler->ScheduleTickTask(&fClockTask, date_ticks);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -74,7 +58,7 @@ void TClockSender::NextClock (ULONG date_ms)
 {
 	fClockCount++;
 	fEventUser->SendEvent(MidiNewEv(typeClock),date_ms);
-	fScheduler->ScheduleTickTask(fClockTask, (ULONG)fClockConverter->ConvertClockToTick((float)fClockCount));
+	fScheduler->ScheduleTickTask(&fClockTask, (ULONG)fClockConverter->ConvertClockToTick((float)fClockCount));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -95,3 +79,7 @@ ULONG TClockSender::GetPosTicks()
 {
 	return (fClockCount == 0) ? 0 : (ULONG)fClockConverter->ConvertClockToTick((float)(fClockCount - 1));
 }
+
+/*--------------------------------------------------------------------------*/
+
+void TClockTask::Execute (TMidiApplPtr appl, ULONG date_ms) {fSender->NextClock(date_ms);}

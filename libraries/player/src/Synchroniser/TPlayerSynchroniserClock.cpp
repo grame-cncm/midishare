@@ -22,18 +22,19 @@
 #include "UTools.h"
 #include "UDebug.h"
 
+
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::Init ()
+void TPlayerSynchroniserClock::Init()
 { 
-	fTempoVisitor->Init();
+	fTempoVisitor.Init();
 	fNextdate_ticks = 0;
 	fClock_count = 0;
-}	
+}		
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::Start ()
+void TPlayerSynchroniserClock::Start()
 { 
 	fOffset = MidiGetTime();
 	fState->SetWaiting();
@@ -41,22 +42,22 @@ void TPlayerSynchroniserClock::Start ()
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::Stop () { fState->SetIdle(); }
+void TPlayerSynchroniserClock::Stop() {fState->SetIdle();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::Cont (ULONG date_ticks) 
+void TPlayerSynchroniserClock::Cont(ULONG date_ticks) 
 { 
-	fTempoVisitor->Init(); // Important  (Tempo Map must be re-initialized)
-	fTempoVisitor->UpdateTicks(date_ticks);
-	fClock_count = (ULONG)fClockConverter->ConvertTickToClock((float)date_ticks);
+	fTempoVisitor.Init(); // Important  (Tempo Map must be re-initialized)
+	fTempoVisitor.UpdateTicks(date_ticks);
+	fClock_count = (ULONG)fClockConverter.ConvertTickToClock((float)date_ticks);
 	fNextdate_ticks = date_ticks;
 	fState->SetWaiting();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::RcvClock (ULONG date_ms)
+void TPlayerSynchroniserClock::RcvClock(ULONG date_ms)
 {
 	if (fState->IsRunning()) {
 		RcvNextClock(date_ms);
@@ -67,32 +68,31 @@ void TPlayerSynchroniserClock::RcvClock (ULONG date_ms)
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::RcvFirstClock (ULONG date_ms)
+void TPlayerSynchroniserClock::RcvFirstClock(ULONG date_ms)
 {
 	fState->SetRunning();
-	fOffset = date_ms - fTempoVisitor->CurDateMs();
-	fTempoVisitor->SetTempo(GetPosTicks(), kDefaultTempoEv);
+	fOffset = date_ms - fTempoVisitor.CurDateMs();
+	fTempoVisitor.SetTempo(GetPosTicks(), kDefaultTempoEv);
  	NextClock(date_ms);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::RcvNextClock (ULONG date_ms)
+void TPlayerSynchroniserClock::RcvNextClock(ULONG date_ms)
 {
- 	fTempoVisitor->SetTempo(GetPosTicks(), fClockConverter->ConvertDeltaToTempo(date_ms - fRcv_clock));
- 	fTempoVisitor->UpdateTicks(fNextdate_ticks);
+ 	fTempoVisitor.SetTempo(GetPosTicks(), fClockConverter.ConvertDeltaToTempo(date_ms - fRcv_clock));
+ 	fTempoVisitor.UpdateTicks(fNextdate_ticks);
  	NextClock(date_ms);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserClock::NextClock (ULONG date_ms)
+void TPlayerSynchroniserClock::NextClock(ULONG date_ms)
 {
  	fRcv_clock = date_ms;
- 	fNextdate_ticks = (ULONG)fClockConverter->ConvertClockToTick((float(++fClock_count)));
+ 	fNextdate_ticks = (ULONG)fClockConverter.ConvertClockToTick((float(++fClock_count)));
  	fScheduler->ReScheduleTasks();
 }
-
 
 /*--------------------------------------------------------------------------*/
 
@@ -100,14 +100,11 @@ Boolean TPlayerSynchroniserClock::IsSchedulable (ULONG date_ticks) {return (date
 
 /*--------------------------------------------------------------------------*/
 
-ULONG TPlayerSynchroniserClock::GetPosTicks () 
-{
-	return fTempoVisitor->CurDateTicks();
-}
+ULONG TPlayerSynchroniserClock::GetPosTicks() {return fTempoVisitor.CurDateTicks();}
 
 /*--------------------------------------------------------------------------*/
 
 void TPlayerSynchroniserClock::SetPosTicks (ULONG date_ticks)
 {
-	 fTempoVisitor->UpdateTicks((ULONG)fClockConverter->ConvertTickToTickAtPrevClock((float)date_ticks));
+	 fTempoVisitor.UpdateTicks((ULONG)fClockConverter.ConvertTickToTickAtPrevClock((float)date_ticks));
 }

@@ -22,15 +22,6 @@
 
 /*----------------------------------------------------------------------------*/
 
-TEventReceiver::TEventReceiver( TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
-	:TEventDispatcher(successor)
-{
-	fLoopManager = loopmanager;
-	fPlayer = player;
-}
-
-/*----------------------------------------------------------------------------*/
-
 void TEventReceiver::ReceiveLoopEnd(MidiEvPtr e)
 {
 	if (fLoopManager->IsLoopOn()) {
@@ -40,7 +31,7 @@ void TEventReceiver::ReceiveLoopEnd(MidiEvPtr e)
 
 /*----------------------------------------------------------------------------*/
 
-void TEventReceiver::ReceiveStop(MidiEvPtr e){ fPlayer->Stop(); }
+void TEventReceiver::ReceiveStop(MidiEvPtr e){fPlayer->Stop();}
 
 /*----------------------------------------------------------------------------*/
 

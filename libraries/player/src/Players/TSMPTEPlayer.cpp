@@ -19,20 +19,6 @@
 #include "TSMPTEPlayer.h"
 #include "UDebug.h"
 
-/*----------------------------------------------------------------------------*/
-	  	
-TSMPTEPlayer::TSMPTEPlayer (TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte,TMidiApplPtr appl)
-{ 
-	fPlayer = player;
-	fRunningState = state;
-	fMidiAppl = appl;
-	fSmpteInfos = smpte;
-	fSMPTEtask = new TSMPTETask(this);
-}
-
-/*----------------------------------------------------------------------------*/
-
-TSMPTEPlayer::~TSMPTEPlayer (){ delete(fSMPTEtask);}
 
 /*----------------------------------------------------------------------------*/
 
@@ -63,7 +49,7 @@ void TSMPTEPlayer::Stop()
 
 void TSMPTEPlayer::Pause()
 {
-	if (fRunningState->IsRunning()) {
+	if (fRunningState->IsRunning()){
 		fPlayer->Pause();
 		fRunningState->SetPause();
 	}
@@ -128,10 +114,10 @@ void TSMPTEPlayer::RcvClock(ULONG date_ms) {}
 void TSMPTEPlayer::StartAtSMPTEOffset()  
 {
 	ULONG curexttime = MidiGetExtTime();
-	fSMPTEtask->Forget();
+	fSMPTEtask.Forget();
 	
 	if (curexttime < fSmpteInfos->GetSMPTEOffset()){
-		fMidiAppl->ScheduleTask(fSMPTEtask, MidiGetTime() + fSmpteInfos->GetSMPTEOffset() - curexttime);
+		fMidiAppl->ScheduleTask(&fSMPTEtask, MidiGetTime() + fSmpteInfos->GetSMPTEOffset() - curexttime);
 	}else  if (curexttime == fSmpteInfos->GetSMPTEOffset()){
 		fPlayer->Start();
 	}else {
@@ -142,11 +128,11 @@ void TSMPTEPlayer::StartAtSMPTEOffset()
 
 /*----------------------------------------------------------------------------*/
 
-ULONG TSMPTEPlayer::GetTempo() { return fPlayer->GetTempo();}
+ULONG TSMPTEPlayer::GetTempo() {return fPlayer->GetTempo();}
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEPlayer::ReceiveEvents (MidiEvPtr e) { fPlayer->ReceiveEvents(e);}
+void TSMPTEPlayer::ReceiveEvents (MidiEvPtr e) {fPlayer->ReceiveEvents(e);}
 
 /*----------------------------------------------------------------------------*/
 
@@ -155,4 +141,8 @@ void TSMPTEPlayer::SetPosBBU (const TPos& pos) {fPlayer->SetPosBBU(pos);}
 /*----------------------------------------------------------------------------*/
 
 void TSMPTEPlayer::SetPosMs (ULONG date_ms) {fPlayer->SetPosMs(date_ms);}
+
+/*----------------------------------------------------------------------------*/
+
+void TSMPTETask::Execute (TMidiApplPtr appl, ULONG date) {fPlayer->Start();}
 	

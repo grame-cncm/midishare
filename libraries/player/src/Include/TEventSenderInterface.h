@@ -12,9 +12,7 @@
 // ===========================================================================
 //	TEventSenderInterface.h			    
 // ===========================================================================
-/*!
-\brief Interface for events users.
-*/
+
 
 #ifndef __TEventSenderInterface__
 #define __TEventSenderInterface__
@@ -24,6 +22,10 @@
 //-----------------------------
 // Class TEventSenderInterface
 //-----------------------------
+/*!
+\brief Interface for events users.
+*/
+
 
 class TEventSenderInterface{
 

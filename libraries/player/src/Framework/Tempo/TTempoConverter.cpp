@@ -97,7 +97,6 @@ void TTempoConverter::Update (ULONG date_ticks, ULONG tempo)
  \return The result is the date in 10 micro-sec.
 */
 
-
 ULONG TTempoConverter::ConvertTickToMicroSec (ULONG date_ticks)
 {
 	ULONG delta ;
@@ -139,8 +138,6 @@ ULONG TTempoConverter::ConvertMicroSecToTick (ULONG date_ten_micro)
  \brief Convert a date in ticks in a date in milliseconds.
  \param date_ticks is the date in ticks
  \return The result is the date in milliseconds.
- 
- 
 */
 
 ULONG TTempoConverter::ConvertTickToMs  (ULONG date_ticks) {return ConvertTickToMicroSec (date_ticks) / 100;}

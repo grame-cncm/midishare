@@ -12,9 +12,7 @@
 // ===========================================================================
 //	TDestructor.h			    
 // ===========================================================================
-//
-//	Keeps trace of all objects allocated by the PlayerFactory
-// 
+
 
 #ifndef __TDestructor__
 #define __TDestructor__
@@ -41,7 +39,9 @@
 #include "TEventReceiver.h"
 #include "TRunningPlayer.h"
 
-
+/*!
+\brief	Keeps trace of all objects allocated by the TPlayerFactory.
+*/
 
 class TDestructor {
 
@@ -103,9 +103,9 @@ class TDestructor {
 			fTimeManager = timemanager;
 		}
 				
-		~TDestructor()
+		virtual ~TDestructor()
 		{
-			// the scheduler must be desallocated first
+			// The scheduler must be desallocated first
 			
 			if (fScheduler)		delete(fScheduler);
 			if (fSynchroniser) 	delete(fSynchroniser);

@@ -13,9 +13,6 @@
 //	TEventReceiverInterface.h		
 // ==============================
 
-/*!
- \brief Interface for an object which receive incoming events.
-*/
 
 #ifndef __TEventReceiverInterface__
 #define __TEventReceiverInterface__
@@ -25,6 +22,9 @@
 //-------------------------------
 // Class TEventReceiverInterface 
 //-------------------------------
+/*!
+ \brief Interface for an object which receive incoming events.
+*/
 
 class TEventReceiverInterface  {
 
@@ -40,7 +40,6 @@ typedef TEventReceiverInterface FAR * TEventReceiverInterfacePtr;
 //------------------------
 // Class TEventDispatcher 
 //------------------------
-
 /*!
  \brief An object that implements the TEventReceiverInterface and a <B> Chain of responsability pattern </B>.
 */

@@ -24,7 +24,6 @@
 //-----------------
 // Class TMidiTask 
 //-----------------
-
 /*!
   \brief  A Class to wrap a MidiShare task.
 */
@@ -37,12 +36,13 @@ class TMidiTask {
 	
 		MidiEvPtr fTask;
 		
-		void Clear ()  				 {fTask = 0;}
-		void SetTask (MidiEvPtr ev)  {fTask = ev;}
+		void Clear()  				 {fTask = 0;}
+		void SetTask(MidiEvPtr ev)   {fTask = ev;}
 		MidiEvPtr GetTask ()  		 {return fTask;}
 	
 	
 	public:
+	
 		TMidiTask() {fTask = 0;}
 		virtual ~TMidiTask() {MidiForgetTask(&fTask);}
 	
@@ -67,12 +67,12 @@ class TMidiAppl{
 	private:
 		
 	#if defined (__Macintosh__) && defined (__MacOS9__)
-		UPPTaskPtr 		fUPPGenericTask;
+		UPPTaskPtr 	fUPPGenericTask;
 		UPPRcvAlarmPtr 	fUPPGenericReceiveAlarm;
 		UPPApplAlarmPtr fUPPGenericApplAlarm;
 	#else
-		TaskPtr 		fUPPGenericTask ;
-		RcvAlarmPtr 	fUPPGenericReceiveAlarm ;
+		TaskPtr 	fUPPGenericTask;
+		RcvAlarmPtr 	fUPPGenericReceiveAlarm;
 		ApplAlarmPtr 	fUPPGenericApplAlarm;
 	#endif
 		
@@ -105,15 +105,8 @@ class TMidiAppl{
 		short fRefnum;
 		MidiFilterPtr fFilter;
 		
-		TMidiAppl() 
-		{ 
-			fRefnum = -1; 
-			fFilter = 0;
-			fUPPGenericTask = 0;
-			fUPPGenericReceiveAlarm = 0;
-			fUPPGenericApplAlarm = 0;
-		}
-		virtual ~TMidiAppl(){ Close();}
+		TMidiAppl():fUPPGenericTask(0),fUPPGenericReceiveAlarm(0),fUPPGenericApplAlarm(0),fRefnum(-1),fFilter(0){}
+		virtual ~TMidiAppl(){Close();}
 		
 		virtual short Open (MidiName name);
 		virtual void Close();

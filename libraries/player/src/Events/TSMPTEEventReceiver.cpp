@@ -18,12 +18,6 @@
 
 #include "TEventReceiver.h"
 
-/*----------------------------------------------------------------------------*/
-
-TSMPTEEventReceiver::TSMPTEEventReceiver( TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
-	:TEventReceiver(player,loopmanager,successor)
-{
-}
 
 /*----------------------------------------------------------------------------*/
 
@@ -39,9 +33,9 @@ void TSMPTEEventReceiver::ReceiveEvents(MidiEvPtr e)
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEEventReceiver::ReceiveStart(MidiEvPtr e) { fPlayer->Start(); }
+void TSMPTEEventReceiver::ReceiveStart(MidiEvPtr e) {fPlayer->Start();}
 
 /*----------------------------------------------------------------------------*/
 
-void TSMPTEEventReceiver::ReceiveStop(MidiEvPtr e) { fPlayer->Stop(); }
+void TSMPTEEventReceiver::ReceiveStop(MidiEvPtr e) {fPlayer->Stop();}
 

@@ -13,9 +13,6 @@
 //	TTempoMapVisitor.h		    
 // ===========================================================================
 
-/*! 
-  \brief A score visitor which uses a TTempoMap object maintain the current Tempo and TimeSign state.
-*/
 
 #ifndef __TTempoMapVisitor__
 #define __TTempoMapVisitor__
@@ -23,23 +20,25 @@
 #include "TEvent.h"
 #include "TScoreVisitorInterface.h"
 #include "TTempoMap.h"
-#include "TEvent.h"
 
 
 //------------------------
 // Class TTempoMapVisitor 
 //------------------------
+/*! 
+  \brief A score visitor which uses a TTempoMap object to maintain the current Tempo and TimeSign state.
+*/
 
-class TTempoMapVisitor : public TScoreVisitorInterface, public TTempoMap {
+
+class TTempoMapVisitor :public TScoreVisitorInterface, public TTempoMap {
 
 	public :
  
- 		TTempoMapVisitor(ULONG tpq) :TTempoMap(tpq){}
+ 		TTempoMapVisitor(ULONG tpq):TTempoMap(tpq){}
  		virtual ~TTempoMapVisitor (){}
  		
  		void Visite (TTempoPtr ev,Boolean forward);
 		void Visite (TTimeSignPtr ev,Boolean forward); 
-		
 			
 };
 

@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TTrackTable.h			    
 // ===========================================================================
-/*! 
-	\brief Tracks management.
-*/
 
 
 #ifndef __TTrackTable__
@@ -24,9 +21,13 @@
 #include "TTrack.h"
 #include "TPlayerConstants.h"
 
-//-----------------------
+//-------------------
 // Class TTrackTable 
-//-----------------------
+//-------------------
+/*! 
+	\brief Tracks management.
+*/
+
 
 class TTrackTable {
 
@@ -47,7 +48,7 @@ class TTrackTable {
 	public :
  	
  		TTrackTable();
- 		~TTrackTable();
+ 		virtual ~TTrackTable();
  	
 		void		SetParam (short tracknum, short param, short value);
 		short		GetParam (short tracknum, short param);

@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TEventReceiver.h			    
 // ===========================================================================
-/*!
-	\brief A TEventReceiver object handles incoming events.
-*/
 
 
 #ifndef __TEventReceiver__
@@ -29,6 +26,9 @@
 //-----------------------
 // Class TEventReceiver 
 //-----------------------
+/*!
+	\brief A TEventReceiver object handles incoming events.
+*/
 
 class TEventReceiver :public TEventDispatcher {
 
@@ -42,8 +42,9 @@ class TEventReceiver :public TEventDispatcher {
 
 	public:
 	
-		TEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, TEventDispatcherPtr successor);
-		~TEventReceiver(){}
+		TEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, TEventDispatcherPtr successor)
+			:TEventDispatcher(successor),fPlayer(player),fLoopManager(loopmanager){}
+		virtual ~TEventReceiver(){}
 	
 		virtual void ReceiveEvents (MidiEvPtr e);
 };
@@ -52,6 +53,9 @@ class TEventReceiver :public TEventDispatcher {
 //--------------------------
 // Class TClockEventReceiver 
 //--------------------------
+/*!
+	\brief A TEventReceiver object used for clock synchronization.
+*/
 
 class TClockEventReceiver :public TEventReceiver {
 
@@ -67,9 +71,9 @@ class TClockEventReceiver :public TEventReceiver {
 
 	public:
 	
-		TClockEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, 
-							TClockConverterPtr fClockConverter, TEventDispatcherPtr successor);
-		~TClockEventReceiver(){}
+		TClockEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, TClockConverterPtr converter, TEventDispatcherPtr successor)
+			:TEventReceiver(player,loopmanager,successor),fClockConverter(converter){}
+		virtual ~TClockEventReceiver(){}
 	
 		void ReceiveEvents (MidiEvPtr e);
 };
@@ -78,6 +82,9 @@ class TClockEventReceiver :public TEventReceiver {
 //-----------------------------
 // Class TExternalEventReceiver 
 //-----------------------------
+/*!
+	\brief A TEventReceiver object used for external tempo synchronization.
+*/
 
 class TExtEventReceiver :public TEventReceiver {
 
@@ -87,8 +94,9 @@ class TExtEventReceiver :public TEventReceiver {
 
 	public:
 	
-		TExtEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor);
-		~TExtEventReceiver(){}
+		TExtEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
+			:TEventReceiver(player,loopmanager,successor){}
+		virtual ~TExtEventReceiver(){}
 	
 		void ReceiveEvents (MidiEvPtr e);
 		
@@ -97,6 +105,9 @@ class TExtEventReceiver :public TEventReceiver {
 //--------------------------
 // Class TSMPTEEventReceiver 
 //--------------------------
+/*!
+	\brief A TEventReceiver object used for SMPTE synchronization.
+*/
 
 class TSMPTEEventReceiver :public TEventReceiver {
 
@@ -107,8 +118,9 @@ class TSMPTEEventReceiver :public TEventReceiver {
 
 	public:
 	
-		TSMPTEEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor);
-		~TSMPTEEventReceiver(){}
+		TSMPTEEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
+			:TEventReceiver(player,loopmanager,successor){}
+		virtual ~TSMPTEEventReceiver(){}
 	
 		void ReceiveEvents (MidiEvPtr e);
 		

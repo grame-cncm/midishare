@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TEventRecorder.cpp			    
 // ===========================================================================
-/*!
-\brief	Recording management.
-*/
 
 
 #ifndef __TEventRecorder__
@@ -26,9 +23,13 @@
 #include "TPlayerScore.h"
 #include "TPlayerSynchroniser.h"
 
-//-----------------------
+//----------------------
 // Class TEventRecorder 
-//-----------------------
+//----------------------
+/*!
+\brief	Recording management.
+*/
+
 
 class TEventRecorder :public TEventDispatcher {
 
@@ -38,7 +39,7 @@ class TEventRecorder :public TEventDispatcher {
 		short 			fRecordmode;	// Record mode
 		MidiFilterPtr 	fRecFilter;     // Record filter
 		
-		TScoreIteratorPtr	 		fIterator;
+		TScoreIterator	 			fIterator;
 		TPlayerScorePtr			 	fScore;
 		TPlayerSynchroniserPtr   	fSynchroniser;
 		TRunningStatePtr 			fState;
@@ -54,7 +55,7 @@ class TEventRecorder :public TEventDispatcher {
 	public:
 	
 		TEventRecorder(TPlayerScorePtr score, TPlayerSynchroniserPtr synchro, TRunningStatePtr state, TEventDispatcherPtr successor);
-		~TEventRecorder();
+		virtual ~TEventRecorder();
 	
 		void SetRecordMode (short state);
 		short GetRecordMode (){return fRecordmode;}

@@ -13,6 +13,15 @@
 //	TChaserVisitor.h			    
 // ===========================================================================
 
+
+#ifndef __TChaserVisitor__
+#define __TChaserVisitor__
+
+#include "TEventTable.h"
+
+//----------------------
+// Class TChaserVisitor
+//----------------------
 /*!
   \brief A chaser visitor contains several hastables (instance of the TEventTable class)
   Each hastable keeps the state of KeyOn, CtrlChange, ProgChange, KeyPress, ChanPress,
@@ -20,41 +29,33 @@
 */
 
 
-#ifndef __TChaserVisitor__
-#define __TChaserVisitor__
-
-#include "TEventTable.h"
-
-/*--------------------------------------------------------------------------*/
-// Class TChaserVisitor
-/*--------------------------------------------------------------------------*/
-
 class TChaserVisitor :public  TScoreVisitorInterface{
 
 	private:
 		/*! Event user */
 		TEventSenderInterfacePtr 	fUser;      
+		
 		/*! Hashtable for KeyOn */
-		TEventTablePtr   	fKeyontable;        
+		TKeyOnTable   		fKeyontable;        
 		/*! Hashtable for CtrlChange */
-		TEventTablePtr   	fCtrlchangetable;	
+		TCtrlChangeTable   	fCtrlchangetable;	
 		/*! Hashtable for KeyPress */
-		TEventTablePtr   	fKeypresstable;		
+		TEventTable   		fKeypresstable;		
 		/*! Hashtable for ChanPress */
-		TEventTablePtr   	fChanpresstable;	
+		TEventTable   		fChanpresstable;	
 		/*! Hashtable for PitchBend */
-		TEventTablePtr   	fPitchwheeltable;	
+		TPitchWheelTable   	fPitchwheeltable;	
 		/*! Hashtable for ProgChange */
-		TEventTablePtr   	fProgchangetable;	
+		TEventTable   		fProgchangetable;	
 		/*! Hashtable for Sysex */
-		TEventTablePtr   	fSysextable;		
+		TEventTable   		fSysextable;		
 		/*! Tune event */
 		MidiEvPtr    		fTune;            
 			
 	public:
 	
-		TChaserVisitor(TEventSenderInterfacePtr user);
-		~TChaserVisitor();
+		TChaserVisitor(TEventSenderInterfacePtr user):fUser(user),fTune(0){}
+		virtual ~TChaserVisitor(){MidiFreeEv (fTune);}
 		
 		void Init();
 		

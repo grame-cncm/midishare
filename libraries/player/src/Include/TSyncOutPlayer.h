@@ -12,11 +12,6 @@
 // ===========================================================================
 //	TSyncOutPlayer.h	   			 
 // ===========================================================================
-/*!
-  \brief A TSyncOutPlayer object send Clock, Start, Stop, Continue and SongPos events.
-  A TSyncOutPlayer use the Decorator pattern. Additionnal behaviours are added 
-  dynamically on the TPlayerInterface object being decorated.
- */
 
 
 #ifndef __TSyncOutPlayer__
@@ -26,9 +21,15 @@
 #include "TClockSender.h"
 
 
-//-----------------------
+//----------------------
 // Class TSyncOutPlayer
-//-----------------------
+//----------------------
+/*!
+  \brief A TSyncOutPlayer object send Clock, Start, Stop, Continue and SongPos events.
+  A TSyncOutPlayer use the Decorator pattern. Additionnal behaviours are added 
+  dynamically on the TPlayerInterface object being decorated.
+*/
+
 
 class TSyncOutPlayer :public TPlayerInterface {
 	
@@ -42,7 +43,7 @@ class TSyncOutPlayer :public TPlayerInterface {
 	 public:
 	  	
 	 	TSyncOutPlayer (TPlayerInterfacePtr player, TClockSenderPtr clock,TClockConverterPtr converter);
-	 	~TSyncOutPlayer (){}
+	 	virtual ~TSyncOutPlayer(){}
 	  
 		void Start();
 		void Stop();
@@ -58,6 +59,7 @@ class TSyncOutPlayer :public TPlayerInterface {
 		void SetTempo (ULONG tempo);
 		ULONG GetTempo ();
 		void RcvClock (ULONG date_ms);
+		
 };
  
 

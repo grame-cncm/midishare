@@ -27,7 +27,7 @@ void TMidiPlayer::SendEvent(MidiEvPtr event, ULONG date_ms) {fMidiAppl->SendAt(e
 
 /*--------------------------------------------------------------------------*/
 
-void TMidiPlayer::CopyAndUseEvent(TEventPtr event, ULONG date_ms) { CopyAndUseEvent(event->MidiEvent(),date_ms); }
+void TMidiPlayer::CopyAndUseEvent(TEventPtr event, ULONG date_ms) {CopyAndUseEvent(event->MidiEvent(),date_ms);}
 	
 /*--------------------------------------------------------------------------*/
 
@@ -42,7 +42,7 @@ void TMidiPlayer::CopyAndUseEvent(MidiEvPtr e, ULONG date_ms)
 
 /*--------------------------------------------------------------------------*/
 
-void TMidiPlayer::UseEvent(TEventPtr e, ULONG date_ms) { UseEvent(e->MidiEvent(),date_ms);}
+void TMidiPlayer::UseEvent(TEventPtr e, ULONG date_ms) {UseEvent(e->MidiEvent(),date_ms);}
 	
 /*--------------------------------------------------------------------------*/
 

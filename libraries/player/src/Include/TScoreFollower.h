@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TScoreFollower.h		    
 // ===========================================================================
-/*!
-\brief  Uses a TScoreIterator to move a TScoreVisitor on a TScore object.
-*/
 
 
 #ifndef __TScoreFollower__
@@ -25,9 +22,12 @@
 #include "TTempoMapVisitor.h"
 
 
-//-----------------------
+//----------------------
 // Class TScoreFollower 
-//-----------------------
+//----------------------
+/*!
+\brief  Uses a TScoreIterator to move a TScoreVisitor on a TScore object.
+*/
 
 class TScoreFollower {
 
@@ -44,23 +44,22 @@ class TScoreFollower {
 	
 	protected:
 	
-		TTempoMapVisitorPtr fTempoVisitor;
-		TScoreIteratorPtr	fIterator;
+		TTempoMapVisitor 	fTempoVisitor;
+		TScoreIterator		fIterator;
 		
 	public :
 	
- 		TScoreFollower() { fTempoVisitor = 0; fIterator = 0;}
- 		TScoreFollower(TScorePtr score,ULONG tpq);
- 		TScoreFollower(TScoreIteratorPtr iterator, TTempoMapVisitorPtr tempovisitor);
- 		virtual ~TScoreFollower ();
+ 		TScoreFollower(TScorePtr score, ULONG tpq):fTempoVisitor(tpq),fIterator(score){}
+ 		TScoreFollower(TScoreIterator& iterator, TTempoMapVisitor& tempovisitor):fTempoVisitor(tempovisitor),fIterator(iterator){} 
+		virtual ~TScoreFollower (){}
  		
-		void Init (){ fIterator->Init(); fTempoVisitor->Init();}
+		void Init (){fIterator.Init(); fTempoVisitor.Init();}
 		
  		TEventPtr SetPosTicks (ULONG date_ticks); 
  		TEventPtr SetPosBBU (const TPos& pos);
  		TEventPtr SetPosMs (ULONG date_ms);
  		
- 		ULONG GetPosTicks() { return fTempoVisitor->CurDateTicks();}
+ 		ULONG GetPosTicks() {return fTempoVisitor.CurDateTicks();}
 };
 
 

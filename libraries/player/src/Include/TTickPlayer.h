@@ -25,6 +25,9 @@
 //----------------------------
 // Class TTickPlayerInterface 
 //----------------------------
+/*!
+ \brief An interface for ticks based players.
+*/
 
 class TTickPlayerInterface {
 	
@@ -47,32 +50,56 @@ class TTickPlayerInterface {
 typedef TTickPlayerInterface FAR * TTickPlayerInterfacePtr;
 
 
-//--------------------
-// Class TTickPlayer 
-//--------------------
+//-----------------
+// Class TPlayTask 
+//-----------------
+/*!
+  \brief Task to play events at the same date.
+*/
 
+class TPlayTask :public TTicksTask{
+
+	friend class TTickPlayer;
+
+	private :
+	
+		TTickPlayer* fPlayer;
+
+	public : 
+	
+		TPlayTask (TTickPlayer* it):TTicksTask(),fPlayer(it){}
+		void Execute (TMidiApplPtr appl , ULONG date_ms);
+};
+
+typedef TPlayTask FAR * TPlayTaskPtr;
+
+
+//-------------------
+// Class TTickPlayer 
+//-------------------
 /*!
 \brief	Player using date in ticks. 
 */
 
 class TTickPlayer : public TTickPlayerInterface{
-	
+
 	friend class TPlayTask;
 	
 	private:
 	
-		TPlayTask*      	    fPlayTask;
-		TScoreIteratorPtr	    fIterator;
-		TSliceVisitorPtr   		fSliceVisitor;
-		TEventSenderInterfacePtr  fEventUser;
-		TSchedulerInterfacePtr	fScheduler;
+        TSliceVisitor  	fSliceVisitor;
+		TScoreIterator	fIterator;
+		TPlayTask      	fPlayTask;
+        TEventSenderInterfacePtr  	fEventUser;
+		TSchedulerInterfacePtr		fScheduler;
 		
 		void PlaySlice (ULONG date_ms);
 		
-	public :
+	public:
  
- 		TTickPlayer(TScorePtr score, TEventSenderInterfacePtr user, TSchedulerInterfacePtr scheduler);
- 		~TTickPlayer();
+ 		TTickPlayer(TScorePtr score, TEventSenderInterfacePtr user, TSchedulerInterfacePtr scheduler)
+ 			:fSliceVisitor(user),fIterator(score),fPlayTask(this),fEventUser(user),fScheduler(scheduler){}
+ 		virtual ~TTickPlayer(){}
  		
  		void Init();
  		void Start();
@@ -87,30 +114,6 @@ class TTickPlayer : public TTickPlayerInterface{
   };
 
 typedef TTickPlayer FAR * TTickPlayerPtr;
-
-
-//-----------------------
-// Class TPlayTask 
-//-----------------------
-
-/*!
-  \brief Task to play events at the same date.
-*/
-
-class TPlayTask :public TTicksTask {
-
-	private :
-	
-		TTickPlayerPtr fPlayer;
-
-	public : 
-	
-		TPlayTask (TTickPlayerPtr it):TTicksTask() {fPlayer =  it;}
-		void Execute (TMidiApplPtr appl , ULONG date_ms) {fPlayer->PlaySlice(date_ms);}
-};
-
-
-typedef TPlayTask FAR * TPlayTaskPtr;
 
 
 #endif

@@ -12,9 +12,7 @@
 // ===========================================================================
 //	TScoreState.h			    
 // ===========================================================================
-/*!
-	\brief For displaying purpose : get the current state.
-*/ 
+
 
 #ifndef __TScoreState__
 #define __TScoreState__
@@ -22,32 +20,36 @@
 #include "TScoreFollower.h"
 #include "CStruct.h"
 
-//-----------------------
+//-------------------
 // Class TScoreState 
-//-----------------------
+//-------------------
+/*!
+	\brief For displaying purpose : get the current state.
+*/ 
+
 
 class TScoreState :public TScoreFollower {
 	
-	public :
+	public:
  
- 		TScoreState(TScorePtr score,ULONG tpq):TScoreFollower(score,tpq) {}
- 		~TScoreState (){}
+ 		TScoreState(TScorePtr score, ULONG tpq):TScoreFollower(score,tpq){}
+ 		virtual ~TScoreState (){}
  	
 		void FillState(PlayerStatePtr state, ULONG date_ticks) 
 		{
 			SetPosTicks(date_ticks);
 	
-			TPos pos = fTempoVisitor->CurDateBBU();
-			state->date =  fTempoVisitor->CurDateMicro() / 100;
+			TPos pos = fTempoVisitor.CurDateBBU();
+			state->date = fTempoVisitor.CurDateMicro() / 100;
 			
-			state->bar  = (short)pos.GetBar() + 1; 
+			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
 			state->unit = (short)pos.GetUnit() + 1;
 			
-			state->tsnum = fTempoVisitor->GetNum ();
-			state->tsdenom = fTempoVisitor->GetDenom ();
-			state->tsclick= fTempoVisitor->GetNClocks();
-			state->tsquarter = fTempoVisitor->GetN32nd();
+			state->tsnum = fTempoVisitor.GetNum ();
+			state->tsdenom = fTempoVisitor.GetDenom ();
+			state->tsclick= fTempoVisitor.GetNClocks();
+			state->tsquarter = fTempoVisitor.GetN32nd();
 		} 
 };
 

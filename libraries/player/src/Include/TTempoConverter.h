@@ -14,13 +14,6 @@
 // ===========================================================================
 
 
-/*!
- \brief Musical time (ticks) to absolute time (10 micro-sec and millisecond) conversion functions (and the contrary).
- Computation are done using integer values and managing remainders to be exact.
- Absolute time values are expressed in units of 10 micro-second, in order to compute
- larger date values before having overflow problems with integers.
- */ 
-
 #ifndef __TTempoConverter__
 #define __TTempoConverter__
 
@@ -30,9 +23,14 @@
 //-----------------------
 // Class TTempoConverter
 //-----------------------
+/*!
+ \brief Musical time (ticks) to absolute time (10 micro-sec and millisecond) conversion functions (and the contrary).
+ Computation are done using integer values and managing remainders to be exact.
+ Absolute time values are expressed in units of 10 micro-second, in order to compute
+ larger date values before having overflow problems with integers.
+*/ 
 
-
-class TTempoConverter  {
+class TTempoConverter {
 	
 	protected:
 
@@ -56,8 +54,8 @@ class TTempoConverter  {
 	
 	public:
 	
-		TTempoConverter() {Init(kDefaultTpq);}
-		~TTempoConverter() {}
+		TTempoConverter(){Init(kDefaultTpq);}
+		virtual ~TTempoConverter(){}
 		
 		void Init(ULONG tpq);
 		void Init(); 		  

@@ -12,9 +12,6 @@
 // ===========================================================================
 //	THashTable.h			    
 // ===========================================================================
-/*!
-\brief  A Midi event hashtable used for chase.
-*/
 
 
 #ifndef __THashTable__
@@ -26,6 +23,9 @@
 //------------------
 // Class THashTable 
 //------------------
+/*!
+\brief  A Midi event hashtable used for chase.
+*/
 
 class THashTable{
 
@@ -36,8 +36,8 @@ class THashTable{
 	
 	public:
 		
-		THashTable()	{ Init();}
-		~THashTable() 	{ Free();}
+		THashTable(){Init();}
+		virtual ~THashTable(){Free();}
 	
 		void		Free();
 		void 		InsertEvent(MidiEvPtr ev);

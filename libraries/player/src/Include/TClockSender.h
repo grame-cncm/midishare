@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TClockSender.h		    
 // ===========================================================================
-/*!
-	\brief Manage Midi events related to Clock synchronization.
-*/
 
 #ifndef __TClockSender__
 #define __TClockSender__
@@ -22,44 +19,6 @@
 #include "TScheduler.h"
 #include "TClockConverter.h"
 #include "TEventSenderInterface.h"
-
-
-//--------------------
-// Class TClockSender 
-//--------------------
-
-class TClockSender{
-
-	friend class TClockTask;
-
-	private:
-		
-		TClockTask* fClockTask;  
-		ULONG 		fClockCount;
-		
-		TSchedulerInterfacePtr	fScheduler;
-		TClockConverterPtr 		fClockConverter;
-		TEventSenderInterfacePtr  fEventUser;
-		
-		void NextClock(ULONG date_ms);
-	
-	public:
-	
-		TClockSender(TSchedulerInterfacePtr scheduler,
-					 TClockConverterPtr converter,
-					 TEventSenderInterfacePtr user);
-					 
- 		~TClockSender();
- 		
- 		void Start();
- 		void Stop();
- 		void Cont(ULONG date_ticks);
- 		void SendSongPos(ULONG date_ticks);
- 		
- 		ULONG GetPosTicks();
-};
-
-typedef TClockSender FAR * TClockSenderPtr;
 
 
 //------------------
@@ -72,17 +31,58 @@ typedef TClockSender FAR * TClockSenderPtr;
 
 class TClockTask :public TTicksTask {
 
+	friend class TClockSender;
+
 	private:
 	
-		TClockSenderPtr fSender;
+		TClockSender* fSender;
 
 	public : 
-		TClockTask (TClockSenderPtr it):TTicksTask() {fSender =  it;}
-		void Execute (TMidiApplPtr appl, ULONG date_ms) {fSender->NextClock(date_ms);}
+		TClockTask (TClockSender* it):TTicksTask(),fSender(it){}
+		void Execute (TMidiApplPtr appl, ULONG date_ms);
 };
 
 
 typedef TClockTask FAR * TClockTaskPtr;
+
+
+//--------------------
+// Class TClockSender 
+//--------------------
+/*!
+	\brief Manage Midi events related to Clock synchronization.
+*/
+
+class TClockSender{
+
+	friend class TClockTask;
+
+	private:
+		
+		TSchedulerInterfacePtr		fScheduler;
+		TClockConverterPtr 			fClockConverter;
+		TEventSenderInterfacePtr  	fEventUser;
+                
+        TClockTask  fClockTask;  
+		ULONG 	fClockCount;
+		
+		void NextClock(ULONG date_ms);
+	
+	public:
+	
+		TClockSender(TSchedulerInterfacePtr scheduler,TClockConverterPtr converter,TEventSenderInterfacePtr user)
+			:fScheduler(scheduler),fClockConverter(converter),fEventUser(user),fClockTask(this),fClockCount(0){}
+		virtual ~TClockSender(){}
+ 		
+ 		void Start();
+ 		void Stop();
+ 		void Cont(ULONG date_ticks);
+ 		void SendSongPos(ULONG date_ticks);
+ 		
+ 		ULONG GetPosTicks();
+};
+
+typedef TClockSender FAR * TClockSenderPtr;
 
 
 #endif

@@ -22,38 +22,28 @@
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator () 
-{
-	fScore = 0;
-	fCur = 0; 
-	fCurDate = 0; 
-	fNextIt = 0;
-	fFirst = fLast = false;
-}
+TScoreIterator::TScoreIterator ():fScore(0),fCur(0),fCurDate(0),fNextIt(0),fFirst(false),fLast(false){} 
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator (TScorePtr score) 
+TScoreIterator::TScoreIterator (TScorePtr score):fScore(score),fNextIt(0) 
 {
-	fScore = score; 
-	fNextIt = 0;
 	fScore->AttachIterator(this);
 	Init();
 }
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator (TScorePtr score,TEventPtr cur) 
+TScoreIterator::TScoreIterator (TScorePtr score, TEventPtr cur):fScore(score),fNextIt(0) 
 { 
-	fScore = score;
-	fNextIt = 0;
 	fScore->AttachIterator(this);
 	Init(cur);
 }
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::~TScoreIterator (){
+TScoreIterator::~TScoreIterator ()
+{
 	Detach();
 	fScore->DetachIterator(this);
 }
@@ -218,10 +208,6 @@ TEventPtr TScoreIterator::PrevDateEv()
 }
 
 /*----------------------------------------------------------------------------*/
-/*!
-\brief Goes on the first event which date is >= the desired date.
-If several events have the same date, goes on the first of the group.
-*/
 
 TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
 {
@@ -238,13 +224,13 @@ TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
 
 void TScoreIterator::SetPosTicksBackward (ULONG date_ticks)
 {
-	do { PrevEv();} while (!IsFirstEv() && (CurDate() >= date_ticks));
+	do {PrevEv();} while (!IsFirstEv() && (CurDate() >= date_ticks));
 }
 
 /*----------------------------------------------------------------------------*/
 
 void TScoreIterator::SetPosTicksForward (ULONG date_ticks)
 {
-	while (!IsLastEv() && (CurDate() < date_ticks)){ NextEv(); }
+	while (!IsLastEv() && (CurDate() < date_ticks)){NextEv();}
 }
 

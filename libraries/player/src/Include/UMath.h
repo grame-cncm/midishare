@@ -19,6 +19,12 @@
 	#endif 
 #endif
 
+//--------------
+// Class UMath 
+//--------------
+/*!
+\brief	Math utilities functions.
+*/
 
 class UMath {
 

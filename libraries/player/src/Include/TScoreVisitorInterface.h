@@ -13,10 +13,6 @@
 //	TScoreVisitorInterface.h			    
 // ===========================================================================
 
-/*!
- \brief A TScoreVisitor is used to visit a TScore object.
-*/
-
 #ifndef __TScoreVisitor__
 #define __TScoreVisitor__
 
@@ -37,6 +33,9 @@ class TTimeSign;
 //---------------------
 // Class TScoreVisitor 
 //---------------------
+/*!
+ \brief A TScoreVisitor is used to visit a TScore object.
+*/
 
 class TScoreVisitorInterface {
 

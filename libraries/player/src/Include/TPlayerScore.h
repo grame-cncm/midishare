@@ -12,11 +12,6 @@
 //	TPlayerScore.h			    
 // ===========================================================================
 
-/*!
- \brief The internal score : a TPlayerScore contains at least one TTempo event, one 
- TTimeSign event and one EndScore event.
- */
-
 
 #ifndef __TPlayerScore__
 #define __TPlayerScore__
@@ -25,11 +20,16 @@
 #include "TPlayerConstants.h"
 #include "TScoreIterator.h"
 
-//-----------------------
+//--------------------
 // Class TPlayerScore 
-//-----------------------
- 
- class TPlayerScore :public TScore{
+//--------------------
+/*!
+ \brief The internal score : a TPlayerScore contains at least one TTempo event, one 
+ TTimeSign event and one EndScore event.
+*/
+
+
+class TPlayerScore :public TScore{
 
 	private:
 		
@@ -48,10 +48,10 @@
 		short InsertEventsIn(TScoreIteratorPtr it,MidiEvPtr* e1);
 		short InsertEventsIn(TScoreIteratorPtr it,MidiEvPtr* e1, short tracknum);
 		
-	public :
+	public:
 	
 		TPlayerScore();
-		~TPlayerScore(){}
+		virtual ~TPlayerScore(){}
 		
 		TEventPtr FirstEvent(); 
 		TEventPtr LastEvent(); 

@@ -12,10 +12,6 @@
 // ===========================================================================
 //	TSMPTEPlayer.h	   			 
 // ===========================================================================
-/*!
-\brief	Player in kSMPTESync mode.
-*/
-
 
 #ifndef __TSMPTEPlayer__
 #define __TSMPTEPlayer__
@@ -27,35 +23,64 @@
 #include "TGenericPlayerInterface.h"
 
 
+
+//------------------
+// Class TSMPTETask 
+//------------------
+/*!
+\brief	Task used in kSMPTESync mode.
+*/
+
+class TSMPTETask :public TMidiTask {
+
+	friend class TSMPTEPlayer;
+	
+	private:
+	
+		TSMPTEPlayer* fPlayer;
+
+	public: 
+	
+		TSMPTETask (TSMPTEPlayer* it):fPlayer(it){}
+		virtual ~TSMPTETask(){}
+		void Execute (TMidiApplPtr appl, ULONG date);
+};
+
+typedef TSMPTETask FAR * TSMPTETaskPtr;
+
+
 //-----------------------
 // Class TSMPTEPlayer
 //-----------------------
-
+/*!
+\brief	Player in kSMPTESync mode.
+*/
 
 class TSMPTEPlayer :public TGenericPlayerInterface {
 
 	friend class TSMPTETask;
 	
 	 private:
-	 
-	 	TRunningStatePtr  			fRunningState;
+	 	
 	 	TGenericPlayerInterfacePtr  fPlayer;
+        TRunningStatePtr  			fRunningState;
 	 	TMidiApplPtr        		fMidiAppl;
 	 	
 	 	TSMPTEInfosPtr	fSmpteInfos;
-		TSMPTETask* 	fSMPTEtask;
+		TSMPTETask		fSMPTEtask;
 	 	
 	 	void StartAtSMPTEOffset();  
 	 	
 	  public:
 	  	
-	 	TSMPTEPlayer (TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte, TMidiApplPtr appl);
-	 	~TSMPTEPlayer ();
+	 	TSMPTEPlayer (TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte, TMidiApplPtr appl)
+	 		:fPlayer(player),fRunningState(state),fMidiAppl(appl),fSmpteInfos(smpte),fSMPTEtask(this){}
+	 	virtual ~TSMPTEPlayer(){}
 	  
-	  	void Start() ;
+	  	void Start();
 		void Stop();
 		void Pause();
-		void Cont() ;
+		void Cont();
 		
 		void PlaySliceForward();
  		void PlaySliceBackward() ;
@@ -74,22 +99,7 @@ class TSMPTEPlayer :public TGenericPlayerInterface {
 };
  
  
- typedef TSMPTEPlayer FAR * TSMPTEPlayerPtr;
+typedef TSMPTEPlayer FAR * TSMPTEPlayerPtr;
  
- 
-//-----------------------
-// Class TSMPTETask 
-//-----------------------
-
-class TSMPTETask :public TMidiTask {
-	TSMPTEPlayerPtr fPlayer;
-
-	public : 
-		TSMPTETask (TSMPTEPlayerPtr it) {fPlayer =  it;}
-		void Execute (TMidiApplPtr appl, ULONG date) {fPlayer->Start();}
-};
-
-typedef TSMPTETask FAR * TSMPTETaskPtr;
-
 
 #endif

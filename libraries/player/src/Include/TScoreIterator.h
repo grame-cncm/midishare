@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TScoreIterator.cpp		    
 // ===========================================================================
-/*!
-\brief  An iterator on a TScore object.
-*/
 
 
 #ifndef __TScoreIterator__
@@ -23,20 +20,24 @@
 
 #include "TScore.h"
 
-//-----------------------
+//----------------------
 // Class TScoreIterator 
-//-----------------------
+//----------------------
+/*!
+\brief  An iterator on a TScore object.
+*/
+
 
 class TScoreIterator {
 
 	friend class TScore;
 	
-	private :
+	private:
 	 
 		void SetPosTicksForward (ULONG date_ticks);
 		void SetPosTicksBackward (ULONG date_ticks);
 	
-	protected :
+	protected:
 	
 		TScorePtr 		fScore;     // score as a RING  
 		TEventPtr 		fCur;
@@ -48,7 +49,7 @@ class TScoreIterator {
 		void ItemsInserted(TEventPtr ev);
 		void ItemsRemoved(TEventPtr ev);
 	
-	public :	
+	public:	
 	
 		TScoreIterator ();
 		TScoreIterator (TScorePtr score);
@@ -84,11 +85,15 @@ typedef class TScoreIterator  FAR * TScoreIteratorPtr;
 //-----------------------
 // Class TScoreIterator1 
 //-----------------------
-
+/*!
+\brief  An iterator on a TScore object that will not be attached to the score.
+*/
 
 class TScoreIterator1 :public TScoreIterator {
 		
 		public:
+		
+			virtual ~TScoreIterator1(){}
 		
 			TScoreIterator1 (TScorePtr score) 
 			{

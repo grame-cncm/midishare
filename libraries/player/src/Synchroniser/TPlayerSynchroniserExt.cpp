@@ -23,7 +23,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Init () { fTempoVisitor->Init(); }
+void TPlayerSynchroniserExt::Init () {fTempoVisitor.Init();}
 
 /*--------------------------------------------------------------------------*/
 
@@ -37,7 +37,8 @@ void TPlayerSynchroniserExt::Start ()
 
 void TPlayerSynchroniserExt::Stop () 
 { 
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
+	
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	fState->SetIdle();
 }
 
@@ -45,12 +46,12 @@ void TPlayerSynchroniserExt::Stop ()
 
 void TPlayerSynchroniserExt::Cont (ULONG date_ticks) 
 { 
-	ULONG tempo = fTempoVisitor->GetTempo();
-	fTempoVisitor->Init(); // Important  (Tempo Map must be re-initialized)
-	fTempoVisitor->SetTempo(date_ticks,tempo);
+	ULONG tempo = fTempoVisitor.GetTempo();
+	fTempoVisitor.Init(); // Important  (Tempo Map must be re-initialized)
+	fTempoVisitor.SetTempo(date_ticks,tempo);
 
 	SetPosTicks(date_ticks);
-	fOffset = MidiGetTime() - fTempoVisitor->CurDateMs();
+	fOffset = MidiGetTime() - fTempoVisitor.CurDateMs();
 	fState->SetRunning(); // ordre ??
 }
 
@@ -62,20 +63,20 @@ Boolean TPlayerSynchroniserExt::IsSchedulable (ULONG date_ticks) {return fState-
 
 ULONG TPlayerSynchroniserExt::GetPosTicks () 
 {
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
-	return fTempoVisitor->CurDateTicks();
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
+	return fTempoVisitor.CurDateTicks();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void  TPlayerSynchroniserExt::SetPosTicks (ULONG date_ticks){ fTempoVisitor->UpdateTicks(date_ticks);}
+void  TPlayerSynchroniserExt::SetPosTicks (ULONG date_ticks){fTempoVisitor.UpdateTicks(date_ticks);}
 
 /*--------------------------------------------------------------------------*/
 
 void TPlayerSynchroniserExt::SetTempo(ULONG  tempo)
 {
-	if (tempo != fTempoVisitor->GetTempo()) {
-		fTempoVisitor->SetTempo(GetPosTicks(),tempo);
+	if (tempo != fTempoVisitor.GetTempo()) {
+		fTempoVisitor.SetTempo(GetPosTicks(),tempo);
 		fScheduler->ReScheduleTasks(); 
 	}
 }

@@ -24,27 +24,11 @@
 
 /*--------------------------------------------------------------------------*/
 
-TChaserIterator::TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user)
-{
-	fChaser = new TChaserVisitor(user);
-	fIterator = new TScoreIterator(score);
-}
-
-/*--------------------------------------------------------------------------*/
-
-TChaserIterator::~TChaserIterator()
-{ 
-	delete(fChaser);
-	delete(fIterator);
-}
-
-/*--------------------------------------------------------------------------*/
-
 void TChaserIterator::GoBeginDateTicks(ULONG date_ticks) 
 {
-	while (!fIterator->IsLastEv() && fIterator->CurDate() < date_ticks){ 
-		fIterator->CurEv()->Accept(fChaser,true);
-		fIterator->NextEv();
+	while (!fIterator.IsLastEv() && fIterator.CurDate() < date_ticks){ 
+		fIterator.CurEv()->Accept(&fChaser,true);
+		fIterator.NextEv();
 	}
 }	
 
@@ -52,8 +36,8 @@ void TChaserIterator::GoBeginDateTicks(ULONG date_ticks)
 
 void TChaserIterator::Init()
 {
-	fChaser->Init();
-	fIterator->Init();
+	fChaser.Init();
+	fIterator.Init();
 	fCurdate_ticks = 0;
 }
 
@@ -75,7 +59,7 @@ void TChaserIterator::SetPosTicks (ULONG date_ticks)
 void TChaserIterator::ChaseOn (ULONG date_ticks)
 {
 	SetPosTicks(date_ticks);
-	fChaser->ChaseOn(date_ticks);
+	fChaser.ChaseOn(date_ticks);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -83,7 +67,7 @@ void TChaserIterator::ChaseOn (ULONG date_ticks)
 void TChaserIterator::ChaseOff (ULONG date_ticks)
 {
 	SetPosTicks(date_ticks);
-	fChaser->ChaseOff(date_ticks);
+	fChaser.ChaseOff(date_ticks);
 }
 
 

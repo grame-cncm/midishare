@@ -12,12 +12,7 @@
 // ===========================================================================
 //	TScheduler.h		    
 // ===========================================================================
-/*!
- \brief A TScheduler object allows to schedule Tasks which dates are in ticks, using a
- synchroniser object to convert dates in ticks in dates in millisecond.
- The scheduler maintains a list of pending tasks, rescheduling them if
- necessary after a Tempo change.
-*/
+
 
 #ifndef __TScheduler__
 #define __TScheduler__
@@ -31,6 +26,10 @@
 //---------------------------
 
 class TTicksTask;
+
+/*!
+ \brief An interface for Schedulers.
+*/
 
 class TSchedulerInterface{
 
@@ -72,6 +71,14 @@ are used in a more demanding use.
 */
 
 #define TableLength 8
+
+
+/*!
+ \brief A TScheduler object allows to schedule Tasks which dates are in ticks, using a
+ synchroniser object to convert dates in ticks in dates in millisecond.
+ The scheduler maintains a list of pending tasks, rescheduling them if
+ necessary after a Tempo change.
+*/
 
 class TScheduler :public TSchedulerInterface{
 
@@ -136,9 +143,9 @@ typedef TScheduler FAR * TSchedulerPtr;
 
 class TTicksTask {
 	
-	
 	friend class TScheduler;
-	enum taskState { kTaskIdle = 0, kTaskRunning, kTaskForget};
+	
+	enum taskState {kTaskIdle = 0, kTaskRunning, kTaskForget};
 		
 	private:
 	
@@ -160,13 +167,7 @@ class TTicksTask {
 			
 	public:
 	
-		TTicksTask() 
-		{
-			fTask = 0; 
-			fDate_ticks = 0;
-			fStatus = kTaskIdle;
-			fIndex = -1;
-		}
+		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
@@ -174,9 +175,7 @@ class TTicksTask {
 		Boolean IsRunning () 	{return (fStatus == kTaskRunning);}
 		Boolean IsIdle () 	 	{return (fStatus == kTaskIdle);}
 		
-		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
-		
 	
 };
 

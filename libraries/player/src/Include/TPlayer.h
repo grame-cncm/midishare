@@ -14,11 +14,6 @@
 //	TPlayer.h			    
 // ===========================================================================
 
-/*!
- \brief The main class which implements all functions from the API.
-*/
- 
-
 
 #ifndef __TPlayer__
 #define __TPlayer__
@@ -35,6 +30,10 @@ typedef  void (* ApplyScorePtr)( MidiEvPtr e , void* data);
 /*--------------------------------------------------------------------------*/
 // Pattern FACADE
 /*--------------------------------------------------------------------------*/
+/*!
+ \brief The main class which implements all functions from the API.
+*/
+
 
 class TPlayer :public  TMidiAppl{
 
@@ -43,31 +42,31 @@ class TPlayer :public  TMidiAppl{
 
 	private:
 
-		TPlayerFactoryPtr   		fFactory;  			// Player factory
+		TPlayerFactory   			fFactory;  			// Player factory
 		TGenericPlayerInterfacePtr 	fPlayer;			// Current player
 			
-		TTrackTablePtr 	  			fTrackTable;		// TrackTable: tracks state
-		TPlayerScorePtr	 			fScore;				// Internal score
+		TTrackTable		  			fTrackTable;		// TrackTable: tracks state
+		TPlayerScore	 			fScore;				// Internal score
 			
 		TEventRecorderPtr  			fEventReceiver;     // The recorder object
 		TClockConverterPtr  		fClockConverter;	// Shared between several objects
 		TLoopManagerPtr     		fLoopManager;		// Loop manager
 		TScoreInserterPtr  			fInserter;			// For insertion in the score
-		TRunningStatePtr 			fRunningState;    	// Running state
+		
+		TRunningState	 			fRunningState;    	// Running state
+		
 		TScoreStatePtr   			fScoreState;		// For internal state 
-		TSMPTEInfosPtr              fSmpteInfos;        // For SMPTE synchronization
+		TSMPTEInfos	              	fSmpteInfos;        // For SMPTE synchronization
 		
 		ULONG	fTick_per_quarter;  // Current resolution
 		short   fSyncIn;         	// SynchroIn state
 		short   fSyncOut;		 	// SynchroOut state
 		short   fOutput;		 	// Output state
 			
-		void Create();
-	
 	 public:
 	 	
 	 	TPlayer();
-	 	~TPlayer();
+	 	virtual ~TPlayer();
 	 
 	 	// Opening/Closing
 	 	 short Open (MidiName name);
@@ -118,7 +117,7 @@ class TPlayer :public  TMidiAppl{
 
 		 // Step playing 
 		 void ForwardStep(short flag);
-		 void BackwardStep(short flag);
+		 void BackwardStep(short state);
 		
 		 // Player state
 		 void GetState (PlayerStatePtr ps);
@@ -134,7 +133,6 @@ class TPlayer :public  TMidiAppl{
 };
 
 typedef TPlayer FAR * TPlayerPtr;
-
 
 
 #endif

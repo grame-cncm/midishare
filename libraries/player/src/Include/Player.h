@@ -203,8 +203,8 @@ void   GetEndScorePlayer (short refnum, PlayerStatePtr playerstate);
 
 // Step playing 
 
-void   ForwardStepPlayer (short refnum , short flag);
-void   BackwardStepPlayer (short refnum , short flag);
+void   ForwardStepPlayer (short refnum , short state);
+void   BackwardStepPlayer (short refnum , short state);
 
 
 // Tracks management

@@ -26,7 +26,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-TScheduler::TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl){ Init(synchro,appl); }
+TScheduler::TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl){Init(synchro,appl);}
 
 /*--------------------------------------------------------------------------*/
 

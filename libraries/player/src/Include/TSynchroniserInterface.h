@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TSynchroniserInterface.h	   			 
 // ===========================================================================
-/*!
-\brief	Synchroniser interface.
-*/
 
 
 #ifndef __TSynchroniserInterface__
@@ -24,13 +21,15 @@
 //------------------------------
 // Class TSynchroniserInterface 
 //------------------------------
-
+/*!
+\brief	Synchroniser interface.
+*/
 
 class TSynchroniserInterface {
 	
 	public: 
 		
-		virtual ~TSynchroniserInterface() {};
+		virtual ~TSynchroniserInterface(){};
 		
 		virtual void Init() = 0;
 		virtual ULONG ConvertTickToMs(ULONG date_tick) = 0;

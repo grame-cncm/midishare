@@ -29,7 +29,7 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 							   TPlayerSynchroniserPtr synchro,
 							   TRunningStatePtr state,
 							   TEventDispatcherPtr successor)
-							  :TEventDispatcher(successor)
+							  :TEventDispatcher(successor),fIterator(score)
 {
 	short i;
 	
@@ -60,18 +60,13 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 	fSynchroniser = synchro;
 	fScore = score;
 	fState = state;
-	fIterator = new TScoreIterator(fScore);
 	fRecordtrack = kNoTrack;
 	fRecordmode = kEraseOff;
 }
 
 /*----------------------------------------------------------------------------*/
 
-TEventRecorder::~TEventRecorder()
-{
-	if (fRecFilter) MidiFreeFilter(fRecFilter);
-	delete (fIterator);
-}
+TEventRecorder::~TEventRecorder(){if (fRecFilter) MidiFreeFilter(fRecFilter);}
 
 /*--------------------------------------------------------------------------*/
 
@@ -137,12 +132,12 @@ void TEventRecorder::Insert(MidiEvPtr e)
 	// Set it's date to the current Tick date, and it's tracknum to the current recording tracknumber
 	
 	ULONG date_ticks = fSynchroniser->ConvertMsToTick(Date(e));
-	TEventPtr cur = fIterator->SetPosTicks(date_ticks);
+	TEventPtr cur = fIterator.SetPosTicks(date_ticks);
 	Date(e) = date_ticks;
 	TrackNum(e) = (unsigned char)fRecordtrack;
 	
 	// If there is an event at the insertion date, insert after
-	if (date_ticks == fIterator->CurDate()) {
+	if (date_ticks == fIterator.CurDate()) {
 		fScore->InsertAfterEvent(cur, TEventFactory::GenericCreateEvent(e));
 	// otherwise insert before the next event which date is > date_ticks
 	}else {

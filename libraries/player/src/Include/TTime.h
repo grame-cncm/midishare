@@ -13,10 +13,6 @@
 //	TTime.h			    
 // ===========================================================================
 
-/*!
-	Time Signature management, time in  Bar Beat Unit representation
-*/
-
 
 #ifndef __TTime__
 #define __TTime__
@@ -25,14 +21,15 @@
 #include "TPlayerConstants.h"
 #include "GenericMidiShare.h"
 
-//-------------
+//------------
 // Class TPos
-//-------------
-/*!
-	Position in Bar Beat Unit representation
-*/
+//------------
 
 class TTime;
+
+/*!
+	\brief Position in Bar Beat Unit representation
+*/
 
 class TPos{
 
@@ -47,9 +44,9 @@ class TPos{
 	public :
 	
 		TPos (){Init();}
-		TPos (ULONG bar, ULONG beat, ULONG unit) { fBar = bar; fBeat = beat; fUnit = unit;}
+		TPos (ULONG bar, ULONG beat, ULONG unit):fBar(bar),fBeat(beat),fUnit(unit){}
 		void Init(){fBar = fBeat = fUnit = 0;} 
-		~TPos() {}
+		virtual ~TPos(){}
 		
 		ULONG GetBar()  {return fBar;}
 		ULONG GetBeat() {return fBeat;}
@@ -59,13 +56,12 @@ class TPos{
 typedef TPos FAR * TPosPtr;
 
 
-//-----------------------
+//-------------
 // Class TTime
-//-----------------------
+//-------------
 /*!
 	\brief Algebra for Bar Beat Unit representation 
 */
-
 
 class TTime{
 
@@ -84,7 +80,7 @@ class TTime{
 	public :
 	
 		TTime() {Init(kDefaultTpq);}
-		~TTime() {}
+		virtual ~TTime() {}
 	
 		void Init (ULONG tick);
 		

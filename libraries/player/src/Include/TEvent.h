@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TEvent.h			    
 // ===========================================================================
-/*!
-	\brief The classes for all Midi events. All events use a TVisitor object to add additional methods
-*/
 
 #ifndef __TEvent__
 #define __TEvent__
@@ -29,6 +26,9 @@
 //--------------
 // Class TEvent 
 //--------------
+/*!
+	\brief The classes for all Midi events. All events use a TVisitor object to add additional methods
+*/
 
 class TEvent {
 
@@ -66,6 +66,9 @@ typedef TEvent FAR * TEventPtr;
 //-------------
 // Class TNote 
 //-------------
+/*!
+	\brief The class for Note events.
+*/
 
 class TNote :public TEvent {
 
@@ -83,6 +86,9 @@ typedef TNote FAR * TNotePtr;
 //--------------
 // Class TKeyOn 
 //--------------
+/*!
+	\brief The class for KeyOn events.
+*/
 
 class TKeyOn :public TEvent {
 
@@ -98,7 +104,9 @@ typedef TKeyOn FAR * TKeyOnPtr;
 //---------------
 // Class TKeyOff 
 //---------------
-
+/*!
+	\brief The class for KeyOff events.
+*/
 
 class TKeyOff :public TEvent {
 
@@ -115,6 +123,9 @@ typedef TKeyOff FAR * TKeyOffPtr;
 //-----------------
 // Class TKeyPress 
 //-----------------
+/*!
+	\brief The class for KeyPress events.
+*/
 
 class TKeyPress :public TEvent {
 
@@ -131,6 +142,9 @@ typedef TKeyPress FAR * TKeyPressPtr;
 //-------------------
 // Class TCtrlChange 
 //-------------------
+/*!
+	\brief The class for CtrlChange events.
+*/
 
 class TCtrlChange :public TEvent {
 
@@ -147,6 +161,9 @@ typedef TCtrlChange FAR * TCtrlChangePtr;
 //-------------------
 // Class TProgChange 
 //-------------------
+/*!
+	\brief The class for ProgChange events.
+*/
 
 class TProgChange :public TEvent {
 
@@ -162,6 +179,9 @@ typedef TProgChange FAR * TProgChangePtr;
 //------------------
 // Class TChanPress 
 //------------------
+/*!
+	\brief The class for ChanPress events.
+*/
 
 class TChanPress :public TEvent {
 
@@ -177,6 +197,9 @@ typedef TChanPress FAR * TChanPressPtr;
 //-------------------
 // Class TPitchWheel 
 //-------------------
+/*!
+	\brief The class for PitchWheel events.
+*/
 
 class TPitchBend :public TEvent {
 
@@ -190,9 +213,12 @@ class TPitchBend :public TEvent {
 
 typedef TPitchBend FAR * TPitchBendPtr;
 
-//--------------
+//-------------
 // Class TTune 
-//--------------
+//-------------
+/*!
+	\brief The class for Tune events.
+*/
 
 class TTune :public TEvent {
 
@@ -209,6 +235,9 @@ typedef TTune FAR * TTunePtr;
 //---------------
 // Class TSysEx
 //---------------
+/*!
+	\brief The class for SysEx events.
+*/
 
 class TSysEx :public TEvent {
 
@@ -222,10 +251,9 @@ class TSysEx :public TEvent {
 typedef TSysEx FAR * TSysExPtr;
 
 
-//---------------
+//--------------
 // Class TTempo
-//---------------
-
+//--------------
 /*!
 	\brief The class for Tempo events.
 */
@@ -234,7 +262,8 @@ class TTempo :public TEvent {
 
  	public:
 	
-		TTempo	(MidiEvPtr e){
+		TTempo(MidiEvPtr e)
+		{
 			fEvent = e;
 			fNext = fPrev = 0; 
 			SetTempoBackward(kDefaultTempo);
@@ -254,7 +283,6 @@ typedef TTempo FAR * TTempoPtr;
 //------------------
 // Class TTimeSign
 //------------------
-
 /*!
 	\brief The class for TimeSign events.
 */
@@ -263,7 +291,7 @@ class TTimeSign :public TEvent {
 
  	public:
 	
-		TTimeSign	(MidiEvPtr e)
+		TTimeSign(MidiEvPtr e)
 		{
 			fEvent = e;
 			fNext = fPrev = 0;

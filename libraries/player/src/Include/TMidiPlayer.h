@@ -12,10 +12,6 @@
 // ===========================================================================
 //	TMidiPlayer.h			    
 // ===========================================================================
-/*!
-\brief	Midi events output management.
-*/
-
 
 
 #ifndef __TEventPlayer__
@@ -26,29 +22,28 @@
 #include "TMidiAppl.h"
 #include "TTrackTable.h"
 
-//-----------------------
+//--------------------
 // Class TEventPlayer 
-//-----------------------
+//--------------------
+/*!
+\brief	Midi events output management.
+*/
 
 class TMidiPlayer :public TEventSenderInterface{
 
 	private:
+	
 		TMidiApplPtr 	fMidiAppl;
 		TTrackTablePtr 	fTrackTable;
 		
-		Boolean IsPrivate(MidiEvPtr e) { return (EvType (e) >= typePrivate) &&  (EvType (e) < typeProcess);}
+		Boolean IsPrivate(MidiEvPtr e) {return (EvType (e) >= typePrivate) &&  (EvType (e) < typeProcess);}
 	
 	public:
 		
-		TMidiPlayer(TMidiApplPtr appl, TTrackTablePtr table) 
-		{
-			fMidiAppl = appl;
-			fTrackTable = table;
-		}
+		TMidiPlayer(TMidiApplPtr appl, TTrackTablePtr table):fMidiAppl(appl),fTrackTable(table){}
+		virtual ~TMidiPlayer(){}
 		
 		short Init() {return kNoErr;}
-		
-		~TMidiPlayer(){}
 		
 		void SendEvent(MidiEvPtr event, ULONG date_ms);
 

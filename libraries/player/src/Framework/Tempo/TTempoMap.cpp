@@ -69,7 +69,6 @@ void TTempoMap::UpdateTenMicroSec (ULONG date_ten_micro)
 	fCur_pos = fTimeConverter.ConvertTickToBBU (fCurdate_ticks);
 }
 
-
 /*--------------------------------------------------------------------------*/
 
 void TTempoMap::UpdateMs (ULONG date_ms) { UpdateTenMicroSec(date_ms*100);}

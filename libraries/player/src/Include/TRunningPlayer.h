@@ -13,13 +13,6 @@
 //	TRunningPlayer.h		    
 // ===========================================================================
 
-/*!
-\brief  A TRunningPlayer uses the Decorator pattern : additionnal behaviours are added 
- dynamically on the TPlayerInterface object being decorated.
- A TRunningPlayer calls the decorated player methods (Start, Stop, SetPosTicks)
- depending of the current running state, read in the TRunningState object. 
- */
-
 
 #ifndef __TRunningPlayer__
 #define __TRunningPlayer__
@@ -32,8 +25,14 @@
 //----------------------
 // Class TRunningPlayer
 //----------------------
+/*!
+\brief  A TRunningPlayer uses the Decorator pattern : additionnal behaviours are added 
+ dynamically on the TPlayerInterface object being decorated.
+ A TRunningPlayer calls the decorated player methods (Start, Stop, SetPosTicks)
+ depending of the current running state, read in the TRunningState object. 
+*/
 
-class TRunningPlayer : public TPlayerInterface {
+class TRunningPlayer :public TPlayerInterface {
 	
 	 private:
 	 
@@ -43,7 +42,7 @@ class TRunningPlayer : public TPlayerInterface {
 	  public:
 	  	
 	 	TRunningPlayer (TPlayerInterfacePtr player, TRunningStatePtr state);
-	 	~TRunningPlayer () {}
+	 	virtual ~TRunningPlayer(){}
 	  
 		void Start();
 		void Stop();
@@ -60,6 +59,7 @@ class TRunningPlayer : public TPlayerInterface {
 		ULONG GetTempo();
 		
 		void  RcvClock(ULONG date_ms);
+		
 };
  
 

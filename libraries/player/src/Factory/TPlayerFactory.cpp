@@ -22,13 +22,13 @@
 
 /*--------------------------------------------------------------------------*/
 
-TPlayerFactory::TPlayerFactory (TPlayer* user) { fUser = user; }
+TPlayerFactory::TPlayerFactory (TPlayer* user):fUser(user){}
 
 /*--------------------------------------------------------------------------*/
 // Creation of Players
 /*--------------------------------------------------------------------------*/
 
-TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
+TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer()
 { 
 	TPlayerSynchroniserPtr 		synchro = 0;
 	TEventDispatcherPtr 		receiver = 0;
@@ -47,13 +47,12 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
 	
-	
 	long res;
 	
 	switch (fUser->fOutput) {
 		
 		case kMidiShare:
-			eventsender = new TMidiPlayer(fUser, fUser->fTrackTable);
+			eventsender = new TMidiPlayer(fUser, &fUser->fTrackTable);
 			res = eventsender->Init();
 			break;
 	}
@@ -62,32 +61,32 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	if (res != kNoErr) return 0;
 	
 	clockconverter = new TClockConverter(fUser->fTick_per_quarter); 
-	loopmanager =  new TLoopManager (fUser->fScore, fUser->fTick_per_quarter); 
-	inserter = new TScoreInserter(fUser->fScore, fUser->fTick_per_quarter);
-	scheduler= new TScheduler(); // constructeur vide
-	timemanager = new  TTimeManager(fUser->fScore,fUser->fTick_per_quarter);
+	loopmanager =  new TLoopManager (&fUser->fScore, fUser->fTick_per_quarter); 
+	inserter = new TScoreInserter(&fUser->fScore, fUser->fTick_per_quarter);
+	scheduler = new TScheduler(); // constructeur vide
+	timemanager = new  TTimeManager(&fUser->fScore,fUser->fTick_per_quarter);
 	
 	
 	switch (fUser->fSyncIn) {
 		
 		case kInternalSync: 
 		case kSMPTESync:
-			synchro = new TPlayerSynchroniserInt(fUser->fScore, scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserInt(&fUser->fScore, scheduler, &fUser->fRunningState,fUser->fTick_per_quarter);
 			break;
 		
 		case kExternalSync: 
-			synchro = new TPlayerSynchroniserExt(scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserExt(scheduler, &fUser->fRunningState, fUser->fTick_per_quarter);
 			break;
 			
 		case kClockSync: 
-			synchro = new TPlayerSynchroniserClock(scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserClock(scheduler, &fUser->fRunningState, fUser->fTick_per_quarter);
 			break;
 	}
 	
 	scheduler->Init(synchro, fUser); // Initialisation 
 	
-	tickplayer 	= new TTickPlayer(fUser->fScore, eventsender, scheduler);
-	chaser 		= new TChaserIterator(fUser->fScore, eventsender);
+	tickplayer 	= new TTickPlayer(&fUser->fScore, eventsender, scheduler);
+	chaser 		= new TChaserIterator(&fUser->fScore, eventsender);
 	player1 	= new TSyncInPlayer(synchro,tickplayer,chaser);
 	
 	
@@ -111,7 +110,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 			
 		default:
-			player3 = new TRunningPlayer(player2,fUser->fRunningState); // enrobage
+			player3 = new TRunningPlayer(player2,&fUser->fRunningState); // enrobage
 			break;
 	}
 	
@@ -137,8 +136,8 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 	}
 		
-	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver);
-	scorestate = new TScoreState(fUser->fScore,fUser->fTick_per_quarter);
+	recorder = new TEventRecorder(&fUser->fScore, synchro, &fUser->fRunningState,receiver);
+	scorestate = new TScoreState(&fUser->fScore,fUser->fTick_per_quarter);
 	
 	// Affectation 
 	fUser->fClockConverter =  clockconverter;
@@ -157,7 +156,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	switch (fUser->fSyncIn) {
 		
 		case kSMPTESync:
-			return new TSMPTEPlayer(genericplayer,fUser->fRunningState, fUser->fSmpteInfos,fUser);
+			return new TSMPTEPlayer(genericplayer, &fUser->fRunningState, &fUser->fSmpteInfos,fUser);
 			
 		default:
 			return genericplayer;

@@ -22,10 +22,9 @@
 #include "TScoreIterator.h"
 
 
-/*--------------------------------------------------------------------------*/
+//------------------------
 // Class TChaserInterface
-/*--------------------------------------------------------------------------*/
-
+//------------------------
 /*!
 	\brief Interface for chase objects.
 */ 
@@ -47,10 +46,9 @@ class TChaserInterface {
 typedef TChaserInterface FAR * TChaserInterfacePtr;
 
 
-/*--------------------------------------------------------------------------*/
+//-----------------------
 // Class TChaserIterator
-/*--------------------------------------------------------------------------*/
-
+//-----------------------
 /*!
 	\brief The chaser iterator use a chaser visitor to keep the state of KeyOn, CtrlChange, 
     ProgChange, KeyPress, ChanPress, PitchBend, Sysex and Tune events when moving 
@@ -63,17 +61,18 @@ class TChaserIterator :public TChaserInterface{
 
 	private:
 	
-		TChaserVisitorPtr 	fChaser;   		
-		TScoreIteratorPtr 	fIterator;
-		ULONG 				fCurdate_ticks;
+		TChaserVisitor 	fChaser;   		
+		TScoreIterator 	fIterator;
+		
+		ULONG 			fCurdate_ticks;
 		
 		void SetPosTicks (ULONG date_ticks);
 		void GoBeginDateTicks (ULONG date_ticks);
 			
 	public:
 	
-		TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user);
-		~TChaserIterator();
+		TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user):fChaser(user),fIterator(score){}
+		virtual ~TChaserIterator(){}
 	
 		void Init();
 		

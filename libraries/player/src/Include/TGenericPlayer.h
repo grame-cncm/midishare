@@ -13,14 +13,6 @@
 //	TGenericPlayer.h			    
 // ===========================================================================
 
-/*!
-  \brief A TGenericPlayer uses three components :
-  <UL>
-  <LI> a synchronizable player implementing the TPlayerInterface 
-  <LI> a event receiver : a component implementing the TEventReceiverInterface
-  <LI> a time manager : a component which converts date in BBU and Ms in ticks date (and vice-versa)
-   </UL>
-*/
 
 #ifndef __TGenericPlayer__
 #define __TGenericPlayer__
@@ -34,6 +26,15 @@
 //----------------------
 // Class TGenericPlayer 
 //----------------------
+/*!
+  \brief A TGenericPlayer uses three components :
+  <UL>
+  	<LI> a synchronizable player implementing the TPlayerInterface 
+  	<LI> a event receiver : a component implementing the TEventReceiverInterface
+  	<LI> a time manager : a component which converts date in BBU and Ms in ticks date (and vice-versa)
+  </UL>
+*/
+
 
 class TGenericPlayer : public TGenericPlayerInterface{
 
@@ -46,15 +47,9 @@ class TGenericPlayer : public TGenericPlayerInterface{
 	
 	public:
 	 
-		TGenericPlayer (TEventReceiverInterfacePtr receiver, TPlayerInterfacePtr player,
-		 	TTimeManagerPtr timemanager)
-		{
-			fReceiver = receiver;
-			fPlayer = player;
-			fTimeManager = timemanager;
-		}
-		
-		~TGenericPlayer (){} 
+		TGenericPlayer (TEventReceiverInterfacePtr receiver, TPlayerInterfacePtr player, TTimeManagerPtr timemanager)
+			:fReceiver(receiver),fPlayer(player),fTimeManager(timemanager){}
+		virtual ~TGenericPlayer(){} 
 			
 		//------------------
 		// Player Interface 

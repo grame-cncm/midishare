@@ -12,18 +12,17 @@
 // ===========================================================================
 //	TSMPTEInfos.h			    
 // ===========================================================================
-//
-//	Infos for the kSMPTESync mode
-// 
-
 
 #ifndef __TSMPTEInfos__
 #define __TSMPTEInfos__
 
  
-//----------------------
+//-------------------
 // Class TSMPTEInfos 
-//----------------------
+//-------------------
+/*!
+\brief Infos for the kSMPTESync mode.
+*/
 
 class TSMPTEInfos {
 
@@ -34,8 +33,8 @@ class TSMPTEInfos {
 	 
 	public:
 	
-		TSMPTEInfos() {fSMPTEoffset = 0;}
-		~TSMPTEInfos() {}
+		TSMPTEInfos():fSMPTEoffset(0){}
+		virtual ~TSMPTEInfos(){}
 	
 		void SetSMPTEOffset(SmpteLocPtr smptepos) 
 		{ 
@@ -51,7 +50,6 @@ class TSMPTEInfos {
 		}
 		
 		ULONG GetSMPTEOffset() {return fSMPTEoffset;}
-		
 		
 };
 

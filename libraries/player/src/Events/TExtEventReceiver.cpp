@@ -17,12 +17,6 @@
 // 
 
 #include "TEventReceiver.h"
-/*-----------------------------------------------------------------*/
-
-TExtEventReceiver::TExtEventReceiver( TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
-	:TEventReceiver(player,loopmanager,successor)
-{
-}
 
 /*----------------------------------------------------------------------------*/
 
@@ -37,5 +31,5 @@ void TExtEventReceiver::ReceiveEvents(MidiEvPtr e)
 
 /*----------------------------------------------------------------------------*/
 
-void TExtEventReceiver::ReceiveTempo(MidiEvPtr e) { fPlayer->SetTempo(MidiGetField(e,0)); }
+void TExtEventReceiver::ReceiveTempo(MidiEvPtr e) {fPlayer->SetTempo(MidiGetField(e,0));}
 

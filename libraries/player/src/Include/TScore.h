@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TScore.h			    
 // ===========================================================================
-/*!
- \brief A double linked list of TEvent objects
-*/
 
 
 #ifndef __TScore__
@@ -23,10 +20,13 @@
 
 #include "TEvent.h"
 
-//---------------
+//--------------
 // Class TScore 
-//---------------
- 
+//--------------
+/*!
+ \brief A double linked list of TEvent objects
+*/
+
 class TScore {
 	
 	friend class TScoreIterator;
@@ -47,8 +47,8 @@ class TScore {
 		
 	public:
 	
-		TScore() {fLast = 0; fHeadtIt = 0;}
-		virtual ~TScore() {  DetachIterators(); Clear ();}
+		TScore():fLast(0),fHeadtIt(0){}
+		virtual ~TScore() {DetachIterators(); Clear();}
 		
 		void Clear();
 		

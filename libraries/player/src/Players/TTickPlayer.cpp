@@ -19,34 +19,13 @@
 #include "TTickPlayer.h"
 #include "UTools.h"
 
-
-/*-------------------------------------------------------------------------*/
-
-TTickPlayer::TTickPlayer(TScorePtr score, TEventSenderInterfacePtr user, TSchedulerInterfacePtr scheduler)
-{
-	fSliceVisitor = new TSliceVisitor(user);
-	fIterator = new TScoreIterator(score);
-	fPlayTask = new TPlayTask(this);	
-	fEventUser = user;
-	fScheduler = scheduler;
-}
-
-/*--------------------------------------------------------------------------*/
-		
-TTickPlayer::~TTickPlayer() 
-{
-	delete(fSliceVisitor);
-	delete(fIterator);
-	delete(fPlayTask);
-}
-
 /*--------------------------------------------------------------------------*/
 
 void TTickPlayer::PlaySliceForward () 
 {
    	TEventPtr cur;
-	while ((cur = fIterator->NextDateEv())) {
-		cur->Accept(fSliceVisitor, true);
+	while ((cur = fIterator.NextDateEv())) {
+		cur->Accept(&fSliceVisitor, true);
 	}
 }
 
@@ -55,8 +34,8 @@ void TTickPlayer::PlaySliceForward ()
 void TTickPlayer::PlaySliceBackward () 
 {
 	TEventPtr cur;
-	while ((cur = fIterator->PrevDateEv())) {
-		cur->Accept(fSliceVisitor, false);
+	while ((cur = fIterator.PrevDateEv())) {
+		cur->Accept(&fSliceVisitor, false);
 	}
 }
 
@@ -64,43 +43,46 @@ void TTickPlayer::PlaySliceBackward ()
 void TTickPlayer::PlaySlice (ULONG date_ms) 
 {
    TEventPtr cur;	
-	if (fIterator->IsLastEv()) {
-		fEventUser->CopyAndUseEvent(fIterator->CurEv(),date_ms);
+	if (fIterator.IsLastEv()) {
+		fEventUser->CopyAndUseEvent(fIterator.CurEv(),date_ms);
 	}else {
 	
 		// For all events at the same date
-		while ((cur = fIterator->NextDateEv())) {fEventUser->CopyAndUseEvent(cur,date_ms);}
+		while ((cur = fIterator.NextDateEv())) {fEventUser->CopyAndUseEvent(cur,date_ms);}
 		
 		// Schedule the PlayTask for the date of the next events in ticks
-		fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate());
+		fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TTickPlayer::Init () {fIterator->Init();}
+void TTickPlayer::Init () {fIterator.Init();}
 
 /*--------------------------------------------------------------------------*/
 
-void TTickPlayer::Start (){ fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate()); }
+void TTickPlayer::Start (){fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());}
 
 /*--------------------------------------------------------------------------*/
 
-void TTickPlayer::Stop (){ fPlayTask->Forget(); }
+void TTickPlayer::Stop (){fPlayTask.Forget();}
 
 /*--------------------------------------------------------------------------*/
 
 void TTickPlayer::Cont (ULONG date_ticks) 
 { 
-	fIterator->SetPosTicks(date_ticks);
-	fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate()); 
+	fIterator.SetPosTicks(date_ticks);
+	fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate()); 
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TTickPlayer::SetPosTicks (ULONG date_ticks) { fIterator->SetPosTicks(date_ticks); }
+void TTickPlayer::SetPosTicks (ULONG date_ticks) { fIterator.SetPosTicks(date_ticks); }
 
 /*--------------------------------------------------------------------------*/
 
-ULONG TTickPlayer::GetPosTicks (){ return fIterator->CurDate(); }
+ULONG TTickPlayer::GetPosTicks (){ return fIterator.CurDate(); }
 
+/*--------------------------------------------------------------------------*/
+
+void TPlayTask::Execute (TMidiApplPtr appl , ULONG date_ms) {fPlayer->PlaySlice(date_ms);}

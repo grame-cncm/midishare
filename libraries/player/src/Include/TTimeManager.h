@@ -12,10 +12,7 @@
 // ===========================================================================
 //	TTimeManager.cpp			    
 // ===========================================================================
-/*!
- \brief Uses a TIterator object to move a TVisitor object on a TScore object.
- Provides time conversion functions.
-*/ 
+
 
 #ifndef __TTimeManager__
 #define __TTimeManager__
@@ -24,11 +21,15 @@
 #include "TScoreFollower.h"
 
 
-//-----------------------
+//--------------------
 // Class TTimeManager 
-//-----------------------
+//--------------------
+/*!
+ \brief Uses a TScoreIterator object to move a TScoreVisitor object on a TScore object.
+ Provides time conversion functions.
+*/ 
 
-class TTimeManager : public TScoreFollower{
+class TTimeManager :public TScoreFollower{
 
 	private:
 	
@@ -37,21 +38,21 @@ class TTimeManager : public TScoreFollower{
 	public :
  
  		TTimeManager(TScorePtr sc, ULONG tpq);
- 		~TTimeManager(){}
+ 		virtual ~TTimeManager(){}
  		
  		// Conversions functions
  		const TPos ConvertTickToBBU(ULONG date_tick);
 		ULONG  ConvertBBUToTick(const TPos& pos);
 		
-		ULONG ConvertTickToMs  (ULONG date_tick);
-		ULONG ConvertMsToTick  (ULONG date_ms) ;
+		ULONG ConvertTickToMs(ULONG date_tick);
+		ULONG ConvertMsToTick(ULONG date_ms) ;
 		
 		// Get Tempo and TimeSign
-		ULONG GetTempo (ULONG date_tick) ;
-		short GetNum (ULONG date_tick);
-		short GetDenom (ULONG date_tick);
-		short GetNClocks (ULONG date_tick);
-		short GetN32nd (ULONG date_tick);
+		ULONG GetTempo(ULONG date_tick) ;
+		short GetNum(ULONG date_tick);
+		short GetDenom(ULONG date_tick);
+		short GetNClocks(ULONG date_tick);
+		short GetN32nd(ULONG date_tick);
 	
 };
 

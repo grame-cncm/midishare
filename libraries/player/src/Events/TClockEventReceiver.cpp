@@ -20,17 +20,6 @@
 
 /*----------------------------------------------------------------------------*/
 
-TClockEventReceiver::TClockEventReceiver( TPlayerInterfacePtr  player, 
-										  TLoopManagerPtr loopmanager,
-										  TClockConverterPtr converter,
-										  TEventDispatcherPtr successor)
-	:TEventReceiver(player,loopmanager,successor)
-{
-	fClockConverter = converter;
-}
-
-/*----------------------------------------------------------------------------*/
-
 void TClockEventReceiver::ReceiveEvents(MidiEvPtr e)
 {
 	switch (EvType(e)) {

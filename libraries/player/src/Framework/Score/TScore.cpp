@@ -102,18 +102,15 @@ void  TScore::ItemsRemoved(TEventPtr ev)
 }
 
 /*----------------------------------------------------------------------------*/
-TEventPtr TScore::FirstEvent()
-{ 
-	return fLast ? fLast->fNext : 0;
 
-}
+TEventPtr TScore::FirstEvent(){return fLast ? fLast->fNext : 0;}
 /*----------------------------------------------------------------------------*/
-TEventPtr TScore::LastEvent()
-{ 
-	return fLast;
-} 
+
+TEventPtr TScore::LastEvent(){return fLast;} 
+
 /*----------------------------------------------------------------------------*/
-void TScore::Clear () 
+
+void TScore::Clear() 
 {
 	TEventPtr cur;
 	TScoreIterator1 it(this);
@@ -226,7 +223,8 @@ void TScore::RemoveEvent(TEventPtr ev)
 
 /*----------------------------------------------------------------------------*/
 
-ULONG TScore::Length() {
+ULONG TScore::Length() 
+{
 	TScoreIterator it(this); 
 	ULONG count = 0;
 	

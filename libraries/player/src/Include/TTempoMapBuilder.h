@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TTempoMapBuilder.h		    
 // ===========================================================================
-/*!
-  \brief Used for the score TempoMap construction
-*/
 
 
 #ifndef __TTempoMapBuilder__
@@ -24,46 +21,53 @@
 #include "TScoreVisitorInterface.h"
 #include "TPlayerConstants.h"
 
-//-----------------------
+//------------------------
 // Class TTempoMapBuilder 
-//-----------------------
+//------------------------
+/*!
+  \brief Used for the score TempoMap construction
+*/
+
 
 class TTempoMapBuilder :public TScoreVisitorInterface {
 
 	private:
 	
-		MidiEvPtr lastTempo;
-		MidiEvPtr lastTs;
+		MidiEvPtr fLastTempo;
+		MidiEvPtr fLastTs;
 	
 	public:
 	
-		TTempoMapBuilder() {lastTempo = lastTs = 0;}
-		~TTempoMapBuilder(){}
+		TTempoMapBuilder():fLastTempo(0),fLastTs(0){}
+		virtual ~TTempoMapBuilder(){}
 	
-		void Visite (TTempo* ev, Boolean  forward ){
-			if (lastTempo) {
-				ev->SetTempoBackward(Tempo(lastTempo));
+		void Visite (TTempo* ev, Boolean  forward)
+		{
+			if (fLastTempo) {
+				ev->SetTempoBackward(Tempo(fLastTempo));
 			}else{
 				ev->SetTempoBackward (kDefaultTempoEv);
 			}	
-			lastTempo = ev->MidiEvent();
+			fLastTempo = ev->MidiEvent();
 		}
 		
-		void Visite (TTimeSign* ev, Boolean  forward ){
-			if (lastTs) {
-				ev->SetBNum(TSNum(lastTs));
-				ev->SetBDenom(TSDenom(lastTs));
-				ev->SetBnClocks(TSClocks(lastTs));
-				ev->SetBn32nd(TS32nd(lastTs)) ;
+		void Visite (TTimeSign* ev, Boolean  forward)
+		{
+			if (fLastTs) {
+				ev->SetBNum(TSNum(fLastTs));
+				ev->SetBDenom(TSDenom(fLastTs));
+				ev->SetBnClocks(TSClocks(fLastTs));
+				ev->SetBn32nd(TS32nd(fLastTs)) ;
 			}else {
 				ev->SetBNum(kDefaultNum);
 				ev->SetBDenom(kDefaultDenom);
 				ev->SetBnClocks(kDefaultClocks);
 				ev->SetBn32nd(kDefaultN32) ;
 			}
-			lastTs = ev->MidiEvent();
+			fLastTs = ev->MidiEvent();
 		}
 
-
 };
+
+
 #endif

@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TPlayerFactory.h			    
 // ===========================================================================
-/*!
-	\brief Builds a Player depending of the current synchronization mode.
-*/
 
 
 #ifndef __TPlayerFactory__
@@ -28,6 +25,9 @@ class TPlayer;
 //-----------------------
 // Class TPlayerFactory 
 //-----------------------
+/*!
+	\brief Builds a Player depending of the current synchronisation mode.
+*/
 
 class TPlayerFactory {
 

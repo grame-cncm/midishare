@@ -21,7 +21,7 @@
 
 /*--------------------------------------------------------------------------*/
                                                     
-void THashTable::Init(){ for (short i = 0; i< kMaxHashCode; i++) {fHashTable[i] = 0;} }
+void THashTable::Init(){ for (short i = 0; i< kMaxHashCode; i++) {fHashTable[i] = 0;}}
 
 /*--------------------------------------------------------------------------*/
 
@@ -40,7 +40,7 @@ void THashTable::InsertEvent( MidiEvPtr ev)
 	MidiEvPtr e = MidiCopyEv(ev);
 
 	if(e) {
-      Byte hashcode = HashCode(RefNum(e), Chan(e));
+      	Byte hashcode = HashCode(RefNum(e), Chan(e));
 		Link(e) = fHashTable[hashcode];
 		fHashTable[hashcode]= e;
 	}

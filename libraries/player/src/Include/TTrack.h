@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TTrack.h			    
 // ===========================================================================
-/*! 
-	\brief Tracks management.
-*/
 
 
 #ifndef __TTrack__
@@ -28,6 +25,9 @@
 //--------------
 // Class TTrack 
 //--------------
+/*! 
+	\brief Tracks management.
+*/
 
 class TTrack{
 
@@ -37,8 +37,8 @@ class TTrack{
 	
 	public :
  	
- 		TTrack() { Init();}	
- 		~TTrack(){}
+ 		TTrack() {Init();}	
+ 		virtual ~TTrack(){}
  		
  		void Init() 
  		{

@@ -21,33 +21,12 @@
 
 /*--------------------------------------------------------------------------*/
 
-TLoopManager::TLoopManager(TPlayerScorePtr score, ULONG tpq) 
-{
-	fFollower = new TScoreFollower(score,tpq);
-	fLoopEndMarker = new TScoreMarker(typeLoopEnd);
-	fScore = score;
-	fLoopState = kLoopOff;
-	fLoopStart  = 0;
-}
-/*--------------------------------------------------------------------------*/
-
-TLoopManager::~TLoopManager ()
-{ 
-	// Important: Remove the Marker from the score before destroying it.
-	fLoopEndMarker->Remove(fScore);
-	
-	delete(fFollower); 
-	delete(fLoopEndMarker);
-}
-
-/*--------------------------------------------------------------------------*/
-
 long TLoopManager::SetLoopStartTicks (ULONG date_ticks) 
 {
 	if (date_ticks  > GetLoopEndTicks()){
 		return  kErrSequencer;
 	}else {
-		fFollower->SetPosTicks(date_ticks);
+		fFollower.SetPosTicks(date_ticks);
 		fLoopStart = date_ticks;
 		return kNoErr;
 	}
@@ -57,16 +36,16 @@ long TLoopManager::SetLoopStartTicks (ULONG date_ticks)
 
 long TLoopManager::SetLoopStartBBU (const TPos& pos) 
 {
-	fFollower->SetPosBBU(pos);
-	return SetLoopStartTicks (fFollower->GetPosTicks());
+	fFollower.SetPosBBU(pos);
+	return SetLoopStartTicks (fFollower.GetPosTicks());
 }
 
 /*--------------------------------------------------------------------------*/
 
 long TLoopManager::SetLoopStartMs(ULONG date_ms)
 {
-	fFollower->SetPosMs(date_ms);
-	return SetLoopStartTicks (fFollower->GetPosTicks());
+	fFollower.SetPosMs(date_ms);
+	return SetLoopStartTicks (fFollower.GetPosTicks());
 }
 	 
 /*--------------------------------------------------------------------------*/
@@ -77,9 +56,9 @@ long TLoopManager::SetLoopEndTicks (ULONG date_ticks)
 	if (date_ticks < GetLoopStartTicks()) {
 		return  kErrSequencer;
 	} else {
-		fLoopEndMarker->Remove(fScore);
-		TEventPtr cur = fFollower->SetPosTicks(date_ticks);
-		fLoopEndMarker->Insert(fScore,cur,date_ticks);
+		fLoopEndMarker.Remove(fScore);
+		TEventPtr cur = fFollower.SetPosTicks(date_ticks);
+		fLoopEndMarker.Insert(fScore,cur,date_ticks);
 		return kNoErr;
 	}
 }
@@ -88,15 +67,15 @@ long TLoopManager::SetLoopEndTicks (ULONG date_ticks)
 
 long TLoopManager::SetLoopEndBBU (const TPos& pos) 
 {
-	fFollower->SetPosBBU(pos);
-	return SetLoopEndTicks (fFollower->GetPosTicks());
+	fFollower.SetPosBBU(pos);
+	return SetLoopEndTicks (fFollower.GetPosTicks());
 }
 
 /*--------------------------------------------------------------------------*/
 
 long TLoopManager::SetLoopEndMs(ULONG date_ms)
 {
-	fFollower->SetPosMs(date_ms);
-	return SetLoopEndTicks (fFollower->GetPosTicks());
+	fFollower.SetPosMs(date_ms);
+	return SetLoopEndTicks (fFollower.GetPosTicks());
 }
 

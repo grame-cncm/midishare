@@ -11,18 +11,12 @@
 // ===========================================================================
 //	TEventFactory.h			    
 // ===========================================================================
-/*!
-	\brief A TEventFactory object allows to build TEvent objects using the MidiShare event type.
-*/
-
-
 
 #ifndef __TEventFactory__
 #define __TEventFactory__
 
  
 #include "TEvent.h"
-
 
 /*--------------------------------------------------------------------------*/
 
@@ -49,9 +43,12 @@ static TEventPtr CreateTempo(MidiEvPtr e)		{ return new TTempo(e);}
 static TEventPtr CreateTimeSign(MidiEvPtr e)	{ return new TTimeSign(e);}
 static TEventPtr CreateSysEx(MidiEvPtr e)		{ return new TSysEx(e);}
 		
-//-----------------------
+//---------------------
 // Class TEventFactory 
-//-----------------------
+//---------------------
+/*!
+	\brief A TEventFactory object allows to build TEvent objects using the MidiShare event type.
+*/
 
 class TEventFactory {
 
@@ -62,11 +59,11 @@ class TEventFactory {
 	
 	public: 
 		
-		TEventFactory ();
-		~TEventFactory() {}
+		TEventFactory();
+		virtual ~TEventFactory(){}
 		
 		static TEventPtr GenericCreateEvent(MidiEvPtr e) {return fInstance->fBuildTable[EvType(e)](e);}
-		static void Init() { if (fInstance == 0) fInstance = new TEventFactory(); }
+		static void Init() {if (fInstance == 0) fInstance = new TEventFactory();}
 };
 
 

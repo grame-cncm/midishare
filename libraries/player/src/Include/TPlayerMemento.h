@@ -11,9 +11,6 @@
 // ===========================================================================
 //	TPlayerMemento.h			    
 // ===========================================================================
-/*!
-\brief	Save and restore the Player state between synchro changes.
-*/
 
 
 #ifndef __TPlayerMemento__
@@ -22,9 +19,12 @@
 
 #include "TPlayer.h"
 
-//-----------------------
+//----------------------
 // Class TPlayerMemento
-//-----------------------
+//----------------------
+/*!
+\brief	Save and restore the Player state between synchro changes.
+*/
 
 
 class TPlayerMemento {
@@ -40,7 +40,7 @@ class TPlayerMemento {
 	public :
 		
 		TPlayerMemento(){}
-		~TPlayerMemento (){}
+		virtual ~TPlayerMemento (){}
 		
 		void SaveState(TPlayerPtr player)
 		{
@@ -66,12 +66,9 @@ class TPlayerMemento {
 				player->fLoopManager->SetLoop(fLoopState);
 			}
 		}
-		
-		
-		void DefaultState(TPlayerPtr player)
-		{
-			player->fTrackTable->Clear();
-		}
+			
+		//void DefaultState(TPlayerPtr player){player->fTrackTable->Clear();}
+		void DefaultState(TPlayerPtr player){player->fTrackTable.Clear();}
 		
 };
 

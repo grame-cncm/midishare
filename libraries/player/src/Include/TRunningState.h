@@ -12,18 +12,19 @@
 // ===========================================================================
 //	TRunningState.h			    
 // ===========================================================================
-/*!
-\brief	The Player running state.
-*/
+
 
 #ifndef __TRunningState__
 #define __TRunningState__
 
 
-
-//-----------------------
+//---------------------
 // Class TRunningState
-//-----------------------
+//---------------------
+/*!
+\brief	The Player running state.
+*/
+
 
 class TRunningState {
 
@@ -33,17 +34,17 @@ class TRunningState {
 		
 	public:
 		
-		TRunningState () {fStatus = kIdle; }
+		TRunningState ():fStatus (kIdle){}
 	
-		Boolean IsIdle() 	{ return  (fStatus == kIdle);}
-		Boolean IsWaiting() { return  (fStatus == kWaiting);}
-		Boolean IsRunning() { return  (fStatus == kPlaying);}
-		Boolean IsPause()	{ return  (fStatus == kPause);}
+		Boolean IsIdle() 	{return  (fStatus == kIdle);}
+		Boolean IsWaiting() {return  (fStatus == kWaiting);}
+		Boolean IsRunning() {return  (fStatus == kPlaying);}
+		Boolean IsPause()	{return  (fStatus == kPause);}
 			
-		void SetRunning() 	{ fStatus = kPlaying; }
-		void SetIdle() 		{ fStatus = kIdle;}
-		void SetWaiting() 	{ fStatus = kWaiting;}
-		void SetPause() 	{ fStatus = kPause;}
+		void SetRunning() 	{fStatus = kPlaying; }
+		void SetIdle() 		{fStatus = kIdle;}
+		void SetWaiting() 	{fStatus = kWaiting;}
+		void SetPause() 	{fStatus = kPause;}
 		
 		short GetState() {return fStatus;}
 

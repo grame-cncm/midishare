@@ -11,11 +11,6 @@
 // ===========================================================================
 //	TSliceVisitor.h			    
 // ===========================================================================
-/*!
-	\brief Visitor for Step playing mode.
-  Only KeyOn event are played, actually KeyOn are "transformed" in Note event
-  with a fixed duration.
-*/
 
 
 #ifndef __TSliceVisitor__
@@ -26,9 +21,15 @@
 #include "TEventSenderInterface.h"
 
 
-//-----------------------
+//---------------------
 // Class TSliceVisitor 
-//-----------------------
+//---------------------
+/*!
+  \brief Visitor for Step playing mode.
+  Only KeyOn event are played, actually KeyOn are "transformed" in Note event
+  with a fixed duration.
+*/
+
 
 class TSliceVisitor :public TScoreVisitorInterface {
 	
@@ -36,12 +37,13 @@ class TSliceVisitor :public TScoreVisitorInterface {
 	
 		TEventSenderInterfacePtr fUser;
 			
-	public :
+	public:
  
- 		TSliceVisitor(TEventSenderInterfacePtr user){ fUser = user;}
- 		~TSliceVisitor (){}
+ 		TSliceVisitor(TEventSenderInterfacePtr user):fUser(user){}
+ 		virtual ~TSliceVisitor(){}
  		
- 		void Visite (TKeyOn* ev, Boolean forward) { 
+ 		void Visite (TKeyOn* ev, Boolean forward) 
+ 		{ 
  			MidiEvPtr note = MidiCopyEv(ev->MidiEvent());
  			// Force the event to typeNote with a default duration
 			if (note) { 

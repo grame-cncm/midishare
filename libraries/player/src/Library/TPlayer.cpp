@@ -34,19 +34,14 @@
 // Creation/Destruction
 /*--------------------------------------------------------------------------*/
 
-TPlayer::TPlayer()
+TPlayer::TPlayer():fFactory(this)
 {
 	fPlayer = 0;
-	fFactory = 0;
-	fTrackTable = 0;
-	fScore = 0;
 	fEventReceiver = 0;
 	fClockConverter = 0;
 	fLoopManager = 0;
-	fRunningState = 0;
 	fInserter = 0;
 	fScoreState = 0;
-	fSmpteInfos = 0;
 	
 	fSyncIn = kInternalSync;
 	fSyncOut = kNoSyncOut;
@@ -55,37 +50,18 @@ TPlayer::TPlayer()
 	
 	// Initialisation of the Event Factory
 	TEventFactory::Init();
-	
-	// Initialisation of the Player Factory
-	fFactory = new TPlayerFactory(this);
 }
 
 /*--------------------------------------------------------------------------*/
 // Create shared objects
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Create() 
-{
-	fTrackTable = new TTrackTable();
-	fScore = new TPlayerScore();
-	fRunningState = new TRunningState();
-	fSmpteInfos = new TSMPTEInfos();
-}
 
 /*--------------------------------------------------------------------------*/
 
 TPlayer::~TPlayer()
 {
-	if (fFactory) {	
-		fFactory->DestroyPlayer(&fPlayer);
-		delete (fFactory);
-	}
-	
-	if (fTrackTable) 	delete (fTrackTable);
-	if (fScore) 		delete (fScore); 
-	if (fRunningState) 	delete (fRunningState);
-	if (fSmpteInfos) 	delete (fSmpteInfos);
-	
+	fFactory.DestroyPlayer(&fPlayer);
 	TMidiAppl::Close();
 }
 
@@ -104,8 +80,7 @@ short TPlayer::Open (MidiName name)
 		Close();
 		return kErrMemory;
 	}
-	// Create shared objects
-	Create();
+
 	// Set an empty score
 	long res = SetAllTrack (MidiNewSeq(), kDefaultTpq);
 	// If OK, return the reference number else close the Player
@@ -119,64 +94,57 @@ short TPlayer::Open (MidiName name)
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Close() 
-{ 
-	if (fRunningState->IsRunning()) Stop();
-	
-}
+void TPlayer::Close() {if (fRunningState.IsRunning()) Stop();}
 
 /*--------------------------------------------------------------------------*/
 // Transport
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Start() { 
-printf("Start\n");
-fPlayer->Start(); 
-}
+void TPlayer::Start() {fPlayer->Start();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Stop() { fPlayer->Stop(); }
+void TPlayer::Stop() {fPlayer->Stop();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Pause() { fPlayer->Pause(); }
+void TPlayer::Pause() {fPlayer->Pause();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Cont() { fPlayer->Cont(); }
+void TPlayer::Cont() {fPlayer->Cont();}
 
 /*--------------------------------------------------------------------------*/
 // Position
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetPosBBU (PosPtr pos) { fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit - 1)); }
+void TPlayer::SetPosBBU (PosPtr pos) {fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit - 1));}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetPosMs (long date_ms) { fPlayer->SetPosMs(date_ms); }
+void TPlayer::SetPosMs (long date_ms) {fPlayer->SetPosMs(date_ms);}
 
 /*--------------------------------------------------------------------------*/
 // Tracks management
 /*--------------------------------------------------------------------------*/
 
- MidiSeqPtr TPlayer::GetAllTrack ()	{ return (fRunningState->IsIdle()) ? fScore->GetAllTrack(): 0;}
- MidiSeqPtr TPlayer::GetTrack (short tracknum) { return (fRunningState->IsIdle()) ? fScore->GetTrack(tracknum): 0;}
+ MidiSeqPtr TPlayer::GetAllTrack ()	{ return (fRunningState.IsIdle()) ? fScore.GetAllTrack(): 0;}
+ MidiSeqPtr TPlayer::GetTrack (short tracknum) { return (fRunningState.IsIdle()) ? fScore.GetTrack(tracknum): 0;}
 
  /*--------------------------------------------------------------------------*/
 
  long 	TPlayer::SetTrack (short tracknum, MidiSeqPtr s)
  {
- 	if (fRunningState->IsIdle()) {
+ 	if (fRunningState.IsIdle()) {
  	
  		MidiSeqPtr s1 = UMidi::BuildTrack(s); // Build the sequence
 	 	if (!s1) return kErrEvent;
 	 		
 	 	long res;
-	 	fFactory->DestroyPlayer(&fPlayer);
+	 	fFactory.DestroyPlayer(&fPlayer);
 	 		
-	 	if ((res = fScore->SetTrack(tracknum,s1)) == kNoErr) {
-	  		fPlayer = fFactory->CreatePlayer();
+	 	if ((res = fScore.SetTrack(tracknum,s1)) == kNoErr) {
+	  		fPlayer = fFactory.CreatePlayer();
 	 	}
 	 	
 	 	return res;
@@ -188,18 +156,18 @@ void TPlayer::SetPosMs (long date_ms) { fPlayer->SetPosMs(date_ms); }
 
  long TPlayer::SetAllTrack (MidiSeqPtr s, long ticks_per_quarter)
  {
- 	if (fRunningState->IsIdle() && (ticks_per_quarter > 0)) {
+ 	if (fRunningState.IsIdle() && (ticks_per_quarter > 0)) {
  	
  		MidiSeqPtr s1 = UMidi::BuildAllTrack(s); // Build the sequence
  		if (!s1) return kErrEvent;
 	 	
  		long res;
  		fTick_per_quarter = ticks_per_quarter;
- 		fFactory->DestroyPlayer(&fPlayer);
+ 		fFactory.DestroyPlayer(&fPlayer);
 
-	 	if ((res = fScore->SetAllTrack(s1)) == kNoErr) {
+	 	if ((res = fScore.SetAllTrack(s1)) == kNoErr) {
 	 		
- 			fPlayer = fFactory->CreatePlayer();
+ 			fPlayer = fFactory.CreatePlayer();
 	 		
 	 		TPlayerMemento memento;
 	 		memento.DefaultState(this);
@@ -221,7 +189,7 @@ long TPlayer::InsertAllTrack(MidiSeqPtr s)
  	ULONG cur_date_ticks = fPlayer->GetPosTicks();
  	
  	if ((res = fInserter->InsertAllTrack(s)) == kNoErr) { 
- 		if (fRunningState->IsIdle()) {
+ 		if (fRunningState.IsIdle()) {
  			fPlayer->SetPosTicks(UMath::Min(date_ticks,cur_date_ticks));
  			fPlayer->Cont();
  		}
@@ -240,7 +208,7 @@ long TPlayer::InsertTrack(short tracknum,MidiSeqPtr s)
  	ULONG cur_date_ticks =  fPlayer->GetPosTicks();	
  	
  	if ((res = fInserter->InsertTrack(tracknum,s)) == kNoErr) { 
- 		if (fRunningState->IsIdle()) {
+ 		if (fRunningState.IsIdle()) {
  			fPlayer->SetPosTicks(UMath::Min(date_ticks,cur_date_ticks));
  			fPlayer->Cont();
  		}
@@ -252,18 +220,18 @@ long TPlayer::InsertTrack(short tracknum,MidiSeqPtr s)
 
 void TPlayer::SetParam (short tracknum, short p, short v) 
 { 
-	if(fRunningState->IsRunning()){
+	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
- 		fTrackTable->SetParam (tracknum, p, v);
+ 		fTrackTable.SetParam (tracknum, p, v);
  		fPlayer->Cont();
  	}else{
- 		fTrackTable->SetParam (tracknum, p, v);
+ 		fTrackTable.SetParam (tracknum, p, v);
  	}
  }
 
 /*--------------------------------------------------------------------------*/
 
- short TPlayer::GetParam (short tracknum, short p)	{ return fTrackTable->GetParam (tracknum, p);}
+ short TPlayer::GetParam (short tracknum, short p)	{return fTrackTable.GetParam (tracknum, p);}
 
 /*--------------------------------------------------------------------------*/
 // Synchronisation management
@@ -271,14 +239,14 @@ void TPlayer::SetParam (short tracknum, short p, short v)
 
 void TPlayer::SetSynchroIn (short state) 
 { 
-	if (fRunningState->IsIdle() && (state>= 0 ) && (state < kMaxSyncIn)) {
+	if (fRunningState.IsIdle() && (state>= 0 ) && (state < kMaxSyncIn)) {
 		fSyncIn = state;
 
 		TPlayerMemento memento;
 		memento.SaveState(this);			// Save the current state
 		
- 		fFactory->DestroyPlayer(&fPlayer);	// Delete the current Player
- 		fPlayer = fFactory->CreatePlayer();	// Allocate a new Player
+ 		fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
+ 		fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
  		
  		memento.RestoreState(this);			// Restore the current state
  	}
@@ -288,36 +256,36 @@ void TPlayer::SetSynchroIn (short state)
 
   void TPlayer::SetSynchroOut (short state)
  {
- 	if(fRunningState->IsIdle() && (state>= 0 ) && (state < kMaxSyncOut)) {
+ 	if(fRunningState.IsIdle() && (state>= 0 ) && (state < kMaxSyncOut)) {
  		fSyncOut = state;
   
    		TPlayerMemento memento;
-		memento.SaveState(this);		// Save the current state
+		memento.SaveState(this);			// Save the current state
   		
-	 	fFactory->DestroyPlayer(&fPlayer);	// Delete the current Player
-	 	fPlayer = fFactory->CreatePlayer();	// Allocate a new Player
+	 	fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
+	 	fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
 	 	
-	 	memento.RestoreState(this);		// Restore the current state
+	 	memento.RestoreState(this);			// Restore the current state
 	 }
  }
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetSMPTEOffset (SmpteLocPtr smptepos) { fSmpteInfos->SetSMPTEOffset(smptepos); }
+ void TPlayer::SetSMPTEOffset (SmpteLocPtr smptepos) { fSmpteInfos.SetSMPTEOffset(smptepos); }
  
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetTempo(long tempo){ fPlayer->SetTempo(tempo);}
+ void TPlayer::SetTempo(long tempo){fPlayer->SetTempo(tempo);}
  
 /*--------------------------------------------------------------------------*/
 // Step playing
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::ForwardStep(short flag) { fPlayer->PlaySliceForward(); }
+void TPlayer::ForwardStep(short flag) {fPlayer->PlaySliceForward();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::BackwardStep(short flag) { fPlayer->PlaySliceBackward(); }
+void TPlayer::BackwardStep(short flag) {fPlayer->PlaySliceBackward();}
 		
 /*--------------------------------------------------------------------------*/
 // Player state
@@ -332,7 +300,7 @@ void TPlayer::GetState (PlayerStatePtr ps)
 	ps->syncin = fSyncIn;
 	ps->syncout = fSyncOut;
 	
-	ps->state = fRunningState->GetState();
+	ps->state = fRunningState.GetState();
 	if ((ps->state == kPlaying) && (fEventReceiver->GetRecordTrack() != kNoTrack)) 
 		ps->state = kRecording;
 }
@@ -341,8 +309,8 @@ void TPlayer::GetState (PlayerStatePtr ps)
 
 void TPlayer::GetEndScore (PlayerStatePtr ps)
 { 
-	TScoreState tmp(fScore,fTick_per_quarter);
-	tmp.FillState(ps,fScore->GetLastDate());
+	TScoreState tmp(&fScore,fTick_per_quarter);
+	tmp.FillState(ps,fScore.GetLastDate());
 }
  
 /*--------------------------------------------------------------------------*/
@@ -380,7 +348,7 @@ long TPlayer::SetLoopEndMs(long date_ms){ return fLoopManager->SetLoopEndMs(date
 
 void TPlayer::SetRecordMode (short state) 
 {  
-	if(fRunningState->IsRunning()){
+	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
  		fEventReceiver->SetRecordMode (state);
  		fPlayer->Cont();
@@ -397,7 +365,7 @@ void TPlayer::SetRecordMode (short state)
 
 void TPlayer::Record (short tracknum) 
 { 	
-	if(fRunningState->IsRunning()){
+	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
  		fEventReceiver->SetRecordTrack(tracknum);
  		fPlayer->Cont();
@@ -410,14 +378,14 @@ void TPlayer::Record (short tracknum)
 
  long TPlayer::SetOutput(short output) 
  { 
- 	if(fRunningState->IsIdle() && (output >= 0) && (output < KMaxOutput)) {
+ 	if(fRunningState.IsIdle() && (output >= 0) && (output < KMaxOutput)) {
  		fOutput = output;
 
   		TPlayerMemento memento;
 		memento.SaveState(this);			// Save the current state
 		
-	 	fFactory->DestroyPlayer(&fPlayer);	// Delete the current Player
-	 	fPlayer = fFactory->CreatePlayer();	// Allocate a new Player
+	 	fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
+	 	fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
 	 	
 	 	if (fPlayer == 0) {
 	 		return kErrSequencer; // If allocation error

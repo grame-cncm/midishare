@@ -12,11 +12,9 @@
 //	TPlayerInterface.h			    
 // ===========================================================================
 /*!
-	\brief 
+	\brief An interface for Players.
 */ 
 
- 
- 
 #ifndef __TPlayerInterface__
 #define __TPlayerInterface__
 
@@ -49,7 +47,6 @@ class TPlayerInterface {
 };
 
 typedef TPlayerInterface FAR * TPlayerInterfacePtr;
-
 
 
 #endif

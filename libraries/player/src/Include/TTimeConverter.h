@@ -12,10 +12,6 @@
 // ===========================================================================
 //	TTimeConverter.h		    
 // ===========================================================================
-/*!
-	\brief Ticks to Bar Beat Unit conversion functions (and the contrary)
-*/
-
 
 #ifndef __TTimeConverter__
 #define __TTimeConverter__
@@ -25,9 +21,13 @@
 #include "TTime.h"
 
 
-//-----------------------
+//----------------------
 // Class TTimeConverter 
-//-----------------------
+//----------------------
+/*!
+	\brief Ticks to Bar Beat Unit conversion functions (and the contrary)
+*/
+
 
 class TTimeConverter  {
 
@@ -47,8 +47,8 @@ class TTimeConverter  {
 		
 	public:
 			
-		TTimeConverter():fInt() { Init (kDefaultTpq);} 
-		~TTimeConverter() {}
+		TTimeConverter():fInt() {Init (kDefaultTpq);} 
+		virtual ~TTimeConverter() {}
 		
 		void Init(ULONG tpq);  // Initialize with a new TPQ value
 		void Init(); 		   // Initialize keeping the current TPQ

@@ -12,9 +12,7 @@
 // ===========================================================================
 //	TPlayerSynchroniser.h		    
 // ===========================================================================
-/*!
-	\brief Synchroniser : a component which provides musical time representation.
-*/
+
 
 #ifndef __TPlayerSynchroniser__
 #define __TPlayerSynchroniser__
@@ -33,6 +31,9 @@
 //---------------------------
 // Class TPlayerSynchroniser 
 //---------------------------
+/*!
+	\brief TPlayerSynchroniser : a component which provides musical time to millisecond time conversion used with a TTickPlayer object.
+*/
 
 class TPlayerSynchroniser :public TSynchroniserInterface{
 
@@ -41,16 +42,12 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 		TSchedulerInterfacePtr 	fScheduler;
 		TRunningStatePtr        fState;
 		ULONG  					fOffset;
-		TTempoMapVisitorPtr 	fTempoVisitor;
+		TTempoMapVisitor	 	fTempoVisitor;
 			
 	public:
-	
-		TPlayerSynchroniser(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq) 
-		{
-			fScheduler = scheduler;
-			fState = state;
-		}
 		
+		TPlayerSynchroniser(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
+			:fScheduler(scheduler),fState(state),fTempoVisitor(tpq){}
 		virtual ~TPlayerSynchroniser(){}
 		
 		// Initialisation
@@ -59,9 +56,9 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 		
 		// Time conversion
 		
-		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
-		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor->ConvertMsToTick(date_ms - fOffset);}
-		
+		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor.ConvertTickToMs(date_tick);}
+		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor.ConvertMsToTick(date_ms - fOffset);}
+	
 		// Transport
 		
 		virtual void Start(){}
@@ -72,7 +69,7 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 		
  		virtual void  SetTempo (ULONG tempo) {}
  		virtual void  SetTempo (ULONG date_ticks, ULONG tempo){}
- 		virtual	ULONG GetTempo (){return fTempoVisitor->GetTempo();}
+ 		virtual	ULONG GetTempo (){return fTempoVisitor.GetTempo();}
  		
  		virtual void  RcvClock (ULONG date_ms){}
  		
@@ -87,12 +84,35 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
 typedef TPlayerSynchroniser FAR * TPlayerSynchroniserPtr;
 
 
+//------------------
+// Class TTempoTask 
+//------------------
+/*!
+  \brief Task to play events at the same date and possibly reschedule pending tick tasks if the Tempo has changed.
+*/
+
+class TTempoTask :public TTicksTask {
+
+	friend class TPlayerSynchroniserInt;
+
+	private:
+	
+		TPlayerSynchroniserInt* fSynchroniser;
+
+	public: 
+	
+		TTempoTask (TPlayerSynchroniserInt* it):TTicksTask(),fSynchroniser(it){}
+		void Execute (TMidiApplPtr appl, ULONG date);
+};
+
+typedef TTempoTask FAR * TTempoTaskPtr;
+
 //------------------------------
 // Class TPlayerSynchroniserInt 
 //------------------------------
-//
-//	TPlayerSynchroniserInt : synchroniser for internal synchronization
-//
+/*!
+	\brief TPlayerSynchroniserInt : synchroniser for internal (TempoMap baed) synchronization
+*/
 
 class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 
@@ -100,16 +120,18 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 
 	private:
 	
-		TTempoTask*			fTempoTask;
-		TScoreIteratorPtr	fIterator;
-		TScoreFollowerPtr   fFollower;
+		TTempoTask		fTempoTask;
+		TScoreIterator	fIterator;
+		TScoreFollower  fFollower;
 		
 		void  PlaySlice ();	
 	
 	public:
 	
-		TPlayerSynchroniserInt(TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq);
-		virtual ~TPlayerSynchroniserInt();
+		
+		TPlayerSynchroniserInt(TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
+			:TPlayerSynchroniser(scheduler,state,tpq),fTempoTask(this),fIterator(score),fFollower(fIterator,fTempoVisitor){}
+		virtual ~TPlayerSynchroniserInt(){}
 		
 		void Init();
 		void Start();
@@ -128,10 +150,9 @@ typedef TPlayerSynchroniserInt FAR * TPlayerSynchroniserIntPtr;
 //--------------------------------
 // Class TPlayerSynchroniserClock 
 //--------------------------------
-//
-//	TPlayerSynchroniserClock : synchroniser for clock synchronization
-//
-
+/*!
+	\brief TPlayerSynchroniserClock : synchroniser for clock synchronization
+*/
 
 class TPlayerSynchroniserClock :public TPlayerSynchroniser{
 
@@ -140,27 +161,17 @@ class TPlayerSynchroniserClock :public TPlayerSynchroniser{
 		ULONG	fRcv_clock;	 		// Date in ms of the previous received clock
 		ULONG 	fNextdate_ticks;	// Date in ticks of the next (expected) clock
 		ULONG 	fClock_count;		// Received clock count
-		TClockConverterPtr  fClockConverter;  
-		
+		TClockConverter  fClockConverter;  
 		
 		void RcvFirstClock(ULONG date_ms);
 		void RcvNextClock(ULONG date_ms);
 		void NextClock(ULONG date_ms);
 			
 	public:
-	
-		TPlayerSynchroniserClock(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq) 
-		 : TPlayerSynchroniser(scheduler,state,tpq) 
-		 {	
-		 	fTempoVisitor = new TTempoMapVisitor(tpq);
-		 	fClockConverter = new TClockConverter(tpq);
-		 }
-		 
-		~TPlayerSynchroniserClock() 
-		{ 
-			delete(fTempoVisitor);
-			delete(fClockConverter); 
-		}
+		
+		TPlayerSynchroniserClock(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
+			:TPlayerSynchroniser(scheduler,state,tpq),fClockConverter(tpq){}
+		virtual ~TPlayerSynchroniserClock() {}
 	
 		void Init();
 		void Start();
@@ -170,7 +181,7 @@ class TPlayerSynchroniserClock :public TPlayerSynchroniser{
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
  		
- 		ULONG GetTempo (){return fTempoVisitor->GetTempo();}
+ 		ULONG GetTempo (){return fTempoVisitor.GetTempo();}
  		
  		Boolean IsSchedulable(ULONG date_tick);
  		
@@ -184,21 +195,18 @@ typedef TPlayerSynchroniserClock FAR * TPlayerSynchroniserClockPtr;
 //------------------------------
 // Class TPlayerSynchroniserExt 
 //------------------------------
-//
-//	TPlayerSynchroniserExt : synchroniser for external synchronization
-//
+/*!
+	\brief TPlayerSynchroniserExt : synchroniser for external synchronization
+*/
 
 class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 
-
 	public:
 	
+		
 		TPlayerSynchroniserExt(TSchedulerInterfacePtr scheduler,  TRunningStatePtr state, ULONG tpq)
-		: TPlayerSynchroniser(scheduler,state,tpq) 
-		{
-			fTempoVisitor = new TTempoMapVisitor(tpq);
-		} 
-		~TPlayerSynchroniserExt(){ delete(fTempoVisitor);}
+			:TPlayerSynchroniser(scheduler,state,tpq){} 
+		virtual ~TPlayerSynchroniserExt(){}
 		
 		void Init();
 		void Start();
@@ -208,7 +216,7 @@ class TPlayerSynchroniserExt :public TPlayerSynchroniser{
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
  		
- 		ULONG GetTempo (){return fTempoVisitor->GetTempo();}
+ 		ULONG GetTempo (){return fTempoVisitor.GetTempo();}
  		void SetTempo (ULONG tempo);
  		
  		Boolean IsSchedulable(ULONG date_tick);
@@ -216,28 +224,6 @@ class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 };
 
 typedef TPlayerSynchroniserExt FAR * TPlayerSynchroniserExtPtr;
-
-//------------------
-// Class TTempoTask 
-//------------------
-
-/*!
-  \brief Task to play events at the same date and possibly reschedule pending tick tasks if the Tempo has changed.
-*/
-
-class TTempoTask :public TTicksTask {
-
-	private:
-	
-		TPlayerSynchroniserIntPtr fSynchroniser;
-
-	public: 
-	
-		TTempoTask (TPlayerSynchroniserIntPtr it):TTicksTask() {fSynchroniser =  it;}
-		void Execute (TMidiApplPtr appl, ULONG date) {fSynchroniser->PlaySlice();}
-};
-
-typedef TTempoTask FAR * TTempoTaskPtr;
 
 
 #endif

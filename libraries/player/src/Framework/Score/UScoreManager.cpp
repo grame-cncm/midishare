@@ -21,19 +21,20 @@
 
 /*----------------------------------------------------------------------------*/
 	
-void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun) {
+void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun) 
+{
 	TScoreIterator it(score);
-
 	TEventPtr cur;
 	while ((cur = it.NextEv())) { cur->Accept(fun,true);}
 }
 	
 /*----------------------------------------------------------------------------*/
 	
-void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun,ULONG begin, ULONG end) {
+void UScoreManager::Apply (TScorePtr score, TScoreVisitorInterfacePtr fun,ULONG begin, ULONG end) 
+{
 	TScoreIterator it(score);
 	TEventPtr cur;
 	it.SetPosTicks(begin);
-	while ((cur = it.NextEv()) && (cur->GetDate() < end)) { cur->Accept(fun,true);}
+	while ((cur = it.NextEv()) && (cur->GetDate() < end)) {cur->Accept(fun,true);}
 }
 	

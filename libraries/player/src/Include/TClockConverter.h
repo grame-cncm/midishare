@@ -12,10 +12,6 @@
 // ===========================================================================
 //	TClockConverter.h			    
 // ===========================================================================
-/*!
-	\brief Conversion functions: clocks, songpos <===> ticks.
-*/
-
 
 #ifndef __TClockConverter__
 #define __TClockConverter__
@@ -30,6 +26,10 @@ static float round(float val){return (float)floor(val+0.5f);}
 //-----------------------
 // Class TClockConverter
 //-----------------------
+/*!
+	\brief Conversion functions between values in clocks, songpos to ticks (and vice-versa).
+*/
+
 
 class TClockConverter {
 
@@ -40,7 +40,7 @@ class TClockConverter {
 	public: 
 	
 		TClockConverter(ULONG tpq) {Init (tpq);}
-		~TClockConverter(){}
+		virtual ~TClockConverter(){}
 			
 		void Init (ULONG tpq) {fTicks_per_quarter = (float)tpq;}
 				

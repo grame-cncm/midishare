@@ -12,11 +12,6 @@
 // ===========================================================================
 //	Umidi.h			    
 // ===========================================================================
-/*!
-\brief	Midi utilities : various MidiShare sequence management functions.
-*/
-
-
 
 #ifndef __UMidi__
 #define __UMidi__
@@ -26,9 +21,12 @@
 #include "TPlayerConstants.h"
 
 
-//------------------------------------------------------------------
-// Fonctions utilitaires sur les sequences et gestion de la memoire
-//------------------------------------------------------------------
+///------------
+// Class UMidi
+//-------------
+/*!
+\brief	Midi utilities : various MidiShare sequence management functions.
+*/
 
 class UMidi{
 

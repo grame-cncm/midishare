@@ -13,10 +13,6 @@
 //	TLoopManager.h			    
 // ===========================================================================
 
-/*!
-	\brief Management of the Loop.
-*/
-
 
 #ifndef __TLoopManager__
 #define __TLoopManager__
@@ -27,29 +23,33 @@
 #include "TScoreFollower.h"
 #include "TScoreMarker.h"
 
-//-----------------------
+//--------------------
 // Class TLoopManager 
-//-----------------------
+//--------------------
+/*!
+	\brief Management of the Loop.
+*/
 
 class TLoopManager {
 
 	private:
+		
+        TScoreFollower	fFollower;
+        TScoreMarker	fLoopEndMarker;
+        TPlayerScorePtr fScore;
+         Boolean 		fLoopState;
+		ULONG            fLoopStart;
 	
-		TPlayerScorePtr 	fScore;
-		TScoreFollowerPtr	fFollower;
-		TScoreMarkerPtr		fLoopEndMarker;
-		ULONG            	fLoopStart;
-		Boolean 			fLoopState;
+	public:
 		
-	public :
-		
-		TLoopManager(TPlayerScorePtr score, ULONG tpq);
-		~TLoopManager ();
+		TLoopManager(TPlayerScorePtr score, ULONG tpq)
+			:fFollower(score,tpq),fLoopEndMarker(typeLoopEnd),fScore(score),fLoopState(kLoopOff),fLoopStart(0){}
+		virtual ~TLoopManager () {fLoopEndMarker.Remove(fScore);}
 		
 		void SetLoop (Boolean state) {fLoopState = state;}
 		Boolean GetLoop () {return fLoopState;}
 		Boolean IsLoopOn(){ return fLoopState == kLoopOn; }
-		Boolean IsLoopPlaced(){ return fLoopEndMarker->IsInserted(); }
+		Boolean IsLoopPlaced(){ return fLoopEndMarker.IsInserted(); }
 		
 		long SetLoopStartTicks (ULONG date_ticks);
 		long SetLoopStartBBU (const TPos& pos);
@@ -58,10 +58,9 @@ class TLoopManager {
 		long SetLoopEndBBU (const TPos& pos);
 		long SetLoopEndMs(ULONG date_ms);
 		
-		ULONG GetLoopEndTicks() 	{return fLoopEndMarker->GetDateTicks();}
+		ULONG GetLoopEndTicks() 	{return fLoopEndMarker.GetDateTicks();}
 		ULONG GetLoopStartTicks() 	{return fLoopStart;}
 	
-		
 };
 
 
