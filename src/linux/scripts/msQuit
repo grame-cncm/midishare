@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+
+count=$(MidiCountAppls)
+i=1
+
+while [ $i -le $count ]
+do
+	ref=$(MidiGetIndAppl $i)
+	if [ $ref -gt 0 ]
+	then
+		list="$list $(MidiGetName $ref)"
+	fi
+	i=$(expr $i + 1)
+done
+
+for proc in $list
+do
+	killall $proc 2>/dev/null
+done
+
+

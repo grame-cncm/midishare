@@ -1,0 +1,29 @@
+.\" Copyright (c) 1999
+.\"	Grame - Computer Music Research Laboratory
+.\"
+.\"     @(#)MidiGetStat.1	1.0 (Grame) 23/09/99
+.\"
+.TH MIDIGETSTAT 1 "23 September 1999" "" "MidiShare User's Manual"
+.SH NAME
+.B MidiGetStat 
+- gives the current MidiShare state.
+.SH SYNOPSIS
+.BI MidiGetStat  
+.SH DESCRIPTION
+.B MidiGetStat
+returns the current MidiShare state like following :
+.PP
+.RS
+ - MidiShare version <version number>
+ - <count> of currently running clients
+ - separator line
+ - <index> : <client name> : <reference number>
+ - separator line
+.RE
+.PP
+.SH "SEE ALSO"
+.BR MidiGetVersion (1),
+.BR MidiCountAppls (1),
+.BR MidiGetIndAppl (1),
+.BR MidiGetName (1),
+

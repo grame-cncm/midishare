@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+
+version=$(MidiGetVersion)
+maj=$(expr $version / 100)
+min=$(expr $version % 100)
+count=$(MidiCountAppls)
+
+
+echo "MidiShare version $maj.$min"
+echo "$count clients are running"
+echo "---------------------------"
+
+i=1
+while [ $i -le $count ]
+do
+	ref=$(MidiGetIndAppl $i)
+	echo "$i : $(MidiGetName $ref) : $ref"
+	i=$(expr $i + 1)
+done
+echo "---------------------------"
+

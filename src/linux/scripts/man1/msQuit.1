@@ -1,0 +1,23 @@
+.\" Copyright (c) 1999
+.\"	Grame - Computer Music Research Laboratory
+.\"
+.\"     @(#)msQuit.1	1.0 (Grame) 27/06/2000
+.\"
+.TH MSQUIT 1 "27 June 2000" "" "MidiShare User's Manual"
+.SH NAME
+.B msQuit 
+- try to kill all the running MidiShare clients.
+.SH SYNOPSIS
+.BI msQuit  
+.SH DESCRIPTION
+.B msQuit
+try to kill all the running MidiShare clients. 
+msQuit assume that each MidiShare client name
+corresponds to its process name. Clients are then
+killed using "killall <client name>"
+.PP
+.PP
+.SH "SEE ALSO"
+.BR MidiCountAppls (1),
+.BR MidiGetIndAppl (1),
+.BR MidiGetName (1),
