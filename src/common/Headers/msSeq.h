@@ -18,19 +18,23 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+
 */
 
 #ifndef __msSeq__
 #define __msSeq__
 
 #include "msDefs.h"
-#include "msMemory.h"
+#include "lflifo.h"
+#include "msTypes.h"
 
 /* MidiShare functions interface */
-MSFunctionType(MidiSeqPtr) MSNewSeq   (MSMemoryPtr g);
+MSFunctionType(MidiSeqPtr) MSNewSeq   (lifo* freelist);
 MSFunctionType(void)       MSAddSeq   (MidiSeqPtr s, MidiEvPtr e);
-MSFunctionType(void)       MSFreeSeq  (MidiSeqPtr s, MSMemoryPtr g);
-MSFunctionType(void)       MSClearSeq (MidiSeqPtr s, MSMemoryPtr g);
-MSFunctionType(void)       MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc, MSMemoryPtr g);
+MSFunctionType(void)       MSFreeSeq  (MidiSeqPtr s, lifo* freelist);
+MSFunctionType(void)       MSClearSeq (MidiSeqPtr s, lifo* freelist);
+MSFunctionType(void)       MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc);
 
 #endif

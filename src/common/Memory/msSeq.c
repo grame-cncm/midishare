@@ -18,18 +18,20 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+
 */
 
 #include "msSeq.h"
 #include "msEvents.h"
-#include "msSync.h"
 
 /*==============================================================================
   External MidiShare functions implementation
   ============================================================================== */
-MSFunctionType(MidiSeqPtr) MSNewSeq (MSMemoryPtr g)
+MSFunctionType(MidiSeqPtr) MSNewSeq (lifo* freelist)
 {
-	MidiSeqPtr seq = (MidiSeqPtr)MSNewCell(g);
+	MidiSeqPtr seq = (MidiSeqPtr)MSNewCell(freelist);
 	if( seq) {
 		seq->first= seq->last= 0;
 		seq->undef1= seq->undef2= 0;
@@ -71,25 +73,30 @@ MSFunctionType(void) MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, MSMemoryPtr g)
+MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, lifo* freelist)
 {
 	if( s) {
-		MSClearSeq (s, g);
-		MSFreeCell ((MidiEvPtr)s, g);
+		MSClearSeq (s, freelist);
+		MSFreeCell (s, freelist);
 	}
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSClearSeq (MidiSeqPtr s, MSMemoryPtr g)
+MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
 {
-	if( s && s->first) {
-		PushMidiList (FreeList(g), s->first, s->last);
+	if ( s ) {
+		MidiEvPtr next, e = s->first;
+		while (e) {
+			next = Link(e);
+			MSFreeCell (e, freelist);
+			e = next;
+		}
 		s->first = s->last = 0;
 	}
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc, MSMemoryPtr g)
+MSFunctionType(void) MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc)
 {
 	MidiEvPtr e, next;
 	if( s && proc) {
