@@ -1,0 +1,695 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		4B02A87A04A1BF0900053105 = {
+			children = (
+				F5CF082803E979BF01053105,
+				F77BCAC502058DC501053118,
+				F77BCACD02058DC501053118,
+				F77BCACF02058DC501053118,
+				F77BCAD402058DC501053118,
+				F77BCAD902058DC501053118,
+				F77BCADB02058DC501053118,
+				F77BCADF02058DC501053118,
+				F77BCAE002058DC501053118,
+			);
+			isa = PBXGroup;
+			name = MidiShare;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B02A88804A1BFA800053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = msDriverState.c;
+			path = Drivers/lib/msDriverState.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B02A88904A1BFA800053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = msDriverState.h;
+			path = Drivers/lib/msDriverState.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BB4C37304A1D7C800053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = profport.c;
+			path = ../lib/profport.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BB4C42004A1EB1500053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = EventToMidiStream.c;
+			path = ../lib/EventToMidiStream.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BB4C42204A1EB2400053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = MidiStreamToEvent.c;
+			path = ../lib/MidiStreamToEvent.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//F50
+//F51
+//F52
+//F53
+//F54
+		F54D3A1803E95BE701053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5CF082903E979BF01053105,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54D3A1903E95BE701053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54D3A1A03E95BE701053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F57704E403E95CC601053105,
+				F57704E503E95CCD01053105,
+				F57704E603E95CCD01053105,
+				F57704E703E95CCE01053105,
+				F57704E803E95CCE01053105,
+				F57704E903E95CCF01053105,
+				F57704EA03E95CCF01053105,
+				F57704EB03E95CD201053105,
+				F57704EC03E95CD501053105,
+				F57704ED03E95CD501053105,
+				F57704EE03E95CD501053105,
+				F57704EF03E95CD601053105,
+				F57704F003E95CD801053105,
+				F57704F103E95CD801053105,
+				F57704F203E95CD901053105,
+				F57704F303E95CD901053105,
+				F57704F403E95CDB01053105,
+				F57704F503E95CDD01053105,
+				F57704F603E95CDD01053105,
+				F57704FB03E95CE601053105,
+				F57704FC03E95CE701053105,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54D3A1B03E95BE701053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F57704FD03E95D0401053105,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54D3A1C03E95BE701053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54D3A1D03E95BE701053105 = {
+			buildPhases = (
+				F54D3A1803E95BE701053105,
+				F54D3A1903E95BE701053105,
+				F54D3A1A03E95BE701053105,
+				F54D3A1B03E95BE701053105,
+				F54D3A1C03E95BE701053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
+				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = "../lib ../common/Headers";
+				OPTIMIZATION_CFLAGS = "-O2";
+				OTHER_CFLAGS = "-D__Macintosh__ -D__POWERPC__ -D__MacOSX__";
+				OTHER_LDFLAGS = "-flat_namespace -framework AudioToolBox";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = MidiShare;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = "midishare framework";
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = midishare;
+			productReference = F54D3A1E03E95BE701053105;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Copyright Grame 1987-2003 http:://www.grame.fr/MidiShare</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>Grame</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>MidiShare</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string>Copyright Grame 1987-2003</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.8.7</string>
+</dict>
+</plist>
+";
+		};
+		F54D3A1E03E95BE701053105 = {
+			explicitFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			path = MidiShare.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F57704E403E95CC601053105 = {
+			fileRef = F77BCAC602058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704E503E95CCD01053105 = {
+			fileRef = F77BCAC702058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704E603E95CCD01053105 = {
+			fileRef = F77BCAC802058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704E703E95CCE01053105 = {
+			fileRef = F77BCAC902058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704E803E95CCE01053105 = {
+			fileRef = F77BCACA02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704E903E95CCF01053105 = {
+			fileRef = F77BCACB02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704EA03E95CCF01053105 = {
+			fileRef = F77BCACC02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704EB03E95CD201053105 = {
+			fileRef = F77BCACE02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704EC03E95CD501053105 = {
+			fileRef = F77BCAD002058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704ED03E95CD501053105 = {
+			fileRef = F77BCAD102058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704EE03E95CD501053105 = {
+			fileRef = F77BCAD202058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704EF03E95CD601053105 = {
+			fileRef = F77BCAD302058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F003E95CD801053105 = {
+			fileRef = F77BCAD502058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F103E95CD801053105 = {
+			fileRef = F77BCAD602058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F203E95CD901053105 = {
+			fileRef = F77BCAD702058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F303E95CD901053105 = {
+			fileRef = F77BCAD802058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F403E95CDB01053105 = {
+			fileRef = F77BCADA02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F503E95CDD01053105 = {
+			fileRef = F77BCADC02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704F603E95CDD01053105 = {
+			fileRef = F77BCADD02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704FB03E95CE601053105 = {
+			fileRef = F77BCADF02058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704FC03E95CE701053105 = {
+			fileRef = F77BCAE002058DC501053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57704FD03E95D0401053105 = {
+			fileRef = F77BCAF902058F7E01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5CF082803E979BF01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = MidiShare.h;
+			path = include/MidiShare.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5CF082903E979BF01053105 = {
+			fileRef = F5CF082803E979BF01053105;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E4C2BB0209449801053105 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreServices.framework;
+			path = /System/Library/Frameworks/CoreServices.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F70
+//F71
+//F72
+//F73
+//F74
+		F77BCABA02058CD401053118 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				F77BCABC02058CD401053118,
+				F77BCABD02058CD401053118,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = F77BCABB02058CD401053118;
+			productRefGroup = F77BCABE02058D1D01053118;
+			projectDirPath = "";
+			targets = (
+				F54D3A1D03E95BE701053105,
+			);
+		};
+		F77BCABB02058CD401053118 = {
+			children = (
+				4BB4C37304A1D7C800053105,
+				4BB4C42004A1EB1500053105,
+				4BB4C42204A1EB2400053105,
+				4B02A88804A1BFA800053105,
+				4B02A88904A1BFA800053105,
+				4B02A87A04A1BF0900053105,
+				F77BCABE02058D1D01053118,
+				F77BCAF902058F7E01053118,
+				F5E4C2BB0209449801053105,
+			);
+			isa = PBXGroup;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCABC02058CD401053118 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F77BCABD02058CD401053118 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F77BCABE02058D1D01053118 = {
+			children = (
+				F54D3A1E03E95BE701053105,
+			);
+			isa = PBXGroup;
+			name = Products;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAC502058DC501053118 = {
+			children = (
+				F77BCAC602058DC501053118,
+				F77BCAC702058DC501053118,
+				F77BCAC802058DC501053118,
+				F77BCAC902058DC501053118,
+				F77BCACA02058DC501053118,
+				F77BCACB02058DC501053118,
+				F77BCACC02058DC501053118,
+			);
+			isa = PBXGroup;
+			name = Clients;
+			path = ../common/Clients;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCAC602058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msAlarms.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAC702058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msAppls.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAC802058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msConnx.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAC902058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msFilter.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCACA02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msMail.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCACB02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msTasks.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCACC02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msXmtRcv.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCACD02058DC501053118 = {
+			children = (
+				F77BCACE02058DC501053118,
+			);
+			isa = PBXGroup;
+			name = Drivers;
+			path = ../common/Drivers;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCACE02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msDriver.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCACF02058DC501053118 = {
+			children = (
+				F77BCAD002058DC501053118,
+				F77BCAD102058DC501053118,
+				F77BCAD202058DC501053118,
+				F77BCAD302058DC501053118,
+			);
+			isa = PBXGroup;
+			name = Kernel;
+			path = ../common/Kernel;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCAD002058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msHandler.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD102058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msInit.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD202058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msSmpte.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD302058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msTime.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD402058DC501053118 = {
+			children = (
+				F77BCAD502058DC501053118,
+				F77BCAD602058DC501053118,
+				F77BCAD702058DC501053118,
+				F77BCAD802058DC501053118,
+			);
+			isa = PBXGroup;
+			name = Memory;
+			path = ../common/Memory;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCAD502058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msEvents.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD602058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msFields.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD702058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msMemory.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD802058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msSeq.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCAD902058DC501053118 = {
+			children = (
+				F77BCADA02058DC501053118,
+			);
+			isa = PBXGroup;
+			name = Sorter;
+			path = ../common/Sorter;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCADA02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msSorter.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCADB02058DC501053118 = {
+			children = (
+				F77BCADC02058DC501053118,
+				F77BCADD02058DC501053118,
+			);
+			isa = PBXGroup;
+			name = lib;
+			path = ../lib;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCADC02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = msPrefs.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCADD02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = profport.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F77BCADF02058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = macosx.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCAE002058DC501053118 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = MidiShare.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F77BCAF902058F7E01053118 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreAudio.framework;
+			path = /System/Library/Frameworks/CoreAudio.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+	};
+	rootObject = F77BCABA02058CD401053118;
+}
