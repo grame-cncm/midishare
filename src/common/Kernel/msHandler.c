@@ -35,8 +35,6 @@
   =========================================================================== */
 static void Accept			( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
 static void Propose		    ( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
-static void Process		    ( MidiEvPtr ev);
-static void DiffProcess	    ( MidiEvPtr ev);
 static void DispatchEvents	( TMSGlobalPtr g, MidiEvPtr ev);
 static void RcvAlarmLoop	( TMSGlobalPtr g);
 
@@ -82,7 +80,7 @@ static void Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 	else { 
 		/* refnum 0 is MidiShare refnum */
 		/* event should be handled by the port manager */
-		/* not yet implemented */
+		SendToDriver (Driver(g), ev);
 		MSFreeEv( ev, FreeList(Memory(g)));
 	}
 }
@@ -99,8 +97,8 @@ static void Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 	type = EvType(ev);
 	canal = Canal(ev)&0x0f;
 	if (!filter
-		|| (IsAcceptedBit( filter->port, Port(ev)) && IsAcceptedBit( filter->evType, type))
-			&& ((type > typePitchWheel) || IsAcceptedBit( filter->channel, canal))) {
+		|| ((IsAcceptedBit( filter->port, Port(ev)) && IsAcceptedBit( filter->evType, type))
+			&& ((type > typePitchWheel) || IsAcceptedBit( filter->channel, canal)))) {
 			copy= MSCopyEv( ev, FreeList(Memory(g)));
 			if( copy)
 				Accept( g, appl, copy);
@@ -110,8 +108,7 @@ static void Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 /*__________________________________________________________________________________*/
 static void ProcessCall( TApplPtr appl, MidiEvPtr ev)
 {
-	TTaskExtPtr task = (TTaskExtPtr)LinkST(ev);	/* event extension */
-	CallTaskCode (appl->context, task, Date(ev), appl->refNum);
+	CallTaskCode (appl->context, ev);
 }
 
 /*__________________________________________________________________________________*/
@@ -127,7 +124,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 {
 	MSMemoryPtr mem = Memory(g);
 	MidiEvPtr next;
-	char refNum; Byte type;
+	short refNum; Byte type;
 
 	do {
 		type= EvType(ev);
@@ -158,7 +155,9 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
 				ProcessCall( appl, ev);		    /* execute the task				*/
+#ifdef __Linux__
 				MSFreeEv( ev, FreeList(mem));
+#endif
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
 				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
