@@ -82,8 +82,7 @@ Boolean CheckPort(MidiEvPtr e);
 void BuildTable(MidiSeqPtr seq, MidiEvPtr* table);
 MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq);
 MidiEvPtr CheckEvType (MidiSeqPtr src, short type);
-		
-		
+Boolean MFAPI MidiFileWriteTrack1( MIDIFilePtr fd, MidiSeqPtr seq);
 							  
 #ifdef __Macintosh__
 	#pragma export on
