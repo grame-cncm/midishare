@@ -6,6 +6,9 @@ h=$(pwd)
 echo "creation des liens symboliques (dylib)"
 ./linklibs
 
+echo suppression des dossiers CVS
+find Distribution -type d -name CVS -exec rm -rf {} \; 2>/dev/null
+
 echo verification des droits des fichiers et des dossiers
 find Distribution -type d -exec chmod 775 {} \;
 find Distribution -type f -exec chmod g+w {} \;
