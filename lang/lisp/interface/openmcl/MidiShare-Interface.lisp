@@ -69,6 +69,8 @@
 ;;;   28-10-03   Rename type macro to evtype.
 ;;;   21-11-03 : Converted to functional API. (HKT)
 ;;;   29-01-04 : Make the MidiShare return 1 or 0 (instead of T and Nil)
+;;;   17-03-04 : Rename type macro to evtype in OpenMCL and CMUCL interfaces
+
 
 
 (in-package :cl-user)       
@@ -1933,7 +1935,7 @@
     (setf (ccl:pref e :<tm>idi<e>v.date) d)
     (ccl:pref e :<tm>idi<e>v.date)))
 
-(defun type (e &optional v)
+(defun evtype (e &optional v)
   "read or set the type of an event. Be careful in modifying the type of an event"
   (if v
     (setf (ccl:pref e :<tm>idi<e>v.ev<t>ype) v)
@@ -2793,7 +2795,7 @@
 
 ;;;..................................................: type
 ;;                                                                                                                                          
-(defun type (e &optional v)
+(defun evtype (e &optional v)
   "read or set the type of an event. Be careful in 
  modifying the type of an event"
   (if v
