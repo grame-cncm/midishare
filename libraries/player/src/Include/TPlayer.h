@@ -81,6 +81,8 @@ class TPlayer :public  TMidiAppl{
 		 // Position
 		 void SetPosBBU (PosPtr pos);
 		 void SetPosMs (long date_ms);
+		 void SetPosTicks (long date_ticks);
+		
 		
 		 // Loop management
 		 void SetLoop (short state) ;
@@ -105,10 +107,9 @@ class TPlayer :public  TMidiAppl{
 		 // Synchronisation management
 		 void SetSynchroIn (short state) ;
 		 void SetSynchroOut (short state);
-		 
 		 void SetSMPTEOffset (SmpteLocPtr smptepos);
-		 
 		 void SetTempo(long tempo);
+		 void SetTempoFactor(float factor);
 
 		 // Record management
 		 void SetRecordMode (short state);

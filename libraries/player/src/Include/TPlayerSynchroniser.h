@@ -73,6 +73,7 @@ class TPlayerSynchroniser :public TSynchroniserInterface{
  		virtual void  SetTempo (ULONG tempo) {}
  		virtual void  SetTempo (ULONG date_ticks, ULONG tempo){}
  		virtual	ULONG GetTempo (){return fTempoVisitor->GetTempo();}
+ 		virtual void  SetTempoFactor (float factor){}
  		
  		virtual void  RcvClock (ULONG date_ms){}
  		
@@ -103,6 +104,7 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 		TTempoTask*			fTempoTask;
 		TScoreIteratorPtr	fIterator;
 		TScoreFollowerPtr   fFollower;
+		float				fTempoFactor;
 		
 		void  PlaySlice ();	
 	
@@ -123,6 +125,8 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
 		
 		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
 		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor->ConvertMsToTick(date_ms - fOffset);}
+ 	
+ 		void  SetTempoFactor (float factor) {fTempoFactor = factor;}
  	
  		Boolean IsSchedulable(ULONG date_tick);
  	

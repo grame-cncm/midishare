@@ -30,6 +30,7 @@
 	fIterator = new TScoreIterator(score);
 	fTempoVisitor = new TTempoMapVisitor(tpq);
 	fFollower = new TScoreFollower(fIterator,fTempoVisitor);
+	fTempoFactor = 1.0;
 }
 
 
@@ -50,6 +51,7 @@ void TPlayerSynchroniserInt::PlaySlice ()
 	if (!fIterator->IsLastEv()) {
 	
 		ULONG cur_tempo = fTempoVisitor->GetTempo();
+		ULONG cur_date_ticks = fIterator->CurDate();
 	
 		// For all events at the same date
 		while (cur = fIterator->NextDateEv()){
@@ -58,6 +60,7 @@ void TPlayerSynchroniserInt::PlaySlice ()
 		
 		// If Tempo has changed, update the Scheduler
 		if (cur_tempo != fTempoVisitor->GetTempo()){ 
+			fTempoVisitor->SetTempo(cur_date_ticks, fTempoVisitor->GetTempo()*fTempoFactor);
 			fScheduler->ReScheduleTasks(); 
 		}
 		

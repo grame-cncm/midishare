@@ -74,6 +74,8 @@ class TGenericPlayer :public TGenericPlayerInterface{
 		
 		void SetTempo (ULONG tempo)	{fPlayer->SetTempo(tempo);}
 		ULONG GetTempo () 			{return fPlayer->GetTempo();}
+		void  SetTempoFactor (float factor){fPlayer->SetTempoFactor(factor);}
+	
 		 
 		//----------------------
 		// Receiver Interface  

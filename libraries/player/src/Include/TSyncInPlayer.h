@@ -64,6 +64,7 @@ class TSyncInPlayer :public TPlayerInterface{
 		
 		void  SetTempo(ULONG tempo);
 		ULONG GetTempo();
+		void  SetTempoFactor (float factor);
 		
 		void RcvClock (ULONG date_ms);
 };

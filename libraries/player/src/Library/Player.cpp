@@ -50,12 +50,13 @@ void  EXPORT PausePlayer (short refnum);
 
 void  EXPORT SetRecordModePlayer (short refnum, short state);
 void  EXPORT RecordPlayer (short refnum, short tracknum);
-void  EXPORT SetRecordFilterPlayer(short refnum, FilterPtr filter);
+void  EXPORT SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 
 // Position management
 
 void  EXPORT SetPosBBUPlayer (short refnum, PosPtr pos);
 void  EXPORT SetPosMsPlayer (short refnum, long date_ms);
+void  EXPORT SetPosTicksPlayer (short refnum, long date_ticks);
 
 // Loop management
 
@@ -71,6 +72,7 @@ void  EXPORT SetSynchroInPlayer (short refnum, short state);
 void  EXPORT SetSynchroOutPlayer (short refnum,short state);
 void  EXPORT SetSMPTEOffsetPlayer (short refnum,SmpteLocPtr smptepos) ;
 void  EXPORT SetTempoPlayer (short refnum,long tempo);
+void  EXPORT SetTempoFactorPlayer (short refnum,float factor);
 
 // State management
 
@@ -216,6 +218,15 @@ void  EXPORT SetPosMsPlayer (short refnum, long date_ms)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void  EXPORT SetPosTicksPlayer (short refnum, long date_ticks)
+{
+	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
+	if (player) player->SetPosTicks(date_ticks);
+}
+
+
+/*--------------------------------------------------------------------------*/
 // Loop management
 /*--------------------------------------------------------------------------*/
 
@@ -282,6 +293,15 @@ void  EXPORT SetTempoPlayer (short refnum,long tempo)
 	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
 	if (player) player->SetTempo(tempo);
 }
+
+/*--------------------------------------------------------------------------*/
+
+void  EXPORT SetTempoFactorPlayer (short refnum,float factor)
+{
+	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
+	if (player) player->SetTempoFactor(factor);
+}
+
 
 /*--------------------------------------------------------------------------*/
 

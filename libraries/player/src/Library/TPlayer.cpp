@@ -156,6 +156,11 @@ void TPlayer::SetPosBBU (PosPtr pos) { fPlayer->SetPosBBU(TPos (pos->bar - 1, po
 void TPlayer::SetPosMs (long date_ms) { fPlayer->SetPosMs(date_ms); }
 
 /*--------------------------------------------------------------------------*/
+
+void TPlayer::SetPosTicks (long date_ticks) { fPlayer->SetPosTicks(date_ticks); }
+
+
+/*--------------------------------------------------------------------------*/
 // Tracks management
 /*--------------------------------------------------------------------------*/
 
@@ -314,6 +319,11 @@ void TPlayer::SetSynchroIn (short state)
 /*--------------------------------------------------------------------------*/
 
  void TPlayer::SetTempo(long tempo){ fPlayer->SetTempo(tempo);}
+ 
+ /*--------------------------------------------------------------------------*/
+
+ void TPlayer::SetTempoFactor(float factor){ fPlayer->SetTempoFactor(factor);}
+
  
 /*--------------------------------------------------------------------------*/
 // Step playing

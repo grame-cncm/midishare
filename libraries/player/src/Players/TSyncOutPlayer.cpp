@@ -126,3 +126,7 @@ void TSyncOutPlayer::RcvClock(ULONG date_ms) { fPlayer->RcvClock(date_ms);}
 /*----------------------------------------------------------------------------*/
 
 ULONG TSyncOutPlayer::GetTempo() { return fPlayer->GetTempo();}
+
+/*----------------------------------------------------------------------------*/
+
+void TSyncOutPlayer::SetTempoFactor(float factor) { fPlayer->SetTempoFactor(factor); }

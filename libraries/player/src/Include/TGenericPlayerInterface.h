@@ -42,6 +42,7 @@ class TGenericPlayerInterface {
 		
 		virtual void  SetTempo (ULONG tempo) = 0;
 		virtual ULONG GetTempo () = 0;
+		virtual void  SetTempoFactor (float factor) = 0;
 		
 		virtual void RcvClock (ULONG date_ms) = 0;
 		
