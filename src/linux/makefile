@@ -24,7 +24,7 @@ tools :
 
 uninstall:
 	./checksu
-	rmmod MidiShareKernel
+	rmmod MidiShare
 	
 clean:
 	make -i -C ../common clean 
