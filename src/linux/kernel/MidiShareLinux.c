@@ -152,20 +152,6 @@ void DriverSleep  (TApplPtr appl)
 }
 
 /*_________________________________________________________________________*/
-Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos)
-{
-	LinuxContextPtr context = (LinuxContextPtr)appl->context;
-	Boolean ret = false;
-	
-	if (context->status) {
-		if (SlotInfo(appl)) ret = SlotInfo(appl)(slot, infos);
-	}
-	else {
-	}
-	return ret;
-}
-
-/*_________________________________________________________________________*/
 
 void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {

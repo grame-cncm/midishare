@@ -1109,13 +1109,12 @@ void MidiReset ()
 /*--------------------------------------------------------------------*/
 short MidiRegisterDriver (TDriverInfos * infos, TDriverOperation *op)
 {
-/*	TMidiRegisterDriverArgs args;
+	TMidiRegisterDriverArgs args;
   	args.infos = *infos;
-  	args.op.wakeup = 0;
-  	args.op.sleep = 0;
-  	args.op.slotInfo = 0;
-	CALL(kMidiRegisterDriver,&args);
-*/	return MIDIerrSpace;
+  	args.op.wakeup = op->wakeup;
+  	args.op.sleep = op->sleep;
+ 	CALL(kMidiRegisterDriver,&args);
+	return args.refnum;
 }
 
 /*--------------------------------------------------------------------*/
@@ -1152,10 +1151,12 @@ Boolean MidiGetDriverInfos (short refnum, TDriverInfos * infos)
 }
 
 /*--------------------------------------------------------------------*/
-SlotRefNum MidiAddSlot  (short refnum)
+SlotRefNum MidiAddSlot  (short refnum, MidiName name, SlotDirection direction)
 {
 	TMidiAddSlotArgs args;
  	args.refnum = refnum;
+	args.name = name;
+	args.direction = direction;
 	CALL(kMidiAddSlot,&args);
 	return args.slotRef;
 }
@@ -1206,6 +1207,17 @@ Boolean MidiIsSlotConnected	(short port, SlotRefNum slot)
 	args.result = false;
 	CALL(kMidiIsSlotConnected,&args);
 	return args.result;
+}
+
+/*--------------------------------------------------------------------*/
+/* release 1.82 additionnal entry points */
+/*--------------------------------------------------------------------*/
+void MidiSetSlotName (SlotRefNum slot, MidiName name)
+{
+	TMidiSetSlotNameArgs args;
+	args.slotRef = slot;
+	args.name = name;
+	CALL(kMidiSetSlotName,&args);
 }
 
 /*--------------------------------------------------------------------*/

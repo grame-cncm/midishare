@@ -908,10 +908,25 @@ int mskGetDriverInfos (unsigned long userptr)
 int mskAddSlot (unsigned long userptr)
 {
 	TMidiAddSlotArgs args;
+	SlotName name;
+	
 	if (copy_from_user(&args, (TMidiAddSlotArgs *)userptr, sizeof(TMidiAddSlotArgs))) return -EFAULT;
-	args.slotRef = MSAddSlot(args.refnum, Clients(gMem));
+	strncpy_from_user(name, args.name, DrvNameLen);
+	args.slotRef = MSAddSlot(args.refnum, name, args.direction, Clients(gMem));
 	return (copy_to_user((SlotRefNum *)userptr, &args.slotRef, sizeof(SlotRefNum)))
 			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskSetSlotName (unsigned long userptr)
+{
+	TMidiSetSlotNameArgs args;
+	SlotName name;
+
+	if (copy_from_user(&args, (TMidiSetSlotNameArgs *)userptr, sizeof(TMidiSetSlotNameArgs))) return -EFAULT;
+	strncpy_from_user(name, args.name, DrvNameLen);
+	MSSetSlotName(args.slotRef, args.name, Clients(gMem));
+	return 0;
 }
 
 /*__________________________________________________________________________________*/

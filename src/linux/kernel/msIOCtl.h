@@ -139,6 +139,9 @@ enum { 	kMidiGetVersion = 1,
 		kMidiConnectSlot,
 		kMidiIsSlotConnected,
 
+		/* release 1.82 */		
+		kMidiSetSlotName,
+
 		kMaxMth
 };
 
@@ -300,8 +303,20 @@ typedef struct SMidiAddSlotArgs
   SlotRefNum slotRef;
   /* input args */
   short refnum;
+  MidiName name;
+  SlotDirection direction;
 
 } TMidiAddSlotArgs;
+
+
+typedef struct SMidiSetSlotNameArgs 
+{
+  /* result */
+  /* input args */
+  SlotRefNum slotRef;
+  MidiName name;
+
+} TMidiSetSlotNameArgs;
 
 
 typedef struct SMidiGetIndSlotArgs 
