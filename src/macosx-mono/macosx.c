@@ -26,6 +26,7 @@
 #include "msExtern.h"
 #include "msMem.h"
 #include "msTasks.h"
+#include "msPrefs.h"
 
 #include "msMidiMain.h"
 #include "msSynthDriver.h"
@@ -35,6 +36,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "dlfcn.h"
+
 
 #include "portaudio.h"
 
@@ -60,59 +63,88 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
         return true;
 }
 
+
+/*------------------------------------------------------------------------------*/
+/*                      Drivers loading                     					*/
+/*------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------*/
+/* MacOSX specific resources		                                            */
+
+typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
+
+struct MacOSXDriver {
+	MacOSXDriverPtr	next;
+	void*		handle;
+};
+
+MacOSXDriverPtr gMacOSXDriver = { 0 };
+
+typedef void (* Start) ();
+
+/*------------------------------------------------------------------------------*/
+void *  LoadLibrary( const char *filename, const char *symbol)
+{
+	void * handle = dlopen(filename,RTLD_LAZY);
+	Start fun ;
+	
+	if (handle &&(fun = (Start) dlsym(handle,symbol))) {
+		(*fun)(); 
+		return handle;
+	}else {
+		if (handle) dlclose(handle);
+		return 0;
+	}
+}
+
+/*------------------------------------------------------------------------------*/
+void FreeLibrary(void * handle){ dlclose(handle);}
+
+
 /*------------------------------------------------------------------------------*/
 /*                      initializations : wakeup & sleep                        */
 /*------------------------------------------------------------------------------*/
 static Boolean LoadDriver (char *drvName) 
 {
-		/*
-        WinDriverPtr mem = (WinDriverPtr)AllocateMemory (kStdMemory, sizeof(WinDriver));
+	   MacOSXDriverPtr mem = (MacOSXDriverPtr)AllocateMemory (kStdMemory, sizeof(MacOSXDriver));
         if (!mem) return false;
-        mem->next = gWinRsrc.drivers;
-        mem->libRef = LoadLibrary (drvName);
-        if (mem->libRef) {
-                gWinRsrc.drivers = mem;
+        
+        mem->next = gMacOSXDriver;
+        mem->handle = LoadLibrary (drvName,"_Start");
+        
+        if (mem->handle) {
+            gMacOSXDriver = mem;
+        }else {
+            DisposeMemory (mem);
+            return false;
         }
-        else {
-                DisposeMemory (mem);
-                return false;
-        }
-        */
       
         return true;
 }
 
+/*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
-		/*
-        unsigned short i, n = CountDrivers ();
-        char str[256];
-        for (i=0; i<n; i++) {
-                if (GetDriver (i, str, 256)) {
-                        LoadDriver (str);
-                }
+       unsigned short i, n = CountDrivers ();
+       char str[256];
+       for (i=0; i<n; i++) {
+           if (GetDriver (i, str, 256))  LoadDriver (str);
         }
-        */
-     	Load_MidiDriver();
-       Load_SynthDriver();
 }
 
 
+/*------------------------------------------------------------------------------*/
 void SpecialSleep  (TMSGlobalPtr g)
 {
-		/*
-        WinDriverPtr next, drv = gWinRsrc.drivers;
-        gWinRsrc.drivers = 0;
+        MacOSXDriverPtr next, drv = gMacOSXDriver;
+        gMacOSXDriver = 0;
         while (drv) {
                 next = drv->next;
-                FreeLibrary (drv->libRef);
+                FreeLibrary (drv->handle);
                 DisposeMemory (drv);
                 drv = next;
         }
-        */
-      Dispose_MidiDriver();
-       Dispose_SynthDriver();
-}
+ }
 
 /*------------------------------------------------------------------------------*/
 /*                   client applications context and tasks                      */
