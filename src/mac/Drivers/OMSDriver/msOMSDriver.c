@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
 */
 
@@ -25,9 +25,10 @@
 #include <Gestalt.h>
 #include <MIDI.h>
 
-#include "MidiShare.h"
-#include "msOMSDriver.h"
 #include "EmulLinearise.h"
+#include "MidiShare.h"
+#include "MidiStreamToEvent.h"
+#include "msOMSDriver.h"
 #include "SavingState.h"
 
 #include "OMS.h"
@@ -52,9 +53,11 @@ typedef struct {
 	Boolean       	OMSRunning;             // OMS state
 	
 	Ev2PacketFunc	e2p[256];				// Event to Packet conversion methods
-	Packet2EvFunc	p2e[256];				// Packet to Event conversion methods
-	Byte			typeTbl[256];			// Type conversion table
-	
+
+	StreamFifo		rcv;
+	ParseMethodTbl	rTbl;
+	Status2TypeTbl	s2t;
+
 	long 	numNodeOut;						// Number of OMS output nodes
 	long 	numNodeIn;						// Number of OMS input nodes
 	long	slot2OMSIn[64];					// SlotRefnum <---> OMS IN ioRefnum table
@@ -66,7 +69,6 @@ typedef struct {
 	OMSNodeInfoListH OMSOutputNodes;			// OMS Output node list 
 	OMSConnectionParamsPtr ConnectionParams;	// Connections list
 	
-	P2EInfos            pei; 				// Packet to event conversion structure
 	OMSMIDIPacket255	mPack2;				// Statically allocated OMS packet
 	Boolean 			reloadOMS;
 	Boolean 			enableWakeup;
@@ -83,7 +85,6 @@ typedef struct {
 /* ----------------------------------*/
 /* some macros                       */
 #define OMSPacket(data)			&(data)->mPack2
-#define P2EInfos(data)			(data)->pei
 #define OMSInputNodes(data)	    (data)->OMSInputNodes
 #define OMSOutputNodes(data)	(data)->OMSOutputNodes
 #define ConnectionParams(data)	(data)->ConnectionParams
@@ -94,8 +95,6 @@ typedef struct {
 #define slotOutRef(data)		(data)->slotOutRef
 #define slotInRef(data)			(data)->slotInRef
 #define e2p(data)				(data)->e2p
-#define p2e(data)				(data)->p2e
-#define typeTbl(data)			(data)->typeTbl
 #define slot2OMSIn(data)		(data)->slot2OMSIn
 #define slot2OMSOut(data)		(data)->slot2OMSOut
 #define slot2InIndex(data)		(data)->slot2InIndex
@@ -225,17 +224,16 @@ static void WakeUp (short r)
 	mem->data = data;
 	data->refNum = r;
 	data->OMSRunning = false;
-	data->pei.src = 0;
-	data->pei.len = 0;
-	data->pei.cont = 0;
 	data->reloadOMS = false;
 	data->enableWakeup = true;
 	OMSInputNodes(data) = 0;
 	OMSOutputNodes(data) = 0;
 	
 	InitSlotsTables (data);
-	InitTypeTbl(data->typeTbl);
-	InitLinearizeMthTbl(data->e2p, data->p2e);
+	InitLinearizeMthTbl(data->e2p);
+	MidiParseInitMthTbl (data->rTbl);
+	MidiParseInitTypeTbl (data->s2t);
+	MidiParseInit (&data->rcv, data->rTbl, data->s2t);
 
 #ifndef __BackgroundOnly__
 	WakeUpEnable (data);
@@ -403,9 +401,11 @@ Boolean SetUpMidi ()
 	mem->refNum = 0;
 	mem->data = 0;
 
-	if (MidiGetNamedAppl (OMSDriverName) > 0)  // still running
+	if (MidiGetNamedAppl (OMSDriverName) > 0) { // still running
+		doneFlag = true;
 		return true;
-
+	}
+	
 	refNum = MidiRegisterDriver(&infos, &op);
 	if (refNum == MIDIerrSpace)
 		return false;
@@ -442,15 +442,21 @@ Boolean CheckOMS()
 }
 
 /* -----------------------------------------------------------------------------*/
-static pascal void	MyReadHook2(OMSMIDIPacket *pkt, long myRefCon)
+static pascal void	MyReadHook2 (OMSMIDIPacket *pkt, long myRefCon)
 {
 	DriverDataPtr data = (DriverDataPtr)myRefCon;
+	StreamFifoPtr rcv = &data->rcv;
 	short slot = GetSlotFromRef(data, pkt->srcIORefNum);
+	unsigned char len = pkt->len, *ptr = pkt->data;
 	
-	P2EInfos(data).src= pkt->data;
-	P2EInfos(data).len= pkt->len;
-
-	if (slot >= 0) SendDatas(data->refNum, slot, pkt->flags & 3, MidiGetTime(), data);
+	if (slot < 0) return;
+	while (len--) {
+		MidiEvPtr e = MidiParseByte (rcv, *ptr++);
+		if (e) {
+			Port(e)= slot;
+			MidiSend (data->refNum, e);
+		}
+	}
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -490,7 +496,6 @@ static OSErr GetOutputPorts(DriverDataPtr data)
 	return 0;
 }
 
-
 /* -----------------------------------------------------------------------------*/
 static OSErr GetInputPorts (DriverDataPtr data)
 {
@@ -509,34 +514,6 @@ static OSErr GetInputPorts (DriverDataPtr data)
 	}
 	return 0;
 }
-
-//__________________________________________________________________________________
- 
-static void SendDatas( short refnum, short slot, short flag, long date, DriverDataPtr data)
-{
-	MidiEvPtr e, next; P2EInfosPtr i = &P2EInfos(data);
-	
-	e= Packet2Evs (i, p2e(data), typeTbl(data));
-	
-	if( e) {
-		
-		Port(e)= slot;
-		if( (flag== midiNoCont) || (flag== midiEndCont))
-			i->cont= 0;
-		else {
-			i->cont= e;
-			e= Link(e);
-		}
-		while( e) {
-			next= Link(e);
-			Date(e)= date;
-			MidiSend( refnum, e);
-			e= next;
-		}
-	}
-	else i->cont= 0;
-}
-
 
 /* -----------------------------------------------------------------------------*/
 static short GetSlotFromRef( DriverDataPtr data, short refNum)
@@ -573,8 +550,9 @@ static Boolean EvToOMSPacket (E2PInfos *i, OMSMIDIPacket255 *p, DriverDataPtr da
 	i->dest= p->data;
 	i->free= 255;
 	p->len = EvToPacket (i, e2p(data));
-	if (i->cont)
+	if (i->cont) {
 		p->flags= oldCont ? midiMidCont : omsStartCont;
+	}
 	else
 		p->flags= oldCont ? omsEndCont : omsNoCont;
 	return p->len ? i->cont != 0 : false;
