@@ -316,8 +316,39 @@ enum{	MIDIOpenAppl=1,
 
 /*------------------------ MidiShare application name ------------------------*/
 
+	#define DrvNameLen 32
 	typedef char* MidiName;
-	
+	typedef char  DriverName[DrvNameLen];
+	typedef DriverName SlotName;
+
+
+/*----------------------- drivers and slots information -----------------------*/
+
+	typedef long SlotRefNum;
+	#define Slot(ref) 			((ref) & 0xffff)
+
+	typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
+	typedef struct TSlotInfos {
+		SlotName 		name;
+		SlotDirection 	direction;
+		char 			cnx[32];	// bit field : 256 ports connection state
+		long			reserved[2];
+	} TSlotInfos;
+
+	typedef struct TDriverOperation {
+		void 		(* wakeup) (short refNum);
+		void 		(* sleep)  (short refNum);
+		Boolean 	(* slotInfo)  (SlotRefNum slot, TSlotInfos * infos);
+		long		reserved[2];
+	} TDriverOperation;
+
+	typedef struct TDriverInfos {
+		DriverName  name;
+		short 		version;
+		short 		slots;			// slots count - ignored at register time
+		long		reserved[2];
+	} TDriverInfos;
+
 
 /*------------------------ Synchronisation informations -----------------------*/
 
@@ -467,6 +498,25 @@ RcvAlarmPtr 	MidiGetRcvAlarm 	(short refNum);
 void 		MidiSetRcvAlarm		(short refNum, RcvAlarmPtr alarm);	
 ApplAlarmPtr 	MidiGetApplAlarm 	(short refNum);		
 void 		MidiSetApplAlarm 	(short refNum, ApplAlarmPtr alarm);
+
+
+/*------------------------------- Drivers management --------------------------*/
+
+short 	MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op);
+void 	MidiUnregisterDriver (short refnum);
+short	MidiCountDrivers	();
+short	MidiGetIndDriver	(short index);
+Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos);
+
+
+/*-------------------------------- Slots management ---------------------------*/
+
+SlotRefNum	MidiAddSlot 		(short refnum);
+SlotRefNum	MidiGetIndSlot		(short refnum, short index);
+void		MidiRemoveSlot 		(SlotRefNum slot);
+Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
+void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state);
+Boolean		MidiIsSlotConnected	(short port, SlotRefNum slot);
 
 
 /*------------------------- Inter-Application Connections ---------------------*/

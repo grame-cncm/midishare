@@ -70,6 +70,7 @@ int mskGetVersion(unsigned long userptr)
 	
 	return 0 ;
 }
+
 /*__________________________________________________________________________________*/
 
 int mskCountAppls(unsigned long userptr) 
@@ -89,7 +90,7 @@ int mskGetIndAppl(unsigned long userptr)
 	TMidiGetIndApplArgs args;
 	
 	if (copy_from_user(&args, (TMidiGetIndApplArgs *)userptr, sizeof(TMidiGetIndApplArgs))) return -EFAULT;
-	args.refnumres = MSGetIndAppl(args.refnumarg, Clients(gMem));
+	args.refnum = MSGetIndAppl(args.index, Clients(gMem));
 	if (copy_to_user((TMidiGetIndApplArgs *)userptr, &args, sizeof(TMidiGetIndApplArgs))) return -EFAULT;
 	
 	return 0 ;
@@ -845,3 +846,121 @@ int mskIsAcceptedType (unsigned long userptr)
 	return 0 ;
 }	
 
+/*__________________________________________________________________________________*/
+/* release 1.80 additionnal entry points */
+/*__________________________________________________________________________________*/
+int mskRegisterDriver (unsigned long userptr)
+{
+	TMidiRegisterDriverArgs args;
+
+	if (copy_from_user(&args, (TMidiRegisterDriverArgs *)userptr, sizeof(TMidiRegisterDriverArgs))) return -EFAULT;
+	args.refnum = MSRegisterDriver (&args.infos, &args.op, gMem);
+	SetUserMode (args.refnum, Clients(gMem));
+		
+	return (copy_to_user((short *)userptr, &args.refnum, sizeof(args.refnum))) 
+			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskUnregisterDriver (unsigned long userptr)
+{
+	short refnum;
+	if (copy_from_user(&refnum, (short *)userptr, sizeof(refnum))) return -EFAULT;
+	MSUnregisterDriver (refnum, gMem);
+	return 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskCountDrivers (unsigned long userptr)
+{
+	short count = MSCountDrivers (Clients(gMem));
+	return (copy_to_user((short *)userptr, &count, sizeof(count))) 
+			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskGetIndDriver (unsigned long userptr)
+{
+	TMidiGetIndDriverArgs args;
+	
+	if (copy_from_user(&args, (TMidiGetIndDriverArgs *)userptr, sizeof(TMidiGetIndDriverArgs))) return -EFAULT;
+	args.refnum = MSGetIndDriver(args.index, Clients(gMem));
+	return (copy_to_user((TMidiGetIndDriverArgs *)userptr, &args, sizeof(TMidiGetIndDriverArgs)))
+			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskGetDriverInfos (unsigned long userptr)
+{
+	TMidiGetDriverInfosArgs args;
+	if (copy_from_user(&args, (TMidiGetDriverInfosArgs *)userptr, sizeof(TMidiGetDriverInfosArgs))) return -EFAULT;
+	args.result = MSGetDriverInfos (refnum, &args.infos, Clients(gMem)) {
+	if (args.result) {
+		return (copy_to_user((TMidiGetDriverInfosArgs *)userptr, &args, sizeof(TMidiGetDriverInfosArgs)))
+			? -EFAULT : 0;
+	}
+	return (copy_to_user((Boolean *)userptr, &args.result, sizeof(Boolean)))
+		? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskAddSlot (unsigned long userptr)
+{
+	TMidiAddSlotArgs args;
+	if (copy_from_user(&args, (TMidiAddSlotArgs *)userptr, sizeof(TMidiAddSlotArgs))) return -EFAULT;
+	args.slotRef = MSAddSlot(args.refnum, Clients(gMem));
+	return (copy_to_user((SlotRefnum *)userptr, &args.slotRef, sizeof(SlotRefnum)))
+			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskGetIndSlot (unsigned long userptr)
+{
+	TMidiGetIndSlotArgs args;
+	if (copy_from_user(&args, (TMidiGetIndSlotArgs *)userptr, sizeof(TMidiGetIndSlotArgs))) return -EFAULT;
+	args.slotRef = MSGetIndSlot(args.refnum, args.index, Clients(gMem));
+	return (copy_to_user((SlotRefnum *)userptr, &args.slotRef, sizeof(SlotRefnum)))
+			? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskRemoveSlot  (unsigned long userptr)
+{
+	SlotRefNum slot;
+	if (copy_from_user(&args, (SlotRefNum *)userptr, sizeof(SlotRefNum))) return -EFAULT;
+	MSRemoveSlot (slot, Clients(gMem));
+	return 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskGetSlotInfos (unsigned long userptr)
+{
+	TMidiGetSlotInfosArgs args;
+	if (copy_from_user(&args, (TMidiGetSlotInfosArgs *)userptr, sizeof(TMidiGetSlotInfosArgs))) return -EFAULT;
+	args.result = MSGetSlotInfos (args.slotRef, &args.infos, Clients(gMem));
+	if (args.result) {
+		return (copy_to_user((TMidiGetSlotInfosArgs *)userptr, &args, sizeof(TMidiGetSlotInfosArgs)))
+			? -EFAULT : 0;
+	}
+	return (copy_to_user((Boolean *)userptr, &args.result, sizeof(Boolean)))
+		? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskConnectSlot (unsigned long userptr)
+{
+	TMidiConnectSlotArgs args;
+	if (copy_from_user(&args, (TMidiConnectSlotArgs *)userptr, sizeof(TMidiConnectSlotArgs))) return -EFAULT;
+	MSConnectSlot (args.port, args.slotRef, args.state, Clients(gMem));
+	return 0;
+}
+
+/*__________________________________________________________________________________*/
+int mskIsSlotConnected (unsigned long userptr)
+{
+	TMidiIsSlotConnectedArgs args;
+	if (copy_from_user(&args, (TMidiIsSlotConnectedArgs *)userptr, sizeof(TMidiIsSlotConnectedArgs))) return -EFAULT;
+	args.result = MSIsSlotConnected (args.port, args.slotRef, Clients(gMem));
+	return (copy_to_user((Boolean *)userptr, &args.result, sizeof(Boolean)))
+		? -EFAULT : 0;
+}

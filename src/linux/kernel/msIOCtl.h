@@ -34,102 +34,113 @@ enum { kUserMode, kKernelMode };
 
 /* functions index for ioctl */
 
-#define kMidiGetVersion 	1
+enum { 	kMidiGetVersion = 1,
+		kMidiCountAppls,
+		kMidiGetIndAppl,
+		kMidiGetNamedAppl,
+		kMidiGetSyncInfo,
+		kMidiSetSyncMode,
+		kMidiGetExtTime,   
+		kMidiInt2ExtTime,
+		kMidiExt2IntTime,
+		kMidiTime2Smpte,
+		kMidiSmpte2Time,
+		kMidiGetTimeAddr,
 
-#define kMidiCountAppls 	2
-#define kMidiGetIndAppl		3
-#define kMidiGetNamedAppl	4
+		kMidiOpen,
+		kMidiClose,
 
-#define kMidiGetSyncInfo	5
-#define kMidiSetSyncMode 	6
-#define kMidiGetExtTime     	8   
-#define kMidiInt2ExtTime	9
-#define kMidiExt2IntTime	10
-#define kMidiTime2Smpte		11
-#define kMidiSmpte2Time		12
-#define kMidiGetTimeAddr	13
+		kMidiGetName,
+		kMidiSetName,
+		kMidiGetInfo,
+		kMidiSetInfo,
+		kMidiGetFilter,
+		kMidiSetFilter,
+		kMidiGetRcvAlarm,
+		kMidiSetRcvAlarm,
+		kMidiGetApplAlarm,
+		kMidiSetApplAlarm,
 
-#define kMidiOpen 		14
-#define kMidiClose 		15
+		kMidiConnect,
+		kMidiIsConnected,
 
-#define kMidiGetName 		16
-#define kMidiSetName		17
-#define kMidiGetInfo		18
-#define kMidiSetInfo		19
-#define kMidiGetFilter		20
-#define kMidiSetFilter		21
-#define kMidiGetRcvAlarm	22
-#define kMidiSetRcvAlarm	23
-#define kMidiGetApplAlarm	24
-#define kMidiSetApplAlarm 	25
+		kMidiGetPortState,
+		kMidiSetPortState,
 
-#define kMidiConnect		26
-#define kMidiIsConnected	27
+		kMidiFreeSpace,
+		kMidiTotalSpace,
+		kMidiGrowSpace,
 
-#define kMidiGetPortState	28
-#define kMidiSetPortState	29
+		kMidiNewCell,
+		kMidiFreeCell,
+		kMidiNewEv,
+		kMidiCopyEv,
+		kMidiFreeEv,
+		kMidiSetField,
+		kMidiGetField,
+		kMidiAddField,
+		kMidiCountFields,
 
-#define kMidiFreeSpace		30
-#define kMidiTotalSpace		31
-#define kMidiGrowSpace		32
+		kMidiNewSeq,
+		kMidiAddSeq,
+		kMidiFreeSeq,
+		kMidiClearSeq,
+		kMidiApplySeq,
 
-#define kMidiNewCell		33
-#define kMidiFreeCell		34
-#define kMidiNewEv 		35
-#define kMidiCopyEv		36
-#define kMidiFreeEv		37
-#define kMidiSetField		38
-#define kMidiGetField		39
-#define kMidiAddField		40
-#define kMidiCountFields	41
+		kMidiGetTime,
 
-#define kMidiNewSeq 		42
-#define kMidiAddSeq 		43
-#define kMidiFreeSeq		44
-#define kMidiClearSeq		45
-#define kMidiApplySeq		46
+		kMidiSendIm,
+		kMidiSend,
+		kMidiSendAt,
 
-#define kMidiGetTime 		47
+		kMidiCountEvs,
+		kMidiGetEv,
+		kMidiAvailEv,
+		kMidiFlushEvs,
 
-#define kMidiSendIm 		48
-#define kMidiSend		49
-#define kMidiSendAt			50
+		kMidiReadSync,
+		kMidiWriteSync,
 
-#define kMidiCountEvs		51
-#define kMidiGetEv			52
-#define kMidiAvailEv		53
-#define kMidiFlushEvs 		54
+		kMidiCall,
+		kMidiTask,
+		kMidiDTask,
+		kMidiForgetTask,
+		kMidiCountDTasks,
+		kMidiFlushDTasks,
+		kMidiExec1DTask,
 
-#define kMidiReadSync		55
-#define kMidiWriteSync		56
+		kMidiShare,
 
-#define kMidiCall			57
-#define kMidiTask			58
-#define kMidiDTask 			59
-#define kMidiForgetTask		60
-#define kMidiCountDTasks	61
-#define kMidiFlushDTasks	62
-#define kMidiExec1DTask 	63
+		kMidiGetCommand,
+		kMidiGetDTask,
 
-#define kMidiShare		64
+		kMidiNewFilter,
+		kMidiFreeFilter,
+		kMidiAcceptChan,
+		kMidiAcceptPort,
+		kMidiAcceptType,
+		kMidiIsAcceptedChan,
+		kMidiIsAcceptedPort,
+		kMidiIsAcceptedType,
 
-#define kMidiGetCommand 	65
-#define kMidiGetDTask 		66
+		kMidiReset,
+		kMidiQuit,
 
-#define kMidiNewFilter 		67
-#define kMidiFreeFilter 	68
-#define kMidiAcceptChan 	69
-#define kMidiAcceptPort		70
-#define kMidiAcceptType		71
-#define kMidiIsAcceptedChan 	72
-#define kMidiIsAcceptedPort 	73
-#define kMidiIsAcceptedType 	74
+		/* release 1.80 */		
+		kMidiRegisterDriver,
+		kMidiUnregisterDriver,
+		kMidiCountDrivers,
+		kMidiGetIndDriver,
+		kMidiGetDriverInfos,
+		kMidiAddSlot,
+		kMidiGetIndSlot,
+		kMidiRemoveSlot,
+		kMidiGetSlotInfos,
+		kMidiConnectSlot,
+		kMidiIsSlotConnected,
 
-#define kMidiReset 		75
-#define kMidiQuit 		76
-
-
-#define kMaxMth			77
+		kMaxMth
+};
 
 
 /* date structures  for ioctl calls */ 
@@ -146,22 +157,21 @@ typedef struct SMidiGetVersionArgs
 typedef struct SMidiCountApplsArgs 
 {
   /* result */
-  int appls;
+  int count;
   
 } TMidiCountApplsArgs;
-
 
 
 typedef struct SMidiGetIndApplArgs 
 {
   /* result */
-  int refnumres;
+  int refnum;
   
   /* input args */
-  int refnumarg;
+  int index;
   
 } TMidiGetIndApplArgs;
-
+typedef TMidiGetIndApplArgs TMidiGetIndDriverArgs;
 
 typedef struct SMidiGetNamedApplArgs 
 {
@@ -252,6 +262,16 @@ typedef struct SMidiOpenArgs
 } TMidiOpenArgs;
 
 
+typedef struct SMidiRegisterDriver 
+{
+  /* result */
+  short refnum;
+  /* input args */
+  TDriverInfos  infos;
+  TDriverOperation op;
+} TMidiRegisterDriverArgs;
+
+
 
 typedef struct SMidiCloseArgs 
 {
@@ -261,6 +281,71 @@ typedef struct SMidiCloseArgs
   int refnum;
 
 } TMidiCloseArgs;
+
+
+typedef struct SMidiGetDriverInfosArgs 
+{
+  /* result */
+  Boolean 		result;
+  /* input args */
+  short 		refnum;
+  TDriverInfos	infos;
+
+} TMidiGetDriverInfosArgs;
+
+
+typedef struct SMidiAddSlotArgs 
+{
+  /* result */
+  SlotRefnum slotRef;
+  /* input args */
+  short refnum;
+
+} TMidiAddSlotArgs;
+
+
+typedef struct SMidiGetIndSlotArgs 
+{
+  /* result */
+  SlotRefnum slotRef;
+  /* input args */
+  short refnum;
+  short index;
+
+} TMidiGetIndSlotArgs;
+
+
+typedef struct SMidiGetSlotInfosArgs 
+{
+  /* result */
+  Boolean result;
+  /* input args */
+  SlotRefnum slotRef;
+  TSlotInfos infos;
+
+} TMidiGetSlotInfosArgs;
+
+
+typedef struct SMidiConnectSlotArgs 
+{
+  /* result */
+  /* input args */
+  SlotRefnum slotRef;
+  short 	port;
+  Boolean 	state;
+
+} TMidiConnectSlotArgs;
+
+
+typedef struct SMidiIsSlotConnectedArgs 
+{
+  /* result */
+  Boolean 	result;
+  /* input args */
+  SlotRefnum slotRef;
+  short 	port;
+
+} TMidiIsSlotConnectedArgs;
 
 
 typedef struct SMidiGetNameArgs 

@@ -107,5 +107,18 @@ EXPORT_SYMBOL(MSIsAcceptedPort);
 EXPORT_SYMBOL(MSIsAcceptedChan);
 EXPORT_SYMBOL(MSIsAcceptedType);
 
+/* release 1.80 additionnal exports */
+EXPORT_SYMBOL(MSRegisterDriver);
+EXPORT_SYMBOL(MSUnregisterDriver);
+EXPORT_SYMBOL(MSCountDrivers);
+EXPORT_SYMBOL(MSGetIndDriver);
+EXPORT_SYMBOL(MSGetDriverInfos);
+EXPORT_SYMBOL(MSAddSlot);
+EXPORT_SYMBOL(MSGetIndSlot);
+EXPORT_SYMBOL(MSRemoveSlot);
+EXPORT_SYMBOL(MSGetSlotInfos);
+EXPORT_SYMBOL(MSConnectSlot);
+EXPORT_SYMBOL(MSIsSlotConnected);
+
 #endif
 

@@ -103,6 +103,19 @@ int mskIsAcceptedType (unsigned long userptr);
 
 int mskQuitAction (unsigned long userptr);
 
+/* release 1.80 */
+int mskRegisterDriver (unsigned long userptr);
+int mskUnregisterDriver (unsigned long userptr);
+int mskCountDrivers (unsigned long userptr);
+int mskGetIndDriver (unsigned long userptr);
+int mskGetDriverInfos (unsigned long userptr);
+int mskAddSlot (unsigned long userptr);
+int mskGetIndSlot (unsigned long userptr);
+int mskRemoveSlot  (unsigned long userptr);
+int mskGetSlotInfos (unsigned long userptr);
+int mskConnectSlot (unsigned long userptr);
+int mskIsSlotConnected (unsigned long userptr);
+
 
 extern TMSGlobalPtr	gMem;
 

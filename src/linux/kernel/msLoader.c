@@ -254,6 +254,19 @@ static void initMthTable() {
 	
 	KernelMthTable[kMidiReset ] = MidiReset;
 	
+	/* release 1.80 additionnal methods */
+	KernelMthTable[kMidiRegisterDriver ] = mskRegisterDriver;
+	KernelMthTable[kMidiUnregisterDriver ] = mskUnregisterDriver;
+	KernelMthTable[kMidiCountDrivers ] = mskCountDrivers;
+	KernelMthTable[kMidiGetIndDriver ] = mskGetIndDriver;
+	KernelMthTable[kMidiGetDriverInfos ] = mskGetDriverInfos;
+	KernelMthTable[kMidiAddSlot ] = mskAddSlot;
+	KernelMthTable[kMidiGetIndSlot ] = mskGetIndSlot;
+	KernelMthTable[kMidiRemoveSlot ] = mskRemoveSlot;
+	KernelMthTable[kMidiGetSlotInfos ] = mskGetSlotInfos;
+	KernelMthTable[kMidiConnectSlot ] = mskConnectSlot;
+	KernelMthTable[kMidiIsSlotConnected ] = mskIsSlotConnected;
+
 }
 
 

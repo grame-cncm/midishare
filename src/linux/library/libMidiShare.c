@@ -213,7 +213,7 @@ short MidiCountAppls()
    int err;
 
    CALL(kMidiCountAppls,&args);
-   return (short)args.appls;
+   return (short)args.count;
 }
 
 /*******************/
@@ -225,7 +225,7 @@ short MidiGetIndAppl(short index)
    TMidiGetIndApplArgs 	args;
    int err;
 
-   args.refnumarg = index;
+   args.index = index;
    CALL(kMidiGetIndAppl,&args);
    return (short)args.refnumres;
 }
@@ -411,30 +411,25 @@ long* MidiGetTimeAddr ()
 void MidiClose (short ref)
 {
 	TMidiCloseArgs 	args;
-    	int            	err;
+    int            	err;
 	TApplPtr 	appl;
 	
 	pthread_mutex_lock(&gClients->mutex);
 	
 	if (CheckRefNum(gClients, ref)) {
- 		
 		appl = gClients->appls[ref];
  		args.refnum = ref;
 		
 		/* Resume the Real Time thread */
-		
 		CALL(kMidiQuit,&args);
 		
 		/* Wait for Real Time thread exit */
-		
 		pthread_join(appl->rcvThread,NULL);
 		
 		/* Kernel close */
-	
 		CALL(kMidiClose,&args);
 		
 		/* Client close */
-		
 		FreeAppl(appl) ;
 		gClients->appls[ref] = 0;
 		gClients->nbAppls--;
@@ -444,7 +439,6 @@ void MidiClose (short ref)
 			restore_sigs ();
 		} 
 	}
-	
 	pthread_mutex_unlock(&gClients->mutex);
 }
 
@@ -1162,6 +1156,110 @@ void MidiReset ()
   CALL(kMidiReset,&args);
 }
 
+
+/*--------------------------------------------------------------------*/
+/* release 1.80 additionnal entry points */
+/*--------------------------------------------------------------------*/
+short MidiRegisterDriver (TDriverInfos * infos, TDriverOperation *op)
+{
+	TMidiRegisterDriverArgs args;
+/*  args.infos = *infos;
+  	args.op.wakeup = 0;
+  	args.op.sleep = 0;
+  	args.op.slotInfo = 0;
+	CALL(kMidiRegisterDriver,&args);
+*/	return MIDIerrSpace;
+}
+
+/*--------------------------------------------------------------------*/
+void MidiUnregisterDriver (short refnum)
+{
+	CALL(kMidiUnregisterDriver,&refnum);
+}
+
+/*--------------------------------------------------------------------*/
+short MidiCountDrivers ()
+{
+	short count = 0;
+	CALL(kMidiCountDrivers,&count);
+	return count;
+}
+
+/*--------------------------------------------------------------------*/
+short MidiGetIndDriver (short index)
+{
+	TMidiGetIndDriverArgs args;
+ 	args.index = index;
+	CALL(kMidiGetIndDriver,&args);
+	return args.refnum;
+}
+
+/*--------------------------------------------------------------------*/
+Boolean MidiGetDriverInfos (short refnum, TDriverInfos * infos)
+{
+	TMidiGetDriverInfosArgs args;
+ 	args.refnum = refnum;
+	CALL(kMidiGetDriverInfos,&args);
+	if (infos) *infos = args.infos;
+ 	return args.result;
+}
+
+/*--------------------------------------------------------------------*/
+SlotRefNum MidiAddSlot  (short refnum)
+{
+	TMidiAddSlotArgs args;
+ 	args.refnum = refnum;
+	CALL(kMidiAddSlot,&args);
+	return args.slotRef;
+}
+
+/*--------------------------------------------------------------------*/
+SlotRefNum MidiGetIndSlot (short refnum, short index)
+{
+	TMidiGetIndSlotArgs args;
+	args.refnum = refnum;
+	args.index = index;
+	CALL(kMidiGetIndSlot,&args);
+	return args.slotRef;
+}
+
+/*--------------------------------------------------------------------*/
+void MidiRemoveSlot (SlotRefNum slot)
+{
+	CALL(kMidiRemoveSlot,&slot);
+}
+
+/*--------------------------------------------------------------------*/
+Boolean MidiGetSlotInfos (SlotRefNum slot, TSlotInfos * infos)
+{
+	TMidiGetSlotInfosArgs args;
+	args.slotRef = slot;
+	args.infos = *infos;
+	args.result = false;
+	CALL(kMidiGetSlotInfos,&args);
+	return args.result;
+}
+
+/*--------------------------------------------------------------------*/
+void MidiConnectSlot (short port, SlotRefNum slot, Boolean state)
+{
+	TMidiConnectSlotArgs args;
+	args.slotRef = slot;
+	args.port = port;
+	args.state = state;
+	CALL(kMidiConnectSlot,&args);
+}
+
+/*--------------------------------------------------------------------*/
+Boolean MidiIsSlotConnected	(short port, SlotRefNum slot)
+{
+	TMidiIsSlotConnectedArgs args;
+	args.slotRef = slot;
+	args.port = port;
+	args.result = false;
+	CALL(kMidiIsSlotConnected,&args);
+	return args.result;
+}
 
 /*--------------------------------------------------------------------*/
 static void panic ()
