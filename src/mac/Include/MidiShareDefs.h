@@ -340,16 +340,15 @@ enum{   MIDIOpenAppl=1,
 		char evType[32];					/* 256 bits */
 		char channel[2];					/*  16 bits	*/
 		char unused[2];						/*  16 bits */
-	} TFilter; 
-	
+	} TFilter; 	
 
-/*------------------------ MidiShare application name ------------------------*/
+/*------------------------------------ names ----------------------------------*/
+	#define DrvNameLen     64
+	#define MaxSlotNameLen 64
 
-	#define DrvNameLen 32
 	typedef unsigned char * MidiName;
 	typedef unsigned char	DriverName[DrvNameLen];
-	typedef DriverName SlotName;
-	
+	typedef unsigned char	SlotName[MaxSlotNameLen];
 
 /*----------------------- drivers and slots information -----------------------*/
 

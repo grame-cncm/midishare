@@ -104,7 +104,7 @@ void DriverWakeUp (TApplPtr appl)
 	if (Wakeup(appl)) {
 		WakeupPtr wakeup = Wakeup(appl);
 		long oldA5 = SetA5Register (GetContext(context));
-    	wakeup (appl->refNum);
+    	wakeup (pub(appl,refNum));
 		SetA5Register (oldA5);
 	}
 }
@@ -116,7 +116,7 @@ void DriverSleep (TApplPtr appl)
 	if (Sleep(appl)) {
 		SleepPtr sleep = Sleep(appl);
 		long oldA5 = SetA5Register (GetContext(context));
- 		sleep (appl->refNum);
+ 		sleep (pub(appl,refNum));
 		SetA5Register (oldA5);
 	}
 }
