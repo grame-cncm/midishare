@@ -31,11 +31,8 @@ MidiIsConnected : MidiIsConnected.c
 MidiGetTime: MidiGetTime.c
 	gcc MidiGetTime.c  -g -I$(INC) -o MidiGetTime -lMidiShare -lpthread
 
-install : $(ToolSet)
-	strip $(ToolSet)
-	mv $(ToolSet) $(InstallDir)
 
-public : $(ToolSet)
+install : $(ToolSet)
 	strip $(ToolSet)
 	cp $(ToolSet) $(PublicDir)
 	bzip2 -k -f man1/*.1
