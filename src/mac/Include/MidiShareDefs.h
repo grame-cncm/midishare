@@ -101,40 +101,40 @@
 #define typeSysEx		17 	/* System Exclusive (only data bytes)			*/
 #define typeStream		18 	/* arbitrary midi bytes (data and status codes)	*/
 		
-#define typePrivate		19	/*19..127 Private events for applications internal use*/
-#define typeProcess		128	/* used by MidiShare for MidiCall and MidiTask	*/
-#define typeDProcess	129	/* used by MidiShare for MidiDTask				*/
-#define typeQuarterFrame 130 /* Midi time code quarter frame				*/
+#define typePrivate		19		/*19..127 Private events for applications internal use*/
+#define typeProcess		128		/* used by MidiShare for MidiCall and MidiTask	*/
+#define typeDProcess	129		/* used by MidiShare for MidiDTask				*/
+#define typeQuarterFrame 130 	/* Midi time code quarter frame					*/
 
 #define typeCtrl14b		131	
 #define typeNonRegParam	132
 #define typeRegParam	133
 
-#define typeSeqNum		134		/* numŽro de sŽquence					*/
-#define typeTextual		135		/* ŽvŽnement texte						*/
-#define typeCopyright	136		/* message copyright					*/
-#define typeSeqName		137		/* nom de sŽquence ou de piste			*/
-#define typeInstrName	138		/* nom d'instrument						*/
-#define typeLyric		139		/* paroles dŽstinŽes ˆ etre chantŽes	*/
-#define typeMarker		140		/* marqueur								*/
-#define typeCuePoint	141		/* cue point							*/
-#define typeChanPrefix	142		/* Midi Channel Prefix					*/
-#define typeEndTrack	143		/* fin de piste							*/
-#define typeTempo		144		/* changement de tempo					*/
-#define typeSMPTEOffset	145		/* offset smpte							*/
+#define typeSeqNum		134		/* MidiFile sequence number				*/
+#define typeTextual		135		/* MidiFile text event					*/
+#define typeCopyright	136		/* MidiFile copyright message			*/
+#define typeSeqName		137		/* MidiFile sequence or track name		*/
+#define typeInstrName	138		/* MidiFile instrument name				*/
+#define typeLyric		139		/* MidiFile lyrics						*/
+#define typeMarker		140		/* MidiFile marker						*/
+#define typeCuePoint	141		/* MidiFile cue point					*/
+#define typeChanPrefix	142		/* MidiFile Midi Channel Prefix			*/
+#define typeEndTrack	143		/* MidiFile end of track				*/
+#define typeTempo		144		/* MidiFile tempo change				*/
+#define typeSMPTEOffset	145		/* MidiFile smpte offset				*/
 
-#define typeTimeSign	146		/* indication de mesure					*/
-#define typeKeySign		147		/* signature tonale						*/
-#define typeSpecific	148		/* mŽta evt spŽcifique ˆ un sŽquenceur	*/
-#define typePortPrefix  149   	/* Midi Port  Prefix       				*/
+#define typeTimeSign	146		/* MidiFile time signature				*/
+#define typeKeySign		147		/* MidiFile key signature				*/
+#define typeSpecific	148		/* MidiFile specific meta event			*/
+#define typePortPrefix  149   	/* MidiFile Midi Port Prefix			*/
 #define typeRcvAlarm    150   	/* RcvAlam         						*/
 #define typeApplAlarm   151   	/* ApplAlam        						*/
 
-#define typeReserved    152   /*152..254 reserved for future extensions */
+#define typeReserved    152     /*152..254 reserved for future extensions */
+#define typeLastReserved 254	/*152..254 reserved for future extensions */
 		
-#define typeDead		255	/* dead Task or DTask							*/
+#define typeDead		255		/* dead Task or DTask					  */
 		
-
 
 /******************************************************************************
 * 								 MIDI STATUS CODE								
@@ -182,10 +182,12 @@
 * List of the error codes returned by some MidiShare functions.																	
 *******************************************************************************/
 		
-#define MIDIerrSpace 	-1		/* plus de place dans la freeList */
-#define MIDIerrRefNum	-2		/* mauvais numero de reference */
-#define MIDIerrBadType	-3		/* mauvais type d'ŽvŽnement */
-#define MIDIerrIndex	-4		/* mauvais index d'acces ˆ un ŽvŽnement */
+#define MIDIerrSpace    -1   /* no space left in the freeList */
+#define MIDIerrRefNum   -2   /* bad reference number          */
+#define MIDIerrBadType  -3   /* bad event type                */
+#define MIDIerrIndex    -4   /* bad access index (events)     */
+#define MIDIerrEv       -5   /* event argument is nil         */
+#define MIDIerrUndef    -6   /* event argument is undef       */
 		
 
 /******************************************************************************
@@ -211,17 +213,17 @@ the context modification, the low 16-bits part describe the type of change as
 listed here.
 *******************************************************************************/
 		
-enum{	MIDIOpenAppl=1,
+enum{   MIDIOpenAppl=1,
 		MIDICloseAppl,
 		MIDIChgName,
 		MIDIChgConnect,
-		MIDIOpenModem,
-		MIDICloseModem,
-		MIDIOpenPrinter,
-		MIDIClosePrinter,
-		MIDISyncStart,
-		MIDISyncStop,
-		MIDIChangeSync,
+		MIDIOpenModem,		// now obsolete
+		MIDICloseModem,		// now obsolete
+		MIDIOpenPrinter,	// now obsolete
+		MIDIClosePrinter,	// now obsolete
+        MIDISyncStart,
+        MIDISyncStop,
+        MIDIChangeSync,
         MIDIOpenDriver,
         MIDICloseDriver,
         MIDIAddSlot,
@@ -234,11 +236,9 @@ enum{	MIDIOpenAppl=1,
 /******************************************************************************
 * 							    EVENTS STRUCTURES							
 *------------------------------------------------------------------------------
-* Tous les ŽvŽnements sont construits ˆ l'aide d'une ou plusieurs cellules de	
-* taille fixe (16 octets). La plupart nŽcessitent une seule cellule. D'autres	
-* comme les System Exclusive nŽcessitent plusieurs cellules cha”nŽes.			
+* All events are built using one or several fixed size cells (16 bytes)
+* Most events use  one cell. Some other like SysEx events use several linked cells.
 *******************************************************************************/
-
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
@@ -274,26 +274,26 @@ enum{	MIDIOpenAppl=1,
 		Byte port;							/* Midi port 						*/
 		Byte chan;							/* Midi channel					 	*/
 		union {								/* info depending of event type :	*/
-			struct {							/* for notes					*/
-				Byte pitch;							/* pitch  					*/
-				Byte vel;							/* velocity 				*/
-				unsigned short dur;					/* duration 				*/
+			struct {						/* for notes						*/
+				Byte pitch;					/* pitch  							*/
+				Byte vel;					/* velocity 						*/
+				unsigned short dur;			/* duration 						*/
 			} note;
 
 			struct {							/* for MidiFile time signature  */
-				Byte numerator;						/* numerator				*/
-				Byte denominator;					/* denominator as neg power	*/
-													/* of 2. (2= quarter note)	*/
-				Byte nClocks;						/* number of Midi clocks in */
-													/* a metronome click		*/
-				Byte n32nd;							/* number of 32nd notes in	*/
-													/* a Midi quarter note		*/
+				Byte numerator;					/* numerator				*/
+				Byte denominator;				/* denominator as neg power	*/
+												/* of 2. (2= quarter note)	*/
+				Byte nClocks;					/* number of Midi clocks in */
+												/* a metronome click		*/
+				Byte n32nd;						/* number of 32nd notes in	*/
+												/* a Midi quarter note		*/
 			} timeSign;
 
 			struct {							/* for MidiFile key signature	*/
-				char ton;							/* 0: key of C, 1: 1 sharp	*/
-													/* -1: 1 flat etc...		*/
-				Byte mode;							/* 0: major 1: minor		*/
+				char ton;						/* 0: key of C, 1: 1 sharp	*/
+												/* -1: 1 flat etc...		*/
+				Byte mode;						/* 0: major 1: minor		*/
 				Byte unused[2];
 			} keySign;
 
@@ -306,6 +306,10 @@ enum{	MIDIOpenAppl=1,
 				unsigned short number;
 				short unused;
 			} seqNum;
+			
+			short shortFields[2];				/* for 14-bits controlers		*/
+            long longField;
+
 			long tempo;							/* MidiFile tempo in			*/
 												/* microsec/Midi quarter note	*/
 			Byte data[4];						/* for other small events	 	*/
@@ -422,37 +426,37 @@ enum{	MIDIOpenAppl=1,
 * Somes macros to read and write event's fields					 
 *******************************************************************************/
 
-	#define Link(e) 	( (e)->link )
-	#define Date(e) 	( (e)->date )
-	#define EvType(e) 	( (e)->evType )
-	#define RefNum(e) 	( (e)->refNum )	
-	#define Port(e) 	( (e)->port )
-	#define Canal(e)	( (e)->chan )
-	#define Chan(e)		( (e)->chan )
-	#define Pitch(e) 	( (e)->info.note.pitch ) 
-	#define Vel(e) 		( (e)->info.note.vel ) 
-	#define Dur(e) 		( (e)->info.note.dur )
-	#define Data(e) 	( (e)->info.data )
-	#define LinkSE(e) 	( (e)->info.linkSE )
-	#define LinkST(e) 	( (e)->info.linkST )
+	#define Link(e)       ( (e)->link )
+    #define Date(e)       ( (e)->date )
+    #define EvType(e)     ( (e)->evType )
+    #define RefNum(e)     ( (e)->refNum )
+    #define Port(e)       ( (e)->port )
+    #define Canal(e)      ( (e)->chan )
+    #define Chan(e)       ( (e)->chan )
+    #define Pitch(e)      ( (e)->info.note.pitch )
+    #define Vel(e)        ( (e)->info.note.vel )
+    #define Dur(e)        ( (e)->info.note.dur )
+    #define Data(e)       ( (e)->info.data )
+    #define LinkSE(e)     ( (e)->info.linkSE )
+    #define LinkST(e)     ( (e)->info.linkST )
 
-	#define TSNum(e)	( (e)->info.timeSign.numerator )
-	#define TSDenom(e)	( (e)->info.timeSign.denominator )
-	#define TSClocks(e)	( (e)->info.timeSign.nClocks )
-	#define TS32nd(e)	( (e)->info.timeSign.n32nd )
+    #define TSNum(e)      ( (e)->info.timeSign.numerator )
+    #define TSDenom(e)    ( (e)->info.timeSign.denominator )
+    #define TSClocks(e)   ( (e)->info.timeSign.nClocks )
+    #define TS32nd(e)     ( (e)->info.timeSign.n32nd )
 
-	#define KSTon(e)	( (e)->info.keySign.ton )
-	#define KSMode(e)	( (e)->info.keySign.mode )
+    #define KSTon(e)      ( (e)->info.keySign.ton )
+    #define KSMode(e)     ( (e)->info.keySign.mode )
 
-	#define Tempo(e)	( (e)->info.tempo )
-	#define SeqNum(e)	( (e)->info.seqNum.number )
-	#define ChanPrefix(e) ((e)->info.data[0] )
-	#define PortPrefix(e) ((e)->info.data[0] )
+    #define Tempo(e)      ( (e)->info.tempo )
+    #define SeqNum(e)     ( (e)->info.seqNum.number )
+    #define ChanPrefix(e) ( (e)->info.data[0] )
+    #define PortPrefix(e) ( (e)->info.data[0] )
 
-	#define First(e)	( (e)->first )
-	#define Last(e)		( (e)->last )
-	#define FirstEv(e)	( (e)->first )
-	#define LastEv(e)	( (e)->last )
+    #define First(e)      ( (e)->first )
+    #define Last(e)       ( (e)->last )
+    #define FirstEv(e)    ( (e)->first )
+    #define LastEv(e)     ( (e)->last )
 
 
 #endif

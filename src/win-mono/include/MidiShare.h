@@ -49,65 +49,63 @@ typedef unsigned char Boolean;
  * of the desirable type and are accessible in an event evType field.
  *******************************************************************************/
 
-#define typeNote             0   /* note with pitch, velocity and duration        */
+#define typeNote		0 	/* note with pitch, velocity and duration		*/	
+		
+#define typeKeyOn		1 	/* Note On with pitch, velocity 				*/
+#define typeKeyOff		2 	/* Note Off with pitch, velocity 				*/
+#define typeKeyPress 	3 	/* Poly Key Pressure with pitch and pressure	*/
+#define typeCtrlChange	4 	/* Control Change with controller ID and value	*/
+#define typeProgChange	5 	/* Program Change with program ID number		*/
+#define typeChanPress	6 	/* Channel Pressure with pressure value			*/
+#define typePitchWheel	7 	/* Pitch Bend Change with LSB and MSB values	*/
+		
+#define typeSongPos		8 	/* Song Position Pointer with LSB and MSB values*/
+#define typeSongSel		9 	/* Song Select with song ID number				*/
+#define typeClock		10 	/* Timing Clock									*/
+#define typeStart		11 	/* Start										*/
+#define typeContinue	12 	/* Continue										*/
+#define typeStop		13	/* Stop											*/
+		
+#define typeTune		14 	/* Tune Request									*/
+#define typeActiveSens	15 	/* Active Sensing								*/
+#define typeReset		16	/* System Reset									*/
+	
+#define typeSysEx		17 	/* System Exclusive (only data bytes)			*/
+#define typeStream		18 	/* arbitrary midi bytes (data and status codes)	*/
+		
+#define typePrivate		19		/*19..127 Private events for applications internal use*/
+#define typeProcess		128		/* used by MidiShare for MidiCall and MidiTask	*/
+#define typeDProcess	129		/* used by MidiShare for MidiDTask				*/
+#define typeQuarterFrame 130 	/* Midi time code quarter frame					*/
 
-#define typeKeyOn            1   /* Note On with pitch, velocity                  */
-#define typeKeyOff           2   /* Note Off with pitch, velocity                 */
-#define typeKeyPress         3   /* Poly Key Pressure with pitch and pressure     */
-#define typeCtrlChange       4   /* Control Change with controller ID and value   */
-#define typeProgChange       5   /* Program Change with program ID number         */
-#define typeChanPress        6   /* Channel Pressure with pressure value          */
-#define typePitchWheel       7   /* Pitch Bend Change with LSB and MSB values     */
+#define typeCtrl14b		131	
+#define typeNonRegParam	132
+#define typeRegParam	133
 
-#define typeSongPos          8   /* Song Position Pointer with LSB and MSB values */
-#define typeSongSel          9   /* Song Select with song ID number               */
-#define typeClock           10   /* Timing Clock                                  */
-#define typeStart           11   /* Start                                         */
-#define typeContinue        12   /* Continue                                      */
-#define typeStop            13   /* Stop                                          */
+#define typeSeqNum		134		/* MidiFile sequence number				*/
+#define typeTextual		135		/* MidiFile text event					*/
+#define typeCopyright	136		/* MidiFile copyright message			*/
+#define typeSeqName		137		/* MidiFile sequence or track name		*/
+#define typeInstrName	138		/* MidiFile instrument name				*/
+#define typeLyric		139		/* MidiFile lyrics						*/
+#define typeMarker		140		/* MidiFile marker						*/
+#define typeCuePoint	141		/* MidiFile cue point					*/
+#define typeChanPrefix	142		/* MidiFile Midi Channel Prefix			*/
+#define typeEndTrack	143		/* MidiFile end of track				*/
+#define typeTempo		144		/* MidiFile tempo change				*/
+#define typeSMPTEOffset	145		/* MidiFile smpte offset				*/
 
-#define typeTune            14   /* Tune Request                                  */
-#define typeActiveSens      15   /* Active Sensing                                */
-#define typeReset           16   /* System Reset                                  */
+#define typeTimeSign	146		/* MidiFile time signature				*/
+#define typeKeySign		147		/* MidiFile key signature				*/
+#define typeSpecific	148		/* MidiFile specific meta event			*/
+#define typePortPrefix  149   	/* MidiFile Midi Port Prefix			*/
+#define typeRcvAlarm    150   	/* RcvAlam         						*/
+#define typeApplAlarm   151   	/* ApplAlam        						*/
 
-#define typeSysEx           17   /* System Exclusive (only data bytes)            */
-#define typeStream          18   /* arbitrary midi bytes (data and status codes)  */
-#define typePrivate         19   /* 19..127 Private events for applications internal use */
-
-#define typeProcess        128   /* used by MidiShare for MidiCall and MidiTask   */
-#define typeDProcess       129   /* used by MidiShare for MidiDTask               */
-#define typeQuarterFrame   130   /* Midi time code quarter frame                  */
-
-#define typeCtrl14b        131
-#define typeNonRegParam    132
-#define typeRegParam       133
-
-#define typeSeqNum         134   /* sequence number           */
-#define typeTextual        135   /* text event                */
-#define typeCopyright      136   /* message copyright message */
-#define typeSeqName        137   /* sequence or track name    */
-#define typeInstrName      138   /* instrument name           */
-#define typeLyric          139   /* lyrics                    */
-#define typeMarker         140   /* marker                    */
-#define typeCuePoint       141   /* cue point                 */
-#define typeChanPrefix     142   /* Midi Channel Prefix       */
-#define typeEndTrack       143   /* end of a track            */
-#define typeTempo          144   /* changement de tempo       */
-#define typeSMPTEOffset    145   /* smpte offset              */
-
-#define typeTimeSign       146   /* time signature                         */
-#define typeKeySign        147   /* signature tonale                       */
-#define typeSpecific       148   /* sequencer specific meta event          */
-#define typePortPrefix	   149	 /* MidiFile Midi Port Prefix			   */
-
-#define typeRcvAlarm    150  	/* RcvAlarm         						*/
-#define typeApplAlarm   151  	/* ApplAlarm       						*/
-
-#define typeReserved     152    /*152..254 reserved for future extensions */
+#define typeReserved    152     /*152..254 reserved for future extensions */
 #define typeLastReserved 254	/*152..254 reserved for future extensions */
-
-#define typeDead         255   	/* dead Task or DTask                     */
-
+		
+#define typeDead		255		/* dead Task or DTask					  */
 
 
 /******************************************************************************
@@ -188,7 +186,6 @@ listed here.
 *******************************************************************************/
 
 enum{   MIDIOpenAppl=1,
-
 		MIDICloseAppl,
 		MIDIChgName,
 		MIDIChgConnect,
@@ -208,7 +205,10 @@ enum{   MIDIOpenAppl=1,
 };
 
 /******************************************************************************
-*                                 DATA TYPES
+* 							    EVENTS STRUCTURES							
+*------------------------------------------------------------------------------
+* All events are built using one or several fixed size cells (16 bytes)
+* Most events use  one cell. Some other like SysEx events use several linked cells.
 *******************************************************************************/
 
 /*------------------------ System Exclusive extension cell ----------------------*/
@@ -270,7 +270,7 @@ enum{   MIDIOpenAppl=1,
 
             } keySign;
             
-	    struct {            /* for paramchg & 14-bits ctrl  */
+	    struct {           		/* for paramchg & 14-bits ctrl  */
             	short num;      /* param or ctrl num            */
             	short val;      /* 14-bits value                */
             } param;
@@ -318,42 +318,44 @@ enum{   MIDIOpenAppl=1,
 
 
 /*------------------------------------ names ----------------------------------*/
-#define DrvNameLen 32
-typedef char FAR * MidiName;
-typedef char	   DriverName[DrvNameLen];
-typedef DriverName SlotName;
+
+	#define DrvNameLen 32
+	typedef char FAR * MidiName;
+	typedef char	   DriverName[DrvNameLen];
+	typedef DriverName SlotName;
+
 
 /*----------------------- drivers and slots information -----------------------*/
 
-typedef struct {
-	short	drvRef;
-	short 	slotRef;
-} SlotRefNum;
-#define Slot(ref)  ((ref).slotRef)
+	typedef struct {
+		short	drvRef;
+		short 	slotRef;
+	} SlotRefNum;
+	#define Slot(ref)  ((ref).slotRef)
 
-typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
+	typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 
-typedef struct TSlotInfos {
-	SlotName 		name;
-	SlotDirection 	direction;
-	char 			cnx[32];	// bit field : 256 ports connection state
-	long			reserved[2];
-} TSlotInfos;
+	typedef struct TSlotInfos {
+		SlotName 		name;
+		SlotDirection 	direction;
+		char 			cnx[32];	// bit field : 256 ports connection state
+		long			reserved[2];
+	} TSlotInfos;
 
-typedef void (MSALARMAPI * WakeupPtr) 	(short refnum);
-typedef void (MSALARMAPI * SleepPtr) 	(short refnum);
-typedef struct TDriverOperation {
-	WakeupPtr   wakeup;
-	SleepPtr    sleep;
-	long		reserved[3];
-} TDriverOperation;
+	typedef void (MSALARMAPI * WakeupPtr) 	(short refnum);
+	typedef void (MSALARMAPI * SleepPtr) 	(short refnum);
+	typedef struct TDriverOperation {
+		WakeupPtr   wakeup;
+		SleepPtr    sleep;
+		long		reserved[3];
+	} TDriverOperation;
 
-typedef struct TDriverInfos {
-	DriverName  name;
-	short 		version;
-	short 		slots;			// slots count - ignored at register time
-	long		reserved[2];
-} TDriverInfos;
+	typedef struct TDriverInfos {
+		DriverName  name;
+		short 		version;
+		short 		slots;			// slots count - ignored at register time
+		long		reserved[2];
+	} TDriverInfos;
 
 
 
@@ -428,7 +430,6 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
     #define SeqNum(e)     ( (e)->info.seqNum.number )
     #define ChanPrefix(e) ( (e)->info.data[0] )
     #define PortPrefix(e) ( (e)->info.data[0] )
-
 
     #define First(e)      ( (e)->first )
     #define Last(e)       ( (e)->last )
