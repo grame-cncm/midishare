@@ -333,3 +333,39 @@ MSFunctionType(void) MFlushDTasks(short refNum, TMSGlobalPtr g) {
 MSFunctionType(void) MExec1DTask(short refNum, TMSGlobalPtr g) {
   MSExec1DTask (refNum, Clients(g));
 } 
+
+
+/*---------------------------------- Filters --------------------------------*/
+
+MSFunctionType(MidiFilterPtr) MNewFilter  (TMSGlobalPtr g) {
+	return MSNewFilter ();
+}
+
+MSFunctionType(void) MFreeFilter (MidiFilterPtr f, TMSGlobalPtr g) {
+	MSFreeFilter (f);
+}
+
+MSFunctionType(void) MAcceptPort(MidiFilterPtr f, short port, Boolean state, TMSGlobalPtr g) {
+	MSAcceptPort (f, port, state);
+}
+
+MSFunctionType(void) MAcceptChan(MidiFilterPtr f, short chan, Boolean state, TMSGlobalPtr g) {
+	MSAcceptChan (f, chan, state);
+}
+
+MSFunctionType(void) MAcceptType(MidiFilterPtr f, short type, Boolean state, TMSGlobalPtr g) {
+	MSAcceptType (f, type, state);
+}
+
+MSFunctionType(Boolean) MIsAcceptedPort(MidiFilterPtr f, short port, TMSGlobalPtr g) {
+	return MSIsAcceptedPort (f, port);
+}
+
+MSFunctionType(Boolean) MIsAcceptedChan(MidiFilterPtr f, short chan, TMSGlobalPtr g) {
+	return MSIsAcceptedChan (f, chan);
+}
+
+MSFunctionType(Boolean) MIsAcceptedType(MidiFilterPtr f, short type, TMSGlobalPtr g) {
+	return MSIsAcceptedType (f, type);
+}
+

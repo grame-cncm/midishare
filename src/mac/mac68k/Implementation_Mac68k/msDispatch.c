@@ -26,6 +26,7 @@
 #include "msDispatch.h"
 #include "msAppFun.h"
 #include "msDrvFun.h"
+#include "msFilter.h"
 #include "msInit.h"
 #include "msMail.h"
 #include "msSmpte.h"
@@ -138,6 +139,17 @@ static asm void MSFunctionsTbl() {
 		jmp MIsSlotConnected
 		jmp MSetSlotName		// 0x4F
 		jmp MAddSlot			// 0x50
+
+		// filter functions
+		jmp MNewFilter			// 0x51
+		jmp MFreeFilter
+		jmp MAcceptPort
+		jmp MAcceptChan
+		jmp MAcceptType			// 0x55
+		jmp MIsAcceptedPort
+		jmp MIsAcceptedChan
+		jmp MIsAcceptedType
+		
 }
 
 static pascal void doNothing (TMSGlobalPtr unused1) {}
