@@ -8,7 +8,7 @@
 #include "portaudio.h"
 
 #define SAMPLE_RATE 44100
-#define AUDIO_MS_INT (SAMPLE_RATE/1000)
+#define AUDIO_MS_INT (SAMPLE_RATE/100)
 
 #define AUDIO_DEVICE "Built-in audio controller"
 
@@ -58,8 +58,7 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
   	if( err != paNoError ) goto error_recovery;
 
   	// Load audio sizr from the .ini file
-  	gAudioSize = GetAudioBufFSize(g->clock.timeRes);
-  	
+  	gAudioSize = GetAudioBufFSize(g->clock.timeRes) * 10;
 	if (strlen (dev)) {
 		// Look for the internal built-in sound device
 		maxdev = Pa_CountDevices();
@@ -82,7 +81,7 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
 				paFloat32,     
 				NULL,
 				SAMPLE_RATE,
-				gAudioSize,     /* frames per buffer */
+				gAudioSize/10,     /* frames per buffer */
 				0,              /* number of buffers, if zero then use default minimum */
 				paClipOff,      /* we won't output out of range samples so don't bother clipping them */
 				AudioClockHandler,
