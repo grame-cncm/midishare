@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W2 /GX /O2 /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /c
+# ADD CPP /nologo /MD /W2 /GX /O2 /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /c
 # ADD BASE RSC /l 0x40c /d "NDEBUG"
 # ADD RSC /l 0x40c /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W2 /Gm /GX /ZI /Od /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
 # ADD RSC /l 0x40c /d "_DEBUG"
 BSC32=bscmake.exe
@@ -80,6 +80,54 @@ LIB32=link.exe -lib
 
 # Name "msNetLib - Win32 Release"
 # Name "msNetLib - Win32 Debug"
+# Begin Group "sockets"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\sockets\TInetAddress.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sockets\TNetInfos.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sockets\TTCPSocket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sockets\TUDPSocket.cpp
+# End Source File
+# End Group
+# Begin Group "TCP"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\..\lib\Network\Tcp\TMidiClient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\lib\Network\Tcp\TMidiServer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\lib\Network\Tcp\TWANControler.cpp
+# End Source File
+# End Group
+# Begin Group "state"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\..\lib\Network\state\ApplState.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\lib\Network\state\SlotState.cpp
+# End Source File
+# End Group
 # Begin Group "Midi"
 
 # PROP Default_Filter ""
@@ -116,57 +164,13 @@ SOURCE=..\..\..\..\lib\Network\Midi\TMidiSlot.cpp
 SOURCE=..\..\..\..\lib\Network\Midi\UDPStreamToEvent.c
 # End Source File
 # End Group
-# Begin Group "state"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\..\lib\Network\state\ApplState.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\lib\Network\state\SlotState.cpp
-# End Source File
-# End Group
-# Begin Group "TCP"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\..\lib\Network\Tcp\TMidiClient.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\lib\Network\Tcp\TMidiServer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\lib\Network\Tcp\TWANControler.cpp
-# End Source File
-# End Group
-# Begin Group "sockets"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\sockets\TInetAddress.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\sockets\TNetInfos.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\sockets\TTCPSocket.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\sockets\TUDPSocket.cpp
-# End Source File
-# End Group
 # Begin Source File
 
 SOURCE=..\..\..\..\lib\Network\FTMA.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\Handle.c
 # End Source File
 # Begin Source File
 
