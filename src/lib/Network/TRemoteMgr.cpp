@@ -156,7 +156,12 @@ void TRemoteList::Remove (IPNum id)
 		r = Find(id, &prev);
 		if (!r) break;
 		adr = prev ? &prev->next : (RemotePtr *)&fRemote.top;
+#ifndef __MacOSX__
 	} while (!CAS ((void **)adr, r, r->next));
+#else
+		*adr = r->next;
+	} while (false);
+#endif
 	if (r) {
 		Delete (r);
 	}
