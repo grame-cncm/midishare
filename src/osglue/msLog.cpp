@@ -22,9 +22,14 @@
  */
 
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "msLog.h"
 #include "TLog.h"
+
+#ifdef WIN32
+#define vsnprintf _vsnprintf
+#endif
 
 TLog gLog;
 

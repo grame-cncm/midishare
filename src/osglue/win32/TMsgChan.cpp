@@ -32,7 +32,6 @@ typedef struct {
 
 //_____________________________________________________________________
 TMsgChan::TMsgChan ()
-	: fHandle (log)
 {
 	fInfos = 0;
 }

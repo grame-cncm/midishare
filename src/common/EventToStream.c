@@ -133,7 +133,7 @@ Boolean	msStreamContEvent (Ev2StreamPtr f)
 	if (!e) return true;
 	else if (cont) {
 		msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
-		h->cont  = c;
+		h->cont  = (unsigned short)c;
 		return cont (f, e);
 	}
 	else return msStreamPutEvent (f, e);

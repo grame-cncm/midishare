@@ -26,11 +26,7 @@
 
 #include <Windows.h>
 #include "TShMem.h"
-	
-typedef struct{
-	UINT	type;
-	WPARAM	id;
-} ContactMsg, * ContactMsgPtr;
+#include "../msCommChans.h"
 	
 //___________________________________________________________________
 // MidiShare oriented implementation of message based communication.

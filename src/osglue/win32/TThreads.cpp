@@ -44,8 +44,7 @@ int	TThreads::MapPriority (int priority)
 	static BOOL classSet = FALSE;
 	switch (priority) {
 		case ClientHighPriority:
-            .grame.fr
-			return THREAD_PRIORITY_HIGHEST;
+ 			return THREAD_PRIORITY_HIGHEST;
 		case ClientRTPriority:
 			return THREAD_PRIORITY_TIME_CRITICAL;
 		case ServerHighPriority:
@@ -80,9 +79,9 @@ int	TThreads::Create (ThreadProcPtr proc, void * arg, int priority)
 	fThread = CreateThread(NULL, 0, proc, arg, 0, &id);
 	if (fThread) {
 		SetPriority (priority);
-		return TRUE;
+		return ThreadNoErr;
 	}
-	return FALSE;
+	return CreateFailed;
 }
 
 //_____________________________________________________________________

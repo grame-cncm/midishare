@@ -44,10 +44,12 @@ void TMutex::Init ()
 }
 
 //_____________________________________________________________________
-void TMutex::Destroy ()
+int TMutex::Destroy ()
 {
-	if (fMutex) CloseHandle(fMutex);
+	int ret = FALSE;
+	if (fMutex) ret = CloseHandle(fMutex);
 	fMutex = 0;
+	return ret;
 }
 
 //_____________________________________________________________________

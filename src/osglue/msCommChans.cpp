@@ -80,7 +80,7 @@ long MPWrite (MeetingPointChan mp, MPMsgPtr msg)
 {
     MPChan * lmp = (MPChan *)mp;
 #ifdef WIN32
-    return lmp->Write (msg->msg, msg->addr);
+    return lmp->Write (&msg->msg, msg->addr);
 #else
     return lmp->Write (msg->addr, &msg->msg, sizeof(msg->msg));
 #endif
@@ -90,7 +90,7 @@ long MPRead (MeetingPointChan mp, MPMsgPtr msg)
 {
     MPChan * lmp = (MPChan *)mp;
 #ifdef WIN32
-    return lmp->Read (msg->msg,&msg->addr);
+    return lmp->Read (&msg->msg,&msg->addr);
 #else
     return lmp->Read (&msg->msg, sizeof(msg->msg), msg->addr);
 #endif

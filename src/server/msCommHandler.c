@@ -32,12 +32,7 @@
 #include "msServerInit.h"
 #include "msSharedMem.h"
 #include "msThreads.h"
-
-#ifdef WIN32
-#define windecl	__cdecl
-#else
-#define windecl
-#endif
+#include "osglue.h"
 
 #define kCommBuffSize	2048
 #define kParseBuffSize	2048
@@ -239,7 +234,7 @@ static void CloseOneClientChannel (PipesListPtr pl)
 }
 
 /*____________________________________________________________________________*/
-void windecl CloseAllClientChannels (void)
+cdeclAPI(void) CloseAllClientChannels ()
 {
     PipesListPtr pl = gPList;
     while (pl) {

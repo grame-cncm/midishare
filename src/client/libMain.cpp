@@ -25,59 +25,46 @@
 #include "msKernel.h"
 #include "msEvents.h"
 
-
 #define kDefaultCLientSpace	60000
 #define kMidiShareLibVersion	004
-
-extern TMSGlobalPtr gMem;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-short MidiGetLibVersion () ;
-
-/* main entry point : called at library load time */
-void MSInitialize(void);
+	extern TMSGlobalPtr gMem;
+	short MidiGetLibVersion () ;
 
 #ifdef __cplusplus
 }
 #endif
 
-//#pragma CALL_ON_MODULE_BIND MSInitialize 
 
 #ifdef WIN32
 void main () {}
-//_________________________________________________________
-BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
-{
-	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
-			MSInitialize ();
-			break;
-		case DLL_PROCESS_DETACH:
-			break;
-	 }
-    return TRUE;
-}
-#else
-class MSInit {
-	public:
-				 MSInit() { MSInitialize(); }
-		virtual ~MSInit() { CloseMemory(Memory(gMem)); }
-};
-
-MSInit gMSInit;
-
 #endif
 
+class LibMain {
+	public:
+				 LibMain();
+		virtual ~LibMain();
+};
+
+LibMain gMSInit;
+
 /*____________________________________________________________________________*/
-void MSInitialize() {
+LibMain::LibMain ()
+{
     InitEvents ();
     InitMemory (Memory(gMem), kDefaultCLientSpace);
     OpenMemory (Memory(gMem));
     gMem->pub = 0;		/* shared memory not yet mapped */
     gMem->context = 0;	/* no contextual information available */
+}
+
+LibMain::~LibMain ()
+{
+	CloseMemory(Memory(gMem));
 }
 
 /*____________________________________________________________________________*/

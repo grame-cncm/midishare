@@ -41,20 +41,24 @@ typedef unsigned char uchar;
 #	define MSFunctionType(type)   type
 #endif
 
+#if defined(macintosh)
+#	include <mactypes.h> 
+#else
+# ifndef __cplusplus
+	enum { false = 0, true };
+# endif
+#endif
+
 #if defined(__MacOSX__)
 	typedef unsigned char Boolean;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
-# ifndef __cplusplus
-	enum { false, true };
-# endif
 
 #elif defined(WIN32)
 #	include <windows.h>
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
-	enum { false = 0, true };
 
 #elif defined(linux)
 #	include <linux/types.h>
@@ -62,13 +66,8 @@ typedef unsigned char uchar;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
-# ifndef __cplusplus
-	enum { false = 0, true };
-# endif
-#elif defined(macintosh)
-#	include <mactypes.h> 
 
-#else
+#elif !defined(macintosh)
 #	error "msTypes.h : target os undefined"
 #endif
 

@@ -108,50 +108,21 @@ SOURCE=..\..\osglue\win32\TShMem.cpp
 SOURCE=..\..\osglue\win32\TThreads.cpp
 # End Source File
 # End Group
-# Begin Group "glue"
-
-# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\osglue\glue\TClientInit.cpp
-
-!IF  "$(CFG)" == "OSGlueLib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "OSGlueLib - Win32 Debug"
-
-!ENDIF 
-
+SOURCE=..\..\osglue\msCommChans.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\osglue\glue\TInitComGlue.cpp
-
-!IF  "$(CFG)" == "OSGlueLib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "OSGlueLib - Win32 Debug"
-
-!ENDIF 
-
+SOURCE=..\..\osglue\msLog.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\osglue\glue\TServerInit.cpp
-
-!IF  "$(CFG)" == "OSGlueLib - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "OSGlueLib - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# End Group
-# Begin Source File
-
-SOURCE=..\..\osglue\msCommInit.cpp
+SOURCE=..\..\osglue\msSharedMem.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\osglue\msServerInit.cpp
+SOURCE=..\..\osglue\msThreads.cpp
 # End Source File
 # End Target
 # End Project

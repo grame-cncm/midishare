@@ -188,10 +188,6 @@ SOURCE=..\msKernelPrefs.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\msKernelPrefs.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\msMain.c
 # End Source File
 # Begin Source File
@@ -200,11 +196,11 @@ SOURCE=..\msMem.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\osglue\msSharedMem.cpp
+SOURCE=..\msServerInit.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\osglue\msThreads.cpp
+SOURCE=..\profport.c
 # End Source File
 # Begin Source File
 

@@ -230,7 +230,7 @@ static int VarLenParseMth (msStreamBufferPtr f, MidiEvPtr e)
 {
 	if (StreamCountAvail(f) >= sizeof(long)) {
 		long * ptr = (long *)f->loc;
-		f->varLen = *ptr++;
+		f->varLen = (unsigned short)*ptr++;
 		StreamAdjust(f, ptr, sizeof(long));
 		return VarLenContMth (f, e);
 	}

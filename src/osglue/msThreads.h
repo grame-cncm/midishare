@@ -24,8 +24,8 @@
 #ifndef __msThreads__
 #define __msThreads__
 
-
 #ifdef WIN32
+#include <windows.h>
 	typedef LPTHREAD_START_ROUTINE ThreadProcPtr;
 #	define ThreadProc(proc, arg)	DWORD WINAPI proc(LPVOID arg)
 #else

@@ -26,7 +26,8 @@
 
 #include "TLog.h"
 
-#define kMaxTimeString	30
+#define kMaxTimeString	50
+#define vsnprintf _vsnprintf
 
 //__________________________________________________________________________
 TLog::TLog (const char * logpath)
@@ -62,37 +63,49 @@ void TLog::Close ()
 }
 
 //__________________________________________________________________________
-void TLog::Write (const char *msg)
+void TLog::Write (const char *msg, ...)
 {
+	char buff[512];
+
+    va_list args;
+    va_start(args, msg);
+	vsnprintf (buff, 512, msg, args);
+    va_end(args);
 	if (fLogFile != INVALID_HANDLE_VALUE) {
-		char buff[kMaxTimeString], *cr = "\n";
+		char date[kMaxTimeString], *cr = "\n";
 		DWORD written;
 
-		DateString (buff, kMaxTimeString);
+		DateString (date, kMaxTimeString);
 		SetFilePointer(fLogFile, 0, 0, FILE_END);
+		WriteFile (fLogFile, date, strlen(buff), &written, NULL);
 		WriteFile (fLogFile, buff, strlen(buff), &written, NULL);
-		WriteFile (fLogFile, msg, strlen(msg), &written, NULL);
 		WriteFile (fLogFile, cr, strlen(cr), &written, NULL);
 	}
-	else fprintf (stderr, "%s\n", msg);
+	else fprintf (stderr, "%s\n", buff);
 }
 
 //__________________________________________________________________________
-void TLog::WriteErr (const char *msg)
+void TLog::WriteErr (const char *msg, ...)
 {
 	char * errstring = ErrorString();
+	char buff[512];
+
+    va_list args;
+    va_start(args, msg);
+	vsnprintf (buff, 512, msg, args);
+    va_end(args);
 	if (fLogFile != INVALID_HANDLE_VALUE) {
-		char buff[kMaxTimeString], *cr = "\n";
+		char date[kMaxTimeString], *cr = "\n";
 		DWORD written;
 
-		DateString (buff, kMaxTimeString);
+		DateString (date, kMaxTimeString);
 		SetFilePointer(fLogFile, 0, 0, FILE_END);
+		WriteFile (fLogFile, date, strlen(buff), &written, NULL);
 		WriteFile (fLogFile, buff, strlen(buff), &written, NULL);
-		WriteFile (fLogFile, msg, strlen(msg), &written, NULL);
 		WriteFile (fLogFile, errstring, strlen(errstring), &written, NULL);
 		WriteFile (fLogFile, cr, strlen(cr), &written, NULL);
 	}
-	else fprintf (stderr, "%s %s\n", msg, errstring);
+	else fprintf (stderr, "%s: %s\n", buff, errstring);
 	LocalFree (errstring);
 }
 

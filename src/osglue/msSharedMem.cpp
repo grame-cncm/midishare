@@ -25,6 +25,7 @@
 #include "TShMem.h"
 
 #ifdef WIN32
+#include <stdio.h>
 typedef struct ShMemInfo {
     TShMem * memh;
     char	id[keyMaxSize];
@@ -60,7 +61,7 @@ static ShMemID CreateShmID (ShMemID baseid, int index)
 {
 #ifdef WIN32
     static char	id[keyMaxSize];
-    wsnprintf (id, "%s%d", baseid, index, keyMaxSize);
+    _snprintf (id, keyMaxSize, "%s%d", baseid, index);
     return id;
 #else
     return baseid + index;
