@@ -24,6 +24,8 @@
 #include "msMidiInOut.h"
 #include "msMidiError.h"
 
+static int min(a,b) {return (a<b)?a:b;}
+
 extern short gRefNum;
 static void MyCompletionProc( MIDISysexSendRequest *request );
 
@@ -109,7 +111,7 @@ static void MyCompletionProc( MIDISysexSendRequest *request )
     
     if (slot->remaining == 0){
         slot->sending = FALSE;
-        
+        /*
         while ((ev = (MidiEvPtr)fifoget(&slot->pending))) {
         	// If typeSysEx or typeStream : send one, pending events will be sent by the CompletionProc
             if ((EvType(ev) == typeSysEx) || (EvType(ev) == typeStream)) {
@@ -120,6 +122,7 @@ static void MyCompletionProc( MIDISysexSendRequest *request )
 	        	MS2MM(slot,ev);
 	        }
         }
+        */
          
     } else {
         SendSysExAux(slot);
@@ -132,7 +135,8 @@ MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e)
 	if ((EvType(e) >= typeClock) && (EvType(e) <= typeReset)){
 		return SendSmallEv(slot,e);
 	}else if (slot->sending) {
-		fifoput(&slot->pending,(cell*)e);
+		//fifoput(&slot->pending,(cell*)e);
+		MidiFreeEv(e);
 		return 0;
 	}else  if ((EvType(e) == typeSysEx) || (EvType(e) == typeStream)) {
 		return SendSysEx(slot,e);

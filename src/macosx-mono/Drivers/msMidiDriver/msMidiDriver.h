@@ -22,7 +22,7 @@
 
 #ifndef __msMidiDriver__
 #define __msMidiDriver__
-#include "lffifo.h"
+//#include "lffifo.h"
 #include <CoreMIDI/MIDIServices.h>
 
 #include "MidiShare.h" 
@@ -62,7 +62,7 @@ struct slot {
 	unsigned char data[MAX_SYSEX_BYTES];  	// For sysEx sending
 	int	  remaining;			  			// Bytes remaining to send
 	Boolean	 sending;			  			// SysEx sending state
-	fifo	 pending;						// Pending events to be sent
+	//fifo	 pending;						// Pending events to be sent
 	
 };
 
@@ -79,6 +79,6 @@ void AddSlots (short refnum);
 void RemoveSlots (short refnum);
 void OpenSlot (SlotPtr slot, Boolean inputSlot);
 
-inline int min(a,b) {return (a<b)?a:b;}
+
 
 #endif
