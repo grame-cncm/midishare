@@ -9,6 +9,7 @@ C = Clients
 K = Kernel
 M = Memory
 S = Sorter
+D = Drivers
 
 SRC = $(C)/ms[^M]*.c $(K)/*.c $(M)/ms[^S]*.c $(S)/*.c
 
@@ -16,7 +17,7 @@ OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
       $(C)/msFilter.o $(C)/msTasks.o $(C)/msXmtRcv.o \
       $(K)/msHandler.o $(K)/msInit.o $(K)/msSmpte.o $(K)/msTime.o \
       $(M)/msEvents.o $(M)/msFields.o $(M)/msMem.o $(M)/msMemory.o \
-      $(S)/msSorter.o
+      $(S)/msSorter.o \
       $(D)/msFrcv.o  $(D)/msFxmt.o
 
 $(TARGET) : $(OBJ)
