@@ -27,10 +27,10 @@
  * v120 [Jan 1,00]     JJC bug correction in write_SeqNum and MidiFileCloseTrack functions
  * v121 [Dec 4,00]     SL remove the obsolete __MWERKS__ tag
  * v122 [Apr 23,01]    SL add PortPrefix management : works with version 185 or later
+ * v123 [Jun 01,01]    SL remove fgetpos and fsetpos use for easier cross platform code management
 
  */
-
-
+ 
 #include "Midifile.h"
 
 #ifdef __Macintosh__
@@ -44,12 +44,11 @@
         #include <String.h>
 #endif
 
-
 /*--------------------------------------------------------------------------*/
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	122				/* source code version 			*/
+#define SRC_VERSION	123				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -802,9 +801,8 @@ Boolean MFAPI MidiFileNewTrack( MIDIFilePtr fd)
 	if( fseek( fd->fd, 0, SEEK_END)) 		/* locate to the end of the file	*/
 		return false;
 	if( !Create_trkHeader( fd->fd, 0))	  	/* write the track header 	*/
-		return false;
-	if( fgetpos(fd->fd,&fd->trkHeadOffset))	/* get the track location 	*/
-		return false;
+		return false;	
+	fd->trkHeadOffset = ftell(fd->fd);		/* get the track location 	*/
 	fd->curDate= 0;							/* current date = 0			*/
 	fd->opened= true;						/* track marked opened		*/
 	return true;
@@ -836,7 +834,7 @@ Boolean MFAPI MidiFileOpenTrack( MIDIFilePtr fd)
 /*--------------------------------------------------------------------------*/
 Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 {
-	fpos_t offset1, offset2;				/* beg and end track offsets */
+	long offset1, offset2;					/* beg and end track offsets */
 	long trkLen;							/* track length				 */
 	short ntrks;							/* tracks count				 */
 	Boolean ret=true;
@@ -849,13 +847,12 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 		{
 			offset1= fd->trkHeadOffset;
 			ret= FlushKeyOff( fd);				/* write the remaining keyOff	*/
-			if( fgetpos( fd->fd, &offset2))	 	/* get the end track location 	*/
-				return false;
+			offset2 = ftell(fd->fd);			/* get the end track location 	*/
 
 			trkLen= LongVal((long)(offset2- offset1));	/* get the track length			*/
 			offset1-= offset_trkLen;
 
-			if( fsetpos( fd->fd, &offset1))	 	/* to track length position 	*/
+			if( fseek( fd->fd, offset1, SEEK_SET))		/* to track length position 	*/
 				return false;
 												/* update the track length 		*/
 			if( fwrite( &trkLen, sizeof( trkLen), 1, fd->fd)!= 1)
