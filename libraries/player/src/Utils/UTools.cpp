@@ -6,6 +6,10 @@
 // Grame : Computer Music Research Laboratory
 // Web : http://www.grame.fr/Research
 // E-mail : MidiShare@rd.grame.fr
+//
+// modifications history:
+//   [11-12-99] SL - Linux adaptation
+//
 // ===========================================================================
 
 
@@ -42,6 +46,12 @@ void UTools::MidiPrintText ( char * s)
 void UTools::MidiPrintText ( char  * s)
 #endif
 
+
+#ifdef __Linux__
+void UTools::MidiPrintText ( char  * s)
+#endif
+
+
 {
 	MidiEvPtr e;
 	ULONG c = 0;
@@ -55,6 +65,11 @@ void UTools::MidiPrintText ( char  * s)
 		#endif
 		
 	#endif
+	
+	#ifdef __Linux__
+		if (e = MidiNewEv(typeText)){
+	#endif
+	
 
 	#ifdef __MSWindows__
 		if (e = MidiNewEv(typeTextual)){
