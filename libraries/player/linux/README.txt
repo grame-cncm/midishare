@@ -17,7 +17,7 @@ Installation guide
 
 The Player source package contains:
 
-- ../src : the source code for all platforms.
+- src : the source code for all platforms.
 - linux  : linux specific files
 
 
