@@ -156,6 +156,17 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
 
 #ifdef __Macintosh__
 # ifdef __POWERPC__
+static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+{
+	if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		return true;
+	}
+	return false;
+//	return CompareAndSwap (taskPtr, content, 0);
+}
+
 # else
 
 static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr content)

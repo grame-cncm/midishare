@@ -38,7 +38,11 @@
 
 #ifdef __Macintosh__
 # include <MacTypes.h>
+# ifdef __POWERPC__
+# define MSFunctionType(type)   type
+# else 
 # define MSFunctionType(type)   pascal type
+# endif
 
 typedef unsigned long ulong;
 

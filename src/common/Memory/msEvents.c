@@ -109,9 +109,8 @@ static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
 /* data storage */
 
-#ifdef __Macintosh__
-# ifdef __POWERPC__
-# else
+#if defined(__Macintosh__) && !defined(__POWERPC__)
+
 static asm void NewEvMeth()       { ds.l 256 }
 static asm void CopyEvMeth()      { ds.l 256 }
 static asm void FreeEvMeth()      { ds.l 256 }
@@ -139,8 +138,6 @@ static asm void smpteShft() {
 
 #define smpteMaskTbl	  (const unsigned long *)smpteMask
 #define smpteShftTbl      (const char *)smpteShft
-
-# endif
 
 #else
 
