@@ -28,6 +28,8 @@
 
 #include "msDefs.h"
 
+enum { kUserMode, kKernelMode };
+
 #define kMidiShareMajor 151
 
 /* functions index for ioctl */
@@ -247,7 +249,6 @@ typedef struct SMidiOpenArgs
   
   /* input args */
   MidiName name;
-
 } TMidiOpenArgs;
 
 
@@ -264,7 +265,7 @@ typedef struct SMidiCloseArgs
 
 typedef struct SMidiGetNameArgs 
 {
-  /* inpout args */
+  /* input args */
   int refnum;
   
   /* res */
@@ -274,7 +275,6 @@ typedef struct SMidiGetNameArgs
 } TMidiGetNameArgs;
 
 typedef TMidiOpenArgs TMidiSetNameArgs;
-
 
 typedef struct SMidiGetInfoArgs 
 {
