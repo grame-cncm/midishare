@@ -25,7 +25,7 @@
 // Version Number 
 //-----------------------
 
-#define kVersion 204
+#define kVersion 205
 
 //-----------------------
 // MidiShare memory limit
@@ -37,10 +37,10 @@
 // Errors messages
 //-----------------------
 
-#define kNoErr 			-1		// No error			            		
-#define	kErrAppl		-2		// Unable to open MidiShare application	
-#define kErrEvent  		-3		// No more MidiShare Memory 			
-#define	kErrMemory		-4		// No more System Memory 			        
+#define kNoErr 		-1		// No error			            		
+#define	kErrAppl	-2		// Unable to open MidiShare application	
+#define kErrEvent  	-3		// No more MidiShare Memory 			
+#define	kErrMemory	-4		// No more System Memory 			        
 #define kErrSequencer	-5		// Sequencer error			            
 
 
