@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [13-09-99] DF - inlining fifoinit in fifoclear
 
 */
 
@@ -113,7 +116,9 @@ static inline cell* fifoclear (fifo * ff)
 	cell* v;
 	INT_OFF();
 	v = ff->head;
-	fifoinit (ff);
+	ff->head = 0;		
+	ff->count = 0;
+	ff->tail = (cell*)&ff->head;
 	INT_ON();
 	return v;
 }
