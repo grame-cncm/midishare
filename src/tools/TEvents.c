@@ -132,7 +132,7 @@ char *typeListe[] =
 /*136 */	"Copyright",	"SeqName",		"InstrName",	"Lyric",
 /*140 */	"Marker",		"CuePoint",		"ChanPrefix",	"EndTrack",
 /*144 */	"Tempo",		"SMPTEOffset",	"TimeSign",		"KeySign",
-/*148 */	"Specific",		"Reserved"
+/*148 */	"Specific",		"PortPrefix",	"RcvAlarm", 	"ApplAlarm", "Reserved"		
 };
 
 
@@ -182,8 +182,8 @@ GetEvFuncPtr GetEvTable[] = {
 /*130 */		GetEvents, 	GetEvents, 	GetEvents, 	GetEvents, 	GetNoExt,
 /*135 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt,
 /*140 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt,
-/*145 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	0,
-/*150 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+/*145 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt,
+/*150 */		GetNoExt,	GetNoExt,	0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*170 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*190 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*210 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
@@ -797,9 +797,24 @@ void MidiFile()
 	print("\nMidiFile events :\n");	
 	if( MidiGetVersion() < 160)
 		print("not implemented !\n");	
+	/*												typeSeqNum until typePortPrefix */
+	else for( i= typeSeqNum; i<=typePortPrefix; i++)
+	{
+		if( TestEvent( i, true)) ok;
+		else print("\n");
+	}
+}
 
-	/*												typeSeqNum until typeSpecific */
-	else for( i= typeSeqNum; i<=typeSpecific; i++)
+/*______________________________________________________________________________*/
+void Internals()
+{
+	short i;
+	
+	print("\nInternal events :\n");	
+	if( MidiGetVersion() < 160)
+		print("not implemented !\n");	
+	/*												typePortPrefix+1 until typeReserved */
+	else for( i= typePortPrefix+1; i<typeReserved; i++)
 	{
 		if( TestEvent( i, true)) ok;
 		else print("\n");
@@ -863,6 +878,7 @@ main( int argc, char *argv[])
 			Process(); flush;
 			QFToMidiFile(); flush;
 			MidiFile(); flush;
+			Internals(); flush;
 			Reserved(); flush;
 			Close ();
 		}
