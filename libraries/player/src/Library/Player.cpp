@@ -50,7 +50,7 @@ void  EXPORT PausePlayer (short refnum);
 
 void  EXPORT SetRecordModePlayer (short refnum, short state);
 void  EXPORT RecordPlayer (short refnum, short tracknum);
-void  EXPORT SetRecordFilterPlayer(short refnum, FilterPtr filter);
+void  EXPORT SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 
 // Position management
 
@@ -191,7 +191,7 @@ void  EXPORT RecordPlayer (short refnum, short tracknum)
 
 /*--------------------------------------------------------------------------*/
 
-void  EXPORT SetRecordFilterPlayer (short refnum, FilterPtr filter)
+void  EXPORT SetRecordFilterPlayer (short refnum, MidiFilterPtr filter)
 {
 	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
 	if (player) player->SetRecordFilter(filter);

@@ -34,9 +34,9 @@ class TEventRecorder :public TEventDispatcher {
 
 	private:
 		
-		short 		fRecordtrack;	// Track in record mode
-		short 		fRecordmode;	// Record mode
-		FilterPtr 	fRecFilter;     // Record filter
+		short 			fRecordtrack;	// Track in record mode
+		short 			fRecordmode;	// Record mode
+		MidiFilterPtr 	fRecFilter;     // Record filter
 		
 		TScoreIteratorPtr	 		fIterator;
 		TPlayerScorePtr			 	fScore;
@@ -60,8 +60,8 @@ class TEventRecorder :public TEventDispatcher {
 		short GetRecordMode (){return fRecordmode;}
 		void SetRecordTrack (short tracknum);
 		short GetRecordTrack () {return fRecordtrack;}
-		void SetRecordFilter (FilterPtr filter);
-		FilterPtr GetRecordFilter (){return fRecFilter;}
+		void SetRecordFilter (MidiFilterPtr filter);
+		MidiFilterPtr GetRecordFilter (){return fRecFilter;}
 		
 		void ReceiveEvents (MidiEvPtr e);	
 	

@@ -113,7 +113,7 @@ class TPlayer :public  TMidiAppl{
 		 // Record management
 		 void SetRecordMode (short state);
 		 void Record (short tracknum);
-		 void SetRecordFilter(FilterPtr filter);
+		 void SetRecordFilter(MidiFilterPtr filter);
 
 		 // Step playing 
 		 void ForwardStep(short flag);
