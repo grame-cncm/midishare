@@ -28,6 +28,7 @@
 
 //_________________________________________________________
 unsigned long LoadSpace ();
+unsigned long LoadBufferSize();
 unsigned short CountDrivers();
 Boolean GetDriver(short index, char *dst, short bufsize);
 

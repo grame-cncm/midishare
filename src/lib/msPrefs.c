@@ -28,32 +28,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-char * MidiShareDirectory = "MidiShare";
+#define MidiShareDirectory  "MidiShare"
 
-static char * profileName 		= "midishare.ini";
-static char * memorySectionName = "Events memory";
-static char * driverSectionName = "Drivers";
-static char * audioSectionName  = "Audio";
-static char * bufferSize  		= "size";
-static char * memDefault  		= "default";
-static char * active  			= "active";
-static char * disable  			= "disable";
+#define profileName "midishare.ini"
+#define memorySectionName "Events memory"
+#define driverSectionName "Drivers"
+#define audioSectionName  "Audio"
+#define bufferSize  "size"
+#define memDefault  "default"
+#define active  	"active"
+#define disable  	"disable"
 
 
 #define kDefaultSpace	40000
 #define kDefaultSize	64
 
+#define DriverMaxEntry	512
+
 //________________________________________________________________________
 static char * GetProfileFullName ()
 {
 	static char  buff [1024];
-	int res;
 	const char* home = getenv("HOME");
 	if (home) {
 		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, profileName);
 		return buff;
 	}
-	res = system("mkdir");
 	return profileName;
 }
 
@@ -84,7 +84,7 @@ static char * NextDriver (char *ptr, Boolean first)
 	return 0;
 }
 
-#define DriverMaxEntry	512
+
 //________________________________________________________________________
 unsigned short CountDrivers()
 {
