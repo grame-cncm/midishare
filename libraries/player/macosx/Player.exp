@@ -1,51 +1,49 @@
-Version
+_Version
 
-OpenPlayer 
-ClosePlayer 
+_OpenPlayer 
+_ClosePlayer 
 
-StartPlayer 
-ContPlayer 
-StopPlayer
-PausePlayer
+_StartPlayer 
+_ContPlayer 
+_StopPlayer
+_PausePlayer
 
-SetRecordModePlayer 
-RecordPlayer 
-SetRecordFilterPlayer
+_SetRecordModePlayer 
+_RecordPlayer 
+_SetRecordFilterPlayer
 
-SetPosBBUPlayer 
-SetPosMsPlayer 
+_SetPosBBUPlayer 
+_SetPosMsPlayer 
 
-SetLoopPlayer
-SetLoopStartBBUPlayer 
-SetLoopEndBBUPlayer 
-SetLoopStartMsPlayer
-SetLoopEndMsPlayer 
+_SetLoopPlayer
+_SetLoopStartBBUPlayer 
+_SetLoopEndBBUPlayer 
+_SetLoopStartMsPlayer
+_SetLoopEndMsPlayer 
 
-SetSynchroInPlayer 
-SetSynchroOutPlayer 
-SetSMPTEOffsetPlayer 
-SetTempoPlayer
+_SetSynchroInPlayer 
+_SetSynchroOutPlayer 
+_SetSMPTEOffsetPlayer 
+_SetTempoPlayer
 
-GetStatePlayer 
-GetEndScorePlayer
+_GetStatePlayer 
+_GetEndScorePlayer
 
-ForwardStepPlayer 
-BackwardStepPlayer 
+_ForwardStepPlayer 
+_BackwardStepPlayer 
 
-GetAllTrackPlayer 
-GetTrackPlayer
+_GetAllTrackPlayer 
+_GetTrackPlayer
 
-SetTrackPlayer 
-SetAllTrackPlayer 
+_SetTrackPlayer 
+_SetAllTrackPlayer 
 
-SetParamPlayer 
-GetParamPlayer
+_SetParamPlayer 
+_GetParamPlayer
 
-InsertAllTrackPlayer
-InsertTrackPlayer
+_InsertAllTrackPlayer
+_InsertTrackPlayer
 
-ApplyAllTrackPlayer
-ApplyTrackPlayer
 
-MidiFileLoad
-MidiFileSave
+_MidiFileLoad
+_MidiFileSave
