@@ -12,16 +12,16 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-/*------------------------------------------------------------------*/
-/*  Player: a library to develop  multi-tracks synchronisable
-/*			MidiShare sequencers
-/*
-/*  version 1.00
-/*  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions
-/*  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, 
-/*						    new SetTempoPlayer function
-/*
-/*------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+  Player: a library to develop  multi-tracks synchronisable
+			MidiShare sequencers
+
+  version 1.00
+  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions
+  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, 
+						    new SetTempoPlayer function
+
+  ------------------------------------------------------------------*/
 
 #ifdef __Macintosh__
 	#if GENERATINGCFM
