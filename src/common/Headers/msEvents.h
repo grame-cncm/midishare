@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - using lifo for memory management
 
 */
 
@@ -24,20 +27,22 @@
 #define __msEvents__
 
 #include "msDefs.h"
-#include "msMemory.h"
+#include "lflifo.h"
+#include "msTypes.h"
+
+#define MSNewCell(fl)		(MidiEvPtr)lfpop(fl)
+#define MSFreeCell(e, fl)	lfpush (fl, (cell*)(e))
 
 /* MidiShare functions interface */
-MSFunctionType(MidiEvPtr)  MSNewCell     (MSMemoryPtr g);
-MSFunctionType(void)       MSFreeCell    (MidiEvPtr e, MSMemoryPtr g);
-MSFunctionType(MidiEvPtr)  MSNewEv       (short typeNum, MSMemoryPtr g);
-MSFunctionType(void)       MSFreeEv      (MidiEvPtr e, MSMemoryPtr g);
-MSFunctionType(MidiEvPtr)  MSCopyEv      (MidiEvPtr e, MSMemoryPtr g);
-MSFunctionType(void)       MSSetField    (MidiEvPtr e, unsigned long f, long v, MSMemoryPtr g);
-MSFunctionType(long)       MSGetField    (MidiEvPtr e, long f, MSMemoryPtr g);
-MSFunctionType(long)       MSCountFields (MidiEvPtr e, MSMemoryPtr g);
-MSFunctionType(long)       MSAddField    (MidiEvPtr e, long v, MSMemoryPtr g);
+MSFunctionType(MidiEvPtr)  MSNewEv       (short typeNum, lifo* freelist);
+MSFunctionType(void)       MSFreeEv      (MidiEvPtr e, lifo* freelist);
+MSFunctionType(MidiEvPtr)  MSCopyEv      (MidiEvPtr e, lifo* freelist);
+MSFunctionType(void)       MSSetField    (MidiEvPtr e, unsigned long f, long v);
+MSFunctionType(long)       MSGetField    (MidiEvPtr e, long f);
+MSFunctionType(long)       MSCountFields (MidiEvPtr e);
+MSFunctionType(void)       MSAddField    (MidiEvPtr e, long v, lifo* freelist);
 
-/* private events management functions */
-void InitEvents( MSMemoryPtr g);
+/* initialization function */
+void InitEvents ();
 
 #endif
