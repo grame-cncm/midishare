@@ -35,29 +35,6 @@ static int gRun = 1;
 //___________________________________________________________________
 // global initialization
 //___________________________________________________________________
-static int siglist [] = {
-	SIGABRT,
-	SIGFPE,
-	SIGILL,
-	SIGINT,
-	SIGSEGV,
-	SIGTERM,
-#ifndef WIN32
-	SIGHUP,
-	SIGQUIT,
-	SIGBUS,
-#endif
-	0
-};
-
-static cdeclAPI(void) sigActions (int sig)
-{
-	LogWrite ("signal %d received", sig);
-	LogWrite ("server exit...");
-	msServerClose ();
-	exit (1);
-}
-
 static cdeclAPI(void) msExit ()
 {
 	msServerContextPtr c = ServerContext;
@@ -70,19 +47,13 @@ static cdeclAPI(void) msExit ()
 	c->sharedmem = 0;
 }
 
-void InitSignal ()
+void CleanState ()
 {
-#ifndef WIN32
-	int * sigs = siglist;
-
-	while (*sigs) {
-		struct sigaction sa;
-		sa.sa_handler = sigActions;
-		sigemptyset (&sa.sa_mask);
-		sa.sa_flags = 0; 			//SA_RESETHAND;
-		sigaction (*sigs++, &sa, 0);
-	}
-#endif
+	void *ptr;
+	SharedMemHandler shm = msSharedMemOpen  (kShMemId, &ptr);
+	if (shm) msSharedMemForceDelete (shm);
+	DeleteMeetingPoint ();
+	CleanCommunicationChannels ();
 }
 
 void * InitShMem (int shmemSize)
