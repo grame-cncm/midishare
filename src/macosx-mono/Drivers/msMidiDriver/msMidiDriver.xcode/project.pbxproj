@@ -186,7 +186,7 @@
 			explicitFileType = "compiled.mach-o.dylib";
 			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
-			path = msMidiDriver.1.0.5.so;
+			path = msMidiDriver.1.0.6.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -211,7 +211,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.5.so;
+				PRODUCT_NAME = msMidiDriver.1.0.6.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
