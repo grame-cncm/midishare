@@ -138,9 +138,10 @@ char *typeListe[] =
 /*136 */	"Copyright",	"SeqName",		"InstrName",	"Lyric",
 /*140 */	"Marker",		"CuePoint",		"ChanPrefix",	"EndTrack",
 /*144 */	"Tempo",		"SMPTEOffset",	"TimeSign",		"KeySign",
-/*148 */	"Specific",		"PortPrefix",	"RcvAlarm", 	"ApplAlarm", "Reserved"		
+/*148 */	"Specific",		"PortPrefix",	"RcvAlarm", 	"ApplAlarm", 
+/*152 */    "MidiOpen",		"MidiOpenRes", 	"MidiClose", 	"MidiConnect",
+/*156*/		"MidiSetName", 	"MidiSetInfo", 	"MidiSetFilter", "Reserved"		
 };
-
 
 
 /* ============================= functions declarations ========================*/
@@ -820,11 +821,35 @@ void Internals()
 	if( MidiGetVersion() < 160)
 		print("not implemented !\n");	
 	/*												typePortPrefix+1 until typeReserved */
-	else for( i= typePortPrefix+1; i<typeReserved; i++)
+	else for( i= typePortPrefix+1; i<=typeApplAlarm; i++)
 	{
 		if( TestEvent( i, true)) ok;
 		else print("\n");
 	}
+}
+
+/*______________________________________________________________________________*/
+void Fonctions()
+{
+	int i; long n1, n2;
+	
+	print("\nMidiShare Functions events :\n");
+	n1 = MidiFreeSpace();
+	if( MidiGetVersion() < 193)
+		print("not implemented !\n");	
+	else for( i= typeMidiOpen; i<typeReserved; i++)
+	{
+		MidiEvPtr e;
+		print("    type %s : ", typeListe[i]); flush;
+		if( e= MidiNewEv(i)){
+			ok;
+			MidiFreeEv(e);
+		}
+		else print("warning: allocation failed\n");
+	}
+	n2 = MidiFreeSpace();
+	if (n1 != n2)
+		print("warning: MidiFreeSpace is %ld instead %ld\n", n2, n1);
 }
 
 /*______________________________________________________________________________*/
@@ -885,6 +910,7 @@ main( int argc, char *argv[])
 			QFToMidiFile(); flush;
 			MidiFile(); flush;
 			Internals(); flush;
+			Fonctions(); flush;
 			Reserved(); flush;
 			Close ();
 		}
