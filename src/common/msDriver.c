@@ -39,7 +39,7 @@
 #define FreeSlotInfo(info)	DisposeMemory(info)
 
 #define CheckDriversCount(g)        (nbDrivers(g) < MaxDrivers - 1)
-#define CheckDriverRefNum( g, r)    (CheckRefNum(g, r) && (g->appls[r]->folder==kDriverFolder))
+#define CheckDriverRefNum( g, r)    (CheckRefNum(g, r) && (folder(g->appls[r])==kDriverFolder))
 #define CheckSlotRef(drv, ref)		((ref>=0) && (ref<MaxSlots) && drv->map[ref])
 
 /*===========================================================================
@@ -133,7 +133,7 @@ MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 		do { 
 			ref--;
 			appl = g->appls[ref];
-			if (appl && (appl->folder == kDriverFolder)) index--;
+			if (appl && (folder(appl) == kDriverFolder)) index--;
 		} while (index && ref);
 		return ref;
 	}
@@ -322,7 +322,7 @@ void OpenDrivers (TMSGlobalPtr g)
 	int ref, n = MSCountDrivers (clients) - 1;
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
-		if (appl && (appl->folder == kDriverFolder)) {
+		if (appl && (folder(appl) == kDriverFolder)) {
 			DriverWakeUp(appl);
 			n--;
 		}
@@ -336,7 +336,7 @@ void CloseDrivers (TMSGlobalPtr g)
 	int ref, n = MSCountDrivers (clients) - 1;
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
-		if (appl && (appl->folder == kDriverFolder)) {
+		if (appl && (folder(appl) == kDriverFolder)) {
 			DriverSleep (appl);
 //			appl->srcList = appl->dstList = 0;
 			n--;

@@ -31,10 +31,11 @@
 #include "msConnx.h"
 #include "msDriver.h"
 #include "msDrvFun.h"
-#include "msExtern.h"
 #include "msInit.h"
 #include "msMem.h"
 #include "msXmtRcv.h"
+
+#include "msExtern.h"
 
 #ifdef PascalNames
 # define kMidiShareName 	"\pMidiShare"
@@ -42,7 +43,7 @@
 # define kMidiShareName 	"MidiShare"
 #endif
 
-#define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (g->appls[ref]->folder==kClientFolder))
+#define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (folder(g->appls[ref])==kClientFolder))
 
 /*===========================================================================
   Internal functions prototypes
@@ -132,7 +133,7 @@ MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
 		do { 
 			ref++;
 			appl = g->appls[ref];
-			if (appl && (appl->folder != kDriverFolder)) index--;
+			if (appl && (folder(appl) != kDriverFolder)) index--;
 		} while (index);
 		return ref;
 	}
@@ -249,7 +250,7 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short folder)
 {
 	/* set first kernel private information */
-	appl->folder = (uchar)folder;
+	folder(appl) = (uchar)folder;
 	appl->rcvFlag = (uchar)kNoRcvFlag;
 	fifoinit (&appl->rcv);
 	fifoinit (&appl->dTasks);

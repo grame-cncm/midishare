@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -24,18 +24,6 @@
 */
 
 #include "msTime.h"
-
-/*===========================================================================
-  Internal functions implementation
-  =========================================================================== */
-static void InitHorloge( TMSGlobalPtr g)
-{
-	THorlogePtr h = &g->clock;
-    CurrTime(g) = 0;
-    h->reenterCount = -1;
-    h->offset = 0;
-    h->adjustCount = kClockAdjustCount;
-}
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -64,6 +52,18 @@ MSFunctionType(long) MSSmpte2Time (SmpteLocPtr loc, TMSGlobalPtr g)
 	return 0;
 }
 
+#ifdef MSKernel
+/*===========================================================================
+  Internal functions implementation
+  =========================================================================== */
+static void InitHorloge( TMSGlobalPtr g)
+{
+	THorlogePtr h = &g->clock;
+    CurrTime(g) = 0;
+    h->reenterCount = -1;
+    h->offset = 0;
+    h->adjustCount = kClockAdjustCount;
+}
 
 /*===========================================================================
   External initialization functions
@@ -78,3 +78,4 @@ void OpenTime( TMSGlobalPtr g)
 	InitHorloge( g);
 	SorterInit( Sorter(g), 10);
 }
+#endif

@@ -38,43 +38,12 @@
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
-typedef struct TMSGlobal FAR *  TMSGlobalPtr;
-typedef struct THorloge  FAR *  THorlogePtr;
-typedef FarPtr(void)			THost;   /* reserved for platform dependant
-                                            storage */
-
-/*------------------------------------------------------------------------*/
-/* realtime clock */
-typedef struct {
-	long	sec;
-	long	usec;
-} TimeInfo, *TimeInfoPtr;
-
-typedef struct THorloge{          /* time management (no public section) */
-	 long           reenterCount; /* count of clockHandler reenters       */
-	 TimeInfo		rtOffset;     /* offset to real time clock            */
-	 long			adjustCount;  /* clocks adjustment count              */
-	 long			offset;       /* current real-time clock offset       */
-} THorloge;
-
-/*___________________________________*/
 typedef struct TMSGlobalPublic {
 	unsigned long  	time;         /* the current 32 bits (milliseconds) date  */
 	short 			version;      /* the current kernel version               */
 	unsigned long  	size;         /* the current public segment size          */
 	TClientsPublic 	clients;      /* clients applications information         */
 } TMSGlobalPublic;
-
-/*___________________________________*/
-typedef struct TMSGlobal {
-	TMSGlobalPublic * pub;
-	THorloge      clock;         /* time management (no public section) */
-	TMSMemory     memory;        /* kernel memory management            */
-	TClients      clients;       /* clients applications management     */
-	TSorter       sorter;        /* sorter specific storage             */
-	fifo          toSched;       /* events to be scheduled              */
-	THost         local;         /* for implementation specific purpose */
-} TMSGlobal;
 
 /*--------------------------------------------------------------------------*/
 /* public fields access macros                                              */
@@ -83,23 +52,57 @@ typedef struct TMSGlobal {
 #define Version(g)          pub(g, version)
 #define Size(g)             pub(g, size)
 
+#ifndef MSKernel
+	typedef struct TMSGlobalPublic FAR *  TMSGlobalPtr;
+#else
+
+	typedef struct TMSGlobal FAR *  TMSGlobalPtr;
+	typedef struct THorloge  FAR *  THorlogePtr;
+	typedef FarPtr(void)			THost;   /* reserved for platform dependant
+	                                            storage */
+
+/*------------------------------------------------------------------------*/
+/* realtime clock */
+	typedef struct {
+		long	sec;
+		long	usec;
+	} TimeInfo, *TimeInfoPtr;
+
+	typedef struct THorloge{          /* time management (no public section) */
+		 long           reenterCount; /* count of clockHandler reenters       */
+		 TimeInfo		rtOffset;     /* offset to real time clock            */
+		 long			adjustCount;  /* clocks adjustment count              */
+		 long			offset;       /* current real-time clock offset       */
+	} THorloge;
+
+	typedef struct TMSGlobal {
+		TMSGlobalPublic * pub;
+		THorloge      clock;         /* time management (no public section) */
+		TMSMemory     memory;        /* kernel memory management            */
+		TClients      clients;       /* clients applications management     */
+		TSorter       sorter;        /* sorter specific storage             */
+		fifo          toSched;       /* events to be scheduled              */
+		THost         local;         /* for implementation specific purpose */
+	} TMSGlobal;
+
 /*--------------------------------------------------------------------------*/
 /* fields access macros                                                     */
 /*--------------------------------------------------------------------------*/
-#define SorterList(g)       (&g->toSched)
-#define Sorter(g)           (&g->sorter)
-#define Clients(g)       	(&g->clients)
-#define Memory(g)           (&g->memory)
-#define TimeOffset(g)       (g->clock.rtOffset)
-#define Appls(g)       		(g->clients.appls)
-#define ActiveAppl(g)       (g->clients.activesAppls)
-#define NextActiveAppl(g)   (g->clients.nextActiveAppl)
+#	define SorterList(g)       (&g->toSched)
+#	define Sorter(g)           (&g->sorter)
+#	define Clients(g)       	(&g->clients)
+#	define Memory(g)           (&g->memory)
+#	define TimeOffset(g)       (g->clock.rtOffset)
+#	define Appls(g)       		(g->clients.appls)
+#	define ActiveAppl(g)       (g->clients.activesAppls)
+#	define NextActiveAppl(g)   (g->clients.nextActiveAppl)
 
-#define kClockAdjustCount	1000
+#	define kClockAdjustCount	1000
 
 /*--------------------------------------------------------------------------*/
 /* function declaration                                                     */
 /*--------------------------------------------------------------------------*/
-void ClockHandler (TMSGlobalPtr g);
+	void ClockHandler (TMSGlobalPtr g);
+#endif
 
 #endif

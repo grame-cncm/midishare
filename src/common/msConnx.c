@@ -29,6 +29,21 @@
 #include "msConnx.h"
 #include "msDefs.h"
 
+/*===========================================================================
+  MidiShare external functions implementation
+=========================================================================== */
+MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
+{
+	if( CheckRefNum(g,src) && CheckRefNum(g,dest) ) {
+		TApplPtr appl = &pub(g, appls[src]);
+		TConnectionsPtr srcCnx = &pub(appl, cnx);		
+		return IsAcceptedBit(srcCnx->dst, dest);
+	}
+	return false;
+}
+
+#ifdef MSKernel
+
 #define byteNum(ref)   (ref/(MaxAppls/8))
 
 /*===========================================================================
@@ -39,7 +54,7 @@ static void SetConnection   (TApplPtr appSrc, TApplPtr appDest, TClientsPtr g);
 
 
 /*===========================================================================
-  MidiShare external functions implementation
+  MidiShare kernel functions implementation
 =========================================================================== */
 MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TClientsPtr g)
 {
@@ -48,20 +63,11 @@ MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TClientsPt
 	if (CheckRefNum(g,src) && CheckRefNum(g,dest)) {
 		appSrc  = g->appls[src]; 
 		appDest = g->appls[dest];
-		if (appSrc->folder == appDest->folder) {
+		if (folder(appSrc) == folder(appDest)) {
 			if( state) SetConnection (appSrc, appDest, g);
 			else ClearConnection (appSrc, appDest, g);
 		}
 	}
-}
-
-MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
-{
-	if( CheckRefNum(g,src) && CheckRefNum(g,dest) ) {
-		TConnectionsPtr srcCnx = &pub(g->appls[src], cnx);		
-		return IsAcceptedBit(srcCnx->dst, dest);
-	}
-	return false;
 }
 
 /*__________________________________________________________________________*/
@@ -109,3 +115,4 @@ static void ClearConnection (TApplPtr appSrc, TApplPtr appDst, TClientsPtr g)
 		CallAlarm (srcRef, MIDIChgConnect, g);
 	}
 }
+#endif

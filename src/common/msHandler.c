@@ -81,7 +81,7 @@ static inline void RawAccept( TMSGlobalPtr g, TApplPtr appl, fifo * q, MidiEvPtr
 
 static void Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	switch (appl->folder) {
+	switch (folder(appl)) {
 		case kClientFolder:
 			/* 
 			   event is sent to MidiShare application. It goes through the 

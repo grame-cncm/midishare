@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -44,7 +44,7 @@ enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
 typedef short 	MutexResCode;
 typedef long 	MutexRef;
 
-#ifdef __Windows__
+#ifdef WIN32
 MutexResCode msOpenMutex  (MutexRef ref);
 MutexResCode msCloseMutex (MutexRef ref);
 #else

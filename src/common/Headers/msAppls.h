@@ -55,8 +55,6 @@
 
 typedef FarPtr(void)				TApplContextPtr;
 
-typedef struct FarPtr(TAppl) 		TApplPtr;
-typedef struct FarPtr(TClients) 	TClientsPtr;
 typedef struct FarPtr(TConnections) TConnectionsPtr;
 
 #ifdef PascalNames
@@ -66,17 +64,17 @@ typedef char MSName[MaxApplNameLen];
 #endif
 
 /*------------------------------------------------------------------------*/
-/* inter-applications connections representation                          */
+/* MidiShare public application data structures                           */
+
 typedef struct TConnections {
     char        dst[MaxAppls/8];    /* destination application */
 } TConnections;
 
-/*------------------------------------------------------------------------*/
-/* MidiShare public and private application data structures               */
 enum { kClientFolder = 0, kDriverFolder = 255 };
 
 typedef struct TApplPublic{
     MSName          name;        /* the application name         */
+    uchar           folder;      /* application folder           */
     FarPtr(void)    info;        /* user field                   */
     short           refNum;      /* reference number             */
     short           drvidx;      /* driver specific info index   */
@@ -84,9 +82,32 @@ typedef struct TApplPublic{
     MidiFilterPtr   filter;      /* client mapping of the filter */
 } TApplPublic;
 
+typedef struct TClientsPublic {
+	short         nbAppls;                /* current running clients count    */
+	short         nbDrivers;              /* current registered drivers count */
+	TApplPublic   appls[MaxAppls];        /* client applications list         */
+	TDriverPublic drivers[MaxDrivers];    /* drivers specific information     */
+	SlotInfosPublic slots[MaxSlots];      /* drivers slots management         */
+} TClientsPublic;
+
+/*--------------------------------------------------------------------------*/
+/* public fields access macros                                              */
+/*--------------------------------------------------------------------------*/
+#define nbAppls(c)      pub(c, nbAppls)
+#define nbDrivers(c)    pub(c, nbDrivers)
+#define nbSlots(c)      pub(c, nbSlots)
+#define appname(c, r)   pub(c->appls[r], name)
+#define appinfo(c, r)   pub(c->appls[r], info)
+#define folder(c)       pub(c, folder)
+
+#ifdef MSKernel
+typedef struct FarPtr(TAppl) 		TApplPtr;
+typedef struct FarPtr(TClients) 	TClientsPtr;
+
+/*------------------------------------------------------------------------*/
+/* MidiShare private application data structures                          */
 typedef struct TAppl{
 	TApplPublic *   pub;
-    uchar           folder;      /* application folder           */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
     fifo            rcv;         /* received events fifo         */
     fifo            dTasks;      /* defered tasks fifo           */
@@ -99,13 +120,6 @@ typedef struct TAppl{
 
 /*------------------------------------------------------------------------*/
 /* MidiShare public and private clients management structures             */
-typedef struct TClientsPublic {
-	short         nbAppls;                /* current running clients count    */
-	short         nbDrivers;              /* current registered drivers count */
-	TApplPublic   appls[MaxAppls];        /* client applications list         */
-	TDriverPublic drivers[MaxDrivers];    /* drivers specific information     */
-	SlotInfosPublic slots[MaxSlots];      /* drivers slots management         */
-} TClientsPublic;
 
 typedef struct TClients {
 	TClientsPublic * pub;
@@ -119,15 +133,6 @@ typedef struct TClients {
 	MSMemoryPtr   memory;                 /* ptr to the kernel memory         */
 } TClients;
 
-/*--------------------------------------------------------------------------*/
-/* macros                                                                   */
-/*--------------------------------------------------------------------------*/
-#define nbAppls(c)      pub(c, nbAppls)
-#define nbDrivers(c)    pub(c, nbDrivers)
-#define nbSlots(c)      pub(c, nbSlots)
-#define appname(c, r)   pub(c->appls[r], name)
-#define appinfo(c, r)   pub(c->appls[r], info)
-
 #define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r])
 #define CheckClientsCount(g)	((nbAppls(g) + nbDrivers(g)) < MaxAppls - 2)
 
@@ -138,5 +143,12 @@ typedef struct TClients {
 /*--------------------------------------------------------------------------*/
 short GetIndClient (short index, short folderRef, TClientsPtr g);
 
+#else
+typedef struct FarPtr(TApplPublic) 		TApplPtr;
+typedef struct FarPtr(TClientsPublic) 	TClientsPtr;
+
+#define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
+
+#endif
 
 #endif

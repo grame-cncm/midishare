@@ -28,8 +28,20 @@
 #include "msInit.h"
 #include "msDrvFun.h"
 #include "msEvents.h"
-#include "msExtern.h"
 #include "msTime.h"
+
+
+/*===========================================================================
+  External MidiShare functions implementation
+  =========================================================================== */		
+
+MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
+{
+	return Version(g);
+}
+
+#ifdef MSKernel
+#include "msExtern.h"
 
 #define kMidiShareVersion  192    /* the current MidiShare version number */
 
@@ -37,9 +49,6 @@ static TMSGlobalPublic gPub = { 0 };
 static void InitPublicSection (TMSGlobalPtr g);
 static void InitClientPublicSection (TClientsPublic * clients);
 
-/*===========================================================================
-  External MidiShare functions implementation
-  =========================================================================== */		
 
 MSFunctionType(void) MSSpecialInit( unsigned long defaultSpace, TMSGlobalPtr g)
 {
@@ -48,11 +57,6 @@ MSFunctionType(void) MSSpecialInit( unsigned long defaultSpace, TMSGlobalPtr g)
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
-}
-
-MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
-{
-	return Version(g);
 }
 
 /*===========================================================================
@@ -109,3 +113,4 @@ static void InitPublicSection (TMSGlobalPtr g)
 	pub(g, size)    = sizeof(TMSGlobalPublic);
 	InitClientPublicSection (&gPub.clients);
 }
+#endif
