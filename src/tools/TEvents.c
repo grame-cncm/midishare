@@ -99,6 +99,10 @@ MidiName ApplName = "Sender";
 MidiName OtherName = "Receiver";
 #endif
 
+#ifndef TestServer
+#define MidiFlushEvs(r)
+#endif
+
 /* ========================= variables globales de l'application ==================*/
 short r1= 0, r2= 0, version= 0;
 long SizeMaxSysEx= 10000;				/* taille du plus grand sysex		*/
@@ -203,13 +207,16 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void wait( int d)
 {
+#ifdef TestServer
 	unsigned long time = MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
+#endif
 }
 
 /*______________________________________________________________________________*/
 static void wait2( int d)
 {
+#ifdef TestServer
 	long time, i, t;
 	
 	time= (i= t= MidiGetTime())+ d;
@@ -219,11 +226,13 @@ static void wait2( int d)
 			print("."); flush;
 		t= MidiGetTime();
 	}
+#endif
 }
 
 /*______________________________________________________________________________*/
 int OpenAppls()
 {	
+#ifdef TestServer
 	if( (r1= MidiOpen( ApplName)) < 0)
 	{
 		print("Impossible to open a MidiShare application !\n");
@@ -240,6 +249,7 @@ int OpenAppls()
 	MidiConnect( r1, 0, true);
 	MidiConnect( 0, r1, true);
 	MidiConnect( r1, r2, true);
+#endif
 	return true;
 }
 
@@ -592,10 +602,15 @@ static TestEvent( short i, Boolean display)
 			{
 				if( i== typeProcess || i== typeDProcess)
 					return true;
+#ifdef TestServer
 				Date( copy)= MidiGetTime()+2;
 				MidiSend( r1, copy); 
 				wait( 6);
 				ret= (* GetEvTable[i])( e);
+#else
+                                MidiFreeEv(copy);
+                                ret = true;
+#endif
 			}
 		}
 		MidiFreeEv(e);
@@ -880,8 +895,10 @@ void Reserved()
 /*______________________________________________________________________________*/
 void Close ()
 {
+#ifdef TestServer
 	MidiClose( r1);
 	MidiClose( r2);
+#endif
 }
 
 /*______________________________________________________________________________*/
@@ -890,9 +907,9 @@ main( int argc, char *argv[])
 	print("\nAllocation, emission and reception of MidiShare events.\n");
 	print("==========================================================\n");
 
-	if( MidiShare())
+//	if( MidiShare())
 	{
-		version= MidiGetVersion();
+//		version= MidiGetVersion();
 		print("                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
 		print("\nWarning : MidiShare must have at least 10000 events !\n");
 
@@ -916,7 +933,7 @@ main( int argc, char *argv[])
 		}
 
 	}
-	else print("MidiShare is not installed !\n");
+//	else print("MidiShare is not installed !\n");
 	print("\nEnd of allocation emission and reception test of events.\n");
 	return 0;
 }
