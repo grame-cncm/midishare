@@ -55,6 +55,6 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, lo
 MSFunctionType(void)      MSForgetTask	(MidiEvPtr *e);
 MSFunctionType(long)      MSCountDTasks	(short refnum, TClientsPtr g);
 MSFunctionType(void)      MSFlushDTasks	(short refnum, TClientsPtr g);
-MSFunctionType(void)      MSExec1DTask	(short refnum, TClientsPtr g, long currtime);
+MSFunctionType(void)      MSExec1DTask	(short refnum, TClientsPtr g);
 
 #endif
