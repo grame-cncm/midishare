@@ -16,6 +16,16 @@
 
 #include <stdio.h>
 
+#ifdef __Linux__
+#define FAR
+#define NEAR
+#define MFAPI
+#include "MidiShare.h"
+#define nil 0
+#define  errno  /* a revoir */
+#endif
+
+
 #ifdef __Macintosh__
 #include <midishare.h>
 #define FAR
@@ -182,6 +192,9 @@ inline short ticks_par_quarterNote(MDF_Header *f)	{ return (f)->time; }
 #define ticks_par_frame(f)			((f)->time & 0xFF)
 #define ticks_par_quarterNote(f)	(f)->time
 #endif
+
+#define MDF_Header_SIZE 14
+#define MDF_Trk_SIZE 	8
 
 
 /*--------------------------------------------------------------------------*/
