@@ -132,11 +132,11 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPublicPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
-	MidiEvPtr e; short ref;
+	MidiEvPtr e; char ref;
 	
 	if (!InitComm(g)) return MIDIerrComm;
 	
-	e = MSNewEv (typeMidiSetName, &g->memory.freeList);
+	e = MSNewEv (typeMidiOpen, &g->memory.freeList);
 	if (e) {
 		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
@@ -172,7 +172,7 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TMSGlobalPtr g)
 	if (e) {
 		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
-		MSSend (ref, e, g);
+		MSSendSync (ref, e, g);
 	}
 }
 
@@ -182,6 +182,7 @@ MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TMSGlobalPtr g)
 	MidiEvPtr e = MSNewEv (typeMidiSetInfo, &g->memory.freeList);
 	if (e) {
 		Date(e) = g->pub->time;
+        e->info.longField = (long)info;
 		MSSendSync (ref, e, g);
 	}
 }
@@ -192,9 +193,14 @@ MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TMSGlobalPtr g
 	if (CheckGlobRefNum(g,ref)) {
 		MidiEvPtr e = MSNewEv (typeMidiSetFilter, &g->memory.freeList);
 		if (e) {
-			string2ev (e, GetShMemID(filter), &g->memory.freeList);
+            void * fid =  GetShMemID(filter);
+#ifdef WIN32
+			string2ev (e, (char *)fid, &g->memory.freeList);
+#else
+            e->info.longField = *(long *)fid;
+#endif
 			Date(e) = g->pub->time;
-			MSSend (ref, e, g);
+			MSSendSync (ref, e, g);
 			g->appls[ref]->filter = filter;
 		}
 	}

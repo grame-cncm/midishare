@@ -24,15 +24,19 @@
 #include "msFunctions.h"
 #include "msKernel.h"
 #include "msKernelPrefs.h"
+#include "msInit.h"
 #include "msServerInit.h"
 #include "msCommInit.h"
+#include "msCommHandler.h"
+
+extern TMSGlobalPtr gMem;
+msKernelPrefs * gPrefs = 0;
 
 /*____________________________________________________________________________*/
 static void MainClientServerProc (PipesPair p)
 {
-	char msg[512];
-	sprintf (msg, "New contact: pipes id = %d\n", (int)PPID(p));
-	LogWrite (msg);
+    if (!gMem->running) MidiShareWakeup (gMem);
+	NewClientChannel (p);
 }
 
 /*____________________________________________________________________________*/
@@ -53,11 +57,10 @@ static msKernelPrefs * init (int argc, char *argv[])
 int main (int argc, char *argv[])
 {
 	TMSGlobalPublic * pubMem;
-	msKernelPrefs * prefs;
 	
 	OpenLog (0);
-	prefs = init (argc, argv);
-	LogPrefs (prefs);
+	gPrefs = init (argc, argv);
+	LogPrefs (gPrefs);
 	pubMem = msServerInit (sizeof(TMSGlobalPublic));
 	if (pubMem) {
 		int version;
@@ -67,6 +70,7 @@ int main (int argc, char *argv[])
 		MidiShareSpecialInit (40000, pubMem);
 
 		/* the main communication server proc needs an initialized kernel */
+        InitCommHandlers ();
 		if (ServerMainComInit (MainClientServerProc)) {
 			version = MidiGetVersion();
 			sprintf (msg, "MidiShare Server v.%d.%02d is running", version/100, version%100);

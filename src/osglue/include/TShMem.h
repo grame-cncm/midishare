@@ -52,12 +52,12 @@ class ShMem
 		 	 ShMem (TLog * log = 0);
 	virtual ~ShMem ();
 			
-		void *	Create 	(MemID id, int size);
+		void *	Create 	(MemID id, unsigned long size);
 		void *	Open 	(MemID id);
 		void	Close 	();
 				
 	protected:
-		int 	Get 	(MemID id, int size, int flags);
+		int 	Get 	(MemID id, unsigned long size, int flags);
 		void *	Attach 	();
 		void	Detach 	();
 

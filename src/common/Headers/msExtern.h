@@ -90,9 +90,9 @@ void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 	void      CloseComm        (TMSGlobalPtr g);
 
 	Boolean   CheckMidiShare   (TMSGlobalPtr g);
-	void      SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
+	Boolean   SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
 	MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
-	char *    GetShMemID       (MidiFilterPtr filter);
+	void *    GetShMemID       (MidiFilterPtr filter);
 
 #endif /* MSKernel */
 

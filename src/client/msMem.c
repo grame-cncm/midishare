@@ -28,37 +28,86 @@
 #	include <stdlib.h>
 #endif
 
+#include "msDefs.h"
 #include "msMem.h"
+#include "msSharedMem.h"
+
+#ifdef WIN32
+#define allocate(size) 	LocalAlloc(LMEM_FIXED, size)
+#define free(ptr) 		LocalFree((HANDLE)ptr)
+#define baseKey			"msFlt"
+#else
+#define allocate(size) (void*)malloc(size)
+#define free(ptr) 		free(ptr)
+#define baseKey			0x0e1e10000
+#endif
 
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
 FarPtr(void) AllocateMemory (unsigned long size)
 { 
-#ifdef WIN32
-	return LocalAlloc (LMEM_FIXED, size);
-#else
-	return (void*)malloc(size);
-#endif
+	return allocate(size);
 }
 
 void DisposeMemory (FarPtr(void) memPtr) 
 {
 	if (!memPtr) return;
-#ifdef WIN32
-	LocalFree ((HANDLE)memPtr);
-#else
 	free(memPtr);
+}
+
+
+static ShMemID CreateShMKey (int index)
+{
+#ifdef WIN32
+    static char	id[keySize];
+    sprintf (id, "%s%d", baseKey, index);
+    return id;
+#else
+    return baseKey + index;
 #endif
 }
 
 FarPtr(void) AllocateFilter (unsigned long size)
 {
+    int i; FilterInfo * ptr;
+    unsigned long fsize = sizeof(FilterInfo) + size;
+
+    for (i = 0; i < MaxFilters; i++) {
+        ShMemID id = CreateShMKey (i);
+        SharedMemHandler mh = msSharedMemCreate(id, fsize, (void **)&ptr);
+        if (mh) {
+            ptr->memh = mh;
+#ifdef WIN32
+            strcpy (ptr->id, id);
+#else
+            ptr->id = id;
+#endif
+            return ++ptr;
+        }
+    }
 	return 0;
+}
+
+void * GetShMemID (MidiFilterPtr filter)
+{
+	if (filter) {
+        FilterInfo * fptr = (FilterInfo *)filter;
+        fptr--;
+#ifdef WIN32
+        return fptr->id;
+#else
+        return &fptr->id;
+#endif
+    }
+    return 0;
 }
 
 void FreeFilter (FarPtr(void) filter)
 {
-	if (filter)
-		;
+	if (filter) {
+        FilterInfo * fptr = (FilterInfo *)filter;
+        fptr--;
+        msSharedMemClose (fptr->memh);
+    }
 }

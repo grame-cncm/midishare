@@ -258,8 +258,11 @@ static void InitNewEvMth( NewEvMethodPtr *table)
   table[typeMidiConnect]   = NewSmallEv;
   table[typeMidiSetName]   = NewSexEv;
   table[typeMidiSetInfo]   = NewSmallEv;
+#ifdef WIN32
   table[typeMidiSetFilter] = NewSexEv;
-  
+#else
+  table[typeMidiSetFilter] = NewSmallEv;
+#endif
   table[typeProcess] 	= NewProcessEv;
   table[typeDProcess] 	= NewProcessEv;
   table[typeDead]    	= NewProcessEv; 
@@ -289,7 +292,11 @@ static void InitFreeEvMth( FreeEvMethodPtr *table)
   table[typeMidiConnect]   = FreeSmallEv;
   table[typeMidiSetName]   = FreeSexEv;
   table[typeMidiSetInfo]   = FreeSmallEv;
+#ifdef WIN32
   table[typeMidiSetFilter] = FreeSexEv;
+#else
+  table[typeMidiSetFilter] = FreeSmallEv;
+#endif
   
   table[typeProcess] 	= FreeProcessEv;
   table[typeDProcess] 	= FreeProcessEv;
@@ -320,7 +327,11 @@ static void InitCopyEvMth( CopyEvMethodPtr *table)
   table[typeMidiConnect]   = CopySmallEv;
   table[typeMidiSetName]   = CopySexEv;
   table[typeMidiSetInfo]   = CopySmallEv;
+#ifdef WIN32
   table[typeMidiSetFilter] = CopySexEv;
+#else
+  table[typeMidiSetFilter] = CopySmallEv;
+#endif
   
   table[typeProcess] 	= CopyProcessEv;
   table[typeDProcess] 	= CopyProcessEv;
@@ -361,7 +372,11 @@ static void InitCountFieldsMth( CountFieldsMethodPtr *table)
   table[typeMidiConnect]   = Count2Fields;
   table[typeMidiSetName]   = CountFSexEv;
   table[typeMidiSetInfo]   = Count1Field;
+#ifdef WIN32
   table[typeMidiSetFilter] = CountFSexEv;
+#else
+  table[typeMidiSetFilter] = Count1Field;
+#endif
   
   table[typeProcess] 	= CountFProcessEv;
   table[typeDProcess] 	= CountFProcessEv;
@@ -396,7 +411,11 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
   table[typeMidiConnect]   = SetFConnect;
   table[typeMidiSetName]   = SetFSexEv;
   table[typeMidiSetInfo]   = SetFSetInfo;
+#ifdef WIN32
   table[typeMidiSetFilter] = SetFSexEv;
+#else
+  table[typeMidiSetFilter] = SetFTempo;
+#endif
   
   table[typeProcess] 	= SetFProcessEv;
   table[typeDProcess] 	= SetFProcessEv;
@@ -431,7 +450,11 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
   table[typeMidiConnect]   = GetFConnect;
   table[typeMidiSetName]   = GetFSexEv;
   table[typeMidiSetInfo]   = GetFSetInfo;
+#ifdef WIN32
   table[typeMidiSetFilter] = GetFSexEv;
+#else
+  table[typeMidiSetFilter] = GetFTempo;
+#endif
   
   table[typeProcess] 	= GetFProcessEv;
   table[typeDProcess] 	= GetFProcessEv;
@@ -461,7 +484,11 @@ static void InitAddFieldMth (AddFieldMethodPtr *table)
   table[typeMidiConnect]   = AddNoField;
   table[typeMidiSetName]   = AddFSexEv;
   table[typeMidiSetInfo]   = AddNoField;
+#ifdef WIN32
   table[typeMidiSetFilter] = AddFSexEv;
+#else
+  table[typeMidiSetFilter] = AddNoField;
+#endif
   
   table[typeProcess] = AddNoField;
   table[typeDProcess] = AddNoField;

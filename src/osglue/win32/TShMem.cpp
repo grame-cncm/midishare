@@ -49,7 +49,7 @@ ShMem::~ShMem ()
 }
 
 //__________________________________________________________________________
-void * ShMem::Create (MemID id, int size) 
+void * ShMem::Create (MemID id, unsigned long size) 
 {
 	void * ptr = 0;
 	LPSECURITY_ATTRIBUTES sec = 0;
@@ -82,7 +82,7 @@ void * ShMem::Open (MemID id)
 }
 
 //__________________________________________________________________________
-int ShMem::Get (MemID id, int size, int flags) 
+int ShMem::Get (MemID id, unsigned long size, int flags) 
 {
 	BOOL inheritflag = FALSE;
 	fHandler = OpenFileMapping (flags, inheritflag, id);

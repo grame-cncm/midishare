@@ -112,6 +112,7 @@ static MidiEvPtr StartReadBuffer (msStreamBufferPtr f, int * retcode)
 {
 	msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
 	MidiEvPtr e = f->curEv;
+
 	if ((!h->cont && e) || (h->cont && !e)) {
 		*retcode = kStreamParseError;
 		return 0;
@@ -150,6 +151,9 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 			*ec = *common++;
 			StreamAdjust(f, common, sizeof(EvCommonPart));
 			*retcode = f->parse[EvType(e)](f, e);
+            if (!StreamCountAvail(f)) {
+                msStreamParseRewind(f);
+            }
 			switch (*retcode) {
 				case kStreamNoError: 
 					f->curEv = 0;
@@ -187,6 +191,7 @@ MidiEvPtr msStreamGetEvent (msStreamBufferPtr f, int * retcode)
   =========================================================================== */
 static int UnknownParseMth (msStreamBufferPtr f, MidiEvPtr e)
 {
+    msStreamParseReset (f);
 	return kStreamUnknowParseMeth;
 }
 

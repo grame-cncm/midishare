@@ -33,8 +33,6 @@
 #include "msMemory.h"
 #include "msXmtRcv.h"
 
-#define CnxState(e)		Chan(e)
-
 /*===========================================================================
   MidiShare external functions implementation
 =========================================================================== */

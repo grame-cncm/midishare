@@ -25,29 +25,147 @@
 #ifdef WIN32
 #	include <windows.h>
 #else
+#	include <stdio.h>
 #	include <stdlib.h>
 #endif
 
+#include "msCommInit.h"
 #include "msExtern.h"
+#include "msFunctions.h"
 
-/*_________________________________________________________________________*/
+#include "EventToStream.h"
+#include "StreamToEvent.h"
+
+#define kCommBuffSize	2048
+#define kParseBuffSize	2048
+
+typedef struct CommDesc * CommDescPtr;
+typedef struct CommDesc {
+    short			refCount;
+    CInitHandler 	inith;
+    PipesPair		comm;
+    msStreamBuffer 	parse;
+    Ev2StreamRec	stream;
+    char 			buff[kParseBuffSize];
+    msStreamParseMethodPtr 	* gParseMthTable;
+    msStreamMthPtr			* gStreamMthTable;
+}CommDesc;
+
+CommDesc gComm = { 0 };
+
+
+/*____________________________________________________________________________*/
+void DoCloseComm ()
+{
+    if (gComm.comm) ClosePipesPair (gComm.comm);
+    gComm.comm = 0;
+    if (gComm.inith) EndClientInit (gComm.inith);
+    gComm.inith = 0;
+    if (gComm.gParseMthTable) free (gComm.gParseMthTable);
+    gComm.gParseMthTable = 0;
+    if (gComm.gStreamMthTable) free (gComm.gStreamMthTable);
+    gComm.gStreamMthTable = 0;
+}
+
+/*____________________________________________________________________________*/
 Boolean InitComm (TMSGlobalPtr g)
 {
-	return false;
+    if (!gComm.refCount) {
+        gComm.gParseMthTable = (msStreamParseMethodPtr *)malloc (sizeof(msStreamParseMethodTbl));
+        if (!gComm.gParseMthTable) return false;
+        gComm.gStreamMthTable = (msStreamMthPtr *)malloc (sizeof(msStreamMthTbl));
+        if (!gComm.gStreamMthTable) return false;
+        
+        msStreamParseInitMthTbl (gComm.gParseMthTable);
+        msStreamInitMthTbl (gComm.gStreamMthTable);
+        msStreamParseInit (&gComm.parse, gComm.gParseMthTable, gComm.buff, kParseBuffSize);
+        msStreamInit (&gComm.stream, gComm.gStreamMthTable, gComm.buff, kParseBuffSize);
+        gComm.inith = CreateClientInit ();
+        if (!gComm.inith) return false;
+        gComm.comm = StartClientInit (gComm.inith);
+        if (!gComm.comm) {
+            EndClientInit (gComm.inith);
+            return false;
+        }
+        atexit (DoCloseComm);
+    }
+//    else printf ("InitComm: gComm.refCount %d\n", gComm.refCount);
+    gComm.refCount++;
+    return true;
 }
 
-/*_________________________________________________________________________*/
+/*____________________________________________________________________________*/
 void CloseComm (TMSGlobalPtr g)
 {
+    if (gComm.refCount > 0) gComm.refCount--;
+    if (!gComm.refCount)
+        DoCloseComm ();
+//    else printf ("CloseComm: gComm.refCount %d\n", gComm.refCount);
 }
 
-/*_________________________________________________________________________*/
-void SendToServer (MidiEvPtr e, TMSGlobalPtr g)
+/*____________________________________________________________________________*/
+static void Printbuff (char *buff, int len)
 {
+    while (len--)
+        printf ("%03d ", (int)*buff++);
+    printf ("\n");
 }
 
-/*_________________________________________________________________________*/
+/*____________________________________________________________________________*/
+static MidiEvPtr ReadFromServer ()
+{
+    MidiEvPtr e = 0;
+    while (!e) {
+        long n = PPRead (gComm.comm, gComm.buff, kCommBuffSize);
+        if (n > 0) {
+            int ret;
+            e = msStreamGetEvent (&gComm.parse, &ret);
+//fprintf (stderr, "ReadFromServer %ld: ev %lx type %d\n", n, (long)e, EvType(e));
+            if (e) break;
+            else if (ret != kStreamNoMoreData) {
+                fprintf (stderr, "ReadFromServer read error (%d)\n", ret);
+                break;
+            }
+        }
+    }
+    return e;
+}
+
+/*____________________________________________________________________________*/
+Boolean SendToServer (MidiEvPtr e, TMSGlobalPtr g)
+{
+    Ev2StreamPtr stream = &gComm.stream;
+    long n; short len;
+
+//fprintf (stderr, "SendToServer %lx: type %d\n", (long)e, EvType(e));
+    msStreamStart (stream);
+    if (!msStreamPutEvent (stream, e)) {
+        do {
+            len = msStreamSize(stream);
+            n = PPWrite (gComm.comm, gComm.buff, len);
+            if (n != len) goto failed;
+//fprintf (stderr, "SendToServer: %ld bytes written\n", n);
+        } while (!msStreamContEvent (stream));
+    }
+    else {
+        len = msStreamSize(stream);
+        n = PPWrite (gComm.comm, gComm.buff, len);
+        if (n != len) goto failed;
+//fprintf (stderr, "SendToServer: %ld bytes written\n", n);
+    }
+    MidiFreeEv (e);
+    return true;
+failed:
+    MidiFreeEv (e);
+    fprintf (stderr, "PPWrite failed (%ld)\n", n);
+    return false;
+}
+
+/*____________________________________________________________________________*/
 MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g)
 {
-	return 0;
+    if (SendToServer (e, g)) {
+        return ReadFromServer ();
+    }
+    return 0;
 }

@@ -26,7 +26,7 @@
 
 
 #define kDefaultCLientSpace	60000
-#define kMidiShareLibVersion	001
+#define kMidiShareLibVersion	002
 
 extern TMSGlobalPtr gMem;
 

@@ -38,9 +38,3 @@ Boolean CheckMidiShare (TMSGlobalPtr g)
     g->pub = GetPubMemory ();
     return g->pub ? true : false;
 }
-
-/*_________________________________________________________________________*/
-char * GetShMemID (MidiFilterPtr filter)
-{
-	return 0;
-}

@@ -55,6 +55,10 @@ MSFunctionType(void) MSSpecialInit( unsigned long defaultSpace, TMSGlobalPtr g, 
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
+#ifndef __mono__
+    OpenMemory (Memory(g));
+#endif
+    g->running = false;
 }
 
 /*===========================================================================
@@ -62,9 +66,13 @@ MSFunctionType(void) MSSpecialInit( unsigned long defaultSpace, TMSGlobalPtr g, 
   =========================================================================== */
 void MidiShareWakeup (TMSGlobalPtr g) 
 {
+    if (g->running) return;
+    g->running = true;
     SpecialWakeUp (g);
     fifoinit (SorterList(g));
+#ifdef __mono__
     OpenMemory (Memory(g));
+#endif
     OpenTime (g);
     OpenTimeInterrupts (g);
 	OpenDrivers(g);
@@ -72,10 +80,14 @@ void MidiShareWakeup (TMSGlobalPtr g)
 
 void MidiShareSleep (TMSGlobalPtr g) 
 {
+    if (!g->running) return;
     CloseTimeInterrupts (g);
 	CloseDrivers(g);
+#ifdef __mono__
     CloseMemory (Memory(g));
+#endif
     SpecialSleep (g);
+    g->running = false;
 }
 
 /*===========================================================================

@@ -53,7 +53,7 @@ ShMem::~ShMem ()
 }
 
 //__________________________________________________________________________
-void * ShMem::Create (MemID id, int size) 
+void * ShMem::Create (MemID id, unsigned long size) 
 {
 	void * ptr = 0;
 	
@@ -80,8 +80,8 @@ void * ShMem::Open (MemID id)
 }
 
 //__________________________________________________________________________
-int ShMem::Get (key_t id, int size, int flags) {
-	fHandler = shmget (id, size, flags);
+int ShMem::Get (key_t id, unsigned long size, int flags) {
+	fHandler = shmget (id, (int)size, flags);
 	if (fHandler == SHMErr) {
 		if (fLog) fLog->WriteErr ("shmget failed:");
 		return false;

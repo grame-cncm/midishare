@@ -27,7 +27,7 @@
 #include "msAppls.h"
 
 enum	{
-	kTimeModeRTC,       // only supported on linux
+	kTimeModeRTC=1,     // only supported on linux
 	kTimeModeAudio,     // 
 	kTimeModeMMSystem   // only supported on windows
 };

@@ -121,7 +121,7 @@
 
 #define typeDead           255   /* dead Task or DTask                     */
 
-
+#define typeMidiCommSync	typeContinue
 
 /******************************************************************************
 * MIDI STATUS CODE
@@ -453,6 +453,8 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
     #define Tempo(e)      ( (e)->info.tempo )
     #define SeqNum(e)     ( (e)->info.seqNum.number )
     #define ChanPrefix(e) ( (e)->info.data[0] )
+
+    #define CnxState(e) 	Chan(e)
 
     #define First(e)      ( (e)->first )
     #define Last(e)       ( (e)->last )

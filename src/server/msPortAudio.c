@@ -55,7 +55,7 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
 {
 	PaError err;
 	const PaDeviceInfo* info;
-	int device;
+	int device, maxdev;
     err = Pa_Initialize();
   	if( err != paNoError ) goto error_recovery;
   	
@@ -63,11 +63,11 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
   	gAudioSize = GetAudioBufFSize(g->clock.timeRes);
   	
   	// Look for the internal built-in sound device
-  	for (device= 0 ; device<Pa_CountDevices(); device++) {
+    maxdev = Pa_CountDevices();
+  	for (device= 0 ; device<maxdev; device++) {
   		info = Pa_GetDeviceInfo(device);
   		if ((strcmp (dev,info->name) == 0) && (info->maxOutputChannels)) break;
   	}
-  
 	// Open Audio stream
     err = Pa_OpenStream(
 				&gStream,

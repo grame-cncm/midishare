@@ -299,7 +299,7 @@ static unsigned long GetMemSize (char *file)
 static int TimeModeStr2TimeMode (char *str)
 {
 	char **ptr = availableTimeModes;
-	int mode = 0;
+	int mode = kTimeModeRTC;
 	while (*ptr) {
 		if (!strcmp (str, *ptr))
 			return mode;

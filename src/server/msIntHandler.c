@@ -40,8 +40,9 @@
 #include "msServerInit.h"
 #include "msTasks.h"
 #include "msThreads.h"
+#include "msPortAudio.h"
 
-
+extern msKernelPrefs * gPrefs;
 msThreadPtr gTimeThread = 0;
 
 //#include "dlfcn.h"
@@ -190,6 +191,8 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	THorlogePtr clock = &g->clock;
 	char msg[512];
 	
+    clock->timeMode = gPrefs->timeMode;
+    clock->timeRes = gPrefs->timeRes;
 	switch (clock->timeMode) {
 #ifdef linux
 		case kTimeModeRTC:
@@ -202,6 +205,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 			break;
 #endif
 		case kTimeModeAudio:
+            OpenPortAudio (g, gPrefs ? gPrefs->audioDev : 0);
 			break;
 #ifdef WIN32
 		case kTimeModeMMSystem:
@@ -227,6 +231,7 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 			break;
 #endif
 		case kTimeModeAudio:
+            ClosePortAudio ();
 			break;
 #ifdef WIN32
 		case kTimeModeMMSystem:
