@@ -13,8 +13,9 @@ History :
 #include <errno.h>
 
 /* #include <ctype.h> */
+#include "profport.h"   /* function prototypes in here */
 
-extern char* MidiShareDirectory;
+static char* TmpDirectory = "/tmp";
 
 static int isdigit (char c) 
 {
@@ -23,8 +24,6 @@ static int isdigit (char c)
 	for (i = 0 ; i < 10; i++) if (digits[i]==c) return 1;
 	return 0;
 }
-
-#include "profport.h"   /* function prototypes in here */
 
 static int read_line(FILE *fp, char *bp);
 
@@ -170,7 +169,7 @@ int write_private_profile_string(char *section,
     //char tmp_name[15];
     //tmpnam(tmp_name); /* Get a temporary file name to copy to */
     
-    tmp_name = tempnam(MidiShareDirectory,"");
+    tmp_name = tempnam(TmpDirectory,"");
     sprintf(t_section,"[%s]",section);/* Format the section name */
     
     if( !(rfp = fopen(file_name,"r")) )  /* If the .ini file doesn't exist */
