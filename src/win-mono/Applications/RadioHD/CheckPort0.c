@@ -61,15 +61,17 @@ static Boolean IsInternalSynth (char *name)
 //________________________________________________________________
 static SlotRefNum ChooseDefaultSlot ()
 {
-	SlotRefNum sref = { 0 };
+	SlotRefNum defslot = { 0 };
 	short i, j, n = MidiCountDrivers ();
 	for (i=1; i<=n; i++) {
 		TDriverInfos infos;
 		short ref = MidiGetIndDriver (i);
 		if ((ref > 0) && MidiGetDriverInfos (ref, &infos)) {
+			SlotRefNum sref = { 0 };
 			for (j=0; j < infos.slots; j++) {
 				TSlotInfos sinfos;
 				sref = MidiGetIndSlot (ref, j);
+				if (!j) defslot = sref;
 				if ((Slot(sref) > 0) && MidiGetSlotInfos (sref, &sinfos)) {
 					if (sinfos.direction & MidiOutputSlot) {
 						if (IsInternalSynth (sinfos.name))
@@ -79,8 +81,7 @@ static SlotRefNum ChooseDefaultSlot ()
 			}
 		}
 	}
-	sref.drvRef = sref.slotRef = 0;
-	return sref;
+	return defslot;
 }
 
 //________________________________________________________________
