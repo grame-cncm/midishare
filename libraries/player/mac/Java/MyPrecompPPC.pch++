@@ -1,0 +1,5 @@
+#include <MacHeaders.h>
+
+
+#define __Macintosh__
+#define PascalNames
