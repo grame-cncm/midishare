@@ -39,6 +39,8 @@
 
 Boolean doneFlag = false;
 #define kGroupTime	10
+#define kVersion	"1.10"
+
 NetConfig gNet = { -1, -1, -1 };
 int clientsIndex, clientsCount = 0;
 short maxClients = 32;
@@ -66,6 +68,7 @@ static void usage (const char *name)
 	fprintf (stderr, "                                  (TCP server mode only)\n");
 	fprintf (stderr, "                 -g <group time>  grouping time parameter\n");
 	fprintf (stderr, "                 -d               run as a daemon\n");
+	fprintf (stderr, "                 -h               print version and exit\n");
 	fprintf (stderr, "                 -log <log file>  log file in daemon mode\n");
 	fprintf (stderr, "                                  default to %s\n", logFile);
 	fprintf (stderr, "                 -s [remote list] run in TCP server mode and \n");
@@ -165,7 +168,7 @@ static void run (pthread_t thread, NetConfig *net)
 	void *threadRet; int done = false; char msg[512];
 	const char * space = "                    ";
 
- 	sprintf (msg, "%s MidiShare Internet driver is running", dateString());
+ 	sprintf (msg, "%s MidiShare Internet driver v. %s is running", dateString(), kVersion);
 	log (msg);
 	if (serverMode) {
 		sprintf (msg, "%sTCP server mode on: %d clients allowed", space, (int)maxClients);
@@ -250,6 +253,9 @@ static int getopts (int argc, char *argv[])
 					break;
 				case 'd':	daemonMode = true;
 					break;
+				case 'h':
+					printf ("msInetDriver v. %s\n", kVersion);
+					exit (0);
 				default:
 					usage (argv[0]);
 			}
