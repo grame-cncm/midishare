@@ -17,6 +17,10 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+   modifications history:
+   
+ 	 [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
 
 */
 
@@ -30,9 +34,7 @@
 /*	Globals variables                                  */
 
 TClients   	gLClients = {0};
-TClients*	gClients = &gLClients;
-
-int msfd = -1;  /* the MidiShare Device file number */
+TClients*	gClients = &gLClients;          /* The global MidiShare structure   */
 
 
 /*________________________________________________________ */
@@ -61,15 +63,11 @@ static void restore_sigs ();
 
 void MidiInstall()
 {
-	
-  msfd = open("/dev/MidiShare", 0);
-  if (msfd < 0) {
-	return;
-  }
-  
+  Device(gClients) = open("/dev/MidiShare", 0);
+  if (Device(gClients) < 0) return;
   InitEvents ();
   InitMemory(Memory(gClients), 15000);
-  pthread_mutex_init(&gClients->mutex, NULL);
+  pthread_mutex_init(Mutex(gClients), NULL);
 }
 
 /*--------------------------------------------------------------------*/
@@ -136,8 +134,8 @@ void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 	appl->refNum = (uchar)ref;
 	appl->rcvAlarm = 0;
 	appl->applAlarm = 0;
-	gClients->appls[ref] = appl;
-	g->nbAppls++;
+	Appls(gClients)[ref] = appl;
+	ApplsCount(gClients)++;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -152,6 +150,8 @@ void* event_handler(void* arg)
 	TTaskExtPtr task ;
 	MidiEvPtr ev;
 	
+	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
+	
 	while ((ev = MidiGetCommand(refNum))) {         		
 			
 			switch (ev->evType) {
@@ -165,24 +165,17 @@ void* event_handler(void* arg)
 					// execute pending real-time tasks 
 					task = (TTaskExtPtr)LinkST(ev);	
 					if (task->fun) (*task->fun) (ev->date, refNum, task->arg1, task->arg2, task->arg3);			
-					break;
-						
+					break;						
 					
 				case typeApplAlarm:
 					// execute application alarm 
 					if (appl->applAlarm) (*appl->applAlarm) (refNum, MSGetField(ev,0)); 	
 					break;	
-					
-				case typeReset:
-					// quit the thread
-					goto exit;	
-					break;		
 							 
 			}
 			MSFreeEv(ev, FreeList(Memory(gClients)));
 	}
 
-	exit:
 	pthread_exit(0);
 }
 
@@ -245,7 +238,6 @@ void MidiGetSyncInfo(SyncInfoPtr p)
    CALL(kMidiGetSyncInfo,p);
 }
 
-
 /*******************/
 /* MidiSetSyncMode */
 /*******************/
@@ -258,7 +250,6 @@ void MidiSetSyncMode(unsigned short mode)
    CALL(kMidiSetSyncMode,&args);
 }
 
-
 /*******************/
 /* MidiGetExtTime  */
 /*******************/
@@ -269,7 +260,6 @@ long MidiGetExtTime ()
    CALL(kMidiGetExtTime,&args);
    return args.time;
 }
-
 
 /*******************/
 /* MidiInt2ExtTime */
@@ -283,7 +273,6 @@ long MidiInt2ExtTime (long date)
    return args.dateout;
 }
 
-
 /*******************/
 /* MidiExt2IntTime */
 /*******************/
@@ -295,7 +284,6 @@ long MidiExt2IntTime (long date)
    CALL(kMidiExt2IntTime,&args);
    return args.dateout;
 }
-
 
 /*******************/
 /* MidiTime2Smpte  */
@@ -311,7 +299,6 @@ void MidiTime2Smpte (long time, short format, SmpteLocPtr loc)
    CALL(kMidiTime2Smpte,&args);
  }
 
-
 /*******************/
 /* MidiSmpte2Time  */
 /*******************/
@@ -325,7 +312,6 @@ long MidiSmpte2Time (SmpteLocPtr loc)
    return args.time;
  }
 
-
 /*******************/
 /* MidiGetTimeAddr */
 /*******************/
@@ -337,7 +323,6 @@ long* MidiGetTimeAddr ()
    CALL(kMidiGetTimeAddr,&args);
    return args.timeadr;
  }
-
  
 /*******************/
 /* MidiOpen 	   */
@@ -347,21 +332,21 @@ long* MidiGetTimeAddr ()
 {
 	TApplPtr 		appl;
 	TMidiOpenArgs 		args;
-  	int           		err;
-   	struct sched_param 	param;  // type defined in  /usr/include/bits/sched.h 
-	uid_t uid = getuid ();
-
-	pthread_mutex_lock(&gClients->mutex);
+  	struct sched_param 	param;   
+	int           		err;
 	
- 	args.name = name;
+	uid_t uid = getuid ();
+	pthread_mutex_lock(Mutex(gClients));
+	
+	args.name = name;
   	CALL(kMidiOpen,&args);
 	 
-	if (gClients->nbAppls == 0) {
+	if (ApplsCount(gClients) == 0) {
 		OpenMemory (Memory(gClients));
 		patch_sigs (gSigList);
 	}
 	
-	if (gClients->nbAppls < MaxAppls) {
+	if (ApplsCount(gClients) < MaxAppls) {
 	
 		appl = NewAppl (sizeof(TAppl));
 		
@@ -374,11 +359,11 @@ long* MidiGetTimeAddr ()
 						
 			setuid (name_to_uid ("root")); 
    			err = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
- 			setuid (uid);
+			setuid (uid);
 		}
 	}
 	
-	pthread_mutex_unlock(&gClients->mutex);
+	pthread_mutex_unlock(Mutex(gClients));
 	return args.refnum;
 }
 
@@ -393,16 +378,14 @@ void MidiClose (short ref)
 	TMidiCloseArgs 	args;
 	TApplPtr 	appl;
 	
-	pthread_mutex_lock(&gClients->mutex);
+	pthread_mutex_lock(Mutex(gClients));
 	
 	if (CheckRefNum(gClients, ref)) {
-		appl = gClients->appls[ref];
+		appl = Appls(gClients)[ref];
  		args.refnum = ref;
 		
-		/* Resume the Real Time thread */
-		CALL(kMidiQuit,&args);
-		
 		/* Wait for Real Time thread exit */
+		pthread_cancel(appl->rcvThread);
 		pthread_join(appl->rcvThread,NULL);
 		
 		/* Kernel close */
@@ -410,17 +393,16 @@ void MidiClose (short ref)
 		
 		/* Client close */
 		FreeAppl(appl) ;
-		gClients->appls[ref] = 0;
-		gClients->nbAppls--;
+		Appls(gClients)[ref] = 0;
+		ApplsCount(gClients)--;
 	
-		if (gClients->nbAppls == 0) {
+		if (ApplsCount(gClients) == 0) {
 			CloseMemory(Memory(gClients));
 			restore_sigs ();
 		} 
 	}
-	pthread_mutex_unlock(&gClients->mutex);
+	pthread_mutex_unlock(Mutex(gClients));
 }
-
 
 /*******************/
 /* MidiGetName     */
@@ -456,9 +438,7 @@ void MidiSetName (short ref, MidiName name)
 void* MidiGetInfo (short ref)
 {
 	void* info = 0;
-	if (CheckRefNum(gClients,ref)) {
-		info = gClients->appls[ref]->info;
-	}
+	if (CheckRefNum(gClients,ref)) info = Appls(gClients)[ref]->info;
 	return info;
 }
 
@@ -469,9 +449,7 @@ void* MidiGetInfo (short ref)
 
 void MidiSetInfo (short ref ,void * info)
 {
-  	if (CheckRefNum(gClients,ref)) {
-		gClients->appls[ref]->info = info;
-	}
+  	if (CheckRefNum(gClients,ref)) Appls(gClients)[ref]->info = info;
 }
 
 
@@ -509,7 +487,7 @@ void MidiSetFilter (short ref, MidiFilterPtr filter)
 
 RcvAlarmPtr MidiGetRcvAlarm (short ref)
 {
-	return CheckRefNum(gClients,ref) ? gClients->appls[ref]->rcvAlarm : 0;
+	return CheckRefNum(gClients,ref) ? Appls(gClients)[ref]->rcvAlarm : 0;
 }
 
 
@@ -525,7 +503,7 @@ void MidiSetRcvAlarm (short ref,RcvAlarmPtr alarm)
 		args.refnum = ref;
 		args.alarm = alarm;
 		CALL(kMidiSetRcvAlarm,&args);
-		gClients->appls[ref]->rcvAlarm = alarm;
+		Appls(gClients)[ref]->rcvAlarm = alarm;
 	}
 }
 
@@ -536,7 +514,7 @@ void MidiSetRcvAlarm (short ref,RcvAlarmPtr alarm)
 
 ApplAlarmPtr MidiGetApplAlarm (short ref)
 {
-	return CheckRefNum(gClients,ref) ? gClients->appls[ref]->applAlarm : 0;
+	return CheckRefNum(gClients,ref) ? Appls(gClients)[ref]->applAlarm : 0;
 }
 
 
@@ -552,7 +530,7 @@ void MidiSetApplAlarm (short ref,ApplAlarmPtr alarm)
 		args.refnum = ref;
 		args.alarm = alarm;
 		CALL(kMidiSetApplAlarm,&args);
-		gClients->appls[ref]->applAlarm = alarm;
+		Appls(gClients)[ref]->applAlarm = alarm;
 	}
 }
 
@@ -628,11 +606,7 @@ MidiEvPtr MidiNewCell (){ return MSNewCell(FreeList(Memory(gClients))); }
 /* MidiFreeCell */
 /*******************/
 
-void MidiFreeCell (MidiEvPtr e) {  
-	if (e) {	
-		MSFreeCell(e, FreeList(Memory(gClients)));
-	}
-}
+void MidiFreeCell (MidiEvPtr e) {  if (e) MSFreeCell(e, FreeList(Memory(gClients)));}
 
 /*******************/
 /* MidiNewEv */
@@ -771,7 +745,6 @@ void MidiSendAt (short ref, MidiEvPtr e, long d)
 		MSFreeEv(e, FreeList(Memory(gClients)));
 	}
 }	
-
 
 /*******************/
 /* MidiCountEvs */
@@ -1089,8 +1062,8 @@ Boolean MidiIsAcceptedType (MidiFilterPtr filter, short type )
 
 Boolean MidiShare () 
 {
-   CHECK;
-   return (msfd >0);
+   CHECK_DEVICE;
+   return (gClients->msfd >0);
 }
 
 /*******************/
@@ -1226,12 +1199,12 @@ static void panic ()
 	TMidiCloseArgs args;
 	int i;
 	for (i=0; i<MaxAppls; i++) {
-		if (gClients->appls[i]) {
-			args.refnum = gClients->appls[i]->refNum;
+		if (Appls(gClients)[i]) {
+			args.refnum = Appls(gClients)[i]->refNum;
 			CALL(kMidiClose,&args);
 		}
 	}
-	if (msfd > 0) close (msfd);
+	if (gClients->msfd > 0) close (gClients->msfd);
 }
 
 /*--------------------------------------------------------------------*/

@@ -17,6 +17,8 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
 
 */
 
@@ -248,8 +250,6 @@ static void initMthTable() {
 	KernelMthTable[kMidiIsAcceptedChan ] = mskIsAcceptedChan;
 	KernelMthTable[kMidiIsAcceptedPort ] = mskIsAcceptedPort;
 	KernelMthTable[kMidiIsAcceptedType ] = mskIsAcceptedType;
-		
-	KernelMthTable[kMidiQuit ] = mskQuitAction;
 	
 	KernelMthTable[kMidiReset ] = MidiReset;
 	

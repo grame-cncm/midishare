@@ -21,7 +21,9 @@
   modification history:
    [08-09-99] fifo functions moved to lffifoh
               mem allocation functions moved to mem.c
-
+	      
+   [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+             
 */
   
 #ifdef MODVERSIONS
@@ -49,9 +51,9 @@ typedef struct TMachine {
 
 typedef struct {
 	fifo 			commands;	/* fifo of commands : task and alarms */
-	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thead */
-	Boolean wakeFlag;
-	Boolean status;    /* running mode : user or kernel */
+	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thread */
+	Boolean 		wakeFlag;	/* used for wake up of the real-time thread */
+	Boolean 		status;    	/* running mode : user or kernel */
 	
 } LinuxContext, * LinuxContextPtr;
 
@@ -121,13 +123,13 @@ static void wakeUp (TApplContextPtr context)
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	
 	if (!linuxContext->wakeFlag){
-		//prnt("wakeUp\n");
 		wake_up(GetCommandQueue(context));
 		linuxContext->wakeFlag = true;	
 	}
 }
 
 /*_________________________________________________________________________*/
+
 void DriverWakeUp (TApplPtr appl)
 {
 	LinuxContextPtr context = (LinuxContextPtr)appl->context;
@@ -140,6 +142,7 @@ void DriverWakeUp (TApplPtr appl)
 }
 
 /*_________________________________________________________________________*/
+
 void DriverSleep  (TApplPtr appl)
 {
 	LinuxContextPtr context = (LinuxContextPtr)appl->context;
@@ -160,8 +163,7 @@ void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long al
 	
 	if (context->status) {
 		alarm (refNum, alarmCode);
-	}
-	else {
+	}else {
 		/* put an applAlarm event in the application command fifo  */	
 		ev = MSNewEv(typeApplAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
@@ -194,28 +196,6 @@ void CallRcvAlarm (TApplContextPtr c, RcvAlarmPtr alarm, short refNum)
 		}
 	}
 }
-
-
-/*_________________________________________________________________________*/
-
-void CallQuitAction (TApplContextPtr context)
-{
-	MidiEvPtr ev;
-	
-	/* Free command fifo */
-	
-	FlushCommandFifo(context);
-	
-	/* put a Quit event in the application command fifo  */
-	
-	ev = MSNewEv(typeReset,FreeList(Memory(gMem)));  // A REVOIR
-
-	if (ev) {
-		fifoput(GetCommand(context), (cell*)ev);
-		wakeUp(context);
-	}
-}
-
 
 /*_________________________________________________________________________*/
 

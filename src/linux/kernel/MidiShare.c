@@ -20,6 +20,7 @@
   
   modifications history:
    [08-09-99] DF - adaptation to new data structures
+   [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
 
 */
 
@@ -42,7 +43,6 @@
 #include "msFilter.h"
 
 //_________________________________________________________
-void CallQuitAction (TApplContextPtr context);
 MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g);
@@ -165,43 +165,6 @@ int mskOpen(unsigned long userptr)
 		
 	if (copy_to_user((TMidiOpenArgs *)userptr, &args, sizeof(TMidiOpenArgs))) return -EFAULT;
 
-	return 0;	
-}
-
-
-/*__________________________________________________________________________________*/
-/*
- User : MidiClose 				
- 
- 	Call (mskQuit)				----> kernel mskQuit  	---> Quit event 
-	
- 	[wait for Real Time thread exit]	
- 		
- 							<------------------  User Real-Time thread exit
-
-	Call(mskClose)
-						----> kernel mskClose 
-						      
-						      Free kernel structure
-						<----
-	Free user structure
-	
-	End
-
-*/
-
-/*__________________________________________________________________________________*/
-
-int mskQuitAction(unsigned long userptr)
-{
-	TMidiCloseArgs args;
-	TClientsPtr clients = Clients(gMem);
-	TApplPtr appl;
-	
-	if (copy_from_user(&args, (TMidiCloseArgs *)userptr, sizeof(TMidiCloseArgs))) return -EFAULT;
-	appl = clients->appls[args.refnum];
-	CallQuitAction(appl->context);	
-	
 	return 0;	
 }
 

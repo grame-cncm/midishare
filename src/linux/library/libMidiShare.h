@@ -20,6 +20,8 @@
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
+   [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+
 
 */
 
@@ -53,14 +55,14 @@ typedef struct TTaskExt
 /*__________________________________________________________________________________*/
 /* Verification and Initialisation of the library          							*/
 
-#define CHECK if (msfd < 0) MidiInstall()
+#define CHECK_DEVICE if (Device(gClients) == 0) MidiInstall()
 
 #define NewAppl(size)		(TApplPtr)malloc( size)
 #define FreeAppl(appl)		free(appl)
 
 #define CALL(index,args) \
-	 {int err; if (msfd < 0) MidiInstall();\
-	 err = ioctl(msfd, (index), args); \
+	 {int err; if (Device(gClients) == 0) MidiInstall();\
+	 err = ioctl(Device(gClients), (index), args); \
 	 if (err < 0) { printf("ioctl failed index %d file %s line %d\n", index, __FILE__, __LINE__);  exit(-1); }}
 
 
@@ -69,8 +71,6 @@ typedef struct TTaskExt
 
 extern TClients   	gLClients ;
 extern TClients*	gClients ;
-extern int msfd;
-
 
 /*__________________________________________________________________________________*/
 /*  Function prototypes                                                   			*/

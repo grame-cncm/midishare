@@ -124,8 +124,7 @@ enum { 	kMidiGetVersion = 1,
 		kMidiIsAcceptedType,
 
 		kMidiReset,
-		kMidiQuit,
-
+	
 		/* release 1.80 */		
 		kMidiRegisterDriver,
 		kMidiUnregisterDriver,
