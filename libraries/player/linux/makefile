@@ -1,12 +1,14 @@
 
 TARGET = libPlayer.so.1.0
 LIB = /usr/lib/libPlayer.so
-INC=src/Include 
+INC=../src/Include 
 INC1=./
+SRC =../src
 OPTIONS=-D__Linux__
 MODCFLAGS := -O6 -Wall -DLINUX 
 FLAGS=-fPIC -c  -g -O2
 CC = gcc
+
 
 OBJ = TChaserIterator.o TChaserVisitor.o THashTable.o TClockEventReceiver.o TEventReceiver.o \
 TEventRecorder.o TExtEventReceiver.o TMidiPlayer.o TSMPTEEventReceiver.o TPlayerFactory.o \
@@ -33,131 +35,131 @@ $(LIB).1.0 : $(TARGET)
 
 	
 
-TChaserIterator.o : src/Chasers/TChaserIterator.cpp
-	$(CC) src/Chasers/TChaserIterator.cpp   -I$(INC) -I$(INC1)  $(OPTIONS) $(FLAGS) 
+TChaserIterator.o : $(SRC)/Chasers/TChaserIterator.cpp
+	$(CC) $(SRC)/Chasers/TChaserIterator.cpp   -I$(INC) -I$(INC1)  $(OPTIONS) $(FLAGS) 
 
-TChaserVisitor.o : src/Chasers/TChaserVisitor.cpp
-	$(CC) src/Chasers/TChaserVisitor.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS) 
+TChaserVisitor.o : $(SRC)/Chasers/TChaserVisitor.cpp
+	$(CC) $(SRC)/Chasers/TChaserVisitor.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS) 
 
-THashTable.o : src/Chasers/THashTable.cpp
-	$(CC) src/Chasers/THashTable.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+THashTable.o : $(SRC)/Chasers/THashTable.cpp
+	$(CC) $(SRC)/Chasers/THashTable.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TClockEventReceiver.o : src/Events/TClockEventReceiver.cpp
-	$(CC) src/Events/TClockEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TClockEventReceiver.o : $(SRC)/Events/TClockEventReceiver.cpp
+	$(CC) $(SRC)/Events/TClockEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TEventReceiver.o : src/Events/TEventReceiver.cpp
-	$(CC) src/Events/TEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TEventReceiver.o : $(SRC)/Events/TEventReceiver.cpp
+	$(CC) $(SRC)/Events/TEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TEventRecorder.o : src/Events/TEventRecorder.cpp
-	$(CC) src/Events/TEventRecorder.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TEventRecorder.o : $(SRC)/Events/TEventRecorder.cpp
+	$(CC) $(SRC)/Events/TEventRecorder.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TExtEventReceiver.o : src/Events/TExtEventReceiver.cpp
-	$(CC) src/Events/TExtEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TExtEventReceiver.o : $(SRC)/Events/TExtEventReceiver.cpp
+	$(CC) $(SRC)/Events/TExtEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 	
-TMidiPlayer.o : src/Events/TMidiPlayer.cpp
-	$(CC) src/Events/TMidiPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TMidiPlayer.o : $(SRC)/Events/TMidiPlayer.cpp
+	$(CC) $(SRC)/Events/TMidiPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TSMPTEEventReceiver.o : src/Events/TSMPTEEventReceiver.cpp
-	$(CC) src/Events/TSMPTEEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TSMPTEEventReceiver.o : $(SRC)/Events/TSMPTEEventReceiver.cpp
+	$(CC) $(SRC)/Events/TSMPTEEventReceiver.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayerFactory.o : src/Factory/TPlayerFactory.cpp
-	$(CC) src/Factory/TPlayerFactory.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayerFactory.o : $(SRC)/Factory/TPlayerFactory.cpp
+	$(CC) $(SRC)/Factory/TPlayerFactory.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-Player.o : src/Library/Player.cpp
-	$(CC) src/Library/Player.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+Player.o : $(SRC)/Library/Player.cpp
+	$(CC) $(SRC)/Library/Player.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayer.o : src/Library/TPlayer.cpp
-	$(CC) src/Library/TPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayer.o : $(SRC)/Library/TPlayer.cpp
+	$(CC) $(SRC)/Library/TPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 	
-TLoopManager.o : src/Loop/TLoopManager.cpp
-	$(CC) src/Loop/TLoopManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TLoopManager.o : $(SRC)/Loop/TLoopManager.cpp
+	$(CC) $(SRC)/Loop/TLoopManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TRunningPlayer.o : src/Players/TRunningPlayer.cpp
-	$(CC) src/Players/TRunningPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TRunningPlayer.o : $(SRC)/Players/TRunningPlayer.cpp
+	$(CC) $(SRC)/Players/TRunningPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TSMPTEPlayer.o : src/Players/TSMPTEPlayer.cpp
-	$(CC) src/Players/TSMPTEPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TSMPTEPlayer.o : $(SRC)/Players/TSMPTEPlayer.cpp
+	$(CC) $(SRC)/Players/TSMPTEPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TSyncInPlayer.o : src/Players/TSyncInPlayer.cpp
-	$(CC) src/Players/TSyncInPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TSyncInPlayer.o : $(SRC)/Players/TSyncInPlayer.cpp
+	$(CC) $(SRC)/Players/TSyncInPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TSyncOutPlayer.o : src/Players/TSyncOutPlayer.cpp
-	$(CC) src/Players/TSyncOutPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TSyncOutPlayer.o : $(SRC)/Players/TSyncOutPlayer.cpp
+	$(CC) $(SRC)/Players/TSyncOutPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTickPlayer.o : src/Players/TTickPlayer.cpp
-	$(CC) src/Players/TTickPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTickPlayer.o : $(SRC)/Players/TTickPlayer.cpp
+	$(CC) $(SRC)/Players/TTickPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayerScore.o : src/Score/TPlayerScore.cpp
-	$(CC) src/Score/TPlayerScore.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayerScore.o : $(SRC)/Score/TPlayerScore.cpp
+	$(CC) $(SRC)/Score/TPlayerScore.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TScoreInserter.o : src/Score/TScoreInserter.cpp
-	$(CC) src/Score/TScoreInserter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TScoreInserter.o : $(SRC)/Score/TScoreInserter.cpp
+	$(CC) $(SRC)/Score/TScoreInserter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TClockSender.o : src/Synchroniser/TClockSender.cpp
-	$(CC) src/Synchroniser/TClockSender.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TClockSender.o : $(SRC)/Synchroniser/TClockSender.cpp
+	$(CC) $(SRC)/Synchroniser/TClockSender.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayerSynchroniserClock.o : src/Synchroniser/TPlayerSynchroniserClock.cpp
-	$(CC) src/Synchroniser/TPlayerSynchroniserClock.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayerSynchroniserClock.o : $(SRC)/Synchroniser/TPlayerSynchroniserClock.cpp
+	$(CC) $(SRC)/Synchroniser/TPlayerSynchroniserClock.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayerSynchroniserExt.o : src/Synchroniser/TPlayerSynchroniserExt.cpp
-	$(CC) src/Synchroniser/TPlayerSynchroniserExt.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayerSynchroniserExt.o : $(SRC)/Synchroniser/TPlayerSynchroniserExt.cpp
+	$(CC) $(SRC)/Synchroniser/TPlayerSynchroniserExt.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TPlayerSynchroniserInt.o : src/Synchroniser/TPlayerSynchroniserInt.cpp
-	$(CC) src/Synchroniser/TPlayerSynchroniserInt.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TPlayerSynchroniserInt.o : $(SRC)/Synchroniser/TPlayerSynchroniserInt.cpp
+	$(CC) $(SRC)/Synchroniser/TPlayerSynchroniserInt.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTrackTable.o : src/Tracks/TTrackTable.cpp
-	$(CC) src/Tracks/TTrackTable.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTrackTable.o : $(SRC)/Tracks/TTrackTable.cpp
+	$(CC) $(SRC)/Tracks/TTrackTable.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-UMidi.o : src/Utils/UMidi.cpp
-	$(CC) src/Utils/UMidi.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+UMidi.o : $(SRC)/Utils/UMidi.cpp
+	$(CC) $(SRC)/Utils/UMidi.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-UTools.o : src/Utils/UTools.cpp
-	$(CC) src/Utils/UTools.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+UTools.o : $(SRC)/Utils/UTools.cpp
+	$(CC) $(SRC)/Utils/UTools.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-Tmtrack.o : src/MidiFile/Tmtrack.c
-	$(CC) src/MidiFile/Tmtrack.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+Tmtrack.o : $(SRC)/MidiFile/Tmtrack.c
+	$(CC) $(SRC)/MidiFile/Tmtrack.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 	
-Midifile.o : src/MidiFile/Midifile.c
-	$(CC) src/MidiFile/Midifile.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+Midifile.o : $(SRC)/MidiFile/Midifile.c
+	$(CC) $(SRC)/MidiFile/Midifile.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TEventFactory.o : src/Framework/Events/TEventFactory.cpp
-	$(CC) src/Framework/Events/TEventFactory.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TEventFactory.o : $(SRC)/Framework/Events/TEventFactory.cpp
+	$(CC) $(SRC)/Framework/Events/TEventFactory.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TMidiAppl.o : src/Framework/MidiAppl/TMidiAppl.cpp
-	$(CC) src/Framework/MidiAppl/TMidiAppl.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TMidiAppl.o : $(SRC)/Framework/MidiAppl/TMidiAppl.cpp
+	$(CC) $(SRC)/Framework/MidiAppl/TMidiAppl.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 	
-TScheduler.o : src/Framework/Scheduler/TScheduler.cpp
-	$(CC) src/Framework/Scheduler/TScheduler.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TScheduler.o : $(SRC)/Framework/Scheduler/TScheduler.cpp
+	$(CC) $(SRC)/Framework/Scheduler/TScheduler.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TScore.o : src/Framework/Score/TScore.cpp
-	$(CC) src/Framework/Score/TScore.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TScore.o : $(SRC)/Framework/Score/TScore.cpp
+	$(CC) $(SRC)/Framework/Score/TScore.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TScoreFollower.o : src/Framework/Score/TScoreFollower.cpp
-	$(CC) src/Framework/Score/TScoreFollower.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TScoreFollower.o : $(SRC)/Framework/Score/TScoreFollower.cpp
+	$(CC) $(SRC)/Framework/Score/TScoreFollower.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TScoreIterator.o : src/Framework/Score/TScoreIterator.cpp
-	$(CC) src/Framework/Score/TScoreIterator.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TScoreIterator.o : $(SRC)/Framework/Score/TScoreIterator.cpp
+	$(CC) $(SRC)/Framework/Score/TScoreIterator.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-UScoreManager.o : src/Framework/Score/UScoreManager.cpp
-	$(CC) src/Framework/Score/UScoreManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+UScoreManager.o : $(SRC)/Framework/Score/UScoreManager.cpp
+	$(CC) $(SRC)/Framework/Score/UScoreManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 		
-TTempoConverter.o : src/Framework/Tempo/TTempoConverter.cpp
-	$(CC) src/Framework/Tempo/TTempoConverter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTempoConverter.o : $(SRC)/Framework/Tempo/TTempoConverter.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTempoConverter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTempoMap.o : src/Framework/Tempo/TTempoMap.cpp
-	$(CC) src/Framework/Tempo/TTempoMap.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTempoMap.o : $(SRC)/Framework/Tempo/TTempoMap.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTempoMap.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTempoMapVisitor.o : src/Framework/Tempo/TTempoMapVisitor.cpp
-	$(CC) src/Framework/Tempo/TTempoMapVisitor.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTempoMapVisitor.o : $(SRC)/Framework/Tempo/TTempoMapVisitor.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTempoMapVisitor.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTime.o : src/Framework/Tempo/TTime.cpp
-	$(CC) src/Framework/Tempo/TTime.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTime.o : $(SRC)/Framework/Tempo/TTime.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTime.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTimeConverter.o : src/Framework/Tempo/TTimeConverter.cpp
-	$(CC) src/Framework/Tempo/TTimeConverter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTimeConverter.o : $(SRC)/Framework/Tempo/TTimeConverter.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTimeConverter.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
-TTimeManager.o : src/Framework/Tempo/TTimeManager.cpp
-	$(CC) src/Framework/Tempo/TTimeManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+TTimeManager.o : $(SRC)/Framework/Tempo/TTimeManager.cpp
+	$(CC) $(SRC)/Framework/Tempo/TTimeManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
  clean : 
 	rm *.o
