@@ -91,13 +91,12 @@ void TTCPSocket::Close ()
 {
 	if (fThread) {
 		fRunFlag = false;
-		WaitForSingleObject (fThread, 50);
+		WaitForSingleObject (fThread, 500);
 		CloseHandle (fThread);
 		fThread = 0;
 		fThreadID = 0;
 	}
 	if (fRef) {
-//		if (fBind) ;
 		shutdown (fRef, 0);
 		closesocket (fRef);
 		fRef = 0;
@@ -120,7 +119,7 @@ DWORD TTCPSocket::ThreadCreate (TCPSocketMode mode)
 	fRunFlag = true;
 	fThread = CreateThread(NULL, 0, f, this, 0, &fThreadID);
 	if (fThread) {
-		SetThreadPriority (fThread, THREAD_PRIORITY_HIGHEST);
+		SetThreadPriority (fThread, THREAD_PRIORITY_TIME_CRITICAL);
 	}
 	else return GetLastError();
 	return noErr;
@@ -219,11 +218,11 @@ void TTCPClient::ListenLoop ()
 			fTCPClient->SockError (err);
 			break;
 		}
-		if (!len) break;
+		if (!len)	break; // connection gracefully closed
 		fTCPClient->RcvPacket (&fPacket, len);
 	}
 	fThread = 0;
-	if (fTCPClient) 
+	if (fTCPClient && len) 
 		fTCPClient->Disconnect (0);
 }
 
@@ -244,7 +243,7 @@ void TTCPClient::SetMTU ()
 //____________________________________________________________
 SocketStatus TTCPSocket::Listen (IPAddrPtr from, void *buff, short *len)
 {
-	int addr_len;
+	int addr_len = sizeof(struct sockaddr);
 	int n = recvfrom(fRef, (char *)buff, *len, 0, (struct sockaddr *)from, &addr_len);
 	if (n == SOCKET_ERROR) {
 		*len = 0;
