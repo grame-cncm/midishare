@@ -297,7 +297,7 @@ typedef struct SMidiGetDriverInfosArgs
 typedef struct SMidiAddSlotArgs 
 {
   /* result */
-  SlotRefnum slotRef;
+  SlotRefNum slotRef;
   /* input args */
   short refnum;
 
@@ -307,7 +307,7 @@ typedef struct SMidiAddSlotArgs
 typedef struct SMidiGetIndSlotArgs 
 {
   /* result */
-  SlotRefnum slotRef;
+  SlotRefNum slotRef;
   /* input args */
   short refnum;
   short index;
@@ -320,7 +320,7 @@ typedef struct SMidiGetSlotInfosArgs
   /* result */
   Boolean result;
   /* input args */
-  SlotRefnum slotRef;
+  SlotRefNum slotRef;
   TSlotInfos infos;
 
 } TMidiGetSlotInfosArgs;
@@ -330,7 +330,7 @@ typedef struct SMidiConnectSlotArgs
 {
   /* result */
   /* input args */
-  SlotRefnum slotRef;
+  SlotRefNum slotRef;
   short 	port;
   Boolean 	state;
 
@@ -342,7 +342,7 @@ typedef struct SMidiIsSlotConnectedArgs
   /* result */
   Boolean 	result;
   /* input args */
-  SlotRefnum slotRef;
+  SlotRefNum slotRef;
   short 	port;
 
 } TMidiIsSlotConnectedArgs;
