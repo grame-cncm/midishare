@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
   modifications history:
    [08-09-99] DF - removing the sorter dependencies
@@ -33,7 +33,7 @@
 MSFunctionType(void)        MSSendIm   (short refNum, MidiEvPtr e, fifo* schedlist, unsigned long curdate);
 MSFunctionType(void)        MSSend     (short refNum, MidiEvPtr e, fifo* schedlist);
 MSFunctionType(void)        MSSendAt   (short refNum, MidiEvPtr e, unsigned long d, fifo* schedlist);
-MSFunctionType(ulong)       MSCountEvs (short refNum, TClientsPtr g);
+MSFunctionType(unsigned long) MSCountEvs (short refNum, TClientsPtr g);
 MSFunctionType(MidiEvPtr)   MSGetEv    (short refNum, TClientsPtr g);
 MSFunctionType(MidiEvPtr)   MSAvailEv  (short refNum, TClientsPtr g);
 MSFunctionType(void)        MSFlushEvs (short refNum, TClientsPtr g);

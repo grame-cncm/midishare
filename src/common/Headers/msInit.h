@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
 */
 
@@ -29,7 +29,7 @@
 MSFunctionType(short)  MSGetVersion  (TMSGlobalPtr g);
 
 /* initialization function */
-MSFunctionType(void)   MSSpecialInit ( ulong defaultSpace, TMSGlobalPtr g);
+MSFunctionType(void)   MSSpecialInit ( unsigned long defaultSpace, TMSGlobalPtr g);
 
 void MidiShareWakeup (TMSGlobalPtr g);
 void MidiShareSleep  (TMSGlobalPtr g);

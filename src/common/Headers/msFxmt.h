@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
   
   modifications history:
 */
@@ -28,12 +28,12 @@
 #include "msDefs.h"
 #include "msKernel.h"
 
-#define kLineUndef	0	/* fifo non encore initialisé		*/
-#define kLineOff	2	/* fifo initialisé mais non actif	*/
-#define kLineOn		3	/* fifo initialisé et actif		*/
+#define kLineUndef	0	/* uninitialized fifo        */
+#define kLineOff	2	/* inactive initialized fifo */
+#define kLineOn		3	/* active initialized fifo   */
 
 /*------------------------------------------------------------------------*/
-/* Les codes de Status MIDI : définis dans MidiShare.h */
+/* MIDI status codes: defined in MidiShare.h */
 #define WAIT		0xFF
 
 #define NRPLSB		98		/* non registr. param number (lsb)	*/

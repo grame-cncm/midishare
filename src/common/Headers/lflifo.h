@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,13 +16,12 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
 */
 
 #ifndef __LFLIFO__
 #define __LFLIFO__
-
 
 //
 /*****************************************************************
@@ -67,30 +66,28 @@ typedef struct cell {
 							/*+ any data here			+*/
 } cell;
 
- 
- 
-#ifdef __Pentium__
-# define vtype volatile
+
+#if defined(WIN32) || defined(i386)
+#	define vtype volatile
 #else
-# define vtype 
+#	define vtype 
 #endif
 
 typedef struct lifo {
 	vtype unsigned long	ic;		/*+ input (push) count	+*/
 	vtype 		  cell*	top;	/*+ top of the stack	+*/
 	vtype unsigned long	oc;		/*+ output (pop) count	+*/
-#ifdef __POWERPC__
+#ifdef __ppc__
 	long 	unused [5];		/* lifo size must be at least 32 bytes */
 							/* to avoid livelock in multiprocessor */
 #endif
 } lifo;
 
-#ifdef __Windows__
-# define inline __inline
+#if defined(WIN32)
+#	define inline __inline
 #elif defined(__MacOSX__)
-#define inline __inline__
+#	define inline __inline__
 #endif
-
 
 
 /****************************************************************
@@ -107,22 +104,25 @@ static inline cell* lfavail(lifo* lf) {
 	return (cell*)lf->top;
 }
 
-#if defined(__linux__)
-# if defined(__powerpc)
+#if defined(linux)
+# if defined(powerpc)
 #  include "lflifoppc.h"
 # else
 #  include "lflifoLinux.h"
 # endif
 
-#elif defined(__Macintosh__) || defined(__MacOSX__)
+#elif defined(macintosh) || defined(__MacOSX__)
 # if defined(__ppc__) && defined(__GNUC__)
 #  include "lflifoppc.h"
 # else
 #  include "lflifoMac.h"
 # endif
 
-#elif defined(__Windows__)
+#elif defined(WIN32)
 # include "lflifoWin.h"
+
+#else
+#	error "lflifo.h : target os undefined"
 #endif
 
 #endif

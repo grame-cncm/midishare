@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
   modifications history:
    [08-09-99] DF - new memory management scheme
@@ -35,11 +35,11 @@
 /*------------------------------------------------------------------------------*/
 typedef struct TMSMemory
 {
-    lifo	     freeList;              /* available events list          */
-    lifo         blockList;             /* allocated block list           */
-    ulong	     desiredSpace;         	/* count of free+used events      */
-    ulong	     totalSpace;         	/* count of free+used events      */
-    long         active;                /* active > 0 if memory is active */
+    lifo	      freeList;             /* available events list          */
+    lifo          blockList;            /* allocated block list           */
+    unsigned long desiredSpace;         /* count of free+used events      */
+    unsigned long totalSpace;         	/* count of free+used events      */
+    long          active;               /* active > 0 if memory is active */
 } TMSMemory, * MSMemoryPtr;
 
 /*------------------------------------------------------------------------------*/
@@ -49,13 +49,13 @@ typedef struct TMSMemory
 #define BlockList(g)        &g->blockList
 
 /* Memory management functions         */
-MSFunctionType(ulong) MSGrowSpace    (unsigned long nbev, MSMemoryPtr g);
-MSFunctionType(ulong) MSDesiredSpace (MSMemoryPtr g);
-MSFunctionType(ulong) MSFreeSpace    (MSMemoryPtr g);
-MSFunctionType(ulong) MSTotalSpace   (MSMemoryPtr g);
+MSFunctionType(unsigned long) MSGrowSpace    (unsigned long nbev, MSMemoryPtr g);
+MSFunctionType(unsigned long) MSDesiredSpace (MSMemoryPtr g);
+MSFunctionType(unsigned long) MSFreeSpace    (MSMemoryPtr g);
+MSFunctionType(unsigned long) MSTotalSpace   (MSMemoryPtr g);
 
 /* private memory management functions */
-void     InitMemory  (MSMemoryPtr g, ulong defaultSpace);
+void     InitMemory  (MSMemoryPtr g, unsigned long defaultSpace);
 Boolean  OpenMemory  (MSMemoryPtr g);
 void     CloseMemory (MSMemoryPtr g);
 

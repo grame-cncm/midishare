@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,14 +16,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
 */
 
 #ifndef __LFLIFOLINUX__
 #define __LFLIFOLINUX__
 
-#ifdef __Pentium__
+#ifdef i386
 
 #ifdef __SMP__
 #define LOCK "lock ; "
@@ -93,6 +93,6 @@ static inline unsigned long lfsize (lifo * lf)
 		:"memory", "edx");
 	return n;
 }
-#endif /* __Pentium__ */
+#endif /* i386 */
 
 #endif

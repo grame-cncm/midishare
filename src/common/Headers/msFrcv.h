@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
   
   modifications history:
 */
@@ -79,8 +79,8 @@ typedef struct RFifo{
 	 char         reserved;  /* Reserve                            */
 	 RcvMethodPtr parse;     /* Etat de l'analyse (adr. routine)   */
 	 MidiEvPtr    ptrCur;    /* Pointeur SysEx en cours            */
-	 ulong        errCount;  /* Nombre d'erreurs en reception      */
-	 ulong        date;      /* Date de l'evt sur 24 bits de pFort */
+	 unsigned long errCount; /* Nombre d'erreurs en reception      */
+	 unsigned long date;     /* Date de l'evt sur 24 bits de pFort */
 	 union {
 		struct {
 			 uchar  type;      /* Type de l'evenement                */

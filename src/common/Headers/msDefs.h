@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
   
   modifications history:
    [08-09-99] DF - improving TMidiST and TMidiEv 
@@ -28,25 +28,14 @@
 
 #include "msTypes.h"
 
-#ifdef __Macintosh__
-#	define  MSALARMAPI
-#	define  FAR
-#	define	MIDISHAREAPI
-#ifdef __MacOSX__
-#   define  ALARMTYPE   
-#else
-#   define  ALARMTYPE pascal
-#endif
-#endif
-
 #ifdef WIN32
 #   include  "windows.h"
 #   define  ALARMTYPE
 #	define	MIDISHAREAPI __declspec(dllexport)
 #	define  MSALARMAPI	CALLBACK
-#endif
-
-#ifdef __linux__
+#elif defined(macintosh) && !defined(__MacOSX__)
+#   define  ALARMTYPE pascal
+#else
 #   define  ALARMTYPE
 #	define  MSALARMAPI
 #	define  FAR

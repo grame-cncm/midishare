@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
   
   modifications history:
    [13-09-99] DF - inlining fifoinit in fifoclear
@@ -50,11 +50,11 @@
  *****************************************************************
  *****************************************************************/
 
-#if defined(__Pentium__) || defined(__POWERPC__)
+#if defined(i386) || defined(__ppc__)
 # include "lffifo_lifo.h"
-#elif defined(__Windows__)
+#elif defined(WIN32)
 # include "lffifo_lifo.h"
-#elif defined(__Macintosh__)
+#elif defined(macintosh)
 # include "lffifoMac.h"
 #endif
 
