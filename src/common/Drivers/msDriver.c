@@ -69,20 +69,23 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 {
-	TDriverPtr drv; short i;
+	TDriverPtr drv; short i; TAppl saved;
 	TClientsPtr clients = Clients(g);	
 	if (!CheckDriverRefNum(clients, ref) || (ref == MidiShareDriverRef))
 		return;
 
-	if (Clients(g)->nbAppls)
-		DriverSleep (clients->appls[ref]);		
+	saved = *clients->appls[ref];
+//	if (Clients(g)->nbAppls)
+//		DriverSleep (clients->appls[ref]);		
 	drv = Driver(clients->appls[ref]);
 	for (i = 0; i < MaxSlots; i++)
 		if (drv->map[i]) FreeMap(drv->map[i]);
 	closeClient (ref, g);
 	clients->nbDrivers--;
-	if (Clients(g)->nbAppls)			
+	if (Clients(g)->nbAppls) {			
+		DriverSleep (&saved);		
 		CallAlarm (ref, MIDICloseDriver, clients);
+	}
 }
 
 /*____________________________________________________________________________*/
@@ -102,6 +105,7 @@ MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClie
 	setApplName (infos->name, appl->name);
 	infos->version = appl->driver->version;
 	infos->slots   = appl->driver->slotsCount;
+	infos->reserved[0] = infos->reserved[1] = 0;
 	return true;
 }
 
@@ -184,6 +188,8 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 		short i; PortMapPtr map = drv->map[ref.u.s.slotRef];
 		for (i=0; i<PortMapSize; i++)
 			infos->cnx[i] = map[i];
+		infos->reserved[0] = 0;
+		infos->reserved[1] = 0;
 		return DriverSlotInfos (g->appls[ref.u.s.drvRef], slot, infos);
 	}
 	return false;
