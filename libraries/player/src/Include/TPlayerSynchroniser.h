@@ -119,11 +119,6 @@ class TPlayerSynchroniserInt :public TPlayerSynchroniser{
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
  		
- 		// Time conversion
-		
-		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
-		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor->ConvertMsToTick(date_ms - fOffset);}
- 	
  		Boolean IsSchedulable(ULONG date_tick);
  	
 };
@@ -174,13 +169,9 @@ class TPlayerSynchroniserClock :public TPlayerSynchroniser{
 		
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
+ 		
  		ULONG GetTempo (){return fTempoVisitor->GetTempo();}
  		
- 		// Time conversion
-		
-		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
-		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor->ConvertMsToTick(date_ms - fOffset);}
-		
  		Boolean IsSchedulable(ULONG date_tick);
  		
  		void RcvClock (ULONG date_ms);
@@ -216,16 +207,11 @@ class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 		
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
- 		ULONG GetTempo (){return fTempoVisitor->GetTempo();}
  		
- 		// Time conversion
-		
-		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor->ConvertTickToMs(date_tick);}
-		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor->ConvertMsToTick(date_ms - fOffset);}
+ 		ULONG GetTempo (){return fTempoVisitor->GetTempo();}
+ 		void SetTempo (ULONG tempo);
  		
  		Boolean IsSchedulable(ULONG date_tick);
- 	
-		void SetTempo (ULONG tempo);
  	
 };
 
