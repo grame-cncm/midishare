@@ -1,0 +1,135 @@
+
+enablemapdirect3216 = true;
+
+typedef unsigned char Byte;
+typedef unsigned char Boolean;
+
+typedef unsigned long DWORD;
+typedef DWORD * LPDWORD;
+typedef void * LPVOID;
+
+typedef long MidiEvPtr;
+typedef long MidiSeqPtr;
+typedef long FilterPtr;
+
+typedef char *MidiName;
+
+typedef struct PlayerState{
+	long date;
+	long tempo;
+	short tsnum;
+	short tsdenom;
+	short tsclick;
+	short tsquarter;
+	short bar;
+	short beat;
+	short unit;
+	short state;
+	short syncin;
+	short syncout;
+}PlayerState;
+typedef  PlayerState  * PlayerStatePtr;
+
+
+typedef struct Pos{
+	short bar;
+	short beat;
+	short unit;
+}Pos;
+typedef  Pos  * PosPtr;
+
+typedef struct {
+	   short		format;
+		short		hours;
+		short		minutes;
+		short		seconds;
+		short		frames;
+		short		fracs;
+} TSmpteLocation;
+typedef TSmpteLocation *SmpteLocPtr;
+
+
+typedef struct MidiFileInfos
+{
+	long format;					/* format du fichier				*/
+	long timedef;					/* définition du temps				*/
+	long clicks;					/* nbre de pas d'horloge/noire/frame*/
+	long tracks;               /* nombre de tracks                 */
+
+}MidiFileInfos;
+typedef  MidiFileInfos   * MidiFileInfosPtr;
+
+// FOR THUNKING
+
+// Player structure management
+
+short  OpenPlayer16 (MidiName name )	{ name=input; }
+void   ClosePlayer16 (short refnum)		{}
+
+// Transport control
+
+void   StartPlayer16 (short refnum)		{}
+void   ContPlayer16 (short refnum)		{}
+void   StopPlayer16 (short refnum)		{}
+void   PausePlayer16 (short refnum) 	{}
+
+// Record management
+
+void   SetRecordModePlayer16 (short refnum, short state) {}
+void   RecordPlayer16 (short refnum, short tracknum)     {}
+void   SetRecordFilterPlayer16(short refnum, FilterPtr filter){}
+
+
+
+// Position management
+
+void   SetPosBBUPlayer16 (short refnum, PosPtr pos){ pos=input; }
+void   SetPosMsPlayer16 (short refnum, long date_ms){}
+
+// Loop management
+
+void   SetLoopPlayer16 (short refnum, short state){}
+long   SetLoopStartBBUPlayer16 (short refnum,  PosPtr pos){ pos=input; }
+long   SetLoopEndBBUPlayer16 (short refnum,  PosPtr pos){ pos=input; }
+long   SetLoopStartMsPlayer16(short refnum,   long date_ms){}
+long   SetLoopEndMsPlayer16 (short refnum,   long date_ms){}
+
+
+// Synchronisation management
+
+void   SetSynchroInPlayer16 (short refnum, short state){}
+void   SetSynchroOutPlayer16 (short refnum,short state){}
+void   SetSMPTEOffsetPlayer16 (short refnum,SmpteLocPtr smptepos) { smptepos=input; }
+void   SetTempoPlayer16 (short refnum,   long tempo){}
+
+// State management
+
+void   GetStatePlayer16 (short refnum, PlayerStatePtr playerstate) { playerstate=input; }
+void   GetEndScorePlayer16 (short refnum, PlayerStatePtr playerstate){ playerstate=input; }
+
+
+// Step playing 
+
+void   ForwardStepPlayer16 (short refnum , short flag){}
+void   BackwardStepPlayer16 (short refnum , short flag){}
+
+ 
+// Tracks management
+
+short  MidiFileLoad16( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos){name = input; infos = input;}
+short  MidiFileSave16( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos){name = input; infos = input;}
+
+MidiSeqPtr   GetAllTrackPlayer16 (short refnum){}
+MidiSeqPtr   GetTrackPlayer16 (short refnum, short tracknum){}
+
+long   SetTrackPlayer16 (short refnum, short tracknum, MidiSeqPtr s){}
+long   SetAllTrackPlayer16 (short refnum, MidiSeqPtr s, long ticks_per_quarter){}
+
+void   SetParamPlayer16 (short refnum, short tracknum, short param , short value){}
+short  GetParamPlayer16 (short refnum, short tracknum, short  param){}
+
+long  InsertAllTrackPlayer16(short refnum,MidiSeqPtr s){}
+long  InsertTrackPlayer16(short refnum, short tracknum, MidiSeqPtr s){}
+
+
+
