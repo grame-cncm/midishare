@@ -4,24 +4,21 @@
 
 TARGET = libMidiShare.so
 
-LIBS = ../msClientCommonLib.o ../msOSGlueLib.o
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o ../msServerSharedLib.o
 
 COMSRC := $(wildcard ../common/*.c)
 COMINC := $(wildcard ../common/Headers/*.h)
-GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
-GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
 
-CFLAGS   := -O3 -Wall -I../common/Headers -I../osglue
-CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
-VPATH = ../common ../osglue ../osglue/glue ../osglue/unix
+CFLAGS   := -O3 -Wall -DMSKernel -I../common/Headers
+CXXFLAGS := $(CFLAGS) -I../osglue  -I../server
 CC = gcc
 
-SRC := $(wildcard *.c)
-OBJ := $(patsubst %.c, %.o, $(SRC)) libMain.o
+SRC := $(wildcard *.cpp)
+OBJ := $(patsubst %.cpp, %.o, $(SRC))
 DEST = /usr/lib
 
 $(TARGET).1.0 : makefile $(LIBS) $(OBJ)
-	$(CC) $(OBJ) $(LIBS) -g -lpthread -lstdc++ -shared -Wl,-soname,$(TARGET).1 -o $(TARGET).1.0
+	$(CC) $(OBJ) $(LIBS) -g -lpthread -lstdc++ -lportaudio -shared -Wl,-soname,$(TARGET).1 -o $(TARGET).1.0
 	
 makefile: makefile.linux
 	cat makefile.readme makefile.linux > makefile
