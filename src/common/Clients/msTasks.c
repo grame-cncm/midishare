@@ -18,54 +18,62 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+                   includes now ForgetTaskSync
+
 */
 
 #include "msTasks.h"
 #include "msEvents.h"
-#include "msSorter.h"
+#include "msExtern.h"
 #include "msSync.h"
+
+
+static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
+
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */
 MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r, 
                              long a1,long a2,long a3, 
-                             MSMemoryPtr g, TsorterBlockPtr sb)
+                             lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
 	MidiSTPtr ext;
 	
-	ev= MSNewEv (typeProcess, g);
+	ev= MSNewEv (typeProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->ptr1= (Ptr)task;
-		ext->ptr2= (Ptr)a1;
-		ext->ptr3= (Ptr)a2;
-		ext->ptr4= (Ptr)a3;
-		SorterPut (sb, (TDatedEvPtr)ev);
+		ext->val[0]= (long)task;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
+		fifoput (schedlist, (cell*)ev);
 	}
 }
 
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r, 
                              long a1,long a2,long a3, 
-                             MSMemoryPtr g, TsorterBlockPtr sb)
+                             lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
 	MidiSTPtr ext;
 	
-	ev= MSNewEv( typeProcess, g);
+	ev= MSNewEv( typeProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->ptr1= (Ptr)task;
-		ext->ptr2= (Ptr)a1;
-		ext->ptr3= (Ptr)a2;
-		ext->ptr4= (Ptr)a3;
-		SorterPut (sb, (TDatedEvPtr)ev);
+		ext->val[0]= (long)task;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
+		fifoput (schedlist, (cell*)ev);
 	}
 	return ev;
 }
@@ -73,21 +81,21 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, 
                              long a1,long a2,long a3, 
-                             MSMemoryPtr g, TsorterBlockPtr sb)
+                             lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
 	MidiSTPtr ext;
 	
-	ev= MSNewEv( typeDProcess, g);
+	ev= MSNewEv( typeDProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->ptr1= (Ptr)task;
-		ext->ptr2= (Ptr)a1;
-		ext->ptr3= (Ptr)a2;
-		ext->ptr4= (Ptr)a3;
-		SorterPut (sb, (TDatedEvPtr)ev);
+		ext->val[0]= (long)task;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
+		fifoput (schedlist, (cell*)ev);
 	}
 	return ev;
 }
@@ -112,10 +120,10 @@ MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
 {
 	MidiEvPtr ev, next;
 	if (CheckRefNum(g, refnum)) {
-		ev = ClearFifo (&g->appls[refnum]->dTasks);
+		ev = (MidiEvPtr)fifoclear (&g->appls[refnum]->dTasks);
 		while (ev) {
 			next= Link(ev);
-			MSFreeEv (ev, g->memory);
+			MSFreeEv (ev, FreeList(g->memory));
 			ev = next;
 		}
 	}
@@ -129,14 +137,39 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 	if( CheckRefNum( g, refnum)) {
 		appl = g->appls[refnum];
 		if (appl->dTasks.count) {
-			ev = PopFifoEv (&appl->dTasks);
+			ev = (MidiEvPtr)fifoget (&appl->dTasks);
 			if (ev) {
 				TTaskExtPtr task= (TTaskExtPtr)LinkST(ev);
                 /* you can assume that the calling process owns the deferred task ie : 
                    the task is located in its address space */
                 CallDTaskCode (appl->context, task, Date(ev), appl->refNum);
-				MSFreeEv (ev, g->memory);		
+				MSFreeEv (ev, FreeList(g->memory));		
 			}
 		}
 	}	
 }
+
+
+/*===========================================================================
+  Internal functions implementation
+  =========================================================================== */
+
+#ifdef __Macintosh__
+# ifdef __POWERPC__
+# else
+
+static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+{
+	Boolean ret = false;
+	INT_OFF();
+	if (*taskPtr == content) {
+      	EvType(content) = typeDead;
+    	*taskPtr = 0;
+    	ret = true;
+	}
+	INT_ON();
+	return ret;
+}
+
+# endif
+#endif /* __Macintosh__ */
