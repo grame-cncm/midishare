@@ -147,7 +147,7 @@ static Boolean TrapAvailable(short	trapNum, short tType)
 			return(false);				/*   these machines					*/
 		}
 	}
-	return NGetTrapAddress(trapNum, tType) != GetTrapAddress(_Unimplemented);
+	return NGetTrapAddress(trapNum, tType) != NGetTrapAddress(_Unimplemented, tType);
 }
 
 static Boolean IsAppWindow (WindowPtr wind)
