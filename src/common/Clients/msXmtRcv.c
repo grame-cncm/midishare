@@ -83,11 +83,9 @@ MSFunctionType(MidiEvPtr) MSGetEv (short refNum, TClientsPtr g)
 /*__________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSAvailEv (short refNum, TClientsPtr g)
 {
-	TApplPtr appl;
-
 	if( CheckRefNum( g, refNum)) {
-		appl = g->appls[refNum]; 
-		return RcvFifoHead(appl);
+		TApplPtr appl = g->appls[refNum]; 
+		return (MidiEvPtr)fifoavail (&appl->rcv);
 	}
 	return 0;
 }
