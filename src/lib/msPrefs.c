@@ -27,8 +27,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h> 
 
 #define MidiShareDirectory  "MidiShare"
+#define ErrFile  "midishare.log"
 
 #define profileName "midishare.ini"
 #define memorySectionName "Events memory"
@@ -46,28 +48,28 @@
 #define DriverMaxEntry	512
 
 //________________________________________________________________________
-static char * GetProfileFullName ()
+static char * GetProfileFullName (char* filename)
 {
 	static char  buff [1024];
 	const char* home = getenv("HOME");
 	if (home) {
-		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, profileName);
+		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, filename);
 		return buff;
 	}
-	return profileName;
+	return filename;
 }
 
 //________________________________________________________________________
 unsigned long LoadSpace()
 {
-	unsigned long n = get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, GetProfileFullName());
+	unsigned long n = get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, GetProfileFullName(profileName));
 	return  n ? n : kDefaultSpace;
 }
 
 //________________________________________________________________________
 unsigned long LoadBufferSize()
 {
-	unsigned long n = get_private_profile_int (audioSectionName, bufferSize, kDefaultSize, GetProfileFullName());
+	unsigned long n = get_private_profile_int (audioSectionName, bufferSize, kDefaultSize, GetProfileFullName(profileName));
 	return  n ? n : kDefaultSize;
 }
 
@@ -91,7 +93,7 @@ unsigned short CountDrivers()
 	char * defaultEntry= "", buff[DriverMaxEntry];
 	unsigned long n; unsigned short count = 0;
 	n= get_private_profile_string (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, GetProfileFullName());
+										DriverMaxEntry, GetProfileFullName(profileName));
 	if (n) {
 		char * ptr = NextDriver (buff, true);
 		while (ptr) {
@@ -109,7 +111,7 @@ Boolean GetDriver(short index, char *dst, short bufsize)
 	unsigned long n;
 
 	n= get_private_profile_string (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, GetProfileFullName());
+										DriverMaxEntry, GetProfileFullName(profileName));
 	if (!n) return false;
 	ptr = NextDriver (buff, true);
 	while (index-- && ptr)
@@ -121,4 +123,33 @@ Boolean GetDriver(short index, char *dst, short bufsize)
 	if (!bufsize) return false;
 	*dst = 0;
 	return true;
+}
+
+//_______________________________________________________________________
+char * dateString ()
+{
+	static char date[256];
+	time_t t;
+	time(&t);
+	strftime (date, 256, "[%D %T]", localtime(&t));
+	return date;
+}
+
+//_______________________________________________________________________
+void logmsg (char *msg)
+{
+	FILE * fd = fopen (GetProfileFullName(ErrFile), "a");
+	
+	if (fd) {
+		fprintf (fd, "%s\n", msg);
+		fclose (fd);
+	}
+}
+
+//_________________________________________________________________________________
+void Report (const char* what, const char* obj, const char* reason)
+{
+	char msg[512];
+	sprintf (msg, "%s: %s: %s %s %s\n", dateString(), what, obj, reason);
+	logmsg (msg);
 }
