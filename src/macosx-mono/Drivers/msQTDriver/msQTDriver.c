@@ -307,19 +307,13 @@ static void PlayReset (QuickTimeEnvPtr qt)
 }
 
 /* -----------------------------------------------------------------------------*/
-static void QTTask (long date, short refNum, long a1,long a2,long a3)
-{
-	NATask ((NoteAllocator)a1);
-}
-
-/* -----------------------------------------------------------------------------*/
 static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e)
 {
 	if (Chan(e) != 9) {
 		short sndNum = MidiGetField (e, 0) + 1; // MidiShare ProgChange go from 0 to 127, QuikTime from 1 to 128
 		NASetInstrumentNumberInterruptSafe (qt->allocator, Note(qt, Chan(e)), sndNum);
 		qt->chan[Chan(e)].sndNum = sndNum;
-		MidiTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
+		NATask (qt->allocator);
 	}
 }
 
