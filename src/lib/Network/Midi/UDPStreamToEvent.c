@@ -22,6 +22,15 @@
 
 #include "UDPStreamToEvent.h"
 
+
+#if defined(macintosh) || defined(__MacOSX__) || (defined(__linux__) && defined(__powerpc__))
+# define bigendian
+# define put(d,big,little,v)		d[big]=v
+#else
+# define put(d,big,little,v)		d[little]=v
+#endif
+
+
 /*===========================================================================
 	internal functions prototypes
   =========================================================================== */
@@ -144,7 +153,7 @@ static inline MidiEvPtr parseComplete (UDPStreamPtr f)
 	return e;
 }
 
-#if defined(macintosh) || defined(__MacOSX__)
+#if defined(bigendian)
 static inline short * LowWord (unsigned long *v) {
 	short * ptr = (short *)v;
 	return ++ptr;
@@ -196,11 +205,7 @@ static MidiEvPtr rcvIgnore (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvShortHigh (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[0] = c;
-#else
-	f->data[1] = c;
-#endif
+	put(f->data, 0, 1, c);
 	f->parse = rcvShortLow;
 	return 0;
 }
@@ -209,11 +214,7 @@ static MidiEvPtr rcvShortLow (UDPStreamPtr f, Byte c)
 {
 	short * sptr = (short *)f->data;
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[1] = c;
-#else
-	f->data[0] = c;
-#endif
+	put(f->data, 1, 0, c);
 	*f->shortDst = *sptr;
 	if (f->next) f->parse = f->next;
 	else return  parseComplete (f);
@@ -226,11 +227,7 @@ static MidiEvPtr rcvShortLow (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongHH (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[0] = c;
-#else
-	f->data[3] = c;
-#endif
+	put(f->data, 0, 3, c);
 	f->parse = rcvLongHL;
 	return 0;
 }
@@ -238,11 +235,7 @@ static MidiEvPtr rcvLongHH (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongHL (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[1] = c;
-#else
-	f->data[2] = c;
-#endif
+	put(f->data, 1, 2, c);
 	f->parse = rcvLongLH;
 	return 0;
 }
@@ -250,11 +243,7 @@ static MidiEvPtr rcvLongHL (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongLH (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[2] = c;
-#else
-	f->data[1] = c;
-#endif
+	put(f->data, 2, 1, c);
 	f->parse = rcvLongLL;
 	return 0;
 }
@@ -263,11 +252,7 @@ static MidiEvPtr rcvLongLL (UDPStreamPtr f, Byte c)
 {
 	long * lptr = (long *)f->data;
 	f->length--;
-#if defined(macintosh) || defined(__MacOSX__)
-	f->data[3] = c;
-#else
-	f->data[0] = c;
-#endif
+	put(f->data, 3, 0, c);
 	*f->longDst = *lptr;
 	if (f->next) f->parse = f->next;
 	else return  parseComplete (f);
