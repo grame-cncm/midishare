@@ -52,7 +52,8 @@ MSFunctionType(short) 		MGetIndDriver (short index, TMSGlobalPtr g);
 MSFunctionType(Boolean) 	MGetDriverInfos (short refnum, TDriverInfos * infos, TMSGlobalPtr g);
 
 /*-------------------------------- Slots management ---------------------------*/
-MSFunctionType(SlotRefNum) 	MAddSlot (short refnum, TMSGlobalPtr g);
+MSFunctionType(SlotRefNum) 	MAddSlot (short refnum, MidiName name, SlotDirection direction, TMSGlobalPtr g);
+MSFunctionType(void) 		MSetSlotName (SlotRefNum slot, MidiName name, TMSGlobalPtr g);
 MSFunctionType(SlotRefNum) 	MGetIndSlot (short refnum, short index, TMSGlobalPtr g);
 MSFunctionType(void) 		MRemoveSlot (SlotRefNum slot, TMSGlobalPtr g);
 MSFunctionType(Boolean) 	MGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TMSGlobalPtr g);

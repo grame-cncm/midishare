@@ -130,12 +130,14 @@ static asm void MSFunctionsTbl() {
 		jmp MCountDrivers		// 0x46
 		jmp MGetIndDriver
 		jmp MGetDriverInfos
-		jmp MAddSlot			// 0x49
-		jmp MGetIndSlot		// 0x4A
+		jmp OldAddSlot			// 0x49
+		jmp MGetIndSlot			// 0x4A
 		jmp MRemoveSlot
 		jmp MGetSlotInfos
 		jmp MConnectSlot		// 0x4D
 		jmp MIsSlotConnected
+		jmp MSetSlotName		// 0x4F
+		jmp MAddSlot			// 0x50
 }
 
 static pascal void doNothing (TMSGlobalPtr unused1) {}
