@@ -24,6 +24,6 @@
 #ifndef __msQTHeader__
 #define __msQTHeader__
 
-#define __CodeRsrc__
+#define __BackgroundOnly__
 
 #endif
