@@ -2,6 +2,8 @@
 MidiShare changes history
 =========================
 
+v 1.85 : PortPrefix MIDIFile event added
+
 v 1.84 : filters functions entry points added
 		 don't bring launched drivers applications to front 
 
