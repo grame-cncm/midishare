@@ -31,13 +31,14 @@
 extern Boolean doneFlag;
 //____________________________________________________________
 TInetControler::TInetControler (NetConfigPtr net, MidiName name, short mode) 
-	: fSocket (net->port), fDTasks (this),
-	  fNetInfos (net->port), fActiveSensing(&fIDPacket)
+	: fSocket (net->port), fNetInfos (net->port)
 {
 	fDrvName = name;
 	fState = kSleeping;
 	fMode = mode;
 	fNetConfig = *net;
+	fActiveSensing = new TActiveSensing (&fIDPacket);
+	fDTasks = new InetCtrlDTask (this);
 	needWakeup = needSleep = false;
 	fSocket.SetListener (this);
 	if (!fNetInfos.Available())
@@ -69,7 +70,7 @@ void TInetControler::SetMode (short mode)
 	if (fMode == mode) return;
 	
 	MidiShareAppl * appl = fAppl;
-	fDTasks.Forget ();
+	if (fDTasks) fDTasks->Forget ();
 	if (mode == kDriverMode) {
 		fAppl = new TInetDriver (this);
 		Open ();
@@ -84,8 +85,8 @@ void TInetControler::SetMode (short mode)
 		}
 	}
 	if (fUDPMode) {
-		fActiveSensing.Forget ();
-		fActiveSensing.Run (MidiGetTime(), GetRefNum(), (long)fNetInfos.BroadcastAddress(), 0);
+		fActiveSensing->Forget ();
+		fActiveSensing->Run (MidiGetTime(), GetRefNum(), (long)fNetInfos.BroadcastAddress(), 0);
 	}
 	delete appl;
 	fMode = mode;
@@ -94,20 +95,24 @@ void TInetControler::SetMode (short mode)
 //____________________________________________________________
 Boolean TInetControler::Open ()
 {
-	if (!fAppl) return false;
+	if (!fAppl || !fDTasks || !fActiveSensing) return false;
 	if (!fAppl->Open (fDrvName)) {
 		INetAlert alert;
 		alert.FatalError (fDrvName, strWakeUpFailure, 
 			(fMode == kDriverMode) ? strDrvRegFailure : strMSApplFail, 0L);
 		return false;
 	}
-	fDTasks.SetRefNum(GetRefNum());
+	fDTasks->SetRefNum(GetRefNum());
 	return true;
 }
 
 //____________________________________________________________
 void TInetControler::Close ()
 { 
+	if (fActiveSensing) delete fActiveSensing;
+	fActiveSensing = 0;
+	if (fDTasks) delete fDTasks;
+	fDTasks = 0;
 	if (fAppl) fAppl->Close ();
 }
 
@@ -146,7 +151,11 @@ void TInetControler::DoIdle ()
 		else ExecDTasks ();
 	}
 }
-	
+
+//____________________________________________________________
+void TInetControler::WakeUp (short r)	{ UWakeup (); }
+void TInetControler::Sleep  (short r)	{ USleep(); }
+
 //____________________________________________________________
 Boolean TInetControler::UWakeup (Boolean udpMode)
 {
@@ -160,8 +169,9 @@ Boolean TInetControler::UWakeup (Boolean udpMode)
 		return false;
 	}
 	if (udpMode) {
-		fActiveSensing.Initialize (&fSocket);
-		fActiveSensing.Run (MidiGetTime(), GetRefNum(), (long)fNetInfos.BroadcastAddress(), 5);
+		if (!fActiveSensing) return false;
+		fActiveSensing->Initialize (&fSocket);
+		fActiveSensing->Run (MidiGetTime(), GetRefNum(), (long)fNetInfos.BroadcastAddress(), 5);
 	}
 	fState = kWakeup;
 	fUDPMode = udpMode;
@@ -175,9 +185,13 @@ void TInetControler::Bye ()
 	Boolean forget = MidiCountAppls() > 0;
 
 	if (forget) {
-		fActiveSensing.Forget ();
-		fDTasks.Forget ();
+		if (fActiveSensing) fActiveSensing->Forget ();
+		if (fDTasks) fDTasks->Forget ();
 		MidiFlushDTasks (GetRefNum());
+	}
+	else {
+		if (fActiveSensing) fActiveSensing->Clear ();
+		if (fDTasks) fDTasks->Clear ();
 	}
 	SocketStatus err = bye.Send (&fSocket, fNetInfos.BroadcastAddress());
 }
@@ -203,6 +217,7 @@ void TInetControler::RcvAlarm (short refnum)
 		MidiEvPtr e = MidiGetEv (refnum);
 		TMidiRemote * remote;
 		while (e) {
+			
 			if (Port(e) != prevSlot) {
 				prevSlot = Port(e);
 				remote = fRemoteMgr.FindOutSlot (Port(e));
@@ -285,7 +300,7 @@ Boolean TInetControler::CreateRemote (MidiEvPtr param)
 	parms.specialIP = GetSpecialIP ();
 	parms.special = GetSpecialSocket (ip);
 	
-	rp.ctrlTask = &fDTasks;
+	rp.ctrlTask = fDTasks;
 	rp.initTimes = times;
 	rp.idPacket = &fIDPacket;
 	rp.name = name;
