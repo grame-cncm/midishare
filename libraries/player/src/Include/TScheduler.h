@@ -41,9 +41,7 @@ class TSchedulerInterface{
 		
 		virtual void Init(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl) = 0;
 		virtual void ScheduleTickTask(TTicksTask* task, ULONG date_ticks) = 0;
-		virtual void ScheduleTickTaskInt(TTicksTask* task, ULONG date_ticks) = 0;
 		virtual void ReScheduleTasks() = 0;
-		virtual void ReScheduleTasksInt() = 0;
 };
 
 typedef TSchedulerInterface FAR * TSchedulerInterfacePtr;
@@ -86,18 +84,15 @@ class TScheduler :public TSchedulerInterface{
 		TTicksTask* fTaskTable[TableLength];
 		
 		#if GENERATINGCFM
-			UPPTaskPtr fUPPScheduleTask;
-			UPPTaskPtr fUPPReScheduleTask;
 			UPPTaskPtr fUPPExecuteTask;
 		#else
-			TaskPtr fUPPScheduleTask;
-			TaskPtr fUPPReScheduleTask;
 			TaskPtr fUPPExecuteTask;
 		#endif
 		
 		void ScheduleRealTime(TTicksTask* task);
 		void RemoveTask(TTicksTask* task);
-		void InsertTask(TTicksTask* task);
+		Boolean InsertTask(TTicksTask* task);
+		Boolean CheckTaskTable() {return (fTaskIndex < TableLength);}
 				
 	public :
 		TSynchroniserInterfacePtr  fSynchro;
@@ -111,9 +106,7 @@ class TScheduler :public TSchedulerInterface{
  		
  		
  		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks);	
- 		void ScheduleTickTaskInt(TTicksTask* task, ULONG date_ticks);
  		void ReScheduleTasks();
- 		void ReScheduleTasksInt();
  		
  		// Internal functions made public to be called from tasks
  		
@@ -154,8 +147,9 @@ class TTicksTask {
 	
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
-			
-		void Clear () {MidiForgetTask(&fTask);}
+		
+		void Clear () {fTask = 0;}
+		void Kill () {MidiForgetTask(&fTask);}
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
@@ -175,8 +169,9 @@ class TTicksTask {
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
 		
-		Boolean IsRunning () {return (fStatus == kTaskRunning);}
-		Boolean IsIdle () 	 {return (fStatus == kTaskIdle);}
+		Boolean IsRunning () 	{return (fStatus == kTaskRunning);}
+		Boolean IsIdle () 	 	{return (fStatus == kTaskIdle);}
+		
 		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
 		
