@@ -207,6 +207,7 @@ void ReadArgs (msCmdLinePrefs * prefs, int argc, char *argv[])
 	prefs->timeRes = -1;
 	prefs->conffile = 0;
 	prefs->logfile = 0;
+	prefs->daemonMode = 0;
 	
 	for (i=1; i<argc; i++) {
 		char * ptr = argv[i];
@@ -366,8 +367,8 @@ static int GetTimeRes (char *file)
 static void GetLog (char *file, char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (logSectionName, logFileStr, defaultLog, buffer, len, file);	
-//	if (!n) strcpy (buffer, defaultLog);
+	n = get_private_profile_string (logSectionName, logFileStr, "", buffer, len, file);	
+	if (!n) buffer[0] = 0;
 }
 
 //________________________________________________________________________
