@@ -36,6 +36,7 @@ install : $(ToolSet)
 	strip $(ToolSet)
 	cp $(ToolSet) $(PublicDir)
 	bzip2 -k -f man1/*.1
+	install -d $(ManDir)
 	mv -f man1/*.bz2 $(ManDir)
 
 clean : 
