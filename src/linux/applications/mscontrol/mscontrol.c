@@ -117,6 +117,8 @@ int main(int argc, char *argv[] )
 	// Initialisations
 	gtk_init (&argc, &argv);
 	gRefNum = MidiOpen("msControl");
+	MidiConnect(gRefNum,0,1);
+	MidiConnect(0,gRefNum,1);
 	
 	// Adjustments description  
 	pitch 	= gtk_adjustment_new (60.0, 1.0, 128.0, 1.0, 8.0, 1.0);

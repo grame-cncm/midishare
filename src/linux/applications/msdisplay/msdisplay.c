@@ -124,7 +124,7 @@ gint display_events( gpointer data )
 	c = MidiCountEvs(gRefNum);
 	
 	// if we are too late, remove some events
-	while (c > 3*MAXEV) { MidiFreeEv(MidiGetEv(gRefNum)); c--; }
+	while (c > MAXEV) { MidiFreeEv(MidiGetEv(gRefNum)); c--; }
 	
 	if (c>0) {
 		while ( (c>0) && (e=MidiGetEv(gRefNum)) ) {
@@ -166,6 +166,7 @@ int main(int argc, char *argv[] )
 	// Initialisations
 	gtk_init (&argc, &argv);
 	gRefNum = MidiOpen("msDisplay");
+	MidiConnect (0,gRefNum,1);
 
 	// User interface construction
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
