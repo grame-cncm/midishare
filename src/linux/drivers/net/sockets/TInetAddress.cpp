@@ -29,21 +29,21 @@
 #include "TInetAddress.h"
 
 //____________________________________________________________
-TInetAddress::TInetAddress (InetSvcRef ref)
+TInetAddress::TInetAddress (InetServiceRef ref)
 {
 	fRefNum = ref;
 	Initialize();
 }
 
 //____________________________________________________________
-TInetAddress::TInetAddress (char *host, InetSvcRef ref)
+TInetAddress::TInetAddress (char *host, InetServiceRef ref)
 {
 	fRefNum = ref;
 	SetAddress (host);
 }
 
 //____________________________________________________________
-TInetAddress::TInetAddress (IPNum ip, InetSvcRef ref)
+TInetAddress::TInetAddress (IPNum ip, InetServiceRef ref)
 {
 	fRefNum = ref;
 	SetAddress (ip);
