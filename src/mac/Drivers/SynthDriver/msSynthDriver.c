@@ -72,7 +72,7 @@ Boolean open_iiwusynth ()
 	
 	/* allocates the synth */
 	data->synth = new_iiwu_synth(&settings);
-    if (data->synth == NULL)return false;
+    if (data->synth == NULL) return false;
      
     /* configure log functions */
 	iiwu_set_log_function(PANIC, my_log_function);
@@ -129,20 +129,14 @@ void CloseMidi ()
 /* -----------------------------------------------------------------------------*/
 Boolean OpenSynth() 
 {
-	DriverDataPtr data = GetData ();
-	short ref = MidiGetNamedAppl(SynthDriverName);
-		
-	MidiConnect (MidiShareDrvRef, ref, false);
-	MidiConnect (ref, MidiShareDrvRef, false);
-	MidiFlushEvs (ref);
-		
 	close_iiwusynth ();
-	if (!open_iiwusynth()) return false;
-	RestoreDriverState (MidiGetNamedAppl(SynthDriverName), StateFile);
-  	
-	MidiConnect (MidiShareDrvRef, ref, true);
-	MidiConnect (ref, MidiShareDrvRef, true);
-	return true;
+	
+	if (!open_iiwusynth()){ 
+		return false;
+	}else {
+		RestoreDriverState (MidiGetNamedAppl(SynthDriverName), StateFile);
+		return true;
+	}
 }
 
 /* -----------------------------------------------------------------------------*/
