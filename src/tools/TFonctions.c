@@ -727,14 +727,14 @@ void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 
 /*____________________________________________________________________*/
 #ifdef PASCALTASKS
-static pascal void MyTask4( long time, short refnum, long a1,long a2,long unused4)
+static pascal void MyTask4( long time, short refnum, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
-void MyTask4( long time, short refnum, long a1,long a2,long unused4)
+void MyTask4( long time, short refnum, long a1,long a2,long a3)
 #endif
 {
 	gContext.res1 = true;
-	gContext.t2 = MidiTask( MyTask3, time, refnum,a1, a2, unused4);
+	gContext.t2 = MidiTask( MyTask3, time, refnum,a1, a2, a3);
 	MidiForgetTask(&gContext.t1);
 }
 
@@ -828,7 +828,10 @@ static void Tasks( Boolean isFreeMem)
 	if( gContext.t2 && isFreeMem)
 		fprintf( stdout, "Warning : task2 address not set to 0 !\n");
 		
-	/* test MidiForgetTask inside a task execution */
+	/* test MidiForgetTask inside a task execution 
+	/* Warning : using MidiForgetTask in the execution of the task may produce unspecified behavior.
+	/* The result of this test may change on different implementations */
+	
 	fprintf( stdout, "    MidiForgetTask(4) : ");flush;	
 	gContext.res1 = gContext.res2 = false;
 	gContext.t1 = gContext.t2 = 0;
