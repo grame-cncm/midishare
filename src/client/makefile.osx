@@ -1,0 +1,55 @@
+#
+# midishare client library makefile (c) Grame 2002
+#
+
+TARGET = libMidiShare.0.0.1.dylib
+
+LIBS = ../msClientCommonLib.o ../msOSGlueLib.o
+
+COMSRC := $(wildcard ../common/*.c)
+COMINC := $(wildcard ../common/Headers/*.h)
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
+
+CFLAGS   := -O3 -Wall -D__MacOSX__ -I../common/Headers -I../osglue
+CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
+VPATH = ../common ../osglue ../osglue/glue ../osglue/unix
+CC = gcc
+
+SRC := $(wildcard *.c)
+OBJ := $(patsubst %.c, %.o, $(SRC)) 
+DEST = /usr/lib
+COMP = -compatibility_version 1 -current_version 1
+
+$(TARGET) : makefile $(LIBS) $(OBJ) _MidiShare.exp
+	libtool -arch_only ppc -noall_load $(COMP) -o $(TARGET) -dynamic -init _MSInitialize $(OBJ) $(LIBS) -lcc_dynamic -lSystem -lstdc++
+	nmedit -s _MidiShare.exp $(TARGET)
+	
+makefile: makefile.osx
+	cat makefile.readme makefile.osx > makefile
+	make dep
+
+install: $(TARGET)
+	install -C $(TARGET) $(DEST) 
+	cd /usr/lib && ln -s $(TARGET) libMidiShare.dylib
+
+uninstall: 
+	rm -rf $(DEST)/$(TARGET)
+	rm -rf $(DEST)/libMidiShare.dylib
+
+dep:
+	cat makefile.readme makefile.osx > makefile
+	mkdep -a -f makefile $(CFLAGS) $(SRC)
+
+clean:
+	make -C ../common cclean
+	make -C ../osglue clean
+	rm -f $(OBJ) $(TARGET)
+
+../msClientCommonLib.o: makefile $(COMSRC) $(COMINC)
+	make -C ../common client
+
+../msOSGlueLib.o: makefile $(GLUESRC) $(GLUEINC)
+	make -C ../osglue
+
+# DO NOT DELETE
