@@ -31,8 +31,6 @@
 
 typedef unsigned char 	e2pRet;
 typedef unsigned char 	uchar;
-typedef short 			p2eRet;
-
 
 //___________________________________
 // Conversions from events into packets 
@@ -43,33 +41,17 @@ typedef struct {
 	short				free;			// available room in the buffer
 } E2PInfos, *E2PInfosPtr;
 
-//___________________________________
-// Conversions from packets into events
-typedef struct P2EInfos{
-	unsigned char	*	src;			// source buffer 
-	short				len;			// length of usable data 
-	MidiEvPtr			cont;			// event continuation if it is not completely in the buffer
-										
-} P2EInfos, *P2EInfosPtr;
-
-
 
 //_____________________
 // Conversion methods
 
 typedef e2pRet 	(*Ev2PacketFunc)( E2PInfosPtr i);
-typedef p2eRet  (*Packet2EvFunc)( MidiEvPtr e, Byte *src, short len);
 
 //_________________________
 // Initialisations methods
 
-void InitLinearizeMthTbl (Ev2PacketFunc* e2p, Packet2EvFunc*	p2e);
-void InitTypeTbl( Byte*	typeTbl);
-
-MidiEvPtr Packet2Evs( P2EInfosPtr i,   Packet2EvFunc*	p2e, Byte*	typeTbl);
+void InitLinearizeMthTbl (Ev2PacketFunc* e2p);
 e2pRet EvToPacket(E2PInfosPtr i, Ev2PacketFunc*	e2p);
-
-
 
 
 #endif

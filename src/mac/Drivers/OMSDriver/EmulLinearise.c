@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
 */
 
@@ -383,75 +383,7 @@ static e2pRet RegParamE2PMth ( E2PInfosPtr i)
 }
 
 //_________________________________________________________________________________
-//							  Structuration	methods				
-//_________________________________________________________________________________
-
-//_________________________________________________________________________________
-static p2eRet NoDataP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	return 0;
-}
-	
-//_________________________________________________________________________________
-static p2eRet OneDataP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	if( len) {
-		Data(e)[0]= *src;
-		return 1;
-	}
-	return 0;
-}
-	
-//_________________________________________________________________________________
-static p2eRet TwoDataP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	short i;
-
-	for( i=0; (i<2) && len; i++, len--)
-		Data(e)[i]= *src++;
-	return i;
-}
-	
-//_________________________________________________________________________________
-static p2eRet ThreeDataP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	short i;
-	
-	for( i=0; (i<3) && len; i++, len--)
-		Data(e)[i]= *src++;
-	return i;
-}
-
-//_________________________________________________________________________________
-static p2eRet SysExP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	short tt;
-	Byte v;
-	
-	tt= len;
-	while( len--) {
-		v= *src++;
-		if( v==	EndSysX)
-			break;
-		MidiAddField( e, v);
-	}
-	return tt - len;
-}
-
-
-//_________________________________________________________________________________
-static p2eRet QuarterFrameP2EMth( MidiEvPtr e, Byte *src, short len)
-{
-	if( len) {
-		MidiAddField( e, QFrame);
-		MidiAddField( e, *src);
-		return 1;
-	}
-	return 0;
-}
-
-//_________________________________________________________________________________
-void InitLinearizeMthTbl (Ev2PacketFunc* e2p, Packet2EvFunc*	p2e)
+void InitLinearizeMthTbl (Ev2PacketFunc* e2p)
 {
 	int	i;
 	
@@ -482,116 +414,6 @@ void InitLinearizeMthTbl (Ev2PacketFunc* e2p, Packet2EvFunc*	p2e)
 	e2p[typeNonRegParam] = NonRegParamE2PMth;
 	e2p[typeRegParam] 	= RegParamE2PMth;
 	e2p[typePrivate] 	= PrivateE2PMth;
-
-	for (i=0; i<256; i++) 
-		p2e[i]= NoDataP2EMth;
-	
-	p2e[typeKeyOn] 		= TwoDataP2EMth;
-	p2e[typeKeyOff] 	= TwoDataP2EMth;
-	p2e[typeKeyPress] 	= TwoDataP2EMth;
-	p2e[typeCtrlChange] = TwoDataP2EMth;
-	p2e[typeProgChange] = OneDataP2EMth;
-	p2e[typeChanPress] 	= OneDataP2EMth;
-	p2e[typePitchWheel] = TwoDataP2EMth;
-	p2e[typeSongPos] 	= TwoDataP2EMth;
-	p2e[typeSongSel] 	= OneDataP2EMth;
-	p2e[typeClock] 		= NoDataP2EMth;
-	p2e[typeStart] 		= NoDataP2EMth;
-	p2e[typeContinue] 	= NoDataP2EMth;
-	p2e[typeStop] 		= NoDataP2EMth;
-	p2e[typeTune] 		= NoDataP2EMth;
-	p2e[typeActiveSens] = NoDataP2EMth;
-	p2e[typeReset] 		= NoDataP2EMth;
-	p2e[typeSysEx] 		= SysExP2EMth;
-	p2e[typeQuarterFrame] = QuarterFrameP2EMth;
-}
-
-//_________________________________________________________________________________
-void InitTypeTbl( Byte*	typeTbl)
-{
-	register int i;
-	Byte *ptr;
-	
-	ptr= typeTbl;
-	for( i=0; i<256; i++) 	*ptr++= 0;
-	
-	ptr= &typeTbl[NoteOff];
-	for( i=0; i< 16; i++)	*ptr++= typeKeyOff;		
-	ptr= &typeTbl[NoteOn];
-	for( i=0; i< 16; i++)	*ptr++= typeKeyOn;
-	ptr= &typeTbl[PolyTouch];
-	for( i=0; i< 16; i++)	*ptr++= typeKeyPress;
-	ptr= &typeTbl[ControlChg];
-	for( i=0; i< 16; i++)	*ptr++= typeCtrlChange;
-	ptr= &typeTbl[ProgramChg];
-	for( i=0; i< 16; i++)	*ptr++= typeProgChange;
-	ptr= &typeTbl[AfterTouch];
-	for( i=0; i< 16; i++)	*ptr++= typeChanPress;
-	ptr= &typeTbl[PitchBend];
-	for( i=0; i< 16; i++)	*ptr++= typePitchWheel;
-	
-	typeTbl[SysEx]	= typeSysEx;
-	typeTbl[QFrame]	= typeStream;			/* typeQuarterFrame (indeed 130) */
-	typeTbl[SongPos]	= typeSongPos;
-	typeTbl[SongSel]	= typeSongSel;
-	typeTbl[Tune]		= typeTune;
-	
-	typeTbl[MClock]	= typeClock;
-	typeTbl[MStart]	= typeStart;
-	typeTbl[MCont]	= typeContinue;
-	typeTbl[MStop]	= typeStop;
-	typeTbl[ActSense]	= typeActiveSens;
-	typeTbl[MReset]	= typeReset;
-}
-
-//____________________________________________________________________________________
-static MidiEvPtr NewEv( unsigned char status,  Byte* typeTbl)
-{
-	MidiEvPtr e= 0;
-	short type;
-
-	type= typeTbl[status];
-	if( type) {
-		e= MidiNewEv( type);
-		if( e) {
-			Date(e)= MidiGetTime();
-			RefNum(e)= 0;
-			Port(e)= ModemPort;
-			Chan(e)= (type< typeSongPos) ? status%16 : 0;
-			Link(e)= 0;
-		}
-	}
-	return e;
-}
-
-//____________________________________________________________________________________
-MidiEvPtr Packet2Evs( P2EInfosPtr i,   Packet2EvFunc*	p2e, Byte*	typeTbl)
-{
-	MidiEvPtr e= 0, prev= 0;
-	Byte *src;
-	short len, n;
-	
-	src= i->src;
-	len= i->len;
-	if( i->cont) e= i->cont;
-	else {
-		e= NewEv( *src, typeTbl);
-		src++; len--; 
-	}
-	while( e) {
-		n= (*p2e[EvType(e)])( e, src, len);
-		len -= n;
-		src+= n;
-
-		Link(e)= prev;
-		prev= e;
-		if( len > 0) {
-			e= NewEv( *src, typeTbl);
-			src++; len--;
-		}
-		else break;
-	}
-	return prev;
 }
 
 //____________________________________________________________________________________
