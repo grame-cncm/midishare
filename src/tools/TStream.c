@@ -28,6 +28,9 @@
 #include "StreamToEvent.h"
 #include "StreamDefs.h"
 
+#define midiGetVersion	193	
+//#define midiGetVersion	MidiGetVersion()
+
 #define print	printf
 #define nil 0
 #define flush    fflush(stdout)
@@ -173,14 +176,16 @@ static int StreamLoop (MidiEvPtr e)
 		print("\nwarning: msStreamPutEvent didn't failed"); flush;
 		goto end;
 	}
-	get = msStreamGetEvent (&gStream2Ev, &err);
+	get = msStreamStartBuffer(&gStream2Ev, msStreamSize(&gEv2Stream), &err);
+//	get = msStreamGetEvent (&gStream2Ev, &err);
 	if (!get && (err != kStreamNoMoreData)) {
 		print("\nwarning: msStreamGetEvent failed with retcode %d (0 expected)", err); flush;
 		goto end;
 	}
 	do {
 		done = msStreamContEvent (&gEv2Stream);
-		get = msStreamGetEvent (&gStream2Ev, &err);
+        get = msStreamStartBuffer(&gStream2Ev, msStreamSize(&gEv2Stream), &err);
+//		get = msStreamGetEvent (&gStream2Ev, &err);
 	} while (!done);
 	msStreamParseRewind (&gStream2Ev);
 	if (err != kStreamNoError) {
@@ -205,8 +210,8 @@ static int StreamTest (MidiEvPtr e, int expectedRet)
 			goto err;
 		}
 	}
+	get = msStreamStartBuffer(&gStream2Ev, msStreamSize(&gEv2Stream), &err);
 	while (++n < gEvCount) {
-		get = msStreamGetEvent (&gStream2Ev, &err);
 		if (!get) {
 			if (err != expectedRet) {
 				print("\nwarning: msStreamGetEvent failed with retcode %d", err); flush;
@@ -216,8 +221,9 @@ static int StreamTest (MidiEvPtr e, int expectedRet)
 		}
 		ret = CmpEv( e, get, "read");
 		if (get) MidiFreeEv(get);
+		get = msStreamGetEvent (&gStream2Ev, &err);
 	}
-	get = msStreamGetEvent (&gStream2Ev, &err);
+//	get = msStreamGetEvent (&gStream2Ev, &err);
 	if (get || (err != kStreamNoMoreData))
 		print("\nwarning: msStreamGetEvent: kStreamNoMoreData expected, got %d", err); flush;
 err:
@@ -342,7 +348,7 @@ static void MidiFile()
 	short i;
 	
 	print("\nMidiFile events :\n");	
-	if( MidiGetVersion() < 160)
+	if( midiGetVersion < 160)
 		print("not implemented !\n");	
 	/*												typeSeqNum until typePortPrefix */
 	else for( i= typeSeqNum; i<=typePortPrefix; i++) {
@@ -357,7 +363,7 @@ static void Internals()
 	short i;
 	
 	print("\nInternal events: (should not be parsed)\n");	
-	if( MidiGetVersion() < 160)
+	if( midiGetVersion < 160)
 		print("not implemented !\n");	
 	/*												typePortPrefix+1 until typeReserved */
 	else for( i= typePortPrefix+1; i<=typeApplAlarm; i++) {
@@ -373,7 +379,7 @@ static void Fonctions()
 	int i;
 	
 	print("\nMidiShare Functions events :\n");
-	if( MidiGetVersion() < 193)
+	if( midiGetVersion < 193)
 		print("not implemented !\n");	
 	else for( i= typeMidiOpen; i<typeReserved; i++) {
 		if( TestEvent( i, true, kStreamNoError)) ok;
@@ -416,13 +422,12 @@ static void TestSuite3 ()
 }
 
 /*______________________________________________________________________________*/
-static int GetLoop (MidiEvPtr e)
+static int GetLoop (MidiEvPtr e, int size)
 {
 	int err, r = 0; 
-	MidiEvPtr get;
+	MidiEvPtr get = msStreamStartBuffer(&gStream2Ev, size, &err);
 	
 	while (true) {
-		get = msStreamGetEvent (&gStream2Ev, &err);
 		if (!get && (err == kStreamNoMoreData))
 			return r;
 		if (err != kStreamNoError) {
@@ -432,6 +437,7 @@ static int GetLoop (MidiEvPtr e)
 		if (!CmpEv( e, get, "read")) return 0;
 		if (get) MidiFreeEv(get);
 		r++;
+		get = msStreamGetEvent (&gStream2Ev, &err);
 	}
 	return r;
 }
@@ -448,7 +454,7 @@ static void TestSuite4 (int type)
 	SetMidiEvent( e, false);
 
 	while (msStreamPutEvent (&gEv2Stream, e)) n++;
-	r = GetLoop (e);
+	r = GetLoop (e, msStreamSize(&gEv2Stream));
 
 	if (!msStreamContEvent (&gEv2Stream)) {
 		print("\nwarning: msStreamContEvent failed");
@@ -461,12 +467,57 @@ static void TestSuite4 (int type)
 	}
 	else n++;
 
-	r += GetLoop (e);
+	r += GetLoop (e, msStreamSize(&gEv2Stream));
 	if (r==n) 
 		printf ("%d events overflow done", n);
 	else
 		printf ("\nwarning: %d events expected, read %d", n ,r);
 end:
+	MidiFreeEv(e);
+}
+
+
+/*______________________________________________________________________________*/
+static void TestSuite5 (int buffSize)
+{
+	MidiEvPtr e=0; int n=0, n2, r=0;
+    Ev2StreamRec stream2;
+
+	e= MidiNewEv(typeNote);
+	if (!e) { noEvts; return; }
+	SetMidiEvent( e, false);
+
+	msStreamInit (&gEv2Stream, gEv2StreamTbl, gBuffer, buffSize);
+	msStreamStart (&gEv2Stream);
+	if (!msStreamPutEvent (&gEv2Stream, e)) {
+		printf ("\nwarning: msStreamPutEvent (stream 1) failed");
+        return;
+    }
+    n = msStreamSize (&gEv2Stream);
+	msStreamInit (&stream2, gEv2StreamTbl, &gBuffer[n], buffSize-n);
+	msStreamStart (&stream2);
+	if (!msStreamPutEvent (&stream2, e)) {
+		printf ("\nwarning: msStreamPutEvent (stream 2) failed");
+        return;
+    }
+	n2 = msStreamSize(&stream2);
+    printf ("\n    streams written - length %d %d", n, n2);
+
+    printf ("\n    checking with complete streams : ");
+	r = GetLoop (e, n + n2);
+    if (r != 2)
+		printf ("\nwarning: 2 events expected, read %d" ,r);
+	else 
+        printf ("ok");
+
+    printf ("\n    checking with uncomplete streams 2 : ");
+	r = GetLoop (e, n + n2 - 8);
+    if (r != 1) printf ("\nwarning: 1 events expected, read %d" ,r);
+	r = GetLoop (e, n + msStreamSize(&stream2));
+    if (r != 1) printf ("\nwarning: 1 events expected, read %d" ,r);
+	else 
+        printf ("ok");
+
 	MidiFreeEv(e);
 }
 
@@ -482,7 +533,7 @@ main( int argc, char *argv[])
     print("\nWarning : memory must be least 10000 events !\n");
 
     if( Initialize()) {
-        print("\nTest suite with buffer size=%ld%s", kBufferSize, s);
+ /*       print("\nTest suite with buffer size=%ld%s", kBufferSize, s);
         gLoopTest = false;
         gEvCount = 1;
         TestSuite1 ();
@@ -503,7 +554,11 @@ main( int argc, char *argv[])
         TestSuite4 (typeNote);
         TestSuite4 (typePrivate);
         TestSuite4 (typeSysEx);
+*/
+        StreamInit (kMediumBufferSize);
+        print("\n\nTest suite with multiple streams per buffer%s", s); flush;
+        TestSuite5 (kMediumBufferSize);
     }
-	print("\nEnd of linearization functions test.\n");
+	print("\n\nEnd of linearization functions test.\n");
 	return 0;
 }
