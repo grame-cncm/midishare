@@ -62,8 +62,8 @@ static char* gEvNames_128_150[] = {
 		"Process", "DProcess", "QuarterFrame", "Ctrl14b", 
 		"NonRegParam", "RegParam", "SeqNum", "Text", "Copyright", "SeqName", 
 		"InstrName", "Lyric", "Marker", "CuePoint", "ChanPrefix", "EndTrack", 
-		"Tempo", "SMPTEOffset", "TimeSign", "KeySign", "Specific", "RcvAlarm", 
-		"ApplAlarm"
+		"Tempo", "SMPTEOffset", "TimeSign", "KeySign", "Specific", "PortPrefix", 
+		"RcvAlarm","ApplAlarm"
 		};
 
 static char* EvName(MidiEvPtr e)
