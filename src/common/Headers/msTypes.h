@@ -29,13 +29,9 @@
 
 #ifdef __Macintosh__
 #ifdef __MacOS9__
-	# include <mactypes.h> 
+	#include <mactypes.h> 
 #else
-	typedef unsigned char Boolean;  
-	typedef unsigned char Byte;     
-	typedef char * Ptr;   
-	#define false 0
-	#define true 1
+	#include <CoreServices/CoreServices.h>
 #endif 
                                    
 # ifdef __POWERPC__
