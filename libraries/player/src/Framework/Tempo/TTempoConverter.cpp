@@ -173,7 +173,7 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 {	
 	if (fTempo) {
-		return ((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo;
+		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
 	}else{
 		return 1;
     }
@@ -188,7 +188,7 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 {	
 	if (fTempo) {
-		return ((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo;
+		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
 	}else{
 		return 1;
     }
