@@ -9,17 +9,11 @@ The MidiShare kernel development documentation is located in the DevGuide folder
 Source code general organization
 --------------------------------
 - header files are grouped together in the 'Header' directory.
-- platform specific functions (to implement) are defined in the 'msExtern.h' file.
-- source files are grouped in separate directories, as independant kernel components.
-  Each component uses its own independant data structures. The kernel itself provides
-  the glue between all the components and specific services (at present time management 
-  and in the future, drivers management).
-
+- platform specific functions (to be implemented) are defined in the 'msExtern.h' file.
 
 Not yet implemented
 -------------------
 - smpte synchronization management.
-- drivers management
 
 
 Kernel development rules
