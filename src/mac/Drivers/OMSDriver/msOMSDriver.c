@@ -281,6 +281,7 @@ static void Sleep (short r)
 	if (data) {
 		DisposeOMSMemory (data);
 		OMSDispose (MySignature, data);
+		DisposePtr ((Ptr)ConnectionParams(data));
 		DisposePtr ((Ptr)data);
 		mem->data = 0;
 	}
