@@ -43,7 +43,7 @@ MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 #ifdef MSKernel
 #include "msExtern.h"
 
-#define kMidiShareVersion  192    /* the current MidiShare version number */
+#define kMidiShareVersion  193    /* the current MidiShare version number */
 
 static TMSGlobalPublic gPub = { 0 };
 static void InitPublicSection (TMSGlobalPtr g);
