@@ -88,7 +88,7 @@
         { 0xf1, 0xb0, 0xb0, 0xb0,
           0, 1, 2, 3, 4, 5, 6, 7,
           0x20, 0x2f, 0x51, 0x54,
-          0x58, 0x59, 0x7f
+          0x58, 0x59, 0x7f,0x21
         };
  
  	/*------------------- meta event/type correspondence -----------------------*/
@@ -97,7 +97,7 @@
           0,0,0,0,0,0,0,0,                              /*  8-15 undefs */
           0,0,0,0,0,0,0,0,                              /* 16-23 undefs */
           0,0,0,0,0,0,0,0,                              /* 24-31                */
-          9,0,0,0,0,0,0,0,                              /* 32-39 undefs */
+          9,16,0,0,0,0,0,0,                             /* 32-39 undefs */
           0,0,0,0,0,0,0,10,                             /* 40-47                */
           0,0,0,0,0,0,0,0,                              /* 48-55 undefs */
           0,0,0,0,0,0,0,0,                              /* 56-63 undefs */
@@ -156,7 +156,8 @@
         new smpte(),            /* 145 typeSMPTEOffset          */
         new timeSign(),         /* 146 typeTimeSign             */
         new keySign(),          /* 147 typeKeySign              */
-        new text()              /* 148 typeSpecific             */
+        new text(),             /* 148 typeSpecific             */
+        new portPref()          /* 149 typePortPref             */
      };
      
      
@@ -206,7 +207,8 @@
  			new smpte(),		/* 145 typeSMPTEOffset	*/
  			new timeSign(),		/* 146 typeTimeSign		*/
  			new keySign(),		/* 147 typeKeySign		*/
- 			new text()			/* 148 typeSpecific		*/
+ 			new text(),			/* 148 typeSpecific		*/
+ 			new portPref()          /* 149 typePortPref             */
  		};
  
  
@@ -229,11 +231,13 @@
  	 static final byte MDF_Meas            =  0x58;            	/* time signature                              */
  	 static final byte MDF_Ton             =  0x59;            	/* key signature                               */
  	 static final byte MDF_Extra           =  0x7F;            	/* sequencer specific meta event               */
- 
+ 	 static final byte MDF_PortPref    	   =  0x21;          	/* Midi Port Prefix                        	   */
+ 	
  	/* length of the differents meta events */
  
  	 static final short MDF_NumSeqLen   	= 2;
  	 static final short MDF_ChanPrefLen 	= 1;
+ 	 static final short MDF_PortPrefLen 	= 1;
  	 static final short MDF_EndTrkLen  		= 0;
  	 static final short MDF_TempoLen    	= 3;
  	 static final short MDF_OffsetLen   	= 5;
@@ -247,8 +251,6 @@
  	 static final short maxTrack =  256;
  	
  	 int trackListe[];	
-  
- 
   
  	// static final short NoErr           = 0;     /* everything is ok                             */
  	// static final short ErrFrmt         = -1;    /* internal datas format error                  */
@@ -685,8 +687,7 @@
  
  
  /*--------------------------------------------------------------------------*/
-   
- 	final void write_param (short num, short val, short type) throws Exception{
+ final void write_param (short num, short val, short type) throws Exception{
  
  		output.write( type);					/* NRP number msb			*/
  		output.write( num >> 7);				/* msb value				*/
@@ -749,8 +750,7 @@
  	*@exception Exception 
   	*/
 
- final  public void NewTrack() throws Exception 
- {
+ final  public void NewTrack() throws Exception  {
  	TrkHeader trkheader = new TrkHeader();
  	
  	if(isTrackOpen()) CloseTrack();			/* eventualy close the track */
@@ -761,7 +761,6 @@
  
  
  /*--------------------------------------------------------------------------*/
- 
  	/**
  	Close a track previously opened with OpenTrack or created with NewTrack.
  		<br> 
@@ -775,8 +774,7 @@
  	*@exception Exception If the track is already closed.
   	*/
 
- final public void CloseTrack() throws Exception 
- {
+ final public void CloseTrack() throws Exception {
  	
  	if(isTrackOpen()) {				/* track opened					*/
  		FlushKeyOff();				/* write the remaining keyOff	*/
@@ -802,10 +800,7 @@
  	*/
  	
  /*--------------------------------------------------------------------------*/
- 
- 
-final  public void WriteEv(int event) throws Exception 
- {
+final  public void WriteEv(int event) throws Exception{
  	int seq,off,date;
  	
  	if(!isTrackOpen()) throw new IOException ("Track  closed");
@@ -841,8 +836,7 @@ final  public void WriteEv(int event) throws Exception
 	*@exception Exception If a IO error or a MidiShare error occurs.
  	*/
  	
- final public void  WriteTrack(int seq) throws Exception 
- {
+ final public void  WriteTrack(int seq) throws Exception  {
  	int ev;
  	
  	NewTrack();	  				/* write the track header 	*/
@@ -857,8 +851,33 @@ final  public void WriteEv(int event) throws Exception
  	CloseTrack();		
  }
  
+  final public void  WriteTrack1(int seq) throws Exception  {
+ 	int ev;
+ 	int port = 0;
+ 	int lastWrite = 0;
+ 	
+ 	NewTrack();	  				/* write the track header 	*/
+ 	ev = Midi.GetFirstEv(seq);
+ 	
+  	while(ev!= 0)
+ 	{
+ 		/* Ecrit un changement de port */
+		if (Midi.GetPort(ev) != port) {
+			port = Midi.GetPort(ev);
+			WritePortPrefix(lastWrite,port);
+		}
+		
+ 	 	WriteEv( ev);	
+ 	 	lastWrite= ev;
+ 		ev= Midi.GetLink(ev);			
+ 	}
+  		
+ 	CloseTrack();		
+ }
+ 
+
+ 
  /*--------------------------------------------------------------------------*/
-   
  final  void mdf_GetDate() throws Exception{
  	int offset;
  	
@@ -882,7 +901,6 @@ final  public void WriteEv(int event) throws Exception
  	
 
  final public void Load (URL url,int seq, MidiFileInfos info ) throws Exception {
-
 	Open(url);
  	
  	if (seq == 0) throw new MidiException ("No more MidiShare event");
@@ -906,7 +924,6 @@ final  public void WriteEv(int event) throws Exception
 
  
  /*--------------------------------------------------------------------------*/
- 
  /**
 	Load a MIDIfile and convert it in a MidiShare sequence. For a multi-tracks MIDIfile,
 	the tracks are mixed in a single MidiShare sequence but are distinguished by the 
@@ -941,7 +958,6 @@ final  public void WriteEv(int event) throws Exception
  }
  
   /*--------------------------------------------------------------------------*/
-
  /**
 	Load a MIDIfile and convert it in a MidiShare sequence. For a multi-tracks MIDIfile,
 	the tracks are mixed in a single MidiShare sequence but are distinguished by the 
@@ -976,8 +992,7 @@ final  public void WriteEv(int event) throws Exception
  
  
  /*--------------------------------------------------------------------------*/
-  final void ReturnTimeInfos(MidiFileInfos info)
-{
+  final void ReturnTimeInfos(MidiFileInfos info){
 	int t;
 	
 	if((time & 0x8000) != 0)				/* smpte time 	*/
@@ -993,9 +1008,24 @@ final  public void WriteEv(int event) throws Exception
 	}
 }
 
+
+final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
+ 	
+	if( info.format < 0 || info.format > 2) throw new IOException ("MidiFileFormat error");
+	InitTrackListe();					/* init track list to nil	*/
+	
+ 	Create ((short)info.format,  (short)info.tracks, (short)info.timedef,  (short)info.clicks);
+  
+  	if(info.format != 0){				/* format 1 or 2			*/
+		AnalyseSeq(seq);				/* sequence analysis 	 	*/
+		WriteTracks(seq);				/* write tracks				*/
+	}else {
+		WriteTrack1(seq);				/* format 0					*/
+	}
+	
+  }
  
  /*--------------------------------------------------------------------------*/
- 
  /**
 	Save a MidiShare sequence as a MIDIfile.
 	Each track in a multi-tracks sequence must be distinguished by the 
@@ -1008,17 +1038,7 @@ final  public void WriteEv(int event) throws Exception
 
  final public void Save (File file, int seq,  MidiFileInfos info) throws Exception {
  	
- 	if(info.format < 0 || info.format > 2) throw new IOException ("MidiFileFormat error");
-	
-	InitTrackListe();					/* init track list to nil	*/
-	Create ((short)info.format,  (short)info.tracks, (short)info.timedef,  (short)info.clicks);
- 	
-   	if(info.format != 0){				/* format 1 or 2			*/
-  		AnalyseSeq(seq);				/* sequence analysis 	 	*/
-		WriteTracks(seq);				/* write tracks				*/
-	}else {
-		WriteTrack(seq);				/* format 0					*/
-	}
+ 	SaveAux(seq,info);
 	
 	// copy the memory stream into the file
 	
@@ -1030,7 +1050,6 @@ final  public void WriteEv(int event) throws Exception
   }
   
    /*--------------------------------------------------------------------------*/
- 
  	/**
 	Save a MidiShare sequence as a MIDIfile. 
 	Each track in a multi-tracks sequence must be distinguished by the 
@@ -1043,17 +1062,7 @@ final  public void WriteEv(int event) throws Exception
 
  final public void Save (URL url, int seq,  MidiFileInfos info) throws Exception {
  	
-	if( info.format < 0 || info.format > 2) throw new IOException ("MidiFileFormat error");
-	InitTrackListe();					/* init track list to nil	*/
-	
- 	Create ((short)info.format,  (short)info.tracks, (short)info.timedef,  (short)info.clicks);
-  
-  	if(info.format != 0){				/* format 1 or 2			*/
-		AnalyseSeq(seq);				/* sequence analysis 	 	*/
-		WriteTracks(seq);				/* write tracks				*/
-	}else {
-		WriteTrack(seq);				/* format 0					*/
-	}
+	SaveAux(seq,info);
 	
 	// copy the memory stream into the file
 	
@@ -1080,19 +1089,9 @@ final  public void WriteEv(int event) throws Exception
 
  final public void Save (OutputStream outstream, int seq,  MidiFileInfos info) throws Exception {
  	
- 	if( info.format < 0 || info.format > 2) throw new IOException ("MidiFileFormat error");
+ 	SaveAux(seq,info);
 	
-	InitTrackListe();					/* init track list to nil	*/
-	Create ((short)info.format,  (short)info.tracks, (short)info.timedef,  (short)info.clicks);
- 
-  	if(info.format != 0){				/* format 1 or 2			*/
-		AnalyseSeq(seq);				/* sequence analysis 	 	*/
-		WriteTracks(seq);				/* write tracks				*/
-	}else {
-		WriteTrack(seq);				/* format 0					*/
-	}
-	
-	// copie du stream mémoire dans le fichier
+	// copy the memory stream into the file
 	
 	BufferedOutputStream   tmp = new BufferedOutputStream (outstream , 1000);
 	seekoutput.writeTo(tmp);
@@ -1102,9 +1101,7 @@ final  public void WriteEv(int event) throws Exception
 
   
   /*--------------------------------------------------------------------------*/
-
-  final void SetLoadDates(  MidiFileInfos info, int s)
-	{
+  final void SetLoadDates(  MidiFileInfos info, int s){
 	int e;
 	
 	if( info.timedef != 0 )  				/* SMPTE time*/
@@ -1144,13 +1141,10 @@ final void WriteTracks(int seq) throws Exception {
 			CloseTrack();
 		}
 	}
-			
 }
 
-
 /*--------------------------------------------------------------------------*/
- final  void AnalyseSeq(int seq)
-{
+ final  void AnalyseSeq(int seq){
 	int ev,type;
 
 	ev = Midi.GetFirstEv(seq);
@@ -1203,14 +1197,13 @@ final void WriteTracks(int seq) throws Exception {
 	if ((lastWrite == 0) || (Midi.GetType(lastWrite) != Midi.typeEndTrack)) 
 		WriteEndTrack(lastWrite);
 }
-
-  
   
   /*--------------------------------------------------------------------------*/
    final void WriteTrackFormat1 (int seq, short ref, short numPiste) throws Exception {
 	
 	boolean firstName = true;
 	int type, ev, lastWrite= 0;
+	int port = 0;
 
 	ev = Midi.GetFirstEv(seq);
 	
@@ -1218,6 +1211,12 @@ final void WriteTracks(int seq) throws Exception {
 	{
 		if(Midi.GetRefnum(ev) == ref)
 		{
+			/* Ecrit un changement de port */
+			if (Midi.GetPort(ev) != port) {
+				port = Midi.GetPort(ev);
+				WritePortPrefix(lastWrite,port);
+			}
+		
 			type = Midi.GetType(ev);
 			if( !IsTempoMap(type))		/* does not belong to the tempo map	*/
 			{
@@ -1246,6 +1245,7 @@ final void WriteTracks(int seq) throws Exception {
 
 	boolean firstName = true;
 	int type, ev, lastWrite= 0;
+	int port = 0;
 
 	ev = Midi.GetFirstEv(seq);
 	
@@ -1253,6 +1253,12 @@ final void WriteTracks(int seq) throws Exception {
 	{
 		if(Midi.GetRefnum(ev) == ref)
 		{
+			/* Ecrit un changement de port */
+			if (Midi.GetPort(ev) != port) {
+				port = Midi.GetPort(ev);
+				WritePortPrefix(lastWrite,port);
+			}
+		
 			if( firstName && Midi.GetType(ev) == Midi.typeSeqName)
 				{
 					WriteSeqName(ev, ref, numPiste);
@@ -1283,8 +1289,8 @@ final void WriteTracks(int seq) throws Exception {
 		Midi.SetText(name, Midi.GetText(name) + " " + MidiFileStream.Player + ref);
 		WriteEv(name);						/* write the event				*/
 		Midi.FreeEv( name);					/* and free it					*/
-	}
-
+	}else
+		throw new IOException ("No more MidiShare events");
 }
 
 
@@ -1312,9 +1318,31 @@ final void WriteTracks(int seq) throws Exception {
 			WriteEv(ev);					/* write the event		*/
 			Midi.FreeEv(ev);				/* free it				*/
 		}
-	}
+	}else
+		throw new IOException ("No more MidiShare events");
 }
 
+/*--------------------------------------------------------------------------*/
+final void WritePortPrefix( int prev, int port) throws Exception {
+	int ev;
+	int seq;
+	
+	if (Midi.GetVersion() < 185) {
+		return;  /* Teste la version de MidiShare */ 
+	}else if( (ev= Midi.NewEv( Midi.typePortPrefix))!= 0){	/* alloue un evt port prefix	*/
+		Midi.SetLink(ev,0);
+		Midi.SetField(ev,0,port);
+		
+		if( prev!=0)									/* s'il y a un événement avant	*/
+			Midi.SetDate(ev,Midi.GetDate(prev));		/* positionne sa date			*/
+		else
+			Midi.SetDate(ev,0);
+			
+		WriteEv(ev);	/* écrit l'événement			*/
+		Midi.FreeEv( ev);				/* et le libère					*/
+	}else
+		throw new IOException ("No more MidiShare events");
+}
 
 /*--------------------------------------------------------------------------*/
  final void InitTrackListe(){
@@ -1333,6 +1361,7 @@ final void WriteTracks(int seq) throws Exception {
  final void UseTrack (int seq, int dest , int i)
 	{
 		SetSeqRef( seq, GetSeqRef(seq, i));		/* restore the refnum			*/
+		SetSeqPort(seq);						/* restore the port				*/
 		MidiSequence.Mix( seq, dest);			/* mixe  with the dest sequence	*/
 												
 		Midi.SetFirstEv(seq, 0);
@@ -1348,8 +1377,7 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 	seq = ReadTrack();
 	UseTrack (seq, dest, i);
 	
-}
-		
+}		
 
 /*--------------------------------------------------------------------------*/
  final void ReadTracks( int dest)  throws Exception {
@@ -1360,7 +1388,6 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 		TryToReadTrack (dest,i);
 	}
 }
-
 
 /*--------------------------------------------------------------------------*/	
 	final  void SetSeqRef(int seq, int refNum)
@@ -1374,6 +1401,37 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 			ev = Midi.GetLink(ev);
 		}
 	}
+
+/*--------------------------------------------------------------------------*/
+/* 		restore l'information de port										*/
+/*--------------------------------------------------------------------------*/
+final void SetSeqPort( int seq)
+{
+	int  ev, prev, tmp;
+	int port = 0;
+	
+	prev= 0;
+	ev= Midi.GetFirstEv(seq);
+	while( ev != 0)
+	{
+		if( (Midi.GetType(ev) == Midi.typePortPrefix) && (Midi.GetLink(ev) != 0))	/* evt fin de piste		*/
+		{															/* n'est pas le dernier */
+			port = Midi.GetField(ev,0);
+			if( prev!=0)								/* n'est pas le premier	*/
+				Midi.SetLink(prev,Midi.GetLink(ev));	/* mod. le chainage		*/
+			else										/* sinon				*/
+				Midi.SetFirstEv(seq,Midi.GetLink(ev)) ; /* suivant= premier		*/
+			tmp= Midi.GetLink(ev);						/* sauve le suivant		*/
+			Midi.FreeEv(ev);							/* libère l'evt			*/
+			ev= tmp;									/* evt courant=suivant	*/
+		}
+		else 
+		{	Midi.SetPort (ev,port);  					/* attribue le port courant */
+			prev = ev;
+			ev = Midi.GetLink(ev);
+		}
+	}
+}
 
 /*--------------------------------------------------------------------------*/
  final int GetBeginKey( String buff)
@@ -2053,6 +2111,40 @@ final  class keySign extends MfEvent{
      	mfile.output.write( MidiFileStream.META);			/* meta evt	header	*/
  		mfile.output.write( MidiFileStream.MDF_ChanPref);	/* meta evt	type	*/
  		mfile.output.write( MidiFileStream.MDF_ChanPrefLen);/* length			*/
+ 		mfile.output.write( Midi.GetField(ev,0));
+ 
+     }
+ }
+ 
+ /*--------------------------------------------------------------------------*/
+ /* class portPref                                                                                   
+ /*--------------------------------------------------------------------------*/
+ 
+ final class portPref extends MfEvent{
+ 
+ 	final  int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	{
+        int ev = 0;
+ 
+        if ((Midi.GetVersion() < 185) || (len != MidiFileStream.MDF_PortPrefLen))             /* message length */
+            return mfile.ReadExtTbl[0].read(mfile, len,(short)0);
+            
+        else if( (ev= Midi.NewEv(Midi.typePortPrefix)) != 0)
+        {
+            Midi.SetField(ev,0, mfile.input.read());
+            mfile._cnt-= len;
+        }
+        else 
+        	throw new MidiException ("No more MidiShare event");	
+        	
+        return ev;
+    }
+     
+     final  void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     
+     	mfile.output.write( MidiFileStream.META);			/* meta evt	header	*/
+ 		mfile.output.write( MidiFileStream.MDF_PortPref);	/* meta evt	type	*/
+ 		mfile.output.write( MidiFileStream.MDF_PortPrefLen);/* length			*/
  		mfile.output.write( Midi.GetField(ev,0));
  
      }
