@@ -24,6 +24,7 @@
  * v117 [Sept 11,97]   SL conversion fonctions ShortVal and LongVal use now usigned values
  * v118 [Nov 23,98]    SL bug correction in write_tempo function
  * v119 [Sept 23,99]   SL use of MDF_Header_SIZE and MDF_Trk_SIZE to avoid alignement problems for data structures
+ * v120 [Jan 1,00]     JJC bug correction in write_SeqNum and MidiFileCloseTrack functions
 
  */
 
@@ -574,7 +575,7 @@ static Boolean write_SeqNum( MIDIFilePtr f, MidiEvPtr ev, short unused1)
 	putc( MDF_NumSeqLen, fd);				/* length			*/
 	s= SeqNum(ev);
 	putc( s >> 8, fd);
-	putc( s & 0xF, fd);
+	putc( s & 0xFF, fd);
 	return !ferror( fd);	
 }
 
@@ -813,7 +814,7 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 	fpos_t offset1, offset2;				/* beg and end track offsets */
 	long trkLen;							/* track length				 */
 	short ntrks;							/* tracks count				 */
-	Boolean ret;
+	Boolean ret=true;
 
 	MidiFile_errno= MidiFileNoErr;
 	offset1= fd->trkHeadOffset;
