@@ -70,6 +70,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = ../../../lib;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
