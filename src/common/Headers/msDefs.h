@@ -196,16 +196,22 @@ listed here.
 *******************************************************************************/
 
 enum{   MIDIOpenAppl=1,
-        MIDICloseAppl,
-        MIDIChgName,
-        MIDIChgConnect,
+
+		MIDICloseAppl,
+		MIDIChgName,
+		MIDIChgConnect,
+		MIDIOpenModem,		// now obsolete
+		MIDICloseModem,		// now obsolete
+		MIDIOpenPrinter,	// now obsolete
+		MIDIClosePrinter,	// now obsolete
         MIDISyncStart,
         MIDISyncStop,
         MIDIChangeSync,
-        MIDIOpenModem=100,
-        MIDICloseModem,
-        MIDIOpenPrinter,
-        MIDIClosePrinter
+        MIDIOpenDriver,
+        MIDICloseDriver,
+        MIDIAddSlot,
+        MIDIRemoveSlot,
+        MIDIChgSlotConnect
 };
 
 /******************************************************************************
@@ -310,11 +316,46 @@ enum{   MIDIOpenAppl=1,
         char unused[2];        /*  16 bits */
     } TFilter;
 
+
+
+/*------------------------------------ names ----------------------------------*/
+#define DrvNameLen 32
+
 #ifdef PascalNames
     typedef unsigned char * MidiName;
+	typedef unsigned char	DriverName[DrvNameLen];
 #else
     typedef char FAR * MidiName;
+	typedef char	   DriverName[DrvNameLen];
 #endif
+typedef DriverName SlotName;
+
+/*----------------------- drivers and slots information -----------------------*/
+
+typedef long SlotRefNum;
+typedef enum { kInputSlot=1, kOutputSlot } SlotDirection;
+typedef struct TSlotInfos {
+	SlotName 		name;
+	SlotDirection 	direction;
+	char 			cnx[32];	// bit field : 256 ports connection state
+} TSlotInfos;
+
+typedef void (* WakeupPtr) 	(short refnum);
+typedef void (* SleepPtr) 	(short refnum);
+typedef Boolean (* SlotInfoPtr)(SlotRefNum slot, TSlotInfos * infos);
+typedef struct TDriverOperation {
+	WakeupPtr   wakeup;
+	SleepPtr    sleep;
+	SlotInfoPtr slotInfo;
+} TDriverOperation;
+
+typedef struct TDriverInfos {
+	DriverName  name;
+	short 		version;
+	short 		slots;			// slots count - ignored at register time
+} TDriverInfos;
+
+
 
 /*------------------------ Synchronisation informations -----------------------*/
 

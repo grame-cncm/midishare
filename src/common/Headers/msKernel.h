@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2000
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -32,7 +32,6 @@
 #include "msTypes.h"
 #include "msMemory.h"
 #include "msSorter.h"
-#include "msDriver.h"
 
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
@@ -56,7 +55,6 @@ typedef struct TMSGlobal {
 	TSorter       sorter;        /* sorter specific storage             */
 	fifo          toSched;       /* events to be scheduled              */
 	THost         local;         /* for implementation specific purpose */
-	TDriverPtr    driver;        /* driver specific storage             */
 } TMSGlobal;
 
 /*--------------------------------------------------------------------------*/
@@ -70,7 +68,6 @@ typedef struct TMSGlobal {
 #define Appls(g)       		(g->clients.appls)
 #define ActiveAppl(g)       (g->clients.activesAppls)
 #define NextActiveAppl(g)   (g->clients.nextActiveAppl)
-#define Driver(g)           (g->driver)
 
 /*--------------------------------------------------------------------------*/
 /* function declaration                                                     */

@@ -47,8 +47,10 @@ MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TClientsPt
 	if (CheckRefNum(g,src) && CheckRefNum(g,dest)) {
 		appSrc  = g->appls[src]; 
 		appDest = g->appls[dest];
-		if( state) SetConnection (appSrc, appDest, g);
-		else ClearConnection (appSrc, appDest, g);
+		if (appSrc->folder == appDest->folder) {
+			if( state) SetConnection (appSrc, appDest, g);
+			else ClearConnection (appSrc, appDest, g);
+		}
 	}
 }
 

@@ -26,7 +26,7 @@
 
 #include "msAppFun.h"
 #include "msInit.h"
-#include "msDriver.h"
+#include "msDrvFun.h"
 #include "msEvents.h"
 #include "msExtern.h"
 #include "msTime.h"
@@ -46,7 +46,7 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 172;
+	return 180;
 }
 
 
@@ -60,13 +60,15 @@ void MidiShareWakeup (TMSGlobalPtr g)
     OpenMemory (Memory(g));
     OpenTime (g);
     OpenTimeInterrupts (g);
-	Driver(g) = OpenDriverManager();
+	OpenDrivers(g);
+	RestoreState (g);
 }
 
 void MidiShareSleep (TMSGlobalPtr g) 
 {
+	SaveState (g);
+	CloseDrivers(g);
     CloseTimeInterrupts (g);
     CloseMemory (Memory(g));
-	CloseDriverManager(Driver(g));
     SpecialSleep (g);
 }

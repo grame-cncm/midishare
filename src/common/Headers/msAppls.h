@@ -30,13 +30,16 @@
 #include "msMemory.h"
 #include "msTypes.h"
 #include "msDefs.h"
+#include "msDriver.h"
 
 /*------------------------------------------------------------------------*/
 /* constants definitions                                                  */
 /*------------------------------------------------------------------------*/
 #define kNoRcvFlag       -1
-#define MaxAppls         64            /* maximum allowed applications    */
-#define MaxApplNameLen   32            /* maximum application name length */
+#define MaxAppls         128            /* maximum allowed clients         */
+#define MaxApplNameLen   32             /* maximum application name length */
+#define MidiShareRef     0              /* MidiShare refnum at client side */
+#define MidiShareDriverRef  MaxAppls-1  /* MidiShare refnum at driver side */
 
 #ifdef PascalNames
 # define kMidiShareName    "\pMidiShare"
@@ -61,9 +64,6 @@ typedef unsigned char MSName[MaxApplNameLen];
 typedef char MSName[MaxApplNameLen];
 #endif
 
-
-
-
 /*------------------------------------------------------------------------*/
 /* inter-applications connections representation                          */
 typedef struct TConnection{
@@ -75,10 +75,13 @@ typedef struct TConnection{
 
 /*------------------------------------------------------------------------*/
 /* MidiShare application internal data structures                         */
+enum { kClientFolder = 0, kDriverFolder = 255 };
+
 typedef struct TAppl{
     MSName          name;        /* the application name         */
     TApplContextPtr context;     /* system dependent context     */
     FarPtr(void)    info;        /* user field                   */
+    uchar           folder;      /* application folder           */
     uchar           refNum;      /* reference number             */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
     RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
@@ -91,14 +94,17 @@ typedef struct TAppl{
     fifo            dTasks;      /* defered tasks fifo        */
  
     MidiFilterPtr   filter;      /* application filter        */
+    TDriverPtr		driver;		 /* driver specific storage   */
+    
 } TAppl;
 
 /*___________________________________*/
 typedef struct TClients {
-	short         nbAppls;                /* current running clients count   */
-	TApplPtr      appls[MaxAppls];        /* client applications list        */
-	TApplPtr      activesAppls[MaxAppls]; /* active client applications list */
-	TApplPtr  *   nextActiveAppl;         /* ptr in active applications list */
+	short         nbAppls;                /* current running clients count    */
+	short         nbDrivers;              /* current registered drivers count */
+	TApplPtr      appls[MaxAppls];        /* client applications list         */
+	TApplPtr      activesAppls[MaxAppls]; /* active client applications list  */
+	TApplPtr  *   nextActiveAppl;         /* ptr in active applications list  */
 	MSMemoryPtr   memory;
 } TClients;
 
@@ -106,7 +112,15 @@ typedef struct TClients {
 /*--------------------------------------------------------------------------*/
 /* macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define CheckRefNum( g, r)    ((r>=0) && (r<MaxAppls) && g->appls[r])
+#define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r])
+#define CheckClientsCount(g)	((g->nbAppls + g->nbDrivers) < MaxAppls - 2)
+
 #define DTasksFifoHead(appl)  (MidiEvPtr)(appl->dTasks.head)
+
+/*--------------------------------------------------------------------------*/
+/* functions                                                                */
+/*--------------------------------------------------------------------------*/
+short GetIndClient (short index, short folderRef, TClientsPtr g);
+
 
 #endif

@@ -53,6 +53,8 @@ MutexResCode CloseMutex (MutexRef ref);
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g);
 void SpecialSleep  (TMSGlobalPtr g);
+void SaveState     (TMSGlobalPtr g);
+void RestoreState  (TMSGlobalPtr g);
 
 void OpenTimeInterrupts (TMSGlobalPtr g);
 void CloseTimeInterrupts(TMSGlobalPtr g);
@@ -67,5 +69,9 @@ void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, l
 void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
 void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
 void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
+
+void DriverWakeUp (TApplPtr appl);
+void DriverSleep  (TApplPtr appl);
+Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos);
 
 #endif

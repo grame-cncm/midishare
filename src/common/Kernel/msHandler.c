@@ -37,7 +37,10 @@ static void Accept			( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
 static void Propose		    ( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
 static void DispatchEvents	( TMSGlobalPtr g, MidiEvPtr ev);
 static void RcvAlarmLoop	( TMSGlobalPtr g);
+static void ConnectionsLoop ( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
 
+static void Slot2PortDispatch( TMSGlobalPtr g, MidiEvPtr ev);
+static void Port2SlotAccept  ( TMSGlobalPtr g, TApplPtr drv, MidiEvPtr ev);
 
 /*===========================================================================
   External functions implementation
@@ -66,28 +69,111 @@ void ClockHandler (TMSGlobalPtr g)
 }
 
 
+//________________________________________________________________________________
+static void MidiPrintf (TMSGlobalPtr g, char *text)
+{
+	MidiEvPtr e;
+	
+	e= MSNewEv (typeTextual, FreeList(Memory(g)));
+	if (e) {
+		while (*text)
+			MSAddField (e, *text++, FreeList(Memory(g)));
+		RefNum(e) = 0;
+		Port(e) = 255;
+		DispatchEvents (g, e);
+	}
+}
+
+#include <Strings.h>
+//________________________________________________________________________________
+static void MidiPrintl (TMSGlobalPtr g, long val)
+{
+	Str32 num;
+	NumToString (val, num);
+	num[num[0]+1] = 0;
+	MidiPrintf (g, (char *)&num[1]);
+}
+
 
 /*===========================================================================
   Internal functions implementation
   ===========================================================================*/ 
-static void Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
-
+static inline void RawAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	if( appl->refNum ) {
-		fifoput (&appl->rcv, (cell *)ev);
-		if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
+	fifoput (&appl->rcv, (cell *)ev);
+	if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
+}
+
+static void Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
+{
+	switch (appl->folder) {
+		case kClientFolder:
+			if (appl->refNum == MidiShareRef) {
+				ConnectionsLoop (g, Clients(g)->appls[MidiShareDriverRef], ev);
+				MSFreeEv (ev, FreeList(Memory(g)));
+			}
+			else RawAccept (g, appl, ev);
+			break;
+
+		case kDriverFolder:
+			if (appl->refNum == MidiShareDriverRef)
+				Slot2PortDispatch (g, ev);
+			else 
+				Port2SlotAccept (g, appl, ev);
+			MSFreeEv (ev, FreeList(Memory(g)));
+			break;
 	}
-	else { 
-		/* refnum 0 is MidiShare refnum */
-		/* event should be handled by the port manager */
-		SendToDriver (Driver(g), ev);
-		MSFreeEv( ev, FreeList(Memory(g)));
+}
+
+/*__________________________________________________________________________________*/
+static void Port2SlotAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev) 
+{
+	char * port2slot = Driver(appl)->port[Port(ev)];
+	short i, j;
+	
+	for (i = 0; i < SlotMapSize; i++, port2slot++) {
+		if (*port2slot) {
+			char mask = 1;
+			for (j=0; j<8; j++) {
+				if (*port2slot & mask) {
+					MidiEvPtr copy= MSCopyEv( ev, FreeList(Memory(g)));
+					if( copy) {
+						Port(copy) = j + (i * 8);
+						fifoput (&appl->rcv, (cell *)copy);
+						if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
+					}
+					break;
+				}
+				mask <<= 1;
+			}
+		}
+	}
+}
+
+/*__________________________________________________________________________________*/
+static void Slot2PortDispatch( TMSGlobalPtr g, MidiEvPtr ev) 
+{
+	TDriverPtr drv = Driver(Appls(g)[RefNum(ev)]);
+	char * slot2port = drv->map[Port(ev)];
+	short i, j;
+	
+	if (!slot2port) return;
+	for (i = 0; i < PortMapSize; i++, slot2port++) {
+		if (*slot2port) {
+			char mask = 1;
+			for (j=0; j<8; j++) {
+				if (*slot2port & mask) {
+					Port(ev) = j + (i * 8);
+					ConnectionsLoop (g, Clients(g)->appls[MidiShareRef], ev);
+				}
+				mask <<= 1;
+			}
+		}
 	}
 }
 
 /*__________________________________________________________________________________*/
 static void Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev) 
-
 {
 	MidiEvPtr copy;
 	MidiFilterPtr filter;
@@ -118,6 +204,19 @@ static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
 }
 
 /*__________________________________________________________________________________*/
+/*	Connections loop								*/
+/*__________________________________________________________________________________*/
+static void ConnectionsLoop (TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
+{
+	TConnectionPtr cnx;
+	cnx= appl->dstList;		        	/* get the connections list */
+	while( cnx) {
+		Propose( g, cnx->itsDst, ev);	/* propose to each connected appl */
+		cnx= cnx->nextDst;		    	/* loop thru the connection list  */
+	}
+}
+
+/*__________________________________________________________________________________*/
 /*	DispatchEvents								*/
 /*__________________________________________________________________________________*/
 static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
@@ -144,12 +243,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 					Accept( g, appl, ev);		    /* event is for appl itself */
 				}
 				else {					        	/* standard event received  */
-					TConnectionPtr cnx;
-					cnx= appl->dstList;		        /* get the connections list */
-					while( cnx) {
-						Propose( g,cnx->itsDst,ev);	/* propose to each connected appl */
-						cnx= cnx->nextDst;		    /* loop thru the connection list  */
-					}
+					ConnectionsLoop (g, appl, ev);
 					MSFreeEv( ev, FreeList(mem));   /* and free the event */
 				}
 			}
@@ -163,7 +257,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
 			}
 			else if( type >= typePrivate) {     /* it's a private event 	*/
-				Accept( g, appl, ev);           /* event is for appl itself */
+				RawAccept( g, appl, ev);        /* event is for appl itself */
 			}
 			else MSFreeEv( ev, FreeList(mem));
 		}

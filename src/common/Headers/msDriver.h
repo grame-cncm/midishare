@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2000
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -26,11 +26,37 @@
 
 #include "msDefs.h"
 
-typedef void * TDriverPtr;
+/*_______________________________________________________________*/
+#define MaxSlots	64
+#define MaxPorts	256
+#define PortMapSize	MaxPorts/8
+#define SlotMapSize	MaxSlots/8
 
-/* external function to be used by the kernel */
-int 		SendToDriver		(TDriverPtr driver, MidiEvPtr ev);
-TDriverPtr	OpenDriverManager	();
-void		CloseDriverManager	(TDriverPtr driver);
+#define Driver(appl)	(appl->driver)
+#define Wakeup(appl)	Driver(appl)->op.wakeup
+#define Sleep(appl)		Driver(appl)->op.sleep
+#define SlotInfo(appl)	Driver(appl)->op.slotInfo
+
+typedef char PortMap[PortMapSize], * PortMapPtr;	
+typedef char SlotMap[SlotMapSize];	
+
+/*_______________________________________________________________*/
+typedef struct {
+	TDriverOperation op;
+	short	version;
+	short	slotsCount;
+	PortMapPtr map[MaxSlots];
+	char	   port[MaxPorts][SlotMapSize];
+} TDriver, * TDriverPtr;
+
+typedef struct {
+	union {
+		SlotRefNum lvalue;
+		struct {
+			short	drvRef;
+			short 	slotRef;
+		} s;
+	} u;
+} IntSlotRefNum;
 
 #endif

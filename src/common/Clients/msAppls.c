@@ -26,7 +26,9 @@
 #include "msAlarms.h"
 #include "msAppls.h"
 #include "msAppFun.h"
+#include "msApplTools.h"
 #include "msConnx.h"
+#include "msDriver.h"
 #include "msExtern.h"
 #include "msInit.h"
 #include "msXmtRcv.h"
@@ -38,37 +40,46 @@
 # define kMidiShareName 	"MidiShare"
 #endif
 
-#define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
 #define FreeAppl(appl)		DisposeMemory(appl)
+
+#define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (g->appls[ref]->folder==kClientFolder))
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static void     setApplName     (TApplPtr ap, MidiName name);
 static Boolean  equalApplName   (TApplPtr ap, MidiName name);
-static void     makeAppl	    (TClientsPtr g, TApplPtr ap, short ref, MidiName n);
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
-	TApplPtr appl;
+	TApplPtr appl, drv;
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
 	if (clients->nbAppls == 0) {
+		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
+		if (drv) {
+			TDriverInfos infos;
+			setApplName (infos.name, kMidiShareName);
+			infos.version = MSGetVersion (g);
+		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
+			Clients(g)->nbDrivers++;
+		}
 		MidiShareWakeup(g);
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
-		    makeAppl(clients, appl, 0, kMidiShareName);
+		    makeClient(clients, appl, MidiShareRef, kMidiShareName, kClientFolder);
+			Clients(g)->nbAppls++;
 		}
 	}
-	if (clients->nbAppls < MaxAppls) {
+	if (CheckClientsCount(clients)) {
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
 			for (ref = 1; clients->appls[ref]; ref++)
 				;
-			makeAppl(clients, appl, ref, name);
+			makeClient(clients, appl, ref, name, kClientFolder);
+			Clients(g)->nbAppls++;
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
 	}
@@ -77,34 +88,25 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
-{
+{	
 	TClientsPtr clients = Clients(g);
-	TApplPtr appl; Boolean cnxChange;
 	
-	if (CheckRefNum(clients, ref)) {
-		appl = clients->appls[ref];
+	if (!CheckApplRefNum(clients, ref) || (ref == MidiShareRef))
+		return;
 		
-		cnxChange = (appl->srcList != 0) || (appl->dstList != 0);
-		RemAllSrcCon (appl, FreeList(Memory(g)));
-		RemAllDstCon (appl, FreeList(Memory(g)));
-		MSFlushEvs (ref, clients);
-		MSFlushDTasks (ref, clients);
-		FreeAppl (appl);
-		clients->appls[ref] = 0;
-		clients->nbAppls--;
-		DisposeApplContext (appl->context);
-		if (clients->nbAppls == 1) {
-			FreeAppl(clients->appls[0]);
-			clients->appls[0] = 0;
-			clients->nbAppls = 0;
-			MidiShareSleep(g);
-		} else {
-			CallAlarm(ref, MIDICloseAppl, clients);
-			if (cnxChange) {
-				CallAlarm(ref, MIDIChgConnect, clients);
-			}
-		}
-	} 
+	closeClient (ref, g);
+	clients->nbAppls--;
+	if (clients->nbAppls == 1) {
+		FreeAppl(clients->appls[MidiShareRef]);
+		clients->appls[MidiShareRef] = 0;
+		clients->appls[MidiShareDriverRef] = 0;
+		clients->nbAppls = 0;
+		MidiShareSleep(g);
+		FreeAppl(clients->appls[MidiShareDriverRef]);
+		clients->nbDrivers--;
+	} else {
+		CallAlarm(ref, MIDICloseAppl, clients);
+	}
 }
 
 /*____________________________________________________________________________*/
@@ -119,9 +121,11 @@ MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
 	short ref = -1;
 	
 	if (index>0 && index<= g->nbAppls) {
+		TApplPtr appl;
 		do { 
 			ref++;
-			if (g->appls[ref]) index--;
+			appl = g->appls[ref];
+			if (appl && (appl->folder != kDriverFolder)) index--;
 		} while (index);
 		return ref;
 	}
@@ -152,7 +156,7 @@ MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
-		setApplName(g->appls[ref], name);
+		setApplName(g->appls[ref]->name, name);
 		CallAlarm (ref, MIDIChgName, g);
 	}
 }
@@ -218,13 +222,14 @@ MSFunctionType(void) MSSetApplAlarm(short ref, ApplAlarmPtr alarm, TClientsPtr g
 }
 
 /*===========================================================================
-  External initialization functions
+  External functions
   =========================================================================== */
 void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 {
 	short i;
 	
 	g->nbAppls = 0;
+	g->nbDrivers = 0;
 	g->memory  = mem;
 	g->nextActiveAppl = 0;
 	for (i = 0; i < MaxAppls; i++) {
@@ -233,12 +238,46 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 	}
 }
 
+/*____________________________________________________________________________*/
+void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short folder)
+{
+	setApplName(appl->name, name);	
+	appl->context = CreateApplContext();
+	appl->info = 0;
+	appl->folder = (uchar)folder;
+	appl->refNum = (uchar)ref;
+	appl->rcvFlag = (uchar)kNoRcvFlag;
+	appl->rcvAlarm = 0;
+	appl->applAlarm = 0;
+	appl->srcList = 0;
+	appl->dstList = 0;
+	appl->filter = 0;
+	appl->driver = 0;
+	fifoinit (&appl->rcv);
+	fifoinit (&appl->dTasks);
+	g->appls[ref] = appl;
+}
+
+/*____________________________________________________________________________*/
+void closeClient (short ref, TMSGlobalPtr g)
+{
+	TClientsPtr clients = Clients(g);
+	TApplPtr appl = clients->appls[ref];
+
+	RemAllSrcCon (appl, FreeList(Memory(g)));
+	RemAllDstCon (appl, FreeList(Memory(g)));
+	MSFlushEvs (ref, clients);
+	MSFlushDTasks (ref, clients);
+	FreeAppl (appl);
+	clients->appls[ref] = 0;
+	DisposeApplContext (appl->context);
+}
+
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
-static void setApplName (TApplPtr ap, MidiName name)
+void setApplName (MidiName dst, MidiName name)
 {
-	MidiName dst= ap->name;
 #ifdef PascalNames
 	int i, count = *name + 1;
 	for (i=0; (i<count) && (i<MaxApplNameLen); i++) {
@@ -266,22 +305,4 @@ static Boolean equalApplName (TApplPtr ap, MidiName name)
 	while ((*apname != 0) && (*apname == *name) ) { apname++; name++; }
 	return (*apname == *name);
 #endif
-}
-
-static void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
-{
-	setApplName(appl, n);	
-	appl->context = CreateApplContext();
-	appl->info = 0;
-	appl->refNum = (uchar)ref;
-	appl->rcvFlag = (uchar)kNoRcvFlag;
-	appl->rcvAlarm = 0;
-	appl->applAlarm = 0;
-	appl->srcList = 0;
-	appl->dstList = 0;
-	appl->filter = 0;
-	fifoinit (&appl->rcv);
-	fifoinit (&appl->dTasks);
-	g->appls[ref] = appl;
-	g->nbAppls++;
 }
