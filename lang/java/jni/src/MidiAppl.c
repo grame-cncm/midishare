@@ -117,6 +117,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
   (JNIEnv * env, jobject obj, jint ref) {
 
 	#if defined( __Macintosh__) && defined( __MacOS9__)
+		if (MidiRcvApplAlarm (ref)) DisposeRoutineDescriptor ((UPPRcvAlarmPtr) MidiRcvApplAlarm (ref));
 		if (MidiGetApplAlarm (ref)) DisposeRoutineDescriptor ((UPPApplAlarmPtr) MidiGetApplAlarm (ref));
 	#endif
 }
