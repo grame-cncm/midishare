@@ -28,6 +28,8 @@
 
 #define __Macintosh__
 #define __Control_Panel__
+#define __MacOS9__
 #define PascalNames
+
 
 #endif
