@@ -8,6 +8,7 @@ VERSION =1.88
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
+IMG		= "MidiShare-$(VERSION) Package"
 
 common = midishare/doc 				\
 		midishare/src/common 			\
@@ -39,6 +40,12 @@ modules = $(common) \
 
 
 package:
+	[ -d $(IMG) ] || mkdir $(IMG)
+	[ -d $(IMG)/Packages ] || mkdir $(IMG)/Packages
+	make userpack
+	make devpack
+	
+userpack:
 	[ -d $(ROOT) ] || cp -R Distribution $(ROOT)
 	find $(ROOT) -depth -name CVS -exec rm -rf {} \;
 	make dist
