@@ -1,3 +1,5 @@
+
+
 ;; =====================================================================================
 ;; The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
 ;; 1996-2000, and is distributed as Open Source software under the Artistic License;
@@ -6,16 +8,29 @@
 ;; Grame : Computer Music Research Laboratory
 ;; Web : http://www.grame.fr/Research
 ;; E-mail : MidiShare@rd.grame.fr
+;;
+;; History:
+;; 
+;; 18-09-03 : Use the  MidiNewMidiFileInfos MidiNewPlayerState MidiNewPos generic functions.
+;; 24-09-03 : Check the version of the library.
 ;; =====================================================================================
 
 ;;
 ;; You must load the file Player_Interface.lisp before using this tutorial
 ;;
 
-;; you must check if MidiShare is installed before using the Player Library
+
+;; Use the MIDISHARE package to have acces to all MidiShare and Player librariry symbols
+
+(use-package :ms)
+
+;; You must check if MidiShare is installed before using the Player library
 
 (midishare) 
 
+;; You can check the Player library version
+
+(Version)
 
 
 ;;=======================
@@ -49,10 +64,11 @@
 
 ;; Allocate a MidiFile record
 
-(defvar *info* (make-record :MidiFileInfos)) 
+(defvar *info* (MidiNewMidiFileInfos))
 
 ;; Load a  Midifile (set YOUR pathname)
 
+(midi-file-load "/Volumes/Documents/MacOS9/MidiFileEx/allblues.mid" *seq* *info*)
 (midi-file-load "Document1:Developpements:MidiFileEx:Labamba.mid" *seq* *info*)
 (midi-file-load "HD1200:MidiFileEx:ChopinNocturne4.2.mid" *seq* *info*)
 (midi-file-load "HD1200:MidiFileEx:BECAUSE.MID" *seq* *info*)
@@ -87,7 +103,7 @@
 ;; GETSTATEPLAYER  can be used during playback
 
 (defvar *state*)
-(setq *state*(make-record :PlayerState))
+(setq *state* (MidiNewPlayerState))
 
 
 ;; Print the state record
@@ -128,8 +144,7 @@
 ;; SETPOSBBUPLAYER and SETPOSMSPLAYER can be used during playback
 
 
-(defvar *pos* (make-record :Pos))
-
+(defvar *pos* (MidiNewPos))
 
 ;; set the postion in bar,beat,unit
 
@@ -147,14 +162,14 @@
 (defun set-pos-ms-player (min sec ms)
    (setposmsplayer *player* (+ (* 60000 min) (* 1000 sec) ms)))
 
-(set-pos-ms-player 1 2 2)
+(set-pos-ms-player 1 2 1)
 
 
 ;;==========================
 ;; Step playing management
 ;;==========================
 
-;; if used during playback FORWARDSTEPPLAYER and BACKWARDSTEPPLAYER  first stop the player
+;; if used during playback FORWARDSTEPPLAYER and BACKWARDSTEPPLAYER first stop the player
 
 
 ;; you will have a Sequencer error when using 
@@ -240,25 +255,6 @@
 ;; Tracks management
 ;;=====================
 
-;; Each track can be individually accessed, changed, muted...
-
-
-;; Get a COPY of the track number 1
-
-(setq *seq* (gettrackplayer *player* 1))
-
-
-;; Print it
-
-(print-seq *seq*)
-
-
-;; Fonctions to print a MidiShare sequence in textual format
-
-(defun print-seq (seq ) 
-  (apply-seq seq #'(lambda (ev) (print (midi-string-ev ev)))))
-
-
 ;; un applicateur de fonction sur une sequence MidiShare
 
 (defun apply-seq (seq fun)
@@ -279,7 +275,7 @@
                 (midi-list-fields e f)))))
 
 (defun midi-list-fields (e &optional (n 4))
-  (if (or (and (>= (type e) typeText) (<= (type e) typeCuePoint)) (= (type e) typeSpecific))
+  (if (or (and (>= (type e) typeTextual) (<= (type e) typeCuePoint)) (= (type e) typeSpecific))
     (text e)
     (let (l)
       (dotimes (i (min n (midicountfields e)))
@@ -319,7 +315,18 @@
            "Undefined") )))
 
 
-(defvar *seq1)
+;; Fonctions to print a MidiShare sequence in textual format
+
+(defun print-seq (seq ) 
+  (apply-seq seq #'(lambda (ev) (print (midi-string-ev ev)))))
+
+;; Each track can be individually accessed, changed, muted...
+
+;; Get a COPY of the track number 1
+
+(setq *seq* (gettrackplayer *player* 1))
+
+(defvar *seq1*)
 (setq *seq1* (getalltrackplayer *player* ))
 
 (print-seq *seq1*)
@@ -373,7 +380,7 @@
   (let ((seq (midinewseq)))
     (dotimes (i 50)
       (let ((ev (midinewev typenote)))
-        (unless (%null-ptr-p ev)
+        (unless (ccl:%null-ptr-p ev)
           (midisetfield ev 0 72)
           (midisetfield ev 1 80)
           (midisetfield ev 2 125)
@@ -411,6 +418,7 @@
 (stopplayer *player*)
 (contplayer *player*)
 
+(setparamplayer *player* 1  kSolo kSoloOff)
 
 ;;==============================
 ;; Synchronisation  management
@@ -436,6 +444,8 @@
 (settempoplayer *player* 50000)
 
 (stopplayer *player*)
+
+(settempoplayer *player* 250000)
 
 
 ;;=============================
@@ -492,7 +502,7 @@
 
 ;; A player can send Midi synchro messages (start, stop, clock, continue...) to be used as a master
 
-(setsynchrooutplayer  *player* kClockSyncOut)
+(setsynchrooutplayer *player* kClockSyncOut)
 
 
 ;;=======================
@@ -535,7 +545,7 @@
 ;;=====================
 
 (defvar *info*)
-(setq *info* (make-record :MidiFileInfos)) 
+(setq *info* (MidiNewMidiFileInfos)) 
 
 
 ;;=====================
@@ -546,7 +556,7 @@
 
 ;; Fill a MidiShare sequence with the MidiFile
 
-(midi-file-load "HD1200:SequenceMidiFile:prelude3.mid" *seq* *info*)
+(midi-file-load "/Lisp/import/test.midi" *seq* *info*)
 
 ;;===================
 ;; Save a MidiFile 
@@ -563,8 +573,7 @@
 ;; in the MidiFile header or set to 500 if you start your session
 ;; with a empty Player. 
 
-(midi-file-save "HD1200:toto.mid" *seq* *info*)
-
+(midi-file-save "/Lisp/import/saved-test.mid" *seq* *info*)
 
 
 ;;=========
