@@ -32,6 +32,7 @@
 #include "msExtern.h"
 #include "msLoader.h" 
 #include "msSync.h" 
+#include "msDriver.h" 
 
 /*_________________________________________________________________________*/
 /* mac 68k desc structure                                                  */
@@ -101,18 +102,20 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 }
 
 /*_________________________________________________________________________*/
-void CallTaskCode  (TApplContextPtr context, TTaskExtPtr task, long date, short refNum)
+void CallTaskCode  (TApplContextPtr context, MidiEvPtr e)
 {
+	TTaskExtPtr task = (TTaskExtPtr)LinkST(e);	/* event extension */
 	long oldA5 = SetA5Register (GetContext(context));
-    (*task->fun)(date, refNum, task->arg1, task->arg2, task->arg3);
+    (*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 	SetA5Register (oldA5);
 }
 
 /*_________________________________________________________________________*/
-void CallDTaskCode  (TApplContextPtr context, TTaskExtPtr task, long date, short refNum)
+void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
 {
+	TTaskExtPtr task = (TTaskExtPtr)LinkST(e);	/* event extension */
 	long oldA5 = SetA5Register (GetContext(context));
-    (*task->fun)(date, refNum, task->arg1, task->arg2, task->arg3);
+    (*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 	SetA5Register (oldA5);
 }
 
@@ -200,3 +203,11 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 	RmvTime((QElemPtr)&TimeTask(g));
 	INT_ON();
 }
+
+/*__________________________________________________________________________*/
+/* drivers management */
+/*__________________________________________________________________________*/
+int 		SendToDriver		(TDriverPtr driver, MidiEvPtr ev) { return 0; }
+TDriverPtr	OpenDriverManager	() { return 0; }
+void		CloseDriverManager	(TDriverPtr driver) {}
+
