@@ -12,13 +12,17 @@ case $1 in
 		./makeLog instlog > install.log
 		mv install.log $DIST/Applications/MidiShare
 		
-		echo change rights
+		echo -n change rights...
 		find $DIST -type d -exec chmod 755 {} \;
+		echo -n ...
 		find $DIST -type f -exec chmod g+w {} \;
+		echo -n ...
 		find $DIST -type f -exec chmod o-w {} \;
+		echo -n ...
 		
 		chmod 775 $DIST/Applications
 		chmod 775 $DIST/System
+		echo
 		
 		echo change owner
 		chown -R root:wheel $DIST/private
@@ -34,10 +38,13 @@ case $1 in
 		./makeLog devlog > install.log
 		mv install.log $DEV/Applications/MidiShare/Developer
 		
-		echo change dev rights
+		echo -n change dev rights...
 		find $DEV -type d -exec chmod 755 {} \;
+		echo -n ...
 		find $DEV -type f -exec chmod g+w {} \;
+		echo -n ...
 		find $DEV -type f -exec chmod o-w {} \;
+		echo
 		
 		echo change dev owner
 		chown -R root:wheel $DEV
