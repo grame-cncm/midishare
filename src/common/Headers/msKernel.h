@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2000
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,6 +20,7 @@
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
+   [04-08-02] DF - memory organization in private and public sections
 
 */
 
@@ -29,6 +30,7 @@
 #include "lffifo.h"
 #include "msDefs.h"
 #include "msAppls.h"
+#include "msDriver.h"
 #include "msTypes.h"
 #include "msMemory.h"
 #include "msSorter.h"
@@ -48,8 +50,7 @@ typedef struct {
 	long	usec;
 } TimeInfo, *TimeInfoPtr;
 
-typedef struct THorloge{
-	 unsigned long  time;         /* la date sur 32 bits (millisecondes)  */
+typedef struct THorloge{          /* time management (no public section) */
 	 long           reenterCount; /* count of clockHandler reenters       */
 	 TimeInfo		rtOffset;     /* offset to real time clock            */
 	 long			adjustCount;  /* clocks adjustment count              */
@@ -57,14 +58,30 @@ typedef struct THorloge{
 } THorloge;
 
 /*___________________________________*/
+typedef struct TMSGlobalPublic {
+	unsigned long  	time;         /* the current 32 bits (milliseconds) date  */
+	short 			version;      /* the current kernel version               */
+	unsigned long  	size;         /* the current public segment size          */
+	TClientsPublic 	clients;      /* clients applications information         */
+} TMSGlobalPublic;
+
+/*___________________________________*/
 typedef struct TMSGlobal {
-	THorloge      currTime;      /* time management                     */
-	TMSMemory     memory;        /* memory management                   */
+	TMSGlobalPublic * pub;
+	THorloge      clock;         /* time management (no public section) */
+	TMSMemory     memory;        /* kernel memory management            */
 	TClients      clients;       /* clients applications management     */
 	TSorter       sorter;        /* sorter specific storage             */
 	fifo          toSched;       /* events to be scheduled              */
 	THost         local;         /* for implementation specific purpose */
 } TMSGlobal;
+
+/*--------------------------------------------------------------------------*/
+/* public fields access macros                                              */
+/*--------------------------------------------------------------------------*/
+#define CurrTime(g)         pub(g, time)
+#define Version(g)          pub(g, version)
+#define Size(g)             pub(g, size)
 
 /*--------------------------------------------------------------------------*/
 /* fields access macros                                                     */
@@ -73,7 +90,6 @@ typedef struct TMSGlobal {
 #define Sorter(g)           (&g->sorter)
 #define Clients(g)       	(&g->clients)
 #define Memory(g)           (&g->memory)
-#define CurrTime(g)         (g->currTime.time)
 #define TimeOffset(g)       (g->currTime.rtOffset)
 #define Appls(g)       		(g->clients.appls)
 #define ActiveAppl(g)       (g->clients.activesAppls)

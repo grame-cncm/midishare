@@ -109,7 +109,7 @@ MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSCountDTasks (short refnum, TClientsPtr g)
+MSFunctionType(unsigned long) MSCountDTasks (short refnum, TClientsPtr g)
 {
 	return CheckRefNum( g, refnum) ? fifosize (&g->appls[refnum]->dTasks) : 0;
 }

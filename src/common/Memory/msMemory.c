@@ -110,7 +110,7 @@ static ulong GrowSpace (MSMemoryPtr g, ulong nbev)
 	ulong count = 0;
 
 	while ( nbev > kMaxEventsPerBlock ) {
-		long n = NewBlock(g, kMaxEventsPerBlock);
+		ulong n = NewBlock(g, kMaxEventsPerBlock);
 		if (n) {
 			count += n;
 			nbev -= kMaxEventsPerBlock;

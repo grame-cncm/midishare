@@ -31,6 +31,11 @@
 #include "msExtern.h"
 #include "msTime.h"
 
+#define kMidiShareVersion  191    /* the current MidiShare version number */
+
+static TMSGlobalPublic gPub = { 0 };
+static void InitPublicSection (TMSGlobalPtr g);
+static void InitClientPublicSection (TClientsPublic * clients);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -38,6 +43,7 @@
 
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
+	InitPublicSection (g);
 	InitEvents ();
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
@@ -46,9 +52,8 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 186;
+	return Version(g);
 }
-
 
 /*===========================================================================
   External initialization functions
@@ -69,4 +74,34 @@ void MidiShareSleep (TMSGlobalPtr g)
 	CloseDrivers(g);
     CloseMemory (Memory(g));
     SpecialSleep (g);
+}
+
+/*===========================================================================
+  Internal initialization functions
+  =========================================================================== */
+static void InitClientPublicSection (TClientsPublic * clients)
+{
+	int i;
+	clients->nbAppls   = 0;               /* current running clients count    */
+	clients->nbDrivers = 0;               /* current registered drivers count */
+	for (i=0; i<MaxAppls; i++) {
+		clients->appls[i].refNum = MIDIerrRefNum;
+	}
+	for (i=0; i<MaxDrivers; i++) {
+		clients->drivers[i].refNum = MIDIerrRefNum;
+	}
+	for (i=0; i<MaxSlots; i++) {
+		clients->slots[i].driverRefNum = MIDIerrRefNum;
+		clients->slots[i].slotRefNum   = MIDIerrRefNum;
+	}
+}
+
+static void InitPublicSection (TMSGlobalPtr g)
+{
+	g->pub = &gPub;
+	g->clients.pub = &gPub.clients;
+	pub(g, time)    = 0;
+	pub(g, version) = kMidiShareVersion;
+	pub(g, size)    = sizeof(TMSGlobalPublic);
+	InitClientPublicSection (&gPub.clients);
 }

@@ -336,15 +336,17 @@ enum{   MIDIOpenAppl=1,
 
 /*------------------------------------ names ----------------------------------*/
 #define DrvNameLen 32
+#define MaxSlotNameLen 64
 
 #ifdef PascalNames
     typedef unsigned char * MidiName;
 	typedef unsigned char	DriverName[DrvNameLen];
+	typedef unsigned char	SlotName[MaxSlotNameLen];
 #else
     typedef char FAR * MidiName;
 	typedef char	   DriverName[DrvNameLen];
+	typedef char	   SlotName[MaxSlotNameLen];
 #endif
-typedef DriverName SlotName;
 
 /*----------------------- drivers and slots information -----------------------*/
 
@@ -475,6 +477,15 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
     #define InvertBit(a,n)      ( ((char FAR*) (a))[(n)>>3] ^=   (1<<((n)&7)) )
 
     #define IsAcceptedBit(a,n)  ( ((char FAR*) (a))[(n)>>3]  &   (1<<((n)&7)) )
+#endif
+
+/******************************************************************************
+*             Client and server access macros to public memory sections
+*******************************************************************************/
+#ifdef MSKernel
+#	define pub(g, f)       	(g->pub->f)
+#else
+#	define pub(g, f)       	(g->f)
 #endif
 
 #endif

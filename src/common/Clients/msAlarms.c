@@ -37,7 +37,7 @@ void CallAlarm (short ref, int alarmCode, TClientsPtr g)
 	for( i=0; i<MaxAppls; i++) {                      /* for each application            */
 		appl = *applPtr++;
 		if( appl && appl->applAlarm) {                /* if the alarm exists             */
-			CallApplAlarm (appl->context, appl->applAlarm, appl->refNum, code);
+			CallApplAlarm (appl->context, appl->applAlarm, pub(appl,refNum), code);
 		}
 	}
 }

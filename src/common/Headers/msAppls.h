@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,6 +20,7 @@
 
   modifications history:
    [08-09-99] DF - new fifo management
+   [04-08-02] DF - memory organization in private and public sections
 
 */
 
@@ -37,7 +38,8 @@
 /*------------------------------------------------------------------------*/
 #define kNoRcvFlag       -1
 #define MaxAppls         128            /* maximum allowed clients         */
-#define MaxApplNameLen   32             /* maximum application name length */
+#define MaxApplNameLen   64             /* maximum application name length */
+#define MaxDrivers       64             /* maximum allowed drivers         */
 #define MidiShareRef     0              /* MidiShare refnum at client side */
 #define MidiShareDriverRef  MaxAppls-1  /* MidiShare refnum at driver side */
 
@@ -55,8 +57,7 @@ typedef FarPtr(void)				TApplContextPtr;
 
 typedef struct FarPtr(TAppl) 		TApplPtr;
 typedef struct FarPtr(TClients) 	TClientsPtr;
-typedef struct FarPtr(TConnection) 	TConnectionPtr;
-
+typedef struct FarPtr(TConnections) TConnectionsPtr;
 
 #ifdef PascalNames
 typedef unsigned char MSName[MaxApplNameLen];
@@ -66,54 +67,69 @@ typedef char MSName[MaxApplNameLen];
 
 /*------------------------------------------------------------------------*/
 /* inter-applications connections representation                          */
-typedef struct TConnection{
-    TApplPtr        itsSrc;         /* source application       */
-    TApplPtr        itsDst;         /* destination application  */
-    TConnectionPtr  nextSrc;        /* next source       */
-    TConnectionPtr  nextDst;        /* next destination  */
-} TConnection;
+typedef struct TConnections {
+    char        dst[MaxAppls/8];    /* destination application */
+} TConnections;
 
 /*------------------------------------------------------------------------*/
-/* MidiShare application internal data structures                         */
+/* MidiShare public and private application data structures               */
 enum { kClientFolder = 0, kDriverFolder = 255 };
 
-typedef struct TAppl{
+typedef struct TApplPublic{
     MSName          name;        /* the application name         */
-    TApplContextPtr context;     /* system dependent context     */
     FarPtr(void)    info;        /* user field                   */
+    short           refNum;      /* reference number             */
+    short           drvidx;      /* driver specific info index   */
+    TConnections    cnx;         /* intput/output connections    */
+    MidiFilterPtr   filter;      /* client mapping of the filter */
+} TApplPublic;
+
+typedef struct TAppl{
+	TApplPublic *   pub;
     uchar           folder;      /* application folder           */
-    uchar           refNum;      /* reference number             */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
-    RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
-    ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
-
-    TConnectionPtr  srcList;     /* intput applications list  */
-    TConnectionPtr  dstList;     /* output applications list  */
-
-    fifo            rcv;         /* received events fifo      */
-    fifo            dTasks;      /* defered tasks fifo        */
- 
-    MidiFilterPtr   filter;      /* application filter        */
-    TDriverPtr		driver;		 /* driver specific storage   */
-    
+    fifo            rcv;         /* received events fifo         */
+    fifo            dTasks;      /* defered tasks fifo           */
+    MidiFilterPtr   filter;      /* server mapping of the filter */
+    RcvAlarmPtr     rcvAlarm;    /* the client receive alarm (used only internaly)     */
+    ApplAlarmPtr    applAlarm;   /* the client application alarm (used only internaly) */
+    TDriverPtr		driver;      /* driver specific information  */
+    TApplContextPtr context;     /* system dependent context     */
 } TAppl;
 
-/*___________________________________*/
-typedef struct TClients {
+/*------------------------------------------------------------------------*/
+/* MidiShare public and private clients management structures             */
+typedef struct TClientsPublic {
 	short         nbAppls;                /* current running clients count    */
 	short         nbDrivers;              /* current registered drivers count */
+	TApplPublic   appls[MaxAppls];        /* client applications list         */
+	TDriverPublic drivers[MaxDrivers];    /* drivers specific information     */
+	SlotInfosPublic slots[MaxSlots];      /* drivers slots management         */
+} TClientsPublic;
+
+typedef struct TClients {
+	TClientsPublic * pub;
+	short         nbSlots;                /* current registered slots count   */
+	short         lastRef;                /* last allocated refNum            */
+	short         lastDrvRef;             /* last allocated driver refNum     */
+	short         lastSlot;               /* last allocated slot refNum       */
 	TApplPtr      appls[MaxAppls];        /* client applications list         */
 	TApplPtr      activesAppls[MaxAppls]; /* active client applications list  */
 	TApplPtr  *   nextActiveAppl;         /* ptr in active applications list  */
-	MSMemoryPtr   memory;
+	MSMemoryPtr   memory;                 /* ptr to the kernel memory         */
 } TClients;
-
 
 /*--------------------------------------------------------------------------*/
 /* macros                                                                   */
 /*--------------------------------------------------------------------------*/
+#define nbAppls(c)      pub(c, nbAppls)
+#define nbDrivers(c)    pub(c, nbDrivers)
+#define nbSlots(c)      pub(c, nbSlots)
+#define appname(c, r)   pub(c->appls[r], name)
+#define appinfo(c, r)   pub(c->appls[r], info)
+
 #define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r])
-#define CheckClientsCount(g)	((g->nbAppls + g->nbDrivers) < MaxAppls - 2)
+#define CheckClientsCount(g)	((nbAppls(g) + nbDrivers(g)) < MaxAppls - 2)
 
 #define DTasksFifoHead(appl)  (MidiEvPtr)(appl->dTasks.head)
 

@@ -188,7 +188,7 @@ MSFunctionType(MidiEvPtr) MSCopyEv (MidiEvPtr e, lifo* freelist)
 MSFunctionType(void)      MSSetField (MidiEvPtr e, unsigned long f, long v)
                                   { if( e) SetFieldMethodTbl[EvType(e)]( e, f, v); }
 
-MSFunctionType(long)      MSGetField (MidiEvPtr e, long f)
+MSFunctionType(long)      MSGetField (MidiEvPtr e, unsigned long f)
                                   { return e ? GetFieldMethodTbl[EvType(e)]( e, f) : kGetFieldError; }
 
 MSFunctionType(long)      MSCountFields (MidiEvPtr e)

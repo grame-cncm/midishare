@@ -29,8 +29,8 @@
 #include "msTypes.h"
 #include "msAppls.h"
 
-void RemAllDstCon (TApplPtr appl, lifo* freelist);
-void RemAllSrcCon (TApplPtr appl, lifo* freelist);
+void RemAllDstCon (TApplPtr appl);
+//void RemAllSrcCon (TApplPtr appl);
 
 MSFunctionType(void)    MSConnect     (short src, short dest, Boolean state, TClientsPtr g);
 MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g);

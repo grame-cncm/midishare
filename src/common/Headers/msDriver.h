@@ -27,17 +27,12 @@
 #include "msDefs.h"
 
 /*_______________________________________________________________*/
-#define MaxSlots	64
+#define MaxSlots	128
 #define MaxPorts	256
-#define PortMapSize	MaxPorts/8
-#define SlotMapSize	MaxSlots/8
 
 #define Driver(appl)	(appl->driver)
 #define Wakeup(appl)	Driver(appl)->op.wakeup
 #define Sleep(appl)		Driver(appl)->op.sleep
-
-typedef char PortMap[PortMapSize], * PortMapPtr;	
-typedef char SlotMap[SlotMapSize];	
 
 typedef struct SInfos {
 	SlotName 		name;
@@ -45,13 +40,37 @@ typedef struct SInfos {
 } SInfos, * SInfosPtr;
 
 /*_______________________________________________________________*/
+typedef struct SlotInfosPublic {
+	short    driverRefNum;
+	short    slotRefNum;
+	SlotName name;
+	char     cnx[MaxPorts/8];
+	char    direction;
+	char    infos;
+} SlotInfosPublic, * SlotInfosPublicPtr;
+
+/*_______________________________________________________________*/
+typedef struct SlotInfos SlotInfos, * SlotInfosPtr;
+struct SlotInfos {
+	SlotInfosPtr	   next;
+	SlotInfosPublicPtr pub;
+	RcvAlarmPtr        rcvAlarm;
+    fifo               rcv;         /* slot received events fifo */
+	long               unused;
+};
+
+/*_______________________________________________________________*/
 typedef struct {
-	TDriverOperation op;
+	short	refNum;
 	short	version;
 	short	slotsCount;
-	PortMapPtr	map[MaxSlots];
-	SInfosPtr 	slotInfos[MaxSlots];
-	char		port[MaxPorts][SlotMapSize];
+} TDriverPublic, * TDriverPublicPtr;
+
+/*_______________________________________________________________*/
+typedef struct {
+	TDriverPublicPtr pub;
+	TDriverOperation op;
+	SlotInfosPtr     slots;
 } TDriver, * TDriverPtr;
 
 #endif

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,10 +16,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  grame@grame.fr
 
   modifications history:
    [08-09-99] DF - new fifo management
+   [06-08-02] DF - userland server implementation
 
 */
 
@@ -29,18 +30,17 @@
 #include "msApplTools.h"
 #include "msConnx.h"
 #include "msDriver.h"
+#include "msDrvFun.h"
 #include "msExtern.h"
 #include "msInit.h"
-#include "msXmtRcv.h"
 #include "msMem.h"
+#include "msXmtRcv.h"
 
 #ifdef PascalNames
 # define kMidiShareName 	"\pMidiShare"
 #else
 # define kMidiShareName 	"MidiShare"
 #endif
-
-#define FreeAppl(appl)		DisposeMemory(appl)
 
 #define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (g->appls[ref]->folder==kClientFolder))
 
@@ -54,32 +54,43 @@ static Boolean  equalApplName   (TApplPtr ap, MidiName name);
   =========================================================================== */		
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
-	TApplPtr appl, drv;
+	TApplPtr appl; TDriverPtr drv;
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
-	if (clients->nbAppls == 0) {
-		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
-		if (drv) {
+	if (nbAppls(clients) == 0) {
+		clients->lastRef = 0;
+		clients->lastDrvRef = MidiShareDriverRef;
+		clients->lastSlot = -1;
+		appl = NewAppl (sizeof(TAppl));
+		drv  = NewDriver (sizeof(TDriver));
+		if (appl && drv) {
 			TDriverInfos infos;
 			setName (infos.name, kMidiShareName);
 			infos.version = MSGetVersion (g);
+		    makeClient(clients, appl, MidiShareDriverRef, kMidiShareName, kDriverFolder);
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
-			Clients(g)->nbDrivers++;
+			pub(drv, slotsCount) = 0;
+		    Driver(appl) = drv;
+			nbDrivers(clients)++;
 		}
 		MidiShareWakeup(g);
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
 		    makeClient(clients, appl, MidiShareRef, kMidiShareName, kClientFolder);
-			Clients(g)->nbAppls++;
+			nbAppls(clients)++;
 		}
+		else return MIDIerrSpace;
 	}
 	if (CheckClientsCount(clients)) {
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
-			for (ref = 1; clients->appls[ref]; ref++)
-				;
+			for (ref = clients->lastRef+1; clients->appls[ref]; ref++) {			
+				if (ref == clients->lastRef) break;  /* should never happend */
+				if (ref == MidiShareDriverRef-1) ref=MidiShareRef;
+			}
+			clients->lastRef = ref;
 			makeClient(clients, appl, ref, name, kClientFolder);
-			Clients(g)->nbAppls++;
+			nbAppls(clients)++;
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
 	}
@@ -95,15 +106,15 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 		return;
 		
 	closeClient (ref, g);
-	clients->nbAppls--;
-	if (clients->nbAppls == 1) {
+	nbAppls(clients)--;
+	if (nbAppls(clients) == 1) {
 		FreeAppl(clients->appls[MidiShareRef]);
 		clients->appls[MidiShareRef] = 0;
-		clients->nbAppls = 0;
+		nbAppls(clients) = 0;
 		MidiShareSleep(g);
 		FreeAppl(clients->appls[MidiShareDriverRef]);
 		clients->appls[MidiShareDriverRef] = 0;
-		clients->nbDrivers--;
+		nbDrivers(clients)--;
 	} else {
 		CallAlarm(ref, MIDICloseAppl, clients);
 	}
@@ -112,7 +123,7 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(short) MSCountAppls (TClientsPtr g)
 {
-	return g->nbAppls;
+	return nbAppls(g);
 }
 
 /*____________________________________________________________________________*/
@@ -120,7 +131,7 @@ MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
 {
 	short ref = -1;
 	
-	if (index>0 && index<= g->nbAppls) {
+	if (index>0 && index<= nbAppls(g)) {
 		TApplPtr appl;
 		do { 
 			ref++;
@@ -146,7 +157,7 @@ MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
 MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
-		return ref ? g->appls[ref]->name : kMidiShareName;
+		return ref ? appname(g, ref) : kMidiShareName;
 	} else {
 		return 0;
 	}
@@ -156,7 +167,7 @@ MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
-		setName(g->appls[ref]->name, name);
+		setName(appname(g, ref), name);
 		CallAlarm (ref, MIDIChgName, g);
 	}
 }
@@ -166,7 +177,7 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
 {
 	FarPtr(void) info = 0;
 	if (CheckRefNum(g,ref)) {
-		info = g->appls[ref]->info;
+		info = appinfo(g,ref);
 	}
 	return info;
 }
@@ -175,7 +186,7 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
 MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
-		g->appls[ref]->info = info;
+		 appinfo(g,ref) = info;
 	}
 }
 
@@ -228,9 +239,9 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 {
 	short i;
 	
-	g->nbAppls = 0;
-	g->nbDrivers = 0;
-	g->memory  = mem;
+	nbAppls(g) = 0;
+	nbDrivers(g) = 0;
+	g->memory = mem;
 	g->nextActiveAppl = 0;
 	for (i = 0; i < MaxAppls; i++) {
 		g->appls[i] = 0;
@@ -241,20 +252,27 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 /*____________________________________________________________________________*/
 void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short folder)
 {
-	setName(appl->name, name);	
-	appl->context = CreateApplContext();
-	appl->info = 0;
+	/* set first kernel private information */
 	appl->folder = (uchar)folder;
-	appl->refNum = (uchar)ref;
 	appl->rcvFlag = (uchar)kNoRcvFlag;
-	appl->rcvAlarm = 0;
-	appl->applAlarm = 0;
-	appl->srcList = 0;
-	appl->dstList = 0;
-	appl->filter = 0;
-	appl->driver = 0;
 	fifoinit (&appl->rcv);
 	fifoinit (&appl->dTasks);
+	appl->filter = 0;
+	appl->rcvAlarm = 0;
+	appl->applAlarm = 0;
+	appl->driver = 0;
+	appl->context = CreateApplContext();
+
+	/* set next public information */
+	appl->pub = &g->pub->appls[ref];
+	setName(pub(appl,name), name);	
+	pub(appl, info) = 0;
+	pub(appl, refNum) = (uchar)ref;
+	pub(appl, drvidx) = -1;
+	pub(appl, filter) = 0;
+	RemAllDstCon (appl);
+
+	/* and finaly stores the kernel application handler */
 	g->appls[ref] = appl;
 }
 
@@ -264,8 +282,14 @@ void closeClient (short ref, TMSGlobalPtr g)
 	TClientsPtr clients = Clients(g);
 	TApplPtr appl = clients->appls[ref];
 
-	RemAllSrcCon (appl, FreeList(Memory(g)));
-	RemAllDstCon (appl, FreeList(Memory(g)));
+	/* clear first application public information */
+	pub(appl, info) = 0;
+	pub(appl, refNum) = MIDIerrRefNum;
+	pub(appl, drvidx) = -1;
+	pub(appl, filter) = 0;
+	RemAllDstCon (appl);
+	
+	/* clear next kernel private information */
 	MSFlushEvs (ref, clients);
 	MSFlushDTasks (ref, clients);
 	DisposeApplContext (appl->context);
@@ -294,7 +318,7 @@ void setName (MidiName dst, MidiName name)
 
 static Boolean equalApplName (TApplPtr ap, MidiName name)
 {
-	MidiName apname = ap->name;
+	MidiName apname = pub(ap, name);
 #ifdef PascalNames
 	int count = *apname + 1;
 	while (count--) {

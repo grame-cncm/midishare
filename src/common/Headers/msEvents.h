@@ -38,7 +38,7 @@ MSFunctionType(MidiEvPtr)  MSNewEv       (short typeNum, lifo* freelist);
 MSFunctionType(void)       MSFreeEv      (MidiEvPtr e, lifo* freelist);
 MSFunctionType(MidiEvPtr)  MSCopyEv      (MidiEvPtr e, lifo* freelist);
 MSFunctionType(void)       MSSetField    (MidiEvPtr e, unsigned long f, long v);
-MSFunctionType(long)       MSGetField    (MidiEvPtr e, long f);
+MSFunctionType(long)       MSGetField    (MidiEvPtr e, unsigned long f);
 MSFunctionType(long)       MSCountFields (MidiEvPtr e);
 MSFunctionType(void)       MSAddField    (MidiEvPtr e, long v, lifo* freelist);
 MSFunctionType(MidiEvPtr)  MSNewCellFunction (lifo* freelist);
