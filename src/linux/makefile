@@ -1,4 +1,6 @@
 
+CONF = MidiShare.conf
+
 midishare: common
 	make -C kernel
 
@@ -16,6 +18,7 @@ install:
 	./checksu
 	make -i -C library install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
+	if [ ! -f /etc/$(CONF) ]; then cp $(CONF) /etc/$(CONF); fi
 	insmod MidiShare
 
 tools :
