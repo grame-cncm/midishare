@@ -9,7 +9,7 @@ Description
 MidiShare on Linux is separated in a kernel module and a shared library.
 The kernel module contains the code used with kernel privilege : scheduler, Midi drivers,IAC...
 The shared library contains code used by MidiShare client applications. The library and kernel 
-communicate using the standard ioctl mechanisms. A device named /dev/midiShare is defined.
+communicate using the standard ioctl mechanisms. A device named /dev/midishare is defined.
 	
 =====================
 Installation guide
@@ -104,7 +104,15 @@ cd test
 ./TestEvents
 
 
-==================
-Known problems
-==================
+===============================
+Known problems and limitations
+===============================
+
+- The MidiShare kernel module uses a 100 Hz timer task, so the scheduler calls the ClockHandler 10 times each 10 ms.
+There is no yet a mechanism to synchronize the MidiShare time on the machine real-time clock.
+(Look at is MidiShareLinux. c in function intrpt_routine)
+
+
+
+
 
