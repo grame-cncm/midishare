@@ -68,6 +68,8 @@ typedef struct {
 	long				old_vol;  // valeur du dernier volume envoyŽ
 	long				old_bend; // valeur du dernier bend envoyŽ
 	short	   		 	monoTable [BUFFER_SIZE];
+	long				numInput;
+	long				numOutput;
 } DriverData, * DriverDataPtr;
 
 /* ----------------------------------*/
@@ -156,15 +158,15 @@ static int inputCallback(void *inputBuffer, void *outputBuffer,
 				        PaTimestamp outTime, void *userData )
 {
 	PitchEv res;
-	DriverData* data =  GetData ();
+	DriverData* data = GetData ();
 	int i;	
 	SAMPLE* in = ((SAMPLE*)inputBuffer);
 		
 	if (data->refNum > 0 && data->connected) { 
-	
+		
 		// Transform in a mono buffer : keep the left input
 		for ( i = 0; i< framesPerBuffer; i++) data->monoTable[i] = in[2*i];
-	
+		
 		// Update parameters
 		if (*data->sflag) {
 			*data->sflag = false;
@@ -182,7 +184,7 @@ static int inputCallback(void *inputBuffer, void *outputBuffer,
 		
 		if (res.isEv == 1)
 		{
-	        if (res.Off != 0) MidiSendIm(data->refNum,KeyOn(res.Off,0));
+		  	if (res.Off != 0) MidiSendIm(data->refNum,KeyOn(res.Off,0));
 	        if (res.On != 0) MidiSendIm(data->refNum,KeyOn(res.On,res.Vol));
 	        
 	        if ((res.Vol != 0) && (res.Vol != data->old_vol) && *data->vol) {
@@ -254,20 +256,25 @@ static void AudioStart ()
 
 
 /* -----------------------------------------------------------------------------*/
- Boolean AudioWakeUp () 
+ Boolean AudioWakeUp (int fftsize) 
 {
 	PaError err;
 	DriverDataPtr data = GetData ();
+	const PaDeviceInfo* info;
 	
-	data->pitchTracker = createPitch(BUFFER_SIZE, *data->fftsize);
+	data->pitchTracker = createPitch(BUFFER_SIZE, fftsize);
 		
 	err = Pa_Initialize();
 	if( err != paNoError ) goto error;       
 	
+	info = Pa_GetDeviceInfo (Pa_GetDefaultInputDeviceID());
+	data->numInput = info->maxInputChannels;
+	data->numOutput = info->maxInputChannels;
+	
 	err = Pa_OpenStream(
 				&data->stream,
 				Pa_GetDefaultInputDeviceID(),
-				2,               // stereo input 
+				data->numInput,
 				PA_SAMPLE_TYPE,
 				NULL,
 				paNoDevice,
