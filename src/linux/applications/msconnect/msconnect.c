@@ -25,9 +25,9 @@ static GtkWidget*	gSrcList = 0;		// sources list
 static GtkWidget*	gAppList = 0;		// applications list
 static GtkWidget*	gDstList = 0;		// destinations list
 
-static int			gUpdateFlag=FALSE;	// true when a list update is being done and callbacks must be ignored
-static int			gNeedRebuild=FALSE;	// set up by the applAlarm when the applications list has been changed
-static int			gNeedRefresh=FALSE;	// set up by the applAlarm when connections have changed
+static int	gUpdateFlag=FALSE;	// true when a list update is being done and callbacks must be ignored
+static int	gNeedRebuild=FALSE;	// set up by the applAlarm when the applications list has been changed
+static int	gNeedRefresh=FALSE;	// set up by the applAlarm when connections have changed
 
 /****************************************************************************
 								Lists management
@@ -86,7 +86,7 @@ static void refreshLists()
 	
 	for (i=0, c=MidiCountAppls(); i < c; i++) {
 		a = row2ref(i);
-		if (a == r)					gtk_clist_select_row (GTK_CLIST(gAppList), i, 0);
+		if (a == r)			gtk_clist_select_row (GTK_CLIST(gAppList), i, 0);
 		if (MidiIsConnected(a, r))	gtk_clist_select_row (GTK_CLIST(gSrcList), i, 0);
 		if (MidiIsConnected(r, a)) 	gtk_clist_select_row (GTK_CLIST(gDstList), i, 0);
 	}
@@ -193,6 +193,10 @@ void MyApplAlarm (short refNum, long msg)
 		case MIDIChgConnect :
 			gNeedRefresh = TRUE;
 			return;
+			
+		case MIDIChgName :
+			gNeedRebuild = TRUE;
+			return;
 	}
 }
 
@@ -203,13 +207,13 @@ gint check_update( gpointer data )
 		gNeedRebuild = FALSE;
 		gNeedRefresh = FALSE;
 		gUpdateFlag = TRUE;
-			rebuildLists();
-			refreshLists();
+		rebuildLists();
+		refreshLists();
 		gUpdateFlag = FALSE;
 	} else if (gNeedRefresh) {
 		gNeedRefresh = FALSE;
 		gUpdateFlag = TRUE;
-			refreshLists();
+		refreshLists();
 		gUpdateFlag = FALSE;
 	}
 		
