@@ -68,6 +68,7 @@ class TSMPTEPlayer :public TGenericPlayerInterface {
 		
 		void SetTempo (ULONG tempo);
 		ULONG GetTempo ();
+		void  SetTempoFactor (float factor);
 		void RcvClock (ULONG date_ms);
 		
 		void ReceiveEvents (MidiEvPtr e);

@@ -156,3 +156,6 @@ void TSMPTEPlayer::SetPosBBU (const TPos& pos) {fPlayer->SetPosBBU(pos);}
 
 void TSMPTEPlayer::SetPosMs (ULONG date_ms) {fPlayer->SetPosMs(date_ms);}
 	
+/*----------------------------------------------------------------------------*/
+
+void TSMPTEPlayer::SetTempoFactor (float factor) {fPlayer->SetTempoFactor(factor);}
