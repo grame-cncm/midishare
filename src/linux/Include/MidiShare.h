@@ -429,7 +429,8 @@ enum{	MIDIOpenAppl=1,
 
 	#define Tempo(e)	( (e)->info.tempo )
 	#define SeqNum(e)	( (e)->info.seqNum.number )
-	#define ChanPrefix(e) ((e)->info.data[0] )
+	#define ChanPrefix(e)   ((e)->info.data[0] )
+	#define PortPrefix(e)   ((e)->info.data[0] )
 
 	#define First(e)	( (e)->first )
 	#define Last(e)		( (e)->last )
