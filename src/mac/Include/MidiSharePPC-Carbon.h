@@ -30,18 +30,26 @@ extern "C" {
 
 	
 /*
-Re-implement a special CallUniversalProc
+Re-implement a special CallUniversalProc, NewRoutineDescriptor and DisposeRoutineDescriptor
 */
 
 typedef long (*CallUniversalProcProcPtr)( UniversalProcPtr theProcPtr, ProcInfoType procInfo,...) ;
 #define CallUniversalProc (*tCallUniversalProcProcPtr)
 
 
+typedef UniversalProcPtr (*NewRoutineDescriptorProcPtr)(ProcPtr theProc, ProcInfoType , ISAType );
+#define NewRoutineDescriptor (*tNewRoutineDescriptorProcPtr)
+
+typedef void (*DisposeRoutineDescriptorProcPtr)(UniversalProcPtr);
+#define DisposeRoutineDescriptor (*tDisposeRoutineDescriptorProcPtr)
+
 /*
-Use a global static variable which contains the real CallUniversalProc entry point
+Use global static variables which contains the real CallUniversalProc, NewRoutineDescriptor and DisposeRoutineDescriptor entry points
 */
 
 static CallUniversalProcProcPtr tCallUniversalProcProcPtr = nil;
+static NewRoutineDescriptorProcPtr tNewRoutineDescriptorProcPtr = nil;
+static DisposeRoutineDescriptorProcPtr tDisposeRoutineDescriptorProcPtr = nil;
 
 
 /* 
@@ -52,10 +60,10 @@ Include the standard MidiShare.h file
 
 
 /*
-Load the real CallUniversalProc entry point
+Load the real CallUniversalProc, NewRoutineDescriptor and DisposeRoutineDescriptor entry points
 */
 
-void Load_CallUniversalProc () 
+void Load_FunctionProc () 
 {
 	CFragConnectionID  			connectionID;
 	Ptr                			mainAddress;
@@ -68,22 +76,36 @@ void Load_CallUniversalProc ()
 		anErr = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag, &connectionID, &mainAddress, errorString);
 		if (noErr == anErr)
 		{
-			CFragSymbolClass    symbolClass;
+				CFragSymbolClass    symbolClass;
 		        anErr = FindSymbol(connectionID, "\pCallUniversalProc",
 		       			(Ptr *) &tCallUniversalProcProcPtr,
 									&symbolClass);
 		        if (noErr != anErr)
 		       	tCallUniversalProcProcPtr = nil;
+		       	
+		        anErr = FindSymbol(connectionID, "\pNewRoutineDescriptor",
+		       			(Ptr *) &tNewRoutineDescriptorProcPtr,
+									&symbolClass);
+		        if (noErr != anErr)
+		       	tNewRoutineDescriptorProcPtr = nil;
+		       	
+		       	anErr = FindSymbol(connectionID, "\pDisposeRoutineDescriptor",
+		       			(Ptr *) &tDisposeRoutineDescriptorProcPtr,
+									&symbolClass);
+		        if (noErr != anErr)
+		       	tDisposeRoutineDescriptorProcPtr = nil;
 		}
+		
+		
 	}
-
+	
 }
 
 /*
-Re-define the MidiShare() function to call the Load_CallUniversalProc, since MidiShare() is supposed to be called
+Re-define the MidiShare() function to call the Load_FunctionProc, since MidiShare() is supposed to be called
 before any other MidiShare function.
 
-Otherwise Load_CallUniversalProc can be called at initialisation time.
+Otherwise Load_FunctionProc can be called at initialisation time.
 */
 
 
@@ -91,7 +113,7 @@ Otherwise Load_CallUniversalProc can be called at initialisation time.
 #undef MidiShare
 int MidiShare()
 {
-	 Load_CallUniversalProc();
+	 Load_FunctionProc();
 	 return	( **((long**)0xB8) == 0xD080D080 );
 }
 #endif
