@@ -116,16 +116,16 @@ void TEventModifier::ReceiveEvents(MidiEvPtr e)
 	
 		switch (EvType(e)) {
 			
+				case typeKeyOn:
+				case typeKeyOff:
+					if (isFunOn()) { Modify(MidiCopyEv(e));}
+					break;
+					
 				case typeNote:
 					if (isFunOn() && (e1 = UMidi::NoteToKeyOff(e))) {
 						Modify(MidiCopyEv(e));   // keyOn
 						Modify(e1);  			 // keyOff
 					}
-					break;
-					
-				case typeKeyOn:
-				case typeKeyOff:
-					if (isFunOn()) { Modify(MidiCopyEv(e));}
 					break;
 					
 				case typeFunOn:
@@ -277,6 +277,9 @@ void TEventModifier::Cont (ULONG date_ticks)
 
 void TEventModifier::SetPosTicks (ULONG date_ticks) 
 { 
+	// Initialise  
+	Init();
+
 	// mettre ˆ jour les fonctions (integrer les ev privŽs dans le chaser)
 	fIterator->SetPosTicks(date_ticks);
  }
@@ -380,7 +383,6 @@ void TEventModifier::Modify(MidiEvPtr ev)
 	// Force le refnum
 	RefNum(ev) = trackNum;
 	
-
 	while(fun) {
 	
 		next = fun->GetNext();
