@@ -42,6 +42,8 @@
 /* 131: New PortPrefix event type
 /* 132: New RemoveEv function
 /* 133: Direct call of Java code for MacOSX
+/* 134: Correct Midi.Share semantic : now the JMidi interface is loaded in Midi.Share 
+/*      thus clients *must* use Midi.Share as the first call to the MidiShare API
 /*****************************************************************************/
 
 
@@ -59,7 +61,7 @@ For perfomances reasons, MidiShare events, sequences and filters are manipulated
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  133;
+	public   static  int  Version =  134;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
@@ -1182,8 +1184,7 @@ public final class Midi {
 		return res;
 	
 	}
-	
-	
+		
 			static native final int ReadSync (int adr);
 			
 	/**
@@ -1301,14 +1302,28 @@ public final class Midi {
 	public  static native final int SetSyncMode (int mode);
 	
 	/**
-  	Test if MidiShare is available on the Machine. This is
-  	the first MidiShare function that an application should call.  
+  	Test if MidiShare is available on the Machine. The function actually tries to load the JMidi native library
+  	and return a result according to the loading process result. 
+  	Applications *must* call this function first, otherwise next calls to the MidiShare API will fail.
              
     *@return The result is true (= 1) if MidiShare is available, false (= 0) otherwise.
     */
- 
 	
-	public	static native final int Share ();
+	public	static final int Share ()
+	{
+		if (interfaceLoaded){
+			return 1;
+		}else{
+			try {
+			  	System.loadLibrary("JMidi");
+				interfaceLoaded = true;
+				return 1;
+	      	} catch (UnsatisfiedLinkError e) {
+				return 0;
+		  	}
+		}	
+	 }
+	
 			
 	/**
   	Convert an SMPTE location to a time in millisecond.  
@@ -1854,15 +1869,5 @@ public final class Midi {
 	}
 
 	
-
-  static {
-		if (!interfaceLoaded){
-			try {
-			  	System.loadLibrary("JMidi");
-				interfaceLoaded = true;
-        } catch (UnsatisfiedLinkError e) {
-				System.err.println("JMidi.library not found");
-		  }
-		}
-	 }
+  
  }
