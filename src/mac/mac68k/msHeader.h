@@ -18,11 +18,15 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+    [13-09-99] adding 'PascalNames' definition
+
 */
 
 #ifndef __msHeader__
 #define __msHeader__
 
 #define __Macintosh__
+#define PascalNames
 
 #endif
