@@ -32,13 +32,17 @@
 
 #include "oldMSSupport.h"
 
-static pascal void doNothing( TMSGlobalPtr unused1);
+static pascal void doNothing (TMSGlobalPtr unused1);
 
-void * _MSFunctionsTbl[];
+void MSFunctionsTbl(); 
+
+#ifdef __Control_Panel__
+void __Startup__ ();
+asm void __Startup__ ()
+#else
 void msEntryPoint ();
-void MSFunctionsTbl ();
-
 asm void msEntryPoint ()
+#endif
 {
 	memPtr:	dc.l	0
 
@@ -48,29 +52,78 @@ asm void msEntryPoint ()
 		move.l	(sp),-(sp)
 		move.l	memPtr,4(sp)
 		lea		MSFunctionsTbl,a0
-		move.l	(a0,d0.l), a0
-		jmp		(a0)
-	end:
+		jmp		(a0,d0.l)
 }
 
-asm void MSFunctionsTbl() {
-		dc.l MSGetVersion, 	MCountAppls, 	MGetIndAppl, 	MGetNamedAppl		/* 0x00 */
-		dc.l MSOpen,		MSClose,		MGetName,		MSetName			/* 0x04 */
-		dc.l MGetInfo,		MSetInfo,		MGetFilter,		MSetFilter			/* 0x08 */
-		dc.l MGetRcvAlarm,	MSetRcvAlarm,	MGetApplAlarm,	MSetApplAlarm		/* 0x0c */
-		dc.l MConnect,		MIsConnected,	MSGetPortState,	MSSetPortState		/* 0x10 */
-		dc.l MFreeSpace,	MNewEv,			MCopyEv,		MFreeEv				/* 0x14 */
-		dc.l OldMSSetField,	OldMSGetField,	MAddField,		OldMSCountFields	/* 0x18 */
-		dc.l doNothing,		MNewSeq,		MAddSeq,		MFreeSeq			/* 0x1c */
-		dc.l MClearSeq,		MApplySeq,		MSGetTime,		MSendIm				/* 0x20 */
-		dc.l MSend,			MSendAt,		MCountEvs,		MGetEv				/* 0x24 */
-		dc.l MAvailEv,		MFlushEvs,		MReadSync,		MWriteSync			/* 0x28 */
-		dc.l MCall,			MTask,			MDTask,			MForgetTask			/* 0x2c */
-		dc.l MCountDTasks,	MFlushDTasks,	MExec1DTask,	MNewCell			/* 0x30 */
-		dc.l MFreeCell,		MTotalSpace,	MGrowSpace,		MSSpecialInit		/* 0x34 */
-		dc.l MSGetSyncInfo,	MSSetSyncMode,	MSetField,		MGetField			/* 0x38 */
-		dc.l MCountFields,	MSGetExtTime,	MSInt2ExtTime,	MSExt2IntTime		/* 0x38 */
-		dc.l MSTime2Smpte,	MSSmpte2Time,	MSGetTimeAddr,	MDesiredSpace		/* 0x3c */
+static asm void MSFunctionsTbl() {
+		jmp MSGetVersion		// 0x00
+		jmp MCountAppls
+		jmp MGetIndAppl
+		jmp MGetNamedAppl
+		jmp MSOpen			// 0x04
+		jmp MSClose
+		jmp MGetName
+		jmp MSetName	
+		jmp MGetInfo			// 0x08
+		jmp MSetInfo
+		jmp MGetFilter
+		jmp MSetFilter
+		jmp MGetRcvAlarm		// 0x0c
+		jmp MSetRcvAlarm
+		jmp MGetApplAlarm
+		jmp MSetApplAlarm
+		jmp MConnect			// 0x10
+		jmp MIsConnected
+		jmp MSGetPortState
+		jmp MSSetPortState
+		jmp MFreeSpace		// 0x14
+		jmp MNewEv
+		jmp MCopyEv
+		jmp MFreeEv
+		jmp OldMSSetField		// 0x18
+		jmp OldMSGetField
+		jmp MAddField
+		jmp OldMSCountFields
+		jmp doNothing			// 0x0c
+		jmp MNewSeq
+		jmp MAddSeq
+		jmp MFreeSeq
+		jmp MClearSeq			// 0x20
+		jmp MApplySeq
+		jmp MSGetTime
+		jmp MSendIm
+		jmp MSend			// 0x24
+		jmp MSendAt
+		jmp MCountEvs
+		jmp MGetEv
+		jmp MAvailEv			// 0x28
+		jmp MFlushEvs
+		jmp MReadSync
+		jmp MWriteSync
+		jmp MCall				// 0x2c
+		jmp MTask
+		jmp MDTask
+		jmp MForgetTask
+		jmp MCountDTasks		// 0x30
+		jmp MFlushDTasks
+		jmp MExec1DTask
+		jmp MNewCell
+		jmp MFreeCell			// 0x34
+		jmp MTotalSpace
+		jmp MGrowSpace
+		jmp MSSpecialInit
+		jmp MSGetSyncInfo		// 0x38
+		jmp MSSetSyncMode
+		jmp MSetField
+		jmp MGetField
+		jmp MCountFields		// 0x0c
+		jmp MSGetExtTime
+		jmp MSInt2ExtTime
+		jmp MSExt2IntTime
+		jmp MSTime2Smpte		// 0x40
+		jmp MSSmpte2Time
+		jmp MSGetTimeAddr
+		jmp MDesiredSpace		// 0x43
 }
 
 static pascal void doNothing (TMSGlobalPtr unused1) {}
