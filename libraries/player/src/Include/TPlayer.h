@@ -27,6 +27,7 @@
 #include "TTrackTable.h"
 #include "TSMPTEInfos.h"
 
+
 /*--------------------------------------------------------------------------*/
 
 typedef  void (* ApplyScorePtr)( MidiEvPtr e , void* data);
@@ -55,6 +56,7 @@ class TPlayer :public  TMidiAppl{
 		TRunningStatePtr 			fRunningState;    	// Running state
 		TScoreStatePtr   			fScoreState;		// For internal state 
 		TSMPTEInfosPtr              fSmpteInfos;        // For SMPTE synchronization
+		TGenEventReceiverProducerPtr fEventProducer;		// Event producer
 		
 		ULONG	fTick_per_quarter;  // Current resolution
 		short   fSyncIn;         	// SynchroIn state
@@ -102,12 +104,14 @@ class TPlayer :public  TMidiAppl{
 		 long InsertAllTrack(MidiSeqPtr s);
 		 long InsertTrack(short tracknum,MidiSeqPtr s);
 		 
+		 // Eevents management
+		 void SetEventProducer (TEventReceiverProducerPtr producer);
+		 TEventReceiverProducerPtr GetEventProducer ();
+		 
 		 // Synchronisation management
 		 void SetSynchroIn (short state) ;
 		 void SetSynchroOut (short state);
-		 
 		 void SetSMPTEOffset (SmpteLocPtr smptepos);
-		 
 		 void SetTempo(long tempo);
 
 		 // Record management

@@ -45,6 +45,7 @@ TPlayer::TPlayer()
 	fInserter = 0;
 	fScoreState = 0;
 	fSmpteInfos = 0;
+	fEventProducer = 0;
 	
 	fSyncIn = kInternalSync;
 	fSyncOut = kNoSyncOut;
@@ -68,6 +69,7 @@ void TPlayer::Create()
 	fScore = new TPlayerScore();
 	fRunningState = new TRunningState();
 	fSmpteInfos = new TSMPTEInfos();
+	fEventProducer = new TGenEventReceiverProducer();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -83,6 +85,7 @@ TPlayer::~TPlayer()
 	if (fScore) 		delete (fScore); 
 	if (fRunningState) 	delete (fRunningState);
 	if (fSmpteInfos) 	delete (fSmpteInfos);
+	if (fEventProducer) delete (fEventProducer);
 	
 	TMidiAppl::Close();
 }
@@ -270,6 +273,22 @@ void TPlayer::SetParam (short tracknum, short p, short v)
 /*--------------------------------------------------------------------------*/
 
  short TPlayer::GetParam (short tracknum, short p)	{ return fTrackTable->GetParam (tracknum, p);}
+ 
+ 
+/*--------------------------------------------------------------------------*/
+// Events management
+/*--------------------------------------------------------------------------*/
+
+ void TPlayer::SetEventProducer (TEventReceiverProducerPtr producer)
+ {
+ 	if (fRunningState->IsIdle()) {fEventProducer->SetEventProducer(producer);}
+ }
+
+/*--------------------------------------------------------------------------*/
+
+ TEventReceiverProducerPtr TPlayer::GetEventProducer () { 
+ 	return (TEventReceiverProducerPtr)fEventProducer->GetEventProducer() ; 
+ }
 
 /*--------------------------------------------------------------------------*/
 // Synchronisation management
@@ -332,12 +351,12 @@ void TPlayer::BackwardStep(short flag) { fPlayer->PlaySliceBackward(); }
 void TPlayer::GetState (PlayerStatePtr ps)
 {
 	fScoreState->FillState(ps,fPlayer->GetPosTicks());
-	
+		
 	ps->tempo = fPlayer->GetTempo();
-	
+		
 	ps->syncin = fSyncIn;
 	ps->syncout = fSyncOut;
-	
+		
 	ps->state = fRunningState->GetState();
 	if ((ps->state == kPlaying) && (fEventReceiver->GetRecordTrack() != kNoTrack)) 
 		ps->state = kRecording;
@@ -394,11 +413,6 @@ void TPlayer::SetRecordMode (short state)
  		fEventReceiver->SetRecordMode (state);
  	}
 }
-
-/*--------------------------------------------------------------------------*/
-
- void TPlayer::SetRecordFilter(MidiFilterPtr filter) { fEventReceiver->SetRecordFilter(filter); }
- 
 /*--------------------------------------------------------------------------*/
 
 void TPlayer::Record (short tracknum) 
@@ -411,6 +425,11 @@ void TPlayer::Record (short tracknum)
  		fEventReceiver->SetRecordTrack(tracknum);
  	}
 }
+
+/*--------------------------------------------------------------------------*/
+
+ void TPlayer::SetRecordFilter(MidiFilterPtr filter) { fEventReceiver->SetRecordFilter(filter); }
+ 
 
 /*--------------------------------------------------------------------------*/
 

@@ -42,6 +42,9 @@
 #include "TRunningPlayer.h"
 #include "TEventModifier.h"
 #include "TCombinerPlayer.h"
+#include "TTickConsumer.h"
+#include "TRunningEventReceiver.h"
+#include "TEventProducer.h"
 
 
 class TDestructor {
@@ -66,6 +69,7 @@ class TDestructor {
 		TEventSenderInterfacePtr  	fEventSender;
 		TTimeManagerPtr				fTimeManager;
 		TCombinerPlayerPtr          fCombiner;
+		TRunningEventReceiverPtr   	fRunning_receiver;
 		
 	public:
 		
@@ -86,7 +90,8 @@ class TDestructor {
 					TScoreStatePtr   			scorestate,
 					TEventSenderInterfacePtr  	eventsender,
 					TTimeManagerPtr				timemanager,
-					TCombinerPlayerPtr          combiner
+					TCombinerPlayerPtr          combiner,
+					TRunningEventReceiverPtr   	running_receiver
 					)
 
 		{
@@ -108,6 +113,7 @@ class TDestructor {
 			fEventSender = eventsender;
 			fTimeManager = timemanager;
 			fCombiner = combiner;
+			fRunning_receiver = running_receiver;
 		}
 				
 		~TDestructor()
@@ -132,6 +138,7 @@ class TDestructor {
 			if (fEventSender) 	delete(fEventSender);
 			if (fTimeManager) 	delete(fTimeManager);
 			if (fCombiner) 		delete(fCombiner);
+			if (fRunning_receiver) 	delete(fRunning_receiver);
 		}
 
 };

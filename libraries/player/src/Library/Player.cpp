@@ -17,6 +17,7 @@
 /*/
 
 #include  "TPlayer.h"
+#include  "TEventProducer.h"
 
 /*----------------------------------------------------------------------------*/
 // Prototypes
@@ -50,7 +51,7 @@ void  EXPORT PausePlayer (short refnum);
 
 void  EXPORT SetRecordModePlayer (short refnum, short state);
 void  EXPORT RecordPlayer (short refnum, short tracknum);
-void  EXPORT SetRecordFilterPlayer(short refnum, FilterPtr filter);
+void  EXPORT SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 
 // Position management
 
@@ -99,6 +100,17 @@ long EXPORT InsertTrackPlayer(short refnum, short tracknum, MidiSeqPtr s);
 void EXPORT ApplyAllTrackPlayer(short refnum,  ApplyScorePtr fun, void* data);
 void EXPORT ApplyTrackPlayer(short refnum, short tracknum, ApplyScorePtr fun,void* data);
 
+// Event management
+
+void EXPORT SetEventProducer (short refnum,TEventReceiverProducerPtr producer);
+EXPORT TEventReceiverProducerPtr GetEventProducer (short refnum);
+
+TEventReceiverProducerPtr EXPORT MakeScoreProducer (MidiSeqPtr seq);
+TEventReceiverProducerPtr EXPORT MakeReactiveProducer (TEventReceiverProducerPtr p, TFilterInterfacePtr f);
+TEventReceiverProducerPtr EXPORT MakeSeqProducer (TEventReceiverProducerPtr p1, TEventReceiverProducerPtr p2);
+TEventReceiverProducerPtr EXPORT MakeMixProducer (TEventReceiverProducerPtr p1, TEventReceiverProducerPtr p2);
+
+TFilterInterfacePtr EXPORT MakeEventFilter (MidiEvPtr e);
 
 #ifdef __Macintosh__
 	#pragma export off
@@ -392,6 +404,56 @@ long  EXPORT InsertTrackPlayer (short refnum, short tracknum, MidiSeqPtr  s)
 	return (player) ? player->InsertTrack(tracknum,s) : kErrSequencer;
 }
 
+/*--------------------------------------------------------------------------*/
+// Event management
+/*--------------------------------------------------------------------------*/
 
+void EXPORT SetEventProducer (short refnum, TEventReceiverProducerPtr producer)
+{
+	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
+	if (player)  player->SetEventProducer(producer);
+}
 
+/*--------------------------------------------------------------------------*/
+
+EXPORT TEventReceiverProducerPtr GetEventProducer (short refnum)
+{
+	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
+	return (player) ? player->GetEventProducer() : 0;
+}
+
+/*--------------------------------------------------------------------------*/
+
+TEventReceiverProducerPtr EXPORT MakeScoreProducer (MidiSeqPtr seq)
+{
+	return TProducerFactory::MakeScoreProducer(seq);
+}
+
+/*--------------------------------------------------------------------------*/
+
+TEventReceiverProducerPtr EXPORT MakeSeqProducer (TEventReceiverProducerPtr p1, TEventReceiverProducerPtr p2)
+{
+	return TProducerFactory::MakeSeqProducer(p1,p2);
+}
+
+/*--------------------------------------------------------------------------*/
+
+TEventReceiverProducerPtr EXPORT MakeMixProducer (TEventReceiverProducerPtr p1, TEventReceiverProducerPtr p2)
+{
+	return TProducerFactory::MakeMixProducer(p1,p2);
+}
+
+/*--------------------------------------------------------------------------*/
+
+TEventReceiverProducerPtr EXPORT MakeReactiveProducer (TEventReceiverProducerPtr p, TFilterInterfacePtr f)
+{
+	return TProducerFactory::MakeReactiveProducer(p , f);
+}
+
+/*--------------------------------------------------------------------------*/
+
+TFilterInterfacePtr EXPORT MakeEventFilter (MidiEvPtr e)
+{
+	return TFilterFactory::MakeEventFilter(e);
+}
 
