@@ -19,6 +19,9 @@
 	#else
 		#include <midishare.h>
 	#endif
+	
+	/* New type definition */
+	typedef struct TFilter * MidiFilterPtr;
 
 #else
   #ifdef WIN32
@@ -29,6 +32,10 @@
 	#define true 1
 	#define false 0
 	#define nil 0
+	
+	/* New type definition */
+	typedef struct TFilter * MidiFilterPtr;
+	
   #endif
 #endif
 
