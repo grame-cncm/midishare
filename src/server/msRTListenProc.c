@@ -52,21 +52,6 @@ static void DropClients  (CommunicationChan cc)
 }
 
 //*____________________________________________________________________________*/
-static void RejectClient  (TApplPtr appl)
-{
-//	msApplContextPtr  ac = (msApplContextPtr)appl->context;
-//	CommunicationChan cc = ac->chan;
-
-	LogWrite ("Client application \"%s\" (%d) to be rejected", pub(appl, name), pub(appl, refNum));
-/*
-	if (ac->filterh) msSharedMemClose(ac->filterh);
-	MidiClose (pub(appl, refNum));
-	CCDec (cc);
-	FreeApplContext(ac);
-*/
-}
-
-//*____________________________________________________________________________*/
 void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
 {
 	msApplContextPtr  ac = (msApplContextPtr)appl->context;
@@ -89,11 +74,7 @@ void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
 	return;
 
 failed:
-    /* in case of failure, the client should be rejected */
-	/* and the client application closed */
     MidiFreeEv (alarm);
-//	LogWriteErr ("CCRTWrite failed for client \"%s\" (%d)", pub(appl, name), pub(appl, refNum));
-//	RejectClient (appl);
 }
 
 //*____________________________________________________________________________*/
@@ -117,7 +98,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 				n = CCRTWrite (cc, rt->wbuff, len);
 				if (n != len) {
 					MidiFreeEv (e);
-					goto failed;
+					return;
 				}
 			} while (!msStreamContEvent (stream));
 		}
@@ -126,14 +107,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	}
 	len = msStreamSize(stream);
 	n = CCRTWrite (cc, rt->wbuff, len);
-    if (n != len) goto failed;
-	return;
-
-failed:
-    /* in case of failure, the client should be rejected */
-	/* and the client application closed */
-//	LogWriteErr ("CCRTWrite failed for client %s (%d)", pub(appl, name), pub(appl, refNum));
-//	RejectClient (appl);
+//    if (n != len) goto failed;
 }
 
 /*____________________________________________________________________________*/
