@@ -120,8 +120,8 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 1,0,1,0
+ PRODUCTVERSION 1,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -136,14 +136,18 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
+            VALUE "Comments", "\0"
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", "MidiShare Drivers Manager\0"
-            VALUE "FileVersion", "1.0\0"
+            VALUE "FileVersion", "1.01\0"
             VALUE "InternalName", "msDrivers\0"
             VALUE "LegalCopyright", "Copyright © Grame 2001\0"
+            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "msDrivers.exe\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "msDrivers\0"
-            VALUE "ProductVersion", "1.0\0"
+            VALUE "ProductVersion", "1.01\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
