@@ -59,7 +59,7 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 		ext->arg2 = a2;
 		ext->arg3 = a3;
 		Date(ev)  = date;
-		MSSend (r, ev, g);
+		MSSend (r, MSCopyEv(ev,&g->memory.freeList), g);
 	}
 	return ev;
 }
@@ -76,7 +76,7 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 		ext->arg2 = a2;
 		ext->arg3 = a3;
 		Date(ev)  = date;
-		MSSend (r, ev, g);
+		MSSend (r, MSCopyEv(ev,&g->memory.freeList), g);
 	}
 	return ev;
 }
