@@ -42,8 +42,8 @@ struct slot {
 	short		mmIndex;	// MMSystem dev index
 	Ev2StreamRec out;
 	StreamFifo	in;
-	MIDIHDR		header;		// for long msg output
-	char		buff[kBuffSize];
+	LPMIDIHDR	header;		// for long msg output
+//	char		buff[kBuffSize];
 };
 
 extern SlotPtr gInSlots, gOutSlots;

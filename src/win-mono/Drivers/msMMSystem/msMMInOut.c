@@ -74,7 +74,7 @@ void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg,
 		case MIM_LONGERROR:
 		case MIM_LONGDATA:
 			LMM2MS (slot, (LPMIDIHDR)dwParam1);
-			midiInAddBuffer (slot->mmHandle, &slot->header, sizeof(slot->header));
+			midiInAddBuffer (slot->mmHandle, slot->header, sizeof(MIDIHDR));
 			break;
 	}
 }
@@ -82,26 +82,29 @@ void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg,
 //_________________________________________________________
 static MidiEvPtr LMS2MM (SlotPtr slot, MidiEvPtr e)
 {
-	char * ptr = slot->buff; short free = kBuffSize;
+//	char * ptr = slot->buff; 
+	char * ptr = (LPBYTE)slot->header + sizeof(MIDIHDR);
+	short free = kBuffSize;
 	MMRESULT res;
-	if (!slot->header.dwUser) {	// Midi Header not prepared
+	if (!slot->header->dwUser) {	// Midi Header not prepared
 		MidiFreeEv(e);			// free the event 
 		return 0;				// and cancel output
 	}
 	e = MidiStreamPutEvent (&slot->out, e);
 	while (MidiStreamGetByte (&slot->out, ptr++)) {
 		if (!--free) {
-			slot->header.dwBufferLength = kBuffSize;
-			res = midiOutLongMsg (slot->mmHandle, &slot->header, sizeof(slot->header));
+			slot->header->dwBufferLength = kBuffSize;
+			res = midiOutLongMsg (slot->mmHandle, slot->header, sizeof(MIDIHDR));
 			if (res != MMSYSERR_NOERROR)
 				goto err;
-			ptr = slot->buff;
+//			ptr = slot->buff;
+			ptr = (LPBYTE)slot->header + sizeof(MIDIHDR);
 			free = kBuffSize;
 		}
 	}
-	slot->header.dwBufferLength = kBuffSize - free;
-	if (slot->header.dwBufferLength) {
-		res = midiOutLongMsg (slot->mmHandle, &slot->header, sizeof(slot->header));
+	slot->header->dwBufferLength = kBuffSize - free;
+	if (slot->header->dwBufferLength) {
+		res = midiOutLongMsg (slot->mmHandle, slot->header, sizeof(MIDIHDR));
 		if (res != MMSYSERR_NOERROR)
 			goto err;
 	}
