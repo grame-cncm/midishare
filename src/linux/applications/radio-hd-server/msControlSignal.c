@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 #include "MidiShare.h"
-
+#include "server.h"
 
 short gRefNum, gXmtPort=1, doneFlag;
 char * gCurFile = 0;

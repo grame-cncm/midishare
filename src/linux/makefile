@@ -21,17 +21,17 @@ common:
 install: libinstall clientsinstall
 	[ -d $(MODF) ] || mkdir $(MODF)
 	install MidiShare.o $(MODF)
-	depmod -a
+	/sbin/depmod -a
 	install MidiShare $(RC)/init.d
 	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
 	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
-	modprobe MidiShare 
+	/sbin/modprobe MidiShare 
 
 uninstall: libuninstall clientsuninstall
 	rm -f /etc/$(CONF)
 	rm -f $(MODF)/MidiShare.o
 	rm -f $(INIT)/MidiShare $(RC)/rc[35].d/*MidiShare
-	rmmod MidiShare
+	/sbin/rmmod MidiShare
 	
 clean:
 	make -i -C ../common/Memory clean 
@@ -60,7 +60,7 @@ libuninstall:
 	make -C library uninstall 
 
 devinstall: libinstall
-	insmod MidiShare.o
+	/sbin/insmod MidiShare.o
 
 libinstall:
 	make -i -C library install

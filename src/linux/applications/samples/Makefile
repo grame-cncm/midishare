@@ -1,5 +1,6 @@
-INC	= ../Headers
-OPTIONS	= 
+#INC	= ../Headers
+INC	= ../../Include
+OPTIONS	=
 LIB	= -Wl,-L../../library -lMidiShare
 
 
@@ -8,39 +9,39 @@ all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlaye
 install:
 
 
-msTutorial : msTutorial.c  /usr/lib/libMidiShare.so
+msTutorial : msTutorial.c  
 	gcc msTutorial.c  -g -I$(INC) -o msTutorial $(LIB)
 
 
-msSendNote : msSendNote.c    /usr/lib/libMidiShare.so
+msSendNote : msSendNote.c    
 	gcc msSendNote.c  -g -I$(INC) -o msSendNote $(LIB) 
 
-msReset : msReset.c    /usr/lib/libMidiShare.so
+msReset : msReset.c    
 	gcc msReset.c  -g -I$(INC) -o msReset $(LIB) 
 
 
-msArpege : msArpege.c    /usr/lib/libMidiShare.so
+msArpege : msArpege.c    
 	gcc msArpege.c  -g -I$(INC) -o msArpege $(LIB) 
 
 
-msSequencer : msSequencer.c    /usr/lib/libMidiShare.so
+msSequencer : msSequencer.c    
 	gcc msSequencer.c  -g -I$(INC) -o msSequencer $(LIB) 
 
 
-msSendSeq : msSendSeq.c    /usr/lib/libMidiShare.so
+msSendSeq : msSendSeq.c    
 	gcc msSendSeq.c  -g -I$(INC) -o msSendSeq $(LIB) 
 
 
-msDisplay : msDisplay.c    /usr/lib/libMidiShare.so
+msDisplay : msDisplay.c    
 	gcc msDisplay.c  -g -I$(INC) -o msDisplay $(LIB) 
 
-msMidiPlayer : msMidiPlayer.c  midifile.c    /usr/lib/libMidiShare.so
+msMidiPlayer : msMidiPlayer.c  midifile.c    
 	gcc msMidiPlayer.c  midifile.c -g $(OPTIONS) -I$(INC) -o msMidiPlayer $(LIB) 
 
-msEcho : msEcho.c        /usr/lib/libMidiShare.so
+msEcho : msEcho.c        
 	gcc   msEcho.c -g $(OPTIONS) -I$(INC) -o msEcho $(LIB) 
 
-msClock : msClock.c      /usr/lib/libMidiShare.so
+msClock : msClock.c      
 	gcc   msClock.c -g $(OPTIONS) -I$(INC) -o msClock $(LIB) 
 
 clean:

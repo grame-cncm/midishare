@@ -25,10 +25,12 @@
 
 #ifdef __Pentium__
 
-#ifdef __SMP__
-#define LOCK "lock ; "
-#else
-#define LOCK ""
+#ifndef LOCK
+# ifdef __SMP__
+#  define LOCK "lock ; "
+# else
+#  define LOCK ""
+# endif
 #endif
 
 static inline void lfpush (lifo * lf, cell * cl) 

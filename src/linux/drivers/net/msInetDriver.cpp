@@ -127,7 +127,7 @@ char * dateString ()
 	static char date[256];
 	time_t t;
 	time(&t);
-	strftime (date, 256, "[%D %T]", localtime(&t));
+	strftime (date, 256, "[%d/%m/%Y %T]", localtime(&t));
 	return date;
 }
 

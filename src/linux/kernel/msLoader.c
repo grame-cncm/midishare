@@ -3,7 +3,7 @@
   Copyright © Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
+  the terms of the GNU General Public License as published by the 
   Free Software Foundation version 2 of the License, or any later version.
 
   This library is distributed in the hope that it will be useful, but
@@ -11,8 +11,8 @@
   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
   for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
+  You should have received a copy of the GNU General Public License
+  along with this source file; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
@@ -51,6 +51,14 @@
 #include "msInit.h"
 #include "msConf.h"
 
+/* Module description */
+
+MODULE_AUTHOR("Grame, http://www.grame.fr");
+MODULE_DESCRIPTION ("Realtime MIDI module with IAC capabilities");
+MODULE_LICENSE("GPL");
+MODULE_SUPPORTED_DEVICE("midishare");
+
+
 
 /* Global variables */
 
@@ -62,8 +70,6 @@ typedef int (*KernelMth) (unsigned long userptr, struct file* f);
 static KernelMth KernelMthTable[kMaxMth];
 
 void MidiShareSpecialInit(unsigned long defaultSpace);  /* A REVOIR */
-
-MODULE_SUPPORTED_DEVICE("midishare");
 
 /*__________________________________________________________________________________*/
 /* -- display functions */

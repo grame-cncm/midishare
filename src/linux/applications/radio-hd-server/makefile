@@ -16,7 +16,8 @@ BIN=/usr/local/bin
 OBJ1 = msWANConnect.o TInetAddress.o msAnything2Midi.o
 OBJ2 = msWANConnect.o TInetAddress.o msControlSignal.o
 SRC = msWANConnect.c TInetAddress.cpp msAnything2Midi.c msControlSignal.c
-CC = gcc
+#CC = gcc
+CC = g++
 
 Target = RadioHDServer
 Control = msControlSignal

@@ -2,7 +2,8 @@
 TARGET = ../MidiShare.o
 OPTIONS=-D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 
-INC = /usr/src/linux/include/
+#INC = /usr/src/linux/include/
+INC = /lib/modules/`uname -r`/build/include/
 INC += -I../../common/Headers
 CFLAGS := -O6 -Wall $(OPTIONS)  -I$(INC)
 CC = gcc
