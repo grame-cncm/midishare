@@ -35,6 +35,8 @@ static MidiShareDriver * gThis = 0;	// used for wakeup callback
 static void MSALARMAPI __WakeUp (short r)
 {
 	if (gThis) gThis->WakeUp (r);
+	MidiConnect (MidiShareDrvRef, r, true);
+	MidiConnect (r, MidiShareDrvRef, true);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -97,8 +99,6 @@ Boolean MidiShareDriver::Open (MidiName name, Boolean wantFilter)
 		}
 		MidiSetInfo (fRefNum, this);
 		SetRcvAlarm (true);
-		MidiConnect (MidiShareDrvRef, fRefNum, true);
-		MidiConnect (fRefNum, MidiShareDrvRef, true);
 	}
 	return true;
 }
