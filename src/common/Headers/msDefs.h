@@ -34,14 +34,17 @@
 #   define  ALARMTYPE   pascal
 #endif
 
-#ifdef __Windows__
+#ifdef WIN32
+#   include  "windows.h"
 #   define  ALARMTYPE
+#	define	MIDISHAREAPI __declspec(dllexport)
+#	define  MSALARMAPI	CALLBACK
 #endif
 
 #ifdef __Linux__
-	#   define  ALARMTYPE
-	#	define  MSALARMAPI
-	#	define  FAR
+#   define  ALARMTYPE
+#	define  MSALARMAPI
+#	define  FAR
 #endif
 
 /*******************************************************************************
@@ -403,10 +406,10 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 
 /*----------------------------- Alarms prototypes ----------------------------*/
 
-    typedef ALARMTYPE void (MSALARMAPI *TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
-    typedef ALARMTYPE void (MSALARMAPI *RcvAlarmPtr)     ( short refNum );
-    typedef ALARMTYPE void (MSALARMAPI *ApplAlarmPtr)    ( short refNum,long code );
-    typedef ALARMTYPE void (MSALARMAPI *ApplyProcPtr)    ( MidiEvPtr e );
+    typedef ALARMTYPE void (MSALARMAPI * TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
+    typedef ALARMTYPE void (MSALARMAPI * RcvAlarmPtr)     ( short refNum );
+    typedef ALARMTYPE void (MSALARMAPI * ApplAlarmPtr)    ( short refNum,long code );
+    typedef ALARMTYPE void (MSALARMAPI * ApplyProcPtr)    ( MidiEvPtr e );
 
 
 /******************************************************************************

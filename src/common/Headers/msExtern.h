@@ -44,8 +44,13 @@ enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
 typedef short 	MutexResCode;
 typedef long 	MutexRef;
 
+#ifdef __Windows__
+MutexResCode msOpenMutex  (MutexRef ref);
+MutexResCode msCloseMutex (MutexRef ref);
+#else
 MutexResCode OpenMutex  (MutexRef ref);
 MutexResCode CloseMutex (MutexRef ref);
+#endif
 
 
 /*------------------------------------------------------------------------------*/

@@ -27,15 +27,6 @@
 #ifndef __msTypes__
 #define __msTypes__
 
-#ifdef __WIN16__
-# define NEAR  near
-# define FAR   far
-#else
-# define NEAR
-# define FAR
-#endif
-
-
 #ifdef __Macintosh__
 # include <MacTypes.h>
 # ifdef __POWERPC__
@@ -50,10 +41,12 @@ typedef unsigned long ulong;
 # define MSFunctionType(type)   type
 #endif
 
-#ifdef __Windows__
+#ifdef WIN32
+# include <windows.h>
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
+	typedef unsigned long ulong;
 	enum { false = 0, true };
 #endif
 

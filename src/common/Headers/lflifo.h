@@ -79,6 +79,10 @@ typedef struct lifo {
 #endif
 } lifo;
 
+#ifdef __Windows__
+# define inline __inline
+#endif
+
 
 
 /****************************************************************
@@ -95,172 +99,12 @@ static inline cell* lfavail(lifo* lf) {
 	return (cell*)lf->top;
 }
 
-
-#ifdef __Pentium__
-
-#ifdef __SMP__
-#define LOCK "lock ; "
-#else
-#define LOCK ""
+#if defined(__Linux__)
+# include "lflifoLinux.h"
+#elif defined(__Macintosh__)
+# include "lflifoMac.h"
+#elif defined(__Windows__)
+# include "lflifoWin.h"
 #endif
-
-static inline void lfpush (lifo * lf, cell * cl) 
-{
-	__asm__ __volatile__ (
-		"# LFPUSH					\n\t"
-		"pushl	%%ebx				\n\t"
-		"pushl	%%ecx				\n\t"
-		"movl 0(%%esi), %%eax		\n\t"
-		"movl 4(%%esi), %%edx		\n"	
-		"1:\t"
-		"movl %%eax, %%ebx			\n\t"
-		"incl %%ebx					\n\t"
-		"movl %%edx, (%%ecx)		\n\t"
-		LOCK "cmpxchg8b (%%esi)		\n\t"
-		"jnz	1b					\n\t"
-		"popl	%%ecx				\n\t"
-		"popl	%%ebx				\n\t"
-		:/* no output */
-		:"S" (lf), "c" (cl)
-		:"memory", "eax", "edx");
-}
-
-static inline cell* lfpop (lifo * lf) 
-{
-	cell*	v=0;
-	__asm__ __volatile__ (
-		"# LFPOP 					\n\t"
-		"pushl	%%ebx				\n\t"
-		"pushl	%%ecx				\n\t"
-		"movl 	4(%%esi), %%edx		\n\t"
-		"movl  	(%%esi), %%eax		\n\t"	
-		"testl	%%eax, %%eax		\n\t"
-		"jz		20f					\n"
-		"10:\t"
-		"movl 	(%%eax), %%ebx		\n\t"
-		"movl	%%edx, %%ecx		\n\t"
-		"incl	%%ecx				\n\t"
-		LOCK "cmpxchg8b (%%esi)		\n\t"
-		"jz		20f					\n\t"
-		"testl	%%eax, %%eax		\n\t"
-		"jnz	10b					\n"
-		"20:\t"
-		"popl	%%ecx				\n\t"
-		"popl	%%ebx				\n\t"
-		:"=a" (v)
-		:"S" (&lf->top)
-		:"memory", "edx");
-	return v;
-}
-
-static inline unsigned long lfsize (lifo * lf) 
-{
-	unsigned long n;
-	__asm__ __volatile__ (
-		"# LFSIZE					\n\t"
-		"movl 	8(%%esi), %%edx		\n\t"
-		"movl  	(%%esi), %%eax		\n\t"	
-		"subl 	%%edx, %%eax		\n\t"
-		:"=a" (n)
-		:"S" (lf)
-		:"memory", "edx");
-	return n;
-}
-#endif /* __Pentium__ */
-
-#ifdef __Macintosh__
-# ifdef __POWERPC__
-
-static void lfpush (register lifo * lf, register cell * cl) 
-{
-	register long tmp;
-	asm {
-		addi	lf, lf, 4
-	loop:
-		lwarx	tmp, 0, lf       /* creates a reservation on lf    */
-		stw		tmp, 0(cl)       /* link the new cell to the lifo  */
-		sync                     /* synchronize instructions       */
-		stwcx.	cl, 0, lf        /* if the reservation is not altered */
-		                         /* modify lifo top               */
-		bne-	loop             /* otherwise: loop and try again */
-
-		addi	lf, lf, 4
-	inc:
-		lwarx	tmp, 0, lf       /* creates a reservation on lf->count */
-		addi	tmp, tmp, 1      /* inc count                      */
-		sync                     /* synchronize instructions       */
-		stwcx.	tmp, 0, lf       /* conditionnal store             */
-		bne-	inc 
-	}
-}
-	
-static cell* lfpop (register lifo * lf) 
-{
-	register cell * result;
-	register long a, b;
-	asm {
-		addi	lf, lf, 4
-	loop:
-		lwarx	a, 0, lf         /* creates a reservation on lf    */
-		cmpwi	a, 0             /* test if the lifo is empty      */
-		beq-	empty
-		lwz		b, 0(a)          /* next cell in b                */
-		sync                     /* synchronize instructions       */
-		stwcx.	b, 0, lf         /* if the reservation is not altered */
-		                         /* modify lifo top                */
-		bne-	loop             /* otherwise: loop and try again  */
-
-		addi	lf, lf, 4
-	dec:
-		lwarx	b, 0, lf         /* creates a reservation on lf->count */
-		addi	b, b, -1         /* dec count                      */
-		sync                     /* synchronize instructions       */
-		stwcx.	b, 0, lf         /* conditionnal store             */
-		bne-	dec
-		 
-	empty:
-		mr		result, a
-	}
-	return result;
-}
-
-static inline unsigned long lfsize (lifo * lf) 
-{
-	return lf->oc;
-}
-
-# else
-
-static inline void lfpush (register lifo * lf, register cell * cl) 
-{
-	INT_OFF();
-	cl->link = lf->top;
-	lf->top = cl;
-	lf->ic++;
-	INT_ON();
-}
-
-static inline cell* lfpop (register lifo * lf) 
-{
-	cell* v;
-	INT_OFF();
-	v = lf->top;
-	if (v) {
-		lf->top = v->link;
-		lf->oc++;
-	}
-	INT_ON();
-	return v;
-}
-
-static inline unsigned long lfsize (lifo * lf) 
-{
-	unsigned long oc = lf->oc;
-	unsigned long ic = lf->ic;
-	return ic - oc;
-}
-
-# endif
-#endif /* __Macintosh__ */
 
 #endif
