@@ -25,28 +25,25 @@
 
 TEventFactoryPtr TEventFactory::fInstance = 0;
 
-/*--------------------------------------------------------------------------*/
-
 TEventFactory::TEventFactory ()
 {
 	// Default constructor
 	
-	for (short i = 0; i< 256 ; i++) { fBuildTable[i] = &TEventFactory::CreateEvent;}
+	for (short i = 0; i< 256 ; i++) { fBuildTable[i] = CreateEvent;}
 	
 	// Specific constructor
 	
-	fBuildTable[typeNote] =  (mthptr)&TEventFactory::CreateNote;
-	fBuildTable[typeKeyOn] = (mthptr)&TEventFactory::CreateKeyOn;
-	fBuildTable[typeKeyOff] = (mthptr)&TEventFactory::CreateKeyOff;
-	fBuildTable[typeProgChange] = (mthptr)&TEventFactory::CreateProgChange;
-	fBuildTable[typeCtrlChange] = (mthptr)&TEventFactory::CreateCtrlChange;
-	fBuildTable[typeKeyPress] = (mthptr)&TEventFactory::CreateKeyPress;
-	fBuildTable[typeChanPress] = (mthptr)&TEventFactory::CreateChanPress;
-	fBuildTable[typePitchWheel] = (mthptr)&TEventFactory::CreatePitchBend;
-	fBuildTable[typeTune] = (mthptr)&TEventFactory::CreateTune;
-	fBuildTable[typeSysEx] = (mthptr)&TEventFactory::CreateSysEx;
-
-	fBuildTable[typeTempo] = (mthptr)&TEventFactory::CreateTempo;
-	fBuildTable[typeTimeSign] = (mthptr)&TEventFactory::CreateTimeSign;
+	fBuildTable[typeNote] =  CreateNote;
+	fBuildTable[typeKeyOn] = CreateKeyOn;
+	fBuildTable[typeKeyOff] = CreateKeyOff;
+	fBuildTable[typeProgChange] = CreateProgChange;
+	fBuildTable[typeCtrlChange] = CreateCtrlChange;
+	fBuildTable[typeKeyPress] = CreateKeyPress;
+	fBuildTable[typeChanPress] = CreateChanPress;
+	fBuildTable[typePitchWheel] = CreatePitchBend;
+	fBuildTable[typeTune] = CreateTune;
+	fBuildTable[typeSysEx] = CreateSysEx;
+	
+	fBuildTable[typeTempo] = CreateTempo;
+	fBuildTable[typeTimeSign] = CreateTimeSign;
 }
-
