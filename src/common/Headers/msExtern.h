@@ -37,9 +37,6 @@
 /*------------------------------------------------------------------------------*/
 /*                                synchronization                               */
 /*------------------------------------------------------------------------------*/
-/* forgetting a realtime task */
-Boolean     ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
-
 /* mutex definitions */
 enum { kMemoryMutex = 1, kWakeUpMutex };
 enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
@@ -68,7 +65,7 @@ TApplContextPtr CreateApplContext ();
 void			DisposeApplContext (TApplContextPtr context);
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
 void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
-void CallTaskCode  (TApplContextPtr context, TTaskExtPtr task, long date, short refNum);
-void CallDTaskCode (TApplContextPtr context, TTaskExtPtr task, long date, short refNum);
+void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
+void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 
 #endif
