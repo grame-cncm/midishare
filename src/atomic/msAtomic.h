@@ -47,20 +47,22 @@
 # error "msAtomic.h : target os undefined"
 #endif
 
-static inline void msAtomicInc (vtype TAtomic * val)
+static inline long msAtomicInc (vtype TAtomic * val)
 {
     long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual+1)));
+	return actual+1;
 }
 
-static inline void msAtomicDec (vtype TAtomic * val)
+static inline long msAtomicDec (vtype TAtomic * val)
 {
     long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual-1)));
+	return actual-1;
 }
 
 #endif
