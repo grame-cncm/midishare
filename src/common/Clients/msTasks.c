@@ -21,6 +21,7 @@
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
                    includes now ForgetTaskSync
+   [13-09-99] DF - removing direct fifo access
 
 */
 
@@ -112,7 +113,7 @@ MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
 /*__________________________________________________________________________________*/
 MSFunctionType(long) MSCountDTasks (short refnum, TClientsPtr g)
 {
-	return CheckRefNum( g, refnum) ? g->appls[refnum]->dTasks.count : 0;
+	return CheckRefNum( g, refnum) ? fifosize (&g->appls[refnum]->dTasks) : 0;
 }
 
 /*__________________________________________________________________________________*/
@@ -136,7 +137,7 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 	MidiEvPtr ev;
 	if( CheckRefNum( g, refnum)) {
 		appl = g->appls[refnum];
-		if (appl->dTasks.count) {
+		if (fifosize (&g->appls[refnum]->dTasks)) {
 			ev = (MidiEvPtr)fifoget (&appl->dTasks);
 			if (ev) {
 				TTaskExtPtr task= (TTaskExtPtr)LinkST(ev);
