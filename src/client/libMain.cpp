@@ -90,8 +90,8 @@ static void  MSContextInitialize (TMSGlobalPtr g)
         msStreamInitMthTbl (c->streamMthTable);
 		msStreamParseInit (&c->std.parse, c->parseMthTable, c->std.rbuff, kReadBuffSize);
 		msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.rbuff, kReadBuffSize);
-        msStreamInit 	  (&c->std.stream, c->streamMthTable, c->std.wbuff, kWriteBuffSize);
-        msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.wbuff, kWriteBuffSize);
+        msStreamInit 	  (&c->std.stream, c->streamMthTable);
+        msStreamInit 	  (&c->RT.stream, c->streamMthTable);
 	}
 	g->context = c;
 }
@@ -99,7 +99,7 @@ static void  MSContextInitialize (TMSGlobalPtr g)
 /*____________________________________________________________________________*/
 void  MSInitialize ()
 { 
-printf ("MidiShare library initialized\n");
+//printf ("MidiShare library initialized\n");
     InitEvents ();
     InitMemory (Memory(gMem), kDefaultCLientSpace);
     OpenMemory (Memory(gMem));

@@ -59,7 +59,7 @@ Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
 	Ev2StreamPtr stream = &c->std.stream;
     long n; short len;
 
-    msStreamStart (stream);
+	msStreamStart (stream, c->std.wbuff, kWriteBuffSize);
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
@@ -70,8 +70,7 @@ Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
 	len = msStreamSize(stream);
 	n = CCWrite (c->cchan, stream->buff, len);
 	if (n != len) goto failed;
-    if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
-        MidiFreeEv (e);
+	MidiFreeEv (e);
     return true;
 
 failed:

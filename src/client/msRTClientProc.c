@@ -60,7 +60,7 @@ static int RTSendFlush (msLibContextPtr c)
 	fifo * f = &c->RTSnd;
 	MidiEvPtr e = (MidiEvPtr)fifoget(f);
 
-	msStreamStart (stream);
+	msStreamStart (stream, c->RT.wbuff, kWriteBuffSize);
 	while (e) {
 		if (!msStreamPutEvent (stream, e)) {
 			do {
@@ -69,8 +69,7 @@ static int RTSendFlush (msLibContextPtr c)
 				if (n != len) goto failed;
 			} while (!msStreamContEvent (stream));
 		}
-        if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
-            MidiFreeEv (e);
+		MidiFreeEv (e);
 		e = (MidiEvPtr)fifoget(f);
 	}
 	len = msStreamSize(stream);
@@ -78,8 +77,8 @@ static int RTSendFlush (msLibContextPtr c)
     return (n == len);
 
 failed:
-    if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
-        MidiFreeEv (e);
+perror ("RTSendFlush: CCRTWrite failed");
+	MidiFreeEv (e);
     return false;
 }
 
@@ -93,13 +92,27 @@ Boolean RTSend (MidiEvPtr e, TMSGlobalPtr g)
 	return true;
 }
 
+//int gRTClientProcFlag = 0;
+//MidiEvPtr gProcessCallEv = 0;
+//MidiEvPtr gProcessCallEv2 = 0;
+//TaskPtr gProcessFun = 0;
+//long gProcessFun2 = 0;
+//int gPCCount=0;
 /*____________________________________________________________________________*/
 static void ProcessCall (TMSGlobalPtr g, MidiEvPtr e)
 {
+//	gPCCount++;
 	msLibContextPtr c = (msLibContextPtr)g->context;
+//gProcessCallEv = e;
 	TTaskExtPtr task = (TTaskExtPtr)LinkST(e);      /* event extension */
 	c->send = RTSend;
+//gRTClientProcFlag = 3123;
+//gProcessFun = task->fun;
+//gProcessFun2 = LinkST((MidiEvPtr)(task->fun))->val[0];
+//gProcessCallEv2 = e;
 	task->fun (Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
+//	gProcessFun (Date(gProcessCallEv), RefNum(gProcessCallEv), task->arg1, task->arg2, task->arg3);
+//gRTClientProcFlag = 3124;
 	c->send = StdSend;
 }
 
@@ -115,17 +128,20 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 	if (!CheckGlobRefNum(g, refNum))  	/* check if refnum is valid     */
 		goto reject;
 
+//        gRTClientProcFlag = 311;
 	appl = g->appls[refNum];
 	switch (type) {
 		case typeProcess:
+//        gRTClientProcFlag = 312;
             ext = LinkST(e);
             process = (MidiEvPtr)ext->val[0];
            if (EvType(process) == typeProcess)
                 ProcessCall (g, process);
-			MidiFreeEv (e);
-			MidiFreeEv (process);
+//			MidiFreeEv (e);
+//			MidiFreeEv (process);
 			break;
 		case typeDProcess:
+//        gRTClientProcFlag = 313;
             ext = LinkST(e);
             process = (MidiEvPtr)ext->val[0];
             if (EvType(process) == typeDProcess)
@@ -134,6 +150,7 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 			MidiFreeEv (e);
 			break;
 		case typeApplAlarm:
+//        gRTClientProcFlag = 314;
 			if (appl->applAlarm) {
 				appl->applAlarm (appl->refNum, e->info.longField);
 				MidiFreeEv (e);
@@ -141,11 +158,14 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 			else RawAccept(g, appl, &appl->rcv, e);
 			break;
 		default:
+//        gRTClientProcFlag = 315;
 			RawAccept(g, appl, &appl->rcv, e);
 	}
+//        gRTClientProcFlag = 316;
 	return;
 
 reject:
+//        gRTClientProcFlag = 310;
 	MidiFreeEv (e);					/* free the event  					*/
 }
 
@@ -155,20 +175,24 @@ ThreadProc(RTClientProc, arg)
 	TMSGlobalPtr g = (TMSGlobalPtr)arg;
 	msLibContextPtr c = (msLibContextPtr)g->context;
 	msStreamBuffer * parse = &c->RT.parse;
-    MidiEvPtr e; long n; int ret; //, remain, read=0;
+    MidiEvPtr e; long n; int ret;
 
 	while (true) {
-        n = CCRTRead (c->cchan, c->RT.rbuff, kReadBuffSize);
+		n = CCRTRead (c->cchan, c->RT.rbuff, kReadBuffSize);
         if (n <= 0) break; /* corrupted communication channel: exit the RT thread */
 
 		NextActiveAppl(g) = ActiveAppl(g);
 		e = msStreamStartBuffer (parse, n, &ret);
 		while (e) {
+//gRTClientProcFlag = 31;
 			DispatchEvent (g, e);
+//gRTClientProcFlag = 32;
 			e = msStreamGetEvent (parse, &ret);
 		}
 		RcvAlarmLoop (g);
-		RTSendFlush (c);
+		if (!RTSendFlush (c))
+			perror ("RTClientProc: RTSendFlush error");
 	}
+//	fprintf (stderr, "RTClientProc: CCRTRead error %ld\n", n);
 	return 0;
 }
