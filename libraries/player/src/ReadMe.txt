@@ -41,7 +41,10 @@ Bug correction in chase management for KeyOn with velocity of 0.
 Bug correction in the TickTask class destructor.
 
 01/07/00 : Version  2.03 : Merge of the new scheduler branch : simplification of the scheduler class
-to correct a synchronization problem on Linux.
+to correct a synchronization problem on Linux. Works with MidiShare untill version 1.84
+
+27/04/01 : Version  > 2.03 : Works only with MidiShare version >= 1.85
+Add the management of PortPrefix events in MIDIFiles
 
 ==================
 General Remarks
@@ -53,7 +56,7 @@ has to be done by the user of the library.
 
 =================================================================================
 The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-1996-2000, and is distributed as Open Source software under a slightly modified 
+1996-2001, and is distributed as Open Source software under a slightly modified 
 version of the Artistic License; see the file "Artistic" that is included in 
 the distribution for details.
 Grame : Computer Music Research Laboratory
