@@ -53,7 +53,7 @@ void OpenTimer (TMSGlobalPtr g)
 	gTask.tmReserved = 0;
 	InstallXTimeTask ((QElemPtr)&gTask);
 	err = PrimeTimeTask((QElemPtr)&gTask, gTimeRes);
-    ReportN("MidiShare", "open time interrupt using a timer - timeresolution is", gTimeRes);
+    ReportN("MidiShare", "open time interrupt using a timer - time resolution is", gTimeRes);
 }
 
 void CloseTimer (TMSGlobalPtr g)
