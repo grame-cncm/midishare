@@ -1,4 +1,0 @@
-#define __ver_snd_tea6330t_detect	7c4badc7
-#define snd_tea6330t_detect	_set_ver(snd_tea6330t_detect)
-#define __ver_snd_tea6330t_update_mixer	5609e20b
-#define snd_tea6330t_update_mixer	_set_ver(snd_tea6330t_update_mixer)

@@ -1,4 +1,0 @@
-#define __ver_snd_opl3_interrupt	a87930fb
-#define snd_opl3_interrupt	_set_ver(snd_opl3_interrupt)
-#define __ver_snd_opl3_new_device	f1496a48
-#define snd_opl3_new_device	_set_ver(snd_opl3_new_device)

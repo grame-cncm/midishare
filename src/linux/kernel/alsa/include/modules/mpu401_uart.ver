@@ -1,4 +1,0 @@
-#define __ver_snd_mpu401_uart_interrupt	be903c89
-#define snd_mpu401_uart_interrupt	_set_ver(snd_mpu401_uart_interrupt)
-#define __ver_snd_mpu401_uart_new_device	aefc4dc6
-#define snd_mpu401_uart_new_device	_set_ver(snd_mpu401_uart_new_device)

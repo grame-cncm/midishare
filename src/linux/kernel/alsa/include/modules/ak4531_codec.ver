@@ -1,2 +1,0 @@
-#define __ver_snd_ak4531_mixer	5c84afcd
-#define snd_ak4531_mixer	_set_ver(snd_ak4531_mixer)
