@@ -58,10 +58,11 @@
 
 #include "Tmtrack.h"
 
-
 #ifdef __Macintosh__
 	#include <CType.h>
-	#include <Files.h>
+	#ifdef __MacOS9__
+		#include <Files.h>
+	#endif
 	#include <StdLib.h>
 	#include <String.h>
 #endif
@@ -205,6 +206,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 			for( i=0; i<n; i++)					/* lit le contenu de l'evt	*/
 				buff[i]= MidiGetField( ev, i);
 			buff[i]= 0;									/* fin de chaine	*/
+			refNum= GetEvRef( buff, l, numPiste);
 			if( !strncmp( buff, Player,l) && !prec)		/* evt ajoutŽ		*/
 			{
 				seq->first= Link(ev);			/* supprime l'evt de la seq */
@@ -220,7 +222,6 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 				else seq->first= ori;			/* la sŽquence				*/
 				MidiFreeEv( ev);				/* libre l'evt modifiŽ		*/
 			}
-			refNum= GetEvRef( buff, l, numPiste);
 		}
 	}
 	return refNum;
@@ -415,7 +416,6 @@ static Boolean TrsfNoteToKeyOn (MidiSeqPtr dest)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-
 static MidiEvPtr CheckEvType (MidiSeqPtr src, short type)
 {
 	MidiEvPtr e = FirstEv(src);
@@ -428,7 +428,6 @@ static MidiEvPtr CheckEvType (MidiSeqPtr src, short type)
 }
 
 /*--------------------------------------------------------------------------*/
-
 static MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq) 
 {
 	MidiEvPtr e1, e2;
@@ -474,7 +473,6 @@ static MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq)
 /*--------------------------------------------------------------------------*/
 /*				Codage de l'info de port									*/
 /*--------------------------------------------------------------------------*/
-
 static void SetSeqPort( MidiSeqPtr seq)
 {
 	register MidiEvPtr ev, prev, tmp;
@@ -504,7 +502,6 @@ static void SetSeqPort( MidiSeqPtr seq)
 }
 
 /*--------------------------------------------------------------------------*/
-
 void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest , int i)
 {
 	SetSeqRef( seq, GetSeqRef(seq, i));	/* restitue le refnum		*/
@@ -515,7 +512,6 @@ void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest , int i)
 }
 
 /*--------------------------------------------------------------------------*/
-
 int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 {
 	register MidiSeqPtr seq;
@@ -620,7 +616,8 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 		ret= MidiFileWriteEv( fd, ev);		/* on Žcrit l'ŽvŽnement tel quel*/
 	else if( name= MidiCopyEv( ev))			/* sinon on le copie			*/
 	{
-		MidiAddField( name, ' ');			/* ajoute un espace				*/
+		/* ajoute espace si l'ev n'est pas vide */
+		if (MidiCountFields(ev)) MidiAddField( name, ' ');			
 		tmp= Player;
 		while( *tmp)						/* ajoute la clŽ				*/
 			MidiAddField( name, *tmp++);
@@ -739,11 +736,7 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 			type= EvType(ev);
 			if( !IsTempoMap( type))		/* n'appartient pas ˆ la tempo map	*/
 				trackListe[ RefNum(ev)]= true;
-			if (ev == Link (ev)){
-				ev = 0;
-			}
-			else ev= Link(ev);
-
+			ev= Link(ev);
 		}
 	}
 	else											/* c'est un format 2	*/
@@ -833,7 +826,7 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 		if( MidiFileNewTrack( fd))
 		{
 			ret= WriteTempoMap( fd, seq); 
-			if( !MidiFileCloseTrack && ret)
+			if( !MidiFileCloseTrack(fd) || !ret)
 				ret= false;
 			numPiste++;
 			i++;
@@ -851,7 +844,7 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 				else
 					ret= WriteTrackFormat2( fd, seq, i, numPiste);
 				numPiste++;
-				if( !MidiFileCloseTrack( fd) && ret)
+				if( !MidiFileCloseTrack(fd) || !ret)
 					ret= false;
 			}
 			else ret= false;
@@ -866,14 +859,14 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 {
 	MidiEvPtr e;
 	
-	if( infos->timedef )  				/* temps SMPTE */
+	if( infos->timedef )  				  /* temps SMPTE */
 	{
-		if (e = MidiNewEv(typeTempo)) {   // ajout d'un ev tempo (conversion au format Midi)
-			Tempo(e) = infos->timedef * infos->clicks * 2000;
+		if (e = MidiNewEv(typeTempo)) {   /* ajout d'un ev tempo (conversion au format Midi) */
+			Tempo(e) = 500000000 / (infos->timedef * infos->clicks);
 			Date(e) = 0;
 			MidiAddSeq (s, e);
 			infos->clicks = 500;
-			infos->timedef = 0;  // format midi
+			infos->timedef = 0;  /* format midi */
 		}
 	}
 }
