@@ -1,12 +1,12 @@
 #!/bin/sh
 #
 
-APPSROOT=/Applications/MidiShare
-MSFOLDER=.host_default_config
+APPSROOT=/private/etc/MidiShare
+MSFOLDER=defaults
 HOMEMS=$HOME/Library/Preferences/MidiShare
 INI="midishare.ini msQTDriver.ini msLANDriver.ini msWANDriver.ini"
 MISC=Vintage.sf2
-DONE=.done.1.87
+DONE=.done.1.89
 
 # --------------------------------------------
 # check every time

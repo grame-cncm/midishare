@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+
+. ./content
+
+function install () {
+	file=$1
+	src=$2
+	dst=$3
+	if [ -d $dst/$file ]
+	then
+		echo "$file is on the way"
+	else
+		echo " ok"
+		cp -R  $src/$file $dst
+	fi
+}
+
+echo -n "creating midishare framework : "
+install MidiShare.framework ../build $DIST/System/Library/Frameworks
+
+for a in $appls
+do
+	echo -n "creating application $(basename $a .app) : "
+	install $(basename $a) $(dirname $a) $DIST/Applications/MidiShare
+done
+
+for a in $drivers
+do
+	echo -n "creating driver $(basename $a) : "
+	install $(basename $a) $(dirname $a) $DIST/usr/lib
+done
+
+
+exit 0

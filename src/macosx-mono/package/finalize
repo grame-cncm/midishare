@@ -12,10 +12,10 @@ echo "creation des liens symboliques (dylib)"
 ./linklibs
 
 echo suppression des dossiers CVS
-find Distribution -type d -name CVS -exec rm -rf {} \; 2>/dev/null
+rm -f $(find Distribution -type d -name CVS)
 
 echo remove the .DS_Store files
-find Distribution -name ".DS_Store" -exec rm -f {} \;
+rm -f $(find Distribution -name ".DS_Store")
 
 echo generates install.log
 cd Distribution
@@ -28,17 +28,13 @@ find Distribution -type d -exec chmod 755 {} \;
 find Distribution -type f -exec chmod g+w {} \;
 find Distribution -type f -exec chmod o-w {} \;
 
+chown -R root:wheel private
 chown -R root:wheel Distribution/*
 chown -R root:admin Distribution/Applications/*
 
 chmod 775 Distribution/Applications
 chmod 775 Distribution/System
 
-echo verification des fichiers caches
-cd Distribution/Applications/MidiShare/
-[ -f checkinstall ] && mv checkinstall .checkinstall
-[ -d host_default_config ] && mv host_default_config .host_default_config
-
 echo "protection des fichiers .ini"
-cd .host_default_config
+cd private/etc/MidiShare/defaults
 chmod go-w *

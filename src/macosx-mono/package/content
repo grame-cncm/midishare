@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+
+A=../applications
+D=../Drivers
+DIST=./Distribution
+
+appls="$A/msControler/build/msControler.app \
+	 $A/msDisplay/build/msDisplay.app \
+	 $A/msDrivers/build/msDrivers.app \
+	 $A/RadioHardDisk/build/RadioHardDisk.app"
+
+
+drivers="$D/msMidiDriver/build/msMidiDriver.*.so \
+	$D/msQTDriver/build/msQTDriver.*.so \
+	$D/msNet/build/msLANDriver.*.so \
+	$D/msNet/build/msWANDriver.*.so"
+

@@ -10,11 +10,14 @@ jar=/Library/Java/Extensions/grame.jar
 MidiShare=/Applications/MidiShare
 user=$HOME/Library/Preferences/MidiShare
 framework="/System/Library/Frameworks/MidiShare.framework /System/Library/Frameworks/Player.framework"
+etc="/private/etc/MidiShare"
+
+TRASH=$HOME/.Trash
 
 function uninstall {
 	for a in $*
 	do
-		[ -a $a ] && sudo rm -rf $a 
+		[ -a $a ] && sudo mv -f $a $TRASH
 	done
 }
 
@@ -23,5 +26,6 @@ uninstall $jni
 uninstall $MidiShare
 uninstall $framework
 uninstall $user
+uninstall $etc
 
 exit 0
