@@ -39,7 +39,7 @@
 
 Boolean doneFlag = false;
 #define kGroupTime	10
-#define kVersion	"1.10"
+#define kVersion	"1.11"
 
 NetConfig gNet = { -1, -1, -1 };
 int clientsIndex, clientsCount = 0;
@@ -68,11 +68,11 @@ static void usage (const char *name)
 	fprintf (stderr, "                                  (TCP server mode only)\n");
 	fprintf (stderr, "                 -g <group time>  grouping time parameter\n");
 	fprintf (stderr, "                 -d               run as a daemon\n");
-	fprintf (stderr, "                 -h               print version and exit\n");
 	fprintf (stderr, "                 -log <log file>  log file in daemon mode\n");
 	fprintf (stderr, "                                  default to %s\n", logFile);
 	fprintf (stderr, "                 -s [remote list] run in TCP server mode and \n");
 	fprintf (stderr, "                    opens a connection for every host in remote list\n");
+	fprintf (stderr, "                 -v               print version and exit\n");
 	exit (1);
 }
 
@@ -253,7 +253,7 @@ static int getopts (int argc, char *argv[])
 					break;
 				case 'd':	daemonMode = true;
 					break;
-				case 'h':
+				case 'v':
 					printf ("msInetDriver v. %s\n", kVersion);
 					exit (0);
 				default:
