@@ -45,6 +45,8 @@ CLEAN :
 	-@erase "$(INTDIR)\FTMA.sbr"
 	-@erase "$(INTDIR)\Handle.obj"
 	-@erase "$(INTDIR)\Handle.sbr"
+	-@erase "$(INTDIR)\HostTools.obj"
+	-@erase "$(INTDIR)\HostTools.sbr"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.sbr"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -103,7 +105,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\msNetLib.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /I "../../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "__Windows__" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\msNetLib.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -158,6 +160,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\UDPStreamToEvent.sbr" \
 	"$(INTDIR)\FTMA.sbr" \
 	"$(INTDIR)\Handle.sbr" \
+	"$(INTDIR)\HostTools.sbr" \
 	"$(INTDIR)\SkewControler.sbr" \
 	"$(INTDIR)\TInetControler.sbr" \
 	"$(INTDIR)\TInetTasks.sbr" \
@@ -196,6 +199,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\UDPStreamToEvent.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -232,6 +236,8 @@ CLEAN :
 	-@erase "$(INTDIR)\FTMA.sbr"
 	-@erase "$(INTDIR)\Handle.obj"
 	-@erase "$(INTDIR)\Handle.sbr"
+	-@erase "$(INTDIR)\HostTools.obj"
+	-@erase "$(INTDIR)\HostTools.sbr"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.sbr"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -291,7 +297,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\msNetLib.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../../include" /I "../../../../lib" /I "../../../../lib/Network/include" /I "../../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "__Windows__" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\msNetLib.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -346,6 +352,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\UDPStreamToEvent.sbr" \
 	"$(INTDIR)\FTMA.sbr" \
 	"$(INTDIR)\Handle.sbr" \
+	"$(INTDIR)\HostTools.sbr" \
 	"$(INTDIR)\SkewControler.sbr" \
 	"$(INTDIR)\TInetControler.sbr" \
 	"$(INTDIR)\TInetTasks.sbr" \
@@ -384,6 +391,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\UDPStreamToEvent.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -524,6 +532,12 @@ SOURCE=..\..\..\..\lib\Network\FTMA.cpp
 SOURCE=..\Handle.c
 
 "$(INTDIR)\Handle.obj"	"$(INTDIR)\Handle.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\..\..\..\lib\Network\HostTools.cpp
+
+"$(INTDIR)\HostTools.obj"	"$(INTDIR)\HostTools.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 

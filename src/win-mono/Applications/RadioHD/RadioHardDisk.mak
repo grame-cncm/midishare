@@ -47,6 +47,8 @@ CLEAN :
 	-@erase "$(INTDIR)\FTMA.sbr"
 	-@erase "$(INTDIR)\Handle.obj"
 	-@erase "$(INTDIR)\Handle.sbr"
+	-@erase "$(INTDIR)\HostTools.obj"
+	-@erase "$(INTDIR)\HostTools.sbr"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\INetAlert.sbr"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
@@ -116,7 +118,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MT /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\RadioHardDisk.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MT /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "__Windows__" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\RadioHardDisk.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -174,6 +176,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\TUDPSocket.sbr" \
 	"$(INTDIR)\FTMA.sbr" \
 	"$(INTDIR)\Handle.sbr" \
+	"$(INTDIR)\HostTools.sbr" \
 	"$(INTDIR)\SkewControler.sbr" \
 	"$(INTDIR)\TInetControler.sbr" \
 	"$(INTDIR)\TInetTasks.sbr" \
@@ -218,6 +221,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -264,6 +268,8 @@ CLEAN :
 	-@erase "$(INTDIR)\FTMA.sbr"
 	-@erase "$(INTDIR)\Handle.obj"
 	-@erase "$(INTDIR)\Handle.sbr"
+	-@erase "$(INTDIR)\HostTools.obj"
+	-@erase "$(INTDIR)\HostTools.sbr"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\INetAlert.sbr"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
@@ -336,7 +342,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MTd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\RadioHardDisk.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MTd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "__Windows__" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\RadioHardDisk.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -394,6 +400,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\TUDPSocket.sbr" \
 	"$(INTDIR)\FTMA.sbr" \
 	"$(INTDIR)\Handle.sbr" \
+	"$(INTDIR)\HostTools.sbr" \
 	"$(INTDIR)\SkewControler.sbr" \
 	"$(INTDIR)\TInetControler.sbr" \
 	"$(INTDIR)\TInetTasks.sbr" \
@@ -438,6 +445,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -586,6 +594,12 @@ SOURCE=..\..\..\lib\Network\FTMA.cpp
 SOURCE=..\..\Drivers\msNetDrivers\Handle.c
 
 "$(INTDIR)\Handle.obj"	"$(INTDIR)\Handle.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\..\..\lib\Network\HostTools.cpp
+
+"$(INTDIR)\HostTools.obj"	"$(INTDIR)\HostTools.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
