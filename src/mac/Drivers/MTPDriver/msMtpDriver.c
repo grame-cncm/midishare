@@ -71,40 +71,17 @@ static void PStrCpy (unsigned char *src, unsigned char * dst)
 }
 
 /* -----------------------------------------------------------------------------*/
-static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
+static MidiName MakeSlotName (short index, MidiName name)
 {
-	char num; short i;
-	Str32 name;
-	MtpDrvPtr data = GetData ();
-	
-	if (! infos) return false;
-
-	i=-1;
-	do {
-		i++;
-	} while( (i<33) && (Slot(slot) != data->scc.slots[i]));
 	PStrCpy (MtpPortName, name);
-
-	if((i%16) < 9)
-	{
-		name[0] = name[0]+1;
-		num='1' + i%16;
-		name[name[0]]=num;
+	if (index > 9) {
+		name[0]++;
+		name[name[0]] = '1';
+		index -= 10;
 	}
-	else
-	{
-		name[0] = name[0]+2;
-		num='1' + i%16 -10;
-		name[name[0]-1]='1';
-		name[name[0]]=num;
-	}
-	//direction
-	if(i<16)
-		infos->direction = MidiInputSlot;
-	else
-		infos->direction = MidiOutputSlot;
-	PStrCpy (name, infos->name);
-	return true;
+	name[0]++;
+	name[name[0]] = '0' + index;
+	return name;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -174,16 +151,21 @@ static void SetupFilter (MidiFilterPtr filter)
 static void add16Slot()
 {
 	MtpDrvPtr data = GetData ();
-	short i; SlotRefNum sref;
+	short i; SlotRefNum sref; SlotName name;
 
-	for (i=0;i<32;i++) {
-		sref = MidiAddSlot (data->refNum);
+	for (i=0; i<16; i++) {
+		sref = MidiAddSlot (data->refNum, MakeSlotName(i+1, name), MidiInputSlot);
 		if (Slot(sref) >= 0) {
 			data->scc.slots[i]=Slot(sref);
-			if (i<16)
-				data->scc.inSlots[i]=Slot(sref);
-			else
-				data->scc.outSlots[Slot(sref)]= i;
+			data->scc.inSlots[i]=Slot(sref);
+		}
+	}
+
+	for (i; i<32; i++) {
+		sref = MidiAddSlot (data->refNum, MakeSlotName(i-15, name), MidiOutputSlot);
+		if (Slot(sref) >= 0) {
+			data->scc.slots[i]=Slot(sref);
+			data->scc.outSlots[Slot(sref)]= i;
 		}
 	}
 }
@@ -214,15 +196,10 @@ Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { MtpDriverName, 100, 0};
 	short refNum;
-	TDriverOperation op;
+	TDriverOperation op = {WakeUp, Sleep, 0, 0, 0};
 	MtpDrvPtr data = GetData ();
 	
 	DataInit (data);
-	
-	op.wakeup = WakeUp;
-	op.sleep = Sleep;
-	op.slotInfo = SlotInfo; 
-
 	if (MidiGetNamedAppl (MtpDriverName) > 0) { // still running
 		doneFlag = true;
 		return true;

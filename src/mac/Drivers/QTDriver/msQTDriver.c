@@ -35,6 +35,7 @@
 #define kDrumKit 			16385
 #define kDefaultSound 		1		 /* default sound (Piano) */
 
+#define QTSlotName	"\pQuickTime GM Synth"
 #define StateFile	"\pmsQuicktime Driver State"	
 enum { StateCreator = 'MsQT', StateType = 'stQT' };	
 
@@ -112,27 +113,6 @@ static void Sleep (short r)
 }
 
 /* -----------------------------------------------------------------------------*/
-static void PStrCpy (unsigned char *src, unsigned char * dst)
-{
-	short i = src[0] + 1;
-	while (i--)
-		*dst++ = *src++;
-}
-
-/* -----------------------------------------------------------------------------*/
-static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
-{
-	Str32 name = "\pQuickTime GM Synth";
-	DriverDataPtr data = GetData ();
-	if (infos && (slot.slotRef == data->slotRef.slotRef)) {
-		PStrCpy (name, infos->name);
-		infos->direction = MidiOutputSlot;
-		return true;
-	}
-	return false;
-}
-
-/* -----------------------------------------------------------------------------*/
 /* MidiShare part                                                               */
 /* -----------------------------------------------------------------------------*/
 static pascal void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
@@ -203,7 +183,7 @@ static void SetupFilter (MidiFilterPtr filter)
 Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { QTDriverName, 100, 0};
-	short refNum; TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
+	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
 	
 	if (MidiGetNamedAppl (QTDriverName) > 0) {
@@ -216,7 +196,7 @@ Boolean SetUpMidi ()
 		return false;
 	
 	data->refNum = refNum;
-	data->slotRef = MidiAddSlot (refNum);
+	data->slotRef = MidiAddSlot (refNum, QTSlotName, MidiOutputSlot);
 	MidiSetRcvAlarm (refNum, ReceiveEvents);		
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);

@@ -238,7 +238,7 @@ static void WakeUp (short r)
 #ifndef __BackgroundOnly__
 	WakeUpEnable (data);
 #else 
-	data->voidSlot = MidiAddSlot (r);
+	data->voidSlot = MidiAddSlot (r, "\ptmp", 0);
 #endif
 }
 
@@ -276,39 +276,6 @@ static void Sleep (short r)
 		mem->data = 0;
 	}
 }
-
-/* -----------------------------------------------------------------------------*/
-static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
-{
-	DriverDataPtr data = GetData (); short i, ref;
-
-#ifdef __BackgroundOnly__
-	if (data && data->enableWakeup) {
-		WakeUpEnable (data);
-		MidiRemoveSlot (data->voidSlot);
-		return false;
-	}
-#endif
-
-	if (infos) {
-		ref = Slot(slot);
-		i = slot2InIndex(data)[ref];
-		if (i >= 0) {
-			PStrCpy ((*OMSInputNodes(data))->info[i].name, infos->name, DrvNameLen);
-			infos->direction = MidiInputSlot;
-			return true;
-		}
-		
-		i = slot2OutIndex(data)[ref];
-		if (i >= 0) {
-			PStrCpy ((*OMSOutputNodes(data))->info[i].name, infos->name, DrvNameLen);
-			infos->direction = MidiOutputSlot;
-			return true;
-		}	
-	}
-	return false;
-}
-
 
 /* -----------------------------------------------------------------------------*/
 void DoIdle()
@@ -392,7 +359,7 @@ static void SetupFilter (MidiFilterPtr filter)
 Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { OMSDriverName, 100, 0};
-	short refNum; TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
+	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	StoragePtr mem = GetStorage();
 
 	mem->refNum = 0;
@@ -478,6 +445,7 @@ static pascal void MyAppHook(OMSAppHookMsg *pkt, long myRefCon)
 static OSErr GetOutputPorts(DriverDataPtr data) 
 {
 	int i; SlotRefNum sref; OMSNodeInfoListH h;
+	Str255 name;
 	
 	h = OMSGetNodeInfo(kOMSOutputNodes);
 	if (!h) return 1;
@@ -485,7 +453,8 @@ static OSErr GetOutputPorts(DriverDataPtr data)
 	OMSOutputNodes(data) = h;
 	numNodeOut(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeOut(data); i++) {			
-		sref = MidiAddSlot (data->refNum);
+		PStrCpy ((*h)->info[i].name, name, DrvNameLen);
+		sref = MidiAddSlot (data->refNum, name, MidiOutputSlot);
 		if (sref.slotRef < 0) return 1;
 		slot2OutIndex(data)[Slot(sref)] = i;
 		slot2OMSOut(data)[Slot(sref)] = (*h)->info[i].ioRefNum;
@@ -497,6 +466,7 @@ static OSErr GetOutputPorts(DriverDataPtr data)
 static OSErr GetInputPorts (DriverDataPtr data)
 {
 	int i; SlotRefNum sref; OMSNodeInfoListH h;
+	Str255 name;
 	
 	h = OMSGetNodeInfo(kOMSInputNodes);
 	if (!h) return 1;
@@ -504,7 +474,8 @@ static OSErr GetInputPorts (DriverDataPtr data)
 	OMSInputNodes(data) = h;
 	numNodeIn(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeIn(data); i++) {	
-		sref = MidiAddSlot (data->refNum);
+		PStrCpy ((*h)->info[i].name, name, DrvNameLen);
+		sref = MidiAddSlot (data->refNum, name, MidiInputSlot);
 		if (sref.slotRef < 0) return 1;
 		slot2InIndex(data)[Slot(sref)] = i;
 		slot2OMSIn(data)[Slot(sref)] =  (*h)->info[i].ioRefNum;
