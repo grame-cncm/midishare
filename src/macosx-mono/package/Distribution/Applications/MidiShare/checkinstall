@@ -3,7 +3,7 @@
 
 APPSROOT=/Applications/MidiShare
 MSFOLDER=.host_default_config
-HOMEMS=$HOME/.MidiShare
+HOMEMS=$HOME/Library/Preferences/MidiShare
 INI="midishare.ini msQTDriver.ini msLANDriver.ini msWANDriver.ini"
 MISC=Vintage.sf2
 DONE=.done.1.87
@@ -12,7 +12,7 @@ DONE=.done.1.87
 # check every time
 # --------------------------------------------
 # creates the user MidiShare folder
-[ -d $HOMEMS ] || mkdir $HOMEMS
+[ -d $HOMEMS ] || mkdir -p $HOMEMS
 
 # fetch the drivers .ini files
 for a in $INI
@@ -20,7 +20,7 @@ do
 	[ -f $HOMEMS/$a ] || cp $APPSROOT/$MSFOLDER/$a $HOMEMS
 done
 
-#[ -f $HOMEMS/$DONE ] && exit 0
+[ -f $HOMEMS/$DONE ] && exit 0
 
 # --------------------------------------------
 # first time only

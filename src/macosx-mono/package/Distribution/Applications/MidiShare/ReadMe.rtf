@@ -20,14 +20,18 @@ MidiShare is a freeware software. It has been developped at GRAME. It and the ac
 \pard\qj
 
 \f1\b \cf0 MidiShare setup
-\f0\b0 : the first time you launch a MidiShare client application, a folder named .MidiShare will be created in your home directory. This folder contains initialization files used by MidiShare or by the drivers to setup various parameters. These files are text files. You can freely edit them as long as you save them as text only. Because its name starts with a '.' (dot), the .MidiShare folder is hidden to normal operations. However you can open this folder from the Finder using the 'Go to' command (shortcut is 'shift-command-G'). \
+\f0\b0 : the first time you launch a MidiShare client application, a folder named MidiShare will be created in your $HOME/Library/Preferences directory. This folder contains initialization files used by MidiShare or by the drivers to setup various parameters. These files are text files. You can freely edit them as long as you save them as text only. \
 \
 
 \f1\b The 'midishare.ini' file:
 \f0\b0  it contains several sections defining parameters values :\
 \
-      [Audio] section : MidiShare is time synchronized on audio. \
-            size : defines the audio buffer size, default value is 64.\
+      [Time] section : controls the MidiShare time policy. \
+            mode : defines the time management policy; should be 'timer' or 'audio', default value is 'timer'\
+            resolution : defines the time resolution in ms. Ignored when time mode is 'audio'.\
+\
+      [Audio] section : only used when MidiShare time mode is 'audio'. \
+            size : defines the audio buffer size in frames, default value is 64, sample rate is supposed to be 44100 khz.\
             audiodev : defines the audio device used to synchronize.\
             \
       [Events memory] section : control the MidiShare memory size.\
@@ -62,22 +66,14 @@ This version of MidiShare is compatible with MacOSX \
 \f3\b0 \
 This version of MidiShare supports the new MidiShare drivers management. It is provided with several drivers :\
 - msMidiDriver : a driver to access MIDI interfaces that can be driven by the standard MacOSX MIDI layer.\
-- msQTDriver : a driver that allows to use QuickTime Musical Instruments\
-- msSynthDriver : a driver that use the IIWU synth software syntheziser.\
+- msQTDriver : a driver that allows to use QuickTime Musical Instruments. When the MidiShare time mode is audio\
+                           and starting from QuickTime version 6.4, you should use an audio size equal or greater than 256 in \
+                           the midishare.ini setup, otherwise Quicktime remains silent.\
 - msLANDriver and msWANDriver : drivers for real-time communication on a local network or on the Internet.\
-\
-
-\f2\b Timing:
-\f3\b0 \
-This version uses an audio timer to provide the MidiShare kernel interrupt. The size of the audio buffer (expressed in frames) can be configurated in the MidiShare setup. (see setup documentation)\
-By default the audio size is 64 frames thus the MidiShare kernel resolution is about 1.45 millisecond. The MidiShare time is then derived from the audio time.\
-To reduce CPU comsumption, the audio size can be augmented but always using power-of-two values (like 128 or 256 frames)\
 \
 \pard\ql\qnatural
 
 \f4\i \cf0 The MidiShare mono application release for MacOSX has been developed by Grame.\
-The audio layer uses the PortAudio API (http://www.portaudio.com)\
-The msSynthDriver driver uses the IIWU synth code developed by Peter Hanappe (http://www.iiwu.org/iiwusynth) \
 \pard\ql\qnatural
 
 \f3\i0 \cf0 \
