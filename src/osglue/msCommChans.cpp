@@ -180,9 +180,8 @@ CommunicationChan RequestCommunicationChannel (MeetingPointChan mp)
 		else cc->id = id;
         /* creates the real-time write pipe */
 		if (!NewPipe (rtpp->GetWritePipe(), kClientRTSndBaseName, id)) goto err;
-		else cc->id = id;
 
-        /* send a message to the server with the previously allocated id */
+       /* send a message to the server with the previously allocated id */
         ret = MPSendID (mp, kContactType, id);
         if (!ret) goto err;
 
@@ -213,7 +212,7 @@ CommunicationChan RequestCommunicationChannel (MeetingPointChan mp)
     }
     return cc;
 err:
-    CloseCommunicationChannel (cc);
+	CloseCommunicationChannel (cc);
     return 0;
 }
 

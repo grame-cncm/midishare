@@ -63,17 +63,12 @@ class TPipe
 		long	BuffSize ()		{ return fBuffSize; }
 
 	private:
-		void	SetName (const char * name) { strncpy ((char *)name, fName, kMaxPipeName); }
+		void	SetName (const char * name) { strncpy (fName, name, kMaxPipeName); }
 
 		PipeHandler fPipe;		// the pipe handler
 		long		fBuffSize;	// pipe buffer size
 		int			fOwner;		// a flag to check wether the pipe has been created
 		char 		fName[kMaxPipeName];
-/*
-#ifndef WIN32
-		char *		fPath;		// access path
-#endif
-*/
 };
 
 #endif

@@ -34,7 +34,7 @@
 
 #define PipeErrCode		-1
 #define OwnerPerm		S_IRUSR+S_IWUSR+S_IRGRP+S_IROTH
-#define kInternalPipeBuffSize	1024		// to be checked
+#define kInternalPipeBuffSize	2048		// to be checked
 
 //_____________________________________________________________________
 TPipe::TPipe ()
