@@ -4,11 +4,10 @@ OPTIONS=-D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Linux__ -D__Pentium__ -DCONFIG_K
 INC = ../../common/Headers
 CFLAGS := -O6 -Wall $(OPTIONS)  -I$(INC)
 CC = gcc
-DRIVER = nodriver
 
-SRC = *.c $(DRIVER)/*.c
+SRC = *.c 
 
-OBJ = msLoader.o MidiShareLinux.o MidiShare.o $(DRIVER)/msDriver.o ../msCommon.o
+OBJ = msLoader.o MidiShareLinux.o MidiShare.o  ../msCommon.o
 
 
 $(TARGET) : $(OBJ)
