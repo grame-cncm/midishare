@@ -41,19 +41,17 @@ class TEventRecorder :public TEventDispatcher {
 		TScoreIteratorPtr	 		fIterator;
 		TPlayerScorePtr			 	fScore;
 		TPlayerSynchroniserPtr   	fSynchroniser;
-		TRunningStatePtr 			fState;
 			
 		void Insert(MidiEvPtr e);
-		void ReceiveDefaultEvent(MidiEvPtr e);
 		void EraseTrack();
 		
-		Boolean	AcceptEv (MidiEvPtr e) 	{ return IsAcceptedBit(fRecFilter->evType,EvType(e));}
+		Boolean	AcceptEv (MidiEvPtr e) 	{ return MidiIsAcceptedType(fRecFilter,EvType(e));}
 		Boolean IsRecording () 			{ return (fRecordtrack > 0);}
 		Boolean IsErasing () 			{ return (fRecordmode == kEraseOn);}
 	
 	public:
 	
-		TEventRecorder(TPlayerScorePtr score, TPlayerSynchroniserPtr synchro, TRunningStatePtr state, TEventDispatcherPtr successor);
+		TEventRecorder(TPlayerScorePtr score, TPlayerSynchroniserPtr synchro, TEventDispatcherPtr successor);
 		~TEventRecorder();
 	
 		void SetRecordMode (short state);

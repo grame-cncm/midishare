@@ -21,45 +21,40 @@
 
 #include "TEventRecorder.h"
 #include "TEventFactory.h"
+#include <assert.h>
 
 /*----------------------------------------------------------------------------*/
-
-TEventRecorder::TEventRecorder(TPlayerScorePtr score, 
-							   TPlayerSynchroniserPtr synchro,
-							   TRunningStatePtr state,
-							   TEventDispatcherPtr successor)
-							  :TEventDispatcher(successor)
+TEventRecorder::TEventRecorder(TPlayerScorePtr score, TPlayerSynchroniserPtr synchro, TEventDispatcherPtr successor)
+	:TEventDispatcher(successor)
 {
+	short i;
+	
 	fRecFilter = MidiNewFilter();
+	assert(fRecFilter);
 	
-	if (fRecFilter) {
-		short i;
-		
-		for (i = 0; i<256; i++) {
-			MidiAcceptType(fRecFilter,i,true);
-			MidiAcceptPort(fRecFilter,i,true);
-		}
-	
-		for (i = 0; i<16; i++) {
-			MidiAcceptChan(fRecFilter,i,true);
-		}
-		
-		// Configuration of the record filter 
-		
-		MidiAcceptType(fRecFilter,typeActiveSens,false);
-		MidiAcceptType(fRecFilter,typeQuarterFrame,false);
-		MidiAcceptType(fRecFilter,typeTempo,false);
-		MidiAcceptType(fRecFilter,typeTimeSign,false);
-		MidiAcceptType(fRecFilter,typeClock,false);
-		MidiAcceptType(fRecFilter,typeStart,false);
-		MidiAcceptType(fRecFilter,typeStop,false);
-		MidiAcceptType(fRecFilter,typeContinue,false);
-		MidiAcceptType(fRecFilter,typeSongPos,false);
+	for (i = 0; i<256; i++) {
+		MidiAcceptType(fRecFilter,i,true);
+		MidiAcceptPort(fRecFilter,i,true);
 	}
+
+	for (i = 0; i<16; i++) {
+		MidiAcceptChan(fRecFilter,i,true);
+	}
+	
+	// Configuration of the record filter 
+	
+	MidiAcceptType(fRecFilter,typeActiveSens,false);
+	MidiAcceptType(fRecFilter,typeQuarterFrame,false);
+	MidiAcceptType(fRecFilter,typeTempo,false);
+	MidiAcceptType(fRecFilter,typeTimeSign,false);
+	MidiAcceptType(fRecFilter,typeClock,false);
+	MidiAcceptType(fRecFilter,typeStart,false);
+	MidiAcceptType(fRecFilter,typeStop,false);
+	MidiAcceptType(fRecFilter,typeContinue,false);
+	MidiAcceptType(fRecFilter,typeSongPos,false);
 	
 	fSynchroniser = synchro;
 	fScore = score;
-	fState = state;
 	fIterator = new TScoreIterator(fScore);
 	fRecordtrack = kNoTrack;
 	fRecordmode = kEraseOff;
@@ -70,23 +65,15 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 TEventRecorder::~TEventRecorder()
 {
 	if (fRecFilter) MidiFreeFilter(fRecFilter);
-	delete (fIterator);
+	if (fIterator) delete (fIterator);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TEventRecorder::SetRecordFilter(MidiFilterPtr filter) { *fRecFilter = *filter; }
-
-/*----------------------------------------------------------------------------*/
-
-void TEventRecorder::ReceiveDefaultEvent(MidiEvPtr e)
-{
-	if (fState->IsRunning() 
-		&& IsRecording()
-		&& AcceptEv(e)){
-		Insert(e);
-	}else
-		MidiFreeEv(e);
+void TEventRecorder::SetRecordFilter(MidiFilterPtr filter) 
+{ 
+	if (fRecFilter) MidiFreeFilter(fRecFilter);
+	fRecFilter = filter; 
 }
 
 /*----------------------------------------------------------------------------*/
@@ -96,25 +83,16 @@ void TEventRecorder::ReceiveEvents(MidiEvPtr e)
 	switch (EvType(e)) {
 	
 		case typeScoreEnd:
-			if (IsRecording()){ // if recording don't pass the event to the EventReceiver
-				MidiFreeEv(e);
+			if (IsRecording()) { 
+				MidiFreeEv(e); // if recording don't pass the event to the EventReceiver
 			}else{
 				TEventDispatcher::ReceiveEvents(e);
 			}
 			break;
-	
-		case typeLoopEnd:
-		case typeClock:
-		case typeStart:
-		case typeStop:
-		case typeContinue:
-		case typeSongPos:
-		case typeTempo:
-			TEventDispatcher::ReceiveEvents(e);
-			break;
-	
+			
 		default:
-			ReceiveDefaultEvent(e);
+			if (IsRecording() && AcceptEv(e)) Insert(MidiCopyEv(e));
+			TEventDispatcher::ReceiveEvents(e);
 			break;
 	}
 }
@@ -124,7 +102,7 @@ void TEventRecorder::ReceiveEvents(MidiEvPtr e)
 void TEventRecorder::SetRecordTrack (short tracknum) 
 {
 	fRecordtrack = tracknum;
-	if (IsErasing() && IsRecording()) EraseTrack(); 
+	EraseTrack(); 
 }
 
 /*--------------------------------------------------------------------------*/
@@ -132,7 +110,7 @@ void TEventRecorder::SetRecordTrack (short tracknum)
 void TEventRecorder::SetRecordMode (short state) 
 { 
 	fRecordmode = state;
-	if (IsErasing () && IsRecording()) EraseTrack(); 
+	EraseTrack(); 
 }
 
 /*--------------------------------------------------------------------------*/
@@ -140,6 +118,7 @@ void TEventRecorder::SetRecordMode (short state)
 void TEventRecorder::Insert(MidiEvPtr e) 
 {
 	// Set it's date to the current Tick date, and it's tracknum to the current recording tracknumber
+	assert(e);
 	
 	ULONG date_ticks = fSynchroniser->ConvertMsToTick(Date(e));
 	TEventPtr cur = fIterator->SetPosTicks(date_ticks);
@@ -153,7 +132,10 @@ void TEventRecorder::Insert(MidiEvPtr e)
 
 void TEventRecorder::EraseTrack() 
 {
-	if (MidiSeqPtr tmp =  MidiNewSeq()) fScore->SetTrack(fRecordtrack,tmp);
+	MidiSeqPtr tmp;
+	
+	if (IsErasing () && IsRecording() && (tmp = MidiNewSeq()))
+		fScore->SetTrack(fRecordtrack,tmp);
 }
 
 
