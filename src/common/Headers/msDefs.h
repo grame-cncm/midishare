@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - improving TMidiST and TMidiEv 
 
 */
 
@@ -215,10 +218,13 @@ enum{   MIDIOpenAppl=1,
     typedef struct TMidiST FAR *MidiSTPtr;
     typedef struct TMidiST
     {
+#ifdef __SupportOldSTDef__
         Ptr ptr1;                  /* 4 32-bits fields */
         Ptr ptr2;
         Ptr ptr3;
         Ptr ptr4;
+#endif
+		long val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/
@@ -257,15 +263,14 @@ enum{   MIDIOpenAppl=1,
 
             } keySign;
 
-            struct {            /* for paramchg & 14-bits ctrl */
-                short num;      /* param or ctrl num           */
-                short val;      /* 14-bits value               */
-            } param;
-
             struct {            /* for MidiFile sequence number */
                 unsigned short number;
                 short unused;
             } seqNum;
+
+			short shortFields[2];/* for 14-bits controlers		*/
+            long longField;
+
             long tempo;         /* MidiFile tempo in            */
                                 /* microsec/Midi quarter note   */
             Byte data[4];       /* for other small events       */
