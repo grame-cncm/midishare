@@ -48,9 +48,6 @@ static void     setApplName     (TApplPtr ap, MidiName name);
 static Boolean  equalApplName   (TApplPtr ap, MidiName name);
 static void     makeAppl	    (TClientsPtr g, TApplPtr ap, short ref, MidiName n);
 
-static void RemAllDstCon (TApplPtr appl, lifo* freelist);
-static void RemAllSrcCon (TApplPtr appl, lifo* freelist);
-
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
