@@ -24,7 +24,7 @@
 
 
 //_________________________________________________________
-// DECLARATION DES VARIABLES GLOBALES
+//	Globals variables
 
 TClients   	gLClients = {0};
 TClients*	gClients = &gLClients;
@@ -80,7 +80,7 @@ MidiEvPtr MidiGetEvAux(short ref, int command)
 	CALL (command, &arg);
 	
 	if (arg.e == 0 && arg.u > 0) {
-		/* -- pas assez de cellules disponibles */
+		/* -- Not enough memrory cells available */
 		while ((arg.d < arg.u) && (c = MSNewCell(FreeList(Memory(gClients))))) {
 			c->link = arg.l;
 			arg.l = c;
@@ -108,7 +108,7 @@ void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 }
 
 /*--------------------------------------------------------------------------*/
-/* event handler : to be notified by the kernel module*/
+/* event handler : to be notified by the kernel module */
 
 MidiEvPtr MidiGetCommand(short ref );
 
@@ -141,6 +141,7 @@ void* event_handler(void* arg)
 					break;	
 					
 				case typeDead:
+					// should never occur
 					printf("User Thread : ForgetTed task \n");	
 					break;		
 							 
@@ -336,7 +337,7 @@ long* MidiGetTimeAddr ()
 	TClientsPtr clients = gClients;
 	TMidiOpenArgs 		args;
   	int           		err,res;
-   	struct sched_param 	param;  // le type est defini dans /usr/include/bits/sched.h 
+   	struct sched_param 	param;  // type defined in  /usr/include/bits/sched.h 
 	
  	args.name = name;
   	CALL(kMidiOpen,&args);
@@ -373,7 +374,7 @@ long* MidiGetTimeAddr ()
 /* MidiClose       */
 /*******************/
 
- void MidiClose (short ref)
+void MidiClose (short ref)
 {
 	TMidiCloseArgs args;
     int            err;
@@ -616,7 +617,6 @@ MidiEvPtr MidiNewCell (){ return MSNewCell(FreeList(Memory(gClients))); }
 void MidiFreeCell (MidiEvPtr e) {  
 	if (e) {	
 		MSFreeCell(e, FreeList(Memory(gClients)));
-/*		lfpush (FreeList(Memory(gClients)), cell); */
 	}
 }
 

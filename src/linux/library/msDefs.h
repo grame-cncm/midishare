@@ -26,36 +26,6 @@
 #ifndef __msDefs__
 #define __msDefs__
 
-/*
-#ifdef __Macintosh__
-	#	include <MacTypes.h>
-	#	define  MSALARMAPI
-	#	define  FAR
-	#   define  ALARMTYPE   pascal
-#endif
-
-#ifdef __Windows__
-	#   define  ALARMTYPE
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	typedef unsigned char Boolean;
-	enum { false = 0, true };
-#endif
-*/
-
-
-//#ifdef __Linux__
-/*
-#   define  ALARMTYPE
-#	define  MSALARMAPI
-#	define  FAR
-typedef unsigned char Byte;
-typedef char * Ptr;
-typedef unsigned char Boolean;
-enum { false = 0, true };
-*/
-
-
 #include "msTypes.h"
 
 #define  ALARMTYPE
@@ -63,9 +33,6 @@ enum { false = 0, true };
 #define  FAR
 
 
-
-
-//#endif
 /*******************************************************************************
  * MIDISHARE EVENTS
  *------------------------------------------------------------------------------
@@ -131,10 +98,10 @@ enum { false = 0, true };
 #define typeSpecific       148   /* sequencer specific meta event          */
 
 #define typeRcvAlarm       149   /* RcvAlam         */
-#define typeApplAlarm      150   /* ApplAlam         */
+#define typeApplAlarm      150   /* ApplAlam        */
 
 
-#define typeReserved       151   /*149..254 reserved for future extensions */
+#define typeReserved       151   /*151..254 reserved for future extensions */
 
 #define typeDead           255   /* dead Task or DTask                     */
 

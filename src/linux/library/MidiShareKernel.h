@@ -120,7 +120,7 @@ typedef  char MSName[MaxApplNameLen];  /* A REVOIR */
 #define kMidiNewFilter 		67
 #define kMidiFreeFilter 	68
 #define kMidiAcceptChan 	69
-#define kMidiAcceptPort	70
+#define kMidiAcceptPort		70
 #define kMidiAcceptType		71
 #define kMidiIsAcceptedChan 72
 #define kMidiIsAcceptedPort 73
@@ -133,7 +133,6 @@ typedef  char MSName[MaxApplNameLen];  /* A REVOIR */
 
 
 /* date structures  for ioctl calls */ 
-
 
 typedef struct SMidiGetVersionArgs 
 {
@@ -393,11 +392,11 @@ typedef struct SMidiCountEvsArgs
 
 typedef struct SMidiGetEvArgs 
 {
-  long		r;	/* -- numéro de reference				*/
-  long 		d;	/* -- nb de cellules disponibles 		*/
-  MidiEvPtr	l;	/* -- liste des cellules disponibles	*/
-  MidiEvPtr	e;	/* -- événement lu						*/
-  long		u;	/* -- nb de cellules utilisées			*/
+  long		r;	/* -- reference number					*/
+  long 		d;	/* -- number of available cells 		*/
+  MidiEvPtr	l;	/* -- list of availables cells			*/
+  MidiEvPtr	e;	/* -- read event						*/
+  long		u;	/* -- number of used cells				*/
 } TMidiGetEvArgs;
 
 
