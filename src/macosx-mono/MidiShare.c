@@ -41,19 +41,20 @@
 
 #include "msPrefs.h"
 
+#include <stdio.h>
+
 TMSGlobal       GlobalMem = { 0 };
 TMSGlobalPtr    gMem = &GlobalMem;
 
-static Boolean 	gInitLib = false;
+/* main entry point : called at library load time */
+extern void __MSInitialize(void);
 
-// To improve : use of a global initialisation entry point
-#define __MSInitialize() \
-{ \
-   	if (!gInitLib) { \
-  		gInitLib = true; \
-  		MSSpecialInit (LoadSpace(), gMem); \
-  	}  \
- } \
+void __MSInitialize() {
+	MSSpecialInit (LoadSpace(), gMem); 
+}
+
+#pragma CALL_ON_MODULE_BIND __MSInitialize 
+
 
 /*--------------------------- Global MidiShare environment --------------------*/
 void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) {
@@ -63,15 +64,12 @@ short MIDISHAREAPI MidiGetVersion(void) {
   	return MSGetVersion(gMem);
 }
 short MIDISHAREAPI MidiCountAppls(void) {
-	 __MSInitialize ();
-  	return MSCountAppls(Clients(gMem));
+ 	return MSCountAppls(Clients(gMem));
 }
 short MIDISHAREAPI MidiGetIndAppl(short index) {
-	 __MSInitialize ();
   	return MSGetIndAppl( index, Clients(gMem));
 }
 short MIDISHAREAPI MidiGetNamedAppl(MidiName name) {
-	 __MSInitialize ();
  	return MSGetNamedAppl( name, Clients(gMem));
 }
  
@@ -100,53 +98,41 @@ long MIDISHAREAPI MidiSmpte2Time(SmpteLocPtr loc) {
 
 /*----------------------------- Open / close application ----------------------*/
 short MIDISHAREAPI MidiOpen(MidiName applName) {
-	 __MSInitialize();
  	 return MSOpen( applName, gMem);
 }
 void MIDISHAREAPI MidiClose(short refNum) {
-	 __MSInitialize();
   	MSClose( refNum, gMem);
 }
 
 /*--------------------------- Application configuration -----------------------*/
 MidiName MIDISHAREAPI MidiGetName(short refNum) {
-	 __MSInitialize();
   	return MSGetName( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetName(short refNum, MidiName applName) {
-	 __MSInitialize();
   	MSSetName( refNum,applName, Clients(gMem));
 }
 void* MIDISHAREAPI MidiGetInfo(short refNum) {
-	 __MSInitialize();
-  	return MSGetInfo( refNum, Clients(gMem));
+ 	return MSGetInfo( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetInfo(short refNum, void* InfoZone) {
-	 __MSInitialize();
   	MSSetInfo( refNum,InfoZone, Clients(gMem));
 }
 MidiFilterPtr MIDISHAREAPI MidiGetFilter(short refNum) {
-	 __MSInitialize();
   	return MSGetFilter( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetFilter(short refNum, MidiFilterPtr f) {
-	 __MSInitialize();
   	MSSetFilter( refNum,f, Clients(gMem));
 }
 RcvAlarmPtr  MIDISHAREAPI MidiGetRcvAlarm(short refNum) {
-	 __MSInitialize();
   	return MSGetRcvAlarm( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm) {
-	 __MSInitialize();
   	MSSetRcvAlarm( refNum,alarm, Clients(gMem));
 }
 ApplAlarmPtr MIDISHAREAPI MidiGetApplAlarm(short refNum) {
-	 __MSInitialize();
  	return MSGetApplAlarm( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm) {
-	 __MSInitialize();
   	MSSetApplAlarm( refNum,alarm, Clients(gMem));
 }
 MidiFilterPtr MIDISHAREAPI MidiNewFilter(void) {
@@ -158,11 +144,9 @@ void MIDISHAREAPI MidiFreeFilter(MidiFilterPtr filter) {
 
 /*------------------------- Inter-Application Connections ---------------------*/
 void MIDISHAREAPI MidiConnect(short src, short dest , Boolean state) {
-	 __MSInitialize();
   	MSConnect( src,dest,state, Clients(gMem));
 }
 Boolean MIDISHAREAPI MidiIsConnected(short src, short dest) {
-	 __MSInitialize();
   	return MSIsConnected( src,dest, Clients(gMem));
 }
 
@@ -175,34 +159,27 @@ Boolean MIDISHAREAPI MidiGetPortState(short port) {
 
 /*-------------------------- Events and memory managing -----------------------*/
 unsigned long MIDISHAREAPI MidiFreeSpace(void) {
-	 __MSInitialize();
   	return MSFreeSpace(Memory(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiNewCell(void) {
-	 __MSInitialize();
   	return MSNewCell(FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiFreeCell(MidiEvPtr e) { 
   	if (e) MSFreeCell( e, FreeList(Memory(gMem)));
 }
 unsigned long MIDISHAREAPI MidiTotalSpace(void) {
-	 __MSInitialize();
   	return MSTotalSpace(Memory(gMem));
 }
 unsigned long MIDISHAREAPI MidiGrowSpace(long n) {
-	 __MSInitialize();
   	return MSGrowSpace( n, Memory(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiNewEv(short typeNum) {
-	 __MSInitialize();
   	return MSNewEv( typeNum, FreeList(Memory(gMem)));
 }
 MidiEvPtr MIDISHAREAPI MidiCopyEv(MidiEvPtr e) {
-	 __MSInitialize();
   	return MSCopyEv( e, FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiFreeEv(MidiEvPtr e) {
-	 __MSInitialize();
   	MSFreeEv( e, FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiSetField(MidiEvPtr e, long f, long v) {
@@ -212,7 +189,6 @@ long MIDISHAREAPI MidiGetField(MidiEvPtr e, long f) {
   	return MSGetField( e,f);
 }
 void MIDISHAREAPI MidiAddField(MidiEvPtr e, long v) {
-	 __MSInitialize();
   	MSAddField( e,v, FreeList(Memory(gMem)));
 }
 long MIDISHAREAPI MidiCountFields(MidiEvPtr e) {
@@ -243,18 +219,15 @@ void            MIDISHAREAPI MidiSetData3       (MidiEvPtr e, long v) { Data(e)[
 
 /*------------------------------- Sequence managing ---------------------------*/
 MidiSeqPtr MIDISHAREAPI MidiNewSeq(void) {
-	 __MSInitialize();
   	return MSNewSeq(FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiAddSeq(MidiSeqPtr s, MidiEvPtr e) {
   	MSAddSeq( s,e);
 }
 void MIDISHAREAPI MidiFreeSeq(MidiSeqPtr s) {
-	 __MSInitialize();
   	MSFreeSeq( s, FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiClearSeq(MidiSeqPtr s) {
-	 __MSInitialize();
   	MSClearSeq( s, FreeList(Memory(gMem)));
 }
 void MIDISHAREAPI MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc) {
@@ -268,91 +241,71 @@ void      MIDISHAREAPI MidiSetLastEv (MidiSeqPtr s, MidiEvPtr e) { s->last = e; 
 
 /*------------------------------------- Time ----------------------------------*/
 unsigned long MIDISHAREAPI MidiGetTime() {
-	 __MSInitialize();
   	return CurrTime(gMem);
 }
 
 /*------------------------------------ Sending --------------------------------*/
 void MIDISHAREAPI MidiSendIm(short refNum, MidiEvPtr e) {
-	 __MSInitialize();
   	MSSendIm( refNum,e, SorterList(gMem), CurrTime(gMem));
 }
 void MIDISHAREAPI MidiSend(short refNum, MidiEvPtr e) {
-	 __MSInitialize();
   	MSSend( refNum,e, SorterList(gMem));
 }
 void MIDISHAREAPI MidiSendAt(short refNum, MidiEvPtr e, unsigned long d) {
-	 __MSInitialize();
   	MSSendAt( refNum,e,d, SorterList(gMem));
 }
 
 /*------------------------------------ Receving -------------------------------*/
 unsigned long MIDISHAREAPI MidiCountEvs(short refNum) {
-	 __MSInitialize();
   	return MSCountEvs( refNum, Clients(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiGetEv(short refNum) {
-	 __MSInitialize();
   	return MSGetEv( refNum, Clients(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiAvailEv(short refNum) {
-	 __MSInitialize();
   	return MSAvailEv( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiFlushEvs(short refNum) {
-	 __MSInitialize();
   	MSFlushEvs( refNum, Clients(gMem));
 }
 
 /*------------------------------- Drivers management --------------------------*/
 short MIDISHAREAPI MidiRegisterDriver (TDriverInfos * infos, TDriverOperation *op) {
-	 __MSInitialize();
   	return MSRegisterDriver (infos, op, gMem);
 }
 void MIDISHAREAPI MidiUnregisterDriver (short refnum) {
-	 __MSInitialize();
   	MSUnregisterDriver (refnum, gMem);
 }
 short MIDISHAREAPI MidiCountDrivers () {
-	 __MSInitialize();
   	return MSCountDrivers (Clients(gMem));
 }
 short MIDISHAREAPI MidiGetIndDriver (short index) {
-	__MSInitialize();
   	return MSGetIndDriver (index, Clients(gMem));
 }
 Boolean MIDISHAREAPI MidiGetDriverInfos (short refnum, TDriverInfos * infos) {
-	__MSInitialize();
   	return MSGetDriverInfos (refnum, infos, Clients(gMem));
 }
 
 /*-------------------------------- Slots management ---------------------------*/
 SlotRefNum MIDISHAREAPI MidiAddSlot (short refnum, MidiName name, SlotDirection direction) {
-	__MSInitialize();
   	return MSAddSlot (refnum, name, direction, Clients(gMem));
 }
 void MIDISHAREAPI MidiSetSlotName (SlotRefNum slot, MidiName name) {
-	__MSInitialize();
   	MSSetSlotName (slot, name, Clients(gMem));
 }
 SlotRefNum MIDISHAREAPI MidiGetIndSlot (short refnum, short index) {
-	__MSInitialize();
   	return MSGetIndSlot (refnum, index, Clients(gMem));
 }
 void MIDISHAREAPI MidiRemoveSlot (SlotRefNum slot) {
-	__MSInitialize();
   	MSRemoveSlot (slot, Clients(gMem));
 }
 Boolean MIDISHAREAPI MidiGetSlotInfos (SlotRefNum slot, TSlotInfos * infos) {
-	__MSInitialize();
   	return MSGetSlotInfos (slot, infos, Clients(gMem));
 }	
 void MIDISHAREAPI MidiConnectSlot (short port, SlotRefNum slot, Boolean state) {
-	__MSInitialize();
   	MSConnectSlot (port, slot, state, Clients(gMem));
 }
 Boolean MIDISHAREAPI MidiIsSlotConnected (short port, SlotRefNum slot) {
-	__MSInitialize();
   	return MSIsSlotConnected (port, slot, Clients(gMem));
 }
 
@@ -366,31 +319,24 @@ void* MIDISHAREAPI MidiWriteSync(void** adrMem,void* val) {
 
 /*---------------------------------- Task Managing ----------------------------*/
 void MIDISHAREAPI MidiCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
-	__MSInitialize();
   	MSCall( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
-	__MSInitialize();
   	return MSTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
-	__MSInitialize();
   	return MSDTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
 void MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e) {
-	__MSInitialize();
   	MSForgetTask( e);
 }
 long MIDISHAREAPI MidiCountDTasks(short refNum) {
-	__MSInitialize();
   	return MSCountDTasks( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiFlushDTasks(short refNum) {
-	__MSInitialize();
   	MSFlushDTasks( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiExec1DTask(short refNum) {
-	__MSInitialize();
   	MSExec1DTask( refNum, Clients(gMem));
 } 
 
