@@ -46,6 +46,8 @@
 class HostTools
 {
 	public:
+		enum { kMaxName	= 256 };
+
 		static	char * HostName ();
 		static	strPtr HostName (char *host);
 #if macintosh
@@ -86,8 +88,8 @@ inline char * HostTools::HostName ()
 	UseResFile( resFile);
 	return (char *)&s[1];
 #else 
-	static char s[kMaxHostName];
-	int ret = gethostname(s, kMaxHostName); 
+	static char s[kMaxName];
+	int ret = gethostname(s, kMaxName); 
 	return (ret == -1) ? (char *)"unknown" : s;
 #endif
 }
