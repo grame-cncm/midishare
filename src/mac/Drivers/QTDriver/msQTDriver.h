@@ -26,8 +26,11 @@
 
 #define QTDriverName	"\pQuickTime Driver"
 
+extern Boolean doneFlag;
+
 Boolean CheckQuickTime ();
 Boolean SetUpMidi ();
 void 	CloseMidi ();
+void 	DoIdle ();
 
 #endif
