@@ -26,17 +26,11 @@
 #endif
 
 #ifdef __Macintosh__
-	#if GENERATINGCFM
-		#include <midisharePPC.h>
-	#else
-		#include <midishare.h>
-	#endif
-	
+	#define MidiSharePPC_68k
+	#include <MidiShare.h>
 	#define FAR
 	#define NEAR
 	#define MFAPI
-	/* New type definition */
-	typedef struct TFilter * MidiFilterPtr;
 #endif
 
 #ifdef  __MSWindows__
