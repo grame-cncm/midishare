@@ -81,8 +81,7 @@ static char * DatasToText(MidiEvPtr e , char *buff)
 
 	*ptr= 0;
 	switch (EvType(e)) {
-		//case typeTextual:
-		case typeText:
+		case typeTextual:
 		case typeCopyright:
 		case typeSeqName:
 		case typeInstrName:
