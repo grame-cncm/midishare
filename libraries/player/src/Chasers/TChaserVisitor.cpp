@@ -64,10 +64,13 @@ TChaserVisitor::~TChaserVisitor()
 }
 
 /*--------------------------------------------------------------------------*/
-
 void TChaserVisitor::Visite (TKeyOnPtr ev,Boolean forward)
 { 
-	fKeyontable->InsertEvent(ev->MidiEvent());
+	MidiEvPtr key = ev->MidiEvent();
+	if(Vel(key) == 0)  // KeyOn with Vel == 0 ==> KeyOff
+		MidiFreeEv(fKeyontable->RemoveEvent(key)); 
+	else
+		fKeyontable->InsertEvent(key);
 }
 
 /*--------------------------------------------------------------------------*/
