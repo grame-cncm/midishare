@@ -66,7 +66,6 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpo
 
 //_________________________________________________________
 // Find the device model associated to a MIDIEndpointRef
-
 Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 {
 	int i,j,k, n,m,o,p;
@@ -106,7 +105,6 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 
 
 //_________________________________________________________
-
 void AddSlots (short refNum)
 {
 	int i, n;
@@ -132,9 +130,9 @@ void AddSlots (short refNum)
 		
 		slot = CreateSlot (refNum, slotname, MidiInputSlot, src);
 		if (slot) {
-			slot->next = gInSlots;
+                 	slot->next = gInSlots;
 			gInSlots = slot;
-			// No connection with the source : done by the application alarme
+                	// No connection with the source : done by the application alarm
 		}
 	}
 	
@@ -210,11 +208,12 @@ void RcvAlarm  (short refNum )
 {
 	SlotPtr slot = 0;
 	MidiEvPtr e = MidiGetEv (refNum);
-	while (e) {
+    
+        while (e) {
 		if (!slot || (Slot(slot->refNum) != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
-			e = MS2MM (slot, e);
+                        e = MS2MM (slot, e);
 			if (e)
 				MidiTask (KOffTask, Date(e), refNum, (long)e, (long)slot, 0);
 		}else{
@@ -254,12 +253,12 @@ void OpenSlot (SlotPtr slot, Boolean input)
 	if (input) OpenInputSlot(slot);
 }
 
-
 //_________________________________________________________
 static void ScanSlotChanges (SlotPtr slot)
 {
+        
 	while (slot) {
-    		if (IsSlotConnected (slot->refNum)) {
+     		if (IsSlotConnected (slot->refNum)) {
    			OpenInputSlot (slot);
 		}else{
    			CloseInputSlot (slot);

@@ -32,6 +32,10 @@
 #include <CoreFoundation/CFRunLoop.h>
 
 #define profileName "msMidiDriver.ini"
+
+#define PRINT(x) { printf x; fflush(stdout); }
+#define DBUG(x)     /*PRINT(x) */
+
 static char * fullProfileName = 0;
 
 Boolean Start();
@@ -58,16 +62,14 @@ static Boolean 		gInit;
 
 typedef void * ( * threadProcPtr) (void * ptr);
 
-#define TIME_OUT 30  // 30 second
-
 //____________________________________________________________
 pthread_t create_thread (int priority, threadProcPtr proc)
 {
 	pthread_t thread;
 	int  ret = pthread_create(&thread, NULL, proc, 0);
-	if (!ret)
+	if (!ret){
 		return thread;	
-	else {
+	}else {
         }
 	return 0;	
 }
@@ -90,10 +92,27 @@ void stopThread (pthread_t thread)
 	}
 }
 
+//_________________________________________________________
+static void SetupFilter (MidiFilterPtr filter)
+{
+	short i;
+	for (i = 0; i<256; i++) {                                                                               
+		RejectBit(filter->evType,i);
+		AcceptBit(filter->port,i);
+	}
+	for (i = 0; i<16; i++)
+		AcceptBit(filter->channel,i);               
+	for (i = 0; i<typeProcess; i++)
+		AcceptBit(filter->evType,i);      
+	for (i = typeQuarterFrame; i<=typeRegParam; i++)
+		AcceptBit(filter->evType,i);
+}
+
 //________________________________________________________________________________________
 void NotifyProc(const MIDINotification *message, void *refCon)
 {
         if (message->messageID == kMIDIMsgSetupChanged) {
+        
 		if (gRefNum > 0 ) {
 		
 			// Mutex for Slot list management : access by this thread and global thread
@@ -104,7 +123,7 @@ void NotifyProc(const MIDINotification *message, void *refCon)
 					RemoveSlots(gRefNum);
 					AddSlots (gRefNum);
 				}while(gReenter--);
-				
+                                LoadState (gInSlots, gOutSlots,fullProfileName);  // To be checked
 				gInit = false;
 			}
 		}
@@ -112,43 +131,73 @@ void NotifyProc(const MIDINotification *message, void *refCon)
 }
 
 //________________________________________________________________________________________
-static Boolean InitMidiClient ()
+static void * OpenThread (void * ptr)
 {
-	OSStatus err;
-	//set_cancel();
+        OSStatus err;
+        fullProfileName = GetProfileFullName (profileName);
+        
+        gInit = true; // Start initialisation
 	
-	err = MIDIClientCreate(CFSTR("MidiShare"), NotifyProc, NULL, &gClient);
-	if (!gClient) {
+        DBUG(("MIDIClientCreate \n"));
+  	err = MIDIClientCreate(CFSTR("MidiShare"), NotifyProc, NULL, &gClient);
+   	if (!gClient) {
 		printf("Can not open Midi client\n");
 		goto error;
 	}
-	
-	err = MIDIInputPortCreate(gClient, CFSTR("Input port"), ReadProc, NULL, &gInPort);
-	if (!gInPort) {
+	DBUG(("MIDIClientCreate OK\n"));
+        
+        DBUG(("MIDIInputPortCreate\n"));
+   	err = MIDIInputPortCreate(gClient, CFSTR("Input port"), ReadProc, NULL, &gInPort);
+   	if (!gInPort) {
 		printf("Can not open Midi in port\n");
 		goto error;
 	}
-	
-	err = MIDIOutputPortCreate(gClient, CFSTR("Output port"), &gOutPort);
-	if (!gOutPort) {
+        DBUG(("MIDIInputPortCreate OK\n"));
+        
+        DBUG(("MIDIOutputPortCreate \n"));
+        err = MIDIOutputPortCreate(gClient, CFSTR("Output port"), &gOutPort);
+        if (!gOutPort) {
 		printf("Can not open Midi out port\n");
 		goto error;
 	}
+        DBUG(("MIDIOutputPortCreate OK\n"));
 	
-	return true;
+        MidiSetRcvAlarm (gRefNum, RcvAlarm);
+	MidiSetApplAlarm (gRefNum, ApplAlarm);
+        SetupFilter (&gFilter);
+        MidiSetFilter (gRefNum, &gFilter);	
+	MidiConnect (MidiShareDrvRef, gRefNum, true);
+	MidiConnect (gRefNum, MidiShareDrvRef, true);
+	MidiStreamInitMthTbl (gLinMethods);
+	MidiParseInitMthTbl  (gParseTbl);
+	MidiParseInitTypeTbl (gTypeTbl);
+	
+	RemoveSlots(gRefNum);
+	AddSlots (gRefNum);
+        
+        DBUG(("Init OK\n"));
+   	LoadState (gInSlots, gOutSlots,fullProfileName); 
+        DBUG(("LoadState OK\n"));
+         
+        gReenter = -1;
+        gInit = false; // End of initialisation
+        
+        CFRunLoopRun();
+	return 0;
 	
 error :
-	if (gInPort) MIDIPortDispose(gInPort);
-	if (gOutPort) MIDIPortDispose(gOutPort);
-	if (gClient) MIDIClientDispose(gClient);
-	return false;
-}
-
-//________________________________________________________________________________________
-static void * MidiThread (void * ptr)
-{
-	if (InitMidiClient()) CFRunLoopRun();
-        return 0;
+	if (gInPort){
+		 MIDIPortDispose(gInPort);
+		 gInPort = NULL;
+	}
+	if (gOutPort) {
+		MIDIPortDispose(gOutPort);
+		gInPort = NULL;
+	}
+	if (gClient) {
+		MIDIClientDispose(gClient);
+		gClient = NULL;
+	}
 }
 
 //_________________________________________________________
@@ -166,76 +215,14 @@ void Stop()
 }
 
 //_________________________________________________________
-static void SetupFilter (MidiFilterPtr filter)
+static void msWakeup (short refnum)
 {
-	short i;
-	for (i = 0; i<256; i++) {                                                                               
-		RejectBit(filter->evType,i);
-		AcceptBit(filter->port,i);
-	}
-	for (i = 0; i<16; i++)
-		AcceptBit(filter->channel,i);               
-	for (i = 0; i<typeProcess; i++)
-		AcceptBit(filter->evType,i);      
-	for (i = typeQuarterFrame; i<=typeRegParam; i++)
-		AcceptBit(filter->evType,i);
+        DBUG(("msWakeup \n"));
+        gThread = create_thread(0,OpenThread);
+        DBUG(("msWakeup OK\n"));
 }
 
 //_________________________________________________________
-static void msWakeup (short refnum)
-{
-	int i;
-	
-	gThread = create_thread(0,MidiThread);
-	gReenter = -1;
-	
-	// Wait for the MIDI thread to open client and ports.
-	for (i = 0 ; i<TIME_OUT; i++) {
-		if (gOutPort) break;
-		sleep(1);
-	}
-	
-	if (!gOutPort) {
-		printf("ERROR TIME OUT\n");
-		goto error;
-	}
-	
-	MidiSetRcvAlarm (refnum, RcvAlarm);
-	MidiSetApplAlarm (refnum, ApplAlarm);
-        SetupFilter (&gFilter);
-        MidiSetFilter (refnum, &gFilter);	
-	MidiConnect (MidiShareDrvRef, refnum, true);
-	MidiConnect (refnum, MidiShareDrvRef, true);
-	MidiStreamInitMthTbl (gLinMethods);
-	MidiParseInitMthTbl	 (gParseTbl);
-	MidiParseInitTypeTbl (gTypeTbl);
-	
-	// Mutex for Slot list management : access by this thread and NotificationProc
-	gInit = true;
-	RemoveSlots(gRefNum);
-	AddSlots (refnum);
-	gInit = false;
-	
-        fullProfileName = GetProfileFullName (profileName);
-	LoadState (gInSlots, gOutSlots,fullProfileName); 
-	
-	return;
-	
-error :
-	if (gInPort){
-		 MIDIPortDispose(gInPort);
-		 gInPort = NULL;
-	}
-	if (gOutPort) {
-		MIDIPortDispose(gOutPort);
-		gInPort = NULL;
-	}
-	if (gClient) {
-		MIDIClientDispose(gClient);
-		gClient = NULL;
-	}
-}
-
 static void msSleep (short refnum)
 {
 	SaveState (gInSlots, gOutSlots,fullProfileName);

@@ -24,6 +24,10 @@
 #include "msMidiInOut.h"
 #include "lffifo.h"
 
+#define PRINT(x) { printf x; fflush(stdout); }
+#define DBUG(x)    /* PRINT(x) */
+
+
 extern short gRefNum;
 
 // Buffer for sending
@@ -147,10 +151,11 @@ void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
 	SlotPtr slot = (SlotPtr)connRefCon;
 	MIDIPacket *packet = (MIDIPacket *)pktlist->packet;	
 	int i;
-	
+	DBUG(("ReadProc \n"));
 	for (i = 0; i < pktlist->numPackets; ++i) {
 		LMM2MS( slot, packet);
 		packet = MIDIPacketNext(packet);
 	}
+        DBUG(("ReadProc OK\n"));
 }
 

@@ -48,18 +48,18 @@ typedef struct sendState {
 typedef struct slot Slot, *SlotPtr;
 struct slot {
 	SlotPtr		next;
-	SlotRefNum	refNum;			// The MidiShare slot refnum
+	SlotRefNum	refNum;		// The MidiShare slot refnum
 	Ev2StreamRec outsysex;		// Linearisation structure for SysEx events
 	sendState    state1;		// Send state for small events
 	sendState    state2;		// Send state for small events
-	StreamFifo	in;				// Midi parser structure
+	StreamFifo	in;		// Midi parser structure
 
 	MIDIEndpointRef src ;   	// Midi src for input slots
-	MIDIPortRef		port;		// Midi client ouput port
+	MIDIPortRef	port;		// Midi client ouput port
 	MIDIEndpointRef	dest;		// Midi client slot destination
-	MIDISysexSendRequest request; 			// SysEx management structure
+	MIDISysexSendRequest request; 		// SysEx management structure
 	unsigned char data[MAX_SYSEX_BYTES];  	// For SysEx completion routine
-	int	 remaining;				// Bytes remaining to send
+	int	 remaining;			// Bytes remaining to send
 	Boolean	 sending;			// SysEx sending state
 	fifo	 pending;			// Pending events to be sent
 };
@@ -76,7 +76,6 @@ void ApplAlarm (short refNum, long code );
 void AddSlots (short refnum);
 void RemoveSlots (short refnum);
 void OpenSlot (SlotPtr slot, Boolean inputSlot);
-
 
 
 #endif
