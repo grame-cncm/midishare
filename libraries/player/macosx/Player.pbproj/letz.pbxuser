@@ -1,0 +1,18 @@
+// !$*UTF8*$!
+{
+	0867D690FE84028FC02AAC07 = {
+		activeBuildStyle = 4F0BB7EC011F40E904CA0E50;
+		activeTarget = 4B9C4E72048F342700A8728E;
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 88697666;
+			PBXWorkspaceStateSaveDate = 88697666;
+		};
+		projectwideBuildSettings = {
+		};
+		wantsIndex = 1;
+		wantsSCM = -1;
+	};
+	4B9C4E72048F342700A8728E = {
+		activeExec = 0;
+	};
+}
