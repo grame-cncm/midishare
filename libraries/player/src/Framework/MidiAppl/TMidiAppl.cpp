@@ -121,9 +121,9 @@ void TMidiAppl::Close()
 
 #ifdef __Macintosh__
 	#if GENERATINGCFM
-		void TMidiAppl::NewMidiTask (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr)
+		void TMidiAppl::NewMidiTask (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
 	#else
-		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr)
+		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
 	#endif
 	
 	MidiEvPtr ev;
@@ -142,7 +142,7 @@ void TMidiAppl::Close()
 		MidiSend(fRefnum,ev);
 	}else
 		*adr = 0;
-
+}
 #endif
 
 
