@@ -17,12 +17,10 @@
 	#define true 1
 	#define false 0
 	#define nil 0
-	#define errno
-	#define NEAR 
+	#define errno 
 	#define FAR
 	#define EXPORT
 	#define MSALARMAPI
-	#define MFAPI
 #endif
 
 #ifdef __Macintosh__
@@ -37,28 +35,26 @@
 	#define MFAPI
 	/* New type definition */
 	typedef struct TFilter * MidiFilterPtr;
-
-#else
-  #ifdef WIN32
-    #include <windows.h>
-
-	#define __MSWindows__ 
-	#define __Windows__
-	#define __UseMSOldInterface__
-
-    #define  EXPORT  __declspec(dllexport)
-    #define  MFAPI
-    #define __DEBUG__ 0
-
-  #endif
-  #ifdef  __MSWindows__
-	#include <MidiShare.h>
-	#define true 1
-	#define false 0
-	#define nil 0
-		
-  #endif
 #endif
 
+#ifdef  __MSWindows__
+	#ifdef WIN32
+		#include <windows.h>
+   		#include "MidiShare.h"
+   		#define  EXPORT  __declspec(dllexport)
+   		#define  MFAPI
+   		#define __DEBUG__ 0
+		#define true 1
+		#define false 0
+		#define nil 0
+	#else
+		#include <MidiShare.h>
+		#define true 1
+		#define false 0
+		#define nil 0
+		#define EXPORT WINAPI _export
+   		#define MFAPI WINAPI _export
+	#endif
+#endif
 
 #endif
