@@ -38,11 +38,11 @@ static char * disable  			= "disable";
 //________________________________________________________________________
 unsigned long LoadSpace()
 {
-	char * defaultEntry= "40000", buff[30];
+	char * defaultEntry= "40000", buff[256];
 	unsigned long desiredSpace=0, n;
 
 	n= GetPrivateProfileString (memorySectionName, memDefault, defaultEntry, buff,
-										30, profileName);
+										255, profileName);
 	desiredSpace = n ? atol (buff) : kDefaultSpace;
 	return  (desiredSpace > 0) ? desiredSpace : kDefaultSpace;
 }
