@@ -49,8 +49,13 @@
 #include "msAppFun.h"
 #include "msLoader.h" 
 #include "msInit.h"
+#include "msConf.h"
+
 
 /* Global variables */
+
+#define MIDISHARE_CONF "/etc/MidiShare.conf"
+#define DEFAULT_MEM  30000
 
 typedef int (*KernelMth) (unsigned long userptr, struct file* f);
 
@@ -285,6 +290,7 @@ struct file_operations myops = {
 int init_module()
 {
 	/* initialisations */
+	msConf conf;
 	
 	int r = register_chrdev(kMidiShareMajor, kMidiShareName, &myops);
 	if (r < 0) {
@@ -293,7 +299,8 @@ int init_module()
 	}
 	
 	initMthTable();
-	MidiShareSpecialInit (30000);
+	read_conf (MIDISHARE_CONF, &conf);
+	MidiShareSpecialInit ((conf.kmem > 0) ? conf.kmem : DEFAULT_MEM);
 	
 	return 0;
 }
