@@ -22,13 +22,29 @@
 #ifndef __msRTListenProc__
 #define __msRTListenProc__
 
+#include "msCommChans.h"
+#include "msServerContext.h"
 #include "msThreads.h"
+
+#include "EventToStream.h"
+#include "StreamToEvent.h"
+
+#define kRTCommBuffSize	2048
+
+typedef struct {
+	msThreadPtr 	RTThread;		/* real time communication thread   */
+    msStreamBuffer 	parse;
+    Ev2StreamRec	stream;
+    char 			rbuff[kRTCommBuffSize];
+    char 			wbuff[kRTCommBuffSize];
+} RTComm, * RTCommPtr;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-ThreadProc(RTListenProc, arg);
+int  RTCommInit (msServerContextPtr c, CommunicationChan cc);
+void RTCommStop (RTCommPtr rt);
 
 #ifdef __cplusplus
 }

@@ -56,16 +56,12 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
-	msServerContextPtr c = (msServerContextPtr)g->context;
-	c->RTThread = msThreadCreate (RTListenProc, g, kServerRTPriority-1);
 }
 
 
 /*------------------------------------------------------------------------------*/
 void SpecialSleep  (TMSGlobalPtr g)
 {
-	msServerContextPtr c = (msServerContextPtr)g->context;
-	if (c->RTThread) msThreadDelete (c->RTThread);
 }
 
 /*------------------------------------------------------------------------------*/

@@ -34,23 +34,12 @@
 #include "msSharedMem.h"
 #include "msThreads.h"
 
-#define kCommBuffSize	2048
-
-typedef struct StreamDesc * StreamDescPtr;
-typedef struct StreamDesc {
-    msStreamBuffer 	parse;
-    Ev2StreamRec	stream;
-    char 			buff[kCommBuffSize];
-}StreamDesc;
-
 typedef struct {
 	void * 				sharedmem;				/* ptr to the shared memory segment */
-	msThreadPtr 		RTThread;				/* real time communication thread   */
 	msThreadPtr 		meetingPointThread;		/* meeting point management thread  */
 	MeetingPointChan 	meetingPoint;			/* meeting point handler			*/
 	msKernelPrefs *		prefs;					/* the server preferences			*/
 
-	StreamDesc			RT;						/* real-time stream management */
 	/* methods tables for the streams - shared between all the streams */
     msStreamParseMethodTbl 	parseMthTable;
     msStreamMthTbl			streamMthTable;

@@ -37,21 +37,23 @@
 //*____________________________________________________________________________*/
 void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 {
-	msServerContextPtr c = (msServerContextPtr)g->context;
 	msApplContextPtr  ac = (msApplContextPtr)appl->context;
-	Ev2StreamPtr stream = &c->RT.stream;
+	CommunicationChan cc = ac->chan;
+	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
+	Ev2StreamPtr stream = &rt->stream;
     long n; short len;
 
-//printf ("CallNetSend start\n");
 	fifo * f = &appl->rcv;
 	MidiEvPtr e = (MidiEvPtr)fifoget(f);
 
+//printf ("CallNetSend start\n");
 	msStreamStart (stream);
 	while (e) {
+		RefNum(e) = pub(appl, refNum);
 		if (!msStreamPutEvent (stream, e)) {
 			do {
 				len = msStreamSize(stream);
-				n = CCRTWrite (ac->chan, c->RT.buff, len);
+				n = CCRTWrite (cc, rt->wbuff, len);
 				if (n != len) {
 					MidiFreeEv (e);
 					goto failed;
@@ -62,9 +64,9 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 		e = (MidiEvPtr)fifoget(f);
 	}
 	len = msStreamSize(stream);
-	n = CCRTWrite (ac->chan, c->RT.buff, len);
+	n = CCRTWrite (cc, rt->wbuff, len);
     if (n != len) goto failed;
-//printf ("CallNetSend exit\n");
+//printf ("CallNetSend end\n");
 	return;
 
 failed:
@@ -73,28 +75,8 @@ failed:
 	LogWriteErr ("CCRTWrite failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
 	if (ac->filterh) msSharedMemClose(ac->filterh);
 	MidiClose (pub(appl, refNum));
-	CCDec (ac->chan);
+	CCDec (cc);
 	FreeApplContext(ac);
-}
-
-/*____________________________________________________________________________*/
-static int GetListeners (TApplPtr * appls, fd_set * read, fd_set * except)
-{
-	int i, n = 0, h; TApplPtr appl;
-
-	FD_ZERO(read);
-	FD_ZERO(except);
-	for (i=0; i < MaxAppls; i++) {
-		appl = appls[i];
-		if (appl && appl->netFlag) {
-			msApplContextPtr ac = (msApplContextPtr)appl->context;
-			h = CCRTReadHandler(ac->chan);
-			FD_SET(h, read);
-			FD_SET(h, except);
-			if (h > n) n = h;
-		}
-	}
-	return n;
 }
 
 /*____________________________________________________________________________*/
@@ -106,58 +88,55 @@ static void EventHandlerProc (MidiEvPtr e)
 }
 
 /*____________________________________________________________________________*/
-static void ReadClients (msServerContextPtr c, TApplPtr * appls, int n, fd_set * read, fd_set * except)
+static ThreadProc(RTListenProc, arg)
 {
-	int i; TApplPtr appl; msStreamBufferPtr parse = &c->RT.parse;
+	CommunicationChan cc = (CommunicationChan)arg;
+	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
+	msStreamBufferPtr parse = &rt->parse;
 
-	for (i=0; (i < MaxAppls) && n; i++) {
-		appl = appls[i];
-		if (appl && appl->netFlag) {
-			msApplContextPtr ac = (msApplContextPtr)appl->context;
-			if (FD_ISSET(CCRTReadHandler(ac->chan), read)) {
-				if (CCRTRead (ac->chan, c->RT.buff, kCommBuffSize) > 0) {
-					do {
-						int ret;
-						MidiEvPtr e = msStreamGetEvent (parse, &ret);
-						if (e) {
-							EventHandlerProc(e);
-							if (!msStreamGetSize(parse)) break;
-						}
-						else if (ret != kStreamNoMoreData) {
-							LogWrite ("msStreamGetEvent read error (%d)", ret);
-							break;
-						}
-					} while (true);
-					msStreamParseReset (parse);
-				}
-				n--;
+	while (CCRTRead (cc, rt->rbuff, kRTCommBuffSize) > 0) {
+		do {
+			int ret;
+			MidiEvPtr e = msStreamGetEvent (parse, &ret);
+			if (e) {
+				EventHandlerProc(e);
+				if (!msStreamGetSize(parse)) break;
 			}
-		}
+			else if (ret != kStreamNoMoreData) {
+				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
+				break;
+			}
+		} while (true);
+		msStreamParseReset (parse);
+	}
+	return 0;
+}
+
+/*____________________________________________________________________________*/
+void RTCommStop (RTCommPtr rt)
+{
+	if (rt) {
+		msThreadDelete (rt->RTThread);
+		DisposeMemory (rt);		
 	}
 }
 
 /*____________________________________________________________________________*/
-ThreadProc(RTListenProc, arg)
+int RTCommInit (msServerContextPtr c, CommunicationChan cc)
 {
-	TMSGlobalPtr g = (TMSGlobalPtr)arg;
-	msServerContextPtr c = (msServerContextPtr)g->context;
-	TApplPtr  * appls = g->clients.appls;
+	RTCommPtr rt = (RTCommPtr)AllocateMemory (sizeof(RTComm));
+	if (rt) {
+		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTCommBuffSize);
+		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTCommBuffSize);
+		CCSetInfos (cc, rt);
+		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerRTPriority - 1);
+		if (rt->RTThread) return true;
 
-	fd_set read, except; int ret, n; struct timeval t = { 0, 1000 };
-
-printf ("RTListenProc is starting g=%lx\n", (long)g);
-	while (true) {
-		n = GetListeners(appls, &read, &except);
-		if (!n) {
-			usleep (1000);
-			continue;
-		}
-		ret = select (n+1, &read, 0, &except, &t);
-		if (ret > 0) {
-			ReadClients (c, appls, ret, &read, &except);
-		}
-		else if (ret < 0) LogWriteErr("RTListenProc select error");
+		LogWrite ("RTCommInit: cannot create RTListenProc");
+		CCSetInfos (cc, 0);
+		DisposeMemory (rt);
+		rt = 0;
 	}
-printf ("RTListenProc stopped\n");
-	return 0;
+	else LogWrite ("RTCommInit: memory allocation failed");
+	return false;
 }

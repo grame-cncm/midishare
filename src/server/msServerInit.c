@@ -26,16 +26,10 @@
 #include <stdio.h>
 
 #include "osglue.h"
-//#include "msCommChans.h"
 #include "msServerInit.h"
 #include "msServerContext.h"
-//#include "msSharedMem.h"
-//#include "msThreads.h"
 #include "msLog.h"
 
-//static void * gShmem = 0;
-//static msThreadPtr gMPThread = 0;
-//static MeetingPointChan gMeetingPoint = 0;
 static int gRun = 1;
 
 //___________________________________________________________________

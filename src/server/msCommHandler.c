@@ -35,6 +35,8 @@
 #include "msThreads.h"
 #include "osglue.h"
 
+#include "msRTListenProc.h"
+
 #define kCommBuffSize	2048
 #define kParseBuffSize	2048
 
@@ -51,6 +53,14 @@ typedef struct CommChans{
 CommChansPtr gCCList = 0;
 msStreamParseMethodTbl	gParseMthTable;
 msStreamMthTbl 			gStreamMthTable;
+
+/*____________________________________________________________________________*/
+static void CCClose (CommunicationChan cc)
+{
+	RTCommPtr rt = CCGetInfos (cc);
+	CloseCommunicationChannel (cc);
+	RTCommStop (rt);
+}
 
 /*____________________________________________________________________________*/
 static char * Event2Text (MidiEvPtr e, char *buff, short len)
@@ -140,8 +150,8 @@ static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
 
 	if (context && (context->chan == cc)) {
 		if (context->filterh) msSharedMemClose(context->filterh);
-		FreeApplContext(context);
 		MidiClose (ref);
+		FreeApplContext(context);
 		CCDec (cc);
 	}
 	reply = MidiNewEv (typeMidiCommSync);
@@ -254,7 +264,7 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
     } while (CCRefCount(pl->comm));
 //	if (CCRefCount(pl->comm))
 		LogWrite ("CommHandlerProc exit: CloseCommunicationChannel (refcount %d)", CCRefCount(pl->comm));
-    CloseCommunicationChannel (pl->comm);
+    CCClose (pl->comm);
     pl->comm = 0;
     pl->thread = 0;
     return 0;
@@ -263,7 +273,7 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
 /*____________________________________________________________________________*/
 static void CloseOneClientChannel (CommChansPtr pl)
 {
-    if (pl->comm) CloseCommunicationChannel (pl->comm);
+    if (pl->comm) CCClose (pl->comm);
     if (pl->thread) msThreadDelete (pl->thread);
     free (pl);
 }
@@ -296,7 +306,7 @@ void NewClientChannel (CommunicationChan cc)
     
     cl = (CommChansPtr)malloc (sizeof(CommChans));
     if (!cl) {
-        CloseCommunicationChannel (cc);
+        CCClose (cc);
         LogWrite ("NewClientChannel: CommChans memory allocation failed");
         return;
     }
@@ -306,11 +316,15 @@ void NewClientChannel (CommunicationChan cc)
     cl->comm = cc;
     thread = msThreadCreate (CommHandlerProc, cl, kServerHighPriority);
 	if (!thread) {
-        CloseCommunicationChannel (cc);
-        free (cl);
         LogWrite ("NewClientChannel: msThreadCreate failed");
-        return;
+        goto err;
     }
     cl->thread = thread;
+	if (!RTCommInit (ServerContext, cc)) goto err;
     gCCList = cl;
+	return;
+
+err:
+	CCClose (cc);
+	free (cl);
 }

@@ -32,8 +32,8 @@
 extern TMSGlobalPtr gMem;
 
 typedef struct {
-	CommunicationChan chan;
-	SharedMemHandler  filterh;
+	CommunicationChan 	chan;
+	SharedMemHandler  	filterh;
 } msApplContext, *msApplContextPtr;
 
 #define GetAppl(r) 		(CheckGlobRefNum(gMem, r)) ? Appls(gMem)[r] : 0

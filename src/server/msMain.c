@@ -45,14 +45,11 @@ static void MainClientServerProc (CommunicationChan cc)
 static void contextInit (msServerContextPtr c)
 {
 	c->sharedmem = 0;
-	c->RTThread = 0;
 	c->meetingPointThread = 0;
 	c->meetingPoint = 0;
 	c->prefs = 0;
 	msStreamParseInitMthTbl (c->parseMthTable);
 	msStreamInitMthTbl (c->streamMthTable);
-	msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.buff, kCommBuffSize);
-	msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.buff, kCommBuffSize);
 }
 
 /*____________________________________________________________________________*/
