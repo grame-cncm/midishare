@@ -6,6 +6,8 @@ LIB = /usr/lib/libPlayer.so
 INC=../src/Include 
 INC1=./
 
+# SET THE PATHNAME  for ../JDKxx/include HERE
+
 INC2=/home/letz/jdk117/include
 INC3=/home/letz/jdk117/include/genunix
 
@@ -42,6 +44,8 @@ $(LIB).1.0 : $(TARGET)
 	cp $(TARGET)   $(LIB).1.0
 
 MidiPlayer.o : $(SRC)/Java/MidiPlayer.c $(SRC)/Java/MidiPlayer.h
+	if [ ! -f $(INC2)/jni.h ]; then echo "You must set up the JDK include pathname in the INC2 variable"; exit 1; fi
+	if [ ! -f $(INC3)/jni_md.h ]; then echo "You must set up the JDK include pathname in the INC3 variable"; exit 1; fi
 	$(CC) $(SRC)/Java/MidiPlayer.c   -I$(INC) -I$(INC1) -I$(INC2) -I$(INC3)  $(OPTIONS) $(FLAGS) 
 	
 
