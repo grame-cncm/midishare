@@ -1,0 +1,297 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+  <TITLE>From </TITLE>
+</HEAD>
+<BODY LINK="#0000ff" BGCOLOR="#ffffff">
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<H1><CENTER>MidiShare Player Library for schemers</CENTER></H1>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<P><CENTER><B>Jacques Herry</B></CENTER></P>
+
+<P><CENTER><B>35, r&eacute;sid Corlay</B></CENTER></P>
+
+<P><CENTER><B>22300 Lannion</B></CENTER></P>
+
+<P><CENTER><B>France</B></CENTER></P>
+
+<P><CENTER><A HREF="/Documents/MacOS9/Developpements/CVSSession/LangCVS/lang/mzscheme/doc/mailto">Jacques.herry@wanadoo.fr</A></CENTER></P>
+
+<H2><CENTER>&nbsp;</CENTER></H2>
+
+<P>Doc for mzPlayer3216 mzscheme extension. It's free... Use at
+your own risk look at gnu LGPL licence. Download the user and
+developer packages from <A HREF="/Documents/MacOS9/Developpements/CVSSession/LangCVS/lang/mzscheme/doc/link%60">http://www.grame.fr/MidiShare</A>
+and install.</P>
+
+<P>Download PLT package from <A HREF="/Documents/MacOS9/Developpements/CVSSession/LangCVS/lang/mzscheme/doc/link">http://www.cs.rice.edu/CS/PLT/packages/drscheme</A>
+.The lib player library version 2.0 is donwloadable at <A HREF="/Documents/MacOS9/Developpements/CVSSession/LangCVS/lang/mzscheme/doc/link">ftp://www.grame.fr/pub/</A>
+For the functions utilisation, read the official doc in MidiShare
+developer distribution.</P>
+
+<P>Diffs are commented in the list below.</P>
+
+<P>And the doc are in MidiPlayer.pdf and MidiShare.pdf provided
+with MidiShare developer package or from ftp.grame.fr from the
+documentation directory.You need intall MidiShare before using
+this package. Look at MidiShare.htm for installation.</P>
+
+<P>&nbsp;</P>
+
+<P><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">Scheme</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">Grame</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">Comments</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;open-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">OpenPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;close-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">ClosePlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;start-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">StartPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;cont-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">Contplayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;stop-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">StopPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;pause-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">PausePlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;make-pos-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">add
+      for scheme</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><CENTER>(define my-pos make-pos-player</CENTER></P>
+
+      <P><CENTER>bar beat unit)</CENTER>
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-pos-bbu-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetPosBBUPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-pos-ms-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetPosMsPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-loop-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetLoopPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-loop-start-bbu-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetLoopStartBBUPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-loop-end-bbu-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetLoopEndBBUPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-loop-start-ms-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetLoopStartMsPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-loop-end-ms-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetLoopEndMsPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-synchro-in-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetSynchroInPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-synchro-out-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetSynchroOutPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="642">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-smpte-offset-player!</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetSMPTEOffsetPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">You
+      should make one smpte struct before.(bug here ? prehaps don't
+      use)</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-tempo-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetTempoPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;get-state-player&quot;</FONT></P>
+
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;get-state-player!&quot;</FONT>
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">GetStatePlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P>Without arg provide the filled state struct (define my-state
+      (get-state-player player))</P>
+
+      <P>After you can use this &quot;my-state&quot; all the time you
+      want st struct values. As in C (memory economie I presume)</P>
+
+      <P>(get-state-player player my-state)</P>
+
+      <P><CENTER>fill the struct my-state with the desired values</CENTER>
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;get-end-score-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">GetEndScorePlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;forward-step-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">ForwardStepPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;backward-step-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">BackwardStepPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;get-all-track-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">GetAllTrackPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;get-track-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">GetTrackPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;set-param-player!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">SetParamPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;get-param-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">GetParamPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="635">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;insert-all-track-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">InsertAllTrackPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;insert-track-player&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">InsertTrackPlayer</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;make-midi-file-infos&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">Add for scheme.</FONT></P>
+
+      <P>*see sample of use in play.scm
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P>(define my-info (make-midi-file-infos format timedef clicks
+      tracks))</P>
+
+      <P>As in C struct, for &quot;midi-file-load&quot; and save below
+    </TD>
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<P><TABLE BORDER="1" CELLSPACING="1" CELLPADDING="4" WIDTH="649">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-file-save&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiFileSave</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">As in C</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-file-load&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">MidiFileLoad</FONT></P>
+
+      <P>*warning this in c return eror code</P>
+
+      <P>here return midi-infos scheme structure
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P>As in C&nbsp;</P>
+
+      <P>(midi-file-load &quot;file.mid&quot; my-info)</P>
+
+      <P>return player error code my-info structure is filled with
+      all information from the midi-file loaded so you can look at
+      with &quot;midi-file-infos-'fieldName'&quot;.
+    </TD>
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;
+
+</BODY>
+</HTML>

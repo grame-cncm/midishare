@@ -1,0 +1,691 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+  <META NAME="Generator" CONTENT="Microsoft Word 97">
+  <TITLE>From Jacques</TITLE>
+  <META NAME="Template" CONTENT="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" BGCOLOR="#ffffff">
+
+<H1><CENTER>&nbsp;</CENTER></H1>
+
+<H1><CENTER>MidiShare for schemers</CENTER></H1>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<P><CENTER><B>Jacques Herry</B></CENTER></P>
+
+<P><CENTER><B>35, resid Corlay</B></CENTER></P>
+
+<P><CENTER><B>22300 Lannion</B></CENTER></P>
+
+<P><CENTER><B>France</B></CENTER></P>
+
+<P><CENTER><A HREF="mailto">Jacques.herry@wanadoo.fr</A></CENTER></P>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<P>Doc for mzShare3216 mzscheme extension.This soft is provided
+for you pleasure but keep in mind I'am a devoted programmer. And
+perhaps bugs can be live here. You can send need and feedback
+at : <A HREF="mailto">Jacques.herry@wanadoo.fr</A></P>
+
+<P>&nbsp;</P>
+
+<P><B><I><FONT FACE="Arial">it's free under gnu licence as another
+guy say and all the world know gpl</FONT></I></B></P>
+
+<P><I><U>The grame package have also his artistic licence look
+@ their site.</U></I></P>
+
+<P>This package need the mshare3216Thunk windows, but the C src
+is for you for further</P>
+
+<P>Compilation on MAC and UNIX</P>
+
+<P>Download the user and developer packages from <A HREF="link">http://www.grame.fr/MidiShare&nbsp;</A></P>
+
+<P>PLT scheme from <A HREF="link">http://www.cs.rice.edu/CS/PLT/packages/drscheme</A></P>
+
+<P>** install the two zipped files and read the doc provided by
+grame **</P>
+
+<P>** before attempt to use this extension. It is a very powerfull
+package**</P>
+
+<P>** experience is connaissance but without connaissance **</P>
+
+<P>** experience ... ??? hum hum !! =&gt; look at the books ***</P>
+
+<P>&nbsp;</P>
+
+<P>MidiShare is ported to Mac,Unix,Win,win9x,win2000 by Grame</P>
+
+<P>( and by me also as mzscheme extension - the windows thunk
+version run I don't have compilator for</P>
+
+<P>MAC and UNIX -)</P>
+
+<P>For the tutorial you can test the lisp tutorial, provided on
+the grame distribution</P>
+
+<P>with little changes for scheme syntax it work.</P>
+
+<P>I provide a little test and this guide for use.</P>
+
+<P>Perhaps another one can write a better guide for the Scheme
+world.</P>
+
+<P>English is not my mother language and you can see it is not
+the academic and I am very</P>
+
+<P>Lazy for writing doc, but I hope this essais is suffisiant.</P>
+
+<P>&nbsp;</P>
+
+<P>For the functions utilisation read the official doc in MidiShare
+developer distribution</P>
+
+<P>Diffs are commented in the list below</P>
+
+<P>And the doc are in <B>MidiShare.pdf </B>as<B> MS </B>ref in
+Comments col</P>
+
+<P>and <B>thunk release pdf </B>. as <B>TH</B> in Comments col</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="4" WIDTH="619">
+  <TR>
+    <TD WIDTH="33%"><B><FONT SIZE="-1" FACE="Courier New">Scheme</FONT></B></TD> 
+    <TD WIDTH="33%"><B><FONT SIZE="-1" FACE="Courier New">Grame</FONT></B></TD> 
+    <TD WIDTH="33%"><B><FONT SIZE="-1" FACE="Courier New">Comments</FONT></B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-version&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetVersion</FONT></TD> 
+    <TD WIDTH="33%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-share?&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiShare</FONT></TD> 
+    <TD WIDTH="33%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-ind-appl&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetIndAppl</FONT></TD> 
+    <TD WIDTH="33%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-count-appls&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiCountAppls</FONT></TD> 
+    <TD WIDTH="33%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-named-appl&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetNamedAppl</FONT></TD> 
+    <TD WIDTH="33%">&nbsp;MS</TD> 
+  </TR>
+</TABLE></P>
+
+<P><B><FONT SIZE="-1" FACE="Courier New">;;SMPTE struct make-smpte-loc
+create a new smpte struct for use</FONT></B></P>
+
+<P><B>;; with the fonctions whiche need this</B></P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="4" WIDTH="633">
+  <TR>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;make-smpte-loc&quot;</FONT></P>
+
+      <P>&quot;<B>smpte-loc</B>-format&quot; &quot;smpte-loc-hours&quot;<BR>
+      &quot;smpte-loc-minutes&quot;<BR>
+      etc</P>
+
+      <P>and</P>
+
+      <P>&quot;set-smpte-loc-format!&quot;
+    </TD>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">6 num args
+      for this constructor are mandatory</FONT></TD> 
+    <TD WIDTH="35%" ROWSPAN="2">
+      <P>(define my-smpte (make-smpte-loc 1 2 3 4 5 6))</P>
+
+      <P>The fields are the same as in c and setter + getter procs
+      are here</P>
+
+      <P><BR>
+      With the same fields as C struct.You can get the value by first
+      collect<BR>
+      the info :<BR>
+      (define si (midi-get-sync-info))<BR>
+      And now<BR>
+      (sync-info-time si) =&gt;what you want.</P>
+
+      <P>(set-sync-info-time! si 20000)
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-sync-info&quot;</FONT></P>
+
+      <P>return a scheme struct</P>
+
+      <P><B>sync-info is the key for accessing fields in the struct</B>
+    </TD>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">MidiGetSyncInfo</FONT></P>
+
+      <P><B>Without argument</B></P>
+
+      <P>In scheme I don't provide constructor because this is only
+      a readable value =&gt; no arg
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-set-sync-mode!&quot;</TD> 
+    <TD WIDTH="33%">MidiSetSyncMode</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-get-ext-time &quot;</TD> 
+    <TD WIDTH="33%">MidiGetExtTime</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-int-&gt;ext-time&quot;</TD> 
+    <TD WIDTH="33%">MidiInt2ExtTime</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-ext-&gt;int-time&quot;</TD> 
+    <TD WIDTH="33%">MidiExt2IntTime</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-time-&gt;smpte&quot;</TD> 
+    <TD WIDTH="33%">MidiTime2Smpte</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">&quot;midi-smpte-&gt;time&quot;</TD> 
+    <TD WIDTH="33%">MidiSmpte2Time</TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P><B>;;The fundamentales procs</B></P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="4" WIDTH="633">
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-open&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiOpen</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-close&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiClose</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-name&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetName</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-name!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetName</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="3"><B><FONT SIZE="-1" FACE="Courier New">;; filter
+      are implemented as &lt;midi-filter&gt; type</FONT></B></TD>
+     
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-new-filter&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiNewFilter</FONT></TD> 
+    <TD WIDTH="35%"><FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-filter&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetFilter</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-filter!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetFilter</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-free-filter&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiFreeFilter</FONT></TD> 
+    <TD WIDTH="35%">
+      <UL>
+        <LI><FONT SIZE="-1" FACE="Courier New">Ev become &lt;midi-filter-killed&gt;</FONT>
+        <LI>a new type, so you cannot reuse invalid pointer
+        <LI>with this securit type
+      </UL>
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-accept-port&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiAcceptPort</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-accept-chan&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiAcceptChan</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-accept-type&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiAcceptType</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-accepted-port?&quot;</FONT></P>
+
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-is-accepted-port?&quot;</FONT>
+    </TD>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiIsAcceptedPort</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-accepted-chan?&quot;</FONT></P>
+
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-is-accepted-chan?&quot;</FONT>
+    </TD>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiIsAcceptedChan</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%">
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-accepted-type?&quot;</FONT></P>
+
+      <P><FONT SIZE="-1" FACE="Courier New">&quot;midi-is-accepted-type?&quot;</FONT>
+    </TD>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiIsAcceptedType</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">TH</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-connect&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiConnect</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-is-connected?&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiIsConnected</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-port-state!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetPortState</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-port-state&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetPortState</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-new-cell&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiNewCell</FONT></TD> 
+    <TD WIDTH="35%">MS<FONT SIZE="-1" FACE="Courier New"> =&gt; &lt;midi-ev&gt;</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-free-cell&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiFreeCell</FONT></TD> 
+    <TD WIDTH="35%">MS<FONT SIZE="-1" FACE="Courier New"> =&gt; &lt;midi-ev-killed&gt;</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-free-space&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiFreeSpace</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-total-space&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiTotalSpace</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-grow-space&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGrowSpace</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="3" HEIGHT="154">
+      <P><B><FONT SIZE="-1" FACE="Courier New">;; if an event cannot
+      be allocated</FONT></B></P>
+
+      <P><B>;; the event become false</B></P>
+
+      <P><B>else the &lt;midi-ev&gt; is returned.</B></P>
+
+      <P><B>;; the ev is not a pointer but an scheme type &lt;midi-ev&gt;</B>
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-new-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiNewEv</FONT></TD> 
+    <TD WIDTH="35%">MS<FONT SIZE="-1" FACE="Courier New"> =&gt; (define
+      jo (midi-new-ev typeNote)) return &lt;midi-ev&gt; if ok else
+      return #f.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-copy-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiCopyEv</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS <FONT SIZE="-1" FACE="Courier New">return
+      &lt;midi-ev&gt; if ok else return #f.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-free-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiFreeEv</FONT></TD> 
+    <TD WIDTH="35%">MS<FONT SIZE="-1" FACE="Courier New"> =&gt; the
+      &lt;midi-ev&gt; become &lt;midi-ev-killed&gt; =&gt; no memory
+      corrupted if you want reuse this you can't.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-field!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetField</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-field&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetField</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-add-field&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiAddField</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-count-fields&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiCountFields</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;MS</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-link!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetLink</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-link&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetLink</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-date&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetDate</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-date&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetDate</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-ref-num!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetRefNum</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-ref-num&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetRefNum</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-type!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetType</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-type&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetType</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-chan!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetChan</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-chan&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetChan</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-port!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetPort</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-port&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetPort</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;TH</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-data0!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetData0</FONT></TD> 
+    <TD WIDTH="35%">
+      <P><FONT SIZE="-1" FACE="Courier New">MS</FONT></P>
+
+      <P>Look at the MidiShare memory management for comprehension
+    </TD>
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-data0&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetData0</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-data1!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetData1</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-data1&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetData1</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-data2!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetData2</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-data2&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetData2</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-data3!&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiSetData3</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-data3&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetData3</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-time&quot;</FONT></TD> 
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">MidiGetTime</FONT></TD> 
+    <TD WIDTH="35%">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+</TABLE><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="4" WIDTH="633">
+  <TR>
+    <TD VALIGN="TOP" COLSPAN="3"><B><FONT SIZE="-1" FACE="Courier New">seq
+      is not a pointer in scheme but &lt;midi-seq&gt; type</FONT></B></TD>
+     
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-new-seq&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiNewSeq</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS
+      return &lt;midi-seq&gt; if ok else return #f.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%"><FONT SIZE="-1" FACE="Courier New">&quot;midi-add-seq&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiAddSeq</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-free-seq&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiFreeSeq</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MS
+      =&gt; &lt;midi-seq-killed&gt;</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-clear-seq&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiClearSeq</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MS
+      =&gt; &lt;midi-seq&gt; empty</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-send-im&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiSendIm</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-send&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiSend</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-send-at&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiSendAt</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-first-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiGetFirstEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-last-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiGetLastEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-first-ev!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiSetFirstEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-last-ev!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiSetLastEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-count-evs&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiCountEvs</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiGetEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS
+      return &lt;midi-ev&gt; if an event is available else return #f.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-avail-ev&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiAvailEv</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS
+      return &lt;midi-ev&gt; if an event is available else return #f.</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-flush-evs&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">MidiFlushEvs</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">&nbsp;<FONT SIZE="-1" FACE="Courier New">MS</FONT></TD> 
+  </TR>
+</TABLE></P>
+
+<P>&nbsp;</P>
+
+<P><I>;; here proc for real time not implemented in 3216</I></P>
+
+<P><I>;; experimented programmer can implement this in C extension</I></P>
+
+<P><I>;; I provide the canevas but I don't know if this can work
+in mzscheme</I></P>
+
+<P><I>;; without system degradation. 3216 is a better implementation</I></P>
+
+<P><I>;; than the 32 bit port on windows (Grame src) don't cry
+;) but</I></P>
+
+<P><I>;; now go to ftp.grame.fr for the windows 2000 implementation
+download lib and dll</I></P>
+
+<P><I>;; and with little perspiration you can implement the good
+real time 32bits</I></P>
+
+<P><I>;; for the mac, unix , windows 2000 and another</I></P>
+
+<P><I>;; this procedure are here but don't use for the moment
+because they can crash mzscheme.</I></P>
+
+<P><I>;;it's just a canvas for fix the mind.</I></P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="4" WIDTH="633">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><B><FONT SIZE="-1" FACE="Courier New">Scheme</FONT></B></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><B><FONT SIZE="-1" FACE="Courier New">Grame</FONT></B></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><B><FONT SIZE="-1" FACE="Courier New">Comments</FONT></B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-rcv-alarm-proc&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">no</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">is
+      the vector container for the scheme alarm procs</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-set-rcv-alarm!&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">not the same</FONT></P>
+
+      <P>but look at</P>
+
+      <P>MidiSetRcvAlarm for</P>
+
+      <P>The spirit
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">attrib
+      the proc to refNum =&gt; (midi-set-rcv-alarm! 1 play)</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-get-rcv-alarm&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">not the same but look</FONT></P>
+
+      <P>at MidiGetRcvAlarm
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">you
+      can see the name of the boxed proc in vector =&gt; (midi-get-rcv-alarm
+      1) =&gt; #&amp;#&lt;procedure:play&gt;</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-test-rcv-proc&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">no</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">test
+      the proc ie :=&gt; (midi-test-rcv-proc 1)</FONT></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">&quot;midi-stop-rcv-alarm&quot;</FONT></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+      <P><FONT SIZE="-1" FACE="Courier New">No, is replacement for</FONT></P>
+
+      <P>MidiSetRcvAlarm(refnum,0)
+    </TD>
+    <TD WIDTH="33%" VALIGN="TOP"><FONT SIZE="-1" FACE="Courier New">the
+      alarm is set to zero =&gt; no trigger midi ev now</FONT></TD> 
+  </TR>
+</TABLE>
+
+</BODY>
+</HTML>
