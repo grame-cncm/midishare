@@ -48,6 +48,7 @@ class MidiShareTask
 		virtual void 	Run			(long date, short refNum, long a1,long a2) = 0;
 		virtual void 	Forget 		(void);
 		virtual Boolean Busy 		(void)		{ return fTask != 0; }
+				void	Clear 		(void)		{ fTask = 0; }
 
 		MidiEvPtr	fTask;
 #if defined(macintosh) && defined(MidiSharePPC_68k)
