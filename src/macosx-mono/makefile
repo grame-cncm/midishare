@@ -7,7 +7,7 @@ LIBO = ../lib/msPrefs.o ../lib/profport.o
 OBJ  = MidiShare.o macosx.o dlopen.o $(LIBO)
 COM  = msCommon.o
 PA   = libPortAudio.o
-TARGET = libMidiShare
+TARGET = libMidiShare.1.8.6
 
 all : static dylib
 
