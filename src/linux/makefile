@@ -1,6 +1,7 @@
 
 CONF = MidiShare.conf
 MODF = /lib/modules/`uname -r`/misc
+INCF = /usr/local/include
 RC   = /etc/rc.d
 INIT = $(RC)/init.d
 
@@ -19,15 +20,17 @@ libinstall:
 	make -i -C library install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
 	cp $(CONF) /etc/$(CONF)
-	cp Include/MidiShare.h /usr/local/include
+	[ -d $(INCF) ] || mkdir $(INCF)
+	install  Include/MidiShare.h $(INCF)
 
 install: libinstall
+	[ -d $(MODF) ] || mkdir $(MODF)
 	install MidiShare.o $(MODF)
 	depmod -a
 	install MidiShare $(RC)/init.d
 	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
 	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
-	modprobe MidiShare
+	modprobe MidiShare 
 
 #Compile applications, tools and drivers
 	
