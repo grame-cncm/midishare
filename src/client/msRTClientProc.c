@@ -109,7 +109,7 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 {
 	short type= EvType(e);
 	short refNum= RefNum(e) & 0x7F;     /* unflag the refnum number     */
-	TApplPtr appl; MidiSTPtr ext;
+	TApplPtr appl; MidiSTPtr ext; MidiEvPtr process;
 	
 	if (type >= typeMidiOpen)			/* event is ignored  */
 		goto reject;
@@ -120,18 +120,18 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 	switch (type) {
 		case typeProcess:
             ext = LinkST(e);
+            process = (MidiEvPtr)ext->val[0];
+           if (EvType(process) == typeProcess)
+                ProcessCall (g, process);
 			MidiFreeEv (e);
-            e = (MidiEvPtr)ext->val[0];
-            if (EvType(e) == typeProcess)
-                ProcessCall (g, e);
-			MidiFreeEv (e);
+			MidiFreeEv (process);
 			break;
 		case typeDProcess:
             ext = LinkST(e);
-			MidiFreeEv (e);
-            e = (MidiEvPtr)ext->val[0];
-            if (EvType(e) == typeDProcess)
-                fifoput (&appl->dTasks, (cell *)e);
+            process = (MidiEvPtr)ext->val[0];
+            if (EvType(process) == typeDProcess)
+                fifoput (&appl->dTasks, (cell *)process);
+			else MidiFreeEv (process);
 			MidiFreeEv (e);
 			break;
 		case typeApplAlarm:

@@ -1115,18 +1115,18 @@ main()
 		if( !Environment()) return 1;
 		flush;
 		OpenClose(); flush;
-/*		ApplConfiguration(); flush;
+		ApplConfiguration(); flush;
 		Connections( true); flush;
 		Events( true); flush;
 		Sequences( true); flush;
 		Time(); flush;
 		Sending(); flush;
 		Mail(); flush;
-*/		Tasks(true); flush;
-/*		Synchro(); flush;
+		Tasks(true); flush;
+		Synchro(); flush;
 		Tolerance(); flush;
 		NoMem(); flush;
-*/		MidiClose( refNum);
+		MidiClose( refNum);
 	}
 	else print ("MidiShare is not installed !\n");
 	print ("\nEnd of functions test.\n");

@@ -191,14 +191,14 @@ static int TestEv( int i, short t1, short t2)
 					if( n== typePrivate)
 						print (" not filtered ");
 					else {
-						print ("\n    error: type %s not filtered\n", typeListe[n]);
+						print ("\n    error: type %s not filtered", typeListe[n]);
 						result= false;
 					}
 				}
 				MidiFreeEv( e);
 			}
 			else if( n!= i) {
-				print ("\n    error: type %s filtered\n", typeListe[n]);
+				print ("\n    error: type %s filtered", typeListe[n]);
 				result= false;
 			}
 		}
@@ -257,18 +257,18 @@ static void TestCanal( int i)
 			e= GetReceived();
 			if( e) {
 				if( n== i) {
-					print ("\n    error: canal %d not filtered\n", n);
+					print ("\n    error: canal %d not filtered", n);
 					result= false;
 				}
 				MidiFreeEv( e);
 			}
 			else if( n!= i) {
-				print ("\n    error: canal %d filtered\n", n);
+				print ("\n    error: canal %d filtered", n);
 				result= false;
 			}
 		}
 		else {
-			print ("\n  cannot allocate a new event !\n");
+			print ("\n  cannot allocate a new event !");
 			break;
 		}
 	}
@@ -307,18 +307,18 @@ static void TestPort( int i)
 			e= GetReceived();
 			if( e) {
 				if( n== i) {
-					print ("\n    error: port %d not filtered\n", n);
+					print ("\n    error: port %d not filtered", n);
 					result= false;
 				}
 				MidiFreeEv( e);
 			}
 			else if( n!= i) {
-				print ("\n    error: port %d filtered\n", n);
+				print ("\n    error: port %d filtered", n);
 				result= false;
 			}
 		}
 		else {
-			print ("\n  cannot allocate a new event !\n");
+			print ("\n  cannot allocate a new event !");
 			break;
 		}
 	}

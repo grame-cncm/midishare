@@ -198,7 +198,7 @@ static MidiEvPtr EventHandlerProc (MidiEvPtr e, CommunicationChan cc)
 			MidiFreeEv(e);
             break;
         case typeMidiSetFilter:
-            SetFilter (RefNum(e), e);
+			SetFilter (RefNum(e), e);
 			MidiFreeEv(e);
             break;
         default:

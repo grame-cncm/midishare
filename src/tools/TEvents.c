@@ -899,9 +899,9 @@ main( int argc, char *argv[])
 		if( OpenAppls()) {
 			wait( 100);
 
-/*			ChanEvents(); flush;
+			ChanEvents(); flush;
 			CommonEvents(); flush;			
-*/			SystemeEx(); flush;
+			SystemeEx(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);
 /*			Stream(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);

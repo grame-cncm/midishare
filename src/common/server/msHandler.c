@@ -177,10 +177,12 @@ static void ProcessCall( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 }
 
 /*__________________________________________________________________________________*/
-static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
+static inline void AcceptTask (TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	if (appl->netFlag)
+	if (appl->netFlag) {
 		fifoput (&appl->rcv, (cell *)ev);
+		if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
+	}
 	else
 		fifoput (&appl->dTasks, (cell *)ev);
 }
@@ -259,7 +261,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 //#endif
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
-				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
+				AcceptTask(g, appl, ev);    		/* store in the appl dtasks fifo*/
 			}
 			else if( type >= typePrivate) {          /* it's a private event     */
 				RawAccept( g, appl, &appl->rcv, ev); /* event is for appl itself */

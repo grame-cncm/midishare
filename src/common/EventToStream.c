@@ -192,7 +192,12 @@ static Boolean TaskLinearizeMth (Ev2StreamPtr f, MidiEvPtr e)
 {
 	if (StreamFreeSpace(f) >= sizeof(MidiEvPtr)) {
 		MidiEvPtr * ptr = (MidiEvPtr *)f->loc;
+#ifdef MSKernel
+		MidiSTPtr ext = LinkST(e);
+		*ptr++ = (MidiEvPtr)ext->val[0];
+#else
         *ptr++ = e;
+#endif
 		StreamAdjust(f, ptr, sizeof(MidiEvPtr));
 		return true;
 	}
