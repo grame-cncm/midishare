@@ -41,8 +41,8 @@ java : $(OBJJAVA)
 $(LIB).1.0 : $(TARGET)
 	cp $(TARGET)   $(LIB).1.0
 
-MidiPlayer.o : Java/MidiPlayer.c Java/MidiPlayer.h
-	$(CC) Java/MidiPlayer.c   -I$(INC) -I$(INC1) -I$(INC2) -I$(INC3)  $(OPTIONS) $(FLAGS) 
+MidiPlayer.o : $(SRC)/Java/MidiPlayer.c $(SRC)/Java/MidiPlayer.h
+	$(CC) $(SRC)/Java/MidiPlayer.c   -I$(INC) -I$(INC1) -I$(INC2) -I$(INC3)  $(OPTIONS) $(FLAGS) 
 	
 
 TChaserIterator.o : $(SRC)/Chasers/TChaserIterator.cpp
@@ -173,4 +173,6 @@ TTimeManager.o : $(SRC)/Framework/Tempo/TTimeManager.cpp
 
  clean : 
 	rm *.o
+	rm $(TARGET)
+	rm $(TARGETJAVA)
 
