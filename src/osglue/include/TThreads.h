@@ -29,18 +29,15 @@
 #ifdef WIN32
 
 	#include <windows.h>
-	#define ThreadAPI(proc, arg)	DWORD  WINAPI proc (LPVOID arg)
 	typedef HANDLE	ThreadHandle;
 	
 #else
 
 	#include <pthread.h>
-	#define ThreadAPI(proc, arg)	void * proc (void * arg)
 	typedef	pthread_t	ThreadHandle;
 
 #endif
 
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented threads management:
 //___________________________________________________________________
@@ -52,9 +49,10 @@ class TThreads
 		enum { NormalPriority=0, 
 			ClientHighPriority=49, ClientRTPriority=90, 
 			ServerHighPriority=50, ServerRTPriority=99 };
-
-		 	 TThreads (TLog * log = 0);
-		 	 TThreads (ThreadProcPtr proc, void * arg, int priority, TLog * log = 0);
+        enum { ThreadNoErr=0, MemAllocFailed=-1, CreateFailed=-2, SetPriorityFailed=-3 };
+    
+		 	 TThreads ();
+		 	 TThreads (ThreadProcPtr proc, void * arg, int priority);
 	virtual ~TThreads ()	{ Stop (); }
 	
 		int		Create (ThreadProcPtr proc, void * arg, int priority=NormalPriority);
@@ -68,7 +66,6 @@ class TThreads
 		int		MapPriority (int priority);
 
 		ThreadHandle fThread;	// the thread handler
-		TLog *		fLog;		// optionnal log capabilities
 };
 
 #ifndef WIN32

@@ -21,16 +21,12 @@
  
 */
 
-
 #include "TMutex.h"
-#include "TLog.h"
-
 
 int TMutex::fMIndex = 0;
 //_____________________________________________________________________
-TMutex::TMutex (TLog * log)
+TMutex::TMutex ()
 {
-	fLog = log;
 	Init ();
 }
 
@@ -42,8 +38,7 @@ void TMutex::Init ()
 		wsprintf (mname, "msMutex%02d", fMIndex++);
 		fMutex = CreateMutex (0, FALSE, mname);
 		if (!fMutex && (GetLastError() != ERROR_ALREADY_EXISTS)) {
-			if (fLog) fLog->WriteErr ("CreateMutex failed:");
-				break;
+            break;
 		}
 	} while (!fMutex && (++n < 10));
 }
@@ -62,7 +57,6 @@ int TMutex::Lock ()
 		DWORD ret = WaitForSingleObject (fMutex, INFINITE);
 		switch (ret) {
 			case WAIT_FAILED:
-				if (fLog) fLog->WriteErr ("WaitForSingleObject failed:");
 				return FALSE;
 			case WAIT_OBJECT_0:
 				return TRUE;
@@ -75,9 +69,8 @@ int TMutex::Lock ()
 int TMutex::Unlock ()
 {
 	if (fMutex) {
-		if (!ReleaseMutex (fMutex))
-			if (fLog) fLog->WriteErr ("ReleaseMutex failed:");
-		else return TRUE;
+		if (ReleaseMutex (fMutex))
+            return TRUE;
 	}
 	return FALSE;
 }

@@ -21,30 +21,24 @@
  
 */
 
-#include "include/TLog.h"
-#include "include/TThreads.h"
+#include "TThreads.h"
 #include "msThreads.h"
-#include "msServerInit.h"
-
-extern TLog gLog;
 
 //___________________________________________________________________
 msThreadPtr msThreadCreate (ThreadProcPtr proc, void * arg, int priority)
 {
-	TThreads * thread = new TThreads (&gLog);
+	TThreads * thread = new TThreads ();
 	if (thread) {
-		if (!thread->Create (proc, arg, priority)) {
+        if (thread->Create (proc, arg, priority) != TThreads::ThreadNoErr) {
 			delete thread;
 			thread = 0;
 		}
 	}
-	else LogWrite ("Cannot create a new TThreads object");
 	return (msThreadPtr)thread;
 }
 
 //___________________________________________________________________
 void msThreadDelete (msThreadPtr thread)
 {
-	TThreads * threadobj = (TThreads *)thread;
-	if (threadobj) delete threadobj;
+	delete (TThreads *)thread;
 }

@@ -26,25 +26,18 @@
 
 typedef void * SharedMemHandler;
 #ifdef WIN32
-	typedef char * 	ShMemID;
-#	define keySize			10
+typedef char * 	ShMemID;
+#	define keyMaxSize			16
+#	define kShMemId		"msPublicMem"
 #else
 #	include <sys/shm.h>
 #	include <sys/ipc.h>
 
-	typedef key_t 	ShMemID;
-#	define keySize	sizeof(ShMemID)
+typedef key_t 	ShMemID;
+#	define keyMaxSize	sizeof(ShMemID)
+#	define kShMemId		0x6d73506d  /* 'msPm' */
 #endif
 
-
-typedef struct FilterInfo {
-    SharedMemHandler memh;
-#ifdef WIN32
-    char	id[keySize];
-#else
-    ShMemID id;
-#endif
-} FilterInfo, * FilterInfoPtr;
 
 #define MaxFilters 500   /* allows a maximum of 500 filters for the whole system */
 
@@ -52,10 +45,13 @@ typedef struct FilterInfo {
 extern "C" {
 #endif
 
-SharedMemHandler msSharedMemCreate(ShMemID id, unsigned long size, void ** memPtr);
-SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr);
-void   			 msSharedMemClose (SharedMemHandler shm);
-
+    void * msSharedMemCreate          (ShMemID id, unsigned long size);
+    void * msSharedMemCreateIndexed   (ShMemID baseid, unsigned long size, int indexlimit);
+    void   msSharedMemDelete 		  (void *memPtr);
+    void * msSharedMemGetID 		  (void *memPtr);
+    SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr);
+    void   			 msSharedMemClose (SharedMemHandler shm);
+    
 #ifdef __cplusplus
 }
 #endif

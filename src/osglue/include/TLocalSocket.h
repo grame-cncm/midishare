@@ -28,7 +28,6 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented implementation of local sockets.
 // Used only for Unix based implementations.
@@ -36,7 +35,7 @@ class TLog;
 class TLocalSocket
 {
 	public:
-		 	 TLocalSocket (TLog * log = 0);
+		 	 TLocalSocket ();
 	virtual ~TLocalSocket ()	{ Close (); }
 	
 		// typically called by the server: creates the socket and 
@@ -57,7 +56,6 @@ class TLocalSocket
 		int		fBinded;
 		int		fSocket;
 		struct sockaddr_un 	fAddr;
-		TLog *				fLog;		// optionnal log capabilities
 };
 
 #endif

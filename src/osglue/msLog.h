@@ -1,5 +1,5 @@
 /*
-  Copyright © Grame 2002
+  Copyright © Grame 2003
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -21,30 +21,19 @@
  
 */
 
-#ifndef __msCommDefs__
-#define __msCommDefs__
+#ifndef __msLog__
+#define __msLog__
 
-#ifdef WIN32
-#	define kServerContactName 	"msServerContact"
-#	define kClientSndBaseName 	"\\\\.\\pipe\\msClientSnd"
-#	define kClientRcvBaseName 	"\\\\.\\pipe\\msClientRcv"
-#	define From(a)	&a
-	typedef DWORD   RemoteAddr;
-
-#else
-
-#	define kServerContactName 	"/tmp/msServerContact"
-#	define kClientSndBaseName 	"/tmp/msClientSnd"
-#	define kClientRcvBaseName 	"/tmp/msClientRcv"
-#	define From(a)	a
-	typedef char 	RemoteAddr[256];
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#define kContactType 	0x0ace
-enum { 	kReadContactFailed = -1,
-		kBadContactType = -2
-};
+void OpenLog 		(const char *file); 	/* if null output messages to stderr */
+void LogWrite 		(const char *msg, ...);
+void LogWriteErr 	(const char *msg, ...);
 
-#define kMaxPipeIndex 128
+#ifdef __cplusplus
+}
+#endif
 
 #endif

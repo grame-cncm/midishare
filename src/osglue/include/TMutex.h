@@ -25,25 +25,20 @@
 #define __TMutex__
 
 #ifdef WIN32
-
 	#include <windows.h>
 	typedef HANDLE	MutexHandle;
-	
 #else
-
 	#include <pthread.h>
 	typedef	pthread_mutex_t	MutexHandle;
-
 #endif
 
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented mutex management:
 //___________________________________________________________________
 class TMutex
 {
 	public:
-		 	 TMutex (TLog * log = 0);
+		 	 TMutex ();
 	virtual ~TMutex ()	{ Destroy (); }
 	
 		int		Lock ();
@@ -51,10 +46,9 @@ class TMutex
 
 	private:
 		void	Init ();
-		void	Destroy ();
+		int		Destroy ();
 
 		MutexHandle fMutex;		// the mutex handler
-		TLog *		fLog;		// optionnal log capabilities
 #ifdef WIN32
 		static int fMIndex;
 #endif

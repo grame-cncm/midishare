@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 #include <time.h>
 
 #include "TLog.h"
@@ -61,23 +62,36 @@ void TLog::Close ()
 }
 
 //__________________________________________________________________________
-void TLog::Write (const char *msg)
+void TLog::Write (const char *msg, ...)
 {
+    FILE * out = stderr;
 	if (fLogFile) {
 		char buff[kMaxTimeString];
-		fprintf (fLogFile, "%s %s\n", DateString (buff, kMaxTimeString), msg);
+		out = fLogFile;
+		fprintf (out, "%s ", DateString (buff, kMaxTimeString));
 	}
-	else fprintf (stderr, "%s\n", msg);
+    va_list args;
+	va_start(args, msg);
+	vfprintf (out, msg, args);
+	va_end(args);
+	fprintf (out, "\n");
 }
 
 //__________________________________________________________________________
-void TLog::WriteErr (const char *msg)
+void TLog::WriteErr (const char *msg, ...)
 {
+    FILE * out = stderr;
 	if (fLogFile) {
 		char buff[kMaxTimeString];
-		fprintf (fLogFile, "%s %s %s\n", DateString (buff, kMaxTimeString), msg, ErrorString());
+		out = fLogFile;
+		fprintf (out, "%s ", DateString (buff, kMaxTimeString));
 	}
-	else fprintf (stderr, "%s %s\n", msg, ErrorString());
+
+    va_list args;
+	va_start(args, msg);
+	vfprintf (out, msg, args);
+	va_end(args);
+	fprintf (out, ": %s\n", ErrorString());
 }
 
 //__________________________________________________________________________

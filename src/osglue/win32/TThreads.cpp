@@ -24,21 +24,17 @@
 #include <windows.h>
 
 #include "TThreads.h"
-#include "TLog.h"
-
 
 //_____________________________________________________________________
-TThreads::TThreads (TLog * log)
+TThreads::TThreads ()
 {
 	fThread = 0;
-	fLog = log;
 }
 
 //_____________________________________________________________________
-TThreads::TThreads (ThreadProcPtr proc, void * arg, int priority, TLog * log)
+TThreads::TThreads (ThreadProcPtr proc, void * arg, int priority)
 {
 	fThread = 0;
-	fLog = log;
 	Create (proc, arg, priority);
 }
 
@@ -48,6 +44,7 @@ int	TThreads::MapPriority (int priority)
 	static BOOL classSet = FALSE;
 	switch (priority) {
 		case ClientHighPriority:
+            .grame.fr
 			return THREAD_PRIORITY_HIGHEST;
 		case ClientRTPriority:
 			return THREAD_PRIORITY_TIME_CRITICAL;
@@ -73,7 +70,6 @@ int	TThreads::SetPriority (int priority)
 		return TRUE;
 	if (!SetThreadPriority (fThread, MapPriority(priority)))
 		return TRUE;
-	if (fLog) fLog->WriteErr ("SetThreadPriority failed:");
 	return FALSE;
 }
 
@@ -86,7 +82,6 @@ int	TThreads::Create (ThreadProcPtr proc, void * arg, int priority)
 		SetPriority (priority);
 		return TRUE;
 	}
-	if (fLog) fLog->WriteErr ("CreateThread failed");
 	return FALSE;
 }
 

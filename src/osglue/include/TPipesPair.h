@@ -40,13 +40,12 @@ typedef struct {
 	int		id;
 } PipeDesc;
 
-class TLog;
 //___________________________________________________________________
 class TPipesPair
 {
 	public:
-		 	 TPipesPair (TLog * log = 0) : fRead(log), fWrite(log) 
-		 	 			{ 	fNext = 0; 
+		 	 TPipesPair () : fRead(), fWrite() 
+		 	 			{ 	fNext = 0; fInfos = 0;
 		 	 				fReadDesc.pipe=&fRead;
 		 	 				fWriteDesc.pipe=&fWrite;
 		 	 			}
@@ -55,8 +54,8 @@ class TPipesPair
 		long	Write 	(void *buff, long len) { return fWrite.Write (buff, len); }
 		long	Read 	(void *buff, long len) { return fRead.Read (buff, len); }
 
-		PipeDesc * 		ReadPipe ()		{ return &fReadDesc; }
-		PipeDesc * 		WritePipe ()	{ return &fWriteDesc; }
+		PipeDesc * 		GetReadPipe ()		{ return &fReadDesc; }
+		PipeDesc * 		GetWritePipe ()		{ return &fWriteDesc; }
 
 		void			Link (TPipesPair * next) 	{ fNext = next; }
 		TPipesPair *	Next ()						{ return fNext; }

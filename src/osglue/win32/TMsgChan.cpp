@@ -22,7 +22,6 @@
 */
 
 #include "TMsgChan.h"
-#include "TLog.h"
 
 #define kKeyID	0x0a0b0c0d	// key identification of the shared memory segment
 
@@ -32,10 +31,9 @@ typedef struct {
 } ContactInfos, *ContactInfosPtr;
 
 //_____________________________________________________________________
-TMsgChan::TMsgChan (TLog * log)
+TMsgChan::TMsgChan ()
 	: fHandle (log)
 {
-	fLog = log;
 	fInfos = 0;
 }
 
@@ -86,7 +84,6 @@ int TMsgChan::Write (ContactMsgPtr msg, DWORD to)
 	if (PostThreadMessage(to, WM_USER + msg->type, msg->id, GetCurrentThreadId())) {
 		return TRUE;
 	}
-	if (fLog) fLog->WriteErr ("PostThreadMessage failed:");
 	return FALSE;
 }
 
@@ -101,6 +98,5 @@ int TMsgChan::Read (ContactMsgPtr msg, DWORD * from)
 		*from = read.lParam;
 		return TRUE;
 	}
-	if (fLog) fLog->WriteErr ("GetMessage failed:");
 	return FALSE;
 }

@@ -48,8 +48,8 @@ class TLog
 
 		void		Open 	(const char * logpath);
 		void		Close 	();
-		void		Write 	(const char *msg);
-		void		WriteErr(const char *msg);
+		void		Write 	(const char *msg, ...);
+		void		WriteErr(const char *msg, ...);
 
 	protected:
 

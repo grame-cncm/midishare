@@ -30,12 +30,10 @@
 #include <unistd.h>
 
 #include "TMutex.h"
-#include "TLog.h"
 
 //_____________________________________________________________________
-TMutex::TMutex (TLog * log)
+TMutex::TMutex ()
 {
-	fLog = log;
 	Init ();
 }
 
@@ -46,18 +44,18 @@ void TMutex::Init ()
 }
 
 //_____________________________________________________________________
-void TMutex::Destroy ()
+int TMutex::Destroy ()
 {
-	if (pthread_mutex_destroy (&fMutex)) {
-		if (fLog) fLog->WriteErr ("pthread_mutex_destroy failed:");
-	}
+    if (pthread_mutex_destroy (&fMutex)) {
+        return false;
+    }
+    return true;
 }
 
 //_____________________________________________________________________
 int TMutex::Lock ()
 {
 	if (pthread_mutex_lock (&fMutex)) {
-		if (fLog) fLog->WriteErr ("pthread_mutex_lock failed:");
 		return false;
 	}
 	return true;
@@ -67,7 +65,6 @@ int TMutex::Lock ()
 int TMutex::Unlock ()
 {
 	if (pthread_mutex_unlock (&fMutex)) {
-		if (fLog) fLog->WriteErr ("pthread_mutex_unlock failed:");
 		return false;
 	}
 	return true;

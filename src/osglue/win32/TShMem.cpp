@@ -22,7 +22,6 @@
 */
 
 #include "TShMem.h"
-#include "TLog.h"
 
 #define SHMErr			0
 
@@ -34,11 +33,10 @@
 #define OtherAttachPerm		FILE_MAP_READ
 
 //__________________________________________________________________________
-TShMem::TShMem (TLog * log) 
+TShMem::TShMem () 
 {
 	fMemAddr = 0;
 	fHandler = SHMErr;
-	fLog = log;
 	fCreated = false;
 }
 
@@ -55,17 +53,15 @@ void * TShMem::Create (MemID id, unsigned long size)
 	LPSECURITY_ATTRIBUTES sec = 0;
 
 	fHandler = CreateFileMapping(INVALID_HANDLE_VALUE, sec, CreateFlags, 0, size, id);
-	if (!fHandler) {
-		if (fLog) fLog->WriteErr ("CreateFileMapping error:");
-	}
-	else if (GetLastError() == ERROR_ALREADY_EXISTS) {
-		if (fLog) fLog->WriteErr ("CreateFileMapping error:");
-		Close ();
-	}
-	else {
-		fCreated = TRUE;
-		ptr = Attach ();
-		if (!ptr) Close();
+	if (fHandler) {
+        if (GetLastError() == ERROR_ALREADY_EXISTS) {
+            Close ();
+        }
+        else {
+            fCreated = TRUE;
+            ptr = Attach ();
+            if (!ptr) Close();
+        }
 	}
 	return ptr;
 }
@@ -87,7 +83,6 @@ int TShMem::Get (MemID id, unsigned long size, int flags)
 	BOOL inheritflag = FALSE;
 	fHandler = OpenFileMapping (flags, inheritflag, id);
 	if (!fHandler) {
-		if (fLog) fLog->WriteErr ("OpenFileMapping failed:");
 		return  FALSE;
 	}
 	return TRUE;
@@ -99,17 +94,14 @@ void * TShMem::Attach () {
 	if (fHandler) {
 		DWORD accessRights = fCreated ? OwnerAttachPerm : OtherAttachPerm;
 		fMemAddr = (void *)MapViewOfFile (fHandler, accessRights, 0, 0, 0);
-		if (!fMemAddr)
-			if (fLog) fLog->WriteErr ("MapViewOfFile error:");
 	}
 	return fMemAddr;
 }
 
 //__________________________________________________________________________
 void TShMem::Detach () {
-	if (!fMemAddr) return;	
-	if (!UnmapViewOfFile (fMemAddr))
-		if (fLog) fLog->WriteErr ("UnmapViewOfFile failed:");
+	if (!fMemAddr) return;
+    UnmapViewOfFile (fMemAddr);
 	fMemAddr = 0;
 }
 
@@ -117,8 +109,7 @@ void TShMem::Detach () {
 void TShMem::Close () {
 	Detach ();
 	if (fHandler) {
-		if (!CloseHandle (fHandler))
-			if (fLog) fLog->WriteErr ("TShMem::Close CloseHandle failed:");
+        CloseHandle (fHandler);
 		fHandler = 0;
 	}
 	fCreated = FALSE;

@@ -22,28 +22,90 @@
 */
 
 #include "msSharedMem.h"
-#include "include/TShMem.h"
+#include "TShMem.h"
 
-SharedMemHandler msSharedMemCreate(ShMemID id, unsigned long size, void ** memPtr)
+#ifdef WIN32
+typedef struct ShMemInfo {
+    TShMem * memh;
+    char	id[keyMaxSize];
+} ShMemInfo, * ShMemInfoPtr;
+
+#else
+typedef struct ShMemInfo {
+    TShMem * memh;
+    ShMemID id;
+} ShMemInfo, * ShMemInfoPtr;
+#endif
+
+void * msSharedMemCreate(ShMemID id, unsigned long size)
 {
     TShMem * shm = new TShMem();
     if (shm) {
-        void *mem = shm->Create(id, size);
-        if (mem) *memPtr = mem;
-        else {
-            delete shm;
-            shm = 0;
+        ShMemInfoPtr ptr = (ShMemInfoPtr)shm->Create(id, size + sizeof(ShMemInfo));
+        if (ptr) {
+            ptr->memh = shm;
+#ifdef WIN32
+            strcpy (ptr->id, id);
+#else
+            ptr->id = id;
+#endif
+            return ++ptr;
         }
+        delete shm;
     }
-    return shm;
+    return 0;
+}
+
+static ShMemID CreateShmID (ShMemID baseid, int index)
+{
+#ifdef WIN32
+    static char	id[keyMaxSize];
+    wsnprintf (id, "%s%d", baseid, index, keyMaxSize);
+    return id;
+#else
+    return baseid + index;
+#endif
+}
+
+void * msSharedMemCreateIndexed (ShMemID baseid, unsigned long size, int indexlimit)
+{
+    for (int i=1; i<indexlimit; i++) {
+        void * ptr = msSharedMemCreate (CreateShmID(baseid, i), size);
+        if (ptr) return ptr;
+    }
+    return 0;
+}
+
+void msSharedMemDelete (void *memPtr)
+{
+    ShMemInfoPtr ptr = (ShMemInfoPtr)memPtr;
+    if (ptr) {
+        TShMem * shm = (--ptr)->memh;
+        delete shm;
+    }
+}
+
+void * msSharedMemGetID (void * memPtr)
+{
+    void * ret = 0;
+    ShMemInfoPtr ptr = (ShMemInfoPtr)memPtr;
+    if (ptr) {
+        ptr--;
+#ifdef WIN32
+        ret = ptr->id;
+#else
+        ret = &ptr->id;
+#endif
+    }
+    return ret;
 }
 
 SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr)
 {
     TShMem * shm = new TShMem();
     if (shm) {
-        void * ptr = shm->Open (id);
-        if (ptr) *memPtr = ptr;
+        ShMemInfoPtr ptr = (ShMemInfoPtr)shm->Open (id);
+        if (ptr) *memPtr = ++ptr;
         else {
             delete shm;
             shm = 0;

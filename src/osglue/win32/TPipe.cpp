@@ -22,7 +22,6 @@
 */
 
 #include "TPipe.h"
-#include "TLog.h"
 
 #define PipeErrCode		INVALID_HANDLE_VALUE
 #define CreateMode		PIPE_ACCESS_OUTBOUND | FILE_FLAG_FIRST_PIPE_INSTANCE
@@ -33,27 +32,21 @@
 #endif 
 
 //_____________________________________________________________________
-TPipe::TPipe (TLog * log)
+TPipe::TPipe ()
 {
 	fPipe = PipeErrCode;
 	fBuffSize = 0;
 	fOwner = FALSE;
-	fLog = log;
 }
 
 //_____________________________________________________________________
-int TPipe::Create (const char * name, int silent)
+int TPipe::Create (const char * name)
 {
 	fPipe = CreateNamedPipe (name, CreateMode, 
 						PIPE_TYPE_BYTE|PIPE_READMODE_BYTE, 
 						PIPE_UNLIMITED_INSTANCES, kBuffSize, kBuffSize,
 						NMPWAIT_USE_DEFAULT_WAIT, NULL);
 	if (fPipe == INVALID_HANDLE_VALUE) {
-		if (fLog && !silent) {
-			char buff[512];
-			wsprintf (buff, "CreateNamedPipe \"%s\" failed:", name);
-			fLog->WriteErr (buff);
-		}
 		return FALSE;
 	}
 	fBuffSize = kBuffSize;
@@ -69,8 +62,7 @@ void TPipe::Close ()
 		FlushFileBuffers (fPipe);
 		DisconnectNamedPipe (fPipe);
 	}
-	if (!CloseHandle (fPipe) && fLog)
-		fLog->WriteErr ("pipe close failed:");
+    CloseHandle (fPipe);
 	fPipe = PipeErrCode;
 	fBuffSize = 0;
 	fOwner = FALSE;
@@ -99,11 +91,6 @@ int TPipe::Open (const char *name, int perm)
 		fPipe = CreateFile (name, perm, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 		if (fPipe != INVALID_HANDLE_VALUE) 
 			return TRUE;
-	}
-	if (fLog) {
-		char buff[512];
-		wsprintf (buff, "pipe open \"%s\" failed:", name);
-		fLog->WriteErr (buff);
 	}
 	return FALSE;
 }

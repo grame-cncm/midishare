@@ -7,16 +7,17 @@
 
 TARGET = midishared
 
-LIBS = ../msServerCommonLib.o ../msOSGlueLib.o libportaudio.a
+#LIBS = ../msServerCommonLib.o ../msOSGlueLib.o libportaudio.a
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o
 
 COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
 COMINC := $(wildcard ../common/Headers/*.h)
-GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
-GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
+GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/unix/*.cpp)
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/include/*.h)
 
 CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
-CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
-VPATH = ../common ../common/server ../osglue ../osglue/glue ../osglue/unix
+CXXFLAGS := $(CFLAGS) -I../osglue/include
+VPATH = ../common ../common/server ../osglue ../osglue/unix
 CC = gcc
 
 SRC := $(wildcard *.c)
@@ -24,7 +25,7 @@ OBJ := $(patsubst %.c, %.o, $(SRC))
 DEST = /usr/local/bin
 
 $(TARGET) : makefile $(LIBS) $(OBJ)
-	$(CC) $(LIBS) $(OBJ) -lpthread -lstdc++  -framework CoreAudio -o $(TARGET)
+	$(CC) $(LIBS) $(OBJ) -lpthread -lstdc++ -lportaudio -framework CoreAudio -o $(TARGET)
 	
 makefile: makefile.osx
 	cat makefile.readme makefile.osx > makefile
@@ -52,9 +53,5 @@ clean:
 
 ../msOSGlueLib.o: makefile $(GLUESRC) $(GLUEINC)
 	make -C ../osglue
-
-# specific rules to differentiate portaudio options
-msPortAudio.o: msPortAudio.c
-	$(CC) $(CFLAGS) -Iportaudio/src/pa_common $< -c -o $@
 
 # DO NOT DELETE

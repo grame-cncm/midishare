@@ -32,7 +32,6 @@
 	typedef int		PipeHandler;
 #endif
 
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented pipes management:
 //   pipes are always created in rw-r--r-- mode
@@ -43,12 +42,12 @@ class TLog;
 class TPipe
 {
 	public:
-		 	 TPipe (TLog * log = 0);
+		 	 TPipe ();
 	virtual ~TPipe ()	{ Close (); }
 			
 		enum { kReadPerm, kWritePerm, kReadWritePerm };
 		
-		int		Create 	(const char * name, int silent=0);
+		int		Create 	(const char * name);
 		int		Open 	(const char *name, int perm=kReadPerm);
 		void	Close 	();
 
@@ -63,7 +62,6 @@ class TPipe
 		PipeHandler fPipe;		// the pipe handler
 		long		fBuffSize;	// pipe buffer size
 		int			fOwner;		// a flag to check wether the pipe has been created
-		TLog *		fLog;		// optionnal log capabilities
 #ifndef WIN32
 		char *		fPath;		// access path
 #endif

@@ -41,11 +41,10 @@
 
 
 //_____________________________________________________________________
-TLocalSocket::TLocalSocket (TLog * log)
+TLocalSocket::TLocalSocket ()
 {
 	fSocket = SOKERRCODE;
 	fAddr.sun_family = AF_UNIX;
-	fLog = log;
 	fBinded = false;
 }
 
@@ -77,7 +76,6 @@ int TLocalSocket::SockOpen ()
 {
 	fSocket = socket (AF_UNIX, SOCK_DGRAM, 0);
 	if (fSocket == SOKERRCODE) {
-		if (fLog) fLog->WriteErr ("socket failed:");
 		return false;
 	}
 	return true;
@@ -86,23 +84,12 @@ int TLocalSocket::SockOpen ()
 //_____________________________________________________________________
 int TLocalSocket::Bind (int silent)
 {
-	char buff[512];
-
 	int ret = bind (fSocket, (struct sockaddr *)&fAddr, sizeof(fAddr));
 	if (ret == SOKERRCODE) {
-		if (!silent && fLog) {
-			sprintf (buff, "bind \"%s\" failed:", fAddr.sun_path);
-			fLog->WriteErr (buff);
-		}
 		return false;
 	}
 	fBinded = true;
-	if (chmod (fAddr.sun_path, kSokPerms) == -1) {
-		if (fLog) {
-			sprintf (buff, "chmod \"%s\" failed:", fAddr.sun_path);
-			fLog->WriteErr (buff);
-		}
-	}
+    chmod (fAddr.sun_path, kSokPerms);
 	return true;
 }
 
@@ -114,11 +101,7 @@ void TLocalSocket::Close ()
 		fSocket = SOKERRCODE;
 	}
 	if (fBinded) {
-		if (unlink (fAddr.sun_path)&& fLog) {
-			char buff[512];
-			sprintf (buff, "unlink \"%s\" failed:", fAddr.sun_path);
-			fLog->WriteErr (buff);
-		}
+        unlink (fAddr.sun_path);
 		fBinded = false;
 	}
 }
@@ -134,7 +117,6 @@ int TLocalSocket::Write (char * to, void * buff, int len)
 	ret = sendto (fSocket, buff, len, 0, 
 			(struct sockaddr *)&addr, sizeof(struct sockaddr_un));
 	if (ret == SOKERRCODE) {
-		if (fLog) fLog->WriteErr ("sendto failed:");
 		return false;
 	}
 	return true;
@@ -147,7 +129,6 @@ int TLocalSocket::Read (void * buff, int len, char * from)
 	socklen_t addr_len = sizeof(addr); 
 	int ret = recvfrom (fSocket, buff, len, 0, (struct sockaddr *)&addr, &addr_len);
 	if (ret == SOKERRCODE) {
-		if (fLog) fLog->WriteErr ("recvfrom failed:");
 		return 0;
 	}
 	sprintf (from, addr.sun_path);

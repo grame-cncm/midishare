@@ -29,7 +29,7 @@ makefile: makefile.linux
 
 install: $(TARGET).1.0
 	install -C $(TARGET).1.0 $(DEST) 
-	install -C ../linux/Include/MidiShare.h /usr/local/include
+	install -C ../include/MidiShare.h /usr/local/include
 	if [ ! -f $(DEST)/$(TARGET) ]; 	 then ln -s $(DEST)/$(TARGET).1 $(DEST)/$(TARGET); fi
 	if [ ! -f $(DEST)/$(TARGET).1 ]; then ln -s $(DEST)/$(TARGET).1.0 $(DEST)/$(TARGET).1; fi
 

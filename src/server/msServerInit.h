@@ -24,22 +24,19 @@
 #ifndef __msServerInit__
 #define __msServerInit__
 
+#include "msCommChans.h"
+
+typedef void (* NewClientProcPtr) (CommunicationChan cc);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* global initialization */
-void * msServerInit (int shmemSize);
-void msServerClose();
-
-/* log facilities */
-void OpenLog 		(const char *file); // if null log messages to stderr
-void LogWrite 		(const char *msg);
-void LogWriteErr 	(const char *msg);
-
-/* shared memory initialization */
-void *	GetSharedMemory ();
-
+	/* global initialization */
+	void 	InitSignal		();
+	void * 	InitShMem 		(int shmemSize);
+	int 	InitMeetingPoint(NewClientProcPtr proc);
+	void 	msServerClose	();
 
 #ifdef __cplusplus
 }

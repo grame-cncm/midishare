@@ -21,44 +21,21 @@
  
 */
 
-#ifndef __msCommInit__
-#define __msCommInit__
+#ifndef __msCommDefs__
+#define __msCommDefs__
 
 #ifdef WIN32
-#	define kShMemId		"msPublicMem"
+#	define kServerContactName 	"msServerContact"
+#	define kClientSndBaseName 	"\\\\.\\pipe\\msClientSnd"
+#	define kClientRcvBaseName 	"\\\\.\\pipe\\msClientRcv"
+#	define From(a)	&a
+
 #else
-#	define kShMemId		0x6d73506d  /* 'msPm' */
-#endif
 
-typedef void * CInitHandler;
-typedef void * PipesPair;
-
-typedef void (* NewClientProcPtr) (PipesPair p);
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* communication initialization */
-CInitHandler	CreateClientInit ();
-PipesPair		StartClientInit (CInitHandler cih);
-void			EndClientInit (CInitHandler cih);
-
-int		ServerMainComInit (NewClientProcPtr proc);
-void	ServerMainComStop (int stopThread);
-
-/* pipes management */
-void	ClosePipesPair	(PipesPair p);
-long	PPWrite 		(PipesPair p, void *buff, long len);
-long	PPRead 			(PipesPair p, void *buff, long len);
-short	PPID 			(PipesPair p);
-
-void	PPSetInfos 		(PipesPair p, void * infos);
-void *	PPGetInfos 		(PipesPair p);
-
-
-#ifdef __cplusplus
-}
+#	define kServerContactName 	"/tmp/msServerContact"
+#	define kClientSndBaseName 	"/tmp/msClientSnd"
+#	define kClientRcvBaseName 	"/tmp/msClientRcv"
+#	define From(a)	a
 #endif
 
 #endif

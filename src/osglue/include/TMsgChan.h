@@ -32,7 +32,6 @@ typedef struct{
 	WPARAM	id;
 } ContactMsg, * ContactMsgPtr;
 	
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented implementation of message based communication.
 // Used only for Windows based implementations.
@@ -40,7 +39,7 @@ class TLog;
 class TMsgChan
 {
 	public:
-		 	 TMsgChan (TLog * log = 0);
+		 	 TMsgChan ();
 	virtual ~TMsgChan ()	{ Close (); }
 	
 		// typically called by the server:  
@@ -61,7 +60,6 @@ class TMsgChan
 		void *	fInfos;
 		TShMem 	fHandle;	// handler on shared memory dedicated
 							// the server thread identification
-		TLog *	fLog;		// optionnal log capabilities
 };
 
 #endif

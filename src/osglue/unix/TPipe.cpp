@@ -31,31 +31,24 @@
 #include <unistd.h>
 
 #include "TPipe.h"
-#include "TLog.h"
 
 #define PipeErrCode		-1
 #define OwnerPerm		S_IRUSR+S_IWUSR+S_IRGRP+S_IROTH
 #define kInternalPipeBuffSize	1024		// to be checked
 
 //_____________________________________________________________________
-TPipe::TPipe (TLog * log)
+TPipe::TPipe ()
 {
 	fPipe = PipeErrCode;
 	fPath = 0;
 	fBuffSize = 0;
 	fOwner = false;
-	fLog = log;
 }
 
 //_____________________________________________________________________
-int TPipe::Create (const char * name, int silent)
+int TPipe::Create (const char * name)
 {
 	if (mkfifo (name, OwnerPerm) == PipeErrCode) {
-		if (fLog && !silent) {
-			char buff[512];
-			sprintf (buff, "mkfifo \"%s\" failed:", name);
-			fLog->WriteErr (buff);
-		}
 		return false;
 	}
 	fOwner = true;
@@ -80,11 +73,6 @@ int TPipe::Open (const char *name, int perm)
 	}
 	fPipe = open (name, perm);
 	if (fPipe == PipeErrCode) {
-		if (fLog) {
-			char buff[512];
-			sprintf (buff, "pipe open \"%s\" failed:", name);
-			fLog->WriteErr (buff);
-		}
 		return false;
 	}
 	fBuffSize = kInternalPipeBuffSize;
@@ -99,15 +87,7 @@ void TPipe::Close ()
 		close (fPipe);
 	fPipe = PipeErrCode;
 	if (fPath) {
-		if (fOwner) {
-			if (unlink (fPath)) {
-				if (fLog) {
-					char buff[512];
-					sprintf (buff, "unlink pipe \"%s\" failed:", fPath);
-					fLog->WriteErr (buff);
-				}
-			}
-		}
+		if (fOwner) unlink (fPath);
 		free (fPath);
 		fPath = 0;
 	}

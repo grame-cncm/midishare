@@ -1,11 +1,12 @@
 
 LSRC = $(wildcard *.cpp)
 USRC = $(wildcard unix/*.cpp)
-GSRC = $(wildcard glue/*.cpp)
-SRC  = $(LSRC) $(USRC) $(GSRC)
+#GSRC = $(wildcard glue/*.cpp)
+#SRC  = $(LSRC) $(USRC) $(GSRC)
+SRC  = $(LSRC) $(USRC)
 OBJ  = $(patsubst %.cpp, %.o, $(SRC))
 
-CFLAGS = -O3 -Iinclude -Iglue -Wall
+CFLAGS = -O3 -Iinclude -Wall
 CXXFLAGS = $(CFLAGS)
 #VPATH = glue unix
 

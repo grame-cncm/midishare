@@ -1,5 +1,5 @@
 /*
-  Copyright © Grame 2002
+  Copyright © Grame 2003
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -21,18 +21,18 @@
  
 */
 
-#ifndef __msServerInit__
-#define __msServerInit__
+#ifndef __osglue__
+#define __osglue__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifdef WIN32
+#include <windows.h>
+typedef void (__cdecl * AtExitProcPtr)();
+#define cdeclAPI(type)	type __cdecl
 
-/* shared memory initialization */
-void *	GetPubMemory ();
+#else
+typedef void (* AtExitProcPtr)();
+#define cdeclAPI(type)	type
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

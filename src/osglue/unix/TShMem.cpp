@@ -26,7 +26,6 @@
 #include <errno.h>
 
 #include "TShMem.h"
-#include "TLog.h"
 
 #define SHMErr			-1
 #define OwnerPerm		0x1A4
@@ -38,11 +37,10 @@
 
 
 //__________________________________________________________________________
-TShMem::TShMem (TLog * log) 
+TShMem::TShMem () 
 {
 	fMemAddr = 0;
 	fHandler = SHMErr;
-	fLog = log;
 	fCreated = false;
 }
 
@@ -60,8 +58,7 @@ void * TShMem::Create (MemID id, unsigned long size)
 	if (Get (id, size, CreateFlags)) {
 #ifdef linux
 		struct shmid_ds desc;
-		if ((shmctl (fHandler, SHM_LOCK, &desc) == SHMErr) && fLog)
-			fLog->WriteErr ("shmctl IPC_LOCK failed:");
+        shmctl (fHandler, SHM_LOCK, &desc);
 #endif
 		fCreated = true;
 		ptr = Attach ();
@@ -83,7 +80,6 @@ void * TShMem::Open (MemID id)
 int TShMem::Get (key_t id, unsigned long size, int flags) {
 	fHandler = shmget (id, (int)size, flags);
 	if (fHandler == SHMErr) {
-		if (fLog) fLog->WriteErr ("shmget failed:");
 		return false;
 	}
 	return true;
@@ -95,7 +91,6 @@ void * TShMem::Attach () {
 	
 	void * memPtr = (void *)shmat (fHandler, 0, fCreated ? OwnerAttachPerm : OtherAttachPerm);
 	if (memPtr == (void *)SHMErr)  {
-		if (fLog) fLog->WriteErr ("shmat failed:");
 		return 0;
 	}
 	fMemAddr = memPtr;
@@ -106,7 +101,6 @@ void * TShMem::Attach () {
 void TShMem::Detach () {
 	if (!fMemAddr) return;
 	if (shmdt ((char *)fMemAddr) == SHMErr)
-		if (fLog) fLog->WriteErr ("shmdt failed:");
 	fMemAddr = 0;
 }
 
@@ -119,8 +113,7 @@ void TShMem::Close () {
 	#ifdef linux
 		shmctl (fHandler, SHM_UNLOCK, &desc);
 	#endif
-		if (shmctl (fHandler, IPC_RMID, &desc) == SHMErr)
-			if (fLog) fLog->WriteErr ("shmctl IPC_RMID failed:");
+        shmctl (fHandler, IPC_RMID, &desc);
 		fHandler = SHMErr;
 		fCreated = false;
 	}

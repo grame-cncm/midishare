@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2002
+  Copyright © Grame 2003
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -22,19 +22,25 @@
 
 */
 
-#ifdef WIN32
-#	include <windows.h>
-#else
-#	include <stdlib.h>
+#ifndef __msSendToServer__
+#define __msSendToServer__
+
+#include "EventToStream.h"
+#include "StreamToEvent.h"
+
+#define kCommBuffSize	2048
+#define kParseBuffSize	2048
+
+typedef struct StreamDesc * StreamDescPtr;
+typedef struct StreamDesc {
+    msStreamBuffer 	parse;
+    Ev2StreamRec	stream;
+    char 			buff[kParseBuffSize];
+    msStreamParseMethodPtr 	* gParseMthTable;
+    msStreamMthPtr			* gStreamMthTable;
+}StreamDesc;
+
+extern StreamDesc 			gStream;
+extern CommunicationChan 	gComm;
+
 #endif
-
-#include "msExtern.h"
-#include "msClientInit.h"
-
-/*_________________________________________________________________________*/
-Boolean CheckMidiShare (TMSGlobalPtr g)
-{
-	if (g->pub) return true;
-    g->pub = GetPubMemory ();
-    return g->pub ? true : false;
-}

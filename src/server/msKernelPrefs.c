@@ -26,6 +26,7 @@
 #include <ctype.h>
 
 #include "msKernelPrefs.h"
+#include "msLog.h"
 #include "msServerInit.h"
 #include "profport.h"
 
@@ -170,11 +171,10 @@ void CheckPrefs  (msKernelPrefs * prefs)
 //________________________________________________________________________
 void LogPrefs (msKernelPrefs * prefs)
 {
-	char buffer[1024], *ptr, *dev="";
+	char *ptr, *dev="";
 	short i;
 	
-	sprintf (buffer, "Kernel memory size : %ld", prefs->memory);
-	LogWrite (buffer);
+	LogWrite ("Kernel memory size : %ld", prefs->memory);
 	switch (prefs->timeMode) {
 		case kTimeModeRTC: 		ptr = "real time clock (/dev/rtc)";
 			break;
@@ -184,16 +184,12 @@ void LogPrefs (msKernelPrefs * prefs)
 			break;
 		default: 				ptr = "unknow time mode";
 	}
-	sprintf (buffer, "Time management    : %s%s", ptr, dev);
-	LogWrite (buffer);
-	sprintf (buffer, "Time resolution    : %d", (int)prefs->timeRes);
-	LogWrite (buffer);
-	sprintf (buffer, "Drivers count      : %d", (int)prefs->drvCount);
-	LogWrite (buffer);
+	LogWrite ("Time management    : %s%s", ptr, dev);
+	LogWrite ("Time resolution    : %d", (int)prefs->timeRes);
+	LogWrite ("Drivers count      : %d", (int)prefs->drvCount);
 	if (prefs->drvCount) {
 		for (i=0; i<prefs->drvCount; i++) {
-			sprintf (buffer, "   %s", DrvName(prefs, i));
-			LogWrite (buffer);		
+			LogWrite ("   %s", DrvName(prefs, i));		
 		}
 	}
 }
@@ -279,11 +275,10 @@ char * DrvName (msKernelPrefs * prefs, short index)
 //________________________________________________________________________
 static void usage (char *str)
 {
-	char buffer[1024], * name = strrchr (str, pathSep);
+	char * name = strrchr (str, pathSep);
 	if (name) name++;
 	else name = str;
-	sprintf (buffer, "usage: %s %s\n", name, kArgs);
-	LogWrite (buffer);
+	LogWrite ("usage: %s %s\n", name, kArgs);
 	exit (1);
 }
 

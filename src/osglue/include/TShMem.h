@@ -38,8 +38,6 @@
 	typedef int 	ShMemHandler;
 #endif
 
-
-class TLog;
 //___________________________________________________________________
 // MidiShare oriented shared memory segments management:
 //   segments are always created in exclusive mode
@@ -49,7 +47,7 @@ class TLog;
 class TShMem
 {
 	public:
-		 	 TShMem (TLog * log = 0);
+		 	 TShMem ();
 	virtual ~TShMem ();
 			
 		void *	Create 	(MemID id, unsigned long size);
@@ -66,7 +64,6 @@ class TShMem
 		int		fCreated;	// a flag to check wether the segment has been created
 
 		ShMemHandler fHandler;	// handler to the shared segment
-		TLog *	fLog;			// optionnal log capabilities
 };
 
 #endif

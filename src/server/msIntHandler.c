@@ -37,7 +37,7 @@
 #include "msKernel.h"
 #include "msKernelPrefs.h"
 #include "msMem.h"
-#include "msServerInit.h"
+#include "msLog.h"
 #include "msTasks.h"
 #include "msThreads.h"
 #include "msPortAudio.h"
@@ -79,7 +79,7 @@ msThreadPtr gTimeThread = 0;
 //____________________________________________________________
 static int open_rtc (rtcTimeInfo * t)
 {
-	int fd, ret; unsigned long freq; char msg[512];
+	int fd, ret; unsigned long freq;
 
 	fd = open ("/dev/rtc", O_RDONLY);
 	if (fd == -1) {
@@ -104,8 +104,7 @@ static int open_rtc (rtcTimeInfo * t)
 		LogWriteErr ("Starting RTC clock failed (RTC_PIE_ON)");
 		goto error;
 	}
-	sprintf (msg, "RTC time is running at %ld hz.", freq);
-	LogWrite (msg);
+	LogWrite ("RTC time is running at %ld hz.", freq);
 	return fd;
 	
 error:
@@ -136,9 +135,8 @@ static int RTCOpen (TMSGlobalPtr g)
 		return -1;
 	}
 	if (res != h->timeRes) {
-		char msg [512];
-		sprintf (msg, "Opening time interrupt in RTC mode: time resolution changed to %d", res);
 		h->timeRes = res;
+		LogWrite ("Opening time interrupt in RTC mode: time resolution changed to %d", res);
 	}
 	return open_rtc (t);
 }
@@ -230,7 +228,6 @@ void CloseMMTimeInterrupts(TMSGlobalPtr g)
 void OpenTimeInterrupts(TMSGlobalPtr g)
 {
 	THorlogePtr clock = &g->clock;
-	char msg[512];
 	
     clock->timeMode = gPrefs->timeMode;
     clock->timeRes = gPrefs->timeRes;
@@ -255,8 +252,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 			break;
 #endif
 		default:
-			sprintf (msg, "Can't open time interrupts: invalid time mode %d\n", (int)clock->timeMode);
-			LogWrite (msg);
+			LogWrite ("Can't open time interrupts: invalid time mode %d\n", (int)clock->timeMode);
 	}
 }
 
@@ -264,7 +260,6 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
 	THorlogePtr clock = &g->clock;
-	char msg[512];
 	
 	switch (clock->timeMode) {
 #ifdef linux
@@ -283,8 +278,7 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 			break;
 #endif
 		default:
-			sprintf (msg, "Can't open time interrupts: invalid time mode %d\n", (int)clock->timeMode);
-			LogWrite (msg);
+			LogWrite ("Can't close time interrupts: invalid time mode %d\n", (int)clock->timeMode);
 	}
 }
 

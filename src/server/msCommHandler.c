@@ -24,13 +24,14 @@
 
 #include "msFunctions.h"
 #include "msKernel.h"
-#include "msCommHandler.h"
-#include "msServerInit.h"
-#include "msThreads.h"
-#include "msSharedMem.h"
-
 #include "EventToStream.h"
 #include "StreamToEvent.h"
+
+#include "msCommHandler.h"
+#include "msLog.h"
+#include "msServerInit.h"
+#include "msSharedMem.h"
+#include "msThreads.h"
 
 #ifdef WIN32
 #define windecl	__cdecl
@@ -44,7 +45,7 @@
 typedef struct PipesList * PipesListPtr;
 typedef struct PipesList{
     PipesListPtr 	next;
-    PipesPair		comm;
+    CommunicationChan comm;
     msThreadPtr 	thread;
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
@@ -70,7 +71,7 @@ static void Event2Text (MidiEvPtr e, char *buff, short len)
 /*____________________________________________________________________________*/
 static void SetFilter (short ref, MidiEvPtr e)
 {
-    ShMemID id; SharedMemHandler memh; FilterInfoPtr fsptr;
+    ShMemID id; SharedMemHandler memh; void *ptr;
 #ifdef WIN32
     char fid[20];
     Event2Text (e, fid, 20);
@@ -79,9 +80,9 @@ static void SetFilter (short ref, MidiEvPtr e)
     id = e->info.longField;
 #endif
     if (id) {
-        memh = msSharedMemOpen (id, (void **)&fsptr);
+        memh = msSharedMemOpen (id, &ptr);
         if (memh) {
-            MidiSetFilter (ref, (MidiFilterPtr)++fsptr);
+            MidiSetFilter (ref, (MidiFilterPtr)ptr);
         }
         else  printf ("msSharedMemOpen failed\n");
     }
@@ -91,7 +92,7 @@ static void SetFilter (short ref, MidiEvPtr e)
 /*____________________________________________________________________________*/
 static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
 {
-    char msg[256]; MidiEvPtr res = 0;
+    MidiEvPtr res = 0;
     char name[256]; short ref;
     static char refmap[32];
 
@@ -163,8 +164,7 @@ memfail:
     LogWrite ("EventHandlerProc: MidiShare memory allocation failed\n");
     return 0;
 unexpected:
-    sprintf (msg, "EventHandlerProc: unexpected event type %d\n", EvType(e));
-    LogWrite (msg);
+    LogWrite ("EventHandlerProc: unexpected event type %d\n", EvType(e));
     MidiFreeEv (e);
     return 0;
 }
@@ -173,39 +173,38 @@ unexpected:
 static Boolean SendEvent (MidiEvPtr e, PipesListPtr pl)
 {
     Ev2StreamPtr stream = &pl->stream;
-    long n; short len; char msg[256];
+    long n; short len;
 
     msStreamStart (stream);
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
-            n = PPWrite (pl->comm, pl->buff, len);
+            n = CCWrite (pl->comm, pl->buff, len);
             if (n != len) goto failed;
         } while (!msStreamContEvent (stream));
     }
     else {
         len = msStreamSize(stream);
-        n = PPWrite (pl->comm, pl->buff, len);
+        n = CCWrite (pl->comm, pl->buff, len);
         if (n != len) goto failed;
     }
     return true;
     
 failed:
-    sprintf (msg, "PPWrite failed (%ld)\n", n);
-	LogWrite (msg);
+	LogWriteErr ("CCWrite failed (%ld)\n", n);
     return false;
 }
 
 /*____________________________________________________________________________*/
-static ThreadProc(PipeHandlerProc, p)
+static ThreadProc(CommHandlerProc, p)
 {
 	PipesListPtr pl = (PipesListPtr)p;
-    char msg[256]; int refcount = 0;
-	sprintf (msg, "New PipeHandlerProc: pipes id = %d\n", (int)PPID(p));
-	LogWrite (msg);
+    int refcount = 0;
+
+fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
 
     do {
-        long n = PPRead (pl->comm, pl->buff, kCommBuffSize);
+        long n = CCRead (pl->comm, pl->buff, kCommBuffSize);
         if (n > 0) {
             int ret;
             MidiEvPtr e = msStreamGetEvent (&pl->parse, &ret);
@@ -215,20 +214,17 @@ static ThreadProc(PipeHandlerProc, p)
                     break;
             }
             else if (ret != kStreamNoMoreData) {
-                sprintf (msg, "msStreamGetEvent read error (%d)\n", ret);
-                LogWrite (msg);
+                LogWrite ("msStreamGetEvent read error (%d)\n", ret);
                 break;
             }
         }
         else if (n < 0) {
-            perror ("PPRead error");
-            sprintf (msg, "PipeHandlerProc read error (%ld)\n", n);
-            LogWrite (msg);
+            LogWriteErr ("CommHandlerProc read error (%ld)", n);
             break;
         }
     } while (refcount);
-    fprintf (stderr, "PipeHandlerProc exit: ClosePipesPair (refcount %d)\n", refcount);
-    ClosePipesPair (pl->comm);
+fprintf (stderr, "CommHandlerProc exit: CloseCommunicationChannel (refcount %d)\n", refcount);
+    CloseCommunicationChannel (pl->comm);
     pl->comm = 0;
     pl->thread = 0;
     return 0;
@@ -237,7 +233,7 @@ static ThreadProc(PipeHandlerProc, p)
 /*____________________________________________________________________________*/
 static void CloseOneClientChannel (PipesListPtr pl)
 {
-    if (pl->comm) ClosePipesPair (pl->comm);
+    if (pl->comm) CloseCommunicationChannel (pl->comm);
     if (pl->thread) msThreadDelete (pl->thread);
     free (pl);
 }
@@ -264,23 +260,23 @@ void InitCommHandlers ()
 }
 
 /*____________________________________________________________________________*/
-void NewClientChannel (PipesPair * p)
+void NewClientChannel (CommunicationChan cc)
 {
     msThreadPtr thread; PipesListPtr pl;
     
     pl = (PipesListPtr)malloc (sizeof(PipesList));
     if (!pl) {
-        ClosePipesPair (p);
+        CloseCommunicationChannel (cc);
         LogWrite ("NewClientChannel: PipesList memory allocation failed\n");
         return;
     }
     msStreamParseInit (&pl->parse, gParseMthTable, pl->buff, kParseBuffSize);
     msStreamInit (&pl->stream, gStreamMthTable, pl->buff, kParseBuffSize);
     pl->next = gPList;
-    pl->comm = p;
-    thread = msThreadCreate (PipeHandlerProc, pl, kServerHighPriority);
+    pl->comm = cc;
+    thread = msThreadCreate (CommHandlerProc, pl, kServerHighPriority);
 	if (!thread) {
-        ClosePipesPair (p);
+        CloseCommunicationChannel (cc);
         free (pl);
         LogWrite ("NewClientChannel: msThreadCreate failed\n");
         return;

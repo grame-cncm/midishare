@@ -4,6 +4,7 @@
 
 #include "msPortAudio.h"
 #include "msExtern.h"
+#include "msLog.h"
 #include "msServerInit.h"
 #include "portaudio.h"
 
@@ -32,7 +33,6 @@ static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
 /*_________________________________________________________________________*/
 static long GetAudioBufFSize (int timeres)
 {
-	char msg[512];
 	switch (timeres) {
 		case 1: return 44;
 		case 2: return 88;
@@ -45,8 +45,7 @@ static long GetAudioBufFSize (int timeres)
 		case 9: return 397;
 		case 10: return 441;
 	}
-	sprintf (msg, "Invalid time resolution %d: forced to 2", timeres);
-	LogWrite (msg);
+	LogWrite ("Invalid time resolution %d: forced to 2", timeres);
 	return 88;
 }
 

@@ -22,10 +22,10 @@
 #ifndef __msCommHandler__
 #define __msCommHandler__
 
-#include "msCommInit.h"
+#include "msCommChans.h"
 
 void CloseAllClientChannels ();
-void NewClientChannel (PipesPair * p);
+void NewClientChannel (CommunicationChan cc);
 void InitCommHandlers ();
 
 #endif

@@ -29,7 +29,6 @@
 #include <unistd.h>
 
 #include "TThreads.h"
-#include "TLog.h"
 
 #define RTSchedPolicy SCHED_RR
 
@@ -54,17 +53,15 @@ static void * baseThreadProc (void * ptr)
 }
 
 //_____________________________________________________________________
-TThreads::TThreads (TLog * log)
+TThreads::TThreads ()
 {
 	fThread = 0;
-	fLog = log;
 }
 
 //_____________________________________________________________________
-TThreads::TThreads (ThreadProcPtr proc, void * arg, int priority, TLog * log)
+TThreads::TThreads (ThreadProcPtr proc, void * arg, int priority)
 {
 	fThread = 0;
-	fLog = log;
 	Create (proc, arg, priority);
 }
 
@@ -73,7 +70,6 @@ int	TThreads::SetPriority (int priority)
 {
 	if (fThread) {
 		struct sched_param param; int ret;
-		char * msg = "";
 		
 		param.sched_priority = priority;
 		if (priority) {
@@ -85,14 +81,9 @@ int	TThreads::SetPriority (int priority)
 		  	ret = pthread_setschedparam (fThread, RTSchedPolicy, &param);
 			setuid (saved_uid);
 		  	if (!ret) return true;
-			msg = "pthread_setschedparam RTSchedPolicy failed:";
 		}
-		else {
-			if (!pthread_setschedparam (fThread, SCHED_OTHER, &param)) 
-				return true;
-			msg = "pthread_setschedparam SCHED_OTHER failed:";
-		}
-		if (fLog) fLog->WriteErr (msg);
+		else if (!pthread_setschedparam (fThread, SCHED_OTHER, &param)) 
+            return true;
 	}
 	return false;
 }
@@ -103,19 +94,16 @@ int	TThreads::Create (ThreadProcPtr proc, void * arg, int priority)
 	int ret;
 	BaseThreadArgPtr argPtr = (BaseThreadArgPtr)malloc (sizeof(BaseThreadArg));
 	if (!argPtr) {
-		if (fLog) fLog->WriteErr ("malloc in TThreads::Create failed:");
-		return false;
+		return MemAllocFailed;
 	}
 	argPtr->arg = arg;
 	argPtr->proc= proc;
 	ret = pthread_create(&fThread, NULL, baseThreadProc, argPtr);
 	if (!ret) {
-		SetPriority (MapPriority(priority));
-		return true;	
+        return SetPriority (MapPriority(priority)) ? ThreadNoErr : SetPriorityFailed;
 	}
 	free (argPtr);
-	if (fLog) fLog->WriteErr ("pthread_create failed:");
-	return false;	
+	return CreateFailed;	
 }
 
 //_____________________________________________________________________

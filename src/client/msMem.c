@@ -35,11 +35,11 @@
 #ifdef WIN32
 #define allocate(size) 	LocalAlloc(LMEM_FIXED, size)
 #define free(ptr) 		LocalFree((HANDLE)ptr)
-#define baseKey			"msFlt"
+#define kBaseFKey			"msFlt"
 #else
 #define allocate(size) (void*)malloc(size)
 #define free(ptr) 		free(ptr)
-#define baseKey			0x0e1e10000
+#define kBaseFKey			0x0e1e10000
 #endif
 
 /*_________________________________________________________________________*/
@@ -56,60 +56,19 @@ void DisposeMemory (FarPtr(void) memPtr)
 	free(memPtr);
 }
 
-
-static ShMemID CreateShMKey (int index)
-{
-#ifdef WIN32
-    static char	id[keySize];
-    wsprintf (id, "%s%d", baseKey, index);
-    return id;
-#else
-    return baseKey + index;
-#endif
-}
-
 FarPtr(void) AllocateFilter (unsigned long size)
 {
-    int i; FilterInfo * ptr;
-    unsigned long fsize = sizeof(FilterInfo) + size;
-
-    for (i = 1; i < MaxFilters; i++) {
-        ShMemID id = CreateShMKey (i);
-        SharedMemHandler mh = msSharedMemCreate (id, fsize, (void **)&ptr);
-        if (mh) {
-            ptr->memh = mh;
-#ifdef WIN32
-            strcpy (ptr->id, id);
-#else
-            ptr->id = id;
-#endif
-            return ++ptr;
-        }
-    }
-	return 0;
+	void * ptr = msSharedMemCreateIndexed (kBaseFKey, size, MaxFilters);
+	return ptr;
 }
 
 void * GetShMemID (MidiFilterPtr filter)
 {
-    void * ret = 0;
-
-    if (filter) {
-        FilterInfo * fptr = (FilterInfo *)filter;
-        fptr--;
-#ifdef WIN32
-        ret = fptr->id;
-#else
-        ret = &fptr->id;
-#endif
-    }
-    return ret;
+	return filter ? msSharedMemGetID (filter) : 0;
 }
 
 void FreeFilter (FarPtr(void) filter)
 {
-    if (filter) {
-        FilterInfo * fptr = (FilterInfo *)filter;
-        fptr--;
-        msSharedMemClose (fptr->memh);
-    }
+    if (filter)
+        msSharedMemDelete (filter);
 }
