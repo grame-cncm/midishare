@@ -38,7 +38,6 @@
 
 #include <linux/kernel.h>
 #include <linux/fs.h>		/* for devices	*/
-#include <asm/uaccess.h>	/* for put_user	*/
 #include <linux/sched.h>	/* for current 	*/
 #include <linux/tty.h>		/* for tty_struct */
 
