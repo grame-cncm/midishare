@@ -208,6 +208,11 @@ void InitEvents ()
 	InitGetFieldMth		( GetFieldMethodTbl );
 	InitCountFieldsMth	( CountFieldsMethodTbl );
 	InitAddFieldMth		( AddFieldMethodTbl );
+	
+	/* will be implemented as method table later */
+	#ifdef __Linux__
+	InitStructTbl();
+	#endif
 }
 
 #ifdef __Macintosh__
