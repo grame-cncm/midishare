@@ -23,15 +23,13 @@
 #include "libMidiShare.h"
 
 
-//_________________________________________________________
-//	Globals variables
+/*________________________________________________________ */
+/*	Globals variables                                  */
 
 TClients   	gLClients = {0};
 TClients*	gClients = &gLClients;
 
-int msfd = -1;        /* the MidiShare Device file number */
-
-
+int msfd = -1;  /* the MidiShare Device file number */
 
 /*--------------------------------------------------------------------*/
 
@@ -39,7 +37,7 @@ void MidiInstall()
 {
   msfd = open("/dev/MidiShare", 0);
   if (msfd < 0) {
-	printf("can't open /dev/MidiShare\n");
+	printf("Can't open /dev/MidiShare\n");
 	exit(-1);
   }
   InitEvents ();
@@ -50,12 +48,12 @@ void MidiInstall()
 
 void FreeList1( MidiEvPtr l)
 {
-	MidiEvPtr n;
+	MidiEvPtr next;
 	
 	while (l) {
-		n = l->link;
+		next = Link(l);
 		MSFreeCell(l,FreeList(Memory(gClients)));
-		l=n;
+		l=next;
 	}
 }
 
@@ -65,12 +63,12 @@ MidiEvPtr MidiGetEvAux(short ref, int command)
 {
 	int            	err;
 	TMidiGetEvArgs 	arg;
-	MidiEvPtr		c;
+	MidiEvPtr	c;
 	
 	c = MSNewCell(FreeList(Memory(gClients)));
 	
 	if (c == 0) return 0;
-	c->link=0;
+	Link(c)=0;
 	arg.r = ref;
 	arg.d = 1;
 	arg.l = c; 
@@ -82,7 +80,7 @@ MidiEvPtr MidiGetEvAux(short ref, int command)
 	if (arg.e == 0 && arg.u > 0) {
 		/* -- Not enough memrory cells available */
 		while ((arg.d < arg.u) && (c = MSNewCell(FreeList(Memory(gClients))))) {
-			c->link = arg.l;
+			Link(c) = arg.l;
 			arg.l = c;
 			arg.d++;
 		}
@@ -116,8 +114,8 @@ void* event_handler(void* arg)
 {
 	TAppl* appl = (TAppl*) arg;
 	int refNum = appl->refNum;
-	MidiEvPtr ev;
 	TTaskExtPtr task ;
+	MidiEvPtr ev;
 			
 	while ((ev = MidiGetCommand(refNum))) {         		
 			
@@ -129,8 +127,8 @@ void* event_handler(void* arg)
 					break;
 			
 				case typeProcess : 
-					task = (TTaskExtPtr)LinkST(ev);	
 					// execute pending real-time tasks 
+					task = (TTaskExtPtr)LinkST(ev);	
 					if (task->fun) (*task->fun) (ev->date, refNum, task->arg1, task->arg2, task->arg3);			
 					break;
 						
@@ -140,14 +138,15 @@ void* event_handler(void* arg)
 					if (appl->applAlarm) (*appl->applAlarm) (refNum, MSGetField(ev,0)); 	
 					break;	
 					
-				case typeDead:
-					// should never occur
-					printf("User Thread : ForgetTed task \n");	
+				case typeReset:
+					// quit the thread
+					goto exit;	
 					break;		
 							 
 			}
 			MSFreeEv(ev, FreeList(Memory(gClients)));
 	}
+	exit:
 	pthread_exit(0);
 }
 
@@ -211,7 +210,6 @@ short MidiGetNamedAppl(MidiName name)
 /* MidiGetSyncInfo */
 /*******************/
 
-
 void MidiGetSyncInfo(SyncInfoPtr p)  
 {
    int err;
@@ -223,7 +221,6 @@ void MidiGetSyncInfo(SyncInfoPtr p)
 /*******************/
 /* MidiSetSyncMode */
 /*******************/
-
 
 void MidiSetSyncMode(unsigned short mode)  
 {
@@ -239,7 +236,6 @@ void MidiSetSyncMode(unsigned short mode)
 /* MidiGetExtTime  */
 /*******************/
 
-
 long MidiGetExtTime ()  
 {
    TMidiGetExtTimeArgs args;
@@ -253,7 +249,6 @@ long MidiGetExtTime ()
 /*******************/
 /* MidiInt2ExtTime */
 /*******************/
-
 
 long MidiInt2ExtTime (long date)  
 {
@@ -269,7 +264,6 @@ long MidiInt2ExtTime (long date)
 /*******************/
 /* MidiExt2IntTime */
 /*******************/
-
 
 long MidiExt2IntTime (long date)  
 {
@@ -333,38 +327,41 @@ long* MidiGetTimeAddr ()
 
  short MidiOpen (MidiName name)
 {
-	TApplPtr appl;
-	TClientsPtr clients = gClients;
+	TApplPtr 		appl;
 	TMidiOpenArgs 		args;
-  	int           		err,res;
+  	int           		err;
    	struct sched_param 	param;  // type defined in  /usr/include/bits/sched.h 
+	
+	pthread_mutex_lock(&gClients->mutex);
 	
  	args.name = name;
   	CALL(kMidiOpen,&args);
 	 
-	if (clients->nbAppls == 0) {
+	if (gClients->nbAppls == 0) {
 		OpenMemory (Memory(gClients));
 	}
 	
-	if (clients->nbAppls < MaxAppls) {
+	if (gClients->nbAppls < MaxAppls) {
 	
 		appl = NewAppl (sizeof(TAppl));
 		
 		if (appl) {
 		
-			makeAppl(clients, appl, args.refnum, name); 
+			makeAppl(gClients, appl, args.refnum, name); 
 			
-			param.sched_priority = 99; // 0 à 99  
+			param.sched_priority = 99; /* 0 to 99  */
 			pthread_create(&appl->rcvThread,NULL,event_handler,(void*)appl);
 			
-   			res = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
+   			err = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
 	
-   			if (res) {
-   				printf("the real-time receive thread priority can not be set\n");
-				printf("you must be SU \n");
+   			if (err) {
+   				printf("The real-time receive thread priority can not be set\n");
+				printf("You must be SU \n");
    			}
  		}
 	}
+	
+	pthread_mutex_unlock(&gClients->mutex);
 	return args.refnum;
 }
 
@@ -376,23 +373,41 @@ long* MidiGetTimeAddr ()
 
 void MidiClose (short ref)
 {
-	TMidiCloseArgs args;
-    int            err;
-	TClientsPtr clients = gClients;
+	TMidiCloseArgs 	args;
+    	int            	err;
+	TApplPtr 	appl;
 	
-	if (CheckRefNum(clients, ref)) {
+	pthread_mutex_lock(&gClients->mutex);
+	
+	if (CheckRefNum(gClients, ref)) {
  		
+		appl = gClients->appls[ref];
  		args.refnum = ref;
+		
+		/* Resume the Real Time thread */
+		
+		CALL(kMidiQuit,&args);
+		
+		/* Wait for Real Time thread exit */
+		
+		pthread_join(appl->rcvThread,NULL);
+		
+		/* Kernel close */
 	
 		CALL(kMidiClose,&args);
 		
-		clients->appls[ref] = 0;
-		clients->nbAppls--;
+		/* Client close */
 		
-		if (clients->nbAppls == 0) {
+		FreeAppl(appl) ;
+		gClients->appls[ref] = 0;
+		gClients->nbAppls--;
+	
+		if (gClients->nbAppls == 0) {
 			CloseMemory(Memory(gClients));
 		} 
 	}
+	
+	pthread_mutex_unlock(&gClients->mutex);
 }
 
 
@@ -583,7 +598,6 @@ Boolean MidiGetPortState (short port)
 }
 
 
-
 /*******************/
 /* MidiFreeSpace */
 /*******************/
@@ -602,13 +616,11 @@ long MidiTotalSpace (){ return MSTotalSpace(Memory(gClients)); }
 
 long MidiGrowSpace (unsigned long nbev){ return MSGrowSpace(nbev, Memory(gClients)); }
 
-
 /*******************/
 /* MidiNewCell */
 /*******************/
 
 MidiEvPtr MidiNewCell (){ return MSNewCell(FreeList(Memory(gClients))); }
-
 
 /*******************/
 /* MidiFreeCell */
@@ -619,7 +631,6 @@ void MidiFreeCell (MidiEvPtr e) {
 		MSFreeCell(e, FreeList(Memory(gClients)));
 	}
 }
-
 
 /*******************/
 /* MidiNewEv */
@@ -650,7 +661,6 @@ void MidiSetField (MidiEvPtr ev, unsigned long f, long v){  MSSetField(ev, f,v);
 /*******************/
 
 long MidiGetField (MidiEvPtr ev, unsigned long f){ return MSGetField(ev, f); }
-
 
 /*******************/
 /* MidiCountFields */
@@ -688,7 +698,6 @@ void MidiFreeSeq (MidiSeqPtr s){  MSFreeSeq(s,FreeList(Memory(gClients))); }
 
 void MidiClearSeq (MidiSeqPtr s){  MSClearSeq(s,FreeList(Memory(gClients))); }
 
-
 /*******************/
 /* MidiApplySeq */
 /*******************/
@@ -723,7 +732,6 @@ unsigned long MidiGetTime()
   return args.time;
 }
 
-
 /*******************/
 /* MidiSendIm */
 /*******************/
@@ -733,7 +741,7 @@ void MidiSendIm (short ref, MidiEvPtr e)
 	int  err;
 	
 	if (e) {
-		e->refNum = ref;
+		RefNum(e) = ref;
 		CALL(kMidiSendIm ,e);
 		MSFreeEv(e, FreeList(Memory(gClients)));
 	}
@@ -749,7 +757,7 @@ void MidiSend (short ref, MidiEvPtr e)
 	int  err;
 	
 	if (e) {
-		e->refNum = ref;
+		RefNum(e) = ref;
 		CALL(kMidiSend ,e);
 		MSFreeEv(e, FreeList(Memory(gClients)));
 	}
@@ -764,8 +772,8 @@ void MidiSendAt (short ref, MidiEvPtr e, long d)
 	int  err;
 	
 	if (e) {
-		e->refNum = ref;
-		e->date = d;
+		RefNum(e) = ref;
+		Date(e) = d;
 		CALL(kMidiSend ,e);
 		MSFreeEv(e, FreeList(Memory(gClients)));
 	}
@@ -809,7 +817,6 @@ void MidiFlushEvs   (short ref)
   CALL(kMidiFlushEvs ,&args);
 }
 
-
 /*******************/
 /* MidiReadSync */
 /*******************/
@@ -824,7 +831,6 @@ void* MidiReadSync (void* adr)
   return args.res;
   
 }
-
 
 /*******************/
 /* MidiWriteSync  */
@@ -842,7 +848,6 @@ void* MidiWriteSync (void* adr, void* val)
   
 }
 
-	
 /*******************/
 /* MidiCall  */
 /*******************/
@@ -864,9 +869,7 @@ void MidiCall (TaskPtr routine, long date, short ref, long a1,long a2,long a3)
 		ext->val[3]= a3;
 		CALL(kMidiSend ,ev);
 	}
-  
 }
-
 
 /*******************/
 /* MidiTask */
@@ -895,8 +898,7 @@ MidiEvPtr MidiTask   (TaskPtr routine, long date, short ref, long a1,long a2,lon
 		CALL (kMidiTask, &args);
 		return args.ktask;
 	}else
-		return 0;
-	
+		return 0;	
 }
 
 /*******************/
@@ -926,7 +928,6 @@ MidiEvPtr MidiDTask   (TaskPtr routine, long date, short ref, long a1,long a2,lo
 		return args.ktask;
 	}else
 		return 0;
-  
 }
 
 /*******************/
@@ -936,7 +937,7 @@ MidiEvPtr MidiDTask   (TaskPtr routine, long date, short ref, long a1,long a2,lo
 void  MidiForgetTask  (MidiEvPtr *taskptr)
 {
 	int  err;
-    TMidiForgetTaskArgs args;
+    	TMidiForgetTaskArgs args;
 	
 	if (taskptr && *taskptr) {
 		args.utask = 0;
@@ -944,7 +945,6 @@ void  MidiForgetTask  (MidiEvPtr *taskptr)
 		CALL(kMidiForgetTask,&args);
 		MSFreeEv(args.utask, FreeList(Memory(gClients)));
 	}
-  
 }
 
 /*******************/
@@ -1046,7 +1046,6 @@ void MidiAcceptPort (MidiFilterPtr filter, short port , Boolean state )
   
 }
 
-
 /*******************/
 /* MidiAcceptType */
 /*******************/
@@ -1058,8 +1057,7 @@ void MidiAcceptType (MidiFilterPtr filter, short type , Boolean state )
   args.filter = filter;
   args.generic = type;
   args.state = state;
-  CALL(kMidiAcceptType,&args);
-  
+  CALL(kMidiAcceptType,&args);  
 }
 
 /*******************/

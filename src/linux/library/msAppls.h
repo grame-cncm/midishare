@@ -30,16 +30,16 @@
 #include "msDefs.h"  
 #include "msMemory.h"  
 
-#define MaxAppls         64            /* maximum allowed applications    */
+#define MaxAppls         64		/* maximum allowed applications    */
 
 
-/* MidiShare application internal data structures                         */
+/* MidiShare application internal data structures                    */
 typedef struct TAppl{
-    FarPtr(void)    info;        /* user field                   */
-    uchar           refNum;      /* reference number             */
+   	FarPtr(void)    info;        /* user field                   */
+    	uchar           refNum;      /* reference number             */
 	
-    RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
-    ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
+   	RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
+    	ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
 	pthread_t       rcvThread;   /* real time rcv thread */
     
 } TAppl;
@@ -48,10 +48,13 @@ typedef struct FarPtr(TAppl) 		TApplPtr;
 
 /*___________________________________*/
 typedef struct TClients {
-	short         nbAppls;                /* current running clients count   */
-	TApplPtr      appls[MaxAppls];        /* client applications list        */
-	TMSMemory     memory;
-	MSName		  nameTable[MaxAppls];  
+	short         	nbAppls;                /* current running clients count   */
+	TApplPtr      	appls[MaxAppls];        /* client applications list        */
+	TMSMemory     	memory;			/* shared event memory */
+	MSName		nameTable[MaxAppls];    /* array of string (for application name management)*/
+	pthread_mutex_t mutex;			/* sychronisation mutex */
+	
+
 } TClients;
 
 
