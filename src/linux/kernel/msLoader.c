@@ -38,7 +38,7 @@
 #include <linux/fs.h>		/* for devices	*/
 #include <asm/uaccess.h>	/* for put_user	*/
 #include <linux/sched.h>	/* for current 	*/
-#include <linux/tty.h>		/* for tty_struct 	*/
+#include <linux/tty.h>		/* for tty_struct */
 #include <linux/slab.h>
 
 #include "msAppFun.h"
@@ -103,21 +103,18 @@ char* itoa (long n, char s[])
 }
 
 /*__________________________________________________________________________________*/
+
 int MidiReset (unsigned long userptr) 
 {
 	int n = MSCountAppls(Clients(gMem));
 	
-	prnt("MidiReset\n");
-	
 	while (n){
 	 	MOD_DEC_USE_COUNT;
-		prnt("Close\n");
 	 	MSClose( MSGetIndAppl(n--,Clients(gMem)),gMem);
 	}
 	
 	return 0;
 }
-
 
 /*__________________________________________________________________________________*/
 
@@ -165,9 +162,7 @@ static int mskNullMth(unsigned long userptr)
 static void initMthTable() {
 
 	int i;
-	for (i = 0; i< kMaxMth; i++) {
-		KernelMthTable[i] = mskNullMth;
-	}
+	for (i = 0; i< kMaxMth; i++) { KernelMthTable[i] = mskNullMth; }
 	
 	KernelMthTable[kMidiGetVersion] = mskGetVersion;
 	
@@ -294,10 +289,8 @@ int init_module()
 		return r; 
 	}
 	
-	prnt("Open MidiShare module...");
-	
 	initMthTable();
-	MidiShareSpecialInit (10000);
+	MidiShareSpecialInit (30000);
 	
 	return 0;
 }
@@ -307,11 +300,7 @@ int init_module()
 void cleanup_module()
 {
 	int r = unregister_chrdev(kMidiShareMajor, kMidiShareName);
-	if (r < 0) {
-		prnt("Error when closing MidiShare module");
-	} else {
-		prnt("Close MidiShare module...");
-	}
+	if (r < 0) prnt("Error when closing MidiShare module");
 }
 
 
