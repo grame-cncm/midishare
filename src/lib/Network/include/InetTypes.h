@@ -68,6 +68,8 @@ typedef OTResult 		SockResult;
 typedef unsigned char 	ErrString[255];
 typedef unsigned char 	NameStr[kMaxHostNameLen];
 typedef unsigned char * strPtr;
+typedef InetSvcRef		InetServiceRef;
+typedef InetDomainName	INetDomainName;
 
 #define IPField(a)		(a).fHost
 #define IPType(a)		(a).fAddressType

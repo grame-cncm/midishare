@@ -28,7 +28,13 @@
 
 #if macintosh
 
+#include <Memory.h>
+
+typedef Handle		INetHandle;
+
 #define HandlePtr(h)	*(h)
+#define 	INetNewHandle 		NewHandle
+#define		INetDisposeHandle 	DisposeHandle
 
 #else
 
