@@ -76,6 +76,7 @@ Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
 failed:
     MidiFreeEv (e);
     fprintf (stderr, "%s line %d: CCWrite failed (%ld)\n", __FILE__, __LINE__, n);
+    c->send = NoCommSend;
     return false;
 }
 

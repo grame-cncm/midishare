@@ -77,8 +77,15 @@ static int RTSendFlush (msLibContextPtr c)
     return (n == len);
 
 failed:
-perror ("RTSendFlush: CCRTWrite failed");
 	MidiFreeEv (e);
+    return false;
+}
+
+/*____________________________________________________________________________*/
+/* used in case of communication error with the server */ 
+Boolean NoCommSend (MidiEvPtr e, TMSGlobalPtr g)
+{
+    MidiFreeEv(e);
     return false;
 }
 
@@ -163,15 +170,17 @@ ThreadProc(RTClientProc, arg)
 		NextActiveAppl(g) = ActiveAppl(g);
 		e = msStreamStartBuffer (parse, n, &ret);
 if (ret != kStreamNoError)
-	fprintf (stderr, "RTClientProc : %s (%d) [%lx %lx]\n", 
+	fprintf (stderr, "RTClientProc - msStreamStartBuffer error: %s (%d) [%lx %lx]\n", 
 		msStreamGetErrorText(ret), e ? RefNum(e) : 0, (long)c, (long)parse);
 		while (e) {
 			DispatchEvent (g, e);
 			e = msStreamGetEvent (parse, &ret);
 		}
 		RcvAlarmLoop (g);
-		if (!RTSendFlush (c))
-			perror ("RTClientProc: RTSendFlush error");
+		if (!RTSendFlush (c)) {
+			c->send = NoCommSend;
+            perror ("RTClientProc: RTSendFlush error");
+        }
 	}
 //	fprintf (stderr, "RTClientProc: CCRTRead error %ld\n", n);
 	return 0;

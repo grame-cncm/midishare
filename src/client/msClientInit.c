@@ -38,10 +38,12 @@ static void DoCloseComm (void)
 {
 	msLibContextPtr c = LibContext;
 	msThreadPtr rtThread = c->RTThread;
+    CommunicationChan cc = c->cchan;
 	c->RTThread = 0;
-    if (c->cchan) CloseCommunicationChannel (c->cchan);
     c->cchan = 0;
+    c->send  = NoCommSend;
 	if (rtThread) msThreadDelete (rtThread);
+    if (cc) CloseCommunicationChannel (cc);
 }
 
 /*____________________________________________________________________________*/
@@ -82,6 +84,7 @@ Boolean InitComm (TMSGlobalPtr g)
 		else {
 			msStreamParseReset(&c->std.parse);
 			msStreamReset(&c->std.stream);
+            c->send  = StdSend;
 			c->RTThread = msThreadCreate (RTClientProc, g, kClientRTPriority);
 			if (!c->RTThread) {
 				DoCloseComm ();

@@ -47,7 +47,7 @@ typedef struct StreamDesc {
 typedef Boolean (* SendToServerPtr) (MidiEvPtr e, TMSGlobalPtr g);
 
 typedef struct {
-	CommunicationChan 	cchan;		/* commaunication channel handler */
+	CommunicationChan 	cchan;		/* communication channel handler */
 	SharedMemHandler	msMem;		/* public shared memory handler */
 	SendToServerPtr		send;
 	msThreadPtr			RTThread;	/* real-time thread handler */
@@ -71,6 +71,7 @@ extern TMSGlobalPtr gMem;
 
 Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g);
 Boolean RTSend (MidiEvPtr e, TMSGlobalPtr g);
+Boolean NoCommSend (MidiEvPtr e, TMSGlobalPtr g);
 
 #ifdef __cplusplus
 }

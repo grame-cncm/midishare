@@ -81,7 +81,7 @@ static void  MSContextInitialize (TMSGlobalPtr g)
 	msLibContextPtr c = (msLibContextPtr)AllocateMemory (sizeof(msLibContext));
 	if (c) {
 		c->cchan = 0;
-		c->send  = StdSend;
+		c->send  = NoCommSend;
 		c->msMem = 0;
 		c->RTThread = 0;
 		fifoinit (&c->RTSnd);
