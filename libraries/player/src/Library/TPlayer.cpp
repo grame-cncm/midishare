@@ -397,7 +397,7 @@ void TPlayer::SetRecordMode (short state)
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetRecordFilter(FilterPtr filter) { fEventReceiver->SetRecordFilter(filter); }
+ void TPlayer::SetRecordFilter(MidiFilterPtr filter) { fEventReceiver->SetRecordFilter(filter); }
  
 /*--------------------------------------------------------------------------*/
 
