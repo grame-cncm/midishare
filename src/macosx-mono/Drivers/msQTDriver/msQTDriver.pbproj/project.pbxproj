@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		F5240F1A0208005601053105 = {
 			isa = PBXFileReference;
@@ -96,7 +96,7 @@
 		};
 		F5EFF91701FDA40901053105 = {
 			isa = PBXLibraryReference;
-			path = msQTDriver.1.0.0.so;
+			path = msQTDriver.1.0.1.so;
 			refType = 3;
 		};
 		F5EFF91801FDA40901053105 = {
@@ -107,6 +107,7 @@
 				F5EFF91C01FDA40901053105,
 			);
 			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				HEADER_SEARCH_PATHS = "../../../common/Headers ../../../lib";
@@ -117,7 +118,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.0.so;
+				PRODUCT_NAME = msQTDriver.1.0.1.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -138,7 +139,7 @@
 				F58CAEEA020ADF9B01053105,
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF91A01FDA40901053105 = {
 			buildActionMask = 2147483647;
@@ -148,7 +149,7 @@
 				F58CAEEB020ADF9B01053105,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF91B01FDA40901053105 = {
 			buildActionMask = 2147483647;
@@ -156,14 +157,14 @@
 				F5EFF92001FDA46601053105,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF91C01FDA40901053105 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXRezBuildPhase;
-			name = "ResourceManager Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EFF91D01FDA41501053105 = {
 			isa = PBXFileReference;
