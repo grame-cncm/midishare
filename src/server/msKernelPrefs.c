@@ -171,7 +171,7 @@ void CheckPrefs  (msKernelPrefs * prefs)
 void LogPrefs (msKernelPrefs * prefs)
 {
 	char buffer[1024], *ptr, *dev="";
-	int i;
+	short i;
 	
 	sprintf (buffer, "Kernel memory size : %ld", prefs->memory);
 	LogWrite (buffer);

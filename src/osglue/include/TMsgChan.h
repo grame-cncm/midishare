@@ -59,7 +59,7 @@ class TMsgChan
 		DWORD	ServerAddr ();
 
 		void *	fInfos;
-		ShMem 	fHandle;	// handler on shared memory dedicated
+		TShMem 	fHandle;	// handler on shared memory dedicated
 							// the server thread identification
 		TLog *	fLog;		// optionnal log capabilities
 };

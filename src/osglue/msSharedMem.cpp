@@ -22,7 +22,7 @@
 */
 
 #include "msSharedMem.h"
-#include "TShMem.h"
+#include "include/TShMem.h"
 
 SharedMemHandler msSharedMemCreate(ShMemID id, unsigned long size, void ** memPtr)
 {

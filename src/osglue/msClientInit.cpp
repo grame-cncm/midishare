@@ -27,7 +27,7 @@
 
 #include "msClientInit.h"
 #include "msCommInit.h"
-#include "TShMem.h"
+#include "include/TShMem.h"
 
 typedef struct {
 	TShMem * shmem;

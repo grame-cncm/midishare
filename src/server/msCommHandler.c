@@ -32,6 +32,12 @@
 #include "EventToStream.h"
 #include "StreamToEvent.h"
 
+#ifdef WIN32
+#define windecl	__cdecl
+#else
+#define windecl
+#endif
+
 #define kCommBuffSize	2048
 #define kParseBuffSize	2048
 
@@ -56,7 +62,7 @@ static void Event2Text (MidiEvPtr e, char *buff, short len)
     len -= 1;
     n = (n > len) ? len : n;
     for (i=0; i<n; i++) {
-        *buff++ = MidiGetField (e, i);
+        *buff++ = (char)MidiGetField (e, i);
     }
     *buff = 0;
 }
@@ -108,7 +114,7 @@ static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
             }
             MidiFreeEv (e);
             res = MidiNewEv (typeMidiOpenRes);
-            if (res) RefNum(res) = ref;
+            if (res) RefNum(res) = (unsigned char)ref;
             else goto memfail;
             break;
         case typeMidiClose:
@@ -191,7 +197,7 @@ failed:
 }
 
 /*____________________________________________________________________________*/
-static void * PipeHandlerProc (void * p)
+static ThreadProc(PipeHandlerProc, p)
 {
 	PipesListPtr pl = (PipesListPtr)p;
     char msg[256]; int refcount = 0;
@@ -237,16 +243,7 @@ static void CloseOneClientChannel (PipesListPtr pl)
 }
 
 /*____________________________________________________________________________*/
-void InitCommHandlers ()
-{
-    msStreamParseInitMthTbl (gParseMthTable);
-    msStreamInitMthTbl (gStreamMthTable);
-    gPList = 0;
-    atexit (CloseAllClientChannels);
-}
-
-/*____________________________________________________________________________*/
-void CloseAllClientChannels ()
+void windecl CloseAllClientChannels (void)
 {
     PipesListPtr pl = gPList;
     while (pl) {
@@ -255,6 +252,15 @@ void CloseAllClientChannels ()
         pl = next;
     }
     gPList = 0;
+}
+
+/*____________________________________________________________________________*/
+void InitCommHandlers ()
+{
+    msStreamParseInitMthTbl (gParseMthTable);
+    msStreamInitMthTbl (gStreamMthTable);
+    gPList = 0;
+    atexit (CloseAllClientChannels);
 }
 
 /*____________________________________________________________________________*/
