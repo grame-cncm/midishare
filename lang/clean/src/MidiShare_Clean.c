@@ -1,10 +1,11 @@
 
 #include "Clean.h" 
+#include "MidiShare.h"
 #include "MidiShare_Clean.h"
 
 
 #define MidiSharePPC_68k
-#include "MidiShare.h"
+
 
 #define TimeOutType 20
 
@@ -35,19 +36,21 @@ int gDate = 0;
  void CleanToC(char *dest, CleanString str) // chaine Clean dans chaine c
 {
 	int i;
-	for (i = 0 ; i<str.clean_string_length; i++) {dest[i] = str.clean_string_characters[i];}
-	dest[i+1] = 0;
+	char* buffer = CleanStringCharacters(str);
+	for (i = 0 ; i<CleanStringLength(str); i++) {dest[i] = buffer[i];}
+	dest[i] = 0;
 }
 
 /*--------------------------------------------------------------------------*/
  void CToClean(CleanString dest, char * src) // chaine c dans chaine Clean
 {
-	int i;
+	int i=0;
+	char* buffer = CleanStringCharacters(dest);
 	while (src[i] != 0) {
-		str.clean_string_characters[i] = src[i];
+		buffer[i] = src[i];
 		i++;
 	}
-	str.clean_string_length = i;
+	CleanStringLength(dest) = i;
 }
 
 /*----------------------------------- MidiShare -------------------------------*/
@@ -62,7 +65,7 @@ int Clean_MidiGetIndAppl (int index){return MidiGetIndAppl(index);}
 int Clean_MidiGetNamedAppl (CleanString name){
 	 char buffer [128];
 	 CleanToC(buffer,name);
-	 return MidiGetNamedAppl(buffer):
+	 return MidiGetNamedAppl(buffer);
 }
 
 /*----------------------------- SMPTE synchronization -------------------------*/
@@ -73,9 +76,10 @@ int Clean_MidiGetNamedAppl (CleanString name){
 int Clean_MidiOpen (CleanString name)
 {
 	char buffer [128];
+	int ref;
 	CleanToC(buffer,name);
 	
-	int ref = MidiOpen1(buffer);
+	ref = MidiOpen1(buffer);
 	/*
 	printf( "msdisplay %ld \n" ,MidiGetNamedAppl ("msdisplay"));
 	MidiConnect (ref, MidiGetNamedAppl ("msdisplay"),1);
@@ -86,26 +90,26 @@ int Clean_MidiOpen (CleanString name)
 }
 
 
-int Clean_MidiClose(int ref) {MidiClose1(ref); return -1;}
+void Clean_MidiClose(int ref) {MidiClose1(ref); }
 
 
 /*--------------------------- Application configuration -----------------------*/
 
 static struct {int length; char buffer[128]; } C_String ;
 
-CleanString Clean_MidiGetName (int refNum, CleanString* str){
-	CToClean((CleanString)C_String, MidiGetName(refNum));
-	*str = (CleanString)&str;
+void Clean_MidiGetName (int refNum, CleanString* str){
+	CToClean((CleanString)&C_String, MidiGetName(refNum));
+	*str = (CleanString)&C_String; 
 }
 
 void Clean_MidiSetName (int refNum, CleanString name){
 	 char buffer [128];
 	 CleanToC(buffer,name);
-	 return MidiSetName(refNum,buffer):
+	 return MidiSetName(refNum,buffer);
 }
 
 void Clean_MidiSetFilter (int refNum, int filter) {MidiSetFilter(refNum, (MidiFilterPtr)filter);}
-int Clean_MidiGetFilter (int refNum){ return (int)MidiGetFilter(refNum)}
+int Clean_MidiGetFilter (int refNum){ return (int)MidiGetFilter(refNum);}
 
 /*------------------------------- Drivers management --------------------------*/
 // Not defined
@@ -122,7 +126,10 @@ int Clean_MidiIsConnected (int src, int dest) {return MidiIsConnected (src,dest)
 /*-------------------------- Events and memory managing -----------------------*/
 
 int Clean_MidiFreeSpace() {return MidiFreeSpace();}
-int Clean_MidiDesiredSpace(){return MidiDesiredSpace();}
+int Clean_MidiDesiredSpace(){
+	//return MidiDesiredSpace();
+	return 0;
+}
 int Clean_MidiNewCell() {return (int) MidiNewCell();}
 void Clean_MidiFreeCell(int cell) {MidiFreeCell((MidiEvPtr)cell);}
 int Clean_MidiTotalSpace(){return MidiTotalSpace();}
@@ -166,9 +173,9 @@ void Clean_MidiSend(int ref, int ev){MidiSend(ref, (MidiEvPtr) ev);}
 /*------------------------------------ Receving -------------------------------*/
 
 int Clean_MidiCountEvs(int ref) {return MidiCountEvs(ref);}
-int Clean_MidiGetEv(int ref){return MidiGetEv(ref);}
+int Clean_MidiGetEv(int ref){return (int)MidiGetEv(ref);}
 void Clean_MidiFlushEvs(int ref){MidiFlushEvs (ref);}
-int Clean_MidiAvailEv(int ref){return MidiAvailEv(ref);}
+int Clean_MidiAvailEv(int ref){return (int)MidiAvailEv(ref);}
 
 /*----------------------------------- Mail boxes ------------------------------*/
 // Not defined
@@ -176,12 +183,12 @@ int Clean_MidiAvailEv(int ref){return MidiAvailEv(ref);}
 // Not defined
 /*---------------------------------- Filters ----------------------------------*/
 
-int Clean_MidiNewFilter() {return MidiNewFilter();}
+int Clean_MidiNewFilter() {return (int)MidiNewFilter();}
 void Clean_MidiFreeFilter(int filter){ MidiFreeFilter((MidiFilterPtr)filter);}
 
-void Clean_MidiAcceptPort(int filter, int port,  Boolean state){MidiAcceptPort((MidiFilterPtr)filter, port,state;}
-void Clean_MidiAcceptChan(int filter, int chan,  Boolean state){MidiAcceptChan((MidiFilterPtr)filter, chan,state;}
-void Clean_MidiAcceptType(int filter, int type,  Boolean state){MidiAcceptType((MidiFilterPtr)filter, type,state;}
+void Clean_MidiAcceptPort(int filter, int port,  Boolean state){MidiAcceptPort((MidiFilterPtr)filter, port,state);}
+void Clean_MidiAcceptChan(int filter, int chan,  Boolean state){MidiAcceptChan((MidiFilterPtr)filter, chan,state);}
+void Clean_MidiAcceptType(int filter, int type,  Boolean state){MidiAcceptType((MidiFilterPtr)filter, type,state);}
 
 int Clean_MidiIsAcceptedPort(int filter, int port){return MidiIsAcceptedPort((MidiFilterPtr)filter, port);}
 int Clean_MidiIsAcceptedChan(int filter, int chan){return MidiIsAcceptedChan((MidiFilterPtr)filter, chan);}
@@ -204,14 +211,14 @@ int Clean_MidiGetPort(int ev){return Port((MidiEvPtr) ev);}
 void Clean_MidiSetRefnum(int ev, int ref){RefNum((MidiEvPtr) ev) = ref;}
 int Clean_MidiGetRefnum(int ev){return RefNum((MidiEvPtr) ev);}
 
-void Clean_MidiSetLink(int ev, int link){Link((MidiEvPtr) ev) = link;}
-int Clean_MidiGetLink(int ev){return Link((MidiEvPtr) ev);}
+void Clean_MidiSetLink(int ev, int link){Link((MidiEvPtr) ev) = (MidiEvPtr)link;}
+int Clean_MidiGetLink(int ev){return (int)Link((MidiEvPtr) ev);}
 
-void Clean_MidiSetFirstEv(int seq, int link){FirstEv((MidiSeqPtr) seq) = link;}
-int Clean_MidiGetFirstEv(int seq){return FirstEv((MidiEvPtr) ev);}
+void Clean_MidiSetFirstEv(int seq, int link){FirstEv((MidiSeqPtr) seq) = (MidiEvPtr)link;}
+int Clean_MidiGetFirstEv(int seq){return (int)FirstEv((MidiSeqPtr)seq);}
 
-void Clean_MidiSetLastEv(int seq, int link){LastEv((MidiSeqPtr) seq) = link;}
-int Clean_MidiGetLastEv(int seq){return LatsEv((MidiEvPtr) ev);}
+void Clean_MidiSetLastEv(int seq, int link){LastEv((MidiSeqPtr) seq) = (MidiEvPtr)link;}
+int Clean_MidiGetLastEv(int seq){return (int)LastEv((MidiSeqPtr) seq);}
 
 /*---------------------------------- Special ----------------------------------*/
 
@@ -228,7 +235,7 @@ int Clean_MidiGetEvBlock(int ref) {
 	}else{
 		printf("MidiGetEvBlock 3bis\n");
 		
-	     	while ((ev = MidiGetCommand(ref)))   { 
+	     	while ((ev = (MidiEvPtr)MidiGetCommand(ref)))   { 
 			printf("MidiGetEvBlock 1\n");
 			
 			if (EvType(ev) == typeProcess ){
@@ -243,7 +250,7 @@ int Clean_MidiGetEvBlock(int ref) {
 				ev1 = 0;
 			
 			MidiFreeEv(ev);
-			if (ev1) return ev1;
+			if (ev1) return (int)ev1;
 		}   
 		printf("MidiGetEvBlock 6\n");
 	}
@@ -258,9 +265,9 @@ int Clean_MidiWaitTimeOut(int ref, int dur) {
 	MidiEvPtr ev;
 	int date = MidiGetTime();
 	gTask = MidiTask(TimeOutTask, date + dur, ref , 0,0,0);
-	ev = Clean_MidiGetEvBlock(ref);
+	ev = (MidiEvPtr)Clean_MidiGetEvBlock(ref);
 	if (EvType (ev) != TimeOutType)MidiForgetTask(&gTask);
 	Date(ev) -= date;
-	return ev;
+	return (int)ev;
 }
 

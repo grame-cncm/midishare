@@ -25,13 +25,13 @@
  *	version 1.20 
  *	version Lightspeed C version 3.01 G. Bloch Aout 1989 (modif YO 9-9-89)
  *	version Think C 4.0 : YO [13-11-89]
- *  extensions taches differees : YO [05-12-89]
+ *  	extensions taches differees : YO [05-12-89]
  *	version MPW C++ 3.1 : YO [09-03-90]
  *	harmonisation prototypes: YO [12-05-90]
  *	harmonisation MPW & TC: YO [12-05-90]
  *	implementation de 'MidiShare()' sous forme de macro: YO [15-03-91]
- *  english version : YO [29-01-92]
- *  changes for TC5 : YO [03-02-93]
+ *  	english version : YO [29-01-92]
+ *  	changes for TC5 : YO [03-02-93]
  *	Linux version : YO [29-07-99]
 ******************************************************************************/
 
@@ -51,37 +51,36 @@
  *******************************************************************************/
 
 	
- #define 	typeNote		0 		/* note with pitch, velocity and duration		*/	
- #define 	typeKeyOn		1 		/* Note On with pitch, velocity 				*/
- #define 	typeKeyOff		2 		/* Note Off with pitch, velocity 				*/
- #define  	typeKeyPress 	3 		/* Poly Key Pressure with pitch and pressure	*/
- #define  	typeCtrlChange	4 		/* Control Change with controller ID and value	*/
- #define  	typeProgChange	5 		/* Program Change with program ID number		*/
- #define  	typeChanPress	6 		/* Channel Pressure with pressure value			*/
- #define  	typePitchWheel	7 		/* Pitch Bend Change with LSB and MSB values	*/
+ #define 	typeNote	0 	/* note with pitch, velocity and duration	*/	
+ #define 	typeKeyOn	1 	/* Note On with pitch, velocity 				*/
+ #define 	typeKeyOff	2 	/* Note Off with pitch, velocity 				*/
+ #define  	typeKeyPress 	3 	/* Poly Key Pressure with pitch and pressure	*/
+ #define  	typeCtrlChange	4 	/* Control Change with controller ID and value	*/
+ #define  	typeProgChange	5 	/* Program Change with program ID number	*/
+ #define  	typeChanPress	6 	/* Channel Pressure with pressure value		*/
+ #define  	typePitchWheel	7 	/* Pitch Bend Change with LSB and MSB values	*/
 		
- #define  	typeSongPos		8 		/* Song Position Pointer with LSB and MSB values*/
- #define  	typeSongSel		9 		/* Song Select with song ID number				*/
- #define  	typeClock		10 		/* Timing Clock				*/
- #define  	typeStart		11 		/* Start					*/
- #define  	typeContinue	12 		/* Continue					*/
- #define  	typeStop		13		/* Stop						*/
+ #define  	typeSongPos	8 	/* Song Position Pointer with LSB and MSB values*/
+ #define  	typeSongSel	9 	/* Song Select with song ID number				*/
+ #define  	typeClock	10 	/* Timing Clock				*/
+ #define  	typeStart	11 	/* Start				*/
+ #define  	typeContinue	12 	/* Continue				*/
+ #define  	typeStop	13	/* Stop					*/
 		
- #define   	typeTune		 14 	/* Tune Request				*/
- #define   	typeActiveSens	 15 	/* Active Sensing			*/
- #define   	typeReset		 16		/* System Reset									*/
+ #define   	typeTune	14 	/* Tune Request				*/
+ #define   	typeActiveSens	15 	/* Active Sensing			*/
+ #define   	typeReset	16	/* System Reset									*/
 	
- #define  	typeSysEx		 17 	/* System Exclusive (only data bytes)			*/
- #define   	typeStream		 18 	/* arbitrary midi bytes (data and status codes)	*/
+ #define  	typeSysEx	17 	/* System Exclusive (only data bytes)		*/
+ #define   	typeStream	18 	/* arbitrary midi bytes (data and status codes)	*/
 		
- #define   	typePrivate		 19		/* 19..127 Application's private events			*/
- #define   	typeProcess		 128	/* used by MidiShare for MidiCall and MidiTask	*/
- #define   	typeDProcess		129	/* used by MidiShare for MidiDTask				*/
- #define   	typeQuarterFrame  130 	/* Midi time code quarter frame					*/
-
- #define   	typeCtrl14b		 131	
+ #define   	typePrivate	19	/* 19..127 Application's private events		*/
+ #define   	typeProcess	128	/* used by MidiShare for MidiCall and MidiTask	*/
+ #define   	typeDProcess	129	/* used by MidiShare for MidiDTask		*/
+ #define   	typeQuarterFrame  130 	/* Midi time code quarter frame			*/
+ #define   	typeCtrl14b	 131	
  #define  	typeNonRegParam	 132
- #define   typeRegParam		 133
+ #define   	typeRegParam	 133
 
  #define  typeSeqNum		 134		/* MidiFile sequence number			*/
  #define  typeText		 135			/* MidiFile text event				*/
@@ -150,9 +149,9 @@ listed here.
 
 Clean (
 	:: *State :== Int;
-	:: *RefNum :==  Int ;
-	:: *MidiEvPtr :==  Int;
-	:: *MidiSeqPtr :==  Int;
+	:: RefNum :==  Int ;
+	:: MidiEvPtr :==  Int;
+	:: MidiSeqPtr :==  Int;
 	:: EvType :==  Int;
 	:: MidiName :== String
 )
@@ -203,9 +202,9 @@ Clean (Clean_MidiGetFilter :: RefNum State -> (Int,State))
 /* Not defined
 void* 			MidiGetInfo 		(short refNum);	
 void 			MidiSetInfo 		(short refNum, void* InfoZone);
-RcvAlarmPtr 	MidiGetRcvAlarm 	(short refNum);		
+RcvAlarmPtr 		MidiGetRcvAlarm 	(short refNum);		
 void 			MidiSetRcvAlarm		(short refNum, RcvAlarmPtr alarm);	
-ApplAlarmPtr 	MidiGetApplAlarm 	(short refNum);		
+ApplAlarmPtr 		MidiGetApplAlarm 	(short refNum);		
 void 			MidiSetApplAlarm 	(short refNum, ApplAlarmPtr alarm);
 */
 
