@@ -71,4 +71,7 @@ void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 void DriverWakeUp (TApplPtr appl);
 void DriverSleep  (TApplPtr appl);
 
+long RealTimeOffset (THorlogePtr h);
+void AdjustTimer    (THost context, long offset, long period);
+
 #endif
