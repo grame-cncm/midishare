@@ -57,7 +57,7 @@ TPlayer::TPlayer():fFactory(this)
 
 /*
 Destructor for fScore must be called before the MidiShare client is closed, otherwise
-the MidiShare memory mamaner is not more available. TMidiAppl::Close() will be lastly 
+the MidiShare memory manager is no more available. TMidiAppl::Close() will be lastly 
 called by the TMidiAppl destructor.
 */
 
