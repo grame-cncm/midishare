@@ -1,10 +1,10 @@
-	
+
 all: player.dll
 
-PATHENV = D:\BC5
-PATHBIN = D:\BC5\BIN
-PATHLIB = D:\BC5\LIB
-PATHINC = D:\BC5\INCLUDE
+PATHENV = C:\BC45
+PATHBIN = C:\BC45\BIN
+PATHLIB = C:\BC45\LIB
+PATHINC = C:\BC45\INCLUDE
 
 CC 	= Bcc +BccW16.cfg
 LINK 	= TLink
@@ -279,4 +279,3 @@ OUT16\umidi.obj:  $(SRC)\Utils\umidi.cpp
 
 OUT16\obj42.obj:  playerwin16.cpp
 	 $(CC) -c $(DLL_CFLAGS) -o$@ playerwin16.cpp
-
