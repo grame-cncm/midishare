@@ -6,7 +6,7 @@
 
    Grame : Computer Music Research Laboratory
    Web : http://www.grame.fr/Research
-   E-mail : MidiShare@rd.grame.fr
+   E-mail : midishare@grame.fr
    ===========================================================================
 */
 
