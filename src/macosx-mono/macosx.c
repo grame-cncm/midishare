@@ -95,9 +95,6 @@ void *  LoadLibrary(const char *filename, const char *symbol)
 	return 0;
 }
 
-extern Boolean StartQT();
-extern void StopQT();
-
 /*------------------------------------------------------------------------------*/
 void FreeLibrary(void * handle, const char *symbol)
 { 
@@ -115,7 +112,7 @@ static Boolean LoadDriver(char *drvName)
         if (!mem) return false;
         
         mem->next = gMacOSXDriver;
-        mem->handle = LoadLibrary(drvName,"Start");
+        mem->handle = LoadLibrary(drvName,"_Start");
         
         if (mem->handle) {
             gMacOSXDriver = mem;
@@ -147,7 +144,7 @@ void SpecialSleep(TMSGlobalPtr g)
         gMacOSXDriver = 0;
         while (drv) {
                 next = drv->next;
-				FreeLibrary (drv->handle,"Stop");
+				FreeLibrary (drv->handle,"_Stop");
                 DisposeMemory (drv);
                 drv = next;
         }
