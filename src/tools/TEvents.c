@@ -31,9 +31,8 @@
  * 		    English version 11/11/99 SL
  */
 
-#include <stdio.h>
-
 #ifdef __Windows__
+#	include <stdio.h>
 #	include <String.h>
 #	include <StdLib.h>
 #	include <MidiShare.h>
@@ -44,7 +43,22 @@
 
 
 #ifdef __Linux__
+#ifdef MODULE
+# 	ifdef MODVERSIONS
+# 		include <linux/modversions.h>
+# 	endif
+#	include <linux/module.h>
+#	include <linux/kernel.h>
+#	include "MidiShareKernel.h"
+#	define flush
+#	define print(args...)	printk(## args)
+inline Boolean MidiShare() { return true; }
+#else
+#	include <stdio.h>
 #	include "MidiShare.h"
+#	define flush		fflush( stdout)
+#	define print(args...)	fprintf(stdout, ## args)
+#endif
 #	define CNAME
 #	define CTASKS
 #	define nil 0
@@ -53,35 +67,17 @@
 
 
 #ifdef __Macintosh__
+#	include <stdio.h>
 #	include <String.h>
 #	include <StdLib.h>
 #	include "MidiShare.h"
-/*
-#include <Desk.h>
-#include <Dialogs.h>
-#include <DiskInit.h>
-#include <Events.h>
-#include <Files.h>
-#include <Fonts.h>
-#include <Memory.h>
-#include <Menus.h>
-#include <OSEvents.h>
-#include <OSUtils.h>
-#include <Packages.h>
-#include <QuickDraw.h>
-#include <Resources.h>
-#include <ROMDefs.h>
-#include <SegLoad.h>
-#include <TextEdit.h>
-#include <ToolUtils.h>
-#include <Traps.h>
-#include <Types.h>
-#include <Values.h>
-#include <Windows.h>
-*/
 #	define PASCALNAME
 #	define PASCALTASKS
+#	define flush	fflush( stdout)
+#	define print	printf
 #endif
+
+#include "TEvents.h"
 
 #define true	1
 #define false	0
@@ -106,12 +102,11 @@ char *gOK = " OK";
 #define SizeMedSysEx	40				/* test des sysex par pas de 1		*/
 
 #ifndef typeSeqNum
-# define typeSeqNum		134				/* début des événements MidiFile 	*/
+#define typeSeqNum		134				/* début des événements MidiFile 	*/
 #endif
 
-#define flush			fflush( stdout)
-#define noEvts			fprintf( stdout, "\nno more MidiShare events !\n")
-#define ok				fprintf( stdout, "%s\n", gOK)
+#define noEvts			print("\nno more MidiShare events !\n")
+#define ok			print("%s\n", gOK)
 
 
 /* ======================= nom des différents types d'événements ==================*/
@@ -217,24 +212,24 @@ static void wait2( int d)
 	while( t<= time)
 	{
 		if( !((t-i)%10000))
-			fprintf( stdout, "."); flush;
+			print("."); flush;
 		t= MidiGetTime();
 	}
 }
 
 /*______________________________________________________________________________*/
-static OpenAppls()
+int OpenAppls()
 {	
 	if( (r1= MidiOpen( ApplName)) < 0)
 	{
-		fprintf( stdout, "Impossible to open a MidiShare application !\n");
-		fprintf( stdout, "Interrupted test !\n");
+		print("Impossible to open a MidiShare application !\n");
+		print("Interrupted test !\n");
 		return false;
 	}
 	if( (r2= MidiOpen( OtherName)) < 0)
 	{
-		fprintf( stdout, "Impossible to open a MidiShare application !\n");
-		fprintf( stdout, "Interrupted test !\n");
+		print("Impossible to open a MidiShare application !\n");
+		print("Interrupted test !\n");
 		MidiClose( r1);
 		return false;
 	}
@@ -250,17 +245,17 @@ static CmpCommon( MidiEvPtr o, MidiEvPtr c, char *src)
 	int ret= true;
 	
 	if( EvType(o) != EvType(c)) {
-		fprintf( stdout, "\n%s : modified event type : %d -> %d", src,
+		print("\n%s : modified event type : %d -> %d", src,
 					(int)EvType(o), (int)EvType(c));
 		ret= false;
 	}
 	if( ( EvType(o) < typeSongPos) && (Chan(o) != Chan(c))) {
-		fprintf( stdout, "\n%s : modified event channel : %d -> %d", src,
+		print("\n%s : modified event channel : %d -> %d", src,
 					(int)Chan(o), (int)Chan(c));
 		ret= false;
 	}
 	if( Port(o) != Port(c)) {
-		fprintf( stdout, "\n%s : modified event port : %d -> %d", src,
+		print("\n%s : modified event port : %d -> %d", src,
 					(int)Port(o), (int)Port(c));
 		ret= false;
 	}
@@ -276,7 +271,7 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 	f2= MidiCountFields( c);
 	if( f1!= f2)
 	{
-		fprintf( stdout, "\n%s : different number of fields : %ld -> %ld", src,f1,f2);
+		print("\n%s : different number of fields : %ld -> %ld", src,f1,f2);
 		return false;
 	}
 	else if( !CmpCommon( o, c, src))
@@ -285,7 +280,7 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 	{
 		if( MidiGetField( o, i)!= MidiGetField( c, i))
 		{
-			fprintf( stdout, "\n%s : modified value at index %ld", src, i);
+			print("\n%s : modified value at index %ld", src, i);
 			return false;
 		}
 	}
@@ -299,7 +294,7 @@ static CompareEv( MidiEvPtr e, short refnum, char *src)
 	
 	if( get= MidiAvailEv( refnum))
 		return CmpEv( e, get, src);
-	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", src);
+	else print("\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
 
@@ -315,14 +310,14 @@ static CompareStream( MidiEvPtr e, short refnum, char *src)
 			EvType(get)= typeStream;
 		else
 		{
-			fprintf( stdout, "wrong type : %d \n", EvType(get));
+			print("wrong type : %d \n", EvType(get));
 			return false;
 		}
 		f1= MidiCountFields( e)-1;
 		f2= MidiCountFields( get)+1;
 		if( f1!= f2)
 		{
-			fprintf( stdout, "\n%s : different number of fields : %ld -> %ld", src,f1,f2);
+			print("\n%s : different number of fields : %ld -> %ld", src,f1,f2);
 			return false;
 		}
 		else if( !CmpCommon( e, get, src))
@@ -331,13 +326,13 @@ static CompareStream( MidiEvPtr e, short refnum, char *src)
 		{
 			if( MidiGetField( e, i)!= MidiGetField( get, i-1))
 			{
-				fprintf( stdout, "\n%s : modified value at index %ld", src, i);
+				print("\n%s : modified value at index %ld", src, i);
 				return false;
 			}
 		}
 		return true;
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", src);
+	else print("\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
 
@@ -353,7 +348,7 @@ static CompareCtrl14b( MidiEvPtr e)
 		v1= MidiGetField( a, 0L);
 		v2= MidiGetField( b, 0L);
 		if( v1!=1 || (v2!= 33))
-			fprintf( stdout, "reception of wrong controlers : %ld followed by %ld\n",v1,v2);
+			print("reception of wrong controlers : %ld followed by %ld\n",v1,v2);
 		else
 		{
 			v2= MidiGetField( b, 1L);
@@ -366,7 +361,7 @@ static CompareCtrl14b( MidiEvPtr e)
 		MidiFreeEv( a);
 		MidiFreeEv( b);
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", "ext");
+	else print("\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
 
@@ -388,7 +383,7 @@ static CompareRegParam( MidiEvPtr e)
 		ret &= ((EvType(e)== typeRegParam) && (v1==101) && (v2==100))
 			|| ((v1==99) && (v2==98));
 		if( !ret)
-			fprintf( stdout, "\nreception of wrong controlers : %ld %ld %ld %ld"
+			print("\nreception of wrong controlers : %ld %ld %ld %ld"
 						, v1, v2, v3, v4);
 		else
 		{
@@ -406,7 +401,7 @@ static CompareRegParam( MidiEvPtr e)
 		MidiFreeEv( c);
 		MidiFreeEv( d);
 	}
-	else fprintf( stdout, "\n%s : MidiAvailEv return nil ", "ext");
+	else print("\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
 
@@ -418,7 +413,7 @@ static GetEvents( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if(n != 1)
-		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
+		print("\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -431,7 +426,7 @@ static GetStream( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if( n != 1)
-		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
+		print("\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -444,7 +439,7 @@ static GetNothing( MidiEvPtr unused)
 	
 	n= MidiCountEvs( r2);
 	if( n)
-		fprintf( stdout, "\nWarning : wrong fifo content : rcv=%ld ", n);
+		print("\nWarning : wrong fifo content : rcv=%ld ", n);
 	else ret= true;
 	return ret;
 }
@@ -457,7 +452,7 @@ static GetNoExt( MidiEvPtr e)
 	
 	n= MidiCountEvs( r2);
 	if( n!= 1)
-		fprintf( stdout, "\nWarning : wrong fifo content : rcv=%ld ", n);
+		print("\nWarning : wrong fifo content : rcv=%ld ", n);
 	else ret= true;
 	if( n== 1)
 		ret &= CompareEv( e, r2, "int");
@@ -472,13 +467,13 @@ static GetPrivate( MidiEvPtr e)
 	
 	n= MidiCountEvs( r1);
 	if( n!=1)
-		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
+		print("\nWarning : wrong fifo content : %ld ", n);
 	else ret= true;
 	if( n== 1)
 		ret &= CompareEv( e, r1, "int");
 	n= MidiCountEvs( r2);
 	if( n)
-		fprintf( stdout, "\nWarning : event distributed at rcv\n");
+		print("\nWarning : event distributed at rcv\n");
 	return ret;
 }
 
@@ -495,13 +490,13 @@ static GetCtrl( MidiEvPtr e)
 	if( n2!= 1 || (type== typeCtrl14b && n1!= 2)
 			   || (type== typeNonRegParam && n1!= 4)
 			   || (type== typeRegParam && n1!= 4))
-		fprintf( stdout, "\nWarning : wrong fifos content : appl=%ld rcv=%ld ", n1,n2);
+		print("\nWarning : wrong fifos content : appl=%ld rcv=%ld ", n1,n2);
 	else ret= true;
 	if( type== typeCtrl14b && n1== 2)
 		ret &= CompareCtrl14b( e);
 	else if( n1== 4)
 		ret &= CompareRegParam( e);
-	fprintf( stdout, " *");
+	print(" *");
 	if( n2== 1)
 		ret &= CompareEv( e, r2, "int");
 	return ret;
@@ -515,23 +510,23 @@ static CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 	
 	if( EvType(e1)!= typeKeyOn || EvType(e2)!= typeKeyOn)
 	{
-		fprintf( stdout, "\next : wrong types : first=%d next=%d ", (int)EvType(e1), (int)EvType(e2));
+		print("\next : wrong types : first=%d next=%d ", (int)EvType(e1), (int)EvType(e2));
 		ret= false;
 	}
 	if( Vel(e2))
 	{
-		fprintf( stdout, "\next : note off : wrong velocity : %d ", (int)Vel(e2));
+		print("\next : note off : wrong velocity : %d ", (int)Vel(e2));
 		ret= false;
 	}
 	dc= Date(e2) - Date(e1);
 	if( dc!= d)
 	{
-		fprintf( stdout, "\next : wrong duration : %d instead of %d ", (int)dc, (int)d);
+		print("\next : wrong duration : %d instead of %d ", (int)dc, (int)d);
 		ret= false;
 	}
 	if( Pitch(e1)!= Pitch(e2))
 	{
-		fprintf( stdout, "\next : wrong pitch : %d and %d ", (int)Pitch(e1), (int)Pitch(e2));
+		print("\next : wrong pitch : %d and %d ", (int)Pitch(e1), (int)Pitch(e2));
 		ret= false;
 	}
 	EvType(e1)= typeNote;
@@ -547,7 +542,7 @@ static GetNote( MidiEvPtr e)
 	wait (Dur(e));
 	n= MidiCountEvs( r2);
 	if(n != 1)
-		fprintf( stdout, "\nWarning : wrong fifo content : %ld ", n);
+		print("\nWarning : wrong fifo content : %ld ", n);
 	else ret = CompareEv( e, r2, "int");
 	return ret;
 }
@@ -564,7 +559,7 @@ static void SetEvent( MidiEvPtr e, Boolean display)
 		if( v<127) v++; else v=0;
 	}
 	if( display)
-		fprintf( stdout, "set "); flush;
+		print("set "); flush;
 }
 
 /*______________________________________________________________________________*/
@@ -576,7 +571,7 @@ static TestEvent( short i, Boolean display)
 	MidiFlushEvs( r1);
 	MidiFlushEvs( r2);
 	if( display)
-		fprintf( stdout, "    type %s : ", typeListe[i]); flush;
+		print("    type %s : ", typeListe[i]); flush;
 	e= MidiNewEv(i);
 	if( !e) noEvts;
 	else{
@@ -607,42 +602,42 @@ static TestEvent( short i, Boolean display)
 }
 
 /*______________________________________________________________________________*/
-static void ChanEvents()
+void ChanEvents()
 {
 	short i;
 	
-	fprintf( stdout, "\nChannel events :\n");
+	print("\nChannel events :\n");
 	/*											typeNote until typePitchWheel */
 	for( i= typeNote; i<typeSongPos; i++)
 		if( TestEvent( i, true)) ok;
-		else fprintf( stdout, "\n");
+		else print("\n");
 }
 
 /*______________________________________________________________________________*/
-static void CommonEvents()
+void CommonEvents()
 {
 	short i;
 	
-	fprintf( stdout, "\nCommon events :\n");	
-	/*											typeSongPos until typeReset */
+	print("\nCommon events :\n");	
+	/*		typeSongPos until typeReset */
 	for( i= typeSongPos; i<typeSysEx; i++)
 		if( TestEvent( i, true)) ok;
-		else fprintf( stdout, "\n");
+		else print("\n");
 }
 
 /*______________________________________________________________________________*/
-static Boolean SystemeEx()
+void SystemeEx()
 {
 	register MidiEvPtr e, copy;
 	register long v=0, n=0;
 	
-	fprintf( stdout, "\nSysteme exclusive :\n");
+	print("\nSysteme exclusive :\n");
 	
-	/*											 			  typeSysEx */
-	if( !TestEvent( typeSysEx, true)) {fprintf( stdout, "\n"); return false;}
+	/*		typeSysEx */
+	if( !TestEvent( typeSysEx, true)) {print("\n"); goto failed;}
 
-	/*			  				test of event until n */
-	if( !(e= MidiNewEv(typeSysEx))) { noEvts; return false;}
+	/*		test of event until n */
+	if( !(e= MidiNewEv(typeSysEx))) { noEvts; goto failed;}
 	for( n=0; n<SizeMedSysEx; n++)
 	{
 		MidiAddField( e, v++);
@@ -651,33 +646,33 @@ static Boolean SystemeEx()
 			MidiSendIm( r1, copy); wait( 40);
 			if( !GetEvents( e))
 			{
-				fprintf( stdout, "\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
-				return false;
+				goto failed;
 			}
 			MidiFlushEvs(r1);
 			MidiFlushEvs(r2);
 		}
 	}
-	fprintf( stdout, " 0-%ld ok", n); flush;
-	/*			  				test of max for max length */
+	print(" 0-%ld ok", n); flush;
+	/*		test of max for max length */
 	for( ; n< SizeMaxSysEx; n++)
 	{
 		MidiAddField( e, v++);
 		if( v>126) v=0; else v++;
 	}
-	fprintf( stdout, "\n      length %ld", MidiCountFields(e)); flush;
+	print("\n      length %ld", MidiCountFields(e)); flush;
 	if( !(copy= MidiCopyEv( e)))  noEvts;
 	else 
 	{
-		fprintf( stdout, " copy"); flush;
+		print(" copy"); flush;
 		if( CmpEv( e, copy, "copy")){
-			fprintf( stdout, " ok ");
+			print(" ok ");
 			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
 			if( !GetEvents( e))
 			{
 				MidiFreeEv(e);
-				return false;
+				goto failed;
 			}
 		}
 	}
@@ -685,20 +680,21 @@ static Boolean SystemeEx()
 	MidiFlushEvs( r1);
 	MidiFlushEvs( r2);
 	ok;
-	return true;
+failed:
+	MidiFlushEvs(r1); MidiFlushEvs(r2);	
 }
 
 /*______________________________________________________________________________*/
-static Boolean Stream()
+void Stream()
 {
 	register MidiEvPtr e, copy;
 	register long v=0, n=0;
 	
-	/*											 			  typeStream */
-	if( !TestEvent( typeStream, true)) {fprintf( stdout, "\n"); return false;}
+	/*			  typeStream */
+	if( !TestEvent( typeStream, true)) {print("\n"); goto failed;}
 
-	/*			  				test of event until n */
-	if( !(e= MidiNewEv(typeStream))) { noEvts; return false;}
+	/*			  test of event until n */
+	if( !(e= MidiNewEv(typeStream))) { noEvts; goto failed;}
 	MidiAddField( e, (long)0xF0);
 	MidiAddField( e, (long)0xF7);
 	for( n=2; n<SizeMedSysEx; n++)
@@ -710,16 +706,16 @@ static Boolean Stream()
 			MidiSendIm( r1, copy); wait( 40);
 			if( !GetStream( e))
 			{
-				fprintf( stdout, "\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
-				return false;
+				goto failed;
 			}
 			MidiFlushEvs(r1);
 			MidiFlushEvs(r2);
 		}
 	}
-	fprintf( stdout, " 0-%ld ok", n); flush;
-	/*			  				test of max for max length */
+	print(" 0-%ld ok", n); flush;
+	/*			  	test of max for max length */
 	MidiSetField( e, n-1, (long)nil);
 	for( ; n< SizeMaxSysEx-1; n++)
 	{
@@ -727,150 +723,155 @@ static Boolean Stream()
 		if( v>126) v=0; else v++;
 	}
 	MidiAddField( e, (long)0xF7);
-	fprintf( stdout, "\n      length %ld", MidiCountFields(e)); flush;
+	print("\n      length %ld", MidiCountFields(e)); flush;
 	if( !(copy= MidiCopyEv( e)))  noEvts;
 	else 
 	{
-		fprintf( stdout, " copy"); flush;
+		print(" copy"); flush;
 		if( CmpEv( e, copy, "copy")){
-			fprintf( stdout, " ok ");
+			print(" ok ");
 			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
 			if( !GetStream( e))
 			{
 				MidiFreeEv(e);
-				return false;
+				goto failed;
 			}
 		}
 	}
 	MidiFreeEv(e);
 	ok;
-	return true;
+failed:
+	MidiFlushEvs(r1); MidiFlushEvs(r2);	
 }
 
 /*______________________________________________________________________________*/
-static Boolean  Private()
+void Private()
 {
 	short i;
 	Boolean display= true;
 	
-	fprintf( stdout, "\nPrivate events :\n");	
+	print("\nPrivate events :\n");	
 	/*													typePrivate */
 	for( i= typePrivate; i<typeProcess; i++)
 	{
 		if( !TestEvent( i, display))
 		{
-			fprintf( stdout, " type %d\n", (int)i);
-			return false;
+			print(" type %d\n", (int)i);
+			return;
 		}
 		display= false;
 	}
 	ok;
-	return true;
 }
 
 /*______________________________________________________________________________*/
-static void Process()
+void Process()
 {
 	short i;
 	
-	fprintf( stdout, "\nProcess and DProcess :\n");	
+	print("\nProcess and DProcess :\n");	
 	/*													typePrivate */
 	for( i= typeProcess; i<typeQuarterFrame; i++)
 	{
 		if( TestEvent( i, true)) ok;
-		else fprintf( stdout, "\n");
+		else print("\n");
 	}
 }
 
 /*______________________________________________________________________________*/
-static void QFToMidiFile()
+void QFToMidiFile()
 {
 	short i;
 	
-	fprintf( stdout, "\nQuarterFrame until RegParam :\n");	
+	print("\nQuarterFrame until RegParam :\n");	
 	/*													nQuarterFrame until RegParam */
 	for( i= typeQuarterFrame; i<=typeRegParam; i++)
 	{
 		if( TestEvent( i, true)) ok;
-		else fprintf( stdout, "\n");
+		else print("\n");
 	}
 }
 
 /*______________________________________________________________________________*/
-static void MidiFile()
+void MidiFile()
 {
 	short i;
 	
-	fprintf( stdout, "\nMidiFile events :\n");	
-	if( version < 160)
-		fprintf( stdout, "not implemented !\n");	
+	print("\nMidiFile events :\n");	
+	if( MidiGetVersion() < 160)
+		print("not implemented !\n");	
 
 	/*												typeSeqNum until typeSpecific */
 	else for( i= typeSeqNum; i<=typeSpecific; i++)
 	{
 		if( TestEvent( i, true)) ok;
-		else fprintf( stdout, "\n");
+		else print("\n");
 	}
 }
 
 /*______________________________________________________________________________*/
-static void Reserved()
+void Reserved()
 {
 	short ret= true;
 	MidiEvPtr e;
 	
-	fprintf( stdout, "\nReserved events :\n");	
+	print("\nReserved events :\n");	
 	/*												typeReserved until typeDead */
-	fprintf( stdout, "    type %s : ", typeListe[typeReserved]); flush;
+	print("    type %s : ", typeListe[typeReserved]); flush;
 	if( e= MidiNewEv(typeReserved)) 
 	{
-		fprintf( stdout, "\ntype %d : allocation return %lx\n", (int)typeReserved, e);
+		print("\ntype %d : allocation return %lx\n", (int)typeReserved, e);
 		ret= false;
 	}
 	if( e= MidiNewEv( typeDead-1)) 
 	{
-		fprintf( stdout, "\ntype %d : allocation return %lx\n", (int)typeDead-1, e);
+		print("\ntype %d : allocation return %lx\n", (int)typeDead-1, e);
 		ret= false;
 	}
 	if( ret) ok;
-	fprintf( stdout, "    type Dead : "); flush;
+	print("    type Dead : "); flush;
 	if( TestEvent( typeDead, false)) ok;
-	else fprintf( stdout, "\n");
+	else print("\n");
+}
+
+/*______________________________________________________________________________*/
+void Close ()
+{
+	MidiClose( r1);
+	MidiClose( r2);
 }
 
 /*______________________________________________________________________________*/
 main( int argc, char *argv[])
 {
-	fprintf( stdout, "\nAllocation, emission and reception of MidiShare events.\n");
-	fprintf( stdout, "==========================================================\n");
+	print("\nAllocation, emission and reception of MidiShare events.\n");
+	print("==========================================================\n");
 
 	if( MidiShare())
 	{
 		version= MidiGetVersion();
-		fprintf( stdout, "                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
-		fprintf( stdout, "\nWarning : MidiShare must have at least 10000 events !\n");
+		print("                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
+		print("\nWarning : MidiShare must have at least 10000 events !\n");
 
 		if( OpenAppls())
 		{
 			wait( 100);
-			ChanEvents(); fflush( stdout);
-			CommonEvents(); fflush( stdout);			
-			SystemeEx(); fflush( stdout);
+			ChanEvents(); flush;
+			CommonEvents(); flush;			
+			SystemeEx(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);
-			Stream(); fflush( stdout);
+			Stream(); flush;
 			MidiFlushEvs(r1); MidiFlushEvs(r2);
-			Private(); fflush( stdout);
-			Process(); fflush( stdout);
-			QFToMidiFile(); fflush( stdout);
-			MidiFile(); fflush( stdout);
-			Reserved(); fflush( stdout);
-
-			MidiClose( r1);
-			MidiClose( r2);
+			Private(); flush;
+			Process(); flush;
+			QFToMidiFile(); flush;
+			MidiFile(); flush;
+			Reserved(); flush;
+			Close ();
 		}
 
 	}
-	else fprintf( stdout, "MidiShare is not installed !\n");
-	fprintf( stdout, "\nEnd of allocation emission and reception test of events.\n");
+	else print("MidiShare is not installed !\n");
+	print("\nEnd of allocation emission and reception test of events.\n");
 	return 0;
 }
