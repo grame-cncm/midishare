@@ -1,0 +1,30 @@
+------------------------------------------------------------------------------
+                          How to Build MidiShare
+                
+                    Dominique Fober <fober@rd.grame.fr>
+
+------------------------------------------------------------------------------
+
+This document describes the requirements and steps necessary to build MidiShare
+for the Macintosh 68k.
+
+What you will need:
+
+1. About 1 MB free disk space for the source and binaries after compilation.
+
+2. An installation of CodeWarrior Pro 4 or later. The MidiShare sources
+   compile with CodeWarrior Pro 4. For more information, see Metrowerks
+   web site at <http://www.metrowerks.com>.
+
+3. The MidiShare source code distibution.
+  
+  
+  
+Compiling MidiShare
+----------------
+
+Open the "MidiShare Application.prj" project in the "mac68k" folder.
+Do a 'Make'. Go and get (quickly) a cup of coffee. Come back, and enjoy !
+
+
+------------------------------------------------------------------------------
