@@ -18,17 +18,19 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+
 */
 
 #ifndef __msTasks__
 #define __msTasks__
 
+#include "lflifo.h"
+#include "lffifo.h"
 #include "msDefs.h"
 #include "msTypes.h"
 #include "msAppls.h"
-#include "msMemory.h"
-#include "msSorter.h"
-
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
@@ -44,11 +46,11 @@ typedef struct TTaskExt
 
 /*__________________________________________________________________________________*/
 MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3, 
-                                   MSMemoryPtr g, TsorterBlockPtr sb);
+                                   lifo* freelist, fifo* schedlist);
 MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
-                                   MSMemoryPtr g, TsorterBlockPtr sb);
+                                   lifo* freelist, fifo* schedlist);
 MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
-                                   MSMemoryPtr g, TsorterBlockPtr sb);
+                                   lifo* freelist, fifo* schedlist);
 
 MSFunctionType(void)      MSForgetTask	(MidiEvPtr *e);
 MSFunctionType(long)      MSCountDTasks	(short refnum, TClientsPtr g);
