@@ -164,7 +164,7 @@ void TWANControler::Disconnect (IPNum id, Boolean remove)
 	TMidiClient * client = (TMidiClient *)fTCPRemote.Find (id);
 	TMidiRemote * r = FindUDPRemote (id);
 	if (client && r) {
-		SocketStatus err = client->Bye (r->MaxLatency(), r->MaxLatencyOver(), r->Missing());
+		client->Bye (r->MaxLatency(), r->MaxLatencyOver(), r->Missing());
 	}
 	if (remove) CallRemoveRemote (id);
 }
@@ -225,7 +225,8 @@ void TWANControler::CheckCompletion  (IPNum id, Boolean silently)
 //_________________________________________________________________________________
 TSocket *  TWANControler::GetSpecialSocket (IPNum ip)
 {
-	return (TSocket *)fTCPRemote.Find (ip);
+	TSocket * s = dynamic_cast<TSocket *>(fTCPRemote.Find (ip));
+	return s;
 }
 
 //_________________________________________________________________________________
@@ -247,7 +248,7 @@ void TWANControler::OpenComplete  (IPNum id)
 //_________________________________________________________________________________
 Boolean TWANControler::AddRemote (TMidiClient * client)
 {
-	return (fTCPRemote.Add (client) != 0);
+	return (fTCPRemote.Add (dynamic_cast<TRemote *>(client)) != 0);
 }
 
 //_________________________________________________________________________________

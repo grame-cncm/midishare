@@ -94,6 +94,6 @@ class TRemoteMgr : public TRemoteList
 
 //____________________________________________________________
 inline TMidiRemote * TRemoteMgr::FindRemote (IPNum id)	
-				{ return (TMidiRemote *)Find(id); }
+				{ return dynamic_cast<TMidiRemote *>(Find(id)); }
 
 #endif
