@@ -59,6 +59,7 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 	
 	fSynchroniser = synchro;
 	fScore = score;
+	fState = state;
 	fIterator = new TScoreIterator(fScore);
 	fRecordtrack = kNoTrack;
 	fRecordmode = kEraseOff;
