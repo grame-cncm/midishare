@@ -240,9 +240,9 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "/Users/fober/src/midishare/macosx-mono/applications/RadioHardDisk";
+				LIBRARY_SEARCH_PATHS = .;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_LDFLAGS = "-lMidiShare";
+				OTHER_LDFLAGS = "-framework MidiShare";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
@@ -268,7 +268,7 @@
 	<key>CFBundleExecutable</key>
 	<string>RadioHardDisk</string>
 	<key>CFBundleGetInfoString</key>
-	<string>v. 1.0 @ Grame 2002</string>
+	<string>v. 1.1 @ Grame 2003</string>
 	<key>CFBundleIconFile</key>
 	<string>RadioHD.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -278,11 +278,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>v. 1.0</string>
+	<string>v. 1.1</string>
 	<key>CFBundleSignature</key>
 	<string>HDCh</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>

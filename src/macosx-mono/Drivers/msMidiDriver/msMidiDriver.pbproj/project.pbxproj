@@ -46,6 +46,7 @@
 				F54A7D7501FC77AF01053105,
 				F54A7D7601FC77AF01053105,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F54A7D7401FC77AF01053105;
 			productRefGroup = F54A7D7A01FC781301053105;
@@ -130,9 +131,9 @@
 				DYLIB_CURRENT_VERSION = 1;
 				HEADER_SEARCH_PATHS = ../../../common/Headers;
 				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O0";
+				OPTIMIZATION_CFLAGS = "-O2";
 				OTHER_CFLAGS = "-D__POWERPC__ -D__Macintosh__";
-				OTHER_LDFLAGS = "-flat_namespace -lMidiShare";
+				OTHER_LDFLAGS = "-flat_namespace -framework MidiShare";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -150,7 +151,6 @@
 			productInstallPath = /usr/local/lib;
 			productName = msMidiDriver;
 			productReference = F54A7D7B01FC781301053105;
-			shouldUseHeadermap = 0;
 		};
 		F54A7D7D01FC781301053105 = {
 			buildActionMask = 2147483647;

@@ -1,7 +1,7 @@
 INC=../Headers
 OPTIONS= -D__Types__ -D__Macintosh__
 CFLAGS := -O3 $(OPTIONS) 
-LIB = -lMidiShare
+LIB = -framework MidiShare
 CC    = cc
 
 all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 
