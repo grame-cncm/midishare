@@ -25,6 +25,7 @@
 */
 
 #include <linux/slab.h>
+#include <linux/poll.h>
 
 #include "msLoader.h" 
 #include "msExtern.h"
@@ -54,11 +55,12 @@ static void intrpt_routine(void * arg);
 #define GetCommand(c)		(&(((LinuxContextPtr)c)->commands))
 #define GetCommandQueue(c)	(&(((LinuxContextPtr)c)->commandsQueue))
 
+
 /*_________________________________________________________________________*/  
 /* application specific part: context, alarm, tasks                        */
 /*_________________________________________________________________________*/
 
-void FreeCommandFifo(TApplContextPtr context)
+void FlushCommandFifo(TApplContextPtr context)
 {
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	MidiEvPtr ev, next;
@@ -68,7 +70,7 @@ void FreeCommandFifo(TApplContextPtr context)
 	ev = (MidiEvPtr)fifoclear (&linuxContext->commands);
 	while(ev) {
 		next= Link(ev);
-		MSFreeCell(ev,FreeList(Memory(gMem))); 
+		MSFreeEv(ev,FreeList(Memory(gMem))); 
 		ev= next;
 	}
 }
@@ -89,7 +91,7 @@ TApplContextPtr CreateApplContext ()
 void DisposeApplContext (TApplContextPtr context)
 {
 	if (context) {
-		FreeCommandFifo(context);
+		FlushCommandFifo(context);
 		kfree (context);
 	}
 }
@@ -101,6 +103,7 @@ static void wakeUp (TApplContextPtr context)
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	
 	if (!linuxContext->wakeFlag){
+		//prnt("wakeUp\n");
 		wake_up(GetCommandQueue(context));
 		linuxContext->wakeFlag = true;	
 	}
@@ -135,6 +138,7 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 	ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
 	if (ev) {
+		//prnt("CallRcvAlarm\n");
 		fifoput(GetCommand(context), (cell*)ev);
 		wakeUp(context);
 	}
@@ -148,7 +152,7 @@ void CallQuitAction (TApplContextPtr context)
 	
 	/* Free command fifo */
 	
-	FreeCommandFifo(context);
+	FlushCommandFifo(context);
 	
 	/* put a Quit event in the application command fifo  */
 	
@@ -297,6 +301,23 @@ MidiEvPtr MSGetDTask (short refNum, TClientsPtr g)
 		return (MidiEvPtr)fifoget (&appl->dTasks);
 	}
 	return 0; 
+}
+
+/*__________________________________________________________________________*/
+
+unsigned int MSPoll(short refNum, TClientsPtr g, struct file * f, poll_table * wait)
+{
+	unsigned int mask = 0;
+	
+	if( CheckRefNum( g, refNum)) {
+		TApplPtr appl = g->appls[refNum]; 
+		LinuxContextPtr context = (LinuxContextPtr)appl->context;
+		prnt("poll wait \n");
+		poll_wait(f, &context->commandsQueue, wait);
+		mask |= POLLIN | POLLRDNORM;  
+	}
+	
+	return mask; 
 }
 
 
