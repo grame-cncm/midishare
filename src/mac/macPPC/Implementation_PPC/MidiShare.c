@@ -147,8 +147,11 @@ MSFunctionType(Boolean) MidiGetDriverInfos (short refnum, TDriverInfos * infos) 
 }
 
 /*-------------------------------- Slots management ---------------------------*/
-MSFunctionType(SlotRefNum) MidiAddSlot (short refnum) {
-	return MSAddSlot (refnum, Clients(GetData()));
+MSFunctionType(SlotRefNum) MidiAddSlot (short refnum, MidiName name, SlotDirection direction) {
+	return MSAddSlot (refnum, name, direction, Clients(GetData()));
+}
+MSFunctionType(void) MidiSetSlotName (SlotRefNum slot, MidiName name) {
+	MSSetSlotName (slot, name, Clients(GetData()));
 }
 MSFunctionType(SlotRefNum) MidiGetIndSlot (short refnum, short index) {
 	return MSGetIndSlot (refnum, index, Clients(GetData()));

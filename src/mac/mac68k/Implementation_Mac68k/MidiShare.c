@@ -119,8 +119,16 @@ MSFunctionType(Boolean) MGetDriverInfos (short refnum, TDriverInfos * infos, TMS
 
 /*-------------------------------- Slots management ---------------------------*/
 
-MSFunctionType(SlotRefNum) MAddSlot (short refnum, TMSGlobalPtr g) {
-  return MSAddSlot (refnum, Clients(g));
+MSFunctionType(SlotRefNum) OldAddSlot (short refnum, TMSGlobalPtr g) {
+  return MSAddSlot (refnum, "\pobsolete slot", MidiInputOutputSlot, Clients(g));
+}
+
+MSFunctionType(SlotRefNum) MAddSlot (short refnum, MidiName name, SlotDirection direction, TMSGlobalPtr g) {
+  return MSAddSlot (refnum, name, direction, Clients(g));
+}
+
+MSFunctionType(void) MSetSlotName (SlotRefNum slot, MidiName name, TMSGlobalPtr g) {
+  MSSetSlotName (slot, name, Clients(g));
 }
 
 MSFunctionType(SlotRefNum) MGetIndSlot (short refnum, short index, TMSGlobalPtr g) {
@@ -223,7 +231,7 @@ MSFunctionType(short) OldMSCountFields( MidiEvPtr e, TMSGlobalPtr g) {
 }
 
 MSFunctionType(Boolean) MSGetPortState(short port, TMSGlobalPtr g) {
-  return false;
+  return true;
 }
 
 MSFunctionType(void) MSSetPortState(short port, Boolean state, TMSGlobalPtr g) {
