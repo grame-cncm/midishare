@@ -207,7 +207,8 @@ void DriverSleep(TApplPtr appl)
 }
 
 /*__________________________________________________________________________*/
-/*      Interrupt handlers  : using CoreAudio                                                                                                            /*__________________________________________________________________________*/
+//      Interrupt handlers  : using CoreAudio                                                                                                            
+/*__________________________________________________________________________*/
 
 static OSStatus AudioClockHandler(AudioDeviceID inDevice, 
                                 const AudioTimeStamp * inNow,
@@ -352,7 +353,6 @@ static bool GetDeviceID(char* driver_name, AudioDeviceID* id)
     free(coreDeviceIDs);
     return res;
 }
-
 
 /*_________________________________________________________________________*/
 void OpenTimeInterrupts(TMSGlobalPtr g)
