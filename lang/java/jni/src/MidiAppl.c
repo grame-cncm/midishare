@@ -34,7 +34,15 @@
 /*****************************************************************************/
 
 #ifdef __Macintosh__
-#include "MidiSharePPC.h"
+	#ifdef __MacOS9__
+		#include <MidiShare.h>
+                UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
+                UPPApplAlarmPtr UPPJApplAlarmPtr ;
+	#else
+		#include <MidiShare.h>
+                RcvAlarmPtr UPPJRcvAlarmPtr ;
+                ApplAlarmPtr UPPJApplAlarmPtr ;
+	#endif
 #endif
 
 #ifdef __Linux__
@@ -48,14 +56,6 @@
 
 #include "MidiAppl.h"
 
-
-#if GENERATINGCFM
-	UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
-	UPPApplAlarmPtr UPPJApplAlarmPtr ;
-#else
-	RcvAlarmPtr UPPJRcvAlarmPtr ;
-	ApplAlarmPtr UPPJApplAlarmPtr ;
-#endif
        
 void  MSALARMAPI ApplAlarm( short ref,long code);
 
@@ -79,7 +79,7 @@ void  MSALARMAPI ApplAlarm( short ref,long code)
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
   (JNIEnv * env , jobject obj, jint ref) {
   
-	#if GENERATINGCFM
+	#if defined( __Macintosh__) && defined( __MacOS9__)
 		UPPJApplAlarmPtr =  NewApplAlarmPtr(ApplAlarm);
 	#else
 		UPPJApplAlarmPtr =  ApplAlarm;
@@ -94,8 +94,9 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
   (JNIEnv * env, jobject obj, jint ref) {
 
-	#if GENERATINGCFM
+	#if defined( __Macintosh__) && defined( __MacOS9__)
 		if (MidiGetApplAlarm (ref)) DisposeRoutineDescriptor ((UPPApplAlarmPtr) MidiGetApplAlarm (ref));
 	#endif
 }
+
 
