@@ -89,11 +89,13 @@ TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr su
 
 TEventModifier::~TEventModifier()
 {
+	// Warning : fScore must be desallocated the last 
+	
 	delete(fIterator1);
 	delete(fIterator);
-	delete(fScore);
 	delete(fPlayTask);
 	delete(fChaser);
+	delete(fScore);	
 }
 	
 /*----------------------------------------------------------------------------*/
