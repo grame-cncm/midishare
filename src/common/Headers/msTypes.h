@@ -27,16 +27,13 @@
 #ifndef __msTypes__
 #define __msTypes__
 
-/* For all platforms */
-# define FAR
-
-
 #ifdef __Macintosh__
 # include <MacTypes.h>                                                          
 # ifdef __POWERPC__
 # define MSFunctionType(type)   type
 # else 
 # define MSFunctionType(type)   pascal type
+# define FAR
 # endif
 
 typedef unsigned long ulong;
@@ -56,6 +53,7 @@ typedef unsigned long ulong;
 
 #ifdef __Linux__
 #	include <linux/types.h>
+#	define FAR
 
 	typedef unsigned char Byte;
 	typedef char * Ptr;
