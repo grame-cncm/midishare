@@ -35,7 +35,7 @@ typedef  void (* ApplyScorePtr)( MidiEvPtr e , void* data);
 */
 
 
-class TPlayer :public  TMidiAppl{
+class TPlayer : public TMidiAppl{
 
 	friend class TPlayerFactory;
 	friend class TPlayerMemento;
@@ -67,10 +67,10 @@ class TPlayer :public  TMidiAppl{
 	 	
 	 	TPlayer();
 	 	virtual ~TPlayer();
-	 
-	 	// Opening/Closing
-	 	 short Open (MidiName name);
-		 void Close ();
+            
+                 // Opening/Closing
+	 	 short Open(MidiName name);
+		 void Close();
 	 		
 		 // Transport
 		 void Start();
@@ -79,40 +79,39 @@ class TPlayer :public  TMidiAppl{
 		 void Cont();
 		
 		 // Position
-		 void SetPosBBU (PosPtr pos);
-		 void SetPosMs (long date_ms);
+		 void SetPosBBU(PosPtr pos);
+		 void SetPosMs(long date_ms);
+                 void SetPosTicks(long date_ticks);
 		
 		 // Loop management
-		 void SetLoop (Boolean state) ;
-		 long SetLoopStartBBU (PosPtr pos);
-		 long SetLoopEndBBU (PosPtr pos);
+		 void SetLoop(Boolean state) ;
+		 long SetLoopStartBBU(PosPtr pos);
+		 long SetLoopEndBBU(PosPtr pos);
 		 long SetLoopStartMs(long date_ms);
 		 long SetLoopEndMs(long date_ms);
 		
 		 // Tracks management
-		 MidiSeqPtr GetAllTrack ();
-		 MidiSeqPtr GetTrack (short tracknum);
+		 MidiSeqPtr GetAllTrack();
+		 MidiSeqPtr GetTrack(short tracknum);
 
-		 long SetTrack (short tracknum, MidiSeqPtr seq);
-		 long SetAllTrack (MidiSeqPtr seq, long ticks_per_quarter);
+		 long SetTrack(short tracknum, MidiSeqPtr seq);
+		 long SetAllTrack(MidiSeqPtr seq, long ticks_per_quarter);
 		
-		 void SetParam (short tracknum, short p, short v);
-		 short GetParam (short tracknum, short p);
+		 void SetParam(short tracknum, short p, short v);
+		 short GetParam(short tracknum, short p);
 		
 		 long InsertAllTrack(MidiSeqPtr s);
 		 long InsertTrack(short tracknum,MidiSeqPtr s);
 		 
 		 // Synchronisation management
-		 void SetSynchroIn (short state) ;
-		 void SetSynchroOut (short state);
-		 
-		 void SetSMPTEOffset (SmpteLocPtr smptepos);
-		 
+		 void SetSynchroIn(short state) ;
+		 void SetSynchroOut(short state);
+		 void SetSMPTEOffset(SmpteLocPtr smptepos);
 		 void SetTempo(long tempo);
 
 		 // Record management
-		 void SetRecordMode (short state);
-		 void Record (short tracknum);
+		 void SetRecordMode(short state);
+		 void Record(short tracknum);
 		 void SetRecordFilter(MidiFilterPtr filter);
 
 		 // Step playing 
@@ -120,16 +119,15 @@ class TPlayer :public  TMidiAppl{
 		 void BackwardStep(short state);
 		
 		 // Player state
-		 void GetState (PlayerStatePtr ps);
-		 void GetEndScore (PlayerStatePtr ps);
+		 void GetState(PlayerStatePtr ps);
+		 void GetEndScore(PlayerStatePtr ps);
 		 
 		 // Alarms (Interface TMidiAppl)
-		 void ReceiveAlarm (short ref);
-		 void ApplAlarm (short ref,long code);
+		 void ReceiveAlarm(short ref);
+		 void ApplAlarm(short ref,long code);
 		 
 		 // Output
 		 long SetOutput(short output);
-		 
 		 
 		 // Initialization
 		 static void Init() {TEventFactory::Init();}
@@ -138,7 +136,6 @@ class TPlayer :public  TMidiAppl{
 };
 
 typedef TPlayer FAR * TPlayerPtr;
-
 
 
 #endif

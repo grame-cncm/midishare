@@ -67,7 +67,7 @@ TPlayer::~TPlayer() {fFactory.DestroyPlayer(&fPlayer);}
 // Open/Close
 /*--------------------------------------------------------------------------*/
 
-short TPlayer::Open (MidiName name) 
+short TPlayer::Open(MidiName name) 
 { 
 	// Open the MidiShare application and check the result
 	short ref = TMidiAppl::Open(name);
@@ -116,22 +116,26 @@ void TPlayer::Cont() {fPlayer->Cont();}
 // Position
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetPosBBU (PosPtr pos) {fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit - 1));}
+void TPlayer::SetPosBBU(PosPtr pos) {fPlayer->SetPosBBU(TPos (pos->bar - 1, pos->beat - 1, pos->unit - 1));}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetPosMs (long date_ms) {fPlayer->SetPosMs(date_ms);}
+void TPlayer::SetPosMs(long date_ms) {fPlayer->SetPosMs(date_ms);}
+
+/*--------------------------------------------------------------------------*/
+
+void TPlayer::SetPosTicks(long date_ticks) {fPlayer->SetPosTicks(date_ticks);}
 
 /*--------------------------------------------------------------------------*/
 // Tracks management
 /*--------------------------------------------------------------------------*/
 
- MidiSeqPtr TPlayer::GetAllTrack () {return (fRunningState.IsIdle()) ? fScore.GetAllTrack(): 0;}
- MidiSeqPtr TPlayer::GetTrack (short tracknum) {return (fRunningState.IsIdle()) ? fScore.GetTrack(tracknum): 0;}
+ MidiSeqPtr TPlayer::GetAllTrack() {return (fRunningState.IsIdle()) ? fScore.GetAllTrack(): 0;}
+ MidiSeqPtr TPlayer::GetTrack(short tracknum) {return (fRunningState.IsIdle()) ? fScore.GetTrack(tracknum): 0;}
 
  /*--------------------------------------------------------------------------*/
 
- long 	TPlayer::SetTrack (short tracknum, MidiSeqPtr s)
+ long 	TPlayer::SetTrack(short tracknum, MidiSeqPtr s)
  {
  	if (fRunningState.IsIdle()) {
  	
@@ -152,7 +156,7 @@ void TPlayer::SetPosMs (long date_ms) {fPlayer->SetPosMs(date_ms);}
  
  /*--------------------------------------------------------------------------*/
 
- long TPlayer::SetAllTrack (MidiSeqPtr s, long ticks_per_quarter)
+ long TPlayer::SetAllTrack(MidiSeqPtr s, long ticks_per_quarter)
  {
  	if (fRunningState.IsIdle() && (ticks_per_quarter > 0)) {
  	
@@ -216,7 +220,7 @@ long TPlayer::InsertTrack(short tracknum,MidiSeqPtr s)
  
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetParam (short tracknum, short p, short v) 
+void TPlayer::SetParam(short tracknum, short p, short v) 
 { 
 	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
@@ -229,13 +233,13 @@ void TPlayer::SetParam (short tracknum, short p, short v)
 
 /*--------------------------------------------------------------------------*/
 
- short TPlayer::GetParam (short tracknum, short p) {return fTrackTable.GetParam (tracknum, p);}
+ short TPlayer::GetParam(short tracknum, short p) {return fTrackTable.GetParam (tracknum, p);}
 
 /*--------------------------------------------------------------------------*/
 // Synchronisation management
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetSynchroIn (short state) 
+void TPlayer::SetSynchroIn(short state) 
 { 
 	if (fRunningState.IsIdle() && (state>= 0) && (state < kMaxSyncIn)) {
 		fSyncIn = state;
@@ -252,8 +256,8 @@ void TPlayer::SetSynchroIn (short state)
 
 /*--------------------------------------------------------------------------*/
 
-  void TPlayer::SetSynchroOut (short state)
- {
+void TPlayer::SetSynchroOut(short state)
+{
  	if(fRunningState.IsIdle() && (state>= 0) && (state < kMaxSyncOut)) {
  		fSyncOut = state;
   
@@ -269,7 +273,7 @@ void TPlayer::SetSynchroIn (short state)
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetSMPTEOffset (SmpteLocPtr smptepos) {fSmpteInfos.SetSMPTEOffset(smptepos);}
+ void TPlayer::SetSMPTEOffset(SmpteLocPtr smptepos) {fSmpteInfos.SetSMPTEOffset(smptepos);}
  
 /*--------------------------------------------------------------------------*/
 
@@ -289,7 +293,7 @@ void TPlayer::BackwardStep(short flag) {fPlayer->PlaySliceBackward();}
 // Player state
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::GetState (PlayerStatePtr ps)
+void TPlayer::GetState(PlayerStatePtr ps)
 {
 	fScoreState->FillState(ps,fPlayer->GetPosTicks());
 	
@@ -305,7 +309,7 @@ void TPlayer::GetState (PlayerStatePtr ps)
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::GetEndScore (PlayerStatePtr ps)
+void TPlayer::GetEndScore(PlayerStatePtr ps)
 { 
 	TScoreState tmp(&fScore,fTick_per_quarter);
 	tmp.FillState(ps,fScore.GetLastDate());
@@ -315,18 +319,18 @@ void TPlayer::GetEndScore (PlayerStatePtr ps)
 // Loop management
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetLoop (Boolean state) {fLoopManager->SetLoop(state);}
+void TPlayer::SetLoop(Boolean state) {fLoopManager->SetLoop(state);}
 
 /*--------------------------------------------------------------------------*/
 
-long TPlayer::SetLoopStartBBU (PosPtr pos) 
+long TPlayer::SetLoopStartBBU(PosPtr pos) 
 {	
 	return fLoopManager->SetLoopStartBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit - 1));
 }
 	 
 /*--------------------------------------------------------------------------*/
 
-long TPlayer::SetLoopEndBBU (PosPtr pos) 
+long TPlayer::SetLoopEndBBU(PosPtr pos) 
 {
 	return fLoopManager->SetLoopEndBBU(TPos(pos->bar - 1, pos->beat - 1, pos->unit - 1));
 }
@@ -344,7 +348,7 @@ long TPlayer::SetLoopEndMs(long date_ms) {return fLoopManager->SetLoopEndMs(date
 // Record management
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetRecordMode (short state) 
+void TPlayer::SetRecordMode(short state) 
 {  
 	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
@@ -357,11 +361,11 @@ void TPlayer::SetRecordMode (short state)
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetRecordFilter(MidiFilterPtr filter) {fEventReceiver->SetRecordFilter(filter);}
+void TPlayer::SetRecordFilter(MidiFilterPtr filter) {fEventReceiver->SetRecordFilter(filter);}
  
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Record (short tracknum) 
+void TPlayer::Record(short tracknum) 
 { 	
 	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
@@ -374,8 +378,8 @@ void TPlayer::Record (short tracknum)
 
 /*--------------------------------------------------------------------------*/
 
- long TPlayer::SetOutput(short output) 
- { 
+long TPlayer::SetOutput(short output) 
+{ 
  	if(fRunningState.IsIdle() && (output >= 0) && (output < KMaxOutput)) {
  		fOutput = output;
 
@@ -400,7 +404,7 @@ void TPlayer::Record (short tracknum)
 // Alarms
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::ReceiveAlarm (short ref) 
+void TPlayer::ReceiveAlarm(short ref) 
 {
 	MidiEvPtr e1,e2;
 	
@@ -444,7 +448,7 @@ void TPlayer::ReceiveAlarm (short ref)
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::ApplAlarm (short ref,long code) 
+void TPlayer::ApplAlarm(short ref,long code) 
 { 
 	// For SMPTE synchronization, MIDISyncStart and MIDISyncStop are converted
 	// in Start and Stop events for homogeneous management in the Player.
