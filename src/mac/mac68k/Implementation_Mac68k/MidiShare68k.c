@@ -226,22 +226,6 @@ void SpecialSleep  (TMSGlobalPtr g)
 /*__________________________________________________________________________*/
 /* time interrrupt management                                               */
 /*__________________________________________________________________________*/
-void AdjustTimer (THost context, long offset, long period)
-{
-	TMacPtr mac = (TMacPtr)context;
-	long newfreq = (mac->freq * period) / (period + offset);
-	mac->freq = (mac->freq + newfreq) / 2;
-}
-
-long RealTimeOffset (THorlogePtr h)
-{
-	UnsignedWide cur; unsigned long t;
-	Microseconds (&cur);
-	t  = (cur.hi - h->rtOffset.sec) * 1000;
-	t += (cur.lo - h->rtOffset.usec) / 1000;
-	return t - h->time;
-}
-
 void OpenTimeInterrupts (TMSGlobalPtr g)
 {
 	TimeTask(g).tmAddr = NewTimerProc(timeManagerTask);
