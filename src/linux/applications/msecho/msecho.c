@@ -119,14 +119,21 @@ static void EchoTask( long d,short ref,long el,long a2, long a3)
   e= (MidiEvPtr)el;
   v = Vel(e)+gVelocity;
   p = Pitch(e)+gPitch;
-  if ( ((v>0)&&(v<128)) && ((p>=0)&&(p<128)) ) {
-         Vel(e) = v;
-         Pitch(e) = p;
-         MidiSendAt(ref, MidiCopyEv(e), d);
-         if( !MidiTask(EchoTask, d+gDelay, ref, el, 0, 0))
-                MidiFreeEv(e);
+  if (d+1000 < MidiGetTime()) {
+	  d = MidiGetTime()+1;
+	  printf("sync\n");
   }
-  else MidiFreeEv(e);
+  if ( ((v>0)&&(v<128)) && ((p>=0)&&(p<128)) ) {
+		Vel(e) = v;
+		Pitch(e) = p;
+		MidiSendAt(ref, MidiCopyEv(e), d);
+		if( !MidiTask(EchoTask, d+gDelay, ref, el, 0, 0) ) {
+			printf("out of mem!\n");
+			MidiFreeEv(e);
+		}
+  } else {
+	  MidiFreeEv(e);
+  }
 }
 
 /****************************************************************************
@@ -210,7 +217,7 @@ int main(int argc, char *argv[] )
 	);
 	
 	gtk_main ();
-
+	printf("MidiFreeSpace = %d\n", MidiFreeSpace());
 	return(0);
 }
 

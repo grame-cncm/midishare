@@ -24,6 +24,8 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
+#include <netdb.h>
 
 #include "TNetInfos.h"
 #include "TInetAddress.h"
@@ -34,7 +36,7 @@
 #define kBroadcastMask	0xff000000
 #endif
 
-extern int errno, h_errno;
+//extern int errno, h_errno;
 //____________________________________________________________
 TNetInfos::TNetInfos (short port)
 {
@@ -58,3 +60,4 @@ TNetInfos::TNetInfos (short port)
 	fMTU = 1500;
 	fError = noErr;
 }
+ 
