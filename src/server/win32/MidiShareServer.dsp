@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib /nologo /subsystem:console /machine:I386 /out:"../midishared"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib /nologo /subsystem:console /machine:I386 /out:"../midishare.exe"
 
 !ELSEIF  "$(CFG)" == "MidiShareServer - Win32 Debug"
 
@@ -82,6 +82,82 @@ LINK32=link.exe
 
 # Name "MidiShareServer - Win32 Release"
 # Name "MidiShareServer - Win32 Debug"
+# Begin Group "common"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\common\midishare.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msAlarms.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msAppls.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msConnx.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msDriver.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msEvents.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msFields.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msFilter.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msHandler.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msInit.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msMail.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msMemory.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msSeq.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msSmpte.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msSorter.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msTasks.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msTime.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msXmtRcv.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\msExtern.c
