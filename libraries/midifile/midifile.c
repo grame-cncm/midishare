@@ -28,7 +28,8 @@
  * v121 [Dec 4,00]     SL remove the obsolete __MWERKS__ tag
  * v122 [Apr 23,01]    SL add PortPrefix management : works with version 185 or later
  * v123 [Jun 01,01]    SL remove fgetpos and fsetpos use for easier cross platform code management
-
+ * v124 [Mars 26,02]   JJC bug correction in MidiFileOpen function
+ *
  */
  
 #include "midifile.h"
@@ -1368,7 +1369,7 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 	if( fd= (MIDIFilePtr)malloc( sizeof( midiFILE)))
 	{
 		fd->fd= nil;
-		stdInit( fd);								/* standard initialization	*/
+		fd->mode= 0;								/* standard initialization	*/
 		if( (stdMode= mdf_getStdMode( mode)) &&		/* opening mode control		*/
 			(fd->fd= fopen( filename, stdMode)))	/* file opening				*/
 		{			
@@ -1378,9 +1379,10 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 				{									/* error :					*/
 					MidiFile_errno= MidiFileErrAdd0;/* try to add to a 0 format	*/
 					ok= false;						/* file						*/
+				}else {
+					fd->mode= (mode== MidiFileAppend ? true : false);
+					ok= stdInit( fd);
 				}
-				fd->mode= (mode== MidiFileAppend ? true : false);
-				ok= stdInit( fd);
 			}
 		}
 		else ok= false;
