@@ -248,8 +248,6 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
         long n = CCRead (pl->comm, pl->rbuff, kReadBuffSize);
         if (n > 0) {
             int ret;  MidiEvPtr reply, e;
-//			parse->buff = pl->rbuff;
-//			msStreamParseRewind (parse);
 			e = msStreamStartBuffer (parse, n, &ret);
 			if (e) {
 				reply = EventHandlerProc(e, pl->comm);
