@@ -101,8 +101,7 @@ int	TThreads::SetPriority (int priority)
 			setuid (saved_uid);
 		  	if (!ret) return true;
 		}
-		else if (!pthread_setschedparam (fThread, SCHED_OTHER, &param)) 
-            return true;
+		return true;
 	}
 	return false;
 }

@@ -21,11 +21,12 @@
  
 */
 
+#include <stdio.h>
+
 #include "msSharedMem.h"
 #include "TShMem.h"
 
 #ifdef WIN32
-#include <stdio.h>
 typedef struct ShMemInfo {
     TShMem * memh;
     char	id[keyMaxSize];

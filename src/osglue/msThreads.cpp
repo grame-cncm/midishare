@@ -21,6 +21,8 @@
  
 */
 
+#include <stdio.h>
+
 #include "TThreads.h"
 #include "msThreads.h"
 
