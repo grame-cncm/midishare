@@ -66,6 +66,7 @@ inline Boolean MidiShare() { return true; }
 #endif
 
 #include "TDrivers.h"
+#include "FilterUtils.h"
 
 #define true	1
 #define false	0
