@@ -57,6 +57,7 @@ msThreadPtr gTimeThread = 0;
 	} rtcState;
 
 	static rtcTimeInfo rtcTimeTbl[] = {
+		{ 0,    0 },  // 0 ms time resolution
 		{ 1024, 1 },  // 1 ms time resolution
 		{ 512,  1 },  // 2 ms time resolution
 		{ 0,    0 },  // 3 ms time resolution (not suppported)
