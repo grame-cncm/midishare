@@ -29,7 +29,6 @@
 
 package grame.midishare;
 import grame.midishare.MidiAppl;
-import grame.midishare.MidiFactory;
 
 /**
 This class is the basic class of Midi tasks. 
