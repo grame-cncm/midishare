@@ -25,6 +25,7 @@
 #define __msDriver__
 
 #include "msDefs.h"
+#include "lffifo.h"
 
 /*_______________________________________________________________*/
 #define MaxSlots	128

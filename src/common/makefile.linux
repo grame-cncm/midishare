@@ -26,10 +26,10 @@ server: dirs $(STARGET)
 client: dirs $(CTARGET)
 
 $(STARGET) : makefile $(SOBJ)
-	ld -m elf_i386 -r -o $(STARGET) $(SOBJ)
+	ld -r -o $(STARGET) $(SOBJ)
 
 $(CTARGET) : makefile $(COBJ)
-	ld -m elf_i386 -r -o $(CTARGET) $(COBJ)
+	ld -r -o $(CTARGET) $(COBJ)
 
 clean:
 	rm -f $(OBJ) $(TARGET)
