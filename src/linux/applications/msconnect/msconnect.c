@@ -223,7 +223,6 @@ gint check_update( gpointer data )
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
 {
-	printf("toto \n");
 	MidiClose(gRefNum);
 	gtk_main_quit();
 	return FALSE;
