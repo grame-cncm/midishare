@@ -6,7 +6,7 @@ CC = gcc
 LD = ld
 CFLAGS := $(FLAGS) -fPIC -I../Headers
 
-OBJ = $(LOBJ)/msMemory.o $(LOBJ)/msEvents.o $(LOBJ)/msSeq.o $(LOBJ)/msMem.o
+OBJ = $(LOBJ)/msMemory.o $(LOBJ)/msEvents.o $(LOBJ)/msSeq.o 
 SRC = msMemory.c msEvents.c msSeq.c msMem.c
 
 $(TARGET) :  $(OBJ)
@@ -21,8 +21,6 @@ $(LOBJ)/msEvents.o: msEvents.c
 	$(CC) $(CFLAGS) -c msEvents.c -o $(LOBJ)/msEvents.o
 $(LOBJ)/msSeq.o:    msSeq.c
 	$(CC) $(CFLAGS) -c msSeq.c -o $(LOBJ)/msSeq.o
-$(LOBJ)/msMem.o:    msMem.c
-	$(CC) $(CFLAGS) -c msMem.c -o $(LOBJ)/msMem.o
 
 clean : 
 	rm $(OBJ) $(TARGET)
@@ -36,4 +34,3 @@ lib/msEvents.o: ../Headers/msEvents.h ../Headers/msDefs.h
 lib/msEvents.o: ../Headers/msTypes.h ../Headers/lflifo.h ../Headers/msSync.h
 lib/msSeq.o: ../Headers/msSeq.h ../Headers/msDefs.h ../Headers/msTypes.h
 lib/msSeq.o: ../Headers/lflifo.h ../Headers/msSync.h ../Headers/msEvents.h
-lib/msMem.o: ../Headers/msMem.h ../Headers/msTypes.h
