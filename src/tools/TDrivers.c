@@ -75,8 +75,6 @@ short refNum= nil;
 
 #ifdef PASCALNAME
 MidiName ApplName   = "\pDrivers";
-MidiName NewName    = "\pNewName";
-MidiName MSName 	= "\pMidiShare";
 DriverName TestName   = "\pTest Driver";
 TDriverInfos 	 gDrvInfo1 = { "\pTest Driver1", 100, 0 };
 TDriverInfos 	 gDrvInfo2 = { "\pTest Driver2", 100, 0 };
@@ -84,8 +82,6 @@ TDriverInfos 	 gDrvInfo2 = { "\pTest Driver2", 100, 0 };
 
 #ifdef CNAME
 MidiName ApplName   = "Drivers";
-MidiName NewName    = "NewName";
-MidiName MSName  	= "MidiShare";
 DriverName TestName   = "Test Driver";
 TDriverInfos 	 gDrvInfo1 = { "Test Driver1", 100, 0 };
 TDriverInfos 	 gDrvInfo2 = { "Test Driver2", 100, 0 };
