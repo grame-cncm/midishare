@@ -29,6 +29,7 @@
 #	define nil 0
 #	define flush    fflush(stdout)
 #	define print	printf
+#	define usleep(n) Sleep(n/1000)
 #endif
 
 
@@ -354,7 +355,7 @@ int Open (void)
 		}
 		MidiSetFilter( refNum, myFilterPtr);
 		MidiConnect( refNum, refNum, true);
-		wait (50);
+		usleep (50000);
 		return true;
 	}
 	return false;
