@@ -1,0 +1,176 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare Internet Drivers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P>&nbsp;</P>
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial"><IMG SRC="images/icon.LAN.jpg"
+WIDTH="31" HEIGHT="31" ALIGN="MIDDLE" BORDER="0" NATURALSIZEFLAG="3">
+MidiShare Internet Drivers <IMG SRC="images/icon.WAN.jpg" WIDTH="31"
+HEIGHT="31" ALIGN="MIDDLE" BORDER="0" NATURALSIZEFLAG="3"></FONT></CENTER></H1>
+
+<H2><CENTER><FONT COLOR="#0000ff" FACE="Arial">for GNU-Linux</FONT></CENTER></H2>
+
+<P><CENTER><HR></CENTER></P>
+
+<P><FONT FACE="Arial">The MidiShare Internet Drivers for GNU-Linux
+is an application named <B>msInetDriver</B>. Depending on its
+command line arguments this application can operate in LAN mode
+(default mode) or in WAN mode.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">in LAN mode, the driver provides low latency
+  real-time communication restricted to local array networks. It
+  includes automatic recognition of remote hosts. </FONT>
+  <LI><FONT FACE="Arial">in WAN mode, it provides real-time communication
+  over Internet. Remote host connection is controlled by the user.
+  </FONT>
+</UL>
+
+<H3><FONT FACE="Arial">Real-time transmission mechanisms :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Real-time transmission of the MidiShare
+  events stream relies on 2 mechanisms :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">a grouping period : the period during
+    which events are accumulated before being transmitted on the
+    network. It is intended to optimize network transmissions.This
+    parameter controls the transmission behavior.</FONT>
+    <LI><FONT FACE="Arial">a maximum latency : represents the maximum
+    transmission time (from sender to receiver) allowed to ensure
+    a correct time rendering of the transmitted events. It is intended
+    to compensate for the network latency and the transmission time
+    variations. This parameter controls the receiver behavior.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The total delay introduced by the network
+  transmission is equal to the grouping period + the maximum transmission
+  delay.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">msInetDriver arguments</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="511" BORDER="1" CELLSPACING="2" CELLPADDING="0"
+  HEIGHT="171">
+    <TR>
+      <TD WIDTH="29%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;argument</TD> 
+      <TD WIDTH="46%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;description</TD> 
+      <TD WIDTH="25%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;default value</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="29%" HEIGHT="43">
+        <PRE>&nbsp;-p &lt;port number&gt;</PRE>
+      </TD>
+      <TD WIDTH="46%" HEIGHT="43">set the UDP port number to &lt;port
+        number&gt;<BR>
+        in WAN mode, TCP and UDP ports numbers are equal</TD> 
+      <TD WIDTH="25%" HEIGHT="43">4950 in LAN mode<BR>
+        4951 in WAN mode</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="29%" HEIGHT="30">
+        <PRE>&nbsp;-lat &lt;latency&gt;</PRE>
+      </TD>
+      <TD WIDTH="46%" HEIGHT="30">set the maximum latency allowed to
+        &lt;latency&gt;</TD> 
+      <TD WIDTH="25%" HEIGHT="30">10 mls in LAN mode<BR>
+        1500 mls in WAN mode</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="29%" HEIGHT="30">
+        <PRE>&nbsp;-g &lt;group time&gt;</PRE>
+      </TD>
+      <TD WIDTH="46%" HEIGHT="30">set the grouping period to &lt;group
+        time&gt;</TD> 
+      <TD WIDTH="25%" HEIGHT="30">10 mls in LAN mode<BR>
+        200 mls in WAN mode</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="29%" HEIGHT="17">
+        <PRE>&nbsp;-d</PRE>
+      </TD>
+      <TD WIDTH="46%" HEIGHT="17">run as a daemon</TD> 
+      <TD WIDTH="25%" HEIGHT="17">&nbsp;</TD> 
+    </TR>
+    <TR>
+      <TD HEIGHT="17">
+        <PRE>&nbsp;-log &lt;log file&gt;</PRE>
+      </TD>
+      <TD HEIGHT="17">in daemon mode, log the driver messages to &lt;log
+        file&gt;</TD> 
+      <TD HEIGHT="17">/var/log/msInetDriver.log</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">WAN mode specific arguments</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="511" BORDER="1" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="29%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;argument</TD> 
+      <TD WIDTH="46%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;description</TD> 
+      <TD WIDTH="25%" HEIGHT="17" BGCOLOR="#aed5ff">&nbsp;default value</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="29%">
+        <PRE>&nbsp;-s [remote list]</PRE>
+      </TD>
+      <TD WIDTH="46%">launch the driver in WAN mode and open a connection
+        for every host in [remote list] which may be empty.</TD> 
+      <TD WIDTH="25%"></TD>
+    </TR>
+    <TR>
+      <TD WIDTH="29%">
+        <PRE>&nbsp;-m &lt;max clients&gt;</PRE>
+      </TD>
+      <TD WIDTH="46%">restrict the server clients count to &lt;max
+        clients&gt;</TD> 
+      <TD WIDTH="25%">32</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Remote hosts applications</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Connected remote hosts appears as MidiShare
+  client applications. To send or to receive data from a remote,
+  an application needs to be connected to this remote MidiShare
+  client. <BR>
+  In WAN mode, this remote client supports TCP transmission on
+  the MidiShare port number 255.<BR>
+  In LAN mode, the driver is sleeping as long as no other MidiShare
+  client application is running. While in sleeping state, the station
+  won't be visible by other stations on the network. The driver
+  wakes up when the first MidiShare client application starts.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">TCP transmission:</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare port number 255 is reserved
+  for secure transmission: every event received by a network client
+  on the port 255 will be transmitted using the TCP socket instead
+  of the UDP socket. The mechanisms for the TCP transmission are
+  the same than for UDP transmission. However, the TCP and UDP
+  streams are not synchronized, therefore the TCP events time rendering
+  may be incorrect relatively to the corresponding UDP events.</FONT></P>
+  <P><FONT FACE="Arial">Secure transmission may be used to send
+  important system exclusives at initialization time for example.
+  Its drawback is that there is no guarantee on the transmission
+  time.</FONT></P></BLOCKQUOTE>
+
+<P><FONT FACE="Arial"><HR ALIGN=LEFT></FONT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare Internet Drivers are part
+  of the <A HREF="http://www.grame.fr/MidiShare" TARGET="_top">MidiShare</A>
+  project. They have been developped by the <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>'s <A HREF="http://www.grame.fr/Research"
+  TARGET="_top">Computer Music Research Laboratory</A>, in collaboration
+  with the company <A HREF="http://www.milprod.com/" TARGET="_blank">Mil-Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

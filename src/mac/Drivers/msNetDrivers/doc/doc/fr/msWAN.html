@@ -1,0 +1,131 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare WAN Driver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial"><IMG SRC="../images/msWAN.jpg"
+WIDTH="169" HEIGHT="178" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></FONT></CENTER></H1>
+
+<P><FONT FACE="Arial">Le driver WAN - MidiShare permet la communication
+temps r&eacute;el sur Internet aux applications clientes de MidiShare.
+La connexion &agrave; une machine distante est control&eacute;e
+par l'utilisateur. Une fois connect&eacute;, la machine distante
+apparait comme un port MidiShare en mode Driver, ou comme un client
+MidiShare dans le cas contraire (voir <A HREF="INetDrivers.html#setupMenu">Setup
+Menu</A>).<BR>
+Lors de la connexion, le driver &eacute;tablit &agrave; la fois
+une socket TCP et une socket UDP entre les 2 machines.</FONT></P>
+
+<H3><FONT FACE="Arial">La fen&ecirc;tre d'&eacute;tat d'une machine
+distante :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="../images/remote.jpg"
+  WIDTH="261" HEIGHT="169" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"><BR>
+  </FONT><FONT SIZE="-1" FACE="Arial">Remote transmission state</FONT></CENTER></P>
+  <UL>
+    <LI><FONT COLOR="#000099" FACE="Arial">Offset to initial latency
+    </FONT><FONT FACE="Arial">: une fois stabilis&eacute;, cet offset
+    indique la variation de latence du r&eacute;seau. Lors de l'&eacute;tablissement
+    de la connexion, il va g&eacute;n&eacute;ralement varier car
+    le param&egrave;tre de latence est &eacute;galement utilis&eacute;
+    pour compenser les diff&eacute;rences de fr&eacute;quences entre
+    les horloges des 2 machines. En effet, le driver inclus un m&eacute;canisme
+    permettant de compenser cette dif&eacute;rence de fr&eacute;quence,
+    ce m&eacute;canisme met un certain temps avant d'op&eacute;rer
+    ave une pr&eacute;cision suffisante. Durant ce temps, les d&eacute;rives
+    d'horloges sont compens&eacute;es par le m&eacute;canisme de
+    compensation de la latence du r&eacute;seau.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Maximum latency over</FONT><FONT
+     FACE="Arial">: indique le nombre de d&eacute;passements de la
+    latence maximale. Chaque d&eacute;passement se traduit par une
+    distortion temporelle &agrave; la restitution des &eacute;v&eacute;nements
+    transmis. Ces d&eacute;passements peuvent &ecirc;tre &eacute;vit&eacute;s
+    en augmentant le param&egrave;tre de latence maximale.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Missing packets</FONT><FONT
+     FACE="Arial">: indique le nombre total de paquets perdus au
+    cours d'une session. Comme le driver ne comprend pas de m&eacute;canisme
+    de r&eacute;cup&eacute;ration des erreurs, les &eacute;v&eacute;nements
+    correspondants sont perdus. Pour guarantir une transmission correcte
+    d'un &eacute;v&eacute;nement, il faut utiliser la transmission
+    TCP.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Throughput</FONT><FONT
+     FACE="Arial">: indique pour le d&eacute;bit pour les flots UDP
+    en entr&eacute;e et en sortie, soit la taille des paquets transmis.
+    Quand l'indicateur passe au rouge, cela signifie que les donn&eacute;es
+    &agrave; transmettre (ou re&ccedil;ues) ne tiennent pas dans
+    un seul paquet et qu'elles sont donc &eacute;mises en utilisant
+    plusierus paquets successifs. Ce cas de figure est &agrave; &eacute;viter
+    car il augmente la probabilit&eacute; de perte d'un paquet.</FONT>
+  </UL>
+</BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Transmission TCP:</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Le port MidiShare 255 est r&eacute;serv&eacute;
+  pour des transmissions s&eacute;curis&eacute;es: tout &eacute;v&eacute;nement
+  re&ccedil;u sur le port 255 sera transmis par le protocole TCP
+  au lieu de UDP. Les m&eacute;canismes de transmission TCP sont
+  les m&ecirc;mes que pour UDP. Toutefois, les flots TCP et UDP
+  ne sont pas synchronis&eacute;s ce qui fait que la restitution
+  temporelle des &eacute;v&eacute;n&eacute;ments TCP peut &ecirc;tre
+  incorrecte, relativement &agrave; ceux transmis via UDP.</FONT></P>
+  <P><FONT FACE="Arial">La transmission TCP peut &ecirc;tre utilis&eacute;e
+  pour transmettre des &eacute;v&eacute;nements importants dans
+  des p&eacute;riodes non critiques (system exclusives dans des
+  phases d'initialisation par exemple). Ce type de transmission
+  pr&eacute;sente l'inconv&eacute;nient de n'offrir aucune garantie
+  sur le temps de transmission.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Les m&eacute;canismes de la transmission
+temps r&eacute;&eacute;el :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">La transmission en temps r&eacute;el d'un
+  flot d'&eacute;v&eacute;nements MidiShare est bas&eacute;e sur
+  2 m&eacute;canismes :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">une p&eacute;riode de groupage : c'est
+    la p&eacute;riode pendant laquelle les &eacute;v&eacute;nements
+    sont accumul&eacute;s avant d'&ecirc;tre transmis sur le r&eacute;seau.
+    Elle permet d'optimiser l'utilisation du r&eacute;seau. Ce param&egrave;tre
+    controle le comportement du driver &agrave; l'&eacute;mission.</FONT>
+    <LI><FONT FACE="Arial">un temps de latence maximal : il repr&eacute;sente
+    le temps de transmission maximum (de l'&eacute;metteur au r&eacute;cepteur)
+    autoris&eacute; pour garantir une restitution temporelle correcte
+    des &eacute;v&eacute;nements transmis. Il permet de compenser
+    la latence du r&eacute;seau et les variations du temps de transmission.
+    Ce param&egrave;tre controle le comportement du driver &agrave;
+    la r&eacute;ception.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">Le d&eacute;lai total introduit par la
+  transmission sur le r&eacute;seau est &eacute;gal &agrave; la
+  p&eacute;riode de groupage + le temps de latence maximal + le
+  d&eacute;lai de transmission initial.</FONT></P>
+  <P><FONT FACE="Arial">Ces param&egrave;tres peuvent &ecirc;tre
+  ajust&eacute;s en r&eacute;glant les pr&eacute;f&eacute;rences
+  UDP (voir Setup Menu).</FONT></P>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="../images/udpWAN.jpg"
+  WIDTH="242" HEIGHT="119" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"><BR>
+  </FONT><FONT SIZE="-1" FACE="Arial">UDP Preferences</FONT></CENTER></P>
+  <P><FONT FACE="Arial">Les valeurs par d&eacute;faut sont de 1500
+  milliseconds pour le temps de latence maximal et de 200 milliseconds
+  pour la p&eacute;riode de groupage.</FONT></P>
+  <P><FONT FACE="Arial">Le num&eacute;ro de port correspond au
+  num&eacute;ro de port UDP et TCP.</FONT></P></BLOCKQUOTE>
+
+<P><HR ALIGN=LEFT></P>
+
+<P><FONT FACE="Arial">Le driver WAN - MidiShare fait partie du
+projet <A HREF="http://www.grame.fr/MidiShare/fr" TARGET="_top">MidiShare</A>.
+Ils a &eacute;t&eacute; d&eacute;velopp&eacute; par le <A HREF="http://www.grame.fr/Research/fr"
+TARGET="_top">laboratoire de recherche en informatique musicale</A>
+de <A HREF="http://www.grame.fr/" TARGET="_blank">Grame</A>, en
+collaboration avec la soci&eacute;t&eacute; <A HREF="http://www.milprod.com/"
+TARGET="_blank">Mil-Productions</A>.</FONT>
+
+</BODY>
+</HTML>

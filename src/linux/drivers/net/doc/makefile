@@ -1,0 +1,9 @@
+MAN1=/usr/man/man1
+Target = msInetDriver.1
+
+install :
+	[ -f $(Target).bz2 ] || bzip2 $(Target)
+	install -m 644 -o root $(Target).bz2 $(MAN1)
+
+uninstall :
+	rm -f $(MAN1)/$(Target).bz2

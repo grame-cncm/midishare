@@ -1,0 +1,23 @@
+
+Installing msInetDriver
+-----------------------
+
+The msInetDriver package includes :
+	- the msInetDriver application
+	- the corresponding man page
+	- html documentation
+
+to install the msInetDriver package, just type
+     make install
+
+Warning: you need root privileges to install the package.
+
+to remove the msInetDriver package, just type
+     make uninstall
+
+The MidiShare Internet Drivers are part of the MidiShare project.
+For more information about MidiShare, see at http://www.grame.fr/MidiShare
+ 
+They have been developped by the Grame's Computer Music Research 
+Laboratory, (http://www.grame.fr/Research) in collaboration with 
+the company Mil-Productions (http://www.milprod.com).

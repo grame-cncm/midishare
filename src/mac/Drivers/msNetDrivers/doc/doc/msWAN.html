@@ -1,0 +1,118 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare WAN Driver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial"><IMG SRC="images/msWAN.jpg"
+WIDTH="169" HEIGHT="178" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></FONT></CENTER></H1>
+
+<P><FONT FACE="Arial">The MidiShare WAN Driver provides real-time
+network communication to MidiShare client applications over the
+Internet. Remote host connection is controlled by the user. Once
+connected to a remote host, it will appear as a MidiShare port
+when the application runs in driver mode, or as a MidiShare client
+on the contrary (see <A HREF="../ReadMe.html#setupMenu">Setup
+Menu</A>).<BR>
+Connected hosts transmission state is available using the Remote
+menu. <BR>
+At connection time, the driver establish both a TCP and a UDP
+socket between the local and the remote host.</FONT></P>
+
+<H3><FONT FACE="Arial">The Remote transmission state window:</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="images/remote.jpg" WIDTH="261"
+  HEIGHT="169" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"><BR>
+  </FONT><FONT SIZE="-1" FACE="Arial">Remote transmission state</FONT></CENTER></P>
+  <UL>
+    <LI><FONT COLOR="#000099" FACE="Arial">Offset to initial latency
+    </FONT><FONT FACE="Arial">: when stabilized, it represents the
+    network latency variation. At connection startup, it will generally
+    vary as the latency parameter is also used to compensate for
+    the frequency difference between the sender and the receiver
+    clocks. The driver includes a mechanism to compensate for these
+    frequencies difference, this mechanism needs a certain time to
+    operate with accuracy. During this time, the clock drifts are
+    compensated using the maximum latency mechanism.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Maximum latency over</FONT><FONT
+     FACE="Arial">: represents the maximum network latency overruns.
+    Any overrun represents a time rendering distortion of the transmitted
+    events. You can avoid overruns by increasing the maximum latency
+    parameter.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Missing packets</FONT><FONT
+     FACE="Arial">: represents the total number of missing packets
+    for the current session. As the driver don't include any error
+    recovery mechanism, the events corresponding to these packets
+    are loosen. Correct transmission of an event, can be ensured
+    using the TCP transmission.</FONT>
+    <LI><FONT COLOR="#000099" FACE="Arial">Throughput</FONT><FONT
+     FACE="Arial">: represents for the input and output UDP streams,
+    the size of the transmitted packets. When the indicator grows
+    up to the red color, it means that the transmitted data don't
+    fit in a single packet and are sent (or received) using several
+    successive packets. This case should be avoided as it increases
+    the probability of missing packets.</FONT>
+  </UL>
+</BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">TCP transmission:</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare port number 255 is reserved
+  for secure transmission: every event received by ta network client
+  on the port 255 will be transmitted using the TCP socket instead
+  of the UDP socket. The mechanisms for the TCP transmission are
+  the same than for UDP transmission. However, the TCP and UDP
+  streams are not synchronized, therefore the TCP events time rendering
+  may be incorrect relatively to the corresponding UDP events.</FONT></P>
+  <P><FONT FACE="Arial">Secure transmission may be used to send
+  important system exclusives at initialization time for example.
+  Its drawback is that there is no guarantee on the transmission
+  time.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Real-time transmission mechanisms :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Real-time transmission of the MidiShare
+  events stream relies on 2 mechanisms :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">a grouping period : the period during
+    which events are accumulated before being transmitted on the
+    network. It is intended to optimize network transmissions. This
+    parameter controls the transmission behavior.</FONT>
+    <LI><FONT FACE="Arial">a maximum latency : represents the maximum
+    transmission time (from sender to receiver) allowed to ensure
+    a correct time rendering of the transmitted events. It is intended
+    to compensate for the network latency and the transmission time
+    variations. This parameter controls the receiver behavior.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The total delay introduced by the network
+  transmission is equal to the grouping period + the maximum transmission
+  delay + the initial transmission delay. This parameter controls
+  the transmission behavior.</FONT></P>
+  <P><FONT FACE="Arial">These parameters can be adjusted using
+  the UDP Preferences form (see Setup Menu).</FONT></P>
+  <P><CENTER><FONT FACE="Arial"><IMG SRC="images/udpWAN.jpg" WIDTH="242"
+  HEIGHT="119" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"><BR>
+  </FONT><FONT SIZE="-1" FACE="Arial">UDP Preferences form</FONT></CENTER></P>
+  <P><FONT FACE="Arial">The default values are 1500 milliseconds
+  for the maximum latency and 200 milliseconds for the grouping
+  time.</FONT> <BR>
+  <FONT FACE="Arial">The port number field represents both the
+  udp and tcp port number.</FONT></P></BLOCKQUOTE>
+
+<P><HR ALIGN=LEFT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare WAN Drivers is part of the
+  <A HREF="http://www.grame.fr/MidiShare" TARGET="_top">MidiShare</A>
+  project. It has been developped by the <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>'s <A HREF="http://www.grame.fr/Research"
+  TARGET="_top">Computer Music Research Laboratory</A>, in collaboration
+  with the company <A HREF="http://www.milprod.com/" TARGET="_blank">Mil-Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

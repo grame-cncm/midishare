@@ -1,0 +1,94 @@
+.\" Copyright (c) 2001
+.\"	Grame - Computer Music Research Laboratory
+.\"
+.\"     @(#)msInetDriver.1	1.0 (Grame) 17/01/01
+.\"
+.TH MSINETDRIVER 1 "17 january 2001" "" "MidiShare User's Manual"
+.SH NAME
+.B msInetDriver 
+- provides real time communication over Internet to MidiShare client applications
+.SH SYNOPSIS
+.BI msInetDriver " [options] 
+
+.SH DESCRIPTION
+.B msInetDriver
+can operate in LAN (local array network) mode or in WAN (wide array network) mode.
+.PP
+In LAN mode it provides low latency automatic communication to all the stations connected to 
+the same local network.
+.PP
+In WAN mode, the connection is user controled and the driver provides both real time 
+communication using UDP and secure transmission using TCP.
+.PP
+
+.SH OPTIONS
+.B -p <port number> :
+.RS
+set the UDP port number to <port number>. In WAN mode, TCP and UDP ports numbers are equal.
+Default port number is 4950 in LAN mode and 4951 in WAN mode.
+.RE
+.PP
+.B -lat <latency> :
+.RS
+set the maximum latency allowed to <latency>. Default is 10 mls in LAN mode and 1500 mls in WAN mode.
+.RE
+.PP
+.B -g <group time> :
+.RS
+set the grouping period to <group time>. Default is 10 mls in LAN mode and 200 mls in WAN mode.
+.RE
+.PP
+.B -d :
+.RS
+run as a daemon.
+.RE
+.PP
+.B -log <log file> :
+.RS
+in daemon mode, log the driver messages to <log file>. Default is /var/log/msInetDriver.log
+.RE
+.PP
+
+.SH WAN MODE SPECIFIC OPTIONS :
+.B -s [remote list] :
+.RS
+launch the driver in WAN mode and open a connection for every host in [remote list] which may be empty.
+.RE
+.PP
+.B -m <max clients> :
+.RS
+restrict the server clients count to <max clients>. Default is 32.
+.RE
+.PP
+
+.SH Real-time transmission mechanisms
+Real-time transmission of the MidiShare events stream relies on 2 mechanisms :
+.PP
+a grouping period : the period during which events are accumulated before being transmitted on the network. It is intended to optimize network transmissions.This parameter controls the transmission behavior.
+.PP
+a maximum latency : represents the maximum transmission time (from sender to receiver) allowed to ensure a correct time rendering of the transmitted events. It is intended to compensate for the network latency and the transmission time variations. This parameter controls the receiver behavior.
+The total delay introduced by the network transmission is equal to the grouping period + the maximum transmission delay.
+.PP
+
+.SH Remote hosts applications
+Connected remote hosts appears as MidiShare client applications. To send or to receive data from a remote, 
+an application needs to be connected to this remote MidiShare client. 
+.PP
+In WAN mode, this remote client supports TCP transmission on the MidiShare port number 255.
+.PP
+In LAN mode, the driver is sleeping as long as no other MidiShare client application is running. 
+While in sleeping state, the station won't be visible by other stations on the network. 
+The driver wakes up when the first MidiShare client application starts.
+.PP
+
+.SH TCP transmission
+The MidiShare port number 255 is reserved for secure transmission: every event received by a network client on 
+the port 255 will be transmitted using the TCP socket instead of the UDP socket. The mechanisms for the TCP 
+transmission are the same than for UDP transmission. However, the TCP and UDP streams are not synchronized, therefore the TCP events time rendering may be incorrect relatively to the corresponding UDP events.
+.PP
+Secure transmission may be used to send important system exclusives at initialization time for example. 
+Its drawback is that there is no guarantee on the transmission time.
+.PP
+
+.SH "SEE ALSO"
+the MidiShare User documentation at http://www.grame.fr/MidiShare
