@@ -19,7 +19,7 @@ install:
 	insmod MidiShareKernel
 
 tools :
-	make -i -C tools public 
+	make -i -C tools install 
 	make -C tests all
 
 uninstall:
