@@ -1,0 +1,12 @@
+#include <MacHeaders.h>
+
+#define __Macintosh__
+#define FAR 
+#define NEAR
+#define EXPORT 
+#define MFAPI
+#define MSALARMAPI pascal 
+#define __MacOS9__
+#define MidiSharePPC_68k
+
+#define __DEBUG__ 0
