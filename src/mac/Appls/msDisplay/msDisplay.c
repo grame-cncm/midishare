@@ -162,7 +162,7 @@ static void EvToString (MidiEvPtr e, Str255 str)
 {
 	char c1, c2; Str255 tmp; unsigned char * fill; long n, i, pos;
 	
-	if ((EvType(e) >= typeText) && (EvType(e) <= typeCuePoint)) {
+	if ((EvType(e) >= typeTextual) && (EvType(e) <= typeCuePoint)) {
 		c1 = c2 = '"';
 	} else {
 		c1 = '(';
@@ -181,7 +181,7 @@ static void EvToString (MidiEvPtr e, Str255 str)
 	
 	n = MidiCountFields(e)-1;
 	pos = str[0] + 1;
-	if ((EvType(e) >= typeText) && (EvType(e) <= typeCuePoint)) {
+	if ((EvType(e) >= typeTextual) && (EvType(e) <= typeCuePoint)) {
 		for (i=0; (i<=n) && (pos<128); i++) {
 			char c = MidiGetField (e, i);
 			str[pos++] = (c < 32) ? 'É' : c;
@@ -218,7 +218,11 @@ void CloseMidi ()
 	DisposeRgn (scrollRgn);
 }
 
-#define DrawMyContent()  CopyBits (&myPort.portBits, &(myWindow->portBits), &scrollRect, &scrollRect, srcCopy, 0)
+/* -----------------------------------------------------------------------------*/
+void DrawMyContent() 
+{
+	CopyBits (&myPort.portBits, &(myWindow->portBits), &scrollRect, &scrollRect, srcCopy, 0);
+}
 
 /* -----------------------------------------------------------------------------*/
 void DoIdle ()

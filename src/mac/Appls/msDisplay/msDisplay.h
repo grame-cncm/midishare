@@ -27,5 +27,6 @@
 Boolean SetupMidi (Str255 applName);
 void 	CloseMidi ();
 void 	DoIdle ();
+void 	DrawMyContent();
 
 #endif

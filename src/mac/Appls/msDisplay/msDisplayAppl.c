@@ -386,6 +386,7 @@ void main()
 						if ( !EmptyRgn( ((WindowPtr)myEvent.message)->visRgn ) ) {
 							SetPort( (WindowPtr)myEvent.message );
 							DrawDialog( (WindowPtr)myEvent.message );
+							DrawMyContent();
 						}
 						EndUpdate( (WindowPtr)myEvent.message );
 					}
