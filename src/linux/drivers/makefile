@@ -1,5 +1,5 @@
 
-DIRS = rawmidi
+DIRS = raw
 
 all:
 	make -C ../../lib
