@@ -61,7 +61,7 @@ static ShMemID CreateShMKey (int index)
 {
 #ifdef WIN32
     static char	id[keySize];
-    sprintf (id, "%s%d", baseKey, index);
+    wsprintf (id, "%s%d", baseKey, index);
     return id;
 #else
     return baseKey + index;
