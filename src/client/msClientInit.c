@@ -95,7 +95,7 @@ Boolean InitComm (TMSGlobalPtr g)
 }
 
 /*_________________________________________________________________________*/
-Boolean CheckMidiShare (TMSGlobalPtr g)
+Boolean _msCheckMidiShare (TMSGlobalPtr g)
 {
 	msLibContextPtr c = (msLibContextPtr)g->context;
 	void * ptr;

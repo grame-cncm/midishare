@@ -91,7 +91,7 @@ void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 	Boolean   InitComm         (TMSGlobalPtr g);
 	void      CloseComm        (TMSGlobalPtr g);
 
-	Boolean   CheckMidiShare   (TMSGlobalPtr g);
+	Boolean   _msCheckMidiShare   (TMSGlobalPtr g);
 	Boolean   SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
 	MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
 	void *    GetShMemID       (MidiFilterPtr filter);

@@ -365,6 +365,6 @@ MSAPI(Boolean)  MidiIsAcceptedType(MidiFilterPtr f, short type) {
 #ifdef MSKernel
 	Boolean  MidiShare(void) { return true; }
 #else
-	MSAPI(Boolean)  MidiShare(void) { return CheckMidiShare(gMem); }
+	MSAPI(Boolean)  MidiShare(void) { return _msCheckMidiShare(gMem); }
 #endif
 
