@@ -45,7 +45,6 @@ typedef struct TMachine {
     Boolean    virtualMemory;      /* virtual memory is active    */
     SysEnvRec  env;
     TMTask     tm;                 /* Time Manager task record    */
-	DriverListPtr	drivers;
 } TMac, * TMacPtr;
 
 typedef struct {
@@ -223,14 +222,13 @@ void SpecialWakeUp (TMSGlobalPtr g)
 	g->local = NewPtrSys (sizeof(TMac));
 	if (g->local) {
 		InitMachine (g->local);
-		Drivers(g) = LoadDrivers ();
+		LoadDrivers ();
 	}
 }
 
 void SpecialSleep  (TMSGlobalPtr g)
 {
 	if (g->local) {
-		UnloadDrivers (g, Drivers(g));
 		DisposePtr (g->local);
 	}
 	g->local = 0;
