@@ -727,6 +727,19 @@ void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 
 /*____________________________________________________________________*/
 #ifdef PASCALTASKS
+static pascal void MyTask4( long time, short refnum, long a1,long a2,long unused4)
+#endif
+#ifdef CTASKS
+void MyTask4( long time, short refnum, long a1,long a2,long unused4)
+#endif
+{
+	gContext.res1 = true;
+	gContext.t2 = MidiTask( MyTask3, time, refnum,a1, a2, unused4);
+	MidiForgetTask(&gContext.t1);
+}
+
+/*____________________________________________________________________*/
+#ifdef PASCALTASKS
 static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
@@ -814,6 +827,25 @@ static void Tasks( Boolean isFreeMem)
 		fprintf( stdout, "Warning : task1 address not set to 0 !\n");
 	if( gContext.t2 && isFreeMem)
 		fprintf( stdout, "Warning : task2 address not set to 0 !\n");
+		
+	/* test MidiForgetTask inside a task execution */
+	fprintf( stdout, "    MidiForgetTask(4) : ");flush;	
+	gContext.res1 = gContext.res2 = false;
+	gContext.t1 = gContext.t2 = 0;
+	time = MidiGetTime() ;
+	
+	gContext.t1= MidiTask( MyTask4, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	fprintf( stdout, "%s\n",OK);
+	
+	time= MidiGetTime()+50;
+	while( MidiGetTime() <= time);
+	
+	if( !gContext.res1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 not completed !\n");
+	if( !gContext.res2 && isFreeMem)
+		fprintf( stdout, "Warning : task2 not completed !\n");
+	if( gContext.t1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 address not set to 0 !\n");
 	
 			
 	fprintf( stdout, "    MidiDTask : ");flush;
