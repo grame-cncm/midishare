@@ -15,7 +15,6 @@
 //
 //	Builds a Player depending of the current synchronization mode
 // 
-// 
 
 #include "TPlayerFactory.h"
 #include "TPlayer.h"
@@ -48,6 +47,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
 	TCombinerPlayerPtr 			combiner = 0;
+	TRunningEventReceiverPtr	running_receiver = 0;
 	
 	long res;
 	
@@ -68,7 +68,6 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	scheduler= new TScheduler(); // constructeur vide
 	timemanager = new  TTimeManager(fUser->fScore,fUser->fTick_per_quarter);
 	
-	
 	switch (fUser->fSyncIn) {
 		
 		case kInternalSync: 
@@ -87,7 +86,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	
 	scheduler->Init(synchro, fUser); // Initialisation 
 	
-	tickplayer 	= new TTickPlayer(fUser->fScore, eventsender, scheduler);
+	tickplayer 	= new TTickConsumer(eventsender, scheduler,fUser->fEventProducer);
 	combiner 	= new TCombinerPlayer(tickplayer, 0);
 	chaser 		= new TChaserIterator(fUser->fScore, eventsender);
 	player1 	= new TSyncInPlayer(synchro,combiner,chaser);
@@ -118,8 +117,9 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 	}
 	
-	// Incoming events handling
-	// Recorder--->EventReceiver
+	// Chaine de traitements des 思始ements
+	//--------------------------------------
+	// Producer ==> Modifier ==> Recorder ==> Receiver (synchro) ==> null
 	
 	switch (fUser->fSyncIn) {
 		
@@ -139,18 +139,18 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			receiver = new TSMPTEEventReceiver(player3,loopmanager,0);
 			break;
 	}
-		
 	
-	// Chaine de traitements des 思始ements
-	//--------------------------------------
-	// Modifier ==> Recorder ==> Receiver
+	// en fin de chaine pour utiliser les event	
+	recorder = new TEventRecorder(fUser->fScore, synchro, receiver); 
+	modifier = new TEventModifier(eventsender, synchro, scheduler,recorder);
 	
-	
-	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver); // en fin de chaine pour utiliser les event
-	modifier = new TEventModifier(eventsender, synchro, scheduler,fUser->fRunningState,recorder);
-
+	fUser->fEventProducer->SetSuccessor(modifier);
+	fUser->fEventProducer->SetPlayer(player3);
 	combiner->SetPlayer2(modifier);
+	
 	scorestate = new TScoreState(fUser->fScore,fUser->fTick_per_quarter);
+	
+	running_receiver = new TRunningEventReceiver(fUser->fEventProducer, fUser->fRunningState);
 	
 	// Affectation 
 	fUser->fClockConverter =  clockconverter;
@@ -162,9 +162,9 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	// Destructor allocation
 	fDestructor = new TDestructor(synchro,receiver,scheduler,tickplayer,
 					chaser,player1,player2,player3,clocksender,clockconverter,
-					loopmanager,inserter,recorder,modifier,scorestate,eventsender,timemanager,combiner);
+					loopmanager,inserter,recorder,modifier,scorestate,eventsender,timemanager,combiner,running_receiver);
 					
-	TGenericPlayerInterfacePtr genericplayer = new TGenericPlayer (modifier, player3,timemanager);
+	TGenericPlayerInterfacePtr genericplayer = new TGenericPlayer (running_receiver, player3,timemanager);
 	
 	switch (fUser->fSyncIn) {
 		
