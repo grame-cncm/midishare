@@ -18,51 +18,54 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - removing the sorter dependencies
+
 */
 
 #include "msXmtRcv.h"
-#include "msEvents.h"
-#include "msSync.h"
+#include "lffifo.h"
 
 
 /*===========================================================================
   MidiShare external functions implementation
 =========================================================================== */
-MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, TsorterBlockPtr sb)
+MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, fifo* schedlist, 
+								unsigned long curdate)
 {
 	if( e) {
 		RefNum(e) = (uchar)refNum;
-		Date(e)   = SorterDate(sb);
-		SorterPut (sb, (TDatedEvPtr)e);
+		Date(e)   = curdate;
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, TsorterBlockPtr sb)
+MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, fifo* schedlist)
 {
 	if( e) {
 		RefNum(e)= (uchar)refNum;
-		SorterPut (sb, (TDatedEvPtr)e);
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d, TsorterBlockPtr sb)
+MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d, 
+								fifo* schedlist)
 {
 	if( e) {
 		RefNum(e)= (uchar)refNum;
 		Date(e)= d;
-		SorterPut (sb, (TDatedEvPtr)e);
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
 MSFunctionType(ulong) MSCountEvs (short refNum, TClientsPtr g)
 {
-	TApplPtr appl;
 	if( CheckRefNum( g, refNum)) {
-		appl = g->appls[refNum]; 
-		return RcvFifoCount(appl);
+		TApplPtr appl = g->appls[refNum]; 
+		return fifosize (&appl->rcv);
 	}
 	return 0;
 }
@@ -70,17 +73,11 @@ MSFunctionType(ulong) MSCountEvs (short refNum, TClientsPtr g)
 /*__________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSGetEv (short refNum, TClientsPtr g)
 {
-	TApplPtr appl; ulong n;
-	MidiEvPtr ev= 0;
-
 	if( CheckRefNum( g, refNum)) {
-		appl = g->appls[refNum]; 
-		n = RcvFifoCount(appl);
-		if( n ) {
-			ev = PopFifoEv (&appl->rcv);
-		}
+		TApplPtr appl = g->appls[refNum]; 
+		return (MidiEvPtr)fifoget (&appl->rcv);
 	}
-	return ev; 
+	return 0; 
 }
 
 /*__________________________________________________________________________*/
@@ -103,13 +100,11 @@ MSFunctionType(void) MSFlushEvs (short refNum, TClientsPtr g)
 
 	if( CheckRefNum( g, refNum)) {
 		appl = g->appls[refNum]; 
-		if (RcvFifoCount(appl)) {
-			ev = ClearFifo (&appl->rcv);
-			while( ev) {
-				next= Link(ev);
-				MSFreeEv(ev, g->memory);
-				ev= next;
-			}
+		ev = (MidiEvPtr)fifoclear (&appl->rcv);
+		while( ev) {
+			next= Link(ev);
+			lfpush (FreeList(g->memory), (cell *)ev);
+			ev= next;
 		}
 	}
 }
