@@ -7,9 +7,6 @@ INIT = $(RC)/init.d
 midishare: common
 	make -C kernel
 
-midishare-alsa: common
-	make -C kernel -f make-alsa
-
 common:
 	make -C ../common
 	make -C ../common/Memory
@@ -30,12 +27,16 @@ install: libinstall
 	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S99MidiShare
 	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S99MidiShare
 	modprobe MidiShare
+
+#Compile applications, tools and drivers
 	
 clients:
 	make -f appls
+	
+#Install applications, tools and drivers
 
-test:
-	make -C tests all
+clientsinstall:
+	make -f appls install
 
 libuninstall:
 	rm -f /dev/MidiShare
@@ -46,6 +47,13 @@ uninstall: libuninstall
 	rm -f $(MODF)/MidiShare.o
 	rm -f $(INIT)/MidiShare $(RC)/rc[35].d/*MidiShare
 	rmmod MidiShare
+	
+test:
+	make -C tests all
+	
+driver:
+	make -C drivers all
+
 	
 dep:
 	make -i -C ../common/Memory dep 
