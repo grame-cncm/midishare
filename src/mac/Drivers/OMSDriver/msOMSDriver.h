@@ -29,7 +29,7 @@
 extern Boolean doneFlag;
 
 Boolean CheckOMS ();
-Boolean SetUpMidi ();
+Boolean SetUpMidi (Boolean *autoQuit);
 void 	CloseMidi ();
 void 	DoIdle();
 
