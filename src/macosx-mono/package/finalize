@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+
+h=$(pwd)
+
+echo "creation des liens symboliques (dylib)"
+./linklibs
+
+echo verification des droits des fichiers et des dossiers
+find Distribution -type d -exec chmod 775 {} \;
+find Distribution -type f -exec chmod g+w {} \;
+find Distribution -type f -exec chmod o-w {} \;
+
+chown -R root:wheel Distribution/*
+chown -R root:admin Distribution/Applications/*
+
+echo remove the .DS_Store files
+find Distribution -name ".DS_Store" -exec rm -f {} \;
+
+echo verification des fichiers caches
+cd Distribution/Applications/MidiShare/
+[ -f checkinstall ] && mv checkinstall .checkinstall
+[ -d host_default_config ] && mv host_default_config .host_default_config
+
+echo "protection des fichiers .ini"
+cd .host_default_config
+chmod go-w *

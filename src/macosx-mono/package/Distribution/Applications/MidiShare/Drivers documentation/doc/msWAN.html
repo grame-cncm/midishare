@@ -1,0 +1,90 @@
+<HTML>  
+<HEAD>
+  <TITLE>MidiShare WAN Driver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial">MidiShare WAN Driver
+for Mac OSX</FONT></CENTER></H1>
+
+<P><FONT FACE="Arial">The MidiShare WAN Driver provides real-time
+network communication to MidiShare client applications over the
+Internet. Remote host connection is controlled by the user using
+the msWANDriver.ini file. Once connected to a remote host, it
+will appear as a MidiShare port.<BR>
+At connection time, the driver establish both a TCP and a UDP
+socket between the local and the remote host.</FONT></P>
+
+<H3><FONT FACE="Arial">Real-time transmission mechanisms :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Real-time transmission of the MidiShare
+  events stream relies on 2 mechanisms :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">a grouping period : the period during
+    which events are accumulated before being transmitted on the
+    network. It is intended to optimize network transmissions. This
+    parameter controls the transmission behavior.</FONT>
+    <LI><FONT FACE="Arial">a maximum latency : represents the maximum
+    transmission time (from sender to receiver) allowed to ensure
+    a correct time rendering of the transmitted events. It is intended
+    to compensate for the network latency and the transmission time
+    variations. This parameter controls the receiver behavior.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The total delay introduced by the network
+  transmission is equal to the grouping period + the maximum transmission
+  delay + the initial transmission delay. </FONT></P>
+  <P><FONT FACE="Arial">These parameters can be adjusted using
+  the msWANDriver.ini file.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Initialization file 'msWANDriver.ini' :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The Net Params section :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">UDP port : represents both the udp and
+    tcp port number. Default value is 4951</FONT>
+    <LI><FONT FACE="Arial">Grouping time : represents the grouping
+    period (see above). Default value is 200 mls.</FONT>
+    <LI><FONT FACE="Arial">Maximum latency allowed :  (see above).
+    Default value is 1500 mls.</FONT>
+    <LI><FONT FACE="Arial">Maximum input connections count : represents
+    the total number of simultaneous incoming connections allowed.
+    Default value is 20.</FONT>
+    <LI><FONT FACE="Arial">Hosts target : should contain remote host
+    addresses (in the form 'computer.somedomain.com' or IP address).
+    At initialization time, the driver setup a connection for every
+    host specified on the host target line. Default value is empty.</FONT>
+    <LI><FONT FACE="Arial">Hosts unused : intended only to disable
+    automatic connection to one host.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">The 'Hosts input connections' section :
+<BR>
+  written by the driver, this section contains IP numbers followed
+  by a list of ports numbers representing input ports connections.
+  When the corresponding host appears, these connections are restored
+  by the driver. Uses the msDriver application to modify the connections
+  state.</FONT></P>
+  <P><FONT FACE="Arial">The 'Hosts output connections' section
+  : <BR>
+  written by the driver, this section contains IP numbers followed
+  by a list of ports numbers representing output ports connections
+  (see above).</FONT></P></BLOCKQUOTE>
+
+<P><FONT FACE="Arial">The msWANDriver logs all the connections
+and possible problems to the msWANDriver.log file which is written
+in your $HOME/MidiShare folder.</FONT></P>
+
+<P><HR ALIGN=LEFT></P>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">The MidiShare WAN Drivers is part of the
+  <A HREF="http://www.grame.fr/MidiShare" TARGET="_top">MidiShare</A>
+  project. It has been developped by the <A HREF="http://www.grame.fr/"
+  TARGET="_blank">Grame</A>'s <A HREF="http://www.grame.fr/Research"
+  TARGET="_top">Computer Music Research Laboratory</A>, in collaboration
+  with the company <A HREF="http://www.milprod.com/" TARGET="_blank">Mil-Productions</A>.</FONT>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

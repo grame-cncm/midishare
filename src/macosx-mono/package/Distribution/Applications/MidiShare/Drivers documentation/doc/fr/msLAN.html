@@ -1,0 +1,96 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare LAN Driver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<H1><CENTER><FONT COLOR="#0000ff" FACE="Arial">MidiShare LAN Driver
+pour Mac OSX</FONT></CENTER></H1>
+
+<P><FONT FACE="Arial">Le driver LAN - MidiShare permet la communication
+temps r&eacute;el sur un r&eacute;seau avec un temps de latence
+faible. Cette communication est restreinte &agrave; un r&eacute;seau
+local. L'optimisation du protocole suppose que le r&eacute;seau
+est principalement d&eacute;di&eacute; &agrave; des transmissions
+musicales.</FONT></P>
+
+<P><FONT FACE="Arial">Le driver LAN - MidiShare est dormant tant
+qu'il n'y a pas d'application cliente MidiShare ouverte. Dans
+l'&eacute;tat dormant, la machine ne sera pas visible par les
+autres machines sur le r&eacute;seau. Le driver se r&eacute;veille
+lors de l'ouverture de la premi&egrave;re application cliente
+de MidiShare.</FONT></P>
+
+<P><FONT FACE="Arial">Dans sa phase de r&eacute;veil, le driver
+reconnait automatiquement les machines distantes sur le r&eacute;seau
+(sous r&eacute;serve que leurs drivers ne sont pas dans l'&eacute;tat
+dormant). Les machines distantes apparaissent comme des ports
+MidiShare.</FONT></P>
+
+<H3><FONT FACE="Arial">Les m&eacute;canismes de la transmission
+temps r&eacute;&eacute;el :</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">La transmission en temps r&eacute;el d'un
+  flot d'&eacute;v&eacute;nements MidiShare est bas&eacute;e sur
+  2 m&eacute;canismes :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">une p&eacute;riode de groupage : c'est
+    la p&eacute;riode pendant laquelle les &eacute;v&eacute;nements
+    sont accumul&eacute;s avant d'&ecirc;tre transmis sur le r&eacute;seau.
+    Elle permet d'optimiser l'utilisation du r&eacute;seau. Ce param&egrave;tre
+    controle le comportement du driver &agrave; l'&eacute;mission.</FONT>
+    <LI><FONT FACE="Arial">un temps de latence maximal : il repr&eacute;sente
+    le temps de transmission maximum (de l'&eacute;metteur au r&eacute;cepteur)
+    autoris&eacute; pour garantir une restitution temporelle correcte
+    des &eacute;v&eacute;nements transmis. Il permet de compenser
+    la latence du r&eacute;seau et les variations du temps de transmission.
+    Ce param&egrave;tre controle le comportement du driver &agrave;
+    la r&eacute;ception.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">Le d&eacute;lai total introduit par la
+  transmission sur le r&eacute;seau est &eacute;gal &agrave; la
+  p&eacute;riode de groupage + le temps de latence maximal.</FONT></P>
+  <P><FONT FACE="Arial">Ces param&egrave;tres peuvent &ecirc;tre
+  ajust&eacute;s via le fichier d'initialisation msLANDriver.ini.</FONT></P></BLOCKQUOTE>
+
+<H3><FONT FACE="Arial">Fichier d'initialisation 'msLANDriver.ini'
+:</FONT></H3>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">Section 'Net Params' :</FONT></P>
+  <UL>
+    <LI><FONT FACE="Arial">UDP port : repr&eacute;sente le num&eacute;ro
+    de port UDP. La valeur par d&eacute;faut est 4950.</FONT>
+    <LI><FONT FACE="Arial">Grouping time : repr&eacute;sente la p&eacute;riode
+    de groupage (voir ci-dessus). La valeur par d&eacute;faut est
+    10 mls.</FONT>
+    <LI><FONT FACE="Arial">Maximum latency allowed : (voir <I>temps
+    de latence maximal</I>). La valeur par d&eacute;faut est 10 mls.</FONT>
+  </UL>
+  <P><FONT FACE="Arial">Section 'Hosts input connections' : <BR>
+  &eacute;crite par le driver, cette section contient des num&eacute;ros
+  IP suivis d'une liste de num&eacute;ros de ports repr&eacute;sentant
+  les connexions avec les ports d'entr&eacute;e. Lorsque le client
+  correspondant apparait, ces connexions sont restaur&eacute;es
+  par le driver. Utilisez l'application msDrivers pour modifier
+  l'&eacute;tat de ces connexions.<BR>
+  </FONT></P>
+  <P><FONT FACE="Arial">Section 'Hosts output connections' : <BR>
+  &eacute;crite par le driver, cette section contient des num&eacute;ros
+  IP suivis d'une liste de num&eacute;ros de ports repr&eacute;sentant
+  les connexions avec les ports de sortie (voir Hosts input connections).</FONT></P></BLOCKQUOTE>
+
+<P><HR ALIGN=LEFT></P>
+
+<P><FONT FACE="Arial">Le driver LAN - MidiShare fait partie du
+projet <A HREF="http://www.grame.fr/MidiShare/fr" TARGET="_top">MidiShare</A>.
+Ils a &eacute;t&eacute; d&eacute;velopp&eacute; par le <A HREF="http://www.grame.fr/Research/fr"
+TARGET="_top">laboratoire de recherche en informatique musicale</A>
+de <A HREF="http://www.grame.fr/" TARGET="_blank">Grame</A>, en
+collaboration avec la soci&eacute;t&eacute; <A HREF="http://www.milprod.com/"
+TARGET="_blank">Mil-Productions</A>.</FONT>
+
+</BODY>
+</HTML>

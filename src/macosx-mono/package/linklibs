@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+
+h=$(pwd)
+cd Distribution/usr/lib
+for a in *.?.?.?.so
+do
+	link=$(echo $a | sed -e 's/\.[0-9]\.[0-9]\.[0-9]\.so/\.so/')
+	[ -f $link ] && rm $link
+	ln -s $a $link
+done

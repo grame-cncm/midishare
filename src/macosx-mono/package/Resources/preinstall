@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+
+LIB=/usr/lib
+MSF=/Applications/MidiShare
+UMSF=$HOME/MidiShare
+NEWUMSF=$HOME/.MidiShare
+
+# removes the old dynamic libraries
+rm -f $LIB/libMidiShare*.dylib
+rm -f $LIB/ms*Driver*.dylib
+rm -f $MSF/.checkinstall
+
+# moves the ini files to the new user MidiShare folder
+# and delete the old one
+if [ -d $UMSF ]
+then
+	[ -d $NEWUMSF ] || mkdir $NEWUMSF
+	for a in $UMSF/*.ini
+	do
+		[ $(basename $a .ini) = "midishare" ] || mv $a $NEWUMSF
+	done
+	rm -f $UMSF/midishare.ini
+	rm -f $UMSF/Applications
+	cat <<! > $UMSF/ReadMe-1.87.txt
+Since MidiShare version 1.87, the .ini files are stored in the
+.MidiShare folder, located at the root of your home directory.
+
+Since the folder name starts with a '.' it is basically hidden for
+normal operations. However you can open this folder from the Finder
+using the 'Go to' command (shortcut is 'shift-command-G').
+
+Apart the midishare.ini (which isn't compatible with the new one)
+previous ini files have been moved to the new folder.
+
+Provided you didn't store some personnal files in your home MidiShare
+folder, you can now safely remove it.
+
+!
+	user=$(ls -ld $HOME | sed -e's/  */ /g' | cut -d' ' -f3)
+	PATH=$PATH:/usr/sbin
+	chown $user $NEWUMSF
+	chown $user $UMSF/ReadMe-1.87.txt
+
+fi
+
+exit 0
