@@ -78,7 +78,7 @@ static char * EvToText ( MidiEvPtr e, char *buff)
 	*buff= 0;
 	sprintf (buff, "%02d:%02d:%02d:%03d  %s %-3d %-2d  %s",
 					h, (int)mn, (int)sec, ms, TblLibEv[EvType(e)],
-					(int)Port(e), (int)Chan(e)+1, DatasToText(e, sDatas));
+					(int)Port(e), (int)Chan(e), DatasToText(e, sDatas));
 	return buff;
 }
 
