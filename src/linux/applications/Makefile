@@ -1,5 +1,5 @@
 
-DIRS = msconnect mscontrol msdisplay msecho msplayer mssync msclock
+DIRS = msconnect mscontrol msdisplay msecho msplayer mssync msclock samples
 
 all:
 	make -C lib
