@@ -23,6 +23,7 @@
 
 #include "msMidiInOut.h"
 #include "lffifo.h"
+#include <mach/mach_time.h>
 
 #define PRINT(x) { printf x; fflush(stdout); }
 #define DBUG(x)    /* PRINT(x) */
@@ -34,6 +35,28 @@ extern short gRefNum;
 
 static int min(a,b) {return (a<b)?a:b;}
 static void CompletionProc( MIDISysexSendRequest *request );
+
+//____________________________________________________________________________________________________________
+// Timing functions found in /Developer/Examples/CoreAudio/MIDI/SampleUSBDriver/Shared/MIDIDriverUtils.cpp
+
+static bool		sIsInited = false;
+static Float64	sNanoRatio;
+
+//_________________________________________________________
+static void InitHostTime()
+{
+	struct mach_timebase_info info;
+
+	mach_timebase_info(&info);
+	sNanoRatio = (double)info.numer / (double)info.denom;
+	sIsInited = true;
+}
+
+//_________________________________________________________
+MIDITimeStamp	MIDIGetCurrentHostTime()
+{
+	return mach_absolute_time();
+}
 
 //_________________________________________________________
 static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
@@ -73,7 +96,7 @@ static void SendSysExAux(SlotPtr slot)
 	slot->request.completionRefCon = slot;
 	
 	err = MIDISendSysex( &slot->request);
-        slot->sending = (err == noErr);
+	slot->sending = (err == noErr);
  }
  
 //_________________________________________________________
@@ -98,7 +121,7 @@ static MidiEvPtr SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 	e = MidiStreamPutEvent (&state->outsmall, e);
 	while (MidiStreamGetByte (&state->outsmall, ptr++)) {n++;}
 	
-	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,0,n,state->evBuffer);
+	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,MIDIGetCurrentHostTime(),n,state->evBuffer);
 	MIDISend(slot->port,slot->dest,pktlist);
 	
 	return e;
