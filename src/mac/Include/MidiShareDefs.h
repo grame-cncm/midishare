@@ -223,7 +223,8 @@ enum{	MIDIOpenAppl=1,
         MIDICloseDriver,
         MIDIAddSlot,
         MIDIRemoveSlot,
-        MIDIChgSlotConnect
+        MIDIChgSlotConnect,
+        MIDIChgSlotName
 };
 	
 		
@@ -362,8 +363,7 @@ enum{	MIDIOpenAppl=1,
 	typedef struct TDriverOperation {
 		void 		(* wakeup) (short refNum);
 		void 		(* sleep)  (short refNum);
-		Boolean 	(* slotInfo)  (SlotRefNum slot, TSlotInfos * infos);
-		long		reserved[2];
+		long		reserved[3];
 	} TDriverOperation;
 
 	typedef struct TDriverInfos {
