@@ -135,7 +135,7 @@
 		4BE442CF05BE876E00FFBCB9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			lastKnownFileType = text.plist.xml;
+			lastKnownFileType = text.xml;
 			name = Info.plist;
 			path = Resources/Info.plist;
 			refType = 2;
@@ -158,8 +158,6 @@
 //4F3
 //4F4
 		4F0BB7EC011F40E904CA0E50 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
@@ -174,8 +172,6 @@
 			name = Development;
 		};
 		4F0BB7ED011F40E904CA0E50 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -222,7 +218,7 @@
 				HEADER_SEARCH_PATHS = ../common/Headers;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /System/Library/Frameworks;
-				LIBRARY_SEARCH_PATHS = "/Users/fober/Desktop/midishare-2.6-devbranch-bixeon-v9/src/common/atomic/benchs";
+				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Dynamic;
 				OTHER_CFLAGS = "-I../lib";
 				OTHER_LDFLAGS = "-flat_namespace";
