@@ -83,7 +83,8 @@ TPlayer::~TPlayer()
 	if (fScore) 		delete (fScore); 
 	if (fRunningState) 	delete (fRunningState);
 	if (fSmpteInfos) 	delete (fSmpteInfos);
-
+	
+	TMidiAppl::Close();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -123,7 +124,7 @@ short TPlayer::Open (MidiName name)
 void TPlayer::Close() 
 { 
 	if (fRunningState->IsRunning()) Stop();
-	TMidiAppl::Close();
+	
 }
 
 /*--------------------------------------------------------------------------*/
