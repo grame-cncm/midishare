@@ -1,5 +1,5 @@
 
-DIRS = msconnect mscontrol msdisplay msecho msplayer
+DIRS = msconnect mscontrol msdisplay msecho msplayer mssync
 
 all:
 	for a in $(DIRS); do make -C $$a; done
