@@ -25,6 +25,9 @@
 #endif
 
 #ifdef __Linux__
+# ifdef MODVERSIONS
+# include <linux/modversions.h>
+# endif
 #include <linux/slab.h>
 #endif
 
