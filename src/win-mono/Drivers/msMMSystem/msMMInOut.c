@@ -48,12 +48,14 @@ static void LMM2MS (SlotPtr slot, LPMIDIHDR h)
 	MidiEvPtr e; long n = h->dwBytesRecorded;
 	char *ptr = h->lpData;
 	while (n--) {
+		unsigned long v = *(unsigned char *)ptr;
 		e = MidiParseByte (&slot->in, *ptr++);
 		if (e) {
 			Port(e) = (Byte)Slot(slot->refNum);
 			MidiSendIm (gRefNum, e);
 		}	
 	}
+	h->dwBytesRecorded = 0;
 }
 
 //_________________________________________________________
@@ -69,8 +71,8 @@ void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg,
 			MM2MS (slot, (char *)&dwParam1);
 			break;
 
-		case MIM_LONGDATA:
 		case MIM_LONGERROR:
+		case MIM_LONGDATA:
 			LMM2MS (slot, (LPMIDIHDR)dwParam1);
 			midiInAddBuffer (slot->mmHandle, &slot->header, sizeof(slot->header));
 			break;

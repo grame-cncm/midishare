@@ -29,7 +29,7 @@
 
 #define kGetErrorTextBuf	256
 
-static char * ErrFile = "\\msMMSystemErrors.txt";
+static char * ErrFile = "\\msMMSystem.log";
 
 //_________________________________________________________
 static char *DateString ()
@@ -75,6 +75,23 @@ void MMError (char *s, int errCode, short in)
 			NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (h != INVALID_HANDLE_VALUE) {
 			DWORD written;
+			SetFilePointer(h, 0, 0, FILE_END);
+			WriteFile(h, string, strlen(string), &written, NULL);
+			CloseHandle (h);
+		}
+	}
+}
+
+//_________________________________________________________
+void MMTrace (char *s, long value)
+{
+	char * errFile = ErrFilePath ();
+	if (errFile) {
+		HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,
+			NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (h != INVALID_HANDLE_VALUE) {
+			DWORD written; char string[256];
+			wsprintf (string, "%s : %ld\n", s, value);
 			SetFilePointer(h, 0, 0, FILE_END);
 			WriteFile(h, string, strlen(string), &written, NULL);
 			CloseHandle (h);
