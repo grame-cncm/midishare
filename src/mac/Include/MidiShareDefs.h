@@ -126,8 +126,11 @@
 #define typeTimeSign	146		/* indication de mesure					*/
 #define typeKeySign		147		/* signature tonale						*/
 #define typeSpecific	148		/* méta evt spécifique à un séquenceur	*/
+#define typePortPrefix  149   	/* Midi Port  Prefix       				*/
+#define typeRcvAlarm    150   	/* RcvAlam         						*/
+#define typeApplAlarm   151   	/* ApplAlam        						*/
 
-#define typeReserved	149	/*149..254	reserved for future extensions		*/
+#define typeReserved    152   /*152..254 reserved for future extensions */
 		
 #define typeDead		255	/* dead Task or DTask							*/
 		
