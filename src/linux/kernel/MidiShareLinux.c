@@ -128,6 +128,44 @@ static void wakeUp (TApplContextPtr context)
 }
 
 /*_________________________________________________________________________*/
+void DriverWakeUp (TApplPtr appl)
+{
+	LinuxContextPtr context = (LinuxContextPtr)appl->context;
+	
+	if (context->status) {
+		if (Wakeup(appl)) Wakeup(appl)(appl->refNum);
+	}
+	else {
+	}
+}
+
+/*_________________________________________________________________________*/
+void DriverSleep  (TApplPtr appl)
+{
+	LinuxContextPtr context = (LinuxContextPtr)appl->context;
+	
+	if (context->status) {
+		if (Sleep(appl)) Sleep(appl)(appl->refNum);
+	}
+	else {
+	}
+}
+
+/*_________________________________________________________________________*/
+Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos)
+{
+	LinuxContextPtr context = (LinuxContextPtr)appl->context;
+	Boolean ret = false;
+	
+	if (context->status) {
+		if (SlotInfo(appl)) ret = SlotInfo(appl)(appl->refNum, infos);
+	}
+	else {
+	}
+	return ret;
+}
+
+/*_________________________________________________________________________*/
 
 void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {
