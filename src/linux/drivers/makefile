@@ -1,5 +1,5 @@
 
-DIRS = raw net
+DIRS = raw net alsa
 
 all:
 	make -C ../../lib
