@@ -76,7 +76,7 @@ void SpecialWakeUp (TMSGlobalPtr g)
 	for (i=0; i<n; i++) {
 		gDrvRefs[i] = LoadDriver (GetDriverName(i));
 		if (!gDrvRefs[i]) 
-			fprintf (stderr, "LoadLibrary error %ld\n", (long)GetLastError());
+			fprintf (stderr, "LoadLibrary error\n");
 	}
 }
 
