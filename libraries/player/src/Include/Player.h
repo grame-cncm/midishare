@@ -174,7 +174,7 @@ void  PausePlayer (short refnum) ;
 
 void  SetRecordModePlayer (short refnum, short state) ;
 void  RecordPlayer 	(short refnum, short tracknum);
-void  SetRecordFilterPlayer	(short refnum, FilterPtr filter);
+void  SetRecordFilterPlayer	(short refnum, MidiFilterPtr filter);
 
 
 // Position management
