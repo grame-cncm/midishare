@@ -27,8 +27,6 @@
 #define __msHeader__
 
 #define __Macintosh__
-#define __MacOS9__
 #define PascalNames
-
 
 #endif
