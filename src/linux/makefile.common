@@ -11,12 +11,12 @@ M = Memory
 S = Sorter
 D = Drivers
 
-SRC = $(C)/ms[^M]*.c $(K)/*.c $(M)/ms[^S]*.c $(S)/*.c $(D)/ms*.c
+SRC = $(C)/*.c $(K)/*.c $(M)/*.c $(S)/*.c $(D)/*.c
 
 OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
-      $(C)/msFilter.o $(C)/msTasks.o $(C)/msXmtRcv.o \
+      $(C)/msFilter.o $(C)/msMail.o $(C)/msTasks.o $(C)/msXmtRcv.o \
       $(K)/msHandler.o $(K)/msInit.o $(K)/msSmpte.o $(K)/msTime.o \
-      $(M)/msEvents.o $(M)/msFields.o $(M)/msMem.o $(M)/msMemory.o \
+      $(M)/msEvents.o $(M)/msFields.o $(M)/msMem.o $(M)/msMemory.o $(M)/msSeq.o \
       $(S)/msSorter.o \
       $(D)/msFrcv.o  $(D)/msFxmt.o
 
@@ -25,6 +25,7 @@ $(TARGET) : $(OBJ)
 
 $(S)/msSorter.o:
 	$(CC) $(CFLAGS) -D__LittleEndian__ -c $(S)/msSorter.c -o $(S)/msSorter.o
+
 dep:
 	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
 
@@ -49,6 +50,7 @@ Clients/msConnx.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
 Clients/msConnx.o: Headers/msMemory.h Headers/msDefs.h Headers/msConnx.h
 Clients/msFilter.o: Headers/msFilter.h Headers/msDefs.h Headers/msTypes.h
 Clients/msFilter.o: Headers/msMem.h
+Clients/msMail.o: Headers/msMail.h Headers/msTypes.h Headers/msSync.h
 Clients/msTasks.o: Headers/msTasks.h Headers/lflifo.h Headers/msTypes.h
 Clients/msTasks.o: Headers/msSync.h Headers/lffifo.h Headers/msDefs.h
 Clients/msTasks.o: Headers/msAppls.h Headers/msMemory.h Headers/msEvents.h
@@ -82,6 +84,8 @@ Memory/msFields.o: Headers/msFields.h Headers/msDefs.h Headers/msTypes.h
 Memory/msMem.o: Headers/msMem.h Headers/msTypes.h
 Memory/msMemory.o: Headers/msDefs.h Headers/msTypes.h Headers/msMemory.h
 Memory/msMemory.o: Headers/lflifo.h Headers/msSync.h Headers/msMem.h
+Memory/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
+Memory/msSeq.o: Headers/lflifo.h Headers/msSync.h Headers/msEvents.h
 Sorter/msSorter.o: Headers/msSorter.h
 Drivers/msFrcv.o: Headers/msFrcv.h Headers/msDefs.h Headers/msTypes.h
 Drivers/msFrcv.o: Headers/msKernel.h Headers/lffifo.h Headers/msSync.h
