@@ -196,6 +196,10 @@ SOURCE=..\msMem.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\msRTListenProc.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\msServerInit.c
 # End Source File
 # Begin Source File

@@ -21,10 +21,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <unistd.h>
-
 #include "msTasks.h"
 #include "msFunctions.h"
 #include "msExtern.h"
@@ -49,7 +45,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 //printf ("CallNetSend start\n");
 	msStreamStart (stream);
 	while (e) {
-		RefNum(e) = pub(appl, refNum);
+		RefNum(e) = (uchar)pub(appl, refNum);
 		if (!msStreamPutEvent (stream, e)) {
 			do {
 				len = msStreamSize(stream);

@@ -38,11 +38,12 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
+# PROP Output_Dir ""
 # PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "KERNELLIB_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "KERNELLIB_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Ot /I "../../common/Headers" /I "../../osglue" /I "../../lib" /I "../../server" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MSKernel" /D "MSExport" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "NDEBUG"
@@ -52,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winmm.lib /nologo /dll /machine:I386 /out:"../midishare.dll"
 
 !ELSEIF  "$(CFG)" == "KernelLib - Win32 Debug"
 
@@ -63,11 +64,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
+# PROP Output_Dir ""
 # PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "KERNELLIB_EXPORTS" /YX /FD /GZ  /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "KERNELLIB_EXPORTS" /YX /FD /GZ  /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "KERNELLIB_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../common/Headers" /I "../../osglue" /I "../../lib" /I "../../server" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MSKernel" /D "MSExport" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
@@ -77,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winmm.lib /nologo /dll /debug /machine:I386 /out:"../midishare.dll" /pdbtype:sept
 
 !ENDIF 
 
@@ -85,17 +87,125 @@ LINK32=link.exe
 
 # Name "KernelLib - Win32 Release"
 # Name "KernelLib - Win32 Debug"
-# Begin Group "Source Files"
+# Begin Group "common"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# End Group
-# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Group "server"
 
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# End Group
-# Begin Group "Resource Files"
+# PROP Default_Filter ""
+# Begin Source File
 
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+SOURCE=..\..\common\server\msAlarms.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\server\msHandler.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\server\msSorter.c
+# End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\common\EventToStream.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\midishare.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msAppls.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msConnx.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msDriver.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msEvents.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msFields.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msFilter.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msInit.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msMail.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msMemory.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msSeq.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msSmpte.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msTasks.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msTime.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msXmtRcv.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\StreamToEvent.c
+# End Source File
+# End Group
+# Begin Group "extern"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\server\msExtern.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\server\msIntHandler.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\server\msKernelPrefs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\server\msMem.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\server\profport.c
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\libMain.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\server\win32\OSGlueLib.lib
+# End Source File
 # End Target
 # End Project
