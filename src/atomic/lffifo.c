@@ -108,75 +108,29 @@ fifocell * fifoget (vtype fifo * ff)
 {
 	vtype fifocell * head;
 	fifocell * next; 
-	long count, val[3];
+	long val[3];
 	short done = 0;
 	
-//printf (">> fifoget in\n");
 	do {
 		LWARX (&ff->head);
-		count = ff->count.value;
         head = ff->head;				/* read the head cell */
 		next = head->link;				/* read the next cell */
-		if (count == ff->count.value) {
-			if (head == ff->tail) {			/* is queue empty or tail falling behind? */
-	//            printf ("---> fifoget: queue empty or ? (%lx %lx %lx)\n", (long)head, (long)next, fifo_end(ff));
-	//			pfifo(ff);
-				if (head->link == fifo_end(ff))	/* is queue empty?             */
-					return 0;				/* queue is empty; return NULL */
-				/* tail is pointing to head in a non empty queue, */
-				/* try to set tail to the next cell               */
-				CASLNE (&ff->tail, (void *)head, fifo_end(ff));
-	//          if (!CASLNE (&ff->tail, (void *)head, fifo_end(ff)))
-	//				pfifo(ff);
-			}
-			else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
-				val[0] = next->value[0];	 /* we read the next cell value */
-				val[1] = next->value[1];
-				val[2] = next->value[2];
-				/* and we try to set head to the next cell */
-				done = STWCX (&ff->head, (void *)head, next);
-			}
+		/*
+		  WARNING: the next pointer still needs to be checked before reading its value 
+		*/
+		if (head == ff->tail) {			/* is queue empty or tail falling behind? */
+			if (head->link == fifo_end(ff) && STWCX (&ff->head, (void *)head, (void *)head)) /* is queue really empty? */
+				return 0;				/* queue is empty; return NULL */
+			/* tail is pointing to head in a non empty queue, */
+			/* try to set tail to the next cell               */
+			CASLNE (&ff->tail, (void *)head, fifo_end(ff));
 		}
-	} while (!done);
-	msAtomicDec (&ff->count);
-	head->value[0] = val[0]; 	/* and finally copy the value to the deqeued cell */
-	head->value[1] = val[1];
-	head->value[2] = val[2];
-//printf ("<< fifoget out (%lx)\n", (long)head);
-	return (fifocell *)head;
-}
-
-fifocell * oldfifoget (vtype fifo * ff) 
-{
-	vtype fifocell * head;
-	fifocell * next; 
-	long ic, oc, val[3];
-	short done = 0;
-	
-	do {
-//		LWARX (&ff->head);
-//		LWARX (&ff->tail);
-        head = ff->head;				/* read the head cell */
-		next = head->link;				/* read the next cell */
-//		if (oc == ff->oc) {				/* ensures that next is a valid pointer */
-		if (next) {				/* ensures that next is a valid pointer */
-                                        /* to avoid failure when reading next value */
-            LWARX (&ff->tail);
-			if (head == ff->tail) {			/* is queue empty or tail falling behind? */
-				if (next == fifo_end(ff))	/* is queue empty?             */
-					return 0;				/* queue is empty; return NULL */
-                /* tail is pointing to head in a non empty queue, */
-                /* try to set tail to the next cell               */
-				STWCX (&ff->tail, (void *)head, next);
-			}
-			else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
-                LWARX (&ff->head);
-				val[0] = next->value[0];	 /* we read the next cell value */
-				val[1] = next->value[1];
-				val[2] = next->value[2];
-                /* and we try to set head to the next cell */
-				done = STWCX (&ff->head, (void *)head, next);
-			}
+		else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
+			val[0] = next->value[0];	 /* we read the next cell value */
+			val[1] = next->value[1];
+			val[2] = next->value[2];
+			/* and we try to set head to the next cell */
+			done = STWCX (&ff->head, (void *)head, next);
 		}
 	} while (!done);
 	msAtomicDec (&ff->count);
