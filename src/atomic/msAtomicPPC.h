@@ -53,11 +53,8 @@ static inline int STWCX (register vtype void * addr, register void * value, regi
         "	sync            	\n"         /* synchronize instructions       */
 		"	stwcx.	%3, 0, %1	\n"         /* if the reservation is not altered */
                                             /* stores the new value at addr   */
-		"	bne-	0f          \n"
+		"	bne-	1f          \n"
         "   li      %0, 1       \n"
-		"	b		2f          \n"
-        "0:                     \n"
-        "   li      %0, 5       \n"
 		"	b		2f          \n"
         "1:                     \n"
         "   li      %0, 0       \n"
