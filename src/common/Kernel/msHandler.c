@@ -69,32 +69,6 @@ void ClockHandler (TMSGlobalPtr g)
 }
 
 
-//________________________________________________________________________________
-static void MidiPrintf (TMSGlobalPtr g, char *text)
-{
-	MidiEvPtr e;
-	
-	e= MSNewEv (typeTextual, FreeList(Memory(g)));
-	if (e) {
-		while (*text)
-			MSAddField (e, *text++, FreeList(Memory(g)));
-		RefNum(e) = 0;
-		Port(e) = 255;
-		DispatchEvents (g, e);
-	}
-}
-
-#include <Strings.h>
-//________________________________________________________________________________
-static void MidiPrintl (TMSGlobalPtr g, long val)
-{
-	Str32 num;
-	NumToString (val, num);
-	num[num[0]+1] = 0;
-	MidiPrintf (g, (char *)&num[1]);
-}
-
-
 /*===========================================================================
   Internal functions implementation
   ===========================================================================*/ 
