@@ -28,6 +28,7 @@
 
 #include <assert.h>
 
+
 /*--------------------------------------------------------------------------*/
 // Creation/Destruction
 /*--------------------------------------------------------------------------*/
@@ -102,13 +103,10 @@ short TPlayer::Open (MidiName name)
 		Close();
 		return kErrMemory;
 	}
-	
 	// Create shared objects
 	Create();
-	
 	// Set an empty score
 	long res = SetAllTrack (MidiNewSeq(), kDefaultTpq);
-	
 	// If OK, return the reference number else close the Player
 	if (res == kNoErr) {
 		return ref;
@@ -446,8 +444,19 @@ void TPlayer::ReceiveAlarm (short ref)
 	// Player may not be correctly allocated when the first ReceiveAlarm is called
 	
 	if (fPlayer) {  
+	
 		while (e1 = MidiGetEv(ref)) { 
+		
 			switch (EvType (e1)) {
+			
+				case typeKeyOn:
+				
+					// KeyOn with 0 velocity are transformed to KeyOff
+					
+					if (Vel(e1) == 0) EvType(e1) = typeKeyOff;
+					fPlayer->ReceiveEvents(e1);
+					break;
+					
 				case typeNote:
 				
 					// Note events are separated in a KeyOn/KeyOff pair, the KeyOff
