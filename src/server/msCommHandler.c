@@ -246,30 +246,20 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
     do {
         long n = CCRead (pl->comm, pl->rbuff, kReadBuffSize);
         if (n > 0) {
-            int ret, remain, read=0;  MidiEvPtr reply, e;
-			parse->buff = pl->rbuff;
-			msStreamParseRewind (parse);
-            do {
-				read += msStreamGetSize(parse);
-				remain = n - read;
-				e = msStreamGetEvent (parse, &ret);
-if (ret <= 0) printf ("msStreamGetEvent %ld %d %d\n", n, read, ret);
-				if (e) {
-					reply = EventHandlerProc(e, pl->comm);
-					if (reply && !SendEvent (reply, pl))
-						break;
-				}
-				else if (ret != kStreamNoMoreData) {
-					msStreamParseReset (parse); /* only one event expected on the commands channel */
-					LogWrite ("CommHandlerProc: msStreamGetEvent read error (%d)", ret);
+            int ret;  MidiEvPtr reply, e;
+//			parse->buff = pl->rbuff;
+//			msStreamParseRewind (parse);
+			e = msStreamStartBuffer (parse, n, &ret);
+			if (e) {
+				reply = EventHandlerProc(e, pl->comm);
+				if (reply && !SendEvent (reply, pl))
 					break;
-				}
-				else if (remain) { 	/* several commands might be queued */
-					parse->buff = &pl->rbuff[read];
-printf ("CommHandlerProc remain %d\n", remain);
-					msStreamParseRewind (parse);
-				}
-			} while (remain > 0);
+			}
+			else if (ret != kStreamNoMoreData) {
+				msStreamParseReset (parse); /* only one event expected on the commands channel */
+				LogWrite ("CommHandlerProc: msStreamGetEvent read error (%d)", ret);
+				break;
+			}
         }
         else if (n < 0) {
             LogWriteErr ("CommHandlerProc read error (%ld)", n);

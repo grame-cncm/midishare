@@ -90,6 +90,21 @@ static ThreadProc(RTListenProc, arg)
 	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
 	msStreamBufferPtr parse = &rt->parse;
 
+	do {
+        long n = CCRTRead (cc, rt->rbuff, kRTReadBuffSize) ;
+        if (n > 0) {
+			int ret;
+			MidiEvPtr e = msStreamStartBuffer (parse, n, &ret);
+			while (e) {
+				EventHandlerProc(e);
+				e = msStreamGetEvent (parse, &ret);
+			}
+			if (ret != kStreamNoMoreData)
+				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
+		}
+		else break;
+	} while (true);
+/*
 	while (CCRTRead (cc, rt->rbuff, kRTReadBuffSize) > 0) {
 		do {
 			int ret;
@@ -106,6 +121,7 @@ static ThreadProc(RTListenProc, arg)
 		} while (true);
 		msStreamParseReset (parse);
 	}
+*/
 	return 0;
 }
 

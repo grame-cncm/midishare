@@ -134,6 +134,7 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 			RawAccept(g, appl, &appl->rcv, e);
 	}
 	return;
+
 reject:
 	MidiFreeEv (e);					/* free the event  					*/
 }
@@ -144,11 +145,19 @@ ThreadProc(RTClientProc, arg)
 	TMSGlobalPtr g = (TMSGlobalPtr)arg;
 	msLibContextPtr c = (msLibContextPtr)g->context;
 	msStreamBuffer * parse = &c->RT.parse;
-    MidiEvPtr e; long n; int ret, remain, read=0;
+    MidiEvPtr e; long n; int ret; //, remain, read=0;
 
 	while (true) {
         n = CCRTRead (c->cchan, c->RT.rbuff, kReadBuffSize);
         if (n <= 0) break; /* corrupted communication channel: exit the RT thread */
+
+		NextActiveAppl(g) = ActiveAppl(g);
+		e = msStreamStartBuffer (parse, n, &ret);
+		while (e) {
+			DispatchEvent (g, e);
+			e = msStreamGetEvent (parse, &ret);
+		}
+/*		
 		parse->buff = c->RT.rbuff;
 		remain = n;
 		read = 0;
@@ -158,11 +167,12 @@ ThreadProc(RTClientProc, arg)
 			remain = n - read;
 			e = msStreamGetEvent (parse, &ret);
 			if (e) DispatchEvent (g, e);
-			else if (remain) { 	/* several commands might be queued */
+			else if (remain) { 	// several commands might be queued
 				parse->buff = &c->RT.rbuff[read];
 				msStreamParseRewind (parse);
 			}
 		} while (e || (remain > 0));
+*/
 		RcvAlarmLoop (g);
 		RTSendFlush (c);
 	}
