@@ -101,8 +101,7 @@ char* LoadConfig (char * section, char* key, char* fullname, char* def)
 //________________________________________________________________________
 unsigned long LoadConfigNum (char * section, char* key, char* fullname, int def)
 {
-        unsigned long n = get_private_profile_int (section, key, def, fullname);
-        return n ? n : def ;
+       return get_private_profile_int (section, key, def, fullname);
 }
 
 //________________________________________________________________________
