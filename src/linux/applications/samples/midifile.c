@@ -290,7 +290,7 @@ static unsigned long  LongVal (long val)
 }
 #endif
 
-#ifdef  __Linux__
+#ifdef  __linux__
 static unsigned short ShortVal(unsigned short val)
 {
 	unsigned short converted= 0;
