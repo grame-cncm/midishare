@@ -178,5 +178,5 @@ void InitNetEventsHandler (NetEventsHandlerTable table, int realtime)
   table[typeMidiSetInfo]  = NetMidiSetInfo;
   table[typeMidiSetFilter]= NetMidiSetFilter;
 
-  for (i=typeMidiSetFilter+1;i<=typeDead;i++)  table[i]= NetUnexpected;
+  for (i=typeReserved;i<=typeDead;i++)  table[i]= NetUnexpected;
 }

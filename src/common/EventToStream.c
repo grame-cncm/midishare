@@ -68,8 +68,8 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 	lin[typeRcvAlarm]      = NullLinearizeMth;
 	lin[typeApplAlarm]     = Data4LinearizeMth;
 
-	lin[typeMidiOpen]      = VarLenLinearizeMth;
-	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) lin[i]= Data4LinearizeMth;
+
+	lin[typeMidiConnect]   = Data4LinearizeMth;
 	lin[typeMidiSetName]   = VarLenLinearizeMth;
 	lin[typeMidiSetInfo]   = Data4LinearizeMth;
 #ifdef WIN32
@@ -77,6 +77,10 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 #else
     lin[typeMidiSetFilter] = Data4LinearizeMth;
 #endif
+
+	lin[typeMidiOpen]      = VarLenLinearizeMth;
+	lin[typeMidiOpenRes]   = Data4LinearizeMth;
+	lin[typeMidiClose]     = Data4LinearizeMth;
 }
 
 void msStreamInit (Ev2StreamPtr f, msStreamMthTbl lin)

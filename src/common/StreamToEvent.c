@@ -126,8 +126,7 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 	tbl[typePortPrefix]    = Data4ParseMth;
 	tbl[typeApplAlarm]     = Data4ParseMth;
 	
-	tbl[typeMidiOpen]      = VarLenParseMth;
-	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) tbl[i]= Data4ParseMth;
+	tbl[typeMidiConnect]   = Data4ParseMth;
 	tbl[typeMidiSetName]   = VarLenParseMth;
 	tbl[typeMidiSetInfo]   = Data4ParseMth;
 #ifdef WIN32
@@ -135,6 +134,10 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 #else
     tbl[typeMidiSetFilter] = Data4ParseMth;
 #endif
+
+	tbl[typeMidiOpen]      = VarLenParseMth;
+	tbl[typeMidiOpenRes]   = Data4ParseMth;
+	tbl[typeMidiClose]     = Data4ParseMth;
 }
 
 /*____________________________________________________________________________*/
