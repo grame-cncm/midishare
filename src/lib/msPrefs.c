@@ -47,6 +47,9 @@
 
 #define DriverMaxEntry	512
 
+static char * dateString ();
+static void logmsg (char *msg);
+
 //________________________________________________________________________
 static char * GetProfileFullName (char* filename)
 {
@@ -126,7 +129,7 @@ Boolean GetDriver(short index, char *dst, short bufsize)
 }
 
 //_______________________________________________________________________
-char * dateString ()
+static char * dateString ()
 {
 	static char date[256];
 	time_t t;
@@ -136,7 +139,7 @@ char * dateString ()
 }
 
 //_______________________________________________________________________
-void logmsg (char *msg)
+static void logmsg (char *msg)
 {
 	FILE * fd = fopen (GetProfileFullName(ErrFile), "a");
 	
