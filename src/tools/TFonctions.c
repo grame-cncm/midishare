@@ -44,12 +44,19 @@
 #if macintosh
 #	include <stdio.h>
 #	include "MidiShare.h"
+# if defined(__ppc__) && defined(__GNUC__)
+#	define __POWERPC__
+#	define CNAME
+#	define CTASKS
+#	define nil 0
+# else
 #	define PASCALNAME
 #	define PASCALTASKS
 #	define unused1
 #	define unused2
 #	define unused3
 #	define unused4
+# endif
 #	define TestMidiCall
 #	define flush        fflush(stdout)
 #	define print        printf

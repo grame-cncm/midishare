@@ -31,7 +31,11 @@
 #ifdef __MacOS9__
 	#include <mactypes.h> 
 #else
-	#include <CoreServices/CoreServices.h>
+	typedef unsigned char Boolean;
+	typedef unsigned char Byte;
+	typedef char * Ptr;
+	enum { false, true };
+//	#include <CoreServices/CoreServices.h>
 #endif 
                                    
 # ifdef __POWERPC__

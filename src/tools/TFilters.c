@@ -59,8 +59,13 @@ inline Boolean MidiShare() { return true; }
 #	include <stdio.h>
 #	include <String.h>
 #	include "MidiShare.h"
+# if defined(__ppc__) && defined(__GNUC__)
+#	define CNAME
+#	define CTASKS
+# else
 #	define PASCALNAME
 #	define PASCALTASKS
+# endif
 #	define flush	fflush( stdout)
 #	define print	printf
 #endif

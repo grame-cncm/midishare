@@ -100,9 +100,19 @@ static inline cell* lfavail(lifo* lf) {
 }
 
 #if defined(__Linux__)
-# include "lflifoLinux.h"
+# if defined(__ppc__)
+#  include "lflifoppc.h"
+# else
+#  include "lflifoLinux.h"
+# endif
+
 #elif defined(__Macintosh__)
-# include "lflifoMac.h"
+# if defined(__ppc__) && defined(__GNUC__)
+#  include "lflifoppc.h"
+# else
+#  include "lflifoMac.h"
+# endif
+
 #elif defined(__Windows__)
 # include "lflifoWin.h"
 #endif
