@@ -130,7 +130,7 @@ Boolean  InetCtrlDTask::FatalError (ErrString msg, long err)
 		fFatalPending = _Schedule (MidiGetTime(), msg, kFatalErrorTask);
 #else
 		fFatalPending = true;
-		Run (MidiGetTime(), fRefNum, msg, kFatalErrorTask);
+		Run (MidiGetTime(), fRefNum, (long)msg, kFatalErrorTask);
 #endif
 	}
 	return fFatalPending;
