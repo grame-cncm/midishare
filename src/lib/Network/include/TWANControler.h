@@ -49,7 +49,7 @@ class TWANControler : public TInetControler
 				void 	CheckCompletion	(IPNum ip, Boolean silently);
 		
 				void 	SetFeedback (FeedbackProvider * f)	{ fFeedback = f; }
-				void 	Connect 	(strPtr remote);
+				Boolean Connect 	(strPtr remote);
 				void 	Disconnect	(IPNum ip, Boolean remove=true);
 				Boolean	CreateClient (SocketRef sok, TInetAddress * addr);
 				Boolean	IsClient 	 (IPNum ip);
