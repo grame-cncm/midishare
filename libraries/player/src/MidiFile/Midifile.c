@@ -22,13 +22,13 @@
  * v113 [April 18, 96]  DF  procedural access to MidiFile_errno and errno
  *                      functions MidiFileGetMFErrno and MidiFileGetErrno.
  *                      error code commented in the read_undef function
- * v114 [April 30, 96]  DF  ignore META events instead reading undef
- * v115 [May 8, 96]     DF  tracks marked opened at creation time 
- *                                              (due to corrections for Code Warrior)
- * v116 [Nov 27, 96]   DF  32 bits version
+ * v114 [April 30, 96] DF ignore META events instead reading undef
+ * v115 [May 8, 96]    DF tracks marked opened at creation time (due to corrections for Code Warrior)
+ * v116 [Nov 27, 96]   DF 32 bits version
  * v117 [Sept 11,97]   SL conversion fonctions ShortVal and LongVal use now usigned values
  * v118 [Nov 23,98]    SL bug correction in write_tempo function
  * v119 [Sept 23,99]   SL use of MDF_Header_SIZE and MDF_Trk_SIZE to avoid alignement problems for data structures
+ * v120 [Jan 1,00]     JJC bug correction in write_SeqNum and MidiFileCloseTrack functions
 
  */
 
@@ -52,7 +52,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	119				/* source code version 			*/
+#define SRC_VERSION	120				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -586,7 +586,7 @@ static Boolean write_SeqNum( MIDIFilePtr f, MidiEvPtr ev, short unused1)
         putc( MDF_NumSeqLen, fd);                               /* length               */
         s= SeqNum(ev);
         putc( s >> 8, fd);
-        putc( s & 0xF, fd);
+        putc( s & 0xFF, fd);
         return !ferror( fd);    
 }
 
@@ -825,7 +825,7 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
         fpos_t offset1, offset2;                                /* beg and end track offsets */
         long trkLen;                                                    /* track length                          */
         short ntrks;                                                    /* tracks count                          */
-        Boolean ret;
+        Boolean ret=true;
 
         MidiFile_errno= MidiFileNoErr;
         offset1= fd->trkHeadOffset;
@@ -850,23 +850,23 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 */
                         if( fsetpos( fd->fd, &offset1))         /* to track length position     */
                                 return false;
-                                                                                                /* update the track length              */
+                                                                                    /* update the track length              */
                         if( fwrite( &trkLen, sizeof( trkLen), 1, fd->fd)!= 1)
                                 return false;
-                                                                                                /* to track count position              */
+                                                                                    /* to track count position              */
                         if( fseek( fd->fd, offset_ntrks, SEEK_SET))
                                 return false;
-                        fd->ntrks++;                                            /* track count                                  */
-                                                                                                /* update the tracks count              */
+                        fd->ntrks++;                                            	/* track count                          */
+                                                                                    /* update the tracks count              */
                         ntrks= ShortVal(fd->ntrks);
                         if( fwrite( &ntrks, sizeof(ntrks), 1, fd->fd)!= 1)
                                 return false;   
                 }
         }
-        else if( isTrackOpen( fd))                                      /* reading mode                                 */
+        else if( isTrackOpen( fd))                              /* reading mode                                 */
                                                                 /* locate to the beginning of the next track    */
                 ret= ( fseek( fd->fd, fd->_cnt, SEEK_CUR)== 0);
-        fd->opened= false;                                                      /* track is marked closed               */
+        fd->opened= false;                                      /* track is marked closed               */
         return ret;
 }
 
@@ -890,18 +890,18 @@ Boolean MFAPI MidiFileWriteEv( MIDIFilePtr fd, MidiEvPtr ev)
         while( off && (Date(ev) >= Date(off)))  /* key off before current evt   */
         {
                 if( !WriteVarLen( Date(off)- date, fd->fd) ||   /* write the offset     */
-                        !WriteEv( fd, off))                                                     /* and the key off      */
+                        !WriteEv( fd, off))                                     /* and the key off      */
                         return false;
-                date= Date( off);                                                       /* update current date  */
+                date= Date( off);                                               /* update current date  */
                 seq->first= Link(off);                                          /* update the sequence  */
-                MidiFreeEv( off);                                                       /* free the key off             */
-                if( !(off= seq->first))                                         /* key off = next               */
+                MidiFreeEv( off);                                               /* free the key off     */
+                if( !(off= seq->first))                                         /* key off = next       */
                         seq->last= nil;
         }
         if( !WriteVarLen( Date( ev)- date, fd->fd) ||           /* write the offset     */
-                !WriteEv( fd, ev))                                                              /* and the event        */
+                !WriteEv( fd, ev))                              /* and the event        */
                 return false;
-        fd->curDate= Date( ev);                                                 /* update current date  */
+        fd->curDate= Date( ev);                                 /* update current date  */
         return true;
 }
 
@@ -919,11 +919,11 @@ Boolean MFAPI MidiFileWriteTrack( MIDIFilePtr fd, MidiSeqPtr seq)
         while( ev && ret)
         {
                 ret= MidiFileWriteEv( fd, ev);                          /* write the event              */
-                ev= Link( ev);                                                          /* next event                   */
+                ev= Link( ev);                                          /* next event                   */
         }
 
         if( !MidiFileCloseTrack( fd))                           /* update the track header      */
-                ret= false;                                                             /* and the file header          */
+                ret= false;                                     /* and the file header          */
         return ret;
 }
 
