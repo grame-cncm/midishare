@@ -37,10 +37,11 @@
 static void DoCloseComm (void)
 {
 	msLibContextPtr c = LibContext;
-	if (c->RTThread) msThreadDelete (c->RTThread);
+	msThreadPtr rtThread = c->RTThread;
 	c->RTThread = 0;
     if (c->cchan) CloseCommunicationChannel (c->cchan);
     c->cchan = 0;
+	if (rtThread) msThreadDelete (rtThread);
 }
 
 /*____________________________________________________________________________*/
@@ -89,7 +90,7 @@ Boolean InitComm (TMSGlobalPtr g)
 		}
 		atexit (msCommExit);
     }
-	else CCInc (c->cchan);
+	CCInc (c->cchan);
     return true;
 }
 
