@@ -18,7 +18,7 @@ OUT = ../msComGlue.o
 all: makefile $(OUT)
 
 $(OUT) : $(OBJ)
-	ld -m elf_i386 -r -o $(OUT) $(OBJ)
+	ld -r -o $(OUT) $(OBJ)
 
 makefile: makefile.osx
 	cp -f makefile.osx makefile
