@@ -20,10 +20,8 @@
 
 */
 
-
 #ifndef __alsaDriver__
 #define __alsaDriver__
-
 
 #include "include/driver.h"
 #include "include/midi.h"
@@ -37,7 +35,6 @@
 #define SYSEX_LEN 512  	/* length  of the SysEx buffer for sending */
 #define MIDI_PORT  0    /* Midi port coded in received events */
 
-
 /* data for this midi synth driver */
 typedef struct {
 	int card;
@@ -47,9 +44,7 @@ typedef struct {
 	int seq_client;
 	int seq_port;
 	unsigned long jiffies;
-	unsigned char running_state;	/* for keeping the last status byte */
-	//unsigned char sysEx[SYSEX_LEN]; /* buffer for SysEx */
-	
+	unsigned char running_state;	/* for keeping the last status byte */	
 } TAlsaDriver;
 
 #endif

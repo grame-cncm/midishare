@@ -45,6 +45,7 @@
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
+
 typedef struct TTaskExt FAR *TTaskExtPtr;
 typedef struct TTaskExt
 {
@@ -54,8 +55,8 @@ typedef struct TTaskExt
     long    arg3;
 } TTaskExt;
 
-
-/* ---------Verification and Initialisation of the library -----------*/
+/*__________________________________________________________________________________*/
+/* Verification and Initialisation of the library          							*/
 
 #define CHECK if (msfd < 0) MidiInstall()
 
@@ -68,12 +69,16 @@ typedef struct TTaskExt
 	 if (err < 0) { printf("(index) ioctl failed: %d\n", err);  exit(-1); }
 
 
-//_________________________________________________________
-// Globals variable declaration
+/*__________________________________________________________________________________*/
+/*  Globals variable declaration                                                    */
 
 extern TClients   	gLClients ;
 extern TClients*	gClients ;
 extern int msfd;
+
+
+/*__________________________________________________________________________________*/
+/*  Function prototypes                                                   			*/
 
 void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n);
 void MidiInstall();

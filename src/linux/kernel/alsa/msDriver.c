@@ -18,14 +18,12 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
   
-  modifications history:
+  modifications history: 11/11/99 First version SL
 
 */
 
 /*
-
-	MIDI Driver built on top of ALSA
-
+	MIDI Driver built using ALSA
 */
 
 #ifdef MODVERSIONS
@@ -36,30 +34,26 @@
 #include "alsaDriver.h"
 #include "msEvents.h"
 #include "msKernel.h"
- * the ALSA low-level midi routines appear to return 'whole' midi events and 
+#include "msMemory.h"
 #include "../msLoader.h"
 #include "msXmtRcv.h"
- 
-
 
 /*
  * The ALSA low-level midi routines appear to return 'whole' midi events and 
  * have already handled midi running state. I don't know if will remain in 
  * the future. If not, some more elaborate MIDI parser is needed.
  */ 
-static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, 
-unsigned char *command, int count)
  
-	
+ 
+unsigned char sysEx[SYSEX_LEN];
+unsigned long lastDate;  // date of last sent event;
+ 
 
 /*__________________________________________________________________________________*/
 
 static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsigned char *command, int count)
 {
 	TAlsaDriver *msynth = (TAlsaDriver *) cmd_private_data;
-	//printk("Receive event\n");
-	//printk("Receive event first byte=0x%x, count=%d\n", *command, count);
-
 	int channel;
 	int port;
 	int i;
@@ -92,9 +86,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 				ev->port = port;
 				ev->chan = channel;
 				MSSetField(ev,0,command[1]);
-			
-
-
+				MSSetField(ev,1,command[2]);
 				MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
 				return;
 			}
@@ -157,6 +149,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 				
 				return;
 			}
+			break;
 
 		case 0xf0:
 			switch (command[0]) {
@@ -170,6 +163,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 						}
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
 						return;
+					}
 					
 					break;	
 		
@@ -181,6 +175,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 						MSSetField(ev,0,command[1] & 0xf0);
 						MSSetField(ev,1,command[1] & 0x0f);
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
+						return;
 					}
 					break;
 
@@ -192,6 +187,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 						MSSetField(ev,0,command[1]);
 						MSSetField(ev,1,command[2]);
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
+						return;
 					}
 					break;
 
@@ -214,9 +210,10 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 
 				case 0xf6:	// tune request 
 					snd_printd("Rx: tune request\n");
-					// system real-time messages
+					return;
 
 				case 0xf7:	// end of sysex 
+					return;
 
 				// system real-time messages
 
@@ -227,6 +224,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 						ev->chan = 0;
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
 						return;
+					}
 				case 0xf9: // undefined 
 					return;
 					
@@ -249,6 +247,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 				case 0xfc:	// stop
 
 					if (count == 1 && (ev = MSNewEv(typeStop,FreeList(Memory(gMem))))) {
+						ev->port = port;
 						ev->chan = 0;
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
 						return;
@@ -260,6 +259,7 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 				case 0xfe:	// active sensing
 
 					if (count == 1 && (ev = MSNewEv(typeActiveSens,FreeList(Memory(gMem))))) {
+						ev->port = port;
 						ev->chan = channel;
 						MSSendIm(0, ev,SorterList(gMem), CurrTime(gMem));
 						return;
@@ -275,8 +275,9 @@ static void snd_midi_command(snd_rawmidi_t * rmidi, void *cmd_private_data, unsi
 					}
 					return;
 			}
+			
+	}
 }
-/* send data to specified midi device */
 
 
 /*__________________________________________________________________________________*/
@@ -286,9 +287,9 @@ static void dump_midi(snd_rawmidi_t * rmidi, unsigned char *buf, int count)
 {
 	int done = snd_midi_transmit(rmidi, buf, count);
 
+	if (done != count) {
 		snd_printk("only wrote %d instead of %d bytes to midi device\n", done, count);
-
- int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
+	}
 }
 
 /*__________________________________________________________________________________*/
@@ -297,8 +298,6 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 {
 	TAlsaDriver * msynth = (TAlsaDriver *)drv;
 	int channel = ev->chan;
-	//prnt("Driver send");
-
 	unsigned char msg[10];	/* buffer for constructing midi messages */
 	snd_rawmidi_t *rmidi;
 	int i,n;
@@ -311,13 +310,11 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 	
 	if (Date(ev) > (lastDate+10)) msynth->running_state = 0;
 	lastDate = Date(ev);
-	//prnt("Driver send");
-			
 	
 	rmidi = msynth->output_rmidi;
+	if (!rmidi)
 		return -EINVAL;
-			/* should be processed before queued */
-			
+
 	/* decode actual event data... */
 	switch (EvType(ev)) {
 	
@@ -339,6 +336,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				EvType(keyOff) = typeKeyOn;
 				Vel(keyOff)=0;
 				Date(keyOff)+= Dur(ev);
+				MSSend(0x80, keyOff,SorterList(gMem));
 			}
 			break;
 
@@ -351,6 +349,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 2);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 3);
 			}
 			break;
 
@@ -363,6 +362,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 2);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 3);
 			}
 			break;
 
@@ -375,6 +375,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 2);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 3);
 			}
 			break;
 
@@ -387,6 +388,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 2);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 3);
 			}
 			break;
 
@@ -398,6 +400,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 1);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 2);
 			}
 			break;
 
@@ -409,6 +412,7 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, msg + 1, 1);
 			} else {
 				msynth->running_state = msg[0];
+				dump_midi(rmidi, msg, 2);
 			}
 			break;
 
@@ -419,16 +423,13 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 			msg[2] = MSGetField(ev,1) & 0x7f;		/* msb */
 			if (msynth->running_state == msg[0]) {
 				dump_midi(rmidi, msg + 1, 2);
-		case typeSysEx: /* A VERIFIER : possibilite d'ecrire plusieur buffer de suite */
+			} else {
 				msynth->running_state = msg[0];
 				dump_midi(rmidi, msg, 3);
-			
 			}
-				
 
 		case typeSysEx: /* To ckeck :writing several buffer */
 			
-				
 			n = MSCountFields(ev);
 			if (n < SYSEX_LEN) {
 				sysEx[0] = 0xf0;
@@ -437,7 +438,8 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 				dump_midi(rmidi, sysEx, n+2); /* n bytes + F0 and F7 */
 			}else {
 				snd_printd("SysEx too long\n");
-		case typeQuarterFrame:  /*  A VERIFIER */
+			}
+			msynth->running_state = 0;
 			break;
 
 
@@ -445,48 +447,52 @@ int SendToDriver(TDriverPtr drv, MidiEvPtr ev)
 		
 			msg[0] = 0xf1;		/* MTC quarter frame */
 			msg[1] = ((MSGetField(ev,0)<<4) + MSGetField(ev,1)) & 0x7f;
+			dump_midi(rmidi, msg, 2);
 			msynth->running_state = 0;
 			break;
 
 		case typeClock:
 		
 			msg[0] = 0xf8;
+			dump_midi(rmidi, msg, 1);
 			msynth->running_state = 0;
 			break;
 
 		case typeStart:
 		
 			msg[0] = 0xfa;
+			dump_midi(rmidi, msg, 1);
 			msynth->running_state = 0;
 			break;
 
 		case typeContinue:
 		
 			msg[0] = 0xfb;
+			dump_midi(rmidi, msg, 1);
 			msynth->running_state = 0;
 			break;
 
 		case typeStop:
 		
 			msg[0] = 0xfc;
+			dump_midi(rmidi, msg, 1);
 			msynth->running_state = 0;
 			break;
 
 		case typeActiveSens:
 		
-
 			msg[0] = 0xfe;	/* active sensing */
 			dump_midi(rmidi, msg, 1);
 			msynth->running_state = 0;
 			break;
 
 		default:
- static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
+			snd_printd("Event  = Decoding for type %d is not implemented\n", EvType(ev));
+	}
+	return 0;
 }
 
 /*__________________________________________________________________________________*/
-	//printk("Opening card=%d device=%d\n", card, device);
-	
 
 static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
 {
@@ -499,15 +505,11 @@ static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
 	
 	/* open midi port for input */
 	if ((err = snd_midi_open(msynth->card, msynth->device, 
-	//snd_printk("midi input ptr %lx\n",msynth->input_rmidi);
+	SND_RAWMIDI_LFLG_INPUT, &msynth->input_rmidi)) < 0) {
 		snd_printk("midi input open failed!!!\n");
 		//MOD_DEC_USE_COUNT;
 		return err;
 	}
-	//if (err) prnt("snd_midi_start_input FAIL\n");
-	//prnt("snd_midi_start_input\n");
-	//MOD_INC_USE_COUNT;
-	
 	
 	msynth->input_rmidi->input.u.p.command = snd_midi_command;
 	msynth->input_rmidi->input.u.p.cmd_private_data = msynth;
@@ -520,17 +522,14 @@ static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
 		//MOD_DEC_USE_COUNT;
 		return err;
 	}
-
-
+	//MOD_INC_USE_COUNT;
 
 	return 0;
 }
 
-    	unsigned char buf = 0xfe;/*active sensing midi event*/
+/*__________________________________________________________________________________*/
 
-	if (!msynth->input_rmidi)
-		return -EINVAL;
-		
+static int  CloseDriverInt(TAlsaDriver * msynth)
 {
  	int err;
     unsigned char buf = 0xfe;/*active sensing midi event*/
@@ -541,11 +540,12 @@ static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
 	if ((err = snd_midi_close(msynth->card, msynth->device, 
 		SND_RAWMIDI_LFLG_INPUT))) {
 		snd_printk("midi input close failed!!!\n");
+		//MOD_DEC_USE_COUNT;
 		return err;
-	/*sending single active sensing message to shut the device up*/
 	}
 	//MOD_DEC_USE_COUNT;
 	
+	/*sending single active sensing message to shut the device up*/
 	
 	snd_midi_transmit (msynth->output_rmidi, &buf, 1);
 	snd_midi_flush_output(msynth->output_rmidi);
@@ -556,15 +556,15 @@ static int OpenDriverInt(TAlsaDriver * msynth, int card, int device)
 		//MOD_DEC_USE_COUNT;
 		return err;
 	}
-
+	//MOD_DEC_USE_COUNT;
 	return 0;
 
 }
-	if (drv) {
-		OpenDriverInt (drv,0,0); 
-	}
+
 /*__________________________________________________________________________________*/
 
+TDriverPtr	OpenDriverManager ()	{
+	TAlsaDriver * drv = (TAlsaDriver *)kmalloc (sizeof(TAlsaDriver), GFP_KERNEL);
 	if (drv) OpenDriverInt (drv,0,0); 
 	return drv;
 }
