@@ -15,7 +15,7 @@ COBJ := $(patsubst %.c, $(COUTDIR)/%.o, $(CSRC))
 
 OBJ  := $(COBJ) $(SOBJ)
 
-all : $(TARGET)
+all : dirs $(TARGET)
 server: dirs $(STARGET)
 client: dirs $(CTARGET)
 

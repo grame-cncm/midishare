@@ -21,7 +21,7 @@ $(SOUTDIR)/%.o: %.c
 $(COUTDIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-all : $(TARGET)
+all : dirs $(TARGET)
 server: dirs $(STARGET)
 client: dirs $(CTARGET)
 
