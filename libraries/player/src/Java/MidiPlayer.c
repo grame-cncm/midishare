@@ -98,7 +98,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
 		return  OpenPlayer(buffer);
 	#endif
 }
-}
 
 /*--------------------------------------------------------------------------*/
 
