@@ -40,6 +40,8 @@
 #include "TSMPTEPlayer.h"
 #include "TEventReceiver.h"
 #include "TRunningPlayer.h"
+#include "TEventModifier.h"
+#include "TCombinerPlayer.h"
 
 
 
@@ -60,6 +62,7 @@ class TDestructor {
 		TLoopManagerPtr         	fLoopManager;
 		TScoreFollowerPtr       	fInserter;
 		TEventRecorderPtr			fRecorder;
+		TEventModifierPtr			fModifier;
 		TScoreStatePtr   			fScoreState;
 		TEventSenderInterfacePtr  	fEventSender;
 		TTimeManagerPtr				fTimeManager;
@@ -79,6 +82,7 @@ class TDestructor {
 					TLoopManagerPtr         	loopmanager,
 					TScoreFollowerPtr       	inserter,
 					TEventRecorderPtr			recorder,
+					TEventModifierPtr			modifier,
 					TScoreStatePtr   			scorestate,
 					TEventSenderInterfacePtr  	eventsender,
 					TTimeManagerPtr				timemanager
@@ -98,6 +102,7 @@ class TDestructor {
 			fLoopManager = loopmanager;
 			fInserter = inserter;
 			fRecorder = recorder;
+			fModifier = modifier;
 			fScoreState = scorestate;
 			fEventSender = eventsender;
 			fTimeManager = timemanager;
@@ -120,6 +125,7 @@ class TDestructor {
 			if (fLoopManager)	delete(fLoopManager);
 			if (fInserter)		delete(fInserter);
 			if (fRecorder)		delete(fRecorder);
+			if (fModifier)		delete(fModifier);
 			if (fScoreState )	delete(fScoreState);
 			if (fEventSender) 	delete(fEventSender);
 			if (fTimeManager) 	delete(fTimeManager);

@@ -43,6 +43,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	TLoopManagerPtr				loopmanager	 = 0;	
 	TScoreInserterPtr			inserter = 0;
 	TEventRecorderPtr       	recorder = 0;
+	TEventModifierPtr       	modifier = 0;
 	TScoreStatePtr          	scorestate = 0;
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
@@ -87,9 +88,12 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	scheduler->Init(synchro, fUser); // Initialisation 
 	
 	tickplayer 	= new TTickPlayer(fUser->fScore, eventsender, scheduler);
+	// A FINIR
+	TCombinerPlayerPtr combiner = new TCombinerPlayer(tickplayer, 0);
 	chaser 		= new TChaserIterator(fUser->fScore, eventsender);
-	player1 	= new TSyncInPlayer(synchro,tickplayer,chaser);
+	player1 	= new TSyncInPlayer(synchro,combiner,chaser);
 	
+
 	
 	switch (fUser->fSyncOut) {
 		
@@ -103,6 +107,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			player1 = 0;
 			break;
 	}
+	
 	
 	switch (fUser->fSyncIn) {
 		
@@ -137,8 +142,22 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 	}
 		
-	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver);
+	
+	//recorder = new TEventModifier(eventsender,fUser->fScore, synchro, fUser->fRunningState,receiver);
+	
+	
+	// Chaine de traitements des ŽvŽnements
+	//--------------------------------------
+	// Modifier ==> Recorder ==> Receiver
+	
+	
+	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver); // en fin de chaine cau utiliser les event
+	modifier = new TEventModifier(eventsender, synchro, scheduler,fUser->fRunningState,recorder);
+
+	combiner->SetPlayer2(modifier);
 	scorestate = new TScoreState(fUser->fScore,fUser->fTick_per_quarter);
+
+
 	
 	// Affectation 
 	fUser->fClockConverter =  clockconverter;
@@ -150,17 +169,19 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	// Destructor allocation
 	fDestructor = new TDestructor(synchro,receiver,scheduler,tickplayer,
 					chaser,player1,player2,player3,clocksender,clockconverter,
-					loopmanager,inserter,recorder,scorestate,eventsender,timemanager);
+					loopmanager,inserter,recorder,modifier,scorestate,eventsender,timemanager);
 					
-	TGenericPlayerInterfacePtr genericplayer = new TGenericPlayer (fUser->fEventReceiver, player3,timemanager);
-					
+	TGenericPlayerInterfacePtr genericplayer = new TGenericPlayer (modifier, player3,timemanager);
+	
 	switch (fUser->fSyncIn) {
 		
 		case kSMPTESync:
 			return new TSMPTEPlayer(genericplayer,fUser->fRunningState, fUser->fSmpteInfos,fUser);
+			break;
 			
 		default:
 			return genericplayer;
+			break;
 	}
 }
 
