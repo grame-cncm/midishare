@@ -1,0 +1,32 @@
+
+USRC = unix/TLog.cpp unix/TShMem.cpp unix/TPipe.cpp unix/TThreads.cpp \
+	unix/TLocalSocket.cpp unix/TMutex.cpp
+UOBJ = unix/TLog.o unix/TShMem.o unix/TPipe.o unix/TThreads.o \
+	unix/TLocalSocket.o unix/TMutex.o
+GSRC = glue/TClientInit.cpp glue/TServerInit.cpp glue/TInitComGlue.cpp
+GOBJ = glue/TClientInit.o glue/TServerInit.o glue/TInitComGlue.o
+
+SRC = msCommInit.cpp msServerInit.cpp $(USRC) $(GSRC)
+OBJ = msCommInit.o msServerInit.o $(UOBJ) $(GOBJ)
+
+CFLAGS = -O3 -Iinclude -Iglue -Wall
+CXXFLAGS = $(CFLAGS)
+CC = gcc
+
+OUT = msComGlueLib.o
+
+all: makefile $(OUT)
+
+$(OUT) : $(OBJ)
+	ld -m elf_i386 -r -o $(OUT) $(OBJ)
+
+makefile: makefile.linux
+	cp -f makefile.linux makefile
+	rm -f $(OBJ) $(OUT)
+
+clean:
+	rm -f $(OBJ) $(OUT)
+
+dep:
+	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
+
