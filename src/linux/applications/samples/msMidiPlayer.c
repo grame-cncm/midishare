@@ -185,15 +185,15 @@ void OpenSeq(TSequencer * s, char * n)
                 CloseSeq(s);
                 exit(MidiFile_errno);
         }
-        
         for (i = f->ntrks; i; i--){ MixSeq( MidiFileReadTrack(f), s->seq); }
 	           
         if (smpte(f)) 
                 TrsfSmpteSeq(s->seq, frame_par_sec(f), ticks_par_frame(f));
         else
                 TrsfTempoSeq(s->seq, ticks_par_quarterNote(f));
-		
-        printf("File : %s, Format : %d, Tracks : %d, Length : %d, Duration : %d\n",
+	
+	if (First(s->seq))
+	 	printf("File : %s, Format : %d, Tracks : %d, Length : %d, Duration : %d\n",
                         n, f->format, f->ntrks, LenSeq(s->seq), Date(Last(s->seq)) );
 	           
         (void) MidiFileClose(f);
