@@ -39,7 +39,7 @@
 
 Boolean doneFlag = false;
 #define kGroupTime	10
-#define kVersion	"1.11"
+#define kVersion	"1.12"
 
 NetConfig gNet = { -1, -1, -1 };
 int clientsIndex, clientsCount = 0;
