@@ -1,5 +1,12 @@
 
+Versions:
+------------------------
+v 1.72      : new MidiShare kernel first release
+v 1.80      : kernel with drivers management
+v 1.81      : bug in MSClearSeq corrected
 
-01/28/2000  
 
-Tag ALSA040 : Linux version with Midi drivers built using ALSA 0.4
+Tags :
+------------------------
+01/28/2000  ALSA040 : Linux version with Midi drivers built using ALSA 0.4
+04/10/2000  V181M   : Macintosh release 1.81
