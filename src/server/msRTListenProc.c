@@ -42,7 +42,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	fifo * f = &appl->rcv;
 	MidiEvPtr e = (MidiEvPtr)fifoget(f);
 
-//printf ("CallNetSend start\n");
+//printf ("CallNetSend msStreamStart %lx %lx %lx\n", cc, rt, stream);
 	msStreamStart (stream);
 	while (e) {
 		RefNum(e) = (uchar)pub(appl, refNum);
@@ -141,6 +141,7 @@ int RTCommInit (msServerContextPtr c, CommunicationChan cc)
 	if (rt) {
 		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTReadBuffSize);
 		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTWriteBuffSize);
+printf ("CCSetInfos %lx %lx\n", (long)cc, (long)rt);
 		CCSetInfos (cc, rt);
 		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerRTPriority - 1);
 		if (rt->RTThread) return true;

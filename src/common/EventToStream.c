@@ -37,6 +37,7 @@ static Boolean     VarLenContinuation   (Ev2StreamPtr f, MidiEvPtr e);
 static Boolean     NullLinearizeMth     (Ev2StreamPtr f, MidiEvPtr e);
 static Boolean     Data4LinearizeMth    (Ev2StreamPtr f, MidiEvPtr e);
 static Boolean     Ext1LinearizeMth     (Ev2StreamPtr f, MidiEvPtr e);
+static Boolean     TaskLinearizeMth     (Ev2StreamPtr f, MidiEvPtr e);
 static Boolean     VarLenLinearizeMth   (Ev2StreamPtr f, MidiEvPtr e);
 
 
@@ -54,7 +55,8 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 	lin[typeStream]       = VarLenLinearizeMth;
 	
 	for (i=typeClock;i<=typeReset;i++)          lin[i]= Data4LinearizeMth;
-	for (i=typePrivate;i<=typeDProcess;i++)     lin[i]= Ext1LinearizeMth;
+	for (i=typePrivate;i<typeProcess;i++)       lin[i]= Ext1LinearizeMth;
+	for (i=typeProcess;i<=typeDProcess;i++)     lin[i]= TaskLinearizeMth;
 	for (i=typeQuarterFrame;i<=typeSeqNum;i++)  lin[i]= Data4LinearizeMth;
 	for (i=typeTextual;i<=typeCuePoint ;i++)    lin[i]= VarLenLinearizeMth;
 	for (i=typeChanPrefix;i<=typeKeySign;i++)   lin[i]= Data4LinearizeMth;
@@ -183,6 +185,18 @@ static Boolean Ext1LinearizeMth (Ev2StreamPtr f, MidiEvPtr e)
 		f->nextCount = (sizeof(long) * 4);
 		f->cont = Ext1LinearizeMth;
 	}
+	return false;
+}
+
+static Boolean TaskLinearizeMth (Ev2StreamPtr f, MidiEvPtr e)
+{
+	if (StreamFreeSpace(f) >= sizeof(MidiEvPtr)) {
+		MidiEvPtr * ptr = (MidiEvPtr *)f->loc;
+        *ptr++ = e;
+		StreamAdjust(f, ptr, sizeof(MidiEvPtr));
+		return true;
+	}
+    f->cont = TaskLinearizeMth;
 	return false;
 }
 

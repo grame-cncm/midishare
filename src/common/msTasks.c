@@ -59,7 +59,12 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 		ext->arg2 = a2;
 		ext->arg3 = a3;
 		Date(ev)  = date;
-		MSSend (r, MSCopyEv(ev,&g->memory.freeList), g);
+#ifdef MSKernel
+        MSSend (r, ev, g);
+#else
+		RefNum(ev)= (uchar)r;
+		return SendToServer (ev, g) ? ev : 0;
+#endif
 	}
 	return ev;
 }
@@ -76,7 +81,12 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 		ext->arg2 = a2;
 		ext->arg3 = a3;
 		Date(ev)  = date;
-		MSSend (r, MSCopyEv(ev,&g->memory.freeList), g);
+#ifdef MSKernel
+        MSSend (r, ev, g);
+#else
+		RefNum(ev)= (uchar)r;
+		return SendToServer (ev, g) ? ev : 0;
+#endif
 	}
 	return ev;
 }
@@ -130,4 +140,3 @@ MSFunctionType(void) MSExec1DTask (short refnum, TMSGlobalPtr g)
 		}
 	}	
 }
-

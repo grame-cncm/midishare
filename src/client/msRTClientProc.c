@@ -69,7 +69,8 @@ static int RTSendFlush (msLibContextPtr c)
 				if (n != len) goto failed;
 			} while (!msStreamContEvent (stream));
 		}
-		MidiFreeEv (e);
+        if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
+            MidiFreeEv (e);
 		e = (MidiEvPtr)fifoget(f);
 	}
 	len = msStreamSize(stream);
@@ -77,7 +78,8 @@ static int RTSendFlush (msLibContextPtr c)
     return (n == len);
 
 failed:
-    MidiFreeEv (e);
+    if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
+        MidiFreeEv (e);
     fprintf (stderr, "CCRTWrite failed (%ld)\n", n);
     return false;
 }
@@ -107,7 +109,7 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 {
 	short type= EvType(e);
 	short refNum= RefNum(e) & 0x7F;     /* unflag the refnum number     */
-	TApplPtr appl;
+	TApplPtr appl; MidiSTPtr ext;
 	
 	if (type >= typeMidiOpen)			/* event is ignored  */
 		goto reject;
@@ -117,11 +119,20 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 	appl = g->appls[refNum];
 	switch (type) {
 		case typeProcess:
-			ProcessCall (g, e);
+            ext = LinkST(e);
+			MidiFreeEv (e);
+            e = (MidiEvPtr)ext->val[0];
+            if (EvType(e) == typeProcess)
+                ProcessCall (g, e);
 			MidiFreeEv (e);
 			break;
 		case typeDProcess:
-			fifoput (&appl->dTasks, (cell *)e);
+            ext = LinkST(e);
+			MidiFreeEv (e);
+            e = (MidiEvPtr)ext->val[0];
+            if (EvType(e) == typeDProcess)
+                fifoput (&appl->dTasks, (cell *)e);
+			MidiFreeEv (e);
 			break;
 		case typeApplAlarm:
 			if (appl->applAlarm) {
@@ -157,22 +168,6 @@ ThreadProc(RTClientProc, arg)
 			DispatchEvent (g, e);
 			e = msStreamGetEvent (parse, &ret);
 		}
-/*		
-		parse->buff = c->RT.rbuff;
-		remain = n;
-		read = 0;
-		NextActiveAppl(g) = ActiveAppl(g);
-		do {
-			read += msStreamGetSize(parse);
-			remain = n - read;
-			e = msStreamGetEvent (parse, &ret);
-			if (e) DispatchEvent (g, e);
-			else if (remain) { 	// several commands might be queued
-				parse->buff = &c->RT.rbuff[read];
-				msStreamParseRewind (parse);
-			}
-		} while (e || (remain > 0));
-*/
 		RcvAlarmLoop (g);
 		RTSendFlush (c);
 	}

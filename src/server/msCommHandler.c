@@ -45,6 +45,7 @@ typedef struct CommChans{
     CommChansPtr 	next;
     CommunicationChan comm;
     msThreadPtr 	thread;
+    msThreadPtr 	rtthread;
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
     char 			rbuff[kReadBuffSize];
@@ -318,13 +319,15 @@ void NewClientChannel (CommunicationChan cc)
     msStreamInit (&cl->stream, gStreamMthTable, cl->wbuff, kWriteBuffSize);
     cl->next = gCCList;
     cl->comm = cc;
+    /* init RT communication before creating the main appl thread */
+	if (!RTCommInit (ServerContext, cc)) goto err;
     thread = msThreadCreate (CommHandlerProc, cl, kServerHighPriority);
 	if (!thread) {
         LogWrite ("NewClientChannel: msThreadCreate failed");
         goto err;
     }
     cl->thread = thread;
-	if (!RTCommInit (ServerContext, cc)) goto err;
+//	if (!RTCommInit (ServerContext, cc)) goto err;
     gCCList = cl;
 	return;
 

@@ -38,6 +38,7 @@
 static int     UnknownParseMth  (msStreamBufferPtr f, MidiEvPtr e);
 static int     Data4ParseMth    (msStreamBufferPtr f, MidiEvPtr e);
 static int     Ext1ParseMth     (msStreamBufferPtr f, MidiEvPtr e);
+static int     TaskParseMth     (msStreamBufferPtr f, MidiEvPtr e);
 static int     VarLenParseMth   (msStreamBufferPtr f, MidiEvPtr e);
 static int     VarLenContMth    (msStreamBufferPtr f, MidiEvPtr e);
 static MidiEvPtr StartReadBuffer(msStreamBufferPtr f, int * retcode);
@@ -91,7 +92,8 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 	tbl[typeStream]       = VarLenParseMth;
 	
 	for (i=typeClock;i<=typeReset;i++)          tbl[i]= Data4ParseMth;
-	for (i=typePrivate;i<=typeDProcess;i++)     tbl[i]= Ext1ParseMth;
+	for (i=typePrivate;i<typeProcess;i++)       tbl[i]= Ext1ParseMth;
+	for (i=typeProcess;i<=typeDProcess;i++)     tbl[i]= TaskParseMth;
 	for (i=typeQuarterFrame;i<=typeSeqNum;i++)  tbl[i]= Data4ParseMth;
 	for (i=typeTextual;i<=typeCuePoint ;i++)    tbl[i]= VarLenParseMth;
 	for (i=typeChanPrefix;i<=typeKeySign;i++)   tbl[i]= Data4ParseMth;
@@ -297,6 +299,19 @@ static int Ext1ParseMth (msStreamBufferPtr f, MidiEvPtr e)
 		return kStreamNoError;
 	}
 //	msStreamParseRewind(f);
+	return kStreamNoMoreData;
+}
+
+/*____________________________________________________________________________*/
+static int TaskParseMth (msStreamBufferPtr f, MidiEvPtr e)
+{
+	if (StreamCountAvail(f) >= sizeof(MidiEvPtr)) {
+		MidiEvPtr * ptr = (MidiEvPtr *)f->loc;
+		long * data = (long *)LinkST(e);
+        *data = (long)*ptr++;
+		StreamAdjust(f, ptr, sizeof(MidiEvPtr));
+		return kStreamNoError;
+	}
 	return kStreamNoMoreData;
 }
 
