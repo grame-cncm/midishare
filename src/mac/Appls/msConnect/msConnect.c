@@ -51,7 +51,7 @@
 #define	suspendResumeMessage	1
 
 /* menu bar constants */
-enum { AppleMenu, FileMenu, EditMenu, PortsMenu, mBarSize };
+enum { AppleMenu, FileMenu, EditMenu,mBarSize };
 enum { AppleID = 128, FileID, EditID, PortsID };
 enum { UndoI = 1, CutI = 3, CopyI, PasteI, ClearI };
 
@@ -460,7 +460,7 @@ static void SetUpMenus()
 	AppendResMenu(myMenus[AppleMenu],'DRVR');
 	myMenus[FileMenu] = GetMenu(FileID);
 	myMenus[EditMenu] = GetMenu(EditID);
-	myMenus[PortsMenu] = GetMenu(PortsID);
+	//myMenus[PortsMenu] = GetMenu(PortsID);
 	for (i = 0; i < mBarSize; i++)
 		InsertMenu(myMenus[i], 0);
 	DrawMenuBar();
@@ -531,22 +531,6 @@ static void DoCommand(long mResult)
 	}
 	HiliteMenu(0);  
 }
-
-/* -----------------------------------------------------------------------------*/
-static void SetPortMark(void)
-{
-	short port, chk;
-
-	for (port = ModemPort; port <= PrinterPort; port++) {
-#ifdef __POWERPC__
-		chk = noMark;
-#else
-		chk =  MidiGetPortState(port) ? checkMark : noMark;
-#endif
-		SetItemMark (myMenus[PortsMenu], port + 1, chk);
-	}
-}
-
 /* -----------------------------------------------------------------------------*/
 static void ResizeWind (Point where)
 {
@@ -597,7 +581,6 @@ static void DoMouseDown()
 	{ 
 		case inMenuBar:
 			AdjustMenus ();
-			SetPortMark ();
 			DoCommand(MenuSelect(myEvent.where));
 			break;
 		case inSysWindow: 
