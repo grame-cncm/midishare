@@ -39,20 +39,21 @@ typedef struct state {
 	long 		bend;
 	long		fftsize;
 	long		dynamic;
+	
 } State, *StatePtr;
 
 
 extern Boolean doneFlag;
 
 Boolean SetUpMidi (StatePtr state);
-Boolean AudioWakeUp ();
+Boolean AudioWakeUp (int fftsize);
 
 void 	CloseMidi ();
 void 	DoIdle ();
 
 enum { kVolOff=0, kVolOn};
 enum { kBendOff=0, kBendOn};
-enum { kMinBendLength=0, kMaxBendLength = 12};
+enum { kMinBendLength=0, kMaxBendLength = 24};
 enum { kMinFFTSize=512, kMaxFFTSize=8192};
 
 
