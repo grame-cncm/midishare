@@ -1,0 +1,45 @@
+2003/02/03 : Replace "/usr/src/linux/include" 
+			 with "/lib/modules/`uname -r`/build/include"
+			 in all makefiles in linux directory and subdirectories
+			 
+		   : prefixed by /sbin/ all the module functions to be compatible
+		     with RH 8.0 (when going su, sbin is not in the PATH)
+			 
+		   : in linux/applications/samples/Makefile: a) removed dependecy
+			 on /usr/lib/libMidiShare.so that prevent make to succeed 
+			 if midishare is not yet installed.	b) replaced "INC = ../Headers"
+			 with "INC = ../../Include" the correct path to "MidiShare.h"
+			 
+		   : in linux/applications/tools/makefile : added path to local 
+			 MidiShare library : "LIB = -Wl,-L../../library -lMidiShare" for 
+			 link to succeed when MidiShare is not yet installed
+			 
+		   : in linux/applications/radio-hd-server/makefile : replaced gcc
+			 with g++. 
+			 in linux/applications/radio-hd-server/msControlSignal.c : added
+			 #include "server.h" to prevent compilation errors.
+			 
+		   : in linux/applications/radio-hd-server/makefile : replaced gcc
+			 with g++. 
+			 in linux/applications/radio-hd-server/msControlSignal.c : added
+			 #include "server.h" to prevent compilation errors.
+			 
+		   : in linux/kernel/MidiShareLinux.c : new version of TimerTask to
+			 take into account the value of HZ which may be different form 100.
+			 
+		   : in common/Memory/msEvent.c : added declaration for InitStructTbl()
+		   
+		   : in linux/kernel/msLoader.c : added MODULE_XXX declaration and switched 
+		     the file from LGPL to GPL. The module will not taint the kernel any more.
+			 The library itself remains LGPL.
+			 
+		   : in msInetDriver.cpp : replaced in function dateString() format %D by %d/%m/%Y
+		     to avoid warning on year.
+			 
+		   : In lflifoLinux.h : check LOCK not defined before defining it in order to avoid 
+		     warning on SMP configuration.
+			 
+		   : In kmsDrvUtils.c : Added the declaration of the Slot macro that was missing
+			 
+ 
+	 
