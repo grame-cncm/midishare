@@ -94,7 +94,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90"
 # Begin Source File
 
-SOURCE=.\Midi.c
+SOURCE=..\src\Midi.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

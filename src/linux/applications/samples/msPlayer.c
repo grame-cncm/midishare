@@ -21,7 +21,7 @@ MidiEvPtr dispTask;
 
 //_______________________________________________________________________
 
- void   DisplayTask (long date, short ref, long a1, long a2, long a3)
+ void DisplayTask(long date, short ref, long a1, long a2, long a3)
  {
  	PlayerState state;
 	GetStatePlayer(ref, &state);
@@ -70,7 +70,6 @@ static Start(short ref)
 {
 	StartPlayer(ref); 
 	MidiForgetTask(&dispTask);
-	
 	DisplayTask(MidiGetTime(), ref,0,0,0);
 }
 
@@ -93,11 +92,11 @@ static Cont(short ref)
 
 //_______________________________________________________________________
 
-int main( int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 		short ref = -1;
 		MidiSeqPtr seq = 0;
-    		MidiFileInfos info;
+		MidiFileInfos info;
 		char* synchro;
 		char c;
 		int res;
@@ -109,19 +108,20 @@ int main( int argc, char *argv[])
 			goto exit;
 		}
 		
-        	ref = OpenPlayer("msPlayer");      		// Open a new Player 
+		ref = OpenPlayer("msPlayer");      		// Open a new Player 
 		
 		if (ref < 0) {
 			printf("Can not allocate a new Player\n");
 			goto exit;
 		}
 		
-		seq = MidiNewSeq();                    		// Allocate a MidiShare sequence
+		seq = MidiNewSeq();                    	// Allocate a MidiShare sequence
 		
 		if (!seq) {
 			printf("Can not allocate a new Sequence\n");
 			goto exit;
 		}
+		
 		res = MidiFileLoad(argv[1], seq, &info);	// Load the MifiFile in the MidiShare sequence
 		
 		if (res) {
@@ -131,8 +131,6 @@ int main( int argc, char *argv[])
 		}
 		
 		SetAllTrackPlayer(ref, seq, info.clicks);	// Set the sequence in the Player
-		//SetSynchroInPlayer(ref, kExternalSync);	// Change the Player synchronisation mode
-		//SetSynchroInPlayer(ref, kClockSync);
 		
 		MidiConnect(ref,0, true);
 		MidiConnect(0,ref, true);			// Connect the Player to plysical midi in and out
@@ -142,12 +140,8 @@ int main( int argc, char *argv[])
 		printf("Use c or C to continue playing\n",res);
 		printf("Use q or Q to quit\n",res);
 		
-		//printf("Use + to speed up the Tempo\n",res);
-		//printf("Use - to slow down the Tempo\n\n",res);
-		//SetLoop(ref);
-		
 		while ((c = getchar()) && c != 'q' && c != 'Q')  switch (c) {
-               			case 'P': case 'p':Start(ref); break;
+				case 'P': case 'p':Start(ref); break;
 				case 'S': case 's':Stop(ref); break;
 				case 'C': case 'c':Cont(ref);break;
 				case '+': case '-':ChangeTempo(ref, c); break;
@@ -156,6 +150,5 @@ int main( int argc, char *argv[])
 		exit:
 		Stop(ref);
 		ClosePlayer(ref);   // Close the Player
-                                    
 }
 

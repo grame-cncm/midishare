@@ -1,0 +1,13 @@
+# list of the files that should be part of the install.log file
+# first column describe a folder root
+# second and third columns are used as 'find' options
+# for each line, a the command:
+#		find $column1 $column2 $column3
+# is issued
+
+../root/Applications/MidiShare+-depth+
+../root/System/Library/Frameworks+-depth+
+../root/private/etc/MidiShare+-depth+
+../root/usr/lib+-type+f
+../root/usr/lib+-type+l
+../root/Library/Java/Extensions+-type+f

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MSLANDRIVER_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "_MBCS" /D "_USRDLL" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /YX /FD /c
+# ADD CPP /nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /I "../../../common/atomic" /D "NDEBUG" /D "_MBCS" /D "_USRDLL" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /YX /FD /c
 # SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MSLANDRIVER_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /I "../../../common/atomic" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /YX /FD /GZ /c
 # SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -176,6 +176,14 @@ SOURCE=.\lib\sockets\TTCPSocket.cpp
 # Begin Source File
 
 SOURCE=.\lib\sockets\TUDPSocket.cpp
+# End Source File
+# End Group
+# Begin Group "atomic"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\common\atomic\lflifoIntel.c
 # End Source File
 # End Group
 # Begin Source File

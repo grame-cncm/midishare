@@ -66,10 +66,9 @@ typedef struct {
 /* ----------------------------------*/
 /* functions declarations            */
 static inline void PlayNote (QuickTimeEnvPtr qt, MidiEvPtr e, short vel)
-			{ NAPlayNote (qt->allocator, Note(qt, Chan(e)), Pitch(e), vel); }
+{ NAPlayNote (qt->allocator, Note(qt, Chan(e)), Pitch(e), vel); }
 static inline void PlayCtrlChange (QuickTimeEnvPtr qt, MidiEvPtr e)
-			{ NASetController(qt->allocator, Note(qt, Chan(e)), MidiGetField(e, 0), 
-			  (MidiGetField (e, 1) << 8 )); }
+{ NASetController(qt->allocator, Note(qt, Chan(e)), MidiGetField(e, 0), (MidiGetField (e, 1) << 8 )); }
 
 static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e);
 static void PlayPitchWheel (QuickTimeEnvPtr qt, MidiEvPtr e);
@@ -89,14 +88,14 @@ static inline DriverDataPtr GetData ()	{ return &gData; }
 /* -----------------------------------------------------------------------------*/
 static void WakeUp (short r)
 {
-        QuickTimeEnvPtr qt = QTE(GetData ());
-          
-        if (qt->running) {
-            MidiSetRcvAlarm (r, ReceiveEvents);
-            MidiConnect (MidiShareDrvRef, r, true);
-            MidiConnect (r, MidiShareDrvRef, true);
-        }else
-            MidiSetRcvAlarm (r, FlushReceivedEvents);
+	QuickTimeEnvPtr qt = QTE(GetData ());
+	  
+	if (qt->running) {
+		MidiSetRcvAlarm (r, ReceiveEvents);
+		MidiConnect (MidiShareDrvRef, r, true);
+		MidiConnect (r, MidiShareDrvRef, true);
+	}else
+		MidiSetRcvAlarm (r, FlushReceivedEvents);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -110,7 +109,6 @@ static void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
 	PlayNote ((QuickTimeEnvPtr)a2, (MidiEvPtr)a1, 0);
 	MidiFreeEv((MidiEvPtr)a1);
 }
-
 
 /* -----------------------------------------------------------------------------*/
 static void FlushReceivedEvents (short r)
@@ -142,6 +140,8 @@ static void ReceiveEvents (short r)
 				break;
 			case typeReset:		PlayReset (qt);
 				break;
+			case typeRegParam:	PlayCtrlChange (qt, e);
+				break;
 		}
 		MidiFreeEv (e);
 loop:
@@ -168,6 +168,7 @@ static void SetupFilter (MidiFilterPtr filter)
 	MidiAcceptType (filter, typeProgChange,true);
 	MidiAcceptType (filter, typePitchWheel,true);
 	MidiAcceptType (filter, typeReset,true);
+	MidiAcceptType (filter, typeRegParam,true);
 }
 
 /* -----------------------------------------------------------------------------*/

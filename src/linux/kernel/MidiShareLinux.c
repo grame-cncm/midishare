@@ -24,12 +24,9 @@
 	      
    [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
    [22-06-01] SL - New CloseAll function to close remaining application associated with a file descriptor
+   [04-04-05] YO - Removed modversions dependencies 
              
 */
-  
-#ifdef MODVERSIONS
-#include <linux/modversions.h>
-#endif
 
 /* centralizing compatibility issues between 2.0, 2.2, 2.4 */
 
@@ -64,6 +61,8 @@
 
 #include <linux/slab.h>
 #include <linux/poll.h>
+#include <asm/param.h>
+#include <linux/timer.h>
 
 #include "msLoader.h" 
 #include "msExtern.h"
@@ -76,23 +75,23 @@
 /*_______________________________________________________________________*/
 
 typedef struct TMachine {
-	struct tq_struct 	timerTask;  /* timer task 						*/
+	struct timer_list 	timerTask;  /* timer task 						*/
 	NEW_WAIT_QUEUE		stopQueue;	/* stop queue (for cleanup_module ) */
 	struct timeval		time;		/* for timer management 			*/
-	long				phase;	/* used to count ClockHandler calls	*/
+	long				phase;		/* used to count ClockHandler calls	*/
 	Boolean 			status;    	/* running mode  					*/
 } TLinux, * TLinuxPtr;
 
 typedef struct {
-	fifo 			commands;	/* fifo of commands : task and alarms */
-	NEW_WAIT_QUEUE		commandsQueue; 	/* to be used by the user real-time thread */
-	Boolean 		wakeFlag;	/* used for wake up of the real-time thread */
-	Boolean 		status;    	/* running mode : user or kernel */
-	struct file*            file;		/* file descriptor */
+	fifo 			commands;		/* fifo of commands : task and alarms */
+	NEW_WAIT_QUEUE	commandsQueue; 	/* to be used by the user real-time thread */
+	Boolean 		wakeFlag;		/* used for wake up of the real-time thread */
+	Boolean 		status;    		/* running mode : user or kernel */
+	struct file*  	file;			/* file descriptor */
 	
 } LinuxContext, * LinuxContextPtr;
 
-static void TimerTask(void * arg);
+static void TimerTask(unsigned long arg);
 
 /* 
   	The machine structure (TLinux structure) is globally allocated so that the TimerTask 
@@ -134,7 +133,7 @@ void FlushCommandFifo(TApplContextPtr context)
 TApplContextPtr CreateApplContext ()
 {
 	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc(sizeof(LinuxContext), GFP_KERNEL);
-	fifoinit(&ptr->commands);
+	fifoinit(&ptr->commands, (fifocell*)MSNewEv(typeNote, FreeList(Memory(gMem))));
 	INIT_WAIT_QUEUE(ptr->commandsQueue);
 	ptr->wakeFlag = false;
 	ptr->status = kKernelMode;
@@ -239,7 +238,7 @@ void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long al
 
 		if (ev) {
 		  	MSSetField(ev,0,alarmCode);
-		  	fifoput(GetCommand(context), (cell*)ev);
+		  	fifoput(GetCommand(context), (fifocell*)ev);
 			wakeUp(context);
 		}
 	}
@@ -260,7 +259,7 @@ void CallRcvAlarm (TApplContextPtr c, RcvAlarmPtr alarm, short refNum)
 		ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
 		if (ev) {
-			fifoput(GetCommand(context), (cell*)ev);
+			fifoput(GetCommand(context), (fifocell*)ev);
 			wakeUp(context);
 		}
 	}
@@ -278,7 +277,7 @@ void CallTaskCode  (TApplContextPtr c, MidiEvPtr e)
 			(*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 		}
 		else {
-			fifoput(GetCommand(context), (cell*)e);
+			fifoput(GetCommand(context), (fifocell*)e);
 			wakeUp(context);
 		}
 	}
@@ -316,12 +315,10 @@ void msCloseMutex (unsigned int mutex) {}
 
 static void InitMachine (TLinuxPtr machine)
 {
-	#ifndef LINUX_24
-	machine->timerTask.next = NULL;			/* Next item in list - queue_task will do this for us */
-	#endif
-	machine->timerTask.sync = 0;    		/* A flag meaning we haven't been inserted into a task queue yet */
-	machine->timerTask.routine = TimerTask;   	/* The function to run */
-	machine->timerTask.data = gMem;        		/* the arg parameter to the interrupt routine : the MidiShare global data */
+	//printk("midishare: initializing\n");
+	init_timer(&machine->timerTask);
+	machine->timerTask.data = (unsigned long)gMem;
+	machine->timerTask.function = TimerTask;
 	INIT_WAIT_QUEUE(machine->stopQueue);
 	machine->phase = 0;
 	machine->status = true;
@@ -336,7 +333,7 @@ static void InitMachine (TLinuxPtr machine)
 	to take into account that HZ may not be a divider of 1000 or
 	can even be greater than 1000 hz.	
 */	
-static void TimerTask(void * arg)
+static void TimerTask(unsigned long arg)
 {
 	TMSGlobalPtr g  = (TMSGlobalPtr) arg;
 	TLinuxPtr machine = (TLinuxPtr) g->local;
@@ -347,7 +344,8 @@ static void TimerTask(void * arg)
 		long i = machine->phase;
 		while (i<1000) { ClockHandler(g); i+=HZ; }
 		machine->phase = i-1000;
-		queue_task(&machine->timerTask, &tq_timer);  
+		machine->timerTask.expires = jiffies+1;
+		add_timer(&machine->timerTask); 
   	}
 }
 
@@ -369,8 +367,10 @@ void SpecialSleep  (TMSGlobalPtr g){}
 void OpenTimeInterrupts (TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
+	//printk("midishare: waking up\n");
 	do_gettimeofday(&machine->time);
-	queue_task(&machine->timerTask, &tq_timer); 
+	machine->timerTask.expires = jiffies+1;
+	add_timer(&machine->timerTask); 
 }
 
 /*__________________________________________________________________________*/
@@ -378,6 +378,7 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
+	//printk("midishare: sleeping\n");
 	machine->status = false;
 	interruptible_sleep_on(&machine->stopQueue);
 }

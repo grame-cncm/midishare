@@ -21,7 +21,7 @@ function conf_I386 ()
 	  move makefile.lib 	$MEM/makefile
 	  move makefile.network $LIB/Network/makefile
 	  move makefile.appls 	$APPLIB/makefile
-	  move makefile.kernel 	kernel/makefile
+	  move makefile.kernel 	kernel/Makefile
 	  move make.lib 		$LIB/makefile
 	  move make.module 		$LIB/make.module
 	  move tests/makefile.drivers 	tests/Drivers/makefile
@@ -44,7 +44,7 @@ function conf_powerpc ()
 	  remove_elf makefile.lib 		$MEM/makefile
 	  remove_elf makefile.network 	$LIB/Network/makefile
 	  remove_elf makefile.appls 	$APPLIB/makefile
-	  remove_elf makefile.kernel 	kernel/makefile
+	  remove_elf makefile.kernel 	kernel/Makefile
 	  remove_elf make.lib 			$LIB/makefile
 	  remove_elf make.module 		$LIB/make.module
 	  remove_elf tests/makefile.drivers tests/Drivers/makefile
@@ -88,4 +88,11 @@ echo Calling lib/configure
 cd lib
 ./configure $arch
 
+cat <<!
+===============================================
+  Linux kernel source code MUST be installed 
+    prior to compile the midishare module
+===============================================
+!
 echo end of configure
+

@@ -20,6 +20,7 @@
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
+   [08-12-04] YO - Changed kMidiShareMajor major number from 151 to 120 (temporary)
 
 */
 
@@ -30,7 +31,7 @@
 
 enum { kUserMode, kKernelMode };
 
-#define kMidiShareMajor 151
+#define kMidiShareMajor 120
 
 /* functions index for ioctl */
 

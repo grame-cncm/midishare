@@ -1,9 +1,11 @@
 
 TARGET = ../linux/lib/mskUtilities.o
 OPTIONS = -D__Pentium__ -DMODULE -D_LOOSE_KERNEL_NAMES -DCONFIG_KERNELD 
-INC = -I../linux/Include -I../common/Headers
-CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
-CC = gcc
+INC = -I../linux/Include -I../common/Headers -I../common/atomic
+#CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
+#CC = gcc
+
+CFLAGS := -O3 -Wall $(CFLAGS) $(OPTIONS) $(INC)
 
 
 SRC = k*.c

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -46,18 +46,32 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 188;
+	return 189;
 }
 
 
 /*===========================================================================
   External initialization functions
   =========================================================================== */
+void MidiShareWakeup1 (TMSGlobalPtr g) 
+{
+    SpecialWakeUp (g);
+    OpenMemory (Memory(g));
+    fifoinit ( SorterList(g), (fifocell*)lfpop(FreeList(Memory(g))) );
+}
+
+void MidiShareWakeup2 (TMSGlobalPtr g) 
+{
+    OpenTime (g);
+    OpenTimeInterrupts (g);
+	OpenDrivers(g);
+}
+
 void MidiShareWakeup (TMSGlobalPtr g) 
 {
     SpecialWakeUp (g);
-    fifoinit (SorterList(g));
     OpenMemory (Memory(g));
+    fifoinit ( SorterList(g), (fifocell*)lfpop(FreeList(Memory(g))) );
     OpenTime (g);
     OpenTimeInterrupts (g);
 	OpenDrivers(g);

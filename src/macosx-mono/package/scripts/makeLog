@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+
+function list() {
+	find $1 $2 $3 -print | sed -e 's/..\/.*root\//\//'	
+}
+
+for a in $(cat $1 | grep -v \#)
+do
+	dir=$(echo $a | cut -d+ -f1)
+	opt1=$(echo $a | cut -d+ -f2)
+	opt2=$(echo $a | cut -d+ -f3)
+	list $dir $opt1 $opt2
+done
+
+exit 0

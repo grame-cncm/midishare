@@ -1,10 +1,10 @@
 INC=../Headers
 OPTIONS= -D__Types__ -D__Macintosh__
 CFLAGS := -O3 $(OPTIONS) 
-LIB = -framework MidiShare
+LIB = -framework MidiShare -framework Player
 CC    = cc
 
-all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 
+all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msPlayer msEcho msClock
 
 
 msTutorial : msTutorial.c  
@@ -26,8 +26,11 @@ msDisplay : msDisplay.c
 	$(CC) $(CFLAGS) $(LIB) msDisplay.c   -o msDisplay  
 
 msMidiPlayer : msMidiPlayer.c  midifile.c   
-	$(CC) $(CFLAGS) $(LIB) msMidiPlayer.c  midifile.c  -o msMidiPlayer  
+	$(CC) $(CFLAGS) $(LIB) msMidiPlayer.c  midifile.c  -o msMidiPlayer 
 
+msPlayer : msPlayer.c   
+	$(CC) $(CFLAGS) $(LIB) msPlayer.c  -o msPlayer  
+ 
 msEcho : msEcho.c        
 	$(CC) $(CFLAGS) $(LIB)  msEcho.c  -o msEcho  
 
@@ -36,4 +39,4 @@ msClock : msClock.c
 
 
 clean:
-	rm msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 
+	rm msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msPlayer msEcho msClock 

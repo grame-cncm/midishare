@@ -174,7 +174,7 @@ MSFunctionType(MidiEvPtr) MSNewCellFunction (lifo* freelist)
                                   { return (MidiEvPtr)lfpop(freelist); }
 
 MSFunctionType(void)      MSFreeCellFunction (MidiEvPtr e, lifo* freelist)
-                                  { if( e) lfpush(freelist, (cell *)e); }
+                                  { if( e) lfpush(freelist, (lifocell *)e); }
 
 MSFunctionType(MidiEvPtr) MSNewEv (short typeNum, lifo* freelist)
                                   { return NewEvMethodTbl[typeNum](freelist, typeNum); }

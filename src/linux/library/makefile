@@ -1,7 +1,7 @@
 
 CC = gcc
-FLAGS := -O0 -Wall -g -D_REENTRANT -D__Pentium__
-CFLAGS := $(FLAGS) -fPIC -I../../common/Headers
+FLAGS := -O3 -Wall -g -D_REENTRANT -D__Pentium__
+CFLAGS := $(FLAGS) -fPIC -I../../common/Headers -I../../common/atomic
 
 LMS = libMidiShare
 LIB = $(LMS).so
@@ -38,8 +38,10 @@ clean :
 
 # DO NOT DELETE
 
-$(LMS).o: $(LMS).h ../kernel/msIOCtl.h
-$(LMS).o: ../../common/Headers/msDefs.h ../../common/Headers/msTypes.h
-$(LMS).o: msAppls.h ../../common/Headers/msMemory.h
-$(LMS).o: ../../common/Headers/lflifo.h ../../common/Headers/msSync.h
-$(LMS).o: ../../common/Headers/msEvents.h ../../common/Headers/msSeq.h
+libMidiShare.o: libMidiShare.h ../kernel/msIOCtl.h
+libMidiShare.o: ../../common/Headers/msDefs.h ../../common/Headers/msTypes.h
+libMidiShare.o: msAppls.h ../../common/Headers/msMemory.h
+libMidiShare.o: ../../common/atomic/lflifo.h ../../common/atomic/msAtomic.h
+libMidiShare.o: ../../common/atomic/msAtomicIntel.h
+libMidiShare.o: ../../common/Headers/msEvents.h ../../common/Headers/msSeq.h
+libMidiShare.o: ../../common/Headers/msMem.h

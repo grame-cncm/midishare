@@ -1,0 +1,81 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare Java Kit</TITLE>
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+
+<H1><CENTER>MidiShare Java Kit 1.26</CENTER></H1>
+
+<P><CENTER><HR SIZE="8"></CENTER></P>
+
+<P>The kit contains what is needed to run MidiShare applets/applications
+on <B>MacOSX.</B> The MidiShare/Java classes and natives libraries
+are JDK 1.4 (and later) compatible.</P>
+
+<P><HR ALIGN=LEFT></P>
+
+<H2>Installation</H2>
+
+<P><A HREF="http://www.grame.fr/MidiShare">MidiShare</A> must
+be installed on your machine. Natives libraries are named <B>libJMidi.x.x.x.jnilib</B>
+and <B>libJPlayer.x.x.x.jnilib </B>with the appropriate version
+number<B>. </B>The Java Virtual machine will look for <B>libJMidi.jnilib</B>
+and <B>libJPlayer.jnilib </B>which<B> </B>are symbolic links to
+the real files. These files can either be installed in the folder
+of the Java applications that needs them, or into the standard <B>
+/usr/lib/java</B> folder for an installation to be shared by all users.</P> 
+
+<P><HR ALIGN=LEFT></P>
+
+<H3>For developers :</H3>
+
+ The MidiShare installer puts natives libraries in <B>
+/usr/lib/java</B> and the <B>grame.jar</B> file in <B>/Library/Java/Extensions</B>. 
+To redistribute a MidiShare/Java application, the best is to give the MidiShare installer with the application.
+  
+
+<P>The <B>grame.jar</B> file located in <B>/Library/Java/Extensions</B> contains the Java classes needed
+to access the MidiShare API in Java. This file must be added in
+Java projects that need to access the MidiShare classes in Java.
+The <B>doc</B> folder contains the MidiShare/Java documentation
+generated with Javadoc. The <B>tutorial </B>contains MidiShare/Java sample
+code.
+
+
+<P><HR ALIGN=LEFT></P>
+
+<H3>Versions :</H3>
+
+<UL>
+  <LI><B>11/13/96 1.00 </B>First Release.
+  <LI><B>01/23/97 1.13 </B>Contains versions of the natives librairies
+  and classes to be used with several JVM (Metrowerks, Apple MRJ,
+  Sun JDK 1.02, Netscape 3.0).
+  <LI><B>06/12/97 1.15</B> MIDIFile management is now complete.
+  More functions to deal with MidiShare events and sequences have
+  been added (see the MidiEvent and MidiSequence classes). The
+  documentation has been updated.
+  <LI><B>03/28/98 1.20</B> Correction of bugs in MIDIFile management.
+  <LI><B>09/01/98 1.21</B> New packaging.
+  <LI><B>05/01/01 1.22</B> Updated for JNI interface. Installation
+  for Apple MRJ only.
+  <LI><B>05/02/02 1.23</B> Installation for MacOSX.
+  <LI><B>10/09/03 1.24</B> Installation for MacOSX framework version.
+  <LI><B>18/09/03 1.25</B> Correct the java natives libraries installation path.
+  <LI><B>16/03/05 1.26</B> Simplified hierachy
+
+</UL>
+
+<P><HR ALIGN=LEFT></P>
+
+<H3>Known problems:</H3>
+
+<UL>
+  <LI>None
+</UL>
+
+<P><HR ALIGN=LEFT>Comments and bug report at: <I><A HREF="mailto:MidiShare@grame.fr">MidiShare@grame.fr</A></I>
+
+</BODY>
+</HTML>

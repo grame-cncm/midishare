@@ -44,6 +44,48 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		D3FC6A9D07E211C3006F6A48 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = lflifo.c;
+			path = /Users/fober/src/midishare/src/common/atomic/lflifo.c;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D3FC6A9E07E211C3006F6A48 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = lflifo.h;
+			path = /Users/fober/src/midishare/src/common/atomic/lflifo.h;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D3FC6A9F07E211C3006F6A48 = {
+			fileRef = D3FC6A9D07E211C3006F6A48;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3FC6AA007E211C3006F6A48 = {
+			fileRef = D3FC6A9E07E211C3006F6A48;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3FC6AA107E211C3006F6A48 = {
+			fileRef = D3FC6A9D07E211C3006F6A48;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3FC6AA207E211C3006F6A48 = {
+			fileRef = D3FC6A9E07E211C3006F6A48;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //D30
 //D31
 //D32
@@ -86,22 +128,6 @@
 			path = INetAlert.cpp;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		F7219676020EB73001053118 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifo.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		F7219677020EB73001053118 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = lflifoppc.c;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
 		};
 		F7219678020EB73001053118 = {
 			fileEncoding = 30;
@@ -159,12 +185,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F721967F020EB73101053118 = {
-			fileRef = F7219676020EB73001053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F7219680020EB73101053118 = {
 			fileRef = F7219678020EB73001053118;
 			isa = PBXBuildFile;
@@ -201,12 +221,6 @@
 			settings = {
 			};
 		};
-		F7219686020EB73101053118 = {
-			fileRef = F7219677020EB73001053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F7219687020EB73101053118 = {
 			fileRef = F721967A020EB73001053118;
 			isa = PBXBuildFile;
@@ -221,12 +235,6 @@
 		};
 		F7219689020EB73101053118 = {
 			fileRef = F721967E020EB73001053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F721968A020EB73101053118 = {
-			fileRef = F7219676020EB73001053118;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -263,12 +271,6 @@
 		};
 		F7219690020EB73101053118 = {
 			fileRef = F7219675020EB73001053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F7219691020EB73101053118 = {
-			fileRef = F7219677020EB73001053118;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -389,8 +391,6 @@
 				D3EE80E405BC096F00FE2FFB,
 				F7219695020EB75B01053118,
 				F7219698020EB75B01053118,
-				F7219676020EB73001053118,
-				F7219677020EB73001053118,
 				F7219673020EB73001053118,
 				F727EB1C0209488B01053118,
 				F727EB120209449B01053118,
@@ -533,13 +533,12 @@
 				F727EAAD0209391401053118,
 				F727EAAE0209391401053118,
 				F727EB10020942D301053118,
-				F727EB720209827201053118,
 				F727EB9C02098A2801053118,
-				F721967F020EB73101053118,
 				F7219680020EB73101053118,
 				F7219681020EB73101053118,
 				F7219682020EB73101053118,
 				F7219683020EB73101053118,
+				D3FC6AA007E211C3006F6A48,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -576,16 +575,15 @@
 				F727EB220209488B01053118,
 				F727EB230209488B01053118,
 				F727EB240209488B01053118,
-				F727EB940209897D01053118,
 				F727EB9D02098A2801053118,
 				F7219684020EB73101053118,
 				F7219685020EB73101053118,
-				F7219686020EB73101053118,
 				F7219687020EB73101053118,
 				F7219688020EB73101053118,
 				F7219689020EB73101053118,
 				F721969B020EB75B01053118,
 				F721969C020EB75B01053118,
+				D3FC6A9F07E211C3006F6A48,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -685,13 +683,12 @@
 				F727EAF20209391501053118,
 				F727EAF30209391501053118,
 				F727EB11020942D401053118,
-				F727EB740209827201053118,
 				F727EB9E02098A2801053118,
-				F721968A020EB73101053118,
 				F721968B020EB73101053118,
 				F721968C020EB73101053118,
 				F721968D020EB73101053118,
 				F721968E020EB73101053118,
+				D3FC6AA207E211C3006F6A48,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -729,15 +726,14 @@
 				F727EB260209488B01053118,
 				F727EB270209488B01053118,
 				F727EB280209488B01053118,
-				F727EB750209827201053118,
 				F721968F020EB73101053118,
 				F7219690020EB73101053118,
-				F7219691020EB73101053118,
 				F7219692020EB73101053118,
 				F7219693020EB73101053118,
 				F7219694020EB73101053118,
 				F721969D020EB75B01053118,
 				F721969E020EB75B01053118,
+				D3FC6AA107E211C3006F6A48,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2096,8 +2092,8 @@
 		};
 		F727EB120209449B01053118 = {
 			children = (
-				F727EB700209827201053118,
-				F727EB710209827201053118,
+				D3FC6A9D07E211C3006F6A48,
+				D3FC6A9E07E211C3006F6A48,
 			);
 			isa = PBXGroup;
 			name = lflifo;
@@ -2230,40 +2226,6 @@
 			settings = {
 			};
 		};
-		F727EB700209827201053118 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = lflifo.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		F727EB710209827201053118 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = lflifoppc.c;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		F727EB720209827201053118 = {
-			fileRef = F727EB700209827201053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F727EB740209827201053118 = {
-			fileRef = F727EB700209827201053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F727EB750209827201053118 = {
-			fileRef = F727EB710209827201053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F727EB85020988D501053118 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -2353,12 +2315,6 @@
 		};
 		F727EB930209897D01053118 = {
 			fileRef = F727EA810209391401053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F727EB940209897D01053118 = {
-			fileRef = F727EB710209827201053118;
 			isa = PBXBuildFile;
 			settings = {
 			};

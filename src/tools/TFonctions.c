@@ -184,9 +184,10 @@ short Environment()
 /*____________________________________________________________________*/
 void OpenClose()
 {
-	int i, n;
+	int i, n, free;
 	short r[256];
 	
+	free = MidiFreeSpace();
 	print ("\nMidiOpen and MidiClose :\n");flush;
 	for( i=0; i<256; i++)
 	{
@@ -201,6 +202,9 @@ void OpenClose()
 	n= MidiCountAppls();
 	if( n!= 2)
 		print ("Warning : not all appplications are closed : remain %d\n", n);
+	n = MidiFreeSpace();
+	if (n != free) 
+		print ("Warning : incoherent freeSpace : %ld (lost: %d)\n", n, free-n);
 }
 
 /*____________________________________________________________________*/

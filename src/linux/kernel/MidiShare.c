@@ -22,13 +22,11 @@
    [08-09-99] DF - adaptation to new data structures
    [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
    [22-06-01] SL - New mskCloseAll function to close remaining application associated with a file descriptor
+   [04-04-05] YO - Removed modversions dependencies 
 
 
 */
 
-#ifdef MODVERSIONS
-#include <linux/modversions.h>
-#endif
 
 #include <linux/kernel.h>
 #include <asm/uaccess.h>

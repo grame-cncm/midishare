@@ -23,7 +23,6 @@
 #include "Python.h"
 #include <MidiShare.h>
 
-
 static PyObject *
 PyAddField(PyObject *self, PyObject *args)
 {
@@ -47,7 +46,7 @@ PyAddSeq(PyObject *self, PyObject *args)
 static PyObject *
 PyApplySeq(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -62,7 +61,7 @@ PyAvailEv(PyObject *self, PyObject *args)
 static PyObject *
 PyCall(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -87,7 +86,6 @@ PyClose(PyObject *self, PyObject *args)
 	return Py_None;
 }
 
-
 static PyObject *
 PyConnect(PyObject *self, PyObject *args)
 {
@@ -97,7 +95,6 @@ PyConnect(PyObject *self, PyObject *args)
 	Py_INCREF(Py_None);
 	return Py_None;
 }
-
 
 static PyObject *
 PyCopyEv(PyObject *self, PyObject *args)
@@ -136,14 +133,14 @@ PyCountFields(PyObject *self, PyObject *args)
 static PyObject *
 PyDTask (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyExec1DTask(PyObject *self, PyObject *args)
 {
-	/* not yet */
-       Py_INCREF(Py_None);
+	/* Not yet implemented */
+	Py_INCREF(Py_None);
 	return Py_None;
 }
 
@@ -177,11 +174,10 @@ PyFlushEvs(PyObject *self, PyObject *args)
 static PyObject *
 PyForgetTask(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
-
 
 static PyObject *
 PyFreeCell(PyObject *self, PyObject *args)
@@ -222,7 +218,7 @@ PyFreeSpace (PyObject *self, PyObject *args)
 static PyObject *
 PyGetApplAlarm (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -263,7 +259,7 @@ PyGetIndAppl (PyObject *self, PyObject *args)
 static PyObject *
 PyGetInfo (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -282,13 +278,13 @@ PyGetNamedAppl (PyObject *self, PyObject *args)
 static PyObject *
 PyGetRcvAlarm(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyGetSyncInfo (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -316,7 +312,6 @@ PyInt2ExtTime (PyObject *self, PyObject *args)
 	int time;
 	return (!PyArg_ParseTuple(args, "i", &time)) ? NULL : Py_BuildValue("i",MidiInt2ExtTime(time));
 }
-
 
 static PyObject *
 PyIsConnected (PyObject *self, PyObject *args)
@@ -385,7 +380,7 @@ PySendIm(PyObject *self, PyObject *args)
 static PyObject *
 PySetApplAlarm (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -413,7 +408,7 @@ PySetFilter (PyObject *self, PyObject *args)
 static PyObject *
 PySetInfo (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -432,7 +427,7 @@ PySetName (PyObject *self, PyObject *args)
 static PyObject *
 PySetRcvAlarm (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -440,7 +435,7 @@ PySetRcvAlarm (PyObject *self, PyObject *args)
 static PyObject *
 PySetSyncMode (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -454,19 +449,19 @@ PyShare (PyObject *self, PyObject *args)
 static PyObject *
 PySmpte2Time (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyTask (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyTime2Smpte (PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
@@ -474,7 +469,6 @@ PyTotalSpace (PyObject *self, PyObject *args)
 {
 	return Py_BuildValue("i", MidiTotalSpace());
 }
-
 
 /*--------------------------------------------------------------------------*/
 /* FOR COMMON FIELDS MANAGEMENT */
@@ -656,7 +650,6 @@ PyGetText (PyObject *self, PyObject *args)
 	 /* to be finished */
 }
 
-
 static PyObject *
 PySetText (PyObject *self, PyObject *args)
 {
@@ -800,7 +793,7 @@ PyGetIndDriver(PyObject *self, PyObject *args)
 static PyObject *
 PyGetDriverInfos(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -821,13 +814,13 @@ PyAddSlot(PyObject *self, PyObject *args)
 static PyObject *
 PyGetIndSlot(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PyRemoveSlot(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -835,7 +828,7 @@ PyRemoveSlot(PyObject *self, PyObject *args)
 static PyObject *
 PyGetSlotInfos(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -843,7 +836,7 @@ PyGetSlotInfos(PyObject *self, PyObject *args)
 static PyObject *
 PyConnectSlot(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -851,13 +844,13 @@ PyConnectSlot(PyObject *self, PyObject *args)
 static PyObject *
 PyIsSlotConnected(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 }
 
 static PyObject *
 PySetSlotName(PyObject *self, PyObject *args)
 {
-	/* not yet */
+	/* Not yet implemented */
 	Py_INCREF(Py_None);
 	return Py_None;
 }
@@ -907,7 +900,7 @@ static PyMethodDef Midi_methods[] = {
         {"NewCell", PyNewCell, METH_VARARGS, "MidiNewCell"},
         {"NewEv", PyNewEv, METH_VARARGS, "MidiNewEv"},
         {"NewSeq", PyNewSeq, METH_VARARGS, "MidiNewSeq"},
-                {"Open", PyOpen, METH_VARARGS, "MidiOpen"},
+		{"Open", PyOpen, METH_VARARGS, "MidiOpen"},
         {"Send", PySend, METH_VARARGS, "MidiSend"},
         {"SendAt", PySendAt, METH_VARARGS, "MidiSendAt"},
         {"SendIm", PySendIm, METH_VARARGS, "MidiSendIm"},

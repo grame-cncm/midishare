@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+
+. ./content
+
+case $1 in 
+	"dist")
+		echo remove the .DS_Store files
+		find $DIST -name ".DS_Store" -exec rm -rf {} \;
+		
+		echo generates install.log
+		./makeLog instlog > install.log
+		mv install.log $DIST/Applications/MidiShare
+		
+		echo -n change rights...
+		find $DIST -type d -exec chmod 755 {} \;
+		echo -n ...
+		find $DIST -type f -exec chmod g+w {} \;
+		echo -n ...
+		find $DIST -type f -exec chmod o-w {} \;
+		echo -n ...
+		
+		chmod 775 $DIST/Applications
+		chmod 775 $DIST/System
+		echo
+		
+		echo change owner
+		chown -R root:wheel $DIST/private
+		chown -R root:wheel $DIST/*
+		chown -R root:admin $DIST/Applications/*
+		
+		echo "protect .ini files"
+		chmod go-w $DIST/private/etc/MidiShare/defaults/*
+		;;
+
+	"dev")
+		echo generates dev install.log
+		./makeLog devlog > install.log
+		mv install.log $DEV/Applications/MidiShare/Developer
+		
+		echo -n change dev rights...
+		find $DEV -type d -exec chmod 755 {} \;
+		echo -n ...
+		find $DEV -type f -exec chmod g+w {} \;
+		echo -n ...
+		find $DEV -type f -exec chmod o-w {} \;
+		echo
+		
+		echo change dev owner
+		chown -R root:wheel $DEV
+		;;
+
+	*)
+		echo "finalize: undefined target"
+		echo "usage: finalize [ dist | dev ]"
+		;;
+esac

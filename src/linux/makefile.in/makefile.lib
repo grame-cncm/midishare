@@ -4,10 +4,11 @@ FLAGS := -O0 -Wall -g -D_REENTRANT -D_LOOSE_KERNEL_NAMES -D__Pentium__
 LOBJ = lib
 CC = gcc
 LD = ld
-CFLAGS := $(FLAGS)  -I../Headers
+CFLAGS := $(FLAGS)  -I../Headers -I../atomic
 
-OBJ = $(LOBJ)/msMemory.o $(LOBJ)/msEvents.o $(LOBJ)/msSeq.o 
-SRC = msMemory.c msEvents.c msSeq.c msMem.c
+LSRC = msMemory.c msEvents.c msSeq.c
+OBJ = $(patsubst %.c, $(LOBJ)/%.o, $(LSRC)) $(LOBJ)/lflifo.o
+SRC := $(LSRC) ../atomic/lflifo.c
 
 $(TARGET) :  $(OBJ)
 	$(LD) $(OBJ) -g  -r -o $(TARGET)
@@ -15,22 +16,14 @@ $(TARGET) :  $(OBJ)
 dep:
 	makedepend -- $(CFLAGS) -- -p$(LOBJ)/ -Y -m $(SRC)
 
-$(LOBJ)/msMemory.o: msMemory.c
-	$(CC) $(CFLAGS) -c msMemory.c -o $(LOBJ)/msMemory.o
-$(LOBJ)/msEvents.o: msEvents.c
-	$(CC) $(CFLAGS) -c msEvents.c -o $(LOBJ)/msEvents.o
-$(LOBJ)/msSeq.o:    msSeq.c
-	$(CC) $(CFLAGS) -c msSeq.c -o $(LOBJ)/msSeq.o
-
 clean : 
 	rm $(OBJ) $(TARGET)
 
+$(LOBJ)/%.o: %.c
+	$(CC) $(CFLAGS) -c $<  -o $@
+
+$(LOBJ)/%.o: ../atomic/%.c
+	$(CC) $(CFLAGS) -c $<  -o $@
+
 # DO NOT DELETE
 
-lib/msMemory.o: ../Headers/msDefs.h ../Headers/msTypes.h
-lib/msMemory.o: ../Headers/msMemory.h ../Headers/lflifo.h ../Headers/msSync.h
-lib/msMemory.o: ../Headers/msMem.h
-lib/msEvents.o: ../Headers/msEvents.h ../Headers/msDefs.h
-lib/msEvents.o: ../Headers/msTypes.h ../Headers/lflifo.h ../Headers/msSync.h
-lib/msSeq.o: ../Headers/msSeq.h ../Headers/msDefs.h ../Headers/msTypes.h
-lib/msSeq.o: ../Headers/lflifo.h ../Headers/msSync.h ../Headers/msEvents.h

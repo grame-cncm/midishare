@@ -3,12 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		01205B34015611757F000001 = {
-			isa = PBXLibraryReference;
+			explicitFileType = "compiled.mach-o.dylib";
+			isa = PBXFileReference;
 			path = libJMidi.1.1.1.jnilib;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		01205B35015611757F000001 = {
 			buildPhases = (
@@ -73,6 +75,8 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01F12F4CFEC8CE2211DB9C8B = {
+			buildSettings = {
+			};
 			buildStyles = (
 				0E20B662001FAFA711DB9C8B,
 				0E20B663001FAFA711DB9C8B,
@@ -95,6 +99,7 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		01F12F4FFEC8CEF111DB9C8B = {
 			children = (
@@ -103,6 +108,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //010
 //011
@@ -115,19 +121,22 @@
 //0E3
 //0E4
 		0E20B662001FAFA711DB9C8B = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		0E20B663001FAFA711DB9C8B = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -146,11 +155,7 @@
 			buildActionMask = 12;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
@@ -166,10 +171,12 @@
 //4B3
 //4B4
 		4B37C35504CD4CE800053105 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaVM.framework;
 			path = /System/Library/Frameworks/JavaVM.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4B37C35604CD4CE800053105 = {
 			fileRef = 4B37C35504CD4CE800053105;
@@ -190,16 +197,20 @@
 		F506805F02083B1F01053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = Midi.c;
 			path = ../src/Midi.c;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F506806002083B1F01053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = MidiAppl.c;
 			path = ../src/MidiAppl.c;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F506806102083B1F01053105 = {
 			fileRef = F506805F02083B1F01053105;

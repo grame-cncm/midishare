@@ -54,6 +54,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib python22.lib /nologo /dll /pdb:".\Release/MidiPlayer.pdb" /machine:I386 /out:".\Release/MidiPlayer.dll" /libpath:"..\PCbuild" /export:initMidiPlayer
+# SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "MidiPlayer - Win32 Debug"
 
@@ -80,6 +81,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /pdb:".\Debug/MidiPlayer.pdb" /debug /machine:I386 /out:".\Debug/MidiPlayer.dll" /pdbtype:sept /libpath:"..\PCbuild" /export:initMidiPlayer
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -92,7 +94,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\MidiPlayer.c
+SOURCE=..\src\MidiPlayer.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+
+APPSROOT=/private/etc/MidiShare
+MSFOLDER=defaults
+HOMEMS=$HOME/Library/Preferences/MidiShare
+INI="midishare.ini msQTDriver.ini msLANDriver.ini msWANDriver.ini"
+MISC=Vintage.sf2
+DONE=.done.1.89
+
+# --------------------------------------------
+# check every time
+# --------------------------------------------
+# creates the user MidiShare folder
+[ -d $HOMEMS ] || mkdir -p $HOMEMS
+
+# fetch the drivers .ini files
+for a in $INI
+do
+	[ -f $HOMEMS/$a ] || cp $APPSROOT/$MSFOLDER/$a $HOMEMS
+done
+
+[ -f $HOMEMS/$DONE ] && exit 0
+
+# --------------------------------------------
+# first time only
+# --------------------------------------------
+# fetch misc files (user existing files will be replaced)
+for a in $MISC
+do
+	[ -f $HOMEMS/$a ] || cp $APPSROOT/$MSFOLDER/$a $HOMEMS 2>/dev/null
+done
+
+# initialization done flag
+[ -f $HOMEMS/$DONE ] || date > $HOMEMS/$DONE

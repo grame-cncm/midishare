@@ -1,6 +1,6 @@
 
 CXX  = g++
-INC = -I../../Include -I../../../lib/Network/include -I../../../common/Headers
+INC = -I../../Include -I../../../lib/Network/include -I../../../common/Headers  -I../../../common/atomic
 NETLIB = ../../../lib/Network/msNetDriverLib.o
 LIB = $(NETLIB) -Wl,-L../../library -lMidiShare -lpthread
 CXXFLAGS = -g $(INC) -O3 -Wall -D__Pentium__
@@ -8,25 +8,12 @@ CFLAGS = $(CXXFLAGS)
 
 BIN=/usr/local/bin
 
-OBJ =	Handle.o \
-	INetAlert.o \
-	LinuxFeedback.o \
-	msInetDriver.o \
-	StateManager.o \
-	./sockets/TInetAddress.o \
-	./sockets/TNetInfos.o \
-	./sockets/TTCPSocket.o \
-	./sockets/TUDPSocket.o 
+CPPSRC = $(wildcard *.cpp sockets/*.cpp)
+CSRC = Handle.c $(wildcard ../../../common/atomic/*Intel.c)
+SRC  = $(CPPSRC) $(CSRC)
 
-SRC =	Handle.c \
-	INetAlert.cpp \
-	LinuxFeedback.cpp \
-	msInetDriver.cpp \
-	StateManager.cpp \
-	./sockets/TInetAddress.cpp \
-	./sockets/TNetInfos.cpp \
-	./sockets/TTCPSocket.cpp \
-	./sockets/TUDPSocket.cpp 
+OBJ = $(patsubst %.cpp, %.o, $(CPPSRC)) $(patsubst %.c, %.o, $(CSRC))
+
 
 Target = msInetDriver
 
@@ -37,7 +24,7 @@ $(Target) : $(OBJ) $(NETLIB)
 
 $(NETLIB) :
 	make -C ../../../lib/Network
-	
+
 clean : 
 	rm -f $(Target) $(OBJ)
 

@@ -101,7 +101,7 @@ typedef void (* Stop) ();
 */
 void CheckInstall()
 {
-	system("[ -x /Applications/MidiShare/.checkinstall ] && /Applications/MidiShare/.checkinstall");
+	system("[ -x /private/etc/MidiShare/checkinstall ] && /private/etc/MidiShare/checkinstall");
 }
 
 /*------------------------------------------------------------------------------*/

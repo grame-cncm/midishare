@@ -31,7 +31,7 @@
 #include "msTypes.h"
 
 #define MSNewCell(fl)		(MidiEvPtr)lfpop(fl)
-#define MSFreeCell(e, fl)	lfpush (fl, (cell*)(e))
+#define MSFreeCell(e, fl)	lfpush (fl, (lifocell*)(e))
 
 /* MidiShare functions interface */
 MSFunctionType(MidiEvPtr)  MSNewEv       (short typeNum, lifo* freelist);

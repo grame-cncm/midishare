@@ -167,7 +167,7 @@ RemotePtr TRemoteList::Add (TRemote * remote)
 	RemotePtr cl = Allocate ();
 	if (cl) {
 		cl->remote = remote;
-		lfpush (&fRemote, (cell *)cl);
+		lfpush (&fRemote, (lifocell *)cl);
 	}
 	return cl;
 }

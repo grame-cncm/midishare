@@ -76,7 +76,7 @@ void RemAllDstCon (TApplPtr appl, lifo* freelist)
 	while( cnx) {
 		next= cnx->nextDst;                 /* get the next connection       */
 		Rem1SrcCon (cnx->itsDst, cnx);      /* remove the current connection */
-		lfpush (freelist, (cell *)cnx);     /* free the connection           */
+		lfpush (freelist, (lifocell *)cnx); /* free the connection           */
 		cnx= next;							/* current = next connection     */
 	}
 	appl->dstList= 0;                       /*  connection list is now empty */
@@ -93,7 +93,7 @@ void RemAllSrcCon (TApplPtr appl, lifo* freelist)
 	while( cnx) {
 		next= cnx->nextSrc;                 /* get the next connection       */
 		Rem1DstCon(cnx->itsSrc, cnx);       /* remove the current connection */
-		lfpush (freelist, (cell *)cnx);     /* free the connection           */
+		lfpush (freelist, (lifocell *)cnx); /* free the connection           */
 		cnx= next;							/* current = next connection     */
 	}
 	appl->srcList= 0;                       /*  connection list is now empty */
@@ -132,7 +132,7 @@ static void ClearConnection (TApplPtr appSrc, TApplPtr appDest, TClientsPtr g)
 	if( cnx) {
 		Rem1SrcCon (appDest, cnx);
 		Rem1DstCon (appSrc, cnx);
-		lfpush (FreeList(g->memory), (cell*)cnx);
+		lfpush (FreeList(g->memory), (lifocell*)cnx);
 		CallAlarm (appSrc->refNum, MIDIChgConnect, g);
 	}
 }

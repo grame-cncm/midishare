@@ -41,5 +41,10 @@
 			 
 		   : In kmsDrvUtils.c : Added the declaration of the Slot macro that was missing
 			 
+2005/04/04	[YO] 
+		   : removed dependency with config/modversions.h
+		   : corrected small bugs in makefile.network
+		   : updated makefile.in/makefile.* in particular makefile.kernel 
+		   : updated configure
  
 	 

@@ -31,7 +31,9 @@ MSFunctionType(short)  MSGetVersion  (TMSGlobalPtr g);
 /* initialization function */
 MSFunctionType(void)   MSSpecialInit ( ulong defaultSpace, TMSGlobalPtr g);
 
-void MidiShareWakeup (TMSGlobalPtr g);
+void MidiShareWakeup1 (TMSGlobalPtr g);
+void MidiShareWakeup2 (TMSGlobalPtr g);
+//void MidiShareWakeup (TMSGlobalPtr g);
 void MidiShareSleep  (TMSGlobalPtr g);
 
 #endif

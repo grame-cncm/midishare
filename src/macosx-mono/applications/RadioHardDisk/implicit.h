@@ -20,14 +20,14 @@
 
 */
 
-#ifndef __implicit__
-#define __implicit__
+#ifndef __msimplicit__
+#define __msimplicit__
 
 //#include <Carbon/Carbon.h>
 #include "InetTypes.h"
 typedef unsigned char 	Boolean;
 typedef unsigned char 	Byte;
 typedef unsigned char * Ptr;
-typedef int				socklen_t;
+//typedef int				socklen_t;
 
 #endif

@@ -51,7 +51,7 @@ MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r,
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
+		fifoput (schedlist, (fifocell*)ev);
 	}
 }
 
@@ -72,7 +72,7 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
+		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
 }
@@ -94,7 +94,7 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
+		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
 }
@@ -119,7 +119,7 @@ MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
 {
 	MidiEvPtr ev, next;
 	if (CheckRefNum(g, refnum)) {
-		ev = (MidiEvPtr)fifoclear (&g->appls[refnum]->dTasks);
+		ev = (MidiEvPtr)fifoflush (&g->appls[refnum]->dTasks);
 		while (ev) {
 			next= Link(ev);
 			MSFreeEv (ev, FreeList(g->memory));

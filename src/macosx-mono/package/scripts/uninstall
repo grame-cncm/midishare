@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+
+TRASH=$HOME/.Trash
+
+function remove () {
+	while [ $1 ]
+	do
+		a=$1
+		opt=f
+		[ -d $a ] && opt=rf
+		echo remove -$opt $a
+		rm -$opt $a
+		shift
+	done
+}
+
+remove /Applications/MidiShare
+remove /System/Library/Frameworks/MidiShare.framework
+remove /System/Library/Frameworks/Player.framework
+
+remove /private/etc/MidiShare
+
+remove /usr/lib/java/libJMidi*.jnilib
+remove /usr/lib/java/libJPlayer*.jnilib
+
+remove /usr/lib/msLANDriver*.so
+remove /usr/lib/msWANDriver*.so
+remove /usr/lib/msMidiDriver*.so
+remove /usr/lib/msQTDriver*.so
+
+remove Library/Java/Extensions/grame.jar
+remove Library/Java/Extensions/grame.jar
+
+remove $HOME/Library/Preferences/MidiShare
+remove $HOME/.MidiShare
+
+exit 0

@@ -59,6 +59,7 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 			makeDriver (clients, appl, ref, infos, op);
 			clients->nbDrivers++;
 			if (clients->nbAppls) {
+				makeClientFifos (clients, appl);
 				DriverWakeUp (appl);
 				CallAlarm (ref, MIDIOpenDriver, clients);
 			}
@@ -296,6 +297,7 @@ void OpenDrivers (TMSGlobalPtr g)
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (appl->folder == kDriverFolder)) {
+			makeClientFifos (clients, appl);
 			DriverWakeUp(appl);
 			n--;
 		}
@@ -311,6 +313,9 @@ void CloseDrivers (TMSGlobalPtr g)
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (appl->folder == kDriverFolder)) {
 			DriverSleep (appl);
+			// clear the fifos but don't take care of getting the cells back
+			// since the memory is freed right after the CloseDrivers call
+			clearClientFifos(0, appl);
 			appl->srcList = appl->dstList = 0;
 			n--;
 		}
