@@ -11,6 +11,7 @@
  *	MIDI Files	version 1.00
  */
  
+ 
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
@@ -22,12 +23,12 @@
 #define MFAPI
 #include "MidiShare.h"
 #define nil 0
-#define  errno  /* a revoir */
+#define errno  /* a revoir */
 #endif
 
 
 #ifdef __Macintosh__
-#include <midishare.h>
+#include <midisharePPC.h>
 #define FAR
 #define NEAR
 #define MFAPI
@@ -100,6 +101,7 @@ enum { midifile0= 0, midifile1, midifile2};
 #define MDF_Mark		6			/* marker							*/
 #define MDF_CuePt		7			/* cue point						*/
 #define MDF_ChanPref	0x20		/* MIDI Channel Prefix				*/
+#define MDF_PortPref	0x21		/* MIDI Port Prefix					*/
 #define MDF_EndTrk		0x2F		/* end track						*/
 #define MDF_Tempo		0x51		/* tempo change						*/
 #define MDF_Offset		0x54		/* smpte offset						*/
@@ -110,6 +112,7 @@ enum { midifile0= 0, midifile1, midifile2};
 /* length of the differents meta events */
 #define MDF_NumSeqLen	2
 #define MDF_ChanPrefLen 1
+#define MDF_PortPrefLen 1
 #define MDF_EndTrkLen	0
 #define MDF_TempoLen	3
 #define MDF_OffsetLen	5

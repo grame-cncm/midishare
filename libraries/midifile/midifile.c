@@ -26,7 +26,7 @@
  * v119 [Sept 23,99]   SL use of MDF_Header_SIZE and MDF_Trk_SIZE to avoid alignement problems for data structures
  * v120 [Jan 1,00]     JJC bug correction in write_SeqNum and MidiFileCloseTrack functions
  * v121 [Dec 4,00]     SL remove the obsolete __MWERKS__ tag
-
+ * v122 [Apr 23,01]    SL add PortPrefix management : works with version 185 or later
 
  */
 
@@ -44,7 +44,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	121				/* source code version 			*/
+#define SRC_VERSION	122				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -67,6 +67,7 @@ static MidiEvPtr read_timeSign( MIDIFilePtr fd, long len, short);
 static MidiEvPtr read_seqNum( MIDIFilePtr fd, long len, short);
 static MidiEvPtr read_chanPref( MIDIFilePtr fd, long len, short);
 static MidiEvPtr read_smpte( MIDIFilePtr fd, long len, short);
+static MidiEvPtr read_portPref( MIDIFilePtr fd, long len, short);
 static Boolean write_note( MIDIFilePtr fd, MidiEvPtr ev, short status);
 static Boolean write_2DataEv( MIDIFilePtr fd, MidiEvPtr ev, short status);
 static Boolean write_1DataEv( MIDIFilePtr fd, MidiEvPtr ev, short status);
@@ -85,6 +86,7 @@ static Boolean write_tempo( MIDIFilePtr fd, MidiEvPtr ev, short);
 static Boolean write_smpte( MIDIFilePtr fd, MidiEvPtr ev, short);
 static Boolean write_timeSign( MIDIFilePtr fd, MidiEvPtr, short);
 static Boolean write_keySign( MIDIFilePtr fd, MidiEvPtr, short);
+static Boolean write_portPref( MIDIFilePtr fd, MidiEvPtr ev, short);
 
 
 /*--------------------------------------------------------------------------*/
@@ -126,7 +128,7 @@ static char metaCodeTbl[]=
 		0xf1, 0xb0, 0xb0, 0xb0,
 		0, 1, 2, 3, 4, 5, 6, 7,
 		0x20, 0x2f, 0x51, 0x54,
-		0x58, 0x59, 0x7f
+		0x58, 0x59, 0x7f,0x21
 	};
 
 /*------------------- meta event/type correspondence -----------------------*/
@@ -135,7 +137,7 @@ static char metaTypeTbl[]=
 	  0,0,0,0,0,0,0,0,				/*  8-15 undefs	*/
 	  0,0,0,0,0,0,0,0,				/* 16-23 undefs	*/
 	  0,0,0,0,0,0,0,0,				/* 24-31		*/
-	  9,0,0,0,0,0,0,0,				/* 32-39 undefs	*/
+	  9,16,0,0,0,0,0,0,				/* 32-39 undefs	*/
 	  0,0,0,0,0,0,0,10,				/* 40-47		*/
 	  0,0,0,0,0,0,0,0,				/* 48-55 undefs	*/
 	  0,0,0,0,0,0,0,0,				/* 56-63 undefs	*/
@@ -196,7 +198,8 @@ static ReadMetaFunc ReadExtTbl[]=
 			read_smpte,			/* 145 typeSMPTEOffset	*/
 			read_timeSign,		/* 146 typeTimeSign		*/
 			read_keySign,		/* 147 typeKeySign		*/
-			read_text			/* 148 typeSpecific		*/
+			read_text,			/* 148 typeSpecific		*/
+			read_portPref		/* 149 typePortPrefix  	*/	
 	};
 
 static WriteFunc WriteEvTbl[]=
@@ -245,7 +248,9 @@ static WriteFunc WriteExtTbl[]=
 			write_smpte,		/* 145 typeSMPTEOffset	*/
 			write_timeSign,		/* 146 typeTimeSign		*/
 			write_keySign,		/* 147 typeKeySign		*/
-			write_texte			/* 148 typeSpecific		*/
+			write_texte,		/* 148 typeSpecific		*/
+			write_portPref,		/* 149 typePortPrefix	*/
+			
 	};
 
 
@@ -546,6 +551,19 @@ static Boolean write_chanPref( MIDIFilePtr f, MidiEvPtr ev, short unused1)
 	putc( MDF_ChanPref, fd);				/* meta evt	type	*/
 	putc( MDF_ChanPrefLen, fd);				/* length			*/
 	putc( ChanPrefix(ev), fd);
+	return !ferror( fd);	
+}
+
+/*--------------------------------------------------------------------------*/
+static Boolean write_portPref( MIDIFilePtr f, MidiEvPtr ev, short unused1)
+{
+	FILE *fd;
+	
+	fd= f->fd;
+	putc( META, fd);						/* meta evt	header	*/
+	putc( MDF_PortPref, fd);				/* meta evt	type	*/
+	putc( MDF_PortPrefLen, fd);				/* length			*/
+	putc( PortPrefix(ev), fd);
 	return !ferror( fd);	
 }
 
@@ -1062,6 +1080,22 @@ static MidiEvPtr read_chanPref( MIDIFilePtr fd, long len, short unused1)
 	else if( ev= MidiNewEv( typeChanPrefix))
 	{
 		ChanPrefix(ev)= getc(fd->fd);
+		fd->_cnt-= len;
+	}
+	else MidiFile_errno= MidiFileErrEvs;
+	return ev;
+}
+
+/*--------------------------------------------------------------------------*/
+static MidiEvPtr read_portPref( MIDIFilePtr fd, long len, short unused1)
+{
+	MidiEvPtr ev=nil;
+	
+	/*  read only if MidiShare version > 185 to avoid error */
+	if ((MidiGetVersion () < 185) || (len != MDF_PortPrefLen)) 		/* message length */
+		mdf_ignoreEv( fd, len);
+	else if( ev= MidiNewEv( typePortPrefix)){ 
+		PortPrefix(ev)= getc(fd->fd);
 		fd->_cnt-= len;
 	}
 	else MidiFile_errno= MidiFileErrEvs;
