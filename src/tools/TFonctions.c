@@ -678,6 +678,17 @@ static void Mail()
 		fprintf( stdout, "Warning : incorrect return : %ld\n", b);
 }
 
+
+/*____________________________________________________________________*/
+typedef struct ApplContext {
+	MidiEvPtr t1;
+	MidiEvPtr t2;
+	Boolean res1;
+	Boolean res2;
+}ApplContext;
+
+ApplContext gContext;
+
 /*____________________________________________________________________*/
 #ifdef PASCALTASKS
 static pascal void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
@@ -692,6 +703,30 @@ void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
 
 /*____________________________________________________________________*/
 #ifdef PASCALTASKS
+static pascal void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
+#endif
+#ifdef CTASKS
+void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
+#endif
+{
+	gContext.res1 = true;
+	MidiForgetTask(&gContext.t1);
+	MidiForgetTask(&gContext.t2);
+}
+
+/*____________________________________________________________________*/
+#ifdef PASCALTASKS
+static pascal void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
+#endif
+#ifdef CTASKS
+void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
+#endif
+{
+	gContext.res2 = true;
+}
+
+/*____________________________________________________________________*/
+#ifdef PASCALTASKS
 static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
@@ -702,6 +737,7 @@ void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 }
 
 /*____________________________________________________________________*/
+
 static void Tasks( Boolean isFreeMem)
 {
 	MidiEvPtr e;
@@ -725,6 +761,56 @@ static void Tasks( Boolean isFreeMem)
 	fprintf( stdout, "%lx %s\n", e, OK);
 	if( (p1!= 1) && isFreeMem)
 		fprintf( stdout, "Warning : task not completed !\n");
+		
+	fprintf( stdout, "    MidiForgetTask(1) : ");flush;	
+	p1= 0;
+	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
+	MidiForgetTask(&e);
+	fprintf( stdout, "%s\n",OK);
+	if(e) fprintf( stdout, "Warning : MidiForgetTask does not set task address to 0 !\n");
+	time+= 4;
+	while( MidiGetTime() <= time);
+	if( (p1!= 0) && isFreeMem)
+		fprintf( stdout, "Warning : MidiForgetTask does not forget the task!\n");
+	
+	
+	/* test MidiForgetTask inside a task execution */
+	fprintf( stdout, "    MidiForgetTask(2) : ");flush;	
+	gContext.res1 = gContext.res2 = false;
+	gContext.t1 = gContext.t2 = 0;
+	time = MidiGetTime()+10 ;
+	gContext.t1= MidiTask( MyTask2, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	fprintf( stdout, "%s\n",OK);
+	time+= 14;
+	while( MidiGetTime() <= time);
+	if( !gContext.res1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 not completed !\n");
+	if( gContext.res2 && isFreeMem)
+		fprintf( stdout, "Warning : task2 not forgeted !\n");
+	if( gContext.t1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 address not set to 0 !\n");
+	if( gContext.t2 && isFreeMem)
+		fprintf( stdout, "Warning : task2 address not set to 0 !\n");
+	
+	/* test MidiForgetTask inside a task execution with late tasks */
+	fprintf( stdout, "    MidiForgetTask(3) : ");flush;	
+	gContext.res1 = gContext.res2 = false;
+	gContext.t1 = gContext.t2 = 0;
+	time = MidiGetTime()-10 ;
+	gContext.t1= MidiTask( MyTask2, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	fprintf( stdout, "%s\n",OK);
+
+	if( !gContext.res1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 not completed !\n");
+	if( gContext.res2 && isFreeMem)
+		fprintf( stdout, "Warning : task2 not forgeted !\n");
+	if( gContext.t1 && isFreeMem)
+		fprintf( stdout, "Warning : task1 address not set to 0 !\n");
+	if( gContext.t2 && isFreeMem)
+		fprintf( stdout, "Warning : task2 address not set to 0 !\n");
+	
 			
 	fprintf( stdout, "    MidiDTask : ");flush;
 	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
