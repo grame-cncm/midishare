@@ -31,15 +31,39 @@
 #include "msLog.h"
 
 //*____________________________________________________________________________*/
+static void DropClients  (CommunicationChan cc)
+{
+	TApplPtr * appls = Appls(gMem);
+	int i;
+	
+	for (i=0; i<MaxAppls; i++) {
+		TApplPtr appl = appls[i];
+		if (appl && appl->netFlag) {
+			msApplContextPtr  ac = (msApplContextPtr)appl->context;
+			if (cc == ac->chan) {
+				LogWrite ("Client application \"%s\" (%d) dropped", pub(appl, name), pub(appl, refNum));
+				if (ac->filterh) msSharedMemClose(ac->filterh);
+				MidiClose (pub(appl, refNum));
+				CCDec (cc);
+				FreeApplContext(ac);
+			}
+		}
+	}
+}
+
+//*____________________________________________________________________________*/
 static void RejectClient  (TApplPtr appl)
 {
-	msApplContextPtr  ac = (msApplContextPtr)appl->context;
-	CommunicationChan cc = ac->chan;
+//	msApplContextPtr  ac = (msApplContextPtr)appl->context;
+//	CommunicationChan cc = ac->chan;
 
+	LogWrite ("Client application \"%s\" (%d) to be rejected", pub(appl, name), pub(appl, refNum));
+/*
 	if (ac->filterh) msSharedMemClose(ac->filterh);
 	MidiClose (pub(appl, refNum));
 	CCDec (cc);
 	FreeApplContext(ac);
+*/
 }
 
 //*____________________________________________________________________________*/
@@ -54,7 +78,7 @@ void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
 	msStreamStart (stream);
 	RefNum(alarm) = (uchar)pub(appl, refNum);
     if (!msStreamPutEvent (stream, alarm)) {
-        LogWriteErr ("CallNetSendAlarm failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
+        LogWriteErr ("CallNetSendAlarm failed for client %s (%d)", pub(appl, name), pub(appl, refNum));
     }
     else {
         len = msStreamSize(stream);
@@ -68,8 +92,8 @@ failed:
     /* in case of failure, the client should be rejected */
 	/* and the client application closed */
     MidiFreeEv (alarm);
-	LogWriteErr ("CCRTWrite failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
-	RejectClient (appl);
+//	LogWriteErr ("CCRTWrite failed for client \"%s\" (%d)", pub(appl, name), pub(appl, refNum));
+//	RejectClient (appl);
 }
 
 //*____________________________________________________________________________*/
@@ -84,7 +108,6 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	fifo * f = &appl->rcv;
 	MidiEvPtr e = (MidiEvPtr)fifoget(f);
 
-//printf ("CallNetSend msStreamStart %lx %lx %lx\n", cc, rt, stream);
 	msStreamStart (stream);
 	while (e) {
 		RefNum(e) = (uchar)pub(appl, refNum);
@@ -104,14 +127,13 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	len = msStreamSize(stream);
 	n = CCRTWrite (cc, rt->wbuff, len);
     if (n != len) goto failed;
-//printf ("CallNetSend end\n");
 	return;
 
 failed:
     /* in case of failure, the client should be rejected */
 	/* and the client application closed */
-	LogWriteErr ("CCRTWrite failed for client %s (%d)\n", pub(appl, name), pub(appl, refNum));
-	RejectClient (appl);
+//	LogWriteErr ("CCRTWrite failed for client %s (%d)", pub(appl, name), pub(appl, refNum));
+//	RejectClient (appl);
 }
 
 /*____________________________________________________________________________*/
@@ -142,25 +164,8 @@ static ThreadProc(RTListenProc, arg)
 				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
 		}
 		else break;
-	} while (true);
-/*
-	while (CCRTRead (cc, rt->rbuff, kRTReadBuffSize) > 0) {
-		do {
-			int ret;
-			MidiEvPtr e = msStreamGetEvent (parse, &ret);
-			if (e) {
-				EventHandlerProc(e);
-				if (!msStreamGetSize(parse)) break;
-			}
-			else {
-				if (ret != kStreamNoMoreData)
-					LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
-				break;
-			}
-		} while (true);
-		msStreamParseReset (parse);
-	}
-*/
+	} while (CCRefCount(cc));
+	DropClients (cc);
 	return 0;
 }
 
