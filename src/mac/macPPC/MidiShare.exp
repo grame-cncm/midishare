@@ -31,6 +31,7 @@ MidiGetDriverInfos
 MidiAddSlot
 MidiGetIndSlot
 MidiRemoveSlot
+MidiSetSlotName
 MidiGetSlotInfos
 MidiConnectSlot
 MidiIsSlotConnected
