@@ -255,7 +255,7 @@ MidiSeqPtr UMidi::BuildTrack(MidiSeqPtr s)
 {
 	if (!s) return 0;
 	
-	ULONG len = UMidi::LengthSeq(s) * 3/2 + kMemoryLimit;
+	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
 	if (MidiFreeSpace() < len)  MidiGrowSpace(len);
 	return (MidiFreeSpace() > len)  ? UMidi::TrsfNoteToKeyOn (s): 0;
 }
@@ -267,7 +267,7 @@ MidiSeqPtr UMidi::BuildAllTrack(MidiSeqPtr s)
 	if (!s) return 0;
 	
 	MidiSeqPtr s1;
-	ULONG len = UMidi::LengthSeq(s) * 3/2 + kMemoryLimit;
+	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
 	if (MidiFreeSpace() < len)  MidiGrowSpace(len);
 	
 	if (MidiFreeSpace() > len  && (s1 = UMidi::TrsfNoteToKeyOn (s))){
