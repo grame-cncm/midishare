@@ -51,6 +51,7 @@ typedef struct {
 	fifo 			commands;	/* fifo of commands : task and alarms */
 	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thead */
 	Boolean wakeFlag;
+	Boolean status;    /* running mode : user or kernel */
 	
 } LinuxContext, * LinuxContextPtr;
 
@@ -87,6 +88,7 @@ TApplContextPtr CreateApplContext ()
 	fifoinit(&ptr->commands);
 	ptr->commandsQueue = 0;
 	ptr->wakeFlag = false;
+	ptr->status = kKernelMode;
 	return ptr;
 }
 
@@ -97,6 +99,18 @@ void DisposeApplContext (TApplContextPtr context)
 	if (context) {
 		FlushCommandFifo(context);
 		kfree (context);
+	}
+}
+
+/*_________________________________________________________________________*/
+void SetUserMode (short refnum, TClientsPtr g)
+{
+	if (CheckRefNum(g, refnum)) {
+		TApplPtr appl = g->appls[refnum];
+		if (appl) {
+			LinuxContextPtr c = (LinuxContextPtr)appl->context;
+			if (c) c->status = kUserMode;
+		}
 	}
 }
 
@@ -115,36 +129,45 @@ static void wakeUp (TApplContextPtr context)
 
 /*_________________________________________________________________________*/
 
-void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode)
+void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long alarmCode)
 {
 	MidiEvPtr ev;
+	LinuxContextPtr context = (LinuxContextPtr)c;
 	
-	/* put an applAlarm event in the application command fifo  */
-	
-	ev = MSNewEv(typeApplAlarm,FreeList(Memory(gMem)));  // A REVOIR
-
-	if (ev) {
-	  	MSSetField(ev,0,alarmCode);
-	  	fifoput(GetCommand(context), (cell*)ev);
-		wakeUp(context);
+	if (context->status) {
+		alarm (refNum, alarmCode);
 	}
-	
+	else {
+		/* put an applAlarm event in the application command fifo  */	
+		ev = MSNewEv(typeApplAlarm,FreeList(Memory(gMem)));  // A REVOIR
+
+		if (ev) {
+		  	MSSetField(ev,0,alarmCode);
+		  	fifoput(GetCommand(context), (cell*)ev);
+			wakeUp(context);
+		}
+	}
 }
 
 /*_________________________________________________________________________*/
 
-void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
+void CallRcvAlarm (TApplContextPtr c, RcvAlarmPtr alarm, short refNum)
 {
 	MidiEvPtr ev;
+	LinuxContextPtr context = (LinuxContextPtr)c;
 	
-	/* put a rcvAlarm event in the application command fifo  */
-	
-	ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
+	if (context->status) {
+		alarm (refNum);	
+	}
+	else {
+		/* put a rcvAlarm event in the application command fifo  */
+		ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
-	if (ev) {
-		//prnt("CallRcvAlarm\n");
-		fifoput(GetCommand(context), (cell*)ev);
-		wakeUp(context);
+		if (ev) {
+			//prnt("CallRcvAlarm\n");
+			fifoput(GetCommand(context), (cell*)ev);
+			wakeUp(context);
+		}
 	}
 }
 
@@ -172,18 +195,34 @@ void CallQuitAction (TApplContextPtr context)
 
 /*_________________________________________________________________________*/
 
-void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev)
+void CallTaskCode  (TApplContextPtr c, MidiEvPtr e)
 {
-	if (ev) {
-		fifoput(GetCommand(context), (cell*)ev);
-		wakeUp(context);
+	LinuxContextPtr context = (LinuxContextPtr)c;
+	
+	if (e) {
+		if (context->status) {
+			TTaskExtPtr task = (TTaskExtPtr)LinkST(e);
+			(*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
+		}
+		else {
+			fifoput(GetCommand(context), (cell*)e);
+			wakeUp(context);
+		}
 	}
 }
 
 /*_________________________________________________________________________*/
 /* not implemented */
 
-void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e) {}
+void CallDTaskCode  (TApplContextPtr c, MidiEvPtr e)
+{
+	LinuxContextPtr context = (LinuxContextPtr)c;
+	if (context->status && e) {
+		TTaskExtPtr task = (TTaskExtPtr)LinkST(e);
+		(*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
+	}
+
+}
 
 /*_________________________________________________________________________*/
 /* synchronization specific part                                           */
