@@ -18,20 +18,23 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - new memory management scheme
+
 */
 
-#include "msEvents.h"
+#include "msDefs.h"
 #include "msMemory.h"
-#include "msExtern.h"
-#include "msSync.h"
+#include "mem.h"
 
+
+#define kMaxEventsPerBlock	8191
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
 static ulong GrowSpace (MSMemoryPtr g, ulong nbev);
 static ulong NewBlock  (MSMemoryPtr g, ulong nbev);
-static void  AddBlock  (MSMemoryPtr g, MemBlockPtr mb, MidiEvPtr last);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -43,54 +46,21 @@ MSFunctionType(ulong) MSDesiredSpace (MSMemoryPtr g)
 
 MSFunctionType(ulong) MSTotalSpace (MSMemoryPtr g)
 {
-	return (g->active > 0) ? g->allocatedSpace : g->desiredSpace;
+	return g ? g->totalSpace : 0;
 }
 
 MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
 {
-	if (nbev > 0) {
-		if (g->active <= 0) {
-			g->desiredSpace += nbev;
-			return nbev;
-		}
-		else return GrowSpace (g, nbev);
+	if (g->active <= 0) {
+		g->desiredSpace += nbev;
+		return nbev;
 	}
-	return 0;
+	else return GrowSpace (g, nbev);
 }
 
 MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
 {
-	ulong count = 0, blocksize = freeSizeBlock;
-	MidiEvPtr start, last = 0, e;
-
-	if (g->active <= 0) return g->desiredSpace;
-	blocksize = 50;
-	start = e = MSNewCell(g);		/* first allocates blocksize count events */
-	while (e) {
-		count++;					/* update allocated events count */
-		last = e;					/* keep the last allocated event */
-		if (!--blocksize) break;
-		e = MSNewCell(g);
-		Link(last) = e;
-	}
-	if (last) {
-		Link(last) = 0;				/* close the allocated events list */
-		do {
-			e = g->freeList;		/* and replace the freelist with the allocated list */
-		} while (!CompareAndSwap (&g->freeList, e, start));
-									/* e is now the pointer to the remaining free events */
-		while (e) {
-			start = e;
-			blocksize = freeSizeBlock;
-			while (e && blocksize--) {	/* count blocksize events */
-				count++;
-				last = e;
-				e = Link(e);
-			}
-			PushMidiList (&g->freeList, start, last); /* free the block */
-		}
-	}
-	return count;
+	return g ? lfsize (FreeList(g)) : 0;
 }
 
 /*===========================================================================
@@ -98,42 +68,33 @@ MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
   =========================================================================== */
 void InitMemory (MSMemoryPtr g, ulong defaultSpace)
 {
-	g->freeList = 0;
-	g->blockList = 0;
-	g->allocatedSpace = 0;
+	lfinit (BlockList(g));
+	lfinit (FreeList(g));	
+	g->totalSpace = 0;
 	g->desiredSpace = defaultSpace;
 	g->active = 0;
-	InitEvents (g);
 }
 
 Boolean OpenMemory (MSMemoryPtr g) 
 {
-	Boolean retCode = true;
-	
 	g->active++;
 	if (g->active == 1) {
-		retCode = (GrowSpace(g, g->desiredSpace) != 0);
+		return (GrowSpace(g, g->desiredSpace) != 0);
 	}
-	return retCode;
+	return true;
 }
 
 void CloseMemory (MSMemoryPtr g)
 {
-	if (OpenMutex (kMemoryMutex) == kSuccess) {
-		g->active--;
-		if (g->active == 0) {
-			MemBlockPtr mem, next;
-			mem = g->blockList;
-			while (mem) {
-				next = mem->nextblock;
-				DisposeMemory (mem);
-				mem = next;
-			}
-			g->freeList = 0;
-			g->blockList = 0;
-			g->allocatedSpace = 0;
+	void* blk;
+	g->active--;
+	if (g->active == 0) {
+		blk = lfpop (BlockList(g));
+		while ( blk ) {
+			DisposeMemory (blk);
+			{ blk = lfpop (BlockList(g)); }
 		}
-		CloseMutex (kMemoryMutex);
+		InitMemory (g, g->desiredSpace);	
 	}
 }
 
@@ -141,45 +102,38 @@ void CloseMemory (MSMemoryPtr g)
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
-
-static void AddBlock (MSMemoryPtr g, MemBlockPtr mb, MidiEvPtr last)
-{
-	PushMemBlock (BlockList(g), mb);
-	PushMidiList (FreeList(g), Event(mb), last);
-}
-
 static ulong GrowSpace (MSMemoryPtr g, ulong nbev)
 {
 	ulong count = 0;
-	ulong maxEvs = kMaxEventsPerBlock;
 
-	if (OpenMutex (kMemoryMutex) == kSuccess) {
-		if ( nbev > maxEvs ) {
-			while ( nbev > maxEvs ) {
-				count += NewBlock(g, maxEvs);
-				nbev -= maxEvs;
-			}
+	while ( nbev > kMaxEventsPerBlock ) {
+		long n = NewBlock(g, kMaxEventsPerBlock);
+		if (n) {
+			count += n;
+			nbev -= kMaxEventsPerBlock;
 		}
-		if ( nbev > 0 )  count += NewBlock(g, nbev);
-		g->allocatedSpace += count;
-		CloseMutex (kMemoryMutex);
+		else return count;
 	}
+	if ( nbev > 0 )  count += NewBlock(g, nbev);
 	return count;
 }
 
 static ulong NewBlock (MSMemoryPtr g, ulong nbev)
 {
-	ulong allocated=0, size = (nbev * kLenEvent) + sizeof(MemBlockPtr);
-	MemBlockPtr mb = (MemBlockPtr)AllocateMemory (kSharedMemory, size);
-
-	if (mb) {
-		MidiEvPtr last, next = &mb->events;
-		nbev = allocated = size / kLenEvent;
-		while (nbev--) {
-			last = next;
-			last->link = ++next;
+	void** 		blk;
+	MidiEvPtr 	cl;
+	ulong 		i;
+	
+	if (nbev > 0) {
+		unsigned long size = nbev * sizeof(TMidiEv) + sizeof(void*);
+		blk = AllocateMemory (kSharedMemory, size);
+		if (!blk) return 0;
+		lfpush ( BlockList(g), (cell*)blk);
+		cl = (MidiEvPtr)(blk+1);
+		for (i=0; i<nbev; i++) {
+			lfpush(FreeList(g), (cell*)(cl++));
 		}
-		AddBlock (g, mb, last);
+		g->totalSpace += nbev; /* A REVOIR POUR UN SYSTEME LOCK FREE */
 	}
-	return allocated;
+	return nbev;
 }
