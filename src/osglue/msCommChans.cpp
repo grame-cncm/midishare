@@ -233,6 +233,21 @@ short CCGetID (CommunicationChan cc)
 	return PP(cc)->GetID ();
 }
 
+int CCInc (CommunicationChan cc)
+{
+	return PP(cc)->Inc ();
+}
+
+int CCDec (CommunicationChan cc)
+{
+	return PP(cc)->Dec ();
+}
+
+int CCRefCount (CommunicationChan cc)
+{
+	return PP(cc)->RefCount ();
+}
+
 /*
 void CCSetInfos (CommunicationChan cc, void * infos)
 {

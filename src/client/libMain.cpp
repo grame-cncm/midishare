@@ -34,6 +34,7 @@ extern "C" {
 
 	extern TMSGlobalPtr gMem;
 	short MidiGetLibVersion () ;
+	void  MSInitialize () ;
 
 #ifdef __cplusplus
 }
@@ -43,6 +44,15 @@ extern "C" {
 #ifdef WIN32
 void main () {}
 #endif
+
+#ifndef __MacOSX__
+/*
+  
+  On MacOSx the constructor of the static LibMain class is not called
+  unless a client call MidiGetLibVersion.
+  This strange behavior is unexplained.
+  
+*/
 
 class LibMain {
 	public:
@@ -55,16 +65,23 @@ LibMain gMSInit;
 /*____________________________________________________________________________*/
 LibMain::LibMain ()
 {
-    InitEvents ();
-    InitMemory (Memory(gMem), kDefaultCLientSpace);
-    OpenMemory (Memory(gMem));
-    gMem->pub = 0;		/* shared memory not yet mapped */
-    gMem->context = 0;	/* no contextual information available */
+	MSInitialize ();
 }
 
 LibMain::~LibMain ()
 {
 	CloseMemory(Memory(gMem));
+}
+#endif
+
+/*____________________________________________________________________________*/
+void  MSInitialize ()
+{ 
+    InitEvents ();
+    InitMemory (Memory(gMem), kDefaultCLientSpace);
+    OpenMemory (Memory(gMem));
+    gMem->pub = 0;		/* shared memory not yet mapped */
+    gMem->context = 0;	/* no contextual information available */
 }
 
 /*____________________________________________________________________________*/

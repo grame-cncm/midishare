@@ -39,7 +39,6 @@ static MidiEvPtr ReadFromServer ()
         if (n > 0) {
             int ret;
             e = msStreamGetEvent (&gStream.parse, &ret);
-//fprintf (stderr, "ReadFromServer %ld: ev %lx type %d\n", n, (long)e, EvType(e));
             if (e) break;
             else if (ret != kStreamNoMoreData) {
                 fprintf (stderr, "ReadFromServer read error (%d)\n", ret);
@@ -56,21 +55,18 @@ Boolean SendToServer (MidiEvPtr e, TMSGlobalPtr g)
     Ev2StreamPtr stream = &gStream.stream;
     long n; short len;
 
-//fprintf (stderr, "SendToServer %lx: type %d\n", (long)e, EvType(e));
     msStreamStart (stream);
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
             n = CCWrite (gComm, gStream.buff, len);
             if (n != len) goto failed;
-//fprintf (stderr, "SendToServer: %ld bytes written\n", n);
         } while (!msStreamContEvent (stream));
     }
     else {
         len = msStreamSize(stream);
         n = CCWrite (gComm, gStream.buff, len);
         if (n != len) goto failed;
-//fprintf (stderr, "SendToServer: %ld bytes written\n", n);
     }
     MidiFreeEv (e);
     return true;

@@ -45,7 +45,7 @@ class TPipesPair
 {
 	public:
 		 	 TPipesPair () : fRead(), fWrite() 
-		 	 			{ 	fNext = 0; fInfos = 0;
+		 	 			{ 	fNext = 0; fInfos = 0, fCount = 0;
 		 	 				fReadDesc.pipe=&fRead;
 		 	 				fWriteDesc.pipe=&fWrite;
 		 	 			}
@@ -64,6 +64,10 @@ class TPipesPair
 		void *	GetInfos ()					{ return fInfos; }
 		int		GetID ()					{ return fReadDesc.id; }
 
+		int		Inc ()						{ return ++fCount; }
+		int		Dec ()						{ return --fCount; }
+		int		RefCount ()					{ return fCount; }
+
 		void	SetName (PipeDesc * d, char *name, int id)
 				{ sprintf (d->name, "%s%d", name, id); d->id = id; }
 		
@@ -73,6 +77,7 @@ class TPipesPair
 		PipeDesc  	fReadDesc;
 		TPipe		fWrite;
 		PipeDesc  	fWriteDesc;
+		int			fCount;
 		void *  	fInfos;
 };
 

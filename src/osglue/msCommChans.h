@@ -69,6 +69,10 @@ void 				CloseCommunicationChannel   (CommunicationChan cc);
 long	CCWrite 	(CommunicationChan cc, void *buff, long len);
 long	CCRead 		(CommunicationChan cc, void *buff, long len);
 
+int		CCInc 		(CommunicationChan cc);
+int		CCDec 		(CommunicationChan cc);
+int		CCRefCount 	(CommunicationChan cc);
+
 short	CCGetID 	(CommunicationChan cc);
 /*
 void	CCSetInfos 	(CommunicationChan cc, void * infos);

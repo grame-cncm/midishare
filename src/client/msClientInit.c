@@ -39,6 +39,7 @@ CommunicationChan 	gComm = 0;
 /*____________________________________________________________________________*/
 static void DoCloseComm (void)
 {
+printf ("DoCloseComm\n");
     if (gComm) CloseCommunicationChannel (gComm);
     gComm = 0;
     if (gStream.gParseMthTable) free (gStream.gParseMthTable);
@@ -48,9 +49,14 @@ static void DoCloseComm (void)
 }
 
 /*____________________________________________________________________________*/
-static cdeclAPI(void) msLibExit ()
+static cdeclAPI(void) msCommExit ()
 {
 	DoCloseComm ();
+}
+
+/*____________________________________________________________________________*/
+static cdeclAPI(void) msShmExit ()
+{
 	if (gShMem) msSharedMemClose (gShMem);
 	gShMem = 0;
 }
@@ -58,13 +64,13 @@ static cdeclAPI(void) msLibExit ()
 /*____________________________________________________________________________*/
 void CloseComm (TMSGlobalPtr g)
 {
-    if (!g->nbAppls) DoCloseComm ();
+    if (!CCDec(gComm)) DoCloseComm ();
 }
 
 /*____________________________________________________________________________*/
 Boolean InitComm (TMSGlobalPtr g)
 {
-    if (!g->nbAppls) {
+    if (!gComm) {
 		MeetingPointChan mp = OpenMeetingPoint ();
 		if (!mp) return false;
 
@@ -84,7 +90,9 @@ Boolean InitComm (TMSGlobalPtr g)
             DoCloseComm ();
             return false;
         }
+		atexit (msCommExit);
     }
+	else CCInc (gComm);
     return true;
 }
 
@@ -96,7 +104,7 @@ Boolean CheckMidiShare (TMSGlobalPtr g)
 	gShMem = msSharedMemOpen (kShMemId, &ptr);
 	if (gShMem) {
 		g->pub = ptr;
-		atexit (msLibExit);
+		atexit (msShmExit);
 	}
 	return g->pub ? true : false;
 }

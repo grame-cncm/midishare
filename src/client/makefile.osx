@@ -22,7 +22,7 @@ DEST = /usr/lib
 COMP = -compatibility_version 1 -current_version 1
 
 $(TARGET) : makefile $(LIBS) $(OBJ) _MidiShare.exp
-	libtool -arch_only ppc -noall_load $(COMP) -o $(TARGET) -dynamic -init _MSInitialize $(OBJ) $(LIBS) -lcc_dynamic -lSystem -lstdc++
+	libtool -arch_only ppc -noall_load $(COMP) -o $(TARGET) -init _MSInitialize -dynamic $(OBJ) $(LIBS) -lcc_dynamic -lSystem -lstdc++
 	nmedit -s _MidiShare.exp $(TARGET)
 	
 makefile: makefile.osx
