@@ -1138,11 +1138,15 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("midi-accept-chan", scheme_make_prim_w_arity(sch_acceptChan,"midi-accept-chan", 3, 3), env);
   scheme_add_global("midi-accept-type", scheme_make_prim_w_arity(sch_acceptType,"midi-accept-type", 3, 3), env);
   scheme_add_global("midi-accepted-port?", scheme_make_prim_w_arity(sch_isAcceptedPort,"Midi-accepted-port?", 2, 2), env);
+  scheme_add_global("midi-is-accepted-port?", scheme_make_prim_w_arity(sch_isAcceptedPort,"Midi-is-accepted-port?", 2, 2), env);
   scheme_add_global("midi-accepted-chan?", scheme_make_prim_w_arity(sch_isAcceptedChan,"midi-accepted-chan?", 2, 2), env);
+  scheme_add_global("midi-is-accepted-chan?", scheme_make_prim_w_arity(sch_isAcceptedChan,"midi-is-accepted-chan?", 2, 2), env);
   scheme_add_global("midi-accepted-type?", scheme_make_prim_w_arity(sch_isAcceptedType,"midi-accepted-type?", 2, 2), env);
+  scheme_add_global("midi-is-accepted-type?", scheme_make_prim_w_arity(sch_isAcceptedType,"midi-is-accepted-type?", 2, 2), env);
 
   scheme_add_global("midi-connect", scheme_make_prim_w_arity(sch_connect,"midi-connect", 3, 3), env);
   scheme_add_global("midi-connected?", scheme_make_prim_w_arity(sch_isConnected,"midi-connected?", 2, 2), env);
+  scheme_add_global("midi-is-connected?", scheme_make_prim_w_arity(sch_isConnected,"midi-is-connected?", 2, 2), env);
  
   scheme_add_global("midi-set-port-state!", scheme_make_prim_w_arity(sch_setPortState,"midi-set-port-state!", 2, 2), env);
   scheme_add_global("midi-get-port-state", scheme_make_prim_w_arity(sch_getPortState,"midi-port-state?", 1, 1), env);
@@ -1157,7 +1161,6 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("midi-new-ev", scheme_make_prim_w_arity(sch_newEv,"midi-new-ev", 1, 1), env);
   scheme_add_global("midi-copy-ev", scheme_make_prim_w_arity(sch_copyEv,"midi-copy-ev", 1, 1), env);
   scheme_add_global("midi-free-ev", scheme_make_prim_w_arity(sch_freeEv,"midi-free-ev", 1, 1), env);
-  
   /* JH for sanity I add the midi-ev? predicat */
   scheme_add_global("midi-ev?", scheme_make_prim_w_arity(sch_isEv,"midi-ev?", 1, 1), env);
 
@@ -1168,7 +1171,7 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
  
   scheme_add_global("midi-set-link!", scheme_make_prim_w_arity(sch_setLink,"midi-set-link!", 2, 2), env);
   scheme_add_global("midi-get-link", scheme_make_prim_w_arity(sch_getLink,"midi-get-link", 1, 1), env);
- 
+
   scheme_add_global("midi-set-date", scheme_make_prim_w_arity(sch_setDate,"midi-set-date", 2, 2), env);
   scheme_add_global("midi-get-date", scheme_make_prim_w_arity(sch_getDate,"midi-get-date", 1, 1), env);
   scheme_add_global("midi-set-ref-num!", scheme_make_prim_w_arity(sch_setRefNum,"midi-set-ref-num", 2, 2), env);
@@ -1196,6 +1199,7 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("midi-free-seq", scheme_make_prim_w_arity(sch_freeSeq,"midi-free-seq", 1, 1), env);
   scheme_add_global("midi-clear-seq", scheme_make_prim_w_arity(sch_clearSeq,"midi-clear-seq", 1, 1), env);
 
+
   scheme_add_global("midi-send-im", scheme_make_prim_w_arity(sch_sendIm,"midi-send-im", 2, 2), env);
   scheme_add_global("midi-send", scheme_make_prim_w_arity(sch_send,"midi-send", 2, 2), env);
   scheme_add_global("midi-send-at", scheme_make_prim_w_arity(sch_sendAt,"midi-send-at", 3, 3), env);
@@ -1210,9 +1214,9 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("midi-flush-evs", scheme_make_prim_w_arity(sch_flushEvs,"midi-flush-evs", 1, 1), env);
   /* here the value for the types for use with player */
   /* I don't know how get type from player without this */
-   scheme_add_global("*<midi-seq>*",scheme_make_integer(seq_type),env);
-   scheme_add_global("*<midi-ev>*",scheme_make_integer(ev_type),env);
-   scheme_add_global("*<midi-filter>*",scheme_make_integer(filter_type),env);
+  scheme_add_global("*<midi-seq>*",scheme_make_integer(seq_type),env);
+  scheme_add_global("*<midi-ev>*",scheme_make_integer(ev_type),env);
+  scheme_add_global("*<midi-filter>*",scheme_make_integer(filter_type),env);
 
 
 #ifndef __UseMSThunking__
@@ -1231,6 +1235,7 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
 #endif 
 
   return scheme_void;
+
 }
 
 Scheme_Object *scheme_initialize(Scheme_Env *env)
