@@ -1,6 +1,6 @@
 
 CXX  = gcc
-INC = -I../../Include -I../../../lib/Network/include
+INC = -I../../Include -I../../../lib/Network/include -I../../../common/Headers
 NETLIB = ../../../lib/Network/msNetDriverLib.o
 LIB = $(NETLIB) -Wl,-L../../library -lMidiShare -lpthread
 CXXFLAGS = -g $(INC) -D__Pentium__
@@ -98,7 +98,6 @@ msInetDriver.o: ../../../lib/Network/include/MidiShareFilter.h
 msInetDriver.o: ../../Include/FilterUtils.h
 msInetDriver.o: ../../../lib/Network/include/TNetInfos.h
 msInetDriver.o: ../../../lib/Network/include/TRemoteMgr.h
-msInetDriver.o: ../../../lib/Network/include/lflifo.h
 msInetDriver.o: ../../../lib/Network/include/TMidiRemote.h
 msInetDriver.o: ../../../lib/Network/include/TMidiOutStream.h
 msInetDriver.o: ../../../lib/Network/include/TMidiPacket.h
