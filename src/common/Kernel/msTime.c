@@ -17,12 +17,13 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - Sorter initialization change
 
 */
 
 #include "msTime.h"
-
-#define SmpteFormat(g)	Smpte(Memory(g)).format
 
 /*===========================================================================
   Internal functions prototypes
@@ -69,7 +70,7 @@ void InitTime( TMSGlobalPtr g)
 void OpenTime( TMSGlobalPtr g)
 {
 	InitHorloge( g);
-	SorterInit( Sorter(g));
+	SorterInit( Sorter(g), 10);
 }
 
 
