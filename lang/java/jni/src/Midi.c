@@ -38,6 +38,7 @@
 /*           14/02/01 version 1.07 fonctions pour la gestion des drivers
 /*           19/03/02 version 1.08 fonctions MidiGetInfo et MidiSetInfo nŽcessaires pour le thread bloquant sur MacOS9
 /*           19/04/02 version 1.09 implementation de MidiForgetTask
+/*           06/11/02 version 1.10 test de validitŽ des pointeurs sur des objets Java passŽ au C
 /*
 /*****************************************************************************/
 
@@ -104,6 +105,13 @@
 	}
 	dest[0] = i;	
 }
+
+/*--------------------------------------------------------------------------*/
+#define Check_Pointer(env,ptr)\
+    if ((ptr) == NULL){\
+        (*(env))->ThrowNew((env), (*(env))->FindClass((env),"java.lang.NullPointerException"), "");\
+        return;\
+    }\
 
 /*--------------------------------------------------------------------------*/
 
@@ -390,7 +398,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetPortState
   (JNIEnv * env, jclass cl, jint port){
 
 	/* no more implemented */
-	//return MidiGetPortState(port);
 	return 0;
 }
 
@@ -410,7 +417,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_GetSyncInfo
 
 	TSyncInfo info;
 	jfieldID time,reenter,syncMode,syncLocked,syncPort,syncStart,syncStop,syncOffset,syncSpeed,syncBreaks,syncFormat;
- 	jclass syncinfoclass = (*inEnv)->GetObjectClass(inEnv, syncinfo);
+ 	jclass syncinfoclass;
+        
+        Check_Pointer(inEnv,syncinfo);
+        syncinfoclass = (*inEnv)->GetObjectClass(inEnv, syncinfo);
  
 	MidiGetSyncInfo (&info);
 	
@@ -443,7 +453,6 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_GetSyncInfo
 	(*inEnv)->SetIntField(inEnv, syncinfo, syncSpeed, info.syncSpeed);
 	(*inEnv)->SetIntField(inEnv, syncinfo, syncBreaks, info.syncBreaks );
 	(*inEnv)->SetIntField(inEnv, syncinfo, syncFormat,info.syncFormat );
-	
 }
 
 /*--------------------------------------------------------------------------*/
@@ -589,7 +598,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetFilter
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetInfo
   (JNIEnv * env, jclass cl, jint refnum, jint info){
 
-	MidiSetInfo(refnum,info);
+	MidiSetInfo(refnum,(void*)info);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -614,7 +623,6 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetPortState
   (JNIEnv * env, jclass cl, jint port, jint state){
   
   	/* no more implemented */
-	//MidiSetPortState(port,state);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -649,8 +657,10 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Smpte2Time
 	
 	TSmpteLocation loc;
  	jfieldID fformat,fhours,fminutes,fseconds,fframes,ffracs;
- 	
- 	jclass smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc);
+ 	jclass smpteposclass;
+        
+        Check_Pointer(inEnv,smpteloc);
+        smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc); 
  	
  	fformat = (*inEnv)->GetFieldID(inEnv, smpteposclass, "format",  "S");
  	fhours = (*inEnv)->GetFieldID(inEnv, smpteposclass, "hours",  "S");
@@ -676,6 +686,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Smpte2Time
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Task
   (JNIEnv * env, jclass cl, jint a0, jint a1, jint a2, jint a3, jint a4, jint a5){
+  
 	/* not implemented */
 	return 0;
 }
@@ -687,8 +698,11 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_Time2Smpte
 
 	TSmpteLocation loc;
  	jfieldID fformat,fhours,fminutes,fseconds,fframes,ffracs;
- 	jclass smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc);
- 	
+ 	jclass smpteposclass;
+        
+        Check_Pointer(inEnv,smpteloc);
+        smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc); 
+ 
  	MidiTime2Smpte(time,format, &loc);	
  	
  	fformat = (*inEnv)->GetFieldID(inEnv, smpteposclass, "format",  "S");
@@ -721,6 +735,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_TotalSpace
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_WriteSync
   (JNIEnv * env, jclass cl, jint a0, jint a1){
+  
 	/* not implemented */
 	return 0;
 }
@@ -752,7 +767,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDate
 }
 
 /*--------------------------------------------------------------------------*/
-
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetDate
   (JNIEnv * env, jclass cl, jint ev, jint date){
@@ -1107,10 +1121,13 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
 	
 	TDriverInfos infos;
 	jfieldID nameAux,version,slots;
-    Boolean res;
-	char *  buffer = (char *)NewPtr(128);
-	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
+        Boolean res;
+	char * buffer = (char *)NewPtr(128);
+	jclass infosclass ;
         
+        Check_Pointer(inEnv,jinfos);
+        infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
+      
         res = MidiGetDriverInfos(refnum,&infos);
  	
         if (res && buffer) {
@@ -1177,9 +1194,12 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
 	jfieldID nameAux,direction,cnxAux;
 	char *  buffer1 = (char *)NewPtr(128);
 	char *  buffer2 = (char *)NewPtr(128);
-	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
-    Boolean res;
+	jclass infosclass;
+        Boolean res;
 	int i;
+        
+        Check_Pointer(inEnv,jinfos);
+        infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
         
         res = MidiGetSlotInfos(*(SlotRefNum *)&slotrefnum,&infos);
         
