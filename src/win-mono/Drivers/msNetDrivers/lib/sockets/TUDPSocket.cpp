@@ -46,13 +46,12 @@ void TUDPSocket::Close ()
 {
 	if (fThread) {
 		fRunFlag = false;
-		WaitForSingleObject (fThread, 50);
+		WaitForSingleObject (fThread, 500);
 		CloseHandle (fThread);
 		fThread = 0;
 		fThreadID = 0;
 	}
 	if (Opened()) {
-//		if (fBind) ;
 		shutdown (fRef, 0);
 		closesocket (fRef);
 		fRef = 0;
@@ -89,7 +88,7 @@ DWORD TUDPSocket::ThreadCreate ()
 	fRunFlag = true;
 	fThread = CreateThread(NULL, 0, sok_listen, this, 0, &fThreadID);
 	if (fThread) {
-		SetThreadPriority (fThread, THREAD_PRIORITY_HIGHEST);
+		SetThreadPriority (fThread, THREAD_PRIORITY_TIME_CRITICAL);
 	}
 	else return GetLastError();
 	return noErr;
