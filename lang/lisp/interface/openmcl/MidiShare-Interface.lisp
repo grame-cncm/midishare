@@ -73,6 +73,7 @@
 ;;;   19-03-04   New MidiNewSmpteLocation, MidiFreeSmpteLocation, MidiNewSyncInfo, MidiFreeSyncInfo
 ;;;   19-03-04   Add nullptr and nullptrp for OpenMCL interface 
 ;;;	  22-03-04   Correct MidiFreeSmpteLocation and MidiFreeSyncInfo for OpenMcl interface
+;;;	  07-07-04   Val renamed to valint to avoid symbol conflict
 
 (in-package :cl-user)       
     
@@ -103,7 +104,7 @@
           "INSTALL-MIDISHARE-INTERFACE" "REMOVE-MIDISHARE-INTERFACE"
           "LINK" "DATE" "EVTYPE" "REF" "PORT" "CHAN" "FIELD" "FIELDSLIST" "PITCH" "VEL" "DUR"
           "LINKSE" "LINKST" "KPRESS" "CTRL" "PARAM" "NUM" "PREFIX" "TEMPO" "SECONDS"
-          "SUBFRAMES" "VAL" "PGM" "BEND" "CLK" "SONG" "FIELDS" "TEXT" "FMSG" "FCOUNT"
+          "SUBFRAMES" "VALINT" "PGM" "BEND" "CLK" "SONG" "FIELDS" "TEXT" "FMSG" "FCOUNT"
           "TSNUM" "TSDENOM" "TSCLICK" "TSQUARTER" "ALTERATION" "MINOR-SCALE" "INFO"
           "FIRSTEV" "LASTEV" "MIDISHARE"
           "MIDIGETVERSION" "MIDICOUNTAPPLS" "MIDIGETINDAPPL"
@@ -586,7 +587,7 @@
     (midigetfield e 1)))
 
 ;;;..................................................: val
-(defun val (e &optional v)
+(defun valint (e &optional v)
   (if v
     (midisetfield e 1 v)
     (midigetfield e 1)))
@@ -2069,7 +2070,7 @@
     (midisetfield e 1 v)
     (midigetfield e 1)))
 
-(defun val (e &optional v)
+(defun valint (e &optional v)
   (if v
     (midisetfield e 1 v)
     (midigetfield e 1)))
@@ -3016,7 +3017,7 @@
 
 ;;;..................................................: val
 ;;                                                                                               
-(defun val (e &optional v)
+(defun valint (e &optional v)
   (if v
     (midisetfield e 1 v)
     (midigetfield e 1)))
