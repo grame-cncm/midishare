@@ -185,6 +185,19 @@ pascal	void		MidiFlushDTasks (short refnum)					 	={0x7031, 0x2078, 0x00B8, 0x4E
 pascal	void		MidiExec1DTask 	(short refnum)					 	={0x7032, 0x2078, 0x00B8, 0x4E90};
 
 
+/*---------------------------------- Filters ----------------------------------*/
+
+pascal	MidiFilterPtr MidiNewFilter  (void)						={0x7051, 0x2078, 0x00B8, 0x4E90};
+pascal	void		MidiFreeFilter (MidiFilterPtr)				={0x7052, 0x2078, 0x00B8, 0x4E90};
+
+pascal	void		MidiAcceptPort(MidiFilterPtr f, short port, Boolean state)	={0x7053, 0x2078, 0x00B8, 0x4E90};
+pascal	void		MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state)	={0x7054, 0x2078, 0x00B8, 0x4E90};
+pascal	void		MidiAcceptType(MidiFilterPtr f, short type, Boolean state)	={0x7055, 0x2078, 0x00B8, 0x4E90};
+
+pascal	Boolean 	MidiIsAcceptedPort(MidiFilterPtr f, short port)	={0x7056, 0x2078, 0x00B8, 0x4E90};
+pascal	Boolean 	MidiIsAcceptedChan(MidiFilterPtr f, short chan)	={0x7057, 0x2078, 0x00B8, 0x4E90};
+pascal	Boolean 	MidiIsAcceptedType(MidiFilterPtr f, short type)	={0x7058, 0x2078, 0x00B8, 0x4E90};
+
 /*----------------------------------- MidiShare -------------------------------*/
 
 #define MidiShare() 	( **((long**)0xB8) == 0xD080D080 )
