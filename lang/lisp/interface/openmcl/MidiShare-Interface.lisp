@@ -72,6 +72,7 @@
 ;;;   17-03-04   Rename type macro to evtype in OpenMCL and CMUCL interfaces
 ;;;   19-03-04   New MidiNewSmpteLocation, MidiFreeSmpteLocation, MidiNewSyncInfo, MidiFreeSyncInfo
 ;;;   19-03-04   Add nullptr and nullptrp for OpenMCL interface 
+;;;	  22-03-04   Correct MidiFreeSmpteLocation and MidiFreeSyncInfo for OpenMcl interface
 
 (in-package :cl-user)       
     
@@ -2564,13 +2565,13 @@
   (ccl::make-record :<ts>mpte<l>ocation))
 
 (defun MidiFreeSmpteLocation (location)
-  (ccl::dispose-record location))
+  (ccl::free location))
 
 (defun MidiNewSyncInfo ()
-  (ccl::make-record :<ts>inc<i>nfo))
+  (ccl::make-record :<ts>ync<i>nfo))
 
 (defun MidiFreeSyncInfo (location)
-  (ccl::dispose-record location))
+  (ccl::free  location))
 
 
 ;;;
