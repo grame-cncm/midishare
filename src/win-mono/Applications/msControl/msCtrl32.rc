@@ -1,0 +1,213 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "msctrl.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+1800                    BITMAP  MOVEABLE PURE   "bmp1800.bmp"
+1811                    BITMAP  MOVEABLE PURE   "bmp1811.bmp"
+1812                    BITMAP  MOVEABLE PURE   "bmp1812.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+ABOUTDLG DIALOG DISCARDABLE  43, 28, 128, 128
+STYLE WS_POPUP | WS_CAPTION
+CAPTION "About msControler"
+FONT 10, "Times New Roman"
+BEGIN
+    LTEXT           "MidiShare Version :",IDC_STATIC,28,77,62,8
+    LTEXT           "1.00",235,93,77,19,8
+    PUSHBUTTON      "OK",1,98,107,23,15
+    CTEXT           "msControler send the more usefull MIDI messages.",
+                    IDC_STATIC,22,41,83,20
+    CTEXT           "Email : msh@rd.grame.fr",IDC_STATIC,17,85,97,9
+    LTEXT           "Copyright GRAME 1995",IDC_STATIC,27,106,65,16
+    CTEXT           "A freeware MidiShare application",IDC_STATIC,10,69,108,
+                    9
+    CONTROL         1811,IDC_STATIC,"Static",SS_BITMAP,6,6,114,32
+    CONTROL         "",IDC_STATIC,"Static",SS_WHITEFRAME,6,65,117,32
+    CONTROL         1812,IDC_STATIC,"Static",SS_BITMAP,7,105,18,17
+END
+
+UCTRL DIALOG DISCARDABLE  35, 27, 158, 107
+STYLE DS_3DLOOK | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "msControler"
+FONT 10, "Times New Roman"
+BEGIN
+    CTEXT           "0",IDD_TX_PORT,8,16,16,9,WS_BORDER
+    CTEXT           "1",IDD_TX_CHAN,8,50,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_PROG,35,16,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_VOL,55,16,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_MOD,73,16,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_PAN,92,16,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_PITCH,116,16,16,9,WS_BORDER
+    CTEXT           "0",IDD_TX_VEL,135,16,16,9,WS_BORDER
+    CTEXT           "Port",IDC_STATIC,7,7,19,8
+    CTEXT           "Chan",IDC_STATIC,7,42,19,8
+    CTEXT           "Prog",IDC_STATIC,34,7,19,8
+    CTEXT           "Vol",IDC_STATIC,53,7,19,8
+    CTEXT           "Mod",IDC_STATIC,72,7,19,8
+    CTEXT           "Pan",IDC_STATIC,91,7,19,8
+    CTEXT           "Pitch",IDC_STATIC,116,7,19,8
+    CTEXT           "Vel",IDC_STATIC,134,7,19,8
+    SCROLLBAR       IDD_SB_PROG,38,26,9,49,SBS_VERT
+    SCROLLBAR       IDD_SB_VOL,57,26,9,49,SBS_VERT
+    SCROLLBAR       IDD_SB_MOD,77,26,9,49,SBS_VERT
+    SCROLLBAR       IDD_SB_PAN,96,26,9,49,SBS_VERT
+    SCROLLBAR       IDD_SB_PORT,12,26,9,15,SBS_VERT
+    SCROLLBAR       IDD_SB_CHAN,12,60,9,15,SBS_VERT
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME,32,4,79,76
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME,4,4,25,76
+    SCROLLBAR       IDD_SB_VEL,139,26,9,49,SBS_VERT
+    SCROLLBAR       IDD_SB_PITCH,120,26,9,49,SBS_VERT
+    CTEXT           "Universal Controler",IDC_STATIC,34,88,73,8
+    PUSHBUTTON      "Exit",2,118,84,33,17
+    PUSHBUTTON      "",AboutButton,7,85,19,17,BS_BITMAP
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME,113,4,42,76
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME,4,82,107,22
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ICON                    ICON    DISCARDABLE     "icon.ico"
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+1 VERSIONINFO
+ FILEVERSION 1,0,2,0
+ PRODUCTVERSION 1,0,2,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "Grame\0"
+            VALUE "FileDescription", "MidiShare Universal Controler\0"
+            VALUE "FileVersion", "1.02\0"
+            VALUE "InternalName", "msControl32\0"
+            VALUE "LegalCopyright", "Copyright © Grame 1996\0"
+            VALUE "OriginalFilename", "msControl32.exe\0"
+            VALUE "ProductName", "GRAME msControl32\0"
+            VALUE "ProductVersion", "1.02\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""msctrl.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
