@@ -26,7 +26,7 @@
 
 typedef struct PlayerState  FAR * PlayerStatePtr;
 typedef struct PlayerState{
-	long date;
+	long date_ms;
 	long tempo;
 	short tsnum;
 	short tsdenom;
@@ -38,6 +38,7 @@ typedef struct PlayerState{
 	short state;
 	short syncin;
 	short syncout;
+	long date_ticks;
 
 }PlayerState;
 
