@@ -30,7 +30,6 @@ typedef struct PlayerState{
 }PlayerState;
 typedef  PlayerState  * PlayerStatePtr;
 
-
 typedef struct Pos{
 	short bar;
 	short beat;
@@ -48,13 +47,12 @@ typedef struct {
 } TSmpteLocation;
 typedef TSmpteLocation *SmpteLocPtr;
 
-
 typedef struct MidiFileInfos
 {
-	long format;					/* format du fichier				*/
-	long timedef;					/* définition du temps				*/
-	long clicks;					/* nbre de pas d'horloge/noire/frame*/
-	long tracks;               /* nombre de tracks                 */
+	long format;	/* format du fichier				*/
+	long timedef;	/* définition du temps				*/
+	long clicks;	/* nbre de pas d'horloge/noire/frame*/
+	long tracks;    /* nombre de tracks                 */
 
 }MidiFileInfos;
 typedef  MidiFileInfos   * MidiFileInfosPtr;
@@ -79,8 +77,6 @@ void   SetRecordModePlayer16 (short refnum, short state) {}
 void   RecordPlayer16 (short refnum, short tracknum)     {}
 void   SetRecordFilterPlayer16(short refnum, FilterPtr filter){}
 
-
-
 // Position management
 
 void   SetPosBBUPlayer16 (short refnum, PosPtr pos){ pos=input; }
@@ -94,7 +90,6 @@ long   SetLoopEndBBUPlayer16 (short refnum,  PosPtr pos){ pos=input; }
 long   SetLoopStartMsPlayer16(short refnum,   long date_ms){}
 long   SetLoopEndMsPlayer16 (short refnum,   long date_ms){}
 
-
 // Synchronisation management
 
 void   SetSynchroInPlayer16 (short refnum, short state){}
@@ -107,12 +102,10 @@ void   SetTempoPlayer16 (short refnum,   long tempo){}
 void   GetStatePlayer16 (short refnum, PlayerStatePtr playerstate) { playerstate=input; }
 void   GetEndScorePlayer16 (short refnum, PlayerStatePtr playerstate){ playerstate=input; }
 
-
 // Step playing 
 
 void   ForwardStepPlayer16 (short refnum , short flag){}
 void   BackwardStepPlayer16 (short refnum , short flag){}
-
  
 // Tracks management
 

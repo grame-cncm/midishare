@@ -62,7 +62,6 @@ long  EXPORT SetLoopEndBBUPlayer16 (short refnum,  PosPtr pos);
 long  EXPORT SetLoopStartMsPlayer16(short refnum,   long date_ms);
 long  EXPORT SetLoopEndMsPlayer16 (short refnum,   long date_ms);
 
-
 // Synchronisation management
 
 void  EXPORT SetSynchroInPlayer16 (short refnum, short state);
@@ -75,12 +74,10 @@ void  EXPORT SetTempoPlayer16 (short refnum,long tempo);
 void  EXPORT GetStatePlayer16 (short refnum, PlayerStatePtr playerstate) ;
 void  EXPORT GetEndScorePlayer16 (short refnum, PlayerStatePtr playerstate);
 
-
 // Step playing 
 
 void  EXPORT ForwardStepPlayer16 (short refnum , short flag);
 void  EXPORT BackwardStepPlayer16 (short refnum , short flag);
-
 
 // Tracks management
 
@@ -99,8 +96,6 @@ long EXPORT InsertTrackPlayer16(short refnum, short tracknum, MidiSeqPtr s);
 int  EXPORT MidiFileLoad16( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
 int  EXPORT MidiFileSave16( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
 
-
-
 #ifdef __Macintosh__
 	#pragma export off
 #endif
@@ -108,8 +103,6 @@ int  EXPORT MidiFileSave16( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 #ifdef __cplusplus
 	}
 #endif
-
-
 
 /*--------------------------------------------------------------------------*/
 
