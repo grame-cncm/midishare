@@ -35,6 +35,7 @@ class OTTask
 		virtual Boolean Schedule 	(long date, short refNum, long a1,long a2);
 		virtual void 	Run			(long date, short refNum, long a1,long a2) = 0;
 		virtual void 	Forget 		(void);
+				void	Clear 		(void)		{ }
 
 		short	fRefNum;
 		long 	fArg1, fArg2, fDate;
