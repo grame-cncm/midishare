@@ -48,10 +48,14 @@
 #ifdef __Linux__
 	#include "MidiShare.h"
 	#define MSALARMAPI
+	 RcvAlarmPtr UPPJRcvAlarmPtr ;
+         ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
 
 #ifdef WIN32
 	#include <MidiShare.h>
+	 RcvAlarmPtr UPPJRcvAlarmPtr ;
+         ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
 
 #include "MidiAppl.h"
