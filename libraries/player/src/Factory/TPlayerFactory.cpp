@@ -1,13 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TPlayerFactory.cpp			    
@@ -22,13 +33,13 @@
 
 /*--------------------------------------------------------------------------*/
 
-TPlayerFactory::TPlayerFactory (TPlayer* user) { fUser = user; }
+TPlayerFactory::TPlayerFactory (TPlayer* user):fUser(user){}
 
 /*--------------------------------------------------------------------------*/
 // Creation of Players
 /*--------------------------------------------------------------------------*/
 
-TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
+TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer()
 { 
 	TPlayerSynchroniserPtr 		synchro = 0;
 	TEventDispatcherPtr 		receiver = 0;
@@ -47,13 +58,12 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
 	
-	
 	long res;
 	
 	switch (fUser->fOutput) {
 		
 		case kMidiShare:
-			eventsender = new TMidiPlayer(fUser, fUser->fTrackTable);
+			eventsender = new TMidiPlayer(fUser, &fUser->fTrackTable);
 			res = eventsender->Init();
 			break;
 	}
@@ -62,32 +72,32 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	if (res != kNoErr) return 0;
 	
 	clockconverter = new TClockConverter(fUser->fTick_per_quarter); 
-	loopmanager =  new TLoopManager (fUser->fScore, fUser->fTick_per_quarter); 
-	inserter = new TScoreInserter(fUser->fScore, fUser->fTick_per_quarter);
-	scheduler= new TScheduler(); // constructeur vide
-	timemanager = new  TTimeManager(fUser->fScore,fUser->fTick_per_quarter);
+	loopmanager =  new TLoopManager (&fUser->fScore, fUser->fTick_per_quarter); 
+	inserter = new TScoreInserter(&fUser->fScore, fUser->fTick_per_quarter);
+	scheduler = new TScheduler(); // constructeur vide
+	timemanager = new  TTimeManager(&fUser->fScore,fUser->fTick_per_quarter);
 	
 	
 	switch (fUser->fSyncIn) {
 		
 		case kInternalSync: 
 		case kSMPTESync:
-			synchro = new TPlayerSynchroniserInt(fUser->fScore, scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserInt(&fUser->fScore, scheduler, &fUser->fRunningState,fUser->fTick_per_quarter);
 			break;
 		
 		case kExternalSync: 
-			synchro = new TPlayerSynchroniserExt(scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserExt(scheduler, &fUser->fRunningState, fUser->fTick_per_quarter);
 			break;
 			
 		case kClockSync: 
-			synchro = new TPlayerSynchroniserClock(scheduler, fUser->fRunningState,fUser->fTick_per_quarter);
+			synchro = new TPlayerSynchroniserClock(scheduler, &fUser->fRunningState, fUser->fTick_per_quarter);
 			break;
 	}
 	
 	scheduler->Init(synchro, fUser); // Initialisation 
 	
-	tickplayer 	= new TTickPlayer(fUser->fScore, eventsender, scheduler);
-	chaser 		= new TChaserIterator(fUser->fScore, eventsender);
+	tickplayer 	= new TTickPlayer(&fUser->fScore, eventsender, scheduler);
+	chaser 		= new TChaserIterator(&fUser->fScore, eventsender);
 	player1 	= new TSyncInPlayer(synchro,tickplayer,chaser);
 	
 	
@@ -111,7 +121,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 			
 		default:
-			player3 = new TRunningPlayer(player2,fUser->fRunningState); // enrobage
+			player3 = new TRunningPlayer(player2,&fUser->fRunningState); // enrobage
 			break;
 	}
 	
@@ -137,8 +147,8 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 			break;
 	}
 		
-	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver);
-	scorestate = new TScoreState(fUser->fScore,fUser->fTick_per_quarter);
+	recorder = new TEventRecorder(&fUser->fScore, synchro, &fUser->fRunningState,receiver);
+	scorestate = new TScoreState(&fUser->fScore,fUser->fTick_per_quarter);
 	
 	// Affectation 
 	fUser->fClockConverter =  clockconverter;
@@ -157,7 +167,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	switch (fUser->fSyncIn) {
 		
 		case kSMPTESync:
-			return new TSMPTEPlayer(genericplayer,fUser->fRunningState, fUser->fSmpteInfos,fUser);
+			return new TSMPTEPlayer(genericplayer, &fUser->fRunningState, &fUser->fSmpteInfos,fUser);
 			
 		default:
 			return genericplayer;
@@ -171,7 +181,7 @@ void TPlayerFactory::DestroyPlayer(TGenericPlayerInterfacePtr* player)
 	TGenericPlayerInterfacePtr tmp = *player;
 	*player = 0; // To avoid access at Interrupt Level
 	
-	if(tmp) {
+	if (tmp) {
 		delete(fDestructor);
 		delete(tmp);
 		fDestructor = 0;

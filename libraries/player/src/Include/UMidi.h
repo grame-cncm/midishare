@@ -1,63 +1,67 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	Umidi.h			    
 // ===========================================================================
-//
-//	Midi utilities: various MidiShare sequence management functions
-// 
-
-
 
 #ifndef __UMidi__
 #define __UMidi__
 
-
 #include "GenericMidiShare.h"
 #include "TPlayerConstants.h"
 
+///------------
+// Class UMidi
+//-------------
+/*!
+\brief	Midi utilities : various MidiShare sequence management functions.
+*/
 
-//------------------------------------------------------------------
-// Fonctions utilitaires sur les sequences et gestion de la memoire
-//------------------------------------------------------------------
+class UMidi {
 
-class UMidi{
-
- public :
+ public:
  
 	static MidiSeqPtr 	TrsfNoteToKeyOn (MidiSeqPtr src);
 	
- 	static void 		MixeSeq( MidiSeqPtr src, MidiSeqPtr dest);
-	static MidiEvPtr 	AddSeq( register MidiEvPtr e1, register MidiEvPtr e2);
+ 	static void 		MixeSeq(MidiSeqPtr src, MidiSeqPtr dest);
+	static MidiEvPtr 	AddSeq(MidiEvPtr e1, MidiEvPtr e2);
 	
-	static MidiEvPtr	CheckEvType (MidiSeqPtr src,short type);
+	static MidiEvPtr	CheckEvType(MidiSeqPtr src, short type);
 
-	static void 		FreeOneLine (MidiEvPtr cur);
- 	static MidiEvPtr 	CopyOneLine (MidiEvPtr cur);
+	static void 		FreeOneLine(MidiEvPtr cur);
  	
- 	static ULONG		LengthSeq (MidiSeqPtr s);
- 	static MidiSeqPtr 	CopySeq (MidiSeqPtr src);
- 	static void 		SetRefnum (MidiSeqPtr src,short refnum);
+ 	static ULONG		LengthSeq(MidiSeqPtr s);
+ 	static void 		SetRefnum(MidiSeqPtr src, short refnum);
  	
- 	static MidiEvPtr 	NoteToKeyOff (MidiEvPtr e1);
+ 	static MidiEvPtr 	NoteToKeyOff(MidiEvPtr e1);
  	
  	static MidiSeqPtr 	BuildTrack(MidiSeqPtr s);
 	static MidiSeqPtr 	BuildAllTrack(MidiSeqPtr s);
 	
 	static Boolean 		Copy_AddSeq(MidiSeqPtr s, MidiEvPtr e);
 	static Boolean 		IsEmpty(MidiSeqPtr s);
-	static void 		DelEndTrack( MidiSeqPtr seq);
-	static void 		RemoveEv( MidiSeqPtr seq,MidiEvPtr e);
-
+	static void 		DelEndTrack(MidiSeqPtr seq);
+	static void 		RemoveEv(MidiSeqPtr seq, MidiEvPtr e);
 };
 
 #endif

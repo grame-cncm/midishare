@@ -1,32 +1,44 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
+
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
-//	TTickScheduler.cpp			   ©1996-1998 Grame All rights reserved.
+//	TTickScheduler.h		  
 // ===========================================================================
-//
-// Combines a scheduler and a synchroniser
 
 #ifndef __TTickScheduler__
 #define __TTickScheduler__
-
 
 #include "TScheduler.h"
 #include "TSynchroniserInterface.h"
 #include "TMidiAppl.h"
 
-//-----------------------
+//----------------------
 // Class TTickScheduler 
-//-----------------------
+//----------------------
+/*!
+	\brief  Combines a scheduler and a synchroniser.
+*/
 
-class TTicksScheduler  :public TSynchroniserInterfacePtr, public TSchedulerInterfacePtr{
+class TTicksScheduler  :public TSynchroniserInterface, public TSchedulerInterface{
 
 	private:
 	
@@ -50,11 +62,8 @@ class TTicksScheduler  :public TSynchroniserInterfacePtr, public TSchedulerInter
 		
 		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks) {	fScheduler->ScheduleTickTask(task,date_ticks);}
  		void ScheduleTickTaskInt(TTicksTask* task, ULONG date_ticks){	fScheduler->ScheduleTickTaskInt(task,date_ticks);}
- 		
 };
 
-
 typedef TTicksScheduler FAR * TTicksSchedulerPtr;
-
 
 #endif

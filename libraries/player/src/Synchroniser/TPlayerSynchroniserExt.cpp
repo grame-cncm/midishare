@@ -1,13 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TPlayerSynchroniserExt.h		    
@@ -16,14 +27,13 @@
 //	Synchronizer for kExternalSync mode: 
 //
 
-
 #include "TPlayerSynchroniser.h"
 #include "UTools.h"
 #include "UDebug.h"
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Init () { fTempoVisitor->Init(); }
+void TPlayerSynchroniserExt::Init () {fTempoVisitor.Init();}
 
 /*--------------------------------------------------------------------------*/
 
@@ -37,7 +47,7 @@ void TPlayerSynchroniserExt::Start ()
 
 void TPlayerSynchroniserExt::Stop () 
 { 
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	fState->SetIdle();
 }
 
@@ -45,12 +55,12 @@ void TPlayerSynchroniserExt::Stop ()
 
 void TPlayerSynchroniserExt::Cont (ULONG date_ticks) 
 { 
-	ULONG tempo = fTempoVisitor->GetTempo();
-	fTempoVisitor->Init(); // Important  (Tempo Map must be re-initialized)
-	fTempoVisitor->SetTempo(date_ticks,tempo);
+	ULONG tempo = fTempoVisitor.GetTempo();
+	fTempoVisitor.Init(); // Important  (Tempo Map must be re-initialized)
+	fTempoVisitor.SetTempo(date_ticks,tempo);
 
 	SetPosTicks(date_ticks);
-	fOffset = MidiGetTime() - fTempoVisitor->CurDateMs();
+	fOffset = MidiGetTime() - fTempoVisitor.CurDateMs();
 	fState->SetRunning(); // ordre ??
 }
 
@@ -62,20 +72,20 @@ Boolean TPlayerSynchroniserExt::IsSchedulable (ULONG date_ticks) {return fState-
 
 ULONG TPlayerSynchroniserExt::GetPosTicks () 
 {
-	if (fState->IsRunning()) fTempoVisitor->UpdateMs(MidiGetTime() - fOffset);
-	return fTempoVisitor->CurDateTicks();
+	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
+	return fTempoVisitor.CurDateTicks();
 }
 
 /*--------------------------------------------------------------------------*/
 
-void  TPlayerSynchroniserExt::SetPosTicks (ULONG date_ticks){ fTempoVisitor->UpdateTicks(date_ticks);}
+void  TPlayerSynchroniserExt::SetPosTicks (ULONG date_ticks){fTempoVisitor.UpdateTicks(date_ticks);}
 
 /*--------------------------------------------------------------------------*/
 
 void TPlayerSynchroniserExt::SetTempo(ULONG  tempo)
 {
-	if (tempo != fTempoVisitor->GetTempo()) {
-		fTempoVisitor->SetTempo(GetPosTicks(),tempo);
+	if (tempo != fTempoVisitor.GetTempo()) {
+		fTempoVisitor.SetTempo(GetPosTicks(),tempo);
 		fScheduler->ReScheduleTasks(); 
 	}
 }

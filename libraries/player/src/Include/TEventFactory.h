@@ -1,75 +1,66 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
+
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TEventFactory.h			    
 // ===========================================================================
-//
-// A TEventFactory object allows to build TEvent objects using the MidiShare event type.
-//
-
-
 
 #ifndef __TEventFactory__
 #define __TEventFactory__
 
- 
 #include "TEvent.h"
 
-
-/*--------------------------------------------------------------------------*/
-
-class TEventFactory;
-typedef TEventFactory FAR * TEventFactoryPtr;
-
-/*--------------------------------------------------------------------------*/
-
-typedef  TEventPtr (TEventFactory::*mthptr)(MidiEvPtr e);
-
-
-//-----------------------
+//---------------------
 // Class TEventFactory 
-//-----------------------
+//---------------------
+/*!
+	\brief A TEventFactory object allows to build TEvent objects using the MidiShare event type.
+*/
+
+typedef  TEventPtr  (*mthptr)(MidiEvPtr e);
 
 class TEventFactory {
 
 	private:
-	
-		TEventPtr 	CreateEvent(MidiEvPtr e){ return new TEvent(e);}
 		
-		TEventPtr 	CreateNote(MidiEvPtr e){ return new TNote(e);}
-		TEventPtr 	CreateKeyOn(MidiEvPtr e){ return new TKeyOn(e);}
-		TEventPtr 	CreateKeyOff(MidiEvPtr e){ return new TKeyOff(e);}
-		TEventPtr	CreateKeyPress(MidiEvPtr e){ return new TKeyPress(e);}
-		TEventPtr 	CreateCtrlChange(MidiEvPtr e){ return new TCtrlChange(e);}
-		TEventPtr   CreateProgChange(MidiEvPtr e){ return new TProgChange(e);}
-		TEventPtr   CreateChanPress(MidiEvPtr e){ return new TChanPress(e);}
-		TEventPtr   CreatePitchBend(MidiEvPtr e){ return new TPitchBend(e);}
-		TEventPtr 	CreateTune(MidiEvPtr e){ return new TTune(e);}
-		TEventPtr 	CreateTempo(MidiEvPtr e){ return new TTempo(e);}
-		TEventPtr 	CreateTimeSign(MidiEvPtr e){ return new TTimeSign(e);}
-		TEventPtr 	CreateSysEx(MidiEvPtr e){ return new TSysEx(e);}
-		
-		mthptr 	fBuildTable[256];
-		static TEventFactoryPtr fInstance;
+		mthptr fBuildTable[256];
+		static TEventFactory* fInstance;
 	
 	public: 
 		
-		TEventFactory ();
-		~TEventFactory() {}
+		TEventFactory();
+		virtual ~TEventFactory(){}
 		
-		static TEventPtr	GenericCreateEvent(MidiEvPtr e) {return fInstance->GenericCreateEventAux(e);}
-		       TEventPtr	GenericCreateEventAux(MidiEvPtr e) {return (this->*fBuildTable[EvType(e)])(e);}
-		
-		static void Init() { if (fInstance == 0) fInstance = new TEventFactory(); }
+		static TEventPtr GenericCreateEvent(MidiEvPtr e) {return fInstance->fBuildTable[EvType(e)](e);}
+		static void Init() {if (fInstance == 0) fInstance = new TEventFactory();}
+		static void Destroy() 
+		{
+			if (fInstance){ 
+				delete(fInstance);
+			 	fInstance = 0;
+			}
+		}
 };
 
+typedef TEventFactory* TEventFactoryPtr;
 
 #endif

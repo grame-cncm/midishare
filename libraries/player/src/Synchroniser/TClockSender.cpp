@@ -1,12 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
+
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 
 // ===========================================================================
@@ -16,26 +28,8 @@
 //	Manage Midi events related to Clock synchronization
 //
 
-
 #include "TClockSender.h"
 #include "UTools.h"
-
-/*--------------------------------------------------------------------------*/
-
-TClockSender::TClockSender(
-	TSchedulerInterfacePtr scheduler, 
-	TClockConverterPtr converter,
-	TEventSenderInterfacePtr user)
-{
-	fScheduler = scheduler;
-	fClockConverter = converter;
-	fEventUser = user;
-	fClockTask = new TClockTask(this);
-}
-
-/*--------------------------------------------------------------------------*/
-
-TClockSender::~TClockSender(){ delete(fClockTask); }
 
 /*--------------------------------------------------------------------------*/
 
@@ -44,14 +38,14 @@ void TClockSender::Start()
 	Stop();
 	fClockCount = 0;
 	fEventUser->SendEvent(MidiNewEv(typeStart),MidiGetTime());
-	fScheduler->ScheduleTickTask(fClockTask, 0);
+	fScheduler->ScheduleTickTask(&fClockTask, 0);
 }
 
 /*--------------------------------------------------------------------------*/
 
 void TClockSender::Stop() 
 { 
-	fClockTask->Forget();
+	fClockTask.Forget();
 	fEventUser->SendEvent(MidiNewEv(typeStop),MidiGetTime());
 }
 
@@ -62,8 +56,8 @@ void TClockSender::Stop()
 void TClockSender::Cont(ULONG date_ticks)
 {
 	fEventUser->SendEvent(MidiNewEv(typeContinue),MidiGetTime());
-	fClockCount = fClockConverter->ConvertTickToClock(date_ticks);
-	fScheduler->ScheduleTickTask(fClockTask, date_ticks);
+	fClockCount = (ULONG)fClockConverter->ConvertTickToClock((float)date_ticks);
+	fScheduler->ScheduleTickTask(&fClockTask, date_ticks);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -74,7 +68,7 @@ void TClockSender::NextClock (ULONG date_ms)
 {
 	fClockCount++;
 	fEventUser->SendEvent(MidiNewEv(typeClock),date_ms);
-	fScheduler->ScheduleTickTask(fClockTask, fClockConverter->ConvertClockToTick(fClockCount));
+	fScheduler->ScheduleTickTask(&fClockTask, (ULONG)fClockConverter->ConvertClockToTick((float)fClockCount));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -82,7 +76,7 @@ void TClockSender::NextClock (ULONG date_ms)
 void TClockSender::SendSongPos(ULONG date_ticks)
 {
 	if (MidiEvPtr e = MidiNewEv(typeSongPos)) {
-		ULONG pos = fClockConverter->ConvertTickToSongPos(date_ticks);
+		ULONG pos = (ULONG)fClockConverter->ConvertTickToSongPos((float)date_ticks);
 		MidiSetField(e,0,pos & 0x7F);
 		MidiSetField(e,1,(pos>>7) & 0x7F);
 		fEventUser->SendEvent(e,MidiGetTime());     
@@ -93,5 +87,9 @@ void TClockSender::SendSongPos(ULONG date_ticks)
 
 ULONG TClockSender::GetPosTicks() 
 {
-	return (fClockCount == 0) ? 0 : fClockConverter->ConvertClockToTick(fClockCount - 1);
+	return (fClockCount == 0) ? 0 : (ULONG)fClockConverter->ConvertClockToTick((float)(fClockCount - 1));
 }
+
+/*--------------------------------------------------------------------------*/
+
+void TClockTask::Execute (TMidiApplPtr appl, ULONG date_ms) {fSender->NextClock(date_ms);}

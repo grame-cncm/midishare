@@ -1,29 +1,32 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TScheduler.h		    
 // ===========================================================================
-//
-// A TScheduler object allows to schedule Tasks which dates are in ticks, using a
-// synchroniser object to convert dates in ticks in dates in millisecond.
-//
-// The scheduler maintains a list of pending tasks, rescheduling them if
-// necessary after a Tempo change.
-
 
 #ifndef __TScheduler__
 #define __TScheduler__
 
- 
 #include "TMidiAppl.h"
 #include "TSynchroniserInterface.h"
 
@@ -33,7 +36,11 @@
 
 class TTicksTask;
 
-class TSchedulerInterface{
+/*!
+ \brief An interface for Schedulers.
+*/
+
+class TSchedulerInterface {
 
 	public:
 	
@@ -46,9 +53,9 @@ class TSchedulerInterface{
 
 typedef TSchedulerInterface FAR * TSchedulerInterfacePtr;
 
-//-----------------------
+//-------------------
 // Class TScheduler 
-//-----------------------
+//-------------------
 
 /*
 
@@ -74,7 +81,14 @@ are used in a more demanding use.
 
 #define TableLength 8
 
-class TScheduler :public TSchedulerInterface{
+/*!
+ \brief A TScheduler object allows to schedule Tasks which dates are in ticks, using a
+ synchroniser object to convert dates in ticks in dates in millisecond.
+ The scheduler maintains a list of pending tasks, rescheduling them if
+ necessary after a Tempo change.
+*/
+
+class TScheduler : public TSchedulerInterface {
 
 	friend class TTicksTask;
 
@@ -83,11 +97,11 @@ class TScheduler :public TSchedulerInterface{
 		ULONG 		fTaskIndex;
 		TTicksTask* fTaskTable[TableLength];
 		
-		#if GENERATINGCFM
-			UPPTaskPtr fUPPExecuteTask;
-		#else
-			TaskPtr fUPPExecuteTask;
-		#endif
+	#if defined (__Macintosh__) && defined (__MacOS9__)
+		UPPTaskPtr fUPPExecuteTask;
+	#else
+		TaskPtr fUPPExecuteTask;
+	#endif
 		
 		void ScheduleRealTime(TTicksTask* task);
 		void RemoveTask(TTicksTask* task);
@@ -111,8 +125,7 @@ class TScheduler :public TSchedulerInterface{
  		// Internal functions made public to be called from tasks
  		
  		void ExecuteTaskInt(TTicksTask* task, ULONG date);		
- 		
-   };
+};
 
 typedef TScheduler FAR * TSchedulerPtr;
 
@@ -131,19 +144,22 @@ typedef TScheduler FAR * TSchedulerPtr;
 *             : kTaskIdle  ==> Forget ==> kTaskIdle (ATTENTION reste dans l'état kTaskIdle)
 */
 
+/*!
+  \brief The base class for tasks in ticks time.
+*/
 
 class TTicksTask {
 	
-	
 	friend class TScheduler;
-	enum taskState { kTaskIdle = 0, kTaskRunning, kTaskForget};
+	
+	enum taskState {kTaskIdle = 0, kTaskRunning, kTaskForget};
 		
 	private:
 	
 		MidiEvPtr 	fTask;
 		ULONG 		fDate_ticks;
+		long		fIndex;
 		Boolean		fStatus;
-		short		fIndex;
 	
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
@@ -153,18 +169,12 @@ class TTicksTask {
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
-		short GetIndex() {return fIndex;}
-		void  SetIndex(short index) {fIndex = index;}
+		long GetIndex() {return fIndex;}
+		void  SetIndex(long index) {fIndex = index;}
 			
 	public:
 	
-		TTicksTask() 
-		{
-			fTask = 0; 
-			fDate_ticks = 0;
-			fStatus = kTaskIdle;
-			fIndex = -1;
-		}
+		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
@@ -172,10 +182,7 @@ class TTicksTask {
 		Boolean IsRunning () 	{return (fStatus == kTaskRunning);}
 		Boolean IsIdle () 	 	{return (fStatus == kTaskIdle);}
 		
-		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
-		
-	
 };
 
 typedef TTicksTask FAR * TTicksTaskPtr;

@@ -1,13 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TTimeManager.cpp		    
@@ -22,17 +33,13 @@
 #include "TTempoMapBuilder.h"
 #include "TEventFactory.h"
 
-
 /*--------------------------------------------------------------------------*/
 
-TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreFollower(score, tpq)
+TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreObjFollower(score,tpq),fScore(score)
 {
- 	fScore = score;
-		
 	// Prepare the score for fast forward/backward moves
 	TTempoMapBuilder fTempomap;
  	UScoreManager::Apply (fScore, &fTempomap);
- 	
 }
  
 /*--------------------------------------------------------------------------*/
@@ -40,7 +47,7 @@ TTimeManager::TTimeManager(TScorePtr score, ULONG tpq) : TScoreFollower(score, t
 const TPos  TTimeManager::ConvertTickToBBU (ULONG date_tick) 
 { 
 	SetPosTicks(date_tick);
-	return fTempoVisitor->CurDateBBU();
+	return GetVisitor().CurDateBBU();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -48,7 +55,7 @@ const TPos  TTimeManager::ConvertTickToBBU (ULONG date_tick)
 ULONG   TTimeManager::ConvertBBUToTick(const TPos& pos) 
 { 
 	SetPosBBU(pos);
-	return fTempoVisitor->CurDateTicks();
+	return  GetVisitor().CurDateTicks();
 }
 	
 /*--------------------------------------------------------------------------*/
@@ -56,7 +63,7 @@ ULONG   TTimeManager::ConvertBBUToTick(const TPos& pos)
 ULONG  TTimeManager::ConvertTickToMs (ULONG date_tick) 
 { 
 	SetPosTicks(date_tick);
-	return fTempoVisitor->CurDateMicro()/100;
+	return GetVisitor().CurDateMicro()/100;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -64,7 +71,7 @@ ULONG  TTimeManager::ConvertTickToMs (ULONG date_tick)
 ULONG  TTimeManager::ConvertMsToTick (ULONG date_ms)   
 { 
 	SetPosMs (date_ms);
-	return fTempoVisitor->CurDateTicks();
+	return GetVisitor().CurDateTicks();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -72,7 +79,7 @@ ULONG  TTimeManager::ConvertMsToTick (ULONG date_ms)
 ULONG TTimeManager::GetTempo (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor->GetTempo();
+	return GetVisitor().GetTempo();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -80,7 +87,7 @@ ULONG TTimeManager::GetTempo (ULONG date_tick)
 short TTimeManager::GetNum (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor->GetNum();
+	return GetVisitor().GetNum();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -88,7 +95,7 @@ short TTimeManager::GetNum (ULONG date_tick)
 short TTimeManager::GetDenom (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor->GetDenom();
+	return GetVisitor().GetDenom();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -96,7 +103,7 @@ short TTimeManager::GetDenom (ULONG date_tick)
 short TTimeManager::GetNClocks (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor->GetNClocks();
+	return GetVisitor().GetNClocks();
 }
 
 /*--------------------------------------------------------------------------*/
@@ -104,6 +111,6 @@ short TTimeManager::GetNClocks (ULONG date_tick)
 short TTimeManager::GetN32nd (ULONG date_tick) 
 {
 	SetPosTicks(date_tick);
-	return fTempoVisitor->GetN32nd();
+	return GetVisitor().GetN32nd();
 }
 

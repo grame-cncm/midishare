@@ -1,25 +1,31 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TEvent.h			    
 // ===========================================================================
-//	The classes for all Midi events
-//
-//  All events use a TVisitor object to add additional methods
-
 
 #ifndef __TEvent__
 #define __TEvent__
-
  
 #include <stddef.h>
 
@@ -27,9 +33,12 @@
 #include "TScoreVisitorInterface.h"
 #include "TPlayerConstants.h"
 
-//-----------------------
+//--------------
 // Class TEvent 
-//-----------------------
+//--------------
+/*!
+	\brief The classes for all Midi events. All events use a TVisitor object to add additional methods
+*/
 
 class TEvent {
 
@@ -63,188 +72,231 @@ class TEvent {
 
 typedef TEvent FAR * TEventPtr;
 	
-//-----------------------
+//-------------
 // Class TNote 
-//-----------------------
+//-------------
+/*!
+	\brief The class for Note events.
+*/
 
 class TNote :public TEvent {
 
 	public:
  
  		TNote	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+ 		virtual ~TNote(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
  
 };
 
 typedef TNote FAR * TNotePtr;
 
-
-//-----------------------
+//--------------
 // Class TKeyOn 
-//-----------------------
+//--------------
+/*!
+	\brief The class for KeyOn events.
+*/
 
 class TKeyOn :public TEvent {
 
 	public:
 
 		TKeyOn	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyOn(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TKeyOn FAR * TKeyOnPtr;
 
-//-----------------------
+//---------------
 // Class TKeyOff 
-//-----------------------
-
+//---------------
+/*!
+	\brief The class for KeyOff events.
+*/
 
 class TKeyOff :public TEvent {
 
 	public:
 
 		TKeyOff	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyOff(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
-
 typedef TKeyOff FAR * TKeyOffPtr;
 
-//-----------------------
+//-----------------
 // Class TKeyPress 
-//-----------------------
+//-----------------
+/*!
+	\brief The class for KeyPress events.
+*/
 
 class TKeyPress :public TEvent {
 
  	public:
 	
 		TKeyPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyPress(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TKeyPress FAR * TKeyPressPtr;
 
-
-//-----------------------
+//-------------------
 // Class TCtrlChange 
-//-----------------------
+//-------------------
+/*!
+	\brief The class for CtrlChange events.
+*/
 
 class TCtrlChange :public TEvent {
 
  	public:
 	
 		TCtrlChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TCtrlChange(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }   
  
 };
 
 typedef TCtrlChange FAR * TCtrlChangePtr;
 
-//-----------------------
+//-------------------
 // Class TProgChange 
-//-----------------------
+//-------------------
+/*!
+	\brief The class for ProgChange events.
+*/
 
 class TProgChange :public TEvent {
 
  	public:
 	
 		TProgChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TProgChange(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TProgChange FAR * TProgChangePtr;
 
-//-----------------------
+//------------------
 // Class TChanPress 
-//-----------------------
+//------------------
+/*!
+	\brief The class for ChanPress events.
+*/
 
 class TChanPress :public TEvent {
 
  	public:
 	
 		TChanPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TChanPress(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TChanPress FAR * TChanPressPtr;
 
-//-----------------------
+//-------------------
 // Class TPitchWheel 
-//-----------------------
+//-------------------
+/*!
+	\brief The class for PitchWheel events.
+*/
 
 class TPitchBend :public TEvent {
 
  	public:
 	
 		TPitchBend	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TPitchBend(){}
 		void	Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
  
 };
 
 typedef TPitchBend FAR * TPitchBendPtr;
 
-//-----------------------
+//-------------
 // Class TTune 
-//-----------------------
+//-------------
+/*!
+	\brief The class for Tune events.
+*/
 
 class TTune :public TEvent {
 
 	public:
 
 		TTune (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TTune(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TTune FAR * TTunePtr;
 
-
-//-----------------------
+//---------------
 // Class TSysEx
-//-----------------------
+//---------------
+/*!
+	\brief The class for SysEx events.
+*/
 
 class TSysEx :public TEvent {
 
 	public:
 
 		TSysEx (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		virtual ~TSysEx(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 };
 
 typedef TSysEx FAR * TSysExPtr;
 
-
-//-----------------------
+//--------------
 // Class TTempo
-//-----------------------
+//--------------
+/*!
+	\brief The class for Tempo events.
+*/
 
 class TTempo :public TEvent {
 
  	public:
 	
-		TTempo	(MidiEvPtr e){
+		TTempo(MidiEvPtr e)
+		{
 			fEvent = e;
 			fNext = fPrev = 0; 
 			SetTempoBackward(kDefaultTempo);
-		 }
+		}
+		virtual ~TTempo(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }   
 		
-		ULONG GetTempoForward()  { return 	Tempo(fEvent);}
+		ULONG GetTempoForward()  { return Tempo(fEvent);}
 		ULONG GetTempoBackward() { return ((ULONG *)&Link(fEvent))[0];}
 		void SetTempoForward(ULONG val)  { Tempo(fEvent) = val;}
-		void SetTempoBackward(ULONG val) {  ((ULONG *)&Link(fEvent))[0] = val;}
+		void SetTempoBackward(ULONG val) { ((ULONG *)&Link(fEvent))[0] = val;}
 
 };
 
 typedef TTempo FAR * TTempoPtr;
 
-//-----------------------
+//------------------
 // Class TTimeSign
-//-----------------------
+//------------------
+/*!
+	\brief The class for TimeSign events.
+*/
 
 class TTimeSign :public TEvent {
 
  	public:
 	
-		TTimeSign	(MidiEvPtr e){
+		TTimeSign(MidiEvPtr e)
+		{
 			fEvent = e;
 			fNext = fPrev = 0;
 			SetBNum(kDefaultNum);
@@ -252,7 +304,7 @@ class TTimeSign :public TEvent {
 			SetBnClocks(kDefaultClocks);
 			SetBn32nd(kDefaultN32);
 		}
-		
+		virtual ~TTimeSign(){}
 		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
 		
 		Byte GetFNum() 		{return TSNum(fEvent);}

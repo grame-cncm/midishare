@@ -1,33 +1,39 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TTempoConverter.cpp		    
 // ===========================================================================
-//
-// Tempo management: musical time (ticks) to absolute time (millisecond) 
-// conversion functions (and vice versa)
-//
-// Computation are done using Integer values and managing remainders to be exact
-// 
 
 #include "TTempoConverter.h"
 #include "UMath.h"
 #include "UTools.h"
 #include "UDebug.h"
 
-
 /*--------------------------------------------------------------------------*/
-// Init with a new Tick_Per_Quarter value
-/*--------------------------------------------------------------------------*/
+/*!
+ \brief Inits with a new Tick_Per_Quarter value.
+ \param tpq is the tick_per_quarter value.
+*/
 
 void TTempoConverter::Init (ULONG tpq) 
 {
@@ -42,8 +48,9 @@ void TTempoConverter::Init (ULONG tpq)
 }	
 
 /*--------------------------------------------------------------------------*/
-// Init with the current Tick_Per_Quarter value
-/*--------------------------------------------------------------------------*/
+/*!
+ \brief Inits with the current Tick_Per_Quarter value.
+*/
 
 void TTempoConverter::Init () 
 {
@@ -55,26 +62,11 @@ void TTempoConverter::Init ()
 }	
 
 /*--------------------------------------------------------------------------*/
-// Update internal state with a Tempo event (using it's date and tempo value)
-/*--------------------------------------------------------------------------*/
-
-
-void TTempoConverter::Update (MidiEvPtr ev)
-{
-	ULONG newtempo = Tempo(ev)/10; 
-
-	if ((newtempo > 0) && (fTempo != newtempo)) { // Update values only if the Tempo has changed
- 		fLast_tempo_ten_micro = ConvertTickToMicroSec (Date(ev));
-		fLast_tempo = Date(ev);
-		fTempo = newtempo;
-		fTen_micro_sec_per_tick = fTempo/fTicks_per_quarter;
-		fTen_micro_sec_per_tick_remain = fTempo % fTicks_per_quarter;
-	}
-}	
-
-/*--------------------------------------------------------------------------*/
-// Update internal state with a Tempo and a date 
-/*--------------------------------------------------------------------------*/
+/*!
+ \brief Updates internal state with a tempo and a date.
+ \param date_ticks is the date in ticks.
+ \param tempo is the tempo in micro-sec per quarter note.
+*/
 
 void TTempoConverter::Update (ULONG date_ticks, ULONG tempo) 
 {
@@ -91,13 +83,16 @@ void TTempoConverter::Update (ULONG date_ticks, ULONG tempo)
 }	
 
 /*--------------------------------------------------------------------------*/
-// Convert a date in (10  micro sec) in ticks 
-/*--------------------------------------------------------------------------*/
+/*!
+ \brief Converts a date in ticks in a 10 micro-sec date. 
+ \param date_ticks is the date in ticks.
+ \return The result is the date in 10 micro-sec.
+*/
 
 ULONG TTempoConverter::ConvertTickToMicroSec (ULONG date_ticks)
 {
 	ULONG delta ;
-	
+    
 	if (date_ticks >= fLast_tempo){
 	
 		delta =  date_ticks - fLast_tempo;
@@ -115,9 +110,11 @@ ULONG TTempoConverter::ConvertTickToMicroSec (ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-// Convert a date in ticks  in (10  micro sec)
-/*--------------------------------------------------------------------------*/
-
+/*!
+ \brief Convert a 10 micro-sec date in a date in ticks.
+ \param date_ten_micro is the date in 10 micro-sec.
+ \return The result is the date in ticks.
+*/
 
 ULONG TTempoConverter::ConvertMicroSecToTick (ULONG date_ten_micro)
 {
@@ -128,16 +125,21 @@ ULONG TTempoConverter::ConvertMicroSecToTick (ULONG date_ten_micro)
 	}
 }
 
+/*--------------------------------------------------------------------------*/
+/*!
+ \brief Convert a date in ticks in a date in milliseconds.
+ \param date_ticks is the date in ticks
+ \return The result is the date in milliseconds.
+*/
+
+ULONG TTempoConverter::ConvertTickToMs  (ULONG date_ticks) {return ConvertTickToMicroSec (date_ticks) / 100;}
 
 /*--------------------------------------------------------------------------*/
-// Convert a date in ticks in millisecond
-/*--------------------------------------------------------------------------*/
-
-ULONG TTempoConverter::ConvertTickToMs  (ULONG date_tick) {return ConvertTickToMicroSec (date_tick) / 100;}
-
-/*--------------------------------------------------------------------------*/
-// Convert a date in millisecond in ticks 
-/*--------------------------------------------------------------------------*/
+/*!
+ \brief Convert a date in millisecond in a date in ticks.
+ \param date_ms is the date in milliseconds
+ \return The result is the date in ticks.
+*/
 
 ULONG TTempoConverter::ConvertMsToTick  (ULONG date_ms) {return ConvertMicroSecToTick (date_ms * 100);}		
 
@@ -153,19 +155,30 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
 
 /*--------------------------------------------------------------------------*/
 
-
 #ifdef __Macintosh__
 
-ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
-{	
-	if (fTempo) {
-		return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
-	}else{
-		return 1;
-    }
-}
-
+	#ifdef __MacOS9__
+	ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+	{	
+		if (fTempo) {
+			return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
+		}else{
+			return 1;
+	    }
+	}
+	#else
+	ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
+	{	
+		if (fTempo) {
+			return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
+		}else{
+			return 1;
+	    }
+	}
+	#endif
+	
 #endif
+
 /*--------------------------------------------------------------------------*/
 
 #ifdef __MSWindows__

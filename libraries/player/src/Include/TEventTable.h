@@ -1,21 +1,28 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TEventTable.h			 
 // ===========================================================================
-//
-//  A Midi event hashtable used for chase 
-//
-
 
 #ifndef __TEventTable__
 #define __TEventTable__
@@ -23,10 +30,12 @@
 #include "THashTable.h"
 #include "TEventSenderInterface.h"
 
-
-//-----------------------
+//-------------------
 // Class TEventTable 
-//-----------------------
+//-------------------
+/*!
+   \brief A Midi event hashtable used for chase.
+*/
 
 class TEventTable {
 
@@ -45,43 +54,50 @@ class TEventTable {
 		MidiEvPtr 	RemoveEvent(MidiEvPtr ev)	{return fHashTable.RemoveEvent(ev);}
 		MidiEvPtr 	RemoveEvent1(MidiEvPtr ev)	{return fHashTable.RemoveEvent1(ev);}
 	
-
-		virtual void ChaseOn (TEventSenderInterfacePtr user , ULONG date_ms) {
+		virtual ~TEventTable(){}
+		
+		virtual void ChaseOn(TEventSenderInterfacePtr user , ULONG date_ms) 
+		{
 			MidiEvPtr cur,e;
 			
 			for (short i = 0; i < kMaxHashCode; i++) {
-				cur =  fHashTable.GetLine(i);
+				cur = fHashTable.GetLine(i);
 				while (cur) {
-					if (e = MidiCopyEv(cur)){ user->UseEvent(e,date_ms);}
+					if ((e = MidiCopyEv(cur))){user->UseEvent(e,date_ms);}
 					cur = Link(cur);
 				}
 			}
 		}
 		
-		virtual void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) {}
-		
+		virtual void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) {}
 				
 };
 
 typedef TEventTable FAR * TEventTablePtr;
 
-//-----------------------
+//-------------------
 // Class TKeyOnTable 
-//-----------------------
+//-------------------
+/*!
+   \brief A Midi event hashtable used for KeyOff chase.
+*/
 
-class TKeyOnTable  :public TEventTable{
+class TKeyOnTable : public TEventTable {
 
 	public:
-
-		void ChaseOn (TEventSenderInterfacePtr user, ULONG date_ms) {}
 	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) {
+		virtual ~TKeyOnTable(){}
+
+		void ChaseOn(TEventSenderInterfacePtr user, ULONG date_ms) {}
+	
+		void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) 
+		{
 			MidiEvPtr cur,e;
 			
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur =  fHashTable.GetLine(i);
 				while (cur) {
-					if (e = MidiCopyEv(cur)){
+					if ((e = MidiCopyEv(cur))){
 						EvType(e) = typeKeyOff;
 						Vel(e) = 64; // KeyOff 
 						user->UseEvent(e,date_ms);
@@ -91,46 +107,18 @@ class TKeyOnTable  :public TEventTable{
 			}
 		}
 			
-		
 };
 
 typedef TKeyOnTable FAR * TKeyOnTablePtr;
 
-//-----------------------
-// Class TPitchWheelTable
-//-----------------------
-
-class TPitchWheelTable  :public TEventTable{
-
-	public:
-	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) {
-			MidiEvPtr cur,e;
-			
-			for (short i = 0; i < kMaxHashCode; i++) {
-				cur =  fHashTable.GetLine(i);
-				while (cur) {
-					if (e = MidiCopyEv(cur)){
-						MidiSetField(e,0,0);
-						MidiSetField(e,1,64);
-						user->UseEvent(e,date_ms);
-					}
-					cur = Link(cur);
-				}
-			}
-		}
-		
-				
-};
-
-typedef TPitchWheelTable FAR * TPitchWheelTablePtr;
-
-
-//-----------------------
+//------------------------
 // Class TCtrlChangeTable 
-//-----------------------
+//------------------------
+/*!
+   \brief A Midi event hashtable used for CtrlChange chase.
+*/
 
-class TCtrlChangeTable  :public TEventTable{
+class TCtrlChangeTable : public TEventTable {
 
 	private:
 
@@ -140,29 +128,27 @@ class TCtrlChangeTable  :public TEventTable{
 		
 	public:
 	
-		TCtrlChangeTable() {for (short i = 0; i <kMaxCtrl; i++) {fCtrldefault [i] = 0;}}
+		TCtrlChangeTable() {for (short i = 0; i < kMaxCtrl; i++) {fCtrldefault [i] = 0;}}
+		virtual ~TCtrlChangeTable(){}
 	
-		void ChaseOff (TEventSenderInterfacePtr user, ULONG date_ms) {
+		void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) 
+		{
 			MidiEvPtr cur,e;
 			
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur =  fHashTable.GetLine(i);
 				while (cur) {
-					if (IsSustain (cur) && (e = MidiCopyEv(cur))){ 	
-						MidiSetField(e,1, fCtrldefault[64]); 		// Default value
+					if (IsSustain(cur) && (e = MidiCopyEv(cur))){ 	
+						MidiSetField(e,1,fCtrldefault[64]); 		// Default value
 						user->UseEvent(e,date_ms);
 					}
 					cur = Link(cur);
 				}
 			}
-		}
-		
+		}		
 				
 };
 
 typedef TCtrlChangeTable FAR * TCtrlChangeTablePtr;
-
-
-
 
 #endif

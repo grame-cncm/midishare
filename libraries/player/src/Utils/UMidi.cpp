@@ -1,13 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	Umidi.cpp			    
@@ -15,7 +26,6 @@
 //
 //	Midi utilities: various MidiShare sequence management functions
 // 
-
 
 #include "UMidi.h"
 
@@ -26,7 +36,7 @@ MidiEvPtr UMidi::NoteToKeyOff (MidiEvPtr e1)
 	MidiEvPtr e2;
 	EvType(e1) = typeKeyOn;
 	
-	if (e2 = MidiCopyEv(e1)) {
+	if ((e2 = MidiCopyEv(e1))) {
 		EvType(e2) = typeKeyOff;
 		Date(e2) = Date(e1)+MidiGetField(e1,2);
 	}
@@ -48,100 +58,101 @@ MidiEvPtr UMidi::CheckEvType (MidiSeqPtr src, short type)
 }
 
 /*--------------------------------------------------------------------------*/
+// Replace typeNote event by  typeKeyOn and typeKeyOff events
 
-MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr src)
+MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr dest)
 {
-	MidiSeqPtr tmp = MidiNewSeq();
-	MidiEvPtr e,e1;
+	MidiEvPtr e,e1,ei,n;
 
-	e = First (src);
-	if (tmp){
-		while (e) {
-			switch (EvType(e)) {
-			
-				case typeKeyOn:
-					if (Vel(e) == 0) {
-						EvType(e) = typeKeyOff;// Type change
-						Vel(e) = 64;
+	e = First (dest);
+	while (e) {
+		if (EvType(e) == typeNote) {
+			// A typeKeyOff ev is build and add to seq
+			if (e1 = MidiCopyEv(e)){
+				EvType(e1) = typeKeyOff;	// Type change
+				Vel(e1) = 64;				// velocity
+				Date(e1) = Date(e1) + Dur(e); // Date + Duration
+				// insert in dest after  e
+				ei = e;
+				while (ei)
+				{
+					n = Link(ei);
+					if(!n || Date(e1) <= Date(n))
+					{
+						// Insert e1 after ei and before n
+						Link(ei) = e1;
+						Link(e1) = n;
+						break;
 					}
-					break;
-			
-				case typeNote:
-					if (e1 = MidiCopyEv(e)){
-						EvType(e1) = typeKeyOff;// Type change
-						Vel(e1) = 64;
-						Date(e1) +=Dur(e);
-						MidiAddSeq(tmp,e1);
-					}else {
-						MidiFreeSeq(tmp);
-						return 0;
-					}
-					EvType(e) = typeKeyOn;// Type change
-					break;
-			}	
-			e = Link(e);
-		}
-		UMidi::MixeSeq (tmp,src); //The first cell of "temp" will be desallocated in MixeSeq
-		return src;
-   }else
-   		return 0;
-  
+					ei = n;
+				}
+				if (!n) Last (dest) = e1;
+
+			}else {
+				return 0;
+			}
+			// typeNote is replaced by a typeKeyOn
+			EvType(e) = typeKeyOn;	// Type change
+		}	
+		e = Link(e);
+	}
+	return dest;
 }
 
 /*--------------------------------------------------------------------------*/
 
-MidiEvPtr  UMidi::AddSeq( MidiEvPtr e1, MidiEvPtr e2)
+MidiEvPtr  UMidi::AddSeq(MidiEvPtr e1, MidiEvPtr e2)
 {
 	MidiEvPtr next;
 	
-	while( next= Link(e1))				/* tant qu'une séquence n'est finie */
+	while((next= Link(e1)))				/* tant qu'une séquence n'est finie */
 	{
-		if( Date(next) <= Date(e2))		/* date inférieure dans la même seq */
-			e1= next;					/* rien à faire : on continue		*/
+		if(Date(next) <= Date(e2))		/* date inférieure dans la même seq */
+			e1 = next;					/* rien à faire : on continue		*/
 		else							/* sinon							*/
 		{
-			Link( e1)= e2;				/* on linke avec l'autre séquence	*/
-			e1= e2;						/* et on les inverse				*/
-			e2= next;
+			Link( e1) = e2;				/* on linke avec l'autre séquence	*/
+			e1 = e2;						/* et on les inverse				*/
+			e2 = next;
 		}
 	}
-	if( Link(e1)= e2)			/* linke avec la fin de l'autre séquence 	*/
-		while( Link(e2))
-			e2= Link(e2);
+	if((Link(e1) = e2))			/* linke avec la fin de l'autre séquence 	*/
+		while(Link(e2))
+			e2 = Link(e2);
 	return e2;					/* et renvoie le dernier evt de la séquence */
 }
 
 /*--------------------------------------------------------------------------*/
 
-void  UMidi::MixeSeq( MidiSeqPtr src, MidiSeqPtr dest)
+void  UMidi::MixeSeq(MidiSeqPtr src, MidiSeqPtr dest)
 {
 	MidiEvPtr firstSrc, firstDest;
 	
-	if( dest && src)							/* dest et src existent		*/
+	if(dest && src)							/* dest et src existent		*/
 	{
-		if( firstSrc= src->first)				/* src non vide				*/
+		if((firstSrc= src->first))				/* src non vide				*/
 		{
-			if( !(firstDest= dest->first))		/* si destination est vide	*/
+			if(!(firstDest = dest->first))		/* si destination est vide	*/
 			{
-				dest->first= firstSrc;			/* recopie du premier et	*/
-				dest->last= src->last;			/* dernier evt de src		*/
+				dest->first = firstSrc;			/* recopie du premier et	*/
+				dest->last = src->last;			/* dernier evt de src		*/
 			}
-			else if( Date(firstSrc) < Date(firstDest))
+			else if(Date(firstSrc) < Date(firstDest))
 												/* 1ier evt source précède	*/
 			{									/* le 1ier evt destination	*/
-				dest->first= firstSrc;			/* range dans destination	*/
-				dest->last= AddSeq( firstSrc, firstDest);	/* et chainage	*/
+				dest->first = firstSrc;			/* range dans destination	*/
+				dest->last = AddSeq(firstSrc, firstDest);	/* et chainage	*/
 			}
-			else dest->last= AddSeq( firstDest, firstSrc);	/* et chainage	*/
+			else dest->last = AddSeq(firstDest, firstSrc);	/* et chainage	*/
 		}
 
-  	MidiFreeCell((MidiEvPtr) src);   
+  		MidiFreeCell((MidiEvPtr) src);   
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void UMidi::FreeOneLine (MidiEvPtr cur)
+void UMidi::FreeOneLine(MidiEvPtr cur)
 {
 	MidiEvPtr next;
 	
@@ -152,53 +163,15 @@ void UMidi::FreeOneLine (MidiEvPtr cur)
 	}
 }
 
-/*----------------------------------------------------------------------------*/
-
-MidiEvPtr UMidi::CopyOneLine (MidiEvPtr cur)
-{
-	MidiEvPtr next,e,first,curint;
-	
-	curint = 0;
-	first = 0;
-	
-	while (cur) {
-		next = Link(cur);
-		if (e = MidiCopyEv (cur)) {
-			if (curint) {
-				Link(curint) = e;
-				curint = e;
-			}else{
-				curint = e;
-				first = e;
-			}
-		}
-		cur = next;
-	}
-	return first;
-}
 
 /*----------------------------------------------------------------------------*/
 
-MidiSeqPtr	UMidi::CopySeq (MidiSeqPtr src)
-{
-	MidiSeqPtr res = MidiNewSeq();
-	MidiEvPtr cur = FirstEv(src);
-	
-	while (res && cur) {
-		MidiAddSeq(res, MidiCopyEv(cur));
-		cur = Link(cur);
-	}
-	return res;
-}
-
-/*----------------------------------------------------------------------------*/
-
-void UMidi::SetRefnum (MidiSeqPtr src,short refnum)
+void UMidi::SetRefnum(MidiSeqPtr src,short refnum)
 {
 	MidiEvPtr cur = FirstEv(src);
 	
 	while (cur) {
-		RefNum(cur) = refnum;
+		RefNum(cur) = (Byte)refnum;
 		cur = Link(cur);
 	}
 }
@@ -207,19 +180,16 @@ void UMidi::SetRefnum (MidiSeqPtr src,short refnum)
 
 ULONG UMidi::LengthSeq (MidiSeqPtr s)
 {
-	ULONG res = 0;
-	MidiEvPtr e = FirstEv(s);
-	
-	while (e){
-		res++;
-		e = Link(e);
-	}
-	return res;
+	ULONG n;
+	MidiEvPtr e;
+
+	for(e = FirstEv(s), n = 0; e; e = Link(e), n++){}
+	return n;
 }
 
 
 /*--------------------------------------------------------------------------*/
-/* 		supprime  toutes les fins de pistes 		*/
+/* 		supprime  toutes les fins de pistes 								*/
 /*--------------------------------------------------------------------------*/
  void  UMidi::DelEndTrack( MidiSeqPtr seq)
 {
@@ -229,22 +199,22 @@ ULONG UMidi::LengthSeq (MidiSeqPtr s)
 	ev = FirstEv(seq);
 	while(ev)
 	{
-		if( EvType(ev) == typeEndTrack) {			/* evt fin de piste		*/
+		if(EvType(ev) == typeEndTrack) {			/* evt fin de piste		*/
 				
 			if(prev)								/* n'est pas le premier	*/
-				Link(prev)= Link(ev);				/* mod. le chainage		*/
+				Link(prev) = Link(ev);				/* mod. le chainage		*/
 			else									/* sinon				*/
-				FirstEv(seq)= Link(ev);	
+				FirstEv(seq) = Link(ev);	
 				
-			if (!Link(ev))	LastEv(seq) = prev;     /* si dernier, met à jour last */
+			if (!Link(ev)) LastEv(seq) = prev;     /* si dernier, met à jour last */
 				
-			tmp= Link(ev);							/* sauve le suivant		*/
+			tmp = Link(ev);							/* sauve le suivant		*/
 			MidiFreeEv(ev);							/* libère l'evt			*/
 			ev = tmp;
 				
 		}else {
-			prev= ev;
-			ev= Link(ev);
+			prev = ev;
+			ev = Link(ev);
 		}
 	}
 }
@@ -256,8 +226,8 @@ MidiSeqPtr UMidi::BuildTrack(MidiSeqPtr s)
 	if (!s) return 0;
 	
 	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
-	if (MidiFreeSpace() < len)  MidiGrowSpace(len);
-	return (MidiFreeSpace() > len)  ? UMidi::TrsfNoteToKeyOn (s): 0;
+	if (MidiFreeSpace() < len) MidiGrowSpace(len);
+	return (MidiFreeSpace() > len) ? UMidi::TrsfNoteToKeyOn (s): 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -268,9 +238,9 @@ MidiSeqPtr UMidi::BuildAllTrack(MidiSeqPtr s)
 	
 	MidiSeqPtr s1;
 	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
-	if (MidiFreeSpace() < len)  MidiGrowSpace(len);
+	if (MidiFreeSpace() < len) MidiGrowSpace(len);
 	
-	if (MidiFreeSpace() > len  && (s1 = UMidi::TrsfNoteToKeyOn (s))){
+	if (MidiFreeSpace() > len && (s1 = UMidi::TrsfNoteToKeyOn (s))){
 		DelEndTrack(s1);	
 		return s1;
 	}else {
@@ -283,15 +253,13 @@ MidiSeqPtr UMidi::BuildAllTrack(MidiSeqPtr s)
 
 Boolean UMidi::Copy_AddSeq(MidiSeqPtr s, MidiEvPtr e) 
 {
-	MidiEvPtr e2;
-
-	e2 = MidiCopyEv(e);
-	if(e2) {
-		Link(e2) = 0;
-		MidiAddSeq(s, e2);
+	MidiEvPtr copy = MidiCopyEv(e);
+	
+	if(copy) {
+		Link(copy) = 0;
+		MidiAddSeq(s, copy);
 		return true;
 	}else {
-		MidiFreeSeq(s);
 		return false;
 	}
 }
@@ -302,7 +270,7 @@ Boolean UMidi::IsEmpty(MidiSeqPtr s) { return (FirstEv(s) == 0);}
 
 /*--------------------------------------------------------------------------*/
 
-void UMidi::RemoveEv( MidiSeqPtr seq, MidiEvPtr e)
+void UMidi::RemoveEv(MidiSeqPtr seq, MidiEvPtr e)
 {
 	MidiEvPtr cur, prev;
 	
@@ -310,12 +278,12 @@ void UMidi::RemoveEv( MidiSeqPtr seq, MidiEvPtr e)
 	cur = FirstEv(seq);
 	while(cur)
 	{
-		if( cur == e) {			
+		if(cur == e) {			
 				
 			if(prev)								/* n'est pas le premier	*/
 				Link(prev) = Link(cur);				/* mod. le chainage		*/
 			else									/* sinon				*/
-				FirstEv(seq)= Link(cur);	
+				FirstEv(seq) = Link(cur);	
 				
 			if (!Link(cur))	LastEv(seq) = prev;     /* si dernier, met à jour last */
 			

@@ -1,24 +1,31 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 // ===========================================================================
 //	TDestructor.h			    
 // ===========================================================================
-//
-//	Keeps trace of all objects allocated by the PlayerFactory
-// 
 
 #ifndef __TDestructor__
 #define __TDestructor__
-
 
 #include "TPlayerSynchroniser.h"
 #include "TSynchroniserInterface.h"
@@ -41,7 +48,9 @@
 #include "TEventReceiver.h"
 #include "TRunningPlayer.h"
 
-
+/*!
+\brief	Keeps trace of all objects allocated by the TPlayerFactory.
+*/
 
 class TDestructor {
 
@@ -55,34 +64,34 @@ class TDestructor {
 		TPlayerInterfacePtr 		fPlayer1;
 		TPlayerInterfacePtr 		fPlayer2;
 		TPlayerInterfacePtr 		fPlayer3;
-		TClockSenderPtr 			fClockSender;
+		TClockSenderPtr 		fClockSender;
 		TClockConverterPtr      	fClockConverter;
 		TLoopManagerPtr         	fLoopManager;
 		TScoreFollowerPtr       	fInserter;
-		TEventRecorderPtr			fRecorder;
-		TScoreStatePtr   			fScoreState;
+		TEventRecorderPtr		fRecorder;
+		TScoreStatePtr   		fScoreState;
 		TEventSenderInterfacePtr  	fEventSender;
-		TTimeManagerPtr				fTimeManager;
+		TTimeManagerPtr			fTimeManager;
 		
 	public:
 		
-		TDestructor(TPlayerSynchroniserPtr 		synchro,
-					TEventDispatcherPtr	 		receiver,
-					TSchedulerInterfacePtr 		scheduler,
-					TTickPlayerInterfacePtr 	tickplayer,
-					TChaserInterfacePtr 		chaser,
-					TPlayerInterfacePtr 		player1,
-					TPlayerInterfacePtr 		player2,
-					TPlayerInterfacePtr 		player3,
-					TClockSenderPtr 			clocksender,
-					TClockConverterPtr      	clockconverter,
-					TLoopManagerPtr         	loopmanager,
-					TScoreFollowerPtr       	inserter,
-					TEventRecorderPtr			recorder,
-					TScoreStatePtr   			scorestate,
-					TEventSenderInterfacePtr  	eventsender,
-					TTimeManagerPtr				timemanager
-					)
+		TDestructor(TPlayerSynchroniserPtr 	synchro,
+                            TEventDispatcherPtr	 	receiver,
+                            TSchedulerInterfacePtr 	scheduler,
+                            TTickPlayerInterfacePtr 	tickplayer,
+                            TChaserInterfacePtr 	chaser,
+                            TPlayerInterfacePtr 	player1,
+                            TPlayerInterfacePtr 	player2,
+                            TPlayerInterfacePtr 	player3,
+                            TClockSenderPtr 		clocksender,
+                            TClockConverterPtr      	clockconverter,
+                            TLoopManagerPtr         	loopmanager,
+                            TScoreFollowerPtr       	inserter,
+                            TEventRecorderPtr		recorder,
+                            TScoreStatePtr   		scorestate,
+                            TEventSenderInterfacePtr  	eventsender,
+                            TTimeManagerPtr		timemanager
+                            )
 
 		{
 			fSynchroniser = synchro;
@@ -103,9 +112,9 @@ class TDestructor {
 			fTimeManager = timemanager;
 		}
 				
-		~TDestructor()
+		virtual ~TDestructor()
 		{
-			// the scheduler must be desallocated first
+			// The scheduler must be desallocated first
 			
 			if (fScheduler)		delete(fScheduler);
 			if (fSynchroniser) 	delete(fSynchroniser);
@@ -116,7 +125,7 @@ class TDestructor {
 			if (fPlayer2)		delete(fPlayer2);
 			if (fPlayer3)		delete(fPlayer3);
 			if (fClockSender)	delete(fClockSender);
-			if (fClockConverter)delete(fClockConverter);
+			if (fClockConverter)	delete(fClockConverter);
 			if (fLoopManager)	delete(fLoopManager);
 			if (fInserter)		delete(fInserter);
 			if (fRecorder)		delete(fRecorder);
@@ -128,4 +137,5 @@ class TDestructor {
 };
 
 typedef TDestructor FAR * TDestructorPtr;
+
 #endif
