@@ -69,7 +69,8 @@ typedef struct {
 	P2EInfos            pei; 				// Packet to event conversion structure
 	OMSMIDIPacket255	mPack2;				// Statically allocated OMS packet
 	Boolean 			reloadOMS;
-
+	Boolean 			enableWakeup;
+	SlotRefNum			voidSlot;
 } DriverData, *DriverDataPtr;
 
 typedef struct {
@@ -202,6 +203,19 @@ static void InitSlotsTables (DriverDataPtr data)
 /* -----------------------------------------------------------------------------*/
 /* Driver required callbacks                                                    */
 /* -----------------------------------------------------------------------------*/
+static void WakeUpEnable (DriverDataPtr data)
+{
+	if (!data->enableWakeup) return;
+	data->enableWakeup = false;
+	if (OpenOMS (MySignature, InputPortID, OutputPortID, data)){
+		MidiConnect (MidiShareDrvRef, data->refNum, true);
+		MidiConnect (data->refNum, MidiShareDrvRef, true);
+	}
+	data->reloadOMS = false;
+	RestoreDriverState (data->refNum, StateFile);
+}
+
+/* -----------------------------------------------------------------------------*/
 static void WakeUp (short r)
 {
 	StoragePtr mem = GetStorage();
@@ -214,6 +228,8 @@ static void WakeUp (short r)
 	data->pei.src = 0;
 	data->pei.len = 0;
 	data->pei.cont = 0;
+	data->reloadOMS = false;
+	data->enableWakeup = true;
 	OMSInputNodes(data) = 0;
 	OMSOutputNodes(data) = 0;
 	
@@ -221,12 +237,11 @@ static void WakeUp (short r)
 	InitTypeTbl(data->typeTbl);
 	InitLinearizeMthTbl(data->e2p, data->p2e);
 
-	if (OpenOMS (MySignature, InputPortID, OutputPortID, data)){
-		MidiConnect (MidiShareDrvRef, r, true);
-		MidiConnect (r, MidiShareDrvRef, true);
-	}
-	data->reloadOMS = false;
-	RestoreDriverState (r, StateFile);
+#ifndef __BackgroundOnly__
+	WakeUpEnable (data);
+#else 
+	data->voidSlot = MidiAddSlot (r);
+#endif
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -249,21 +264,33 @@ static void Sleep (short r)
 {
 	StoragePtr mem = GetStorage();
 	DriverDataPtr data = mem->data;
-	
+
+	if (mem->refNum)
+		SaveDriverState (r, StateFile, MySignature, StateType);
+#ifdef __BackgroundOnly__	
 	CloseMidi ();
+	doneFlag = true;
+#endif
 	if (data) {
 		DisposeOMSMemory (data);
 		OMSDispose (MySignature, data);
 		DisposePtr ((Ptr)data);
 		mem->data = 0;
 	}
-	doneFlag = true;
 }
 
 /* -----------------------------------------------------------------------------*/
 static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 {
 	DriverDataPtr data = GetData (); short i, ref;
+
+#ifdef __BackgroundOnly__
+	if (data && data->enableWakeup) {
+		WakeUpEnable (data);
+		MidiRemoveSlot (data->voidSlot);
+		return false;
+	}
+#endif
 
 	if (infos) {
 		ref = Slot(slot);
@@ -397,7 +424,6 @@ void CloseMidi ()
 	short ref = mem->refNum;
 	mem->refNum = 0;
 	if (ref > 0) {
-		SaveDriverState (ref, StateFile, MySignature, StateType);
 		MidiUnregisterDriver (ref);
 	}
 }
