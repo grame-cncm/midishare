@@ -24,7 +24,7 @@
 #ifndef __msQTDriver__
 #define __msQTDriver__
 
-#define kQTDriverVersion      101
+#define kQTDriverVersion      103
 #define QTDriverName	"QuickTime Driver"
 
 Boolean CheckQuickTime ();
