@@ -22,7 +22,8 @@ v 1.86 	    : minor bug in MidiClose corrected (memory not released)
 
 Tags :
 ------------------------
-26/06/2001  V185	  : Release 1.85 for all platforms
+26/07/2001  V186      : Release 1.86 for all platforms
+26/06/2001  V185      : Release 1.85 for all platforms
 23/05/2001  linux_22x : For linux kernels 2.2.x
 25/04/2001  V184      : Release 1.84 for all platforms
 10/04/2000  V181M     : Macintosh release 1.81
