@@ -1,5 +1,15 @@
 // ===========================================================================
-//	TPlayerGeneric.h			    
+// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
+// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// see the file "Artistic" that is included in the distribution for details.
+//
+// Grame : Computer Music Research Laboratory
+// Web : http://www.grame.fr/Research
+// E-mail : MidiShare@rd.grame.fr
+// ===========================================================================
+
+// ===========================================================================
+//	TGenericPlayerInterface.h			    
 // ===========================================================================
 
 
@@ -16,7 +26,7 @@ class TGenericPlayerInterface {
 	 
 	 	virtual ~TGenericPlayerInterface(){};
 	 
-		virtual void Start() = 0;
+	 	virtual void Start() = 0;
 		virtual void Stop() = 0;
 		virtual void Pause() = 0;
 		virtual void Cont() = 0;

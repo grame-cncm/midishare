@@ -10,7 +10,7 @@
 
 
 // ===========================================================================
-//	TPlayerGeneric.h			    
+//	TGenericPlayer.h			    
 // ===========================================================================
 //  A TPlayerGeneric uses three components:
 //  - a synchronizable player implementing the TPlayerInterface 
@@ -55,7 +55,7 @@ class TGenericPlayer :public TGenericPlayerInterface{
 		//----------------------
 		// Player Interface 
 		//----------------------
-			
+		
 		void Start() {fPlayer->Start();}
 		void Stop()  {fPlayer->Stop();}
 		void Pause() {fPlayer->Pause();}
