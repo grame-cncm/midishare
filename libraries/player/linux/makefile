@@ -1,15 +1,15 @@
 
-TARGET = libPlayer.so.1.0
-TARGETJAVA = libJPlayer.so
+TARGET = libPlayer1.so.1.0
+TARGETJAVA = libJPlayer1.so
 
-LIB = /usr/lib/libPlayer.so
+LIB = /usr/lib/libPlayer1.so
 INC=../src/Include 
 INC1=./
 
 # SET THE PATHNAME  for ../JDKxx/include HERE
 
-INC2=/home/letz/jdk117/include
-INC3=/home/letz/jdk117/include/genunix
+INC2=/home/letz/jdk1.2.2/include
+INC3=/home/letz/jdk1.2.2/include/linux
 
 SRC =../src
 OPTIONS=-D__Linux__ -D_REENTRANT
@@ -26,19 +26,19 @@ TClockSender.o TPlayerSynchroniserClock.o TPlayerSynchroniserExt.o TPlayerSynchr
 TTrackTable.o UMidi.o UTools.o Tmtrack.o Midifile.o \
 TEventFactory.o  TMidiAppl.o TScheduler.o TScore.o TScoreFollower.o TScoreIterator.o\
 UScoreManager.o TTempoConverter.o TTempoMap.o TTempoMapVisitor.o TTime.o \
-TTimeConverter.o TTimeManager.o 
+TTimeConverter.o TTimeManager.o TEventModifier.o
  
 OBJJAVA = $(OBJ) MidiPlayer.o
  
 $(TARGET) :   $(OBJ)
-	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
+	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer1.so.1 -o $(TARGET)
 
 install: $(LIB).1.0
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
 	if [ ! -f $(LIB).1 ]; then ln -s $(LIB).1.0 $(LIB).1; fi
 
 java : $(OBJJAVA)
-	$(CC)  $(OBJJAVA) -lMidiShare -shared -fPIC -W1,soname,libJPlayer.so.1 -o $(TARGETJAVA)
+	$(CC)  $(OBJJAVA) -lMidiShare -shared -fPIC -W1,soname,libJPlayer1.so.1 -o $(TARGETJAVA)
 
 $(LIB).1.0 : $(TARGET)
 	cp $(TARGET)   $(LIB).1.0
@@ -174,6 +174,9 @@ TTimeConverter.o : $(SRC)/Framework/Tempo/TTimeConverter.cpp
 
 TTimeManager.o : $(SRC)/Framework/Tempo/TTimeManager.cpp
 	$(CC) $(SRC)/Framework/Tempo/TTimeManager.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+
+TEventModifier.o : $(SRC)/Events/TEventModifier.cpp
+	$(CC) $(SRC)/Events/TEventModifier.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
  clean : 
 	rm *.o
