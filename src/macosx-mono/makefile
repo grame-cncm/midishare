@@ -7,7 +7,8 @@ LIBO = ../lib/msPrefs.o ../lib/profport.o
 OBJ  = MidiShare.o macosx.o dlopen.o $(LIBO)
 COM  = msCommon.o
 PA   = libPortAudio.o
-TARGET = libMidiShare.1.8.6
+TARGET = libMidiShare
+VERS   = 1.8.6
 
 all : static dylib
 
@@ -15,8 +16,8 @@ static : common $(PA) $(OBJ)
 	ld -r $(OBJ) $(COM) $(PA) -o $(TARGET).o
 
 dylib : common $(OBJ) $(COM) $(PA)
-	libtool -arch_only ppc -noall_load -o $(TARGET).dylib -dynamic -framework CoreAudio -framework CoreServices $(OBJ) $(COM) $(PA) -lcc_dynamic -lSystem
-	nmedit -s _MidiShare.exp $(TARGET).dylib
+	libtool -arch_only ppc -noall_load -o $(TARGET).$(VERS).dylib -dynamic -framework CoreAudio -framework CoreServices $(OBJ) $(COM) $(PA) -lcc_dynamic -lSystem
+	nmedit -s _MidiShare.exp $(TARGET).$(VERS).dylib
 
 common :
 	make -C ../common
@@ -25,10 +26,12 @@ $(PA) :
 	make -C PortAudio
 
 install :
-	cp $(TARGET).dylib /usr/lib
-	cp MidiShare.h /usr/include
+	cp $(TARGET).$(VERS).dylib /usr/lib
+	cp include/MidiShare.h /usr/include
+	cd /usr/lib && ln -s $(TARGET).$(VERS).dylib $(TARGET).dylib
 
 uninstall :
+	rm -f /usr/lib/(TARGET).$(VERS).dylib
 	rm -f /usr/lib/(TARGET).dylib
 	rm /usr/include/MidiShare.h
 
