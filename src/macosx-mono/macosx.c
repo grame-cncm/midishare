@@ -28,9 +28,6 @@
 #include "msTasks.h"
 #include "msPrefs.h"
 
-#include "msMidiMain.h"
-#include "msSynthDriver.h"
-
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
