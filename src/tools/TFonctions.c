@@ -37,7 +37,7 @@
 	typedef char Boolean;
 #endif
 
-#ifdef __Macintosh__
+#if macintosh
 #	include <stdio.h>
 #	include "MidiShare.h"
 #	define PASCALNAME
@@ -981,7 +981,7 @@ void Tolerance()
 	MidiFreeEv( (MidiEvPtr)nil);
 	print ("%s\n", OK);
 
-#ifdef __Macintosh__
+#if macintosh && !defined __POWERPC__
 	print ("    OldMidiSetField : ");flush;
 	OldMidiSetField( (MidiEvPtr)nil, 0, 0L);
 	print ("%s\n", OK);
@@ -1094,7 +1094,7 @@ main()
 		Sequences( true); flush;
 		Time(); flush;
 		Sending(); flush;
-//		Mail(); flush;
+		Mail(); flush;
 		Tasks(true); flush;
 		Synchro(); flush;
 		Tolerance(); flush;

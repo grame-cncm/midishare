@@ -29,7 +29,7 @@
 	typedef char Boolean;
 #endif
 
-#ifdef __Macintosh__
+#if macintosh
 #	include <stdio.h>
 #	include "MidiShare.h"
 #	define PASCALNAME

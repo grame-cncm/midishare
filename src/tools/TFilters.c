@@ -55,7 +55,7 @@ inline Boolean MidiShare() { return true; }
 #endif
 
 
-#ifdef __Macintosh__
+#if macintosh
 #	include <stdio.h>
 #	include <String.h>
 #	include "MidiShare.h"
