@@ -133,8 +133,7 @@
 #define kMaxMth			    76
 
 
-/* date structures  for ioctl calls */ 
-
+/* data structures for ioctl calls */ 
 
 typedef struct SMidiGetVersionArgs 
 {
@@ -394,11 +393,11 @@ typedef struct SMidiCountEvsArgs
 
 typedef struct SMidiGetEvArgs 
 {
-  long		r;	/* -- numéro de reference				*/
-  long 		d;	/* -- nb de cellules disponibles 		*/
-  MidiEvPtr	l;	/* -- liste des cellules disponibles	*/
-  MidiEvPtr	e;	/* -- événement lu						*/
-  long		u;	/* -- nb de cellules utilisées			*/
+  long		r;	/* -- reference number					*/
+  long 		d;	/* -- number of available cells 		*/
+  MidiEvPtr	l;	/* -- list of availables cells			*/
+  MidiEvPtr	e;	/* -- read event						*/
+  long		u;	/* -- number of used cells				*/
 } TMidiGetEvArgs;
 
 
@@ -499,20 +498,7 @@ typedef TMidiFilterGenericArgs TMidiIsAcceptedPortArgs ;
 typedef TMidiFilterGenericArgs TMidiIsAcceptedTypeArgs ;
 
 
-/*
-
-int mskOpen(TMidiOpenArgs* userptr, TMSGlobalPtr g);
-int mskClose(TMidiCloseArgs* userptr,TMSGlobalPtr g);
-int mskGetTime(TMidiGetTimeArgs* userptr, TMSGlobalPtr g);
-int mskSendIm(MidiEvPtr e, TMSGlobalPtr g);
-int mskSend(MidiEvPtr e, TMSGlobalPtr g);
-int mskGetEv(TMidiGetEvArgs* userptr, TMSGlobalPtr g, int command);
-
-int mskConnect(TMidiConnectArgs* ue,  TMSGlobalPtr g);
-int mskIsConnected(TMidiIsConnectedArgs* args,  TMSGlobalPtr g);
-*/
-
-
+/* functions prototypes */
 
 int mskGetVersion(unsigned long userptr);
 int mskCountAppls(unsigned long userptr);
