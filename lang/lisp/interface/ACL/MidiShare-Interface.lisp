@@ -2,12 +2,15 @@
 ;;; ----------------------------------------------------------------------
 ;;; Saved for the last time with emacs on (and by): 
 ;;;     Time-stamp: <2004-04-21 10:59:14 Saugier>
+;;; 11-02-05 : SL : Callback pointer defines as :long type
+;;;
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (load "mshare32.dll")
   )
 
 (in-package :cl-user)
+(use-package 'ff)
 
 (cl:defpackage "MIDISHARE"
   (:nicknames "MS")
@@ -332,10 +335,16 @@
 
 ;; Function pointer types
 
-(def-foreign-type TaskPtr :foreign-address)
-(def-foreign-type RcvAlarmPtr :foreign-address)
-(def-foreign-type ApplAlarmPtr :foreign-address)
-(def-foreign-type ApplyProcPtr :foreign-address)
+;;(def-foreign-type TaskPtr :foreign-address)
+;;(def-foreign-type RcvAlarmPtr :foreign-address)
+;;(def-foreign-type ApplAlarmPtr :foreign-address)
+;;(def-foreign-type ApplyProcPtr :foreign-address)
+
+(def-foreign-type TaskPtr :long)
+(def-foreign-type RcvAlarmPtr :long)
+(def-foreign-type ApplAlarmPtr :long)
+(def-foreign-type ApplyProcPtr :long)
+
 
 ;;;-----------------------------------------------------------------------
 ;;;
