@@ -46,11 +46,14 @@
 #define osEvent 				app4Evt
 #define	resumeMask				1
 #define	suspendResumeMessage	1
+#define kStateResType	'Stat'
+#define kBaseRsrcId		128
 
 /* menu bar constants */
-#define mBarSize	2
-enum { AppleMenu, FileMenu };
-enum { AppleID = 128, FileID };
+#define mBarSize	3
+enum { AppleMenu, FileMenu, SetupMenu };
+enum { AppleID = 128, FileID, SetupID };
+enum { ShowHideI = 1, QuitSetupI };
 
 /* dialog & alerts */
 enum { dialogID = 128, AlertID = 500 };
@@ -58,9 +61,16 @@ enum { dialogID = 128, AlertID = 500 };
 /* Application name	*/
 #define ApplName 		"\pMidiShare OMS Driver"
 
+typedef struct state {
+	Boolean		showWindow;
+	Boolean		autoQuit;
+} State, *StatePtr;
+
 /* global variables	*/
-WindowPtr	myWindow;
+WindowPtr	myWindow = 0;
 Boolean		doneFlag;
+State 		gState;
+short 		resFile;
 
 SysEnvRec	gMac;
 Boolean		hasWNE;
@@ -70,6 +80,8 @@ EventRecord	myEvent;
 Rect		dragRect;
 MenuHandle	myMenus[mBarSize];
 
+unsigned char *Hide= "\pHide window";
+unsigned char *Show= "\pShow window";
 
 
 /********************************************************************************/
@@ -124,6 +136,20 @@ static void CloseAllWinds (WindowPtr wind)
 	}
 }
 
+//_________________________________________________________________________________
+static void AdjustLocation (DialogPtr dlog)
+{
+	Point p;
+	
+	p.h = dlog->portRect.left + 6;	// 6 is enough to grab
+	p.v = dlog->portRect.top + 6;	// 6 is enough to grab
+	LocalToGlobal(&p);
+	
+	if (!PtInRgn (p, GetGrayRgn())) {
+		MoveWindow ((WindowPtr) dlog, qd.screenBits.bounds.left + 50,			
+									  qd.screenBits.bounds.top  + 50, false);
+	}
+}
 
 /* -----------------------------------------------------------------------------*/
 static void SetUpWindows()
@@ -133,8 +159,8 @@ static void SetUpWindows()
 	InsetRect (&dragRect, 4, 4);
  	myWindow = GetNewDialog (dialogID, nil, (WindowPtr) -1);
  	SetPort(myWindow);
+	AdjustLocation (myWindow);
 	ShowWindow(myWindow);
-
 }
 	
 /* -----------------------------------------------------------------------------*/
@@ -145,7 +171,8 @@ static void SetUpMenus()
 	myMenus[AppleMenu] = GetMenu(AppleID);
 	AppendResMenu(myMenus[AppleMenu],'DRVR');
 	myMenus[FileMenu] = GetMenu(FileID);
-	for (i = AppleMenu; i <= FileMenu; i++)
+	myMenus[SetupMenu] = GetMenu(SetupID);
+	for (i = AppleMenu; i <= SetupMenu; i++)
 		InsertMenu(myMenus[i], 0);
 	DrawMenuBar();
 }			
@@ -154,7 +181,45 @@ static void SetUpMenus()
 static void ShowAbout()
 {										
 }
-			
+
+//_________________________________________________________________________________
+static void SaveLocation (DialogPtr dlog)
+{
+	Handle	h1;
+	Rect	WhereItIs;
+	
+	h1 = GetResource( 'DLOG', dialogID);
+	if( dlog) {
+		WhereItIs = dlog->portRect;
+		LocalToGlobal( (Point *) &(WhereItIs.top) );
+		LocalToGlobal( (Point *) &(WhereItIs.bottom) );
+		SetPort( dlog);
+
+		if( h1) {
+			HNoPurge( h1);
+			( *((DialogTHndl)h1))->boundsRect = WhereItIs;
+			ChangedResource( h1);
+			WriteResource( h1);
+			HPurge( h1);
+		}
+	}
+}
+		
+/* -----------------------------------------------------------------------------*/
+static void WShowHide ()
+{
+	if( myWindow) {
+		SaveLocation (myWindow);
+		CloseWind( myWindow);
+		myWindow= 0;
+		gState.showWindow= false;
+	}
+	else {
+		SetUpWindows();
+		gState.showWindow= true;;
+	}
+}
+		
 /* -----------------------------------------------------------------------------*/
 static void DoCommand(long mResult)
 {
@@ -180,6 +245,19 @@ static void DoCommand(long mResult)
 		case FileID: 
 			doneFlag = true;
 			break;
+
+		case SetupID:
+			switch (theItem) {
+				case ShowHideI:
+					WShowHide ();
+					break;
+				case QuitSetupI:
+					gState.autoQuit = !gState.autoQuit;
+					SetItemMark(myMenus[SetupMenu], QuitSetupI, 
+									gState.autoQuit ? checkMark : noMark);
+					break;
+			} 
+			break;
 	}
 	HiliteMenu(0);  
 }
@@ -192,6 +270,7 @@ static void DoMouseDown()
 	switch ( FindWindow( myEvent.where, &whichWindow ) )
 	{ 
 		case inMenuBar:	
+				SetMenuItemText( myMenus[SetupMenu], ShowHideI, myWindow ? Hide : Show);
 				DoCommand(MenuSelect(myEvent.where));
 				break;
 		case inSysWindow: 
@@ -218,6 +297,61 @@ static void AdjustCursor()
 {
 	if (foreGround && IsAppWindow(FrontWindow())) 
 		SetCursor(&qd.arrow);
+}
+
+//_________________________________________________________________________________
+static void SetState (StatePtr state)
+{
+	if (state->showWindow) {
+		SetUpWindows();
+	}
+	SetItemMark (myMenus[SetupMenu], QuitSetupI, 
+									state->autoQuit ? checkMark : noMark);
+}
+
+//_________________________________________________________________________________
+static void InitState (StatePtr g)
+{
+	Handle h;
+	StatePtr state;
+
+	g->showWindow= true;
+	g->autoQuit= true;
+	h= GetResource( kStateResType, kBaseRsrcId);
+	if( h) {
+		state= (StatePtr)*h;
+		*g = *state;
+	}
+}
+
+//_________________________________________________________________________________
+static void SaveState ()
+{
+	Handle h;
+	StatePtr *state;
+
+	h= GetResource( kStateResType, kBaseRsrcId);
+	if( !h) {
+		state= (StatePtr *)NewHandle( sizeof( State));
+		if( state){
+			HLock( (Handle)state);
+			**state= gState;
+			AddResource( (Handle)state, kStateResType, kBaseRsrcId, "\pState");
+			UpdateResFile( resFile);
+			HUnlock( (Handle)state);
+			DisposeHandle( (Handle)state);
+		}
+	}
+	else {
+		state= (StatePtr *)h;
+		**state= gState;
+		HLock( h);
+		ChangedResource( h);
+		UpdateResFile( resFile);
+		HUnlock( h);
+	}
+	if( myWindow)
+		SaveLocation( myWindow);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -248,14 +382,16 @@ static void Initialize()
 	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
 							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 
+	resFile = CurResFile();
 	if (!CheckOMS()) 			AlertUser ("\pOMS 2.00 or later is required");
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
 	if (MidiGetVersion() < 182) AlertUser ("\prequire MidiShare version 1.82 or later");
 	if (MidiGetNamedAppl (OMSDriverName) > 0) AlertUser ("\pOMS driver is still running");
-	if (!SetUpMidi()) 			AlertUser ("\pMidiShare initialization failed");
+	if (!SetUpMidi(&gState.autoQuit)) 		AlertUser ("\pMidiShare initialization failed");
 	foreGround = true;
 	SetUpMenus();
-	SetUpWindows();
+	InitState (&gState);
+	SetState (&gState);
 }
 
 /*======================================== main loop =======================================*/
@@ -311,6 +447,7 @@ void main()
 				break;
 		}
 	}
+	SaveState ();
 	CloseMidi ();
 	CloseAllWinds( FrontWindow() );
 }
