@@ -65,8 +65,8 @@ class TPlayerSynchroniser : public TSynchroniserInterface {
 		
 		// Time conversion
 		
-		ULONG ConvertTickToMs (ULONG date_tick) { return fOffset + fTempoVisitor.ConvertTickToMs(date_tick);}
-		ULONG ConvertMsToTick (ULONG date_ms)   { return fTempoVisitor.ConvertMsToTick(date_ms - fOffset);}
+		ULONG ConvertTickToMs(ULONG date_tick) {return fOffset + fTempoVisitor.ConvertTickToMs(date_tick);}
+		ULONG ConvertMsToTick(ULONG date_ms)   {return fTempoVisitor.ConvertMsToTick(date_ms - fOffset);}
 	
 		// Transport
 		
@@ -76,18 +76,18 @@ class TPlayerSynchroniser : public TSynchroniserInterface {
  		
 		// Tempo management
 		
- 		virtual void  SetTempo (ULONG tempo) {}
- 		virtual void  SetTempo (ULONG date_ticks, ULONG tempo){}
- 		virtual	ULONG GetTempo (){return fTempoVisitor.GetTempo();}
+ 		virtual void  SetTempo(ULONG tempo) {}
+ 		virtual void  SetTempo(ULONG date_ticks, ULONG tempo){}
+ 		virtual ULONG GetTempo(){return fTempoVisitor.GetTempo();}
  		
- 		virtual void  RcvClock (ULONG date_ms){}
+ 		virtual void  RcvClock(ULONG date_ms){}
  		
- 		virtual Boolean IsSchedulable(ULONG date_tick){ return false;};
+ 		virtual Boolean IsSchedulable(ULONG date_tick){return false;}
  		
  		// Position management
  		
- 		virtual void SetPosTicks (ULONG date_ticks){}
- 		virtual ULONG GetPosTicks (){return 0;}
+ 		virtual void SetPosTicks(ULONG date_ticks){}
+ 		virtual ULONG GetPosTicks(){return 0;}
 };
 
 typedef TPlayerSynchroniser FAR * TPlayerSynchroniserPtr;
@@ -110,8 +110,8 @@ class TTempoTask : public TTicksTask {
 
 	public: 
 	
-		TTempoTask (TPlayerSynchroniserInt* it):TTicksTask(),fSynchroniser(it){}
-		void Execute (TMidiApplPtr appl, ULONG date);
+		TTempoTask(TPlayerSynchroniserInt* it):TTicksTask(),fSynchroniser(it){}
+		void Execute(TMidiApplPtr appl, ULONG date);
 };
 
 typedef TTempoTask FAR * TTempoTaskPtr;
@@ -146,8 +146,8 @@ class TPlayerSynchroniserInt : public TPlayerSynchroniser {
  		void Stop();
  		void Cont(ULONG date_ticks);
  		
- 		ULONG GetPosTicks ();
- 		void SetPosTicks (ULONG date_ticks);
+ 		ULONG GetPosTicks();
+ 		void SetPosTicks(ULONG date_ticks);
  		
  		Boolean IsSchedulable(ULONG date_tick);
  	
@@ -189,11 +189,11 @@ class TPlayerSynchroniserClock : public TPlayerSynchroniser {
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
  		
- 		ULONG GetTempo (){return fTempoVisitor.GetTempo();}
+ 		ULONG GetTempo(){return fTempoVisitor.GetTempo();}
  		
  		Boolean IsSchedulable(ULONG date_tick);
  		
- 		void RcvClock (ULONG date_ms);
+ 		void RcvClock(ULONG date_ms);
 };
 
 
@@ -220,11 +220,11 @@ class TPlayerSynchroniserExt : public TPlayerSynchroniser {
 		void Stop();
  		void Cont(ULONG date_ticks);
 		
- 		ULONG GetPosTicks ();
- 		void SetPosTicks (ULONG date_ticks);
+ 		ULONG GetPosTicks();
+ 		void SetPosTicks(ULONG date_ticks);
  		
- 		ULONG GetTempo (){return fTempoVisitor.GetTempo();}
- 		void SetTempo (ULONG tempo);
+ 		ULONG GetTempo(){return fTempoVisitor.GetTempo();}
+ 		void SetTempo(ULONG tempo);
  		
  		Boolean IsSchedulable(ULONG date_tick);
  	
