@@ -24,7 +24,7 @@
 
 /*----------------------------------------------------------------------------*/
 	  	
-TSyncOutPlayer::TSyncOutPlayer (TPlayerInterfacePtr player, TClockSenderPtr clock,TClockConverterPtr converter)
+TSyncOutPlayer::TSyncOutPlayer (TPlayerInterfacePtr player, TClockSenderPtr clock, TClockConverterPtr converter)
 { 
 	fPlayer = player;
 	fClocksender = clock;
@@ -64,15 +64,11 @@ void TSyncOutPlayer::Cont()
 {
 	// Set the pos on the previous Clock or SongPos
 	
-	ULONG new_date_ticks;
+	ULONG new_date_ticks = (fNeedSongPos) 
+		? fClockConverter->ConvertTickToTickAtPrevSP(fPlayer->GetPosTicks())
+		: fClockConverter->ConvertTickToTickAtPrevClock(fPlayer->GetPosTicks());
 	
-	if (fNeedSongPos){
-		new_date_ticks = fClockConverter->ConvertTickToTickAtPrevSP(fPlayer->GetPosTicks());
-	}else {
-		new_date_ticks = fClockConverter->ConvertTickToTickAtPrevClock(fPlayer->GetPosTicks());
-	}
-		
-	fPlayer->SetPosTicks (new_date_ticks);
+	fPlayer->SetPosTicks(new_date_ticks);
 	fPlayer->Cont();
 	fClocksender->Cont(new_date_ticks);
 	fNeedSongPos = false;
