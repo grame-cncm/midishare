@@ -349,43 +349,43 @@ int Clean_MidiGetDate(int ev);
 Clean (Clean_MidiGetDate :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetType(int ev, int type);
-Clean (Clean_MidiSetType :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetType :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetType(int ev);
 Clean (Clean_MidiGetType :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetChan(int ev, int chan);
-Clean (Clean_MidiSetChan :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetChan :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetChan(int ev);
 Clean (Clean_MidiGetChan :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetPort(int ev, int port);
-Clean (Clean_MidiSetPort :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetPort :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetPort(int ev);
 Clean (Clean_MidiGetPort :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetRefnum(int ev, int ref);
-Clean (Clean_MidiSetRefnum :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetRefnum :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetRefnum(int ev);
 Clean (Clean_MidiGetRefnum :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetLink(int ev, int link);
-Clean (Clean_MidiSetLink :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetLink :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetLink(int ev);
 Clean (Clean_MidiGetLink :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetFirstEv(int seq, int link);
-Clean (Clean_MidiSetFirstEv :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetFirstEv :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetFirstEv(int seq);
 Clean (Clean_MidiGetFirstEv :: MidiEvPtr State -> (Int,State))
 
 void Clean_MidiSetLastEv(int seq, int link);
-Clean (Clean_MidiSetLastEv :: MidiEvPtr Int State -> MidiEvPtr)
+Clean (Clean_MidiSetLastEv :: MidiEvPtr Int State -> State)
 
 int Clean_MidiGetLastEv(int seq);
 Clean (Clean_MidiGetLastEv :: MidiEvPtr State -> (Int,State))
@@ -393,10 +393,10 @@ Clean (Clean_MidiGetLastEv :: MidiEvPtr State -> (Int,State))
 /*---------------------------------- Special ----------------------------------*/
 
 int Clean_MidiGetEvBlock(int ref);
-Clean (Clean_MidiGetEvBlock :: RefNum -> MidiEvPtr)
+Clean (Clean_MidiGetEvBlock :: RefNum State -> (MidiEvPtr,State))
 
 int Clean_MidiWait(int ref, int d);
-Clean (Clean_MidiWait :: RefNum Int  -> Int)
+Clean (Clean_MidiWait :: RefNum Int  State -> (Int,State))
 
 int Clean_MidiWaitTimeOut(int ref, int d);
-Clean (Clean_MidiWaitTimeOut :: RefNum Int  -> MidiEvPtr)
+Clean (Clean_MidiWaitTimeOut :: RefNum Int  State ->( MidiEvPtr,State))
