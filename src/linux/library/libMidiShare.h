@@ -59,9 +59,9 @@ typedef struct TTaskExt
 #define FreeAppl(appl)		free(appl)
 
 #define CALL(index,args) \
-	 if (msfd < 0) MidiInstall();\
+	 {int err; if (msfd < 0) MidiInstall();\
 	 err = ioctl(msfd, (index), args); \
-	 if (err < 0) { printf("(index) ioctl failed: %d\n", err);  exit(-1); }
+	 if (err < 0) { printf("(index) ioctl failed: %d\n", err);  exit(-1); }}
 
 
 /*__________________________________________________________________________________*/
