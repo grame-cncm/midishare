@@ -22,6 +22,7 @@
 */
 
 #include <stdio.h>
+#include <signal.h>
 
 #include "TThreads.h"
 #include "msThreads.h"
