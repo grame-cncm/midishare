@@ -1,0 +1,20 @@
+General
+--------
+
+- Remove the use of the running state object for events management in main branch
+
+
+Macintosh 
+----------
+
+
+Linux 
+------
+
+- Update MidiShare.h to match MidiShare 1.85 version
+
+
+Windows 
+--------
+
+- Update MidiShare.h to match MidiShare 1.85 version
