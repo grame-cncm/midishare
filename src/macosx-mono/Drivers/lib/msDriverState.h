@@ -20,13 +20,17 @@
 
 */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MidiShareDirectory ".MidiShare"
 
 #define kMaxEntryLen	1024
 #define PortMaxEntry	10
 #define CnxError	-1
 
-static __inline Boolean CnxSeparator(c) { return ((c)==' ') || ((c)=='	'); }
+static __inline Boolean CnxSeparator(char c) { return ((c)==' ') || ((c)=='	'); }
 
 unsigned short CountCnx (char * cnxString);
 short GetCnx (char * cnxString, short index);
@@ -38,3 +42,7 @@ int SaveConfig (char * section, char* key, char* name, char* fullname);
 int SaveConfigNum (char * section, char* key, int val, char* fullname);
 void LoadSlot (char * section, char* fullname, char* drivername);
 void SaveSlot (char * section, char* fullname,char* drivername);
+
+#ifdef __cplusplus
+}
+#endif
