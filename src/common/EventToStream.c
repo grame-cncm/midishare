@@ -24,10 +24,6 @@
 #include "StreamDefs.h"
 #include "msEvents.h"
 
-#ifdef WIN32
-enum { false, true };
-#endif
-
 #define StreamFreeSpace(f) (f->size - StreamLength(f->buff))
 #define StreamAdjust(f, ptr, size) \
 	StreamLength(f->buff) += size; \

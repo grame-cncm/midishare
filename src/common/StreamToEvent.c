@@ -25,10 +25,6 @@
 #include "StreamDefs.h"
 #include "msFunctions.h"
 
-#ifdef WIN32
-enum { false, true };
-#endif
-
 #define StreamCountAvail(f) (StreamLength(f->buff) - f->read)
 #define StreamCountCont(f)  (StreamLength(f->buff) - f->read)
 #define StreamAdjust(f, ptr, size) \
