@@ -1,5 +1,8 @@
 
 CONF = MidiShare.conf
+MODF = /lib/modules/`uname -r`/misc
+RC   = /etc/rc.d
+INIT = $(RC)/init.d
 
 midishare: common
 	make -C kernel
@@ -12,25 +15,38 @@ common:
 	make -C ../common/Memory
 	make -C library
 
-install:
-	./checksu
-	make -i -C library install
-	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
-	if [ ! -f /etc/$(CONF) ]; then cp $(CONF) /etc/$(CONF); fi
+devinstall: libinstall
 	insmod MidiShare.o
 
+libinstall:
+	make -i -C library install
+	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
+	cp $(CONF) /etc/$(CONF)
+
+install: libinstall
+	install MidiShare.o $(MODF)
+	depmod -a
+	install MidiShare $(RC)/init.d
+	ln -s $(INIT)/MidiShare $(RC)/rc5.d/S99MidiShare
+	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S99MidiShare
+	modprobe MidiShare
+	
 appls:
 	make -f appls
 
 test:
 	make -C tests all
 
-uninstall:
-	./checksu
-	rmmod MidiShare || echo module not installed
-	if [ -c /dev/MidiShare ]; then rm /dev/MidiShare; fi
-	if [ -f /etc/$(CONF) ]; then rm /etc/$(CONF); fi
+libuninstall:
+	rm -f /dev/MidiShare
 	make -C library uninstall 
+
+uninstall: libuninstall
+	rm -f /etc/$(CONF)
+	rmmod MidiShare
+	rm -f $(MODF)/MidiShare.o
+	rm -f $(INIT)/MidiShare $(RC)/rc[35].d/*MidiShare
+	
 dep:
 	make -i -C ../common/Memory dep 
 	make -i -C ../common dep 
