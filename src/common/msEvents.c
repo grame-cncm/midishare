@@ -745,19 +745,19 @@ static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
 /*__________________________________________________________________________________*/
 static void	SetFOpenRes	( MidiEvPtr e, unsigned long f, long v)
 {
-	if( f < 1) e->info.seqNum.number = v;
+	if( f < 1) e->info.seqNum.number = (unsigned short)v;
 }
 
 /*__________________________________________________________________________________*/
 static void	SetFClose	( MidiEvPtr e, unsigned long f, long v)
 {
-	if( f < 1) e->info.seqNum.number = v;
+	if( f < 1) e->info.seqNum.number = (unsigned short)v;
 }
 
 /*__________________________________________________________________________________*/
 static void	SetFConnect	( MidiEvPtr e, unsigned long f, long v)
 {
-	if( f < 2) e->info.shortFields[f] = v;
+	if( f < 2) e->info.shortFields[f] = (short)v;
 }
 
 /*__________________________________________________________________________________*/
