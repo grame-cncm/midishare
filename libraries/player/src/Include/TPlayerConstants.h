@@ -25,7 +25,7 @@
 // Version Number 
 //-----------------------
 
-#define kVersion 201
+#define kVersion 204
 
 //-----------------------
 // MidiShare memory limit
