@@ -15,8 +15,8 @@ function install () {
 	then
 		echo "$file is on the way"
 	else
+		cp -R  $src/$file $dst || exit 1
 		echo " ok"
-		cp -R  $src/$file $dst || exit 0
 	fi
 }
 

@@ -4,7 +4,7 @@ ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
 
-VERSION =1.88
+VERSION =1.89
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
@@ -56,7 +56,7 @@ dist:
 
 devpack:
 	[ -d $(DEVROOT) ] || cp -R Developer $(DEVROOT)
-	find $(ROOT) -depth -name CVS -exec rm -rf {} \;
+	find $(DEVROOT) -depth -name CVS -exec rm -rf {} \;
 	make dev
 	open msDevPackage.pmsp
 
