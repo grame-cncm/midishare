@@ -698,18 +698,9 @@ int mskDTask(unsigned long userptr){ return mskTask(userptr);}
 int mskForgetTask (unsigned long userptr){ 
 
 	TMidiForgetTaskArgs args;
-	MidiEvPtr ktask; 
 	
 	if (copy_from_user(&args, (TMidiForgetTaskArgs *)userptr, sizeof(TMidiForgetTaskArgs))) return -EFAULT;
-	
-	ktask = args.taskptr ? *args.taskptr : 0;
-	
-	if (ktask && ((EvType(ktask) == typeProcess) || (EvType(ktask) == typeDProcess)))
-	 {
-     		EvType(ktask) = typeDead;
-		*args.taskptr = 0;
-	}
-	
+	MSForgetTask(args.taskptr);
 	if (copy_to_user((TMidiForgetTaskArgs *)userptr, &args, sizeof(TMidiForgetTaskArgs))) return -EFAULT;
 			
 	return 0 ;
