@@ -29,7 +29,7 @@
 #include <string.h>
 #include <time.h> 
 
-#define MidiShareDirectory  "MidiShare"
+#define MidiShareDirectory  ".MidiShare"
 #define ErrFile  "midishare.log"
 
 #define profileName "midishare.ini"

@@ -20,7 +20,7 @@
 
 */
 
-#define MidiShareDirectory "MidiShare"
+#define MidiShareDirectory ".MidiShare"
 
 #define kMaxEntryLen	1024
 #define PortMaxEntry	10

@@ -26,7 +26,7 @@
 #include "states.h"
 #include "profport.h"
 
-#define MidiShareDirectory "MidiShare"
+#define MidiShareDirectory ".MidiShare"
 
 static char * sectionName = "Window position";
 static char * xEntryName  = "xpos";

@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include "NetTools.h"
 
-#define MidiShareDirectory "MidiShare"
+#define MidiShareDirectory ".MidiShare"
 
 //________________________________________________________________________
 char * MakeMSFullName (char * name)
