@@ -1,5 +1,5 @@
 /*
- * $Id: pa_mac_core.c,v 1.1.2.5 2003/09/15 15:11:02 letz Exp $
+ * $Id: pa_mac_core.c,v 1.1.2.6 2003/10/16 08:30:08 letz Exp $
  * pa_mac_core.c
  * Implementation of PortAudio for Mac OS X Core Audio
  *
@@ -50,6 +50,9 @@
             Check for getenv("PA_MIN_LATEWNCY_MSEC") to set latency externally.
             Better error checking for invalid channel counts and invalid devices.
  3.29.2002 - Phil Burk - Fixed Pa_GetCPULoad() for small buffers.
+ 10.16.2003- S Letz - Removes PaHost_SetSampleRate from PaHost_OpenInputStream and PaHost_OpenOuputStream
+            that does not work on Panther.
+
 
 TODO:
 O- how do mono output?
@@ -801,9 +804,11 @@ PaError PaHost_OpenInputStream( internalPortAudioStream   *past )
     hostDeviceInfo = &sDeviceInfos[past->past_InputDeviceID];
 
     /* Try to set sample rate. */
+    /*
     result = PaHost_SetSampleRate( hostDeviceInfo->audioDeviceID, IS_INPUT, past->past_SampleRate );
 	if( result != paNoError ) return result;
-
+    */
+    
     if( past->past_NumInputChannels != hostDeviceInfo->paInfo.maxInputChannels )
     {
 #if 1
@@ -873,9 +878,11 @@ PaError PaHost_OpenOutputStream( internalPortAudioStream   *past )
     hostDeviceInfo = &sDeviceInfos[past->past_OutputDeviceID];
 
     /* Try to set sample rate. */
+    /*
     result = PaHost_SetSampleRate( hostDeviceInfo->audioDeviceID, IS_OUTPUT, past->past_SampleRate );
 	if( result != paNoError ) return result;
-
+    */
+    
     if( past->past_NumOutputChannels != hostDeviceInfo->paInfo.maxOutputChannels )
     {
 #if 1
@@ -992,8 +999,10 @@ PaError PaHost_OpenStream( internalPortAudioStream   *past )
     PaHost_CalcHostBufferSize( past );
 
     {
+        /*
         int msecLatency = (int) ((PaHost_GetTotalBufferFrames(past) * 1000) / past->past_SampleRate);
-        //PRINT(("PortAudio on OS X - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
+        PRINT(("PortAudio on OS X - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
+        */
     }
     
     /* Setup constants for CPU load measurement. */
