@@ -19,12 +19,6 @@
 
 #include "SignatureToApp.h"
 
-/* ajout DF pour que ça compile...
-enum {
-	false						= 0,
-	true						= 1
-};
-*/
 
    ////////////////////////////////////////////////////////////
   //	FindRunningAppBySignature							//
