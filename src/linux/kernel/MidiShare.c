@@ -352,6 +352,9 @@ void InitStructTbl()
   for (i=typeReserved;i<=typeLastReserved;i++) 	gEvStruct[i]= kUndefStruct;
   gEvStruct[typeQuarterFrame] = kSmallStruct;
   gEvStruct[typeSpecific]     = kSexStruct;
+  gEvStruct[typePortPrefix]   = kSmallStruct;
+  gEvStruct[typeRcvAlarm]   = kSmallStruct;
+  gEvStruct[typeApplAlarm]   = kSmallStruct;
   gEvStruct[typeProcess]    = kPrivateStruct;
   gEvStruct[typeDProcess]   = kPrivateStruct;
   gEvStruct[typeDead]       = kDeadStruct;
