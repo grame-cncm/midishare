@@ -1,7 +1,7 @@
 
 INC = -I../../../Include
 UTILS = ../../../lib/msUtilities.o
-LIB = $(UTILS) -lMidiShare -lpthread
+LIB = $(UTILS) -Wl,-L../../../library -lMidiShare 
 BIN=/usr/local/bin
 
 Target = msRawMidi

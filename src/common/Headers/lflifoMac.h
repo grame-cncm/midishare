@@ -86,6 +86,8 @@ static inline unsigned long lfsize (lifo * lf)
 
 # else
 
+#include "msSync.h"
+
 static inline void lfpush (register lifo * lf, register cell * cl) 
 {
 	INT_OFF();

@@ -186,7 +186,6 @@ void TMidiRemote::SendError (SocketStatus err)
 void TMidiRemote::CollectEvents (unsigned long date, short refnum)
 {
 	SocketStatus err = noErr; unsigned long packDate, offset;
-	Boolean sendtcp = false;
 	MidiEvPtr e = fAppl->GetEv ();
 	if (!e) {						// not any event received
 		fAppl->SetRcvAlarm (true);	// switch to receive alarm mode

@@ -181,7 +181,7 @@ static void DataInit (SerialDrvPtr data)
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi ()
 {
-	TDriverInfos infos = { SerialDriverName, 100, 0};
+	TDriverInfos infos = { SerialDriverName, kSerialDriverVersion, 0};
 	SlotRefNum sref; short refNum;
 	TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	SerialDrvPtr data = GetData ();

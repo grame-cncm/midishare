@@ -21,6 +21,7 @@
 
 */
 
+#include <stdio.h>
 
 #include "TimeTools.h"
 #include "TInetControler.h"
@@ -31,7 +32,7 @@
 extern Boolean doneFlag;
 //____________________________________________________________
 TInetControler::TInetControler (NetConfigPtr net, MidiName name, short mode) 
-	: fSocket (net->port), fNetInfos (net->port)
+	: fNetInfos (net->port), fSocket (net->port)
 {
 	fDrvName = name;
 	fState = kSleeping;
@@ -161,7 +162,6 @@ Boolean TInetControler::UWakeup (Boolean udpMode)
 {
 	INetAlert alert;
 	if (!Sleeping()) return true;
-	
 	fState = kWakeup;
 	SocketStatus err = fSocket.Open (udpMode);
 	if (err != noErr) {
@@ -195,7 +195,7 @@ void TInetControler::Bye ()
 		if (fActiveSensing) fActiveSensing->Clear ();
 		if (fDTasks) fDTasks->Clear ();
 	}
-	SocketStatus err = bye.Send (&fSocket, fNetInfos.BroadcastAddress());
+	bye.Send (&fSocket, fNetInfos.BroadcastAddress());
 }
 
 //____________________________________________________________
@@ -217,7 +217,7 @@ void TInetControler::RcvAlarm (short refnum)
 	else {
 		short prevSlot  = -1;
 		MidiEvPtr e = MidiGetEv (refnum);
-		TMidiRemote * remote;
+		TMidiRemote * remote = 0;
 		while (e) {
 			
 			if (Port(e) != prevSlot) {

@@ -1,3 +1,4 @@
+
 /*
 
   Copyright © Grame 1999
@@ -22,16 +23,23 @@
   [01-10-99] DF - YO - sorter interface simplification
              externalization of the synchronisation mechanisms to provide a better
              module independance
-
+ 
 */
 
 #include "msSorter.h"
 
 /*-------------------------------------------------------------------------*/
-#ifdef __LittleEndian__
-enum { kLev3, kLev2, kLev1, kLev0 };
+
+#if defined(macintosh) || defined(__PPC__) || defined(__ppc__)  					/* Big	Endian */
+	enum { kLev0, kLev1, kLev2, kLev3 };
+	#define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
+	#define GetLevel(index) (unsigned char)index
+#elif defined(__i386__) || defined(__INTEL__) || defined (_M_IX86)										/* Litte Endian */
+	enum { kLev3, kLev2, kLev1, kLev0 };
+	#define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
+	#define GetLevel(index) 3-index;
 #else
-enum { kLev0, kLev1, kLev2, kLev3 };
+	error "msSorter.c : cannot dertermine endianness"
 #endif
 
 typedef union {
@@ -39,17 +47,12 @@ typedef union {
 	unsigned char part[4];
 } SorterDate;
 
-#define Next(e)          e->link
+#define Next(e) e->link
 
 
 /*===========================================================================
   Internal macros
 =========================================================================== */
-#ifdef __LittleEndian__
-  #define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
-#else
-  #define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
-#endif
 
 #define SWAP(level) { TBufferPtr tmp; tmp=level->alt; level->alt=level->pri; level->pri=tmp; }
 
@@ -178,12 +181,7 @@ static void BufferInit (TBufferPtr buffer)
 /*-------------------------------------------------------------------------*/
 static void LevelInit (TLevelPtr level, unsigned char index)
 {
-#ifdef __LittleEndian__
-	level->lev = 3-index;
-#else
-	level->lev = (unsigned char)index;
-#endif
-
+	level->lev = GetLevel(index); 
 	level->pri=&level->buf[0];
 	level->alt=&level->buf[1];	
 
@@ -195,8 +193,6 @@ static void LevelInit (TLevelPtr level, unsigned char index)
 	BufferInit(level->pri);
 	BufferInit(level->alt);
 }
-	
-
 
 /*-------------------------------------------------------------------------*/
 static void FifoPut (TSFifoPtr fifo, TDatedEvPtr event)

@@ -26,6 +26,7 @@
 #include "windows.h"
 #include "msMem.h"
 #include "msPrefs.h"
+#include "msTasks.h"
 
 /*------------------------------------------------------------------------------*/
 /* windows specific resources		*/
@@ -50,7 +51,7 @@ WinRsrc gWinRsrc = { 0 };
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
 MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
 /*------------------------------------------------------------------------------*/
-Boolean CompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
+Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {
 	*adr = swapWith;
 	return true;
@@ -183,3 +184,45 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 	}
 	timeEndPeriod (t->wTimerRes);
 }
+
+/*_________________________________________________________________________*/
+Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
+{
+	if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		return true;
+	}
+	return false;
+}
+
+/*_________________________________________________________________________*/
+/* memory allocation implementation                                        */
+/*_________________________________________________________________________*/
+FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
+{
+	HLOCAL h = LocalAlloc (LMEM_FIXED, size + sizeof(HLOCAL));
+	if (h) {
+		HLOCAL * ptr = (HLOCAL *)LocalLock (h);
+		if (ptr) {
+			*ptr++ = h;
+			return ptr;
+		}
+	}
+	return 0;
+}
+
+/*_________________________________________________________________________*/
+void DisposeMemory  (FarPtr(void) memPtr)
+{
+	HLOCAL * ptr = (HLOCAL *)memPtr;
+	if (ptr) {
+		HLOCAL h = *--ptr;
+		if (h) {
+			LocalUnlock (h);
+			LocalFree (h);
+		}
+	}
+}
+
+

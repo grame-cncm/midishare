@@ -164,6 +164,7 @@ SocketStatus TTCPServer::SetOptions ()
 	if (err != noErr) return err;
 	int ret = 1;
 	ret = setsockopt (fRef, SOL_SOCKET, SO_REUSEADDR, &ret, sizeof(int));
+	return (ret==-1) ? errno : noErr;
 }
 
 //________________________________________________________________________

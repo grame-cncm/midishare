@@ -24,6 +24,7 @@
 #ifndef __msOMSDriver__
 #define __msOMSDriver__
 
+#define kOMSDriverVersion	100
 #define OMSDriverName	"\pOMS Driver"
 
 extern Boolean doneFlag;

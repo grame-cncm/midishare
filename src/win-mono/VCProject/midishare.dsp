@@ -43,8 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /GB /Zp8 /W3 /GX /Ot /Ob2 /I "..\..\common\headers" /D "NDEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /FR /YX /FD /c
-# SUBTRACT CPP /Z<none>
+# ADD CPP /nologo /W3 /GX /Ot /Ob2 /I "..\..\common\headers" /D "NDEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x40c /d "NDEBUG"
@@ -70,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /GB /Zp8 /ML /W3 /Gm /GX /Zi /Od /Ob0 /I "..\..\common\headers" /D "_DEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /FR /YX /FD /c
+# ADD CPP /nologo /ML /W3 /Gm /GX /Zi /Od /I "..\..\common\headers" /D "_DEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
@@ -154,10 +153,6 @@ SOURCE=..\..\common\Memory\msEvents.c
 # Begin Source File
 
 SOURCE=..\..\common\Memory\msFields.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\common\Memory\msMem.c
 # End Source File
 # Begin Source File
 

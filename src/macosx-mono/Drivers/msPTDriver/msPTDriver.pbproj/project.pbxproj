@@ -1,0 +1,188 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		F58CAEF0020ADFE701053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEF1020ADFE701053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEF2020ADFE701053105 = {
+			fileRef = F58CAEF1020ADFE701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEF3020ADFE701053105 = {
+			fileRef = F58CAEF0020ADFE701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEF4020AE0C701053105 = {
+			isa = PBXFileReference;
+			name = profport.c;
+			path = ../../../lib/profport.c;
+			refType = 2;
+		};
+		F58CAEF5020AE0C701053105 = {
+			fileRef = F58CAEF4020AE0C701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EFF92801FDE04F01053105 = {
+			buildStyles = (
+				F5EFF92A01FDE04F01053105,
+				F5EFF92B01FDE04F01053105,
+			);
+			isa = PBXProject;
+			mainGroup = F5EFF92901FDE04F01053105;
+			productRefGroup = F5EFF92C01FDE09501053105;
+			projectDirPath = "";
+			targets = (
+				F5EFF92E01FDE09501053105,
+			);
+		};
+		F5EFF92901FDE04F01053105 = {
+			children = (
+				F5EFF93401FDE0FF01053105,
+				F5EFF93301FDE0DA01053105,
+				F58CAEF0020ADFE701053105,
+				F58CAEF1020ADFE701053105,
+				F5EFF92C01FDE09501053105,
+				F58CAEF4020AE0C701053105,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		F5EFF92A01FDE04F01053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F5EFF92B01FDE04F01053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F5EFF92C01FDE09501053105 = {
+			children = (
+				F5EFF92D01FDE09501053105,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		F5EFF92D01FDE09501053105 = {
+			isa = PBXLibraryReference;
+			path = msPTDriver.1.0.0.so;
+			refType = 3;
+		};
+		F5EFF92E01FDE09501053105 = {
+			buildPhases = (
+				F5EFF92F01FDE09501053105,
+				F5EFF93001FDE09501053105,
+				F5EFF93101FDE09501053105,
+				F5EFF93201FDE09501053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-lPitchTracker -lMidiShare -lc";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msPTDriver.1.0.0.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = msPTDriver;
+			productInstallPath = /usr/local/lib;
+			productName = msPTDriver;
+			productReference = F5EFF92D01FDE09501053105;
+			shouldUseHeadermap = 0;
+		};
+		F5EFF92F01FDE09501053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5EFF93501FDE0FF01053105,
+				F58CAEF2020ADFE701053105,
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F5EFF93001FDE09501053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5EFF93601FDE0FF01053105,
+				F58CAEF3020ADFE701053105,
+				F58CAEF5020AE0C701053105,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F5EFF93101FDE09501053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F5EFF93201FDE09501053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F5EFF93301FDE0DA01053105 = {
+			isa = PBXFileReference;
+			path = msPTDriver.c;
+			refType = 4;
+		};
+		F5EFF93401FDE0FF01053105 = {
+			isa = PBXFileReference;
+			path = msPTDriver.h;
+			refType = 4;
+		};
+		F5EFF93501FDE0FF01053105 = {
+			fileRef = F5EFF93401FDE0FF01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EFF93601FDE0FF01053105 = {
+			fileRef = F5EFF93301FDE0DA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = F5EFF92801FDE04F01053105;
+}

@@ -30,7 +30,7 @@
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
-#include <linux/malloc.h>
+#include <linux/slab.h>
 #include <asm/current.h>
 #include <asm/string.h>
 

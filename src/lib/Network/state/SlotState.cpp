@@ -38,13 +38,13 @@
 SlotState::SlotState (TRemoteSlot * slots)
 {
 	fSlots = slots;
-	fMemory = NewHandle (sizeof (TSlotInfos) * 2);
+	fMemory = INetNewHandle (sizeof (TSlotInfos) * 2);
 }
 
 //____________________________________________________________
 SlotState::~SlotState ()
 {
-	if (fMemory)  DisposeHandle (fMemory);
+	if (fMemory)  INetDisposeHandle (fMemory);
 }
 
 //____________________________________________________________
@@ -54,7 +54,7 @@ long SlotState::ID ()
 }
 
 //____________________________________________________________
-Handle SlotState::GetState ()
+INetHandle SlotState::GetState ()
 {
 	if (fMemory) {
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(fMemory);
@@ -65,7 +65,7 @@ Handle SlotState::GetState ()
 }
 
 //____________________________________________________________
-void SlotState::SetState (Handle h)
+void SlotState::SetState (INetHandle h)
 {
 	TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
 	RestoreSlot (fSlots->InRef (), infos->cnx);

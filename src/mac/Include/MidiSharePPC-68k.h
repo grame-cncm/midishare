@@ -33,6 +33,8 @@ typedef UniversalProcPtr UPPApplAlarmPtr;
 typedef UniversalProcPtr UPPApplyProcPtr;
 typedef UniversalProcPtr UPPWakeupProcPtr;
 typedef UniversalProcPtr UPPSleepProcPtr;
+typedef UniversalProcPtr UPPDriverPtr;
+
 
 enum {
 	
@@ -63,6 +65,10 @@ enum {
 		 
 	uppSleepProcPtrProcInfo = kThinkCStackBased
 		 | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(short)))
+,
+	uppDriverPtrProcInfo = kThinkCStackBased 
+		| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(short)))
+
 };
 
 #define NewTaskPtr(userRoutine)		\
@@ -82,6 +88,9 @@ enum {
 
 #define NewSleepProcPtr(userRoutine)		\
 		(UPPSleepProcPtr) NewRoutineDescriptor((ProcPtr)(userRoutine), uppSleepProcPtrProcInfo, GetCurrentISA())
+
+#define NewDriverPtr(userRoutine)		\
+		(UPPDriverPtr) NewRoutineDescriptor((ProcPtr)(userRoutine), uppDriverPtrProcInfo, GetCurrentISA())
 
 /* use:
 
@@ -875,11 +884,23 @@ static short CodeSetSlotName[]			={0x704F, 0x2078, 0x00B8, 0x4ED0};
 
 /*-------------------------------- Slots management ---------------------------*/
 
-#define MidiAddSlot(r,name,dir)		\
+#define MidiAddSlotAux(r,name,dir)		\
 	(long)CallUniversalProc((UniversalProcPtr)CodeAddSlot, uppProcInfoType17,(r),(name),(dir))
+	
+inline SlotRefNum MidiAddSlot(short refnum, SlotName name, SlotDirection direction)	
+{ 
+	long s = MidiAddSlotAux(refnum,name,direction);
+  	return *(SlotRefNum *)&s;
+}
 
-#define MidiGetIndSlot(r,index)		\
-	(long)CallUniversalProc((UniversalProcPtr)CodeGetIndSlot, uppProcInfoType18,(r),(index))
+#define MidiGetIndSlotAux(r,index)		\
+	CallUniversalProc((UniversalProcPtr)CodeGetIndSlot, uppProcInfoType18,(r),(index))
+	  
+inline SlotRefNum MidiGetIndSlot(short r, short index)		
+{ 
+	long s = MidiGetIndSlotAux(r,index);
+  	return *(SlotRefNum *)&s;
+}
 
 #define MidiRemoveSlot(slot)		\
 	CallUniversalProc((UniversalProcPtr)CodeRemoveSlot, uppProcInfoType19,(slot))

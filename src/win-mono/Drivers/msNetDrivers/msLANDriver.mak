@@ -38,6 +38,7 @@ CLEAN :
 	-@erase "$(INTDIR)\EventToUDPStream.obj"
 	-@erase "$(INTDIR)\FTMA.obj"
 	-@erase "$(INTDIR)\Handle.obj"
+	-@erase "$(INTDIR)\HostTools.obj"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -78,7 +79,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /Fp"$(INTDIR)\msLANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "_MBCS" /D "_USRDLL" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /Fp"$(INTDIR)\msLANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -140,6 +141,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -176,6 +178,7 @@ CLEAN :
 	-@erase "$(INTDIR)\EventToUDPStream.obj"
 	-@erase "$(INTDIR)\FTMA.obj"
 	-@erase "$(INTDIR)\Handle.obj"
+	-@erase "$(INTDIR)\HostTools.obj"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -219,7 +222,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MDd /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"$(INTDIR)\msLANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "__Windows__" /Fp"$(INTDIR)\msLANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -281,6 +284,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -428,6 +432,12 @@ SOURCE=..\..\..\lib\Network\FTMA.cpp
 SOURCE=.\Handle.c
 
 "$(INTDIR)\Handle.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=..\..\..\lib\Network\HostTools.cpp
+
+"$(INTDIR)\HostTools.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 SOURCE=..\..\..\lib\Network\SkewControler.cpp

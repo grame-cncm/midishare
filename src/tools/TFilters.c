@@ -32,7 +32,7 @@
 #endif
 
 
-#ifdef __Linux__
+#ifdef __linux__
 #ifdef MODULE
 # 	ifdef MODVERSIONS
 # 		include <linux/modversions.h>
@@ -59,8 +59,13 @@ inline Boolean MidiShare() { return true; }
 #	include <stdio.h>
 #	include <String.h>
 #	include "MidiShare.h"
+# if defined(__ppc__) && defined(__GNUC__)
+#	define CNAME
+#	define CTASKS
+# else
 #	define PASCALNAME
 #	define PASCALTASKS
+# endif
 #	define flush	fflush( stdout)
 #	define print	printf
 #endif

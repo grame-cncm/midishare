@@ -34,6 +34,7 @@
 # ifdef __POWERPC__
 # include "lflifo.h"
 # else
+# include "lflifo.h"
 typedef struct fifo {
 	cell*			head;		/* the fifo head */
 	cell*			tail;	    /* the fifo tail */
@@ -48,6 +49,8 @@ typedef struct fifo {
 # ifdef __POWERPC__
 
 # else
+
+#include "msSync.h"
 
 static inline cell* fifoavail (fifo * ff) 
 {
@@ -102,6 +105,6 @@ static inline cell* fifoclear (register fifo * ff)
 	return v;
 }
 
-# endif
+#endif
 
 #endif

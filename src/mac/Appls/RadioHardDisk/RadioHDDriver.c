@@ -151,12 +151,7 @@ void CloseInetDriver ()
 {
 	short ref = MidiGetNamedAppl ("\pQuickTime Driver");
 	if (ref > 0) {
-#if defined(macintosh) && defined(MidiSharePPC_68k)
-		long ref = MidiGetIndSlot (ref, 1);
-		SlotRefNum sref = *(SlotRefNum *)&ref;
-#else
 		SlotRefNum sref = MidiGetIndSlot (ref, 1);
-#endif
 		if (MidiIsSlotConnected (0, sref)) {
 			long t = MidiGetTime() + 15;
 			MidiConnect (gControl->GetRefNum(), 0, true);

@@ -146,6 +146,8 @@ void MSALARMAPI RcvAlarm  (short refNum )
 			e = MS2MM (slot, e);
 			if (e)
 				MidiTask (KOffTask, Date(e), refNum, (long)e, (long)slot, 0);
+		}else{
+			MidiFreeEv(e);
 		}
 		e = MidiGetEv (refNum);
 	}

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2001
+  Copyright © Grame 2001-2002
   Copyright © Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
@@ -49,6 +49,10 @@ enum {  kDefaultLANPort=4950, kDefaultLANLatency = 10, kDefaultLANGroupTime = 10
 
 #define kWANVersion		100
 
+# if defined(__MACH__) && defined(__ppc__) && defined(__GNUC__)
+# define __MacOSX__
+#endif
+
 #if macintosh
 //________________________________________________________________________
 // macintosh types definition
@@ -64,6 +68,8 @@ typedef OTResult 		SockResult;
 typedef unsigned char 	ErrString[255];
 typedef unsigned char 	NameStr[kMaxHostNameLen];
 typedef unsigned char * strPtr;
+typedef InetSvcRef		InetServiceRef;
+typedef InetDomainName	INetDomainName;
 
 #define IPField(a)		(a).fHost
 #define IPType(a)		(a).fAddressType
@@ -89,8 +95,8 @@ typedef unsigned char * strPtr;
 #define kMaxHostNameLen 255
 #define noErr			0
 
-typedef char 	InetDomainName[kMaxHostNameLen + 1];
-typedef short 	InetSvcRef;
+typedef char 	INetDomainName[kMaxHostNameLen + 1];
+typedef short 	InetServiceRef;
 typedef char 	ErrString[255];
 typedef char 	NameStr[32];
 typedef char * 	strPtr;
@@ -105,8 +111,15 @@ typedef long 				SockResult;
 
 #else
 //________________________________________________________________________
-// linux types definition
+// linux and MacOS X types definition
 //________________________________________________________________________
+# ifdef __MacOSX__
+#	include <sys/types.h>
+#	include <sys/socket.h>
+# else
+	typedef int 				Boolean;
+#endif
+
 #include <netinet/in.h>
 
 #define IPField(a)		(a).sin_addr.s_addr
@@ -117,13 +130,12 @@ typedef long 				SockResult;
 #define kMaxHostNameLen 255
 #define noErr			0
 
-typedef char 	InetDomainName[kMaxHostNameLen + 1];
-typedef short 	InetSvcRef;
+typedef char 	INetDomainName[kMaxHostNameLen + 1];
+typedef short 	InetServiceRef;
 typedef char 	ErrString[255];
 typedef char 	NameStr[32];
 typedef char * 	strPtr;
 
-typedef int 				Boolean;
 typedef unsigned long		IPNum;
 typedef struct sockaddr_in 	IPAddr, * IPAddrPtr;
 typedef int					SocketRef;

@@ -34,7 +34,7 @@ class TWANControler;
 class TMidiServer : public TTCPListener, public TTCPServer
 {
 	public:
-		 	 TMidiServer (short port, InetSvcRef ref = 0);
+		 	 TMidiServer (short port, InetServiceRef ref = 0);
 	virtual ~TMidiServer () {}
 	
 		// TTCPListener methods
@@ -46,10 +46,10 @@ class TMidiServer : public TTCPListener, public TTCPServer
 		
 		void	RefuseCnx (SocketRef sok, short reason);
 		void	SetControler (TWANControler * ctrl) { fControler = ctrl; }
-		InetSvcRef GetInetRef ()	{ return fRefNum; }
+		InetServiceRef GetInetRef ()	{ return fRefNum; }
 		
 	private:
-		InetSvcRef 	fRefNum;
+		InetServiceRef 	fRefNum;
 		TWANControler * fControler;
 };
 

@@ -22,6 +22,7 @@
    [08-09-99] DF - adaptation to the new memory management
                    includes now ForgetTaskSync
    [13-09-99] DF - removing direct fifo access
+   [16-01-01] SL - ForgetTaskSync moved to platform dependent code
 
 */
 
@@ -29,9 +30,6 @@
 #include "msEvents.h"
 #include "msExtern.h"
 #include "msSync.h"
-
-
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
 
 
 /*===========================================================================
@@ -148,52 +146,4 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
 		}
 	}	
 }
-
-
-/*===========================================================================
-  Internal functions implementation
-  =========================================================================== */
-
-#ifdef __Macintosh__
-# ifdef __POWERPC__
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false;
-//	return CompareAndSwap (taskPtr, content, 0);
-}
-
-# else
-
-static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr content)
-{
-	Boolean ret = false;
-	INT_OFF();
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		ret = true;
-	}
-	INT_ON();
-	return ret;
-}
-
-# endif
-#endif /* __Macintosh__ */
-
-#if defined(__Linux__) || defined(__Windows__)
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false;
-}
-#endif /* __Linux__ */
 

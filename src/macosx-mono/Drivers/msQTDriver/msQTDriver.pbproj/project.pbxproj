@@ -1,0 +1,210 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		F5240F1A0208005601053105 = {
+			isa = PBXFileReference;
+			name = profport.c;
+			path = ../../../lib/profport.c;
+			refType = 2;
+		};
+		F5240F1B0208005601053105 = {
+			fileRef = F5240F1A0208005601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F567580B01FDA3E101053105 = {
+			buildStyles = (
+				F567580D01FDA3E101053105,
+				F567580E01FDA3E101053105,
+			);
+			isa = PBXProject;
+			mainGroup = F567580C01FDA3E101053105;
+			productRefGroup = F5EFF91601FDA40901053105;
+			projectDirPath = "";
+			targets = (
+				F5EFF91801FDA40901053105,
+			);
+		};
+		F567580C01FDA3E101053105 = {
+			children = (
+				F5EFF92601FDA77301053105,
+				F5EFF91D01FDA41501053105,
+				F5240F1A0208005601053105,
+				F58CAEE8020ADF9B01053105,
+				F58CAEE9020ADF9B01053105,
+				F5EFF92301FDA4CC01053105,
+				F5EFF91601FDA40901053105,
+				F5EFF91F01FDA46601053105,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		F567580D01FDA3E101053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F567580E01FDA3E101053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F58CAEE8020ADF9B01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEE9020ADF9B01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEEA020ADF9B01053105 = {
+			fileRef = F58CAEE9020ADF9B01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEEB020ADF9B01053105 = {
+			fileRef = F58CAEE8020ADF9B01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EFF91601FDA40901053105 = {
+			children = (
+				F5EFF91701FDA40901053105,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		F5EFF91701FDA40901053105 = {
+			isa = PBXLibraryReference;
+			path = msQTDriver.1.0.0.so;
+			refType = 3;
+		};
+		F5EFF91801FDA40901053105 = {
+			buildPhases = (
+				F5EFF91901FDA40901053105,
+				F5EFF91A01FDA40901053105,
+				F5EFF91B01FDA40901053105,
+				F5EFF91C01FDA40901053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = "../../../common/Headers ../../../lib";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace  -lMidiShare";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msQTDriver.1.0.0.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = msQTDriver;
+			productInstallPath = /usr/local/lib;
+			productName = msQTDriver;
+			productReference = F5EFF91701FDA40901053105;
+			shouldUseHeadermap = 0;
+		};
+		F5EFF91901FDA40901053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5EFF92701FDA77301053105,
+				F58CAEEA020ADF9B01053105,
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F5EFF91A01FDA40901053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5EFF91E01FDA41501053105,
+				F5240F1B0208005601053105,
+				F58CAEEB020ADF9B01053105,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F5EFF91B01FDA40901053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5EFF92001FDA46601053105,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F5EFF91C01FDA40901053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F5EFF91D01FDA41501053105 = {
+			isa = PBXFileReference;
+			path = msQTDriver.c;
+			refType = 4;
+		};
+		F5EFF91E01FDA41501053105 = {
+			fileRef = F5EFF91D01FDA41501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EFF91F01FDA46601053105 = {
+			isa = PBXFrameworkReference;
+			name = QuickTime.framework;
+			path = /System/Library/Frameworks/QuickTime.framework;
+			refType = 0;
+		};
+		F5EFF92001FDA46601053105 = {
+			fileRef = F5EFF91F01FDA46601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5EFF92301FDA4CC01053105 = {
+			isa = PBXFileReference;
+			name = QuickTimeMusic.h;
+			path = /System/Library/Frameworks/QuickTime.framework/Versions/A/Headers/QuickTimeMusic.h;
+			refType = 0;
+		};
+		F5EFF92601FDA77301053105 = {
+			isa = PBXFileReference;
+			path = msQTDriver.h;
+			refType = 4;
+		};
+		F5EFF92701FDA77301053105 = {
+			fileRef = F5EFF92601FDA77301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = F567580B01FDA3E101053105;
+}

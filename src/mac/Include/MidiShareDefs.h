@@ -367,11 +367,12 @@ enum{   MIDIOpenAppl=1,
 		long			reserved[2];
 	} TSlotInfos;
 
-	typedef void (* DriverAlarmPtr) (short refNum);
+	typedef void (* WakeupPtr) 	(short refnum);
+	typedef void (* SleepPtr) 	(short refnum);
 	typedef struct TDriverOperation {
-		DriverAlarmPtr wakeup;
-		DriverAlarmPtr sleep;
-		long		reserved[3];
+		WakeupPtr wakeup;
+		SleepPtr sleep;
+		long	reserved[3];
 	} TDriverOperation;
 
 	typedef struct TDriverInfos {

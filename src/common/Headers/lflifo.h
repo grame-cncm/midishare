@@ -23,10 +23,8 @@
 #ifndef __LFLIFO__
 #define __LFLIFO__
 
-#include "msTypes.h"
-#include "msSync.h"
 
-
+//
 /*****************************************************************
  *****************************************************************
                        LOCK FREE LIFO STACK 
@@ -63,6 +61,14 @@
 /*****************************************************************
                            DATA STRUCTURES
  *****************************************************************/
+ 
+typedef struct cell {
+	struct cell* link;		/*+ next cell in the list 	+*/
+							/*+ any data here			+*/
+} cell;
+
+ 
+ 
 #ifdef __Pentium__
 # define vtype volatile
 #else
@@ -81,6 +87,8 @@ typedef struct lifo {
 
 #ifdef __Windows__
 # define inline __inline
+#elif defined(__MacOSX__)
+#define inline __inline__
 #endif
 
 
@@ -99,10 +107,20 @@ static inline cell* lfavail(lifo* lf) {
 	return (cell*)lf->top;
 }
 
-#if defined(__Linux__)
-# include "lflifoLinux.h"
-#elif defined(__Macintosh__)
-# include "lflifoMac.h"
+#if defined(__linux__)
+# if defined(__powerpc)
+#  include "lflifoppc.h"
+# else
+#  include "lflifoLinux.h"
+# endif
+
+#elif defined(__Macintosh__) || defined(__MacOSX__)
+# if defined(__ppc__) && defined(__GNUC__)
+#  include "lflifoppc.h"
+# else
+#  include "lflifoMac.h"
+# endif
+
 #elif defined(__Windows__)
 # include "lflifoWin.h"
 #endif

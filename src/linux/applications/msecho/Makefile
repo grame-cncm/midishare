@@ -1,6 +1,6 @@
 
 cappl := msecho
-LIB   := ../lib/msApplsLib.o -lMidiShare -lpthread
+LIB   := ../lib/msApplsLib.o -Wl,-L../../library -lMidiShare
 INC   := -I../../Include -I../lib
 options := -Wall -O6 $(INC) `gtk-config --cflags --libs` $(LIB)
 DEST = /usr/local/bin

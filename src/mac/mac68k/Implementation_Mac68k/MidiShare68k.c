@@ -36,6 +36,9 @@
 #include "msExtern.h"
 #include "msLoader.h" 
 #include "msSync.h" 
+#include "msTasks.h" 
+#include "msMem.h" 
+
 
 /*_________________________________________________________________________*/
 /* mac 68k desc structure                                                  */
@@ -156,7 +159,7 @@ void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
 /*_________________________________________________________________________*/
 /* synchronization specific part                                           */
 /*_________________________________________________________________________*/
-Boolean CompareAndSwap (register void **adr, register void *compareTo, register void *swapWith) 
+Boolean MSCompareAndSwap (register void **adr, register void *compareTo, register void *swapWith) 
 {
 	Boolean retcode = true;
 	INT_OFF();
@@ -244,3 +247,23 @@ void CloseTimeInterrupts (TMSGlobalPtr g)
 	INT_ON();
 }
 
+
+/*_____________________________________________________________________________________*/
+Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr content)
+{
+	Boolean ret = false;
+	INT_OFF();
+	if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		ret = true;
+	}
+	INT_ON();
+	return ret;
+}
+
+/*_________________________________________________________________________*/
+/* memory allocation implementation                                        */
+/*_________________________________________________________________________*/
+FarPtr(void) AllocateMemory (MemoryType type, unsigned long size){return NewPtrSys (size);}
+void DisposeMemory  (FarPtr(void) memPtr) {if (memPtr) DisposePtr ((Ptr)memPtr);}

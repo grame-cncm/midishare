@@ -26,6 +26,7 @@
 #define __msWANHeader__
 
 #define __WANInet__
+#define __Macintosh__
 #ifdef __POWERPC__
 #define	MidiSharePPC_68k
 #endif

@@ -35,7 +35,7 @@ MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem)
 	
 	do {
 		content= *adrMem;
-	} while (!CompareAndSwap (adrMem, content, 0));
+	} while (!MSCompareAndSwap (adrMem, content, 0));
 	return content;
 }
 
@@ -48,6 +48,6 @@ MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void
 	
 	do {
 		content= *adrMem;
-	} while (!CompareAndSwap (adrMem, content, val));
+	} while (!MSCompareAndSwap (adrMem, content, val));
 	return content;
 }

@@ -36,7 +36,7 @@
 //________________________________________________________________________
 // TMidiServer
 //________________________________________________________________________
-TMidiServer::TMidiServer (short port, InetSvcRef ref)
+TMidiServer::TMidiServer (short port, InetServiceRef ref)
 	: TTCPServer (port)
 {
 	fRefNum = ref;
@@ -48,7 +48,7 @@ void TMidiServer::RefuseCnx (SocketRef sok, short reason)
 {
 	TCnxRefusedPacket p(reason);
 	short len = p.Length();
-	SocketStatus err = SendTo (sok, p.Buffer(), &len);
+	SendTo (sok, p.Buffer(), &len);
 }
 
 //________________________________________________________________________

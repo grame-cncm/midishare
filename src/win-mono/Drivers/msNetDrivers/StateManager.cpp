@@ -58,7 +58,7 @@ void StatesManager::SaveState (IPNum ip)
 {
 	TInetAddress addr (ip); char buff [kMaxEntryLen];
 	if (!fState) return;
-	Handle h = fState->GetState ();
+	INetHandle h = fState->GetState ();
 	if (h) {
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
 		buff[0] = 0;
@@ -100,7 +100,7 @@ static void SetPorts (char *buff, TSlotInfos *infos)
 void StatesManager::LoadState (IPNum ip)
 {
 	TInetAddress addr (ip); char buff [kMaxEntryLen];
-	Handle h = NewHandle (sizeof(TSlotInfos) * 2);
+	INetHandle h = INetNewHandle (sizeof(TSlotInfos) * 2);
 	if (h) {
 		DWORD n, m;
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
@@ -114,6 +114,6 @@ void StatesManager::LoadState (IPNum ip)
 		if ((n + m) && fState) {
 			fState->SetState (h);
 		}
-		else DisposeHandle (h);
+		else INetDisposeHandle (h);
 	}
 }

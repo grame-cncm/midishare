@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-#ifdef __Linux__
+#ifdef __linux__
 #define FAR
 #define NEAR
 #define MFAPI

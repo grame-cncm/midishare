@@ -41,6 +41,13 @@ TClients*	gClients = &gLClients;          /* The global MidiShare structure   */
 
 
 /*--------------------------------------------------------------------*/
+/* memory allocation implementation                                   */
+/*--------------------------------------------------------------------*/
+
+FarPtr(void) AllocateMemory (MemoryType type, unsigned long size){ return (void*)malloc(size); }
+void DisposeMemory  (FarPtr(void) memPtr){if (memPtr) free(memPtr); }
+
+/*--------------------------------------------------------------------*/
 
 void MidiInstall()
 {

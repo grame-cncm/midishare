@@ -57,6 +57,7 @@ TMidiClient::TMidiClient (TWANControler *ctrl, SocketRef ref, TInetAddress * add
 //________________________________________________________________________
 TMidiClient::~TMidiClient () 
 {
+	SetListener (0);
 	fSkewTask.Forget();
 	delete fAddr;
 }

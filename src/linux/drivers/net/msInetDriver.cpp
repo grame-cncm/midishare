@@ -39,6 +39,8 @@
 
 Boolean doneFlag = false;
 #define kGroupTime	10
+#define kVersion	"1.11"
+
 NetConfig gNet = { -1, -1, -1 };
 int clientsIndex, clientsCount = 0;
 short maxClients = 32;
@@ -70,6 +72,7 @@ static void usage (const char *name)
 	fprintf (stderr, "                                  default to %s\n", logFile);
 	fprintf (stderr, "                 -s [remote list] run in TCP server mode and \n");
 	fprintf (stderr, "                    opens a connection for every host in remote list\n");
+	fprintf (stderr, "                 -v               print version and exit\n");
 	exit (1);
 }
 
@@ -165,7 +168,7 @@ static void run (pthread_t thread, NetConfig *net)
 	void *threadRet; int done = false; char msg[512];
 	const char * space = "                    ";
 
- 	sprintf (msg, "%s MidiShare Internet driver is running", dateString());
+ 	sprintf (msg, "%s MidiShare Internet driver v. %s is running", dateString(), kVersion);
 	log (msg);
 	if (serverMode) {
 		sprintf (msg, "%sTCP server mode on: %d clients allowed", space, (int)maxClients);
@@ -187,7 +190,7 @@ static void run (pthread_t thread, NetConfig *net)
 //_______________________________________________________________________
 static int getclients (int argc, char *argv[], int i)
 {
-	for (i; i< argc; i++) {
+	for (; i< argc; i++) {
 		char * arg = argv[i];
 		if (*arg == '-') break;
 		else {
@@ -250,6 +253,9 @@ static int getopts (int argc, char *argv[])
 					break;
 				case 'd':	daemonMode = true;
 					break;
+				case 'v':
+					printf ("msInetDriver v. %s\n", kVersion);
+					exit (0);
 				default:
 					usage (argv[0]);
 			}

@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+
+COM=../common
+TOOLS=../tools
+
+echo creating $COM/makefile
+cp makefile.common  $COM/makefile
+echo creating $TOOLS/makefile
+cp makefile.tools  $TOOLS/makefile
+
+echo end of configure

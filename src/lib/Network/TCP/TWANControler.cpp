@@ -21,6 +21,7 @@
 
 */
 
+#include <stdio.h>
 
 #include "TWANControler.h"
 #include "TInetAddress.h"
@@ -72,14 +73,14 @@ Boolean TWANControler::IsClient (IPNum ip)
 }
 
 //_________________________________________________________________________________
-void TWANControler::Connect (strPtr remote)
+Boolean TWANControler::Connect (strPtr remote)
 {
 	INetAlert alert; SocketStatus err; TMidiClient * client;
 
 	TInetAddress * addr = new TInetAddress (fServer->GetInetRef ());
 	if (!addr) {
 		alert.Report (fDrvName, strConnectFailure, strMemFail, 0L);
-		return;
+		goto failed;
 	}
 	fFeedback->Lookup (remote);
 	if (!addr->SetAddress (remote)) {				// looking for inet address
@@ -90,13 +91,13 @@ void TWANControler::Connect (strPtr remote)
 		alert.Report (fDrvName, strAlreadyOpened, remote, 0L);
 		goto failed;
 	}
-
 	fFeedback->Connecting (addr->HostName());
 	client = new TMidiClient (Net()->port, this, addr);	// creates TCP client
 	if (!client) {
 		alert.Report (fDrvName, strConnectFailure, strMemFail, 0L);
 		goto failed;
 	}
+
 	err = client->ClientOpen (addr->GetAddress());		// opens TCP client
 	if (err != noErr) {
 		delete client;
@@ -111,11 +112,11 @@ void TWANControler::Connect (strPtr remote)
 	fFeedback->CheckLatency (addr->HostName());
 	client->Start (GetRefNum());				// start sending ID packets
 	CallCheckCompletion (client->GetID(), kCompletionTimeout, false);
-	return;
+	return true;
 
 failed:
 	fFeedback->Failed (0);
-	return;
+	return false;
 }
 
 //_________________________________________________________________________________
@@ -163,7 +164,7 @@ void TWANControler::Disconnect (IPNum id, Boolean remove)
 	TMidiClient * client = (TMidiClient *)fTCPRemote.Find (id);
 	TMidiRemote * r = FindUDPRemote (id);
 	if (client && r) {
-		SocketStatus err = client->Bye (r->MaxLatency(), r->MaxLatencyOver(), r->Missing());
+		client->Bye (r->MaxLatency(), r->MaxLatencyOver(), r->Missing());
 	}
 	if (remove) CallRemoveRemote (id);
 }
@@ -201,6 +202,7 @@ void TWANControler::CheckCompletion  (IPNum id, Boolean silently)
 {
 	Boolean failed = false;
 	TMidiRemote * r = FindUDPRemote (id);
+
 	if (r) {
 		if (!r->Opened()) {
 			fTCPRemote.Remove (id);
@@ -223,7 +225,12 @@ void TWANControler::CheckCompletion  (IPNum id, Boolean silently)
 //_________________________________________________________________________________
 TSocket *  TWANControler::GetSpecialSocket (IPNum ip)
 {
-	return (TSocket *)fTCPRemote.Find (ip);
+#ifdef WIN32
+	TSocket * s = (TSocket *)fTCPRemote.Find (ip);
+#else
+	TSocket * s = dynamic_cast<TSocket *>(fTCPRemote.Find (ip));
+#endif
+	return s;
 }
 
 //_________________________________________________________________________________
@@ -245,7 +252,7 @@ void TWANControler::OpenComplete  (IPNum id)
 //_________________________________________________________________________________
 Boolean TWANControler::AddRemote (TMidiClient * client)
 {
-	return (fTCPRemote.Add (client) != 0);
+	return (fTCPRemote.Add (dynamic_cast<TRemote *>(client)) != 0);
 }
 
 //_________________________________________________________________________________

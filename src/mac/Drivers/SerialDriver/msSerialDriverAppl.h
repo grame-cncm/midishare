@@ -24,6 +24,7 @@
 #ifndef __msSerialDriverAppl__
 #define __msSerialDriverAppl__
 
+#define kSerialDriverVersion	100
 #define SerialDriverName	"\pSerial Driver"
 
 extern Boolean	doneFlag;

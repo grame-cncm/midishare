@@ -11,7 +11,7 @@ UTILS = ../../lib/msUtilities.o
 CXXFLAGS = -g $(INC)
 CFLAGS   = $(CXXFLAGS)
 
-LIB = $(UTILS) -lMidiShare -lpthread
+LIB = $(UTILS) -Wl,-L../../library -lMidiShare
 BIN=/usr/local/bin
 OBJ1 = msWANConnect.o TInetAddress.o msAnything2Midi.o
 OBJ2 = msWANConnect.o TInetAddress.o msControlSignal.o

@@ -28,9 +28,18 @@
 #define __msTypes__
 
 #ifdef __Macintosh__
-# include <MacTypes.h>                                                          
+#ifdef __MacOSX__
+	typedef unsigned char Boolean;
+	typedef unsigned char Byte;
+	typedef char * Ptr;
+	enum { false, true };
+#else
+	#include <mactypes.h> 
+#endif 
+                                   
 # ifdef __POWERPC__
 # define MSFunctionType(type)   type
+# define FAR
 # else 
 # define MSFunctionType(type)   pascal type
 # define FAR
@@ -51,7 +60,7 @@ typedef unsigned long ulong;
 	enum { false = 0, true };
 #endif
 
-#ifdef __Linux__
+#ifdef __linux__
 #	include <linux/types.h>
 #	define FAR
 
@@ -62,12 +71,7 @@ typedef unsigned long ulong;
 #endif
 
 typedef unsigned char uchar;
-#define FarPtr(type)           type FAR *
-
-typedef struct cell {
-	struct cell* link;		/*+ next cell in the list 	+*/
-					/*+ any data here		+*/
-} cell;
+#define FarPtr(type)  type FAR *
 
 
 #endif

@@ -28,14 +28,20 @@
 
 #if macintosh
 
+#include <Memory.h>
+
+typedef Handle		INetHandle;
+
 #define HandlePtr(h)	*(h)
+#define 	INetNewHandle 		NewHandle
+#define		INetDisposeHandle 	DisposeHandle
 
 #else
 
 typedef struct {
 	void *	ptr;
 	long	len;
-} HandleRec, * Handle;
+} INetHandleRec, * INetHandle;
 
 #define HandlePtr(h)		(h)->ptr
 #define GetHandleSize(h)	(h)->len
@@ -44,8 +50,8 @@ typedef struct {
 extern "C" {
 #endif
 
-Handle 	NewHandle (long size);
-void	DisposeHandle (Handle h);
+INetHandle 	INetNewHandle (long size);
+void		INetDisposeHandle (INetHandle h);
 
 #ifdef __cplusplus
 }

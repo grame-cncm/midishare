@@ -94,6 +94,10 @@ class TRemoteMgr : public TRemoteList
 
 //____________________________________________________________
 inline TMidiRemote * TRemoteMgr::FindRemote (IPNum id)	
+#ifdef WIN32
 				{ return (TMidiRemote *)Find(id); }
+#else
+				{ return dynamic_cast<TMidiRemote *>(Find(id)); }
+#endif
 
 #endif

@@ -1,25 +1,91 @@
 #!/bin/sh
 #
 
+M=makefile.in
 COM=../common
+LIB=../lib
+APPLIB=applications/lib
 MEM=$COM/Memory
 
-echo creating $COM/makefile
-cp makefile.common  $COM/makefile
+function move ()
+{
+	src=$1
+	dst=$2
+	echo Creating $dst
+	cp $M/$src  $dst
+}
 
-echo creating $MEM/makefile
-cp makefile.lib     $MEM/makefile
+function conf_I386 ()
+{
+	  move makefile.common  $COM/makefile
+	  move makefile.lib 	$MEM/makefile
+	  move makefile.network $LIB/Network/makefile
+	  move makefile.appls 	$APPLIB/makefile
+	  move makefile.kernel 	kernel/makefile
+	  move make.lib 		$LIB/makefile
+	  move make.module 		$LIB/make.module
+	  move tests/makefile.drivers 	tests/Drivers/makefile
+	  move tests/makefile.events 	tests/Events/makefile
+	  move tests/makefile.filters 	tests/Filters/makefile
+	  move tests/makefile.functions tests/Functions/makefile
+}
+
+function remove_elf ()
+{
+	src=$1
+	dst=$2
+	echo Creating $dst
+	sed -e 's/\-m[ 	]*elf_i386//' $M/$src  > $dst
+}
+
+function conf_powerpc ()
+{
+	  remove_elf makefile.common 	$COM/makefile
+	  remove_elf makefile.lib 		$MEM/makefile
+	  remove_elf makefile.network 	$LIB/Network/makefile
+	  remove_elf makefile.appls 	$APPLIB/makefile
+	  remove_elf makefile.kernel 	kernel/makefile
+	  remove_elf make.lib 			$LIB/makefile
+	  remove_elf make.module 		$LIB/make.module
+	  remove_elf tests/makefile.drivers tests/Drivers/makefile
+	  remove_elf tests/makefile.events 	tests/Events/makefile
+	  remove_elf tests/makefile.filters tests/Filters/makefile
+	  remove_elf tests/makefile.functions tests/Functions/makefile
+}
+
+
+echo -n "Determining processor... "
+res=$(cpp -dM << !
+!
+)
+arch=i386
+echo $res | grep powerpc 2>&1 > /dev/null
+[ $? -eq 0 ] && arch=powerpc
+echo $arch
+
+if [ $arch == "powerpc" ]
+then
+	echo Calling conf powerpc
+	conf_powerpc
+elif [ $arch == "i386" ]
+then
+	echo Calling conf i386
+	conf_I386
+else
+	echo error: architecture undefined
+	exit 0
+fi
 
 if [ ! -d $MEM/lib ]
 then
-	echo creating object directory $MEM/lib
-	mkdir $MEM/lib
+ echo Creating object directory $MEM/lib
+ mkdir $MEM/lib
 fi
 
 chmod +x checksu
 
-echo calling lib/configure
+echo Calling lib/configure
 cd lib
-./configure
+./configure $arch
 
 echo end of configure

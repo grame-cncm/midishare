@@ -1,0 +1,316 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		F5240F1C0208056001053105 = {
+			isa = PBXFileReference;
+			name = EventToMidiStream.c;
+			path = ../../../lib/EventToMidiStream.c;
+			refType = 2;
+		};
+		F5240F1D0208056001053105 = {
+			fileRef = F5240F1C0208056001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5240F1E0208058801053105 = {
+			isa = PBXFileReference;
+			name = MidiStreamToEvent.c;
+			path = ../../../lib/MidiStreamToEvent.c;
+			refType = 2;
+		};
+		F5240F1F0208058801053105 = {
+			isa = PBXFileReference;
+			name = profport.c;
+			path = ../../../lib/profport.c;
+			refType = 2;
+		};
+		F5240F200208058801053105 = {
+			fileRef = F5240F1E0208058801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5240F210208058801053105 = {
+			fileRef = F5240F1F0208058801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54A7D7301FC77AF01053105 = {
+			buildStyles = (
+				F54A7D7501FC77AF01053105,
+				F54A7D7601FC77AF01053105,
+			);
+			isa = PBXProject;
+			mainGroup = F54A7D7401FC77AF01053105;
+			productRefGroup = F54A7D7A01FC781301053105;
+			projectDirPath = "";
+			targets = (
+				F54A7D7C01FC781301053105,
+			);
+		};
+		F54A7D7401FC77AF01053105 = {
+			children = (
+				F54A7D7701FC781301053105,
+				F569F8E6020573BA01053105,
+				F569F8E7020573BA01053105,
+				F54A7D7801FC781301053105,
+				F54A7D7901FC781301053105,
+				F54A7D8401FC781C01053105,
+				F58CAEE4020ADF5E01053105,
+				F58CAEE5020ADF5E01053105,
+				F76B9CAB02086D8E01053118,
+				F76B9CAA02086C0B01053118,
+				F54A7D7A01FC781301053105,
+				F76B9CAD02086E8001053118,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		F54A7D7501FC77AF01053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		F54A7D7601FC77AF01053105 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		F54A7D7701FC781301053105 = {
+			isa = PBXFileReference;
+			path = msMidiInOut.c;
+			refType = 4;
+		};
+		F54A7D7801FC781301053105 = {
+			isa = PBXFileReference;
+			path = msMidiDriver.c;
+			refType = 4;
+		};
+		F54A7D7901FC781301053105 = {
+			isa = PBXFileReference;
+			path = msMidiDriver.h;
+			refType = 4;
+		};
+		F54A7D7A01FC781301053105 = {
+			children = (
+				F54A7D7B01FC781301053105,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		F54A7D7B01FC781301053105 = {
+			isa = PBXLibraryReference;
+			path = msMidiDriver.1.0.1.so;
+			refType = 3;
+		};
+		F54A7D7C01FC781301053105 = {
+			buildPhases = (
+				F54A7D7D01FC781301053105,
+				F54A7D7F01FC781301053105,
+				F54A7D8201FC781301053105,
+				F54A7D8301FC781301053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				IMPLICITLY_INCLUDED_HEADERS = implicit.h;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-D__POWERPC__ -D__Macintosh__";
+				OTHER_LDFLAGS = "-flat_namespace -lMidiShare";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = implicit.h;
+				PRODUCT_NAME = msMidiDriver.1.0.1.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = msMidiDriver;
+			productInstallPath = /usr/local/lib;
+			productName = msMidiDriver;
+			productReference = F54A7D7B01FC781301053105;
+			shouldUseHeadermap = 0;
+		};
+		F54A7D7D01FC781301053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F54A7D7E01FC781301053105,
+				F569F8E8020573BA01053105,
+				F76B9CAC02086D8E01053118,
+				F58CAEE6020ADF5E01053105,
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		F54A7D7E01FC781301053105 = {
+			fileRef = F54A7D7901FC781301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54A7D7F01FC781301053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F54A7D8001FC781301053105,
+				F54A7D8101FC781301053105,
+				F54A7D8501FC781C01053105,
+				F569F8E9020573BA01053105,
+				F5240F1D0208056001053105,
+				F5240F200208058801053105,
+				F5240F210208058801053105,
+				F58CAEE7020ADF5E01053105,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		F54A7D8001FC781301053105 = {
+			fileRef = F54A7D7701FC781301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54A7D8101FC781301053105 = {
+			fileRef = F54A7D7801FC781301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54A7D8201FC781301053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				F76B9CAE02086E8001053118,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		F54A7D8301FC781301053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		F54A7D8401FC781C01053105 = {
+			isa = PBXFileReference;
+			path = msMidiMain.c;
+			refType = 4;
+		};
+		F54A7D8501FC781C01053105 = {
+			fileRef = F54A7D8401FC781C01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F569F8E6020573BA01053105 = {
+			isa = PBXFileReference;
+			path = msMidiState.h;
+			refType = 4;
+		};
+		F569F8E7020573BA01053105 = {
+			isa = PBXFileReference;
+			path = msMidiState.c;
+			refType = 4;
+		};
+		F569F8E8020573BA01053105 = {
+			fileRef = F569F8E6020573BA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F569F8E9020573BA01053105 = {
+			fileRef = F569F8E7020573BA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEE4020ADF5E01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEE5020ADF5E01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEE6020ADF5E01053105 = {
+			fileRef = F58CAEE5020ADF5E01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEE7020ADF5E01053105 = {
+			fileRef = F58CAEE4020ADF5E01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F70
+//F71
+//F72
+//F73
+//F74
+		F76B9CAA02086C0B01053118 = {
+			children = (
+				F5240F1C0208056001053105,
+				F5240F1E0208058801053105,
+				F5240F1F0208058801053105,
+			);
+			isa = PBXGroup;
+			name = lib;
+			refType = 4;
+		};
+		F76B9CAB02086D8E01053118 = {
+			isa = PBXFileReference;
+			path = implicit.h;
+			refType = 4;
+		};
+		F76B9CAC02086D8E01053118 = {
+			fileRef = F76B9CAB02086D8E01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F76B9CAD02086E8001053118 = {
+			isa = PBXFrameworkReference;
+			name = CoreMIDI.framework;
+			path = /System/Library/Frameworks/CoreMIDI.framework;
+			refType = 0;
+		};
+		F76B9CAE02086E8001053118 = {
+			fileRef = F76B9CAD02086E8001053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = F54A7D7301FC77AF01053105;
+}

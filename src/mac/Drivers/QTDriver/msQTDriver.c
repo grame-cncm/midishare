@@ -183,7 +183,7 @@ static void SetupFilter (MidiFilterPtr filter)
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi ()
 {
-	TDriverInfos infos = { QTDriverName, 100, 0};
+	TDriverInfos infos = { QTDriverName, kQTDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
 	

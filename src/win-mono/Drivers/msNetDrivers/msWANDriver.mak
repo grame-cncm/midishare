@@ -38,6 +38,7 @@ CLEAN :
 	-@erase "$(INTDIR)\EventToUDPStream.obj"
 	-@erase "$(INTDIR)\FTMA.obj"
 	-@erase "$(INTDIR)\Handle.obj"
+	-@erase "$(INTDIR)\HostTools.obj"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -79,7 +80,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -141,6 +142,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -178,6 +180,7 @@ CLEAN :
 	-@erase "$(INTDIR)\EventToUDPStream.obj"
 	-@erase "$(INTDIR)\FTMA.obj"
 	-@erase "$(INTDIR)\Handle.obj"
+	-@erase "$(INTDIR)\HostTools.obj"
 	-@erase "$(INTDIR)\INetAlert.obj"
 	-@erase "$(INTDIR)\MidiShareAppl.obj"
 	-@erase "$(INTDIR)\MidiShareDriver.obj"
@@ -222,7 +225,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -284,6 +287,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TUDPSocket.obj" \
 	"$(INTDIR)\FTMA.obj" \
 	"$(INTDIR)\Handle.obj" \
+	"$(INTDIR)\HostTools.obj" \
 	"$(INTDIR)\SkewControler.obj" \
 	"$(INTDIR)\TInetControler.obj" \
 	"$(INTDIR)\TInetTasks.obj" \
@@ -425,74 +429,315 @@ SOURCE=.\lib\sockets\TUDPSocket.cpp
 
 SOURCE=..\..\..\lib\Network\FTMA.cpp
 
-"$(INTDIR)\FTMA.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\FTMA.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\FTMA.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=.\Handle.c
 
-"$(INTDIR)\Handle.obj" : $(SOURCE) "$(INTDIR)"
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\Handle.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\Handle.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
+
+SOURCE=..\..\..\lib\Network\HostTools.cpp
+
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
+
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\HostTools.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\HostTools.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\SkewControler.cpp
 
-"$(INTDIR)\SkewControler.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\SkewControler.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\SkewControler.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TInetControler.cpp
 
-"$(INTDIR)\TInetControler.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TInetControler.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TInetControler.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TInetTasks.cpp
 
-"$(INTDIR)\TInetTasks.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TInetTasks.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TInetTasks.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TMidiInStream.cpp
 
-"$(INTDIR)\TMidiInStream.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TMidiInStream.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TMidiInStream.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TMidiOutStream.cpp
 
-"$(INTDIR)\TMidiOutStream.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TMidiOutStream.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TMidiOutStream.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TMidiRemote.cpp
 
-"$(INTDIR)\TMidiRemote.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TMidiRemote.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TMidiRemote.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TPacket.cpp
 
-"$(INTDIR)\TPacket.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TPacket.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TPacket.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TRemoteAppl.cpp
 
-"$(INTDIR)\TRemoteAppl.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TRemoteAppl.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TRemoteAppl.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TRemoteMgr.cpp
 
-"$(INTDIR)\TRemoteMgr.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TRemoteMgr.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TRemoteMgr.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=..\..\..\lib\Network\TRemoteSlot.cpp
 
-"$(INTDIR)\TRemoteSlot.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
+!IF  "$(CFG)" == "msWANDriver - Win32 Release"
 
+CPP_SWITCHES=/nologo /MD /W2 /GX /O2 /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\TRemoteSlot.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "msWANDriver - Win32 Debug"
+
+CPP_SWITCHES=/nologo /MDd /W2 /Gm /GX /ZI /Od /I "../../include" /I "../../../lib/Network/include" /I "../../../lib/" /I "../../../common/Headers" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WANDriver" /D "__Windows__" /Fp"$(INTDIR)\msWANDriver.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\TRemoteSlot.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
 
 SOURCE=.\INetAlert.cpp
 

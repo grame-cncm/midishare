@@ -26,6 +26,7 @@
 #define __msLANHeader__
 
 #define MidiSharePPC_68k
+#define __Macintosh__
 
 #include <MacHeaders.h>
 
