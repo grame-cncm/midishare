@@ -60,14 +60,18 @@
  *****************************************************************/
 
 #ifdef __Macintosh__
+# ifdef __POWERPC__
+# include "lflifo.h"
+# else
 typedef struct fifo {
 	cell*			head;		/* the fifo head */
-	unsigned long	count;		/* cells count   */
 	cell*			tail;	    /* the fifo tail */
+	unsigned long	count;		/* cells count   */
 } fifo;
+# endif
 #endif
 
-#ifdef __Pentium__
+#if defined(__Pentium__) || defined(__POWERPC__)
 typedef struct fifo {
 	lifo in;
 	lifo out;	
@@ -90,6 +94,7 @@ typedef struct fifo {
 /* Macintosh implementation */
 #ifdef __Macintosh__
 # ifdef __POWERPC__
+
 # else
 
 static inline cell* fifoavail (fifo * ff) 
@@ -149,7 +154,7 @@ static inline cell* fifoclear (register fifo * ff)
 #endif  /* __Macintosh__ */
 
 /* Pentium processors implementation */
-#ifdef __Pentium__
+#if defined(__Pentium__) || defined(__POWERPC__)
 
 static inline unsigned long fifosize (fifo * ff) 
 {
