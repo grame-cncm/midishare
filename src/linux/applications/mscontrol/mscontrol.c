@@ -17,7 +17,9 @@
 
 static short 		gRefNum = -1;		// numéro de référence de msControl
 
-GtkObject *pitch, *velocity, *duration, *channel, *port, *ctrlnum, *ctrlval;
+GtkObject 	*pitch, *velocity, *duration, 
+			*channel, *port, 
+			*prog, *vol, *mod, *pan;
 
 
 /****************************************************************************
@@ -80,12 +82,23 @@ void note_action (GtkAdjustment* adj, GtkWidget* data)
 	MidiSendIm(gRefNum, e);
 }
 	
-void ctrl_action (GtkAdjustment* adj, GtkWidget* data)
+void prog_action (GtkAdjustment* adj, GtkWidget* data)
+{
+	MidiEvPtr e = MidiNewEv(typeProgChange);
+	
+	Pitch(e) = GTK_ADJUSTMENT(prog)->value + 0.5; 
+	Chan(e) = GTK_ADJUSTMENT(channel)->value + 0.5; 
+	Port(e) = GTK_ADJUSTMENT(port)->value + 0.5; 
+	
+	MidiSendIm(gRefNum, e);
+}
+	
+void ctrl_action (GtkAdjustment* adj, long ctrlnumber)
 {
 	MidiEvPtr e = MidiNewEv(typeCtrlChange);
 	
-	Pitch(e) = GTK_ADJUSTMENT(ctrlnum)->value + 0.5; 
-	Vel(e) = GTK_ADJUSTMENT(ctrlval)->value + 0.5; 
+	Pitch(e) = ctrlnumber; 
+	Vel(e) = GTK_ADJUSTMENT(vol)->value + 0.5; 
 	Chan(e) = GTK_ADJUSTMENT(channel)->value + 0.5; 
 	Port(e) = GTK_ADJUSTMENT(port)->value + 0.5; 
 	
@@ -112,8 +125,10 @@ int main(int argc, char *argv[] )
 	channel = gtk_adjustment_new (0.0, 0.0, 16.0, 1.0, 1.0, 1.0);
 	port 	= gtk_adjustment_new (0.0, 0.0, 128.0, 1.0, 1.0, 1.0);
 
-	ctrlnum	= gtk_adjustment_new (7.0, 0.0, 128.0, 1.0, 8.0, 1.0);
-	ctrlval	= gtk_adjustment_new (60.0, 0.0, 128.0, 1.0, 8.0, 1.0);
+	prog	= gtk_adjustment_new (0.0, 0.0, 128.0, 1.0, 8.0, 1.0);
+	vol		= gtk_adjustment_new (100.0, 0.0, 128.0, 1.0, 8.0, 1.0);
+	mod		= gtk_adjustment_new (0.0, 0.0, 128.0, 1.0, 8.0, 1.0);
+	pan		= gtk_adjustment_new (64.0, 0.0, 128.0, 1.0, 8.0, 1.0);
 
 
 	// Définition de la fenetre
@@ -129,13 +144,19 @@ int main(int argc, char *argv[] )
 	add_control(vbox, "Pitch", pitch);
 	add_control(vbox, "Vel", velocity);
 	add_control(vbox, "Dur", duration);
-	add_control(vbox, "Chan", channel);
-	add_control(vbox, "Port", port);
 	
 	add(vbox, gtk_hseparator_new());
 
-	add_control(vbox, "Ctrl", ctrlnum);
-	add_control(vbox, "Val", ctrlval);
+	add_control(vbox, "Prog", prog);
+	add_control(vbox, "Vol", vol);
+	add_control(vbox, "Mod", mod);
+	add_control(vbox, "Pan", pan);
+	
+	add(vbox, gtk_hseparator_new());
+
+	add_control(vbox, "Chan", channel);
+	add_control(vbox, "Port", port);
+	
 	
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
@@ -147,8 +168,10 @@ int main(int argc, char *argv[] )
 	gtk_signal_connect( channel, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
 	gtk_signal_connect( port, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
 
-	gtk_signal_connect( ctrlnum, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), NULL);
-	gtk_signal_connect( ctrlval, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), NULL);
+	gtk_signal_connect( prog, "value_changed", GTK_SIGNAL_FUNC(prog_action), NULL);
+	gtk_signal_connect( vol, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)7L);
+	gtk_signal_connect( mod, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)1L);
+	gtk_signal_connect( pan, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)10L);
 
 	// connexion des signaux
 	gtk_signal_connect(
