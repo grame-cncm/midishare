@@ -764,7 +764,7 @@ static void Tasks( Boolean isFreeMem)
 		
 	fprintf( stdout, "    MidiForgetTask(1) : ");flush;	
 	p1= 0;
-	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
+	e= MidiTask( MyTask, time= MidiGetTime()+100, refNum, (long)&p1, (long)&p2, (long)&p3);
 	MidiForgetTask(&e);
 	fprintf( stdout, "%s\n",OK);
 	if(e) fprintf( stdout, "Warning : MidiForgetTask does not set task address to 0 !\n");
