@@ -86,18 +86,21 @@ Boolean OpenMemory (MSMemoryPtr g)
 
 void CloseMemory (MSMemoryPtr g)
 {
-	void* blk;
+	void* blk, *next;
 	g->active--;
 	if (g->active == 0) {
 		blk = lfpop (BlockList(g));
 		while ( blk ) {
+			next = lfpop (BlockList(g));	// fetch the next block before the function call
+									// otherwise lfpop inlining is splitted by
+									// a stack correction
+									// a bug in CodeWarrior 5  compiler for mac is suspected  
 			DisposeMemory (blk);
-			{ blk = lfpop (BlockList(g)); }
+			blk = next;
 		}
 		InitMemory (g, g->desiredSpace);	
 	}
 }
-
 
 /*===========================================================================
   Internal functions implementation
