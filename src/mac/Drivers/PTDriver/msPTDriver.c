@@ -55,6 +55,8 @@ typedef struct {
 	Boolean	*			autoQuit;
 	Boolean	*			sflag;
 	Boolean             connected;
+	 UPPDriverPtr   	upp_wakeup_ptr;
+  	UPPDriverPtr   		upp_sleep_ptr;
 	long*				tune;
 	long*				buffers;
 	long* 				noisein;
@@ -67,9 +69,10 @@ typedef struct {
 	long 				old_bendlength;
 	long				old_vol;  // valeur du dernier volume envoyŽ
 	long				old_bend; // valeur du dernier bend envoyŽ
-	short	   		 	monoTable [BUFFER_SIZE];
 	long				numInput;
 	long				numOutput;
+	short	   		 	monoTable [BUFFER_SIZE];
+	
 } DriverData, * DriverDataPtr;
 
 /* ----------------------------------*/
@@ -165,8 +168,8 @@ static int inputCallback(void *inputBuffer, void *outputBuffer,
 	if (data->refNum > 0 && data->connected) { 
 		
 		// Transform in a mono buffer : keep the left input
-		for ( i = 0; i< framesPerBuffer; i++) data->monoTable[i] = in[2*i];
-		
+		for ( i = 0; i< framesPerBuffer; i++) data->monoTable[i] = in[data->numInput*i];
+				
 		// Update parameters
 		if (*data->sflag) {
 			*data->sflag = false;
@@ -267,14 +270,19 @@ static void AudioStart ()
 	err = Pa_Initialize();
 	if( err != paNoError ) goto error;       
 	
+	/*
 	info = Pa_GetDeviceInfo (Pa_GetDefaultInputDeviceID());
 	data->numInput = info->maxInputChannels;
-	data->numOutput = info->maxInputChannels;
+	data->numOutput = info->maxOutputChannels;
+	*/
+	
+	data->numInput = 2;
+	data->numOutput = 2;
 	
 	err = Pa_OpenStream(
 				&data->stream,
 				Pa_GetDefaultInputDeviceID(),
-				data->numInput,
+				data->numInput ,
 				PA_SAMPLE_TYPE,
 				NULL,
 				paNoDevice,
@@ -311,13 +319,13 @@ Boolean SetUpMidi (StatePtr state)
 {
 	TDriverInfos infos = { PTDriverName, 100, 0};
 	TDriverOperation op = { 0, 0, 0, 0, 0 }; 
-	UPPDriverPtr UPPDriverWakeUp = NewDriverPtr(WakeUp);
-	UPPDriverPtr UPPDriverSleep = NewDriverPtr(Sleep);
 	DriverDataPtr data = GetData ();
 	short refNum; 
+	data->upp_wakeup_ptr = NewDriverPtr(WakeUp);
+	data->upp_sleep_ptr = NewDriverPtr(Sleep);
 		
-	op.wakeup = (DriverAlarmPtr)UPPDriverWakeUp;
-	op.sleep = (DriverAlarmPtr)UPPDriverSleep;
+	op.wakeup = (DriverAlarmPtr)data->upp_wakeup_ptr;
+	op.sleep = (DriverAlarmPtr)data->upp_sleep_ptr;
 	
 	if (MidiGetNamedAppl (PTDriverName) > 0) {
 		doneFlag = true;
@@ -364,6 +372,8 @@ void CloseMidi ()
 	if (ref > 0) {
 		SaveDriverState (ref, StateFile, StateCreator, StateType);
 		MidiUnregisterDriver (ref);
+		DisposeRoutineDescriptor(data->upp_wakeup_ptr);
+  		DisposeRoutineDescriptor(data->upp_sleep_ptr);
 	}
 }
 
