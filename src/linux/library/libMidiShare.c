@@ -21,6 +21,7 @@
 */
 
 #include <pwd.h>
+#include <signal.h>
 
 #include "libMidiShare.h"
 
@@ -32,6 +33,29 @@ TClients   	gLClients = {0};
 TClients*	gClients = &gLClients;
 
 int msfd = -1;  /* the MidiShare Device file number */
+
+
+/*________________________________________________________ */
+/* signal handling parameters and variables                */
+/* list of signals to be patched */
+int gSigList [] = {
+	SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGTRAP,
+	SIGABRT, SIGBUS, SIGFPE, 
+	SIGSEGV, SIGPIPE, SIGTERM, SIGSTKFLT, 
+	0
+};
+
+/* array to store the previous signal handlers */
+typedef void (*sighandler) (int);
+#define kMaxSigs  32
+sighandler gSigs [kMaxSigs] = { 0 };
+
+/* functions prototypes */
+static void panic ();
+static void sighandle (int signum);
+static void patch_sigs (int * list);
+static void restore_sigs ();
+
 
 /*--------------------------------------------------------------------*/
 
@@ -129,7 +153,7 @@ void* event_handler(void* arg)
 	int refNum = appl->refNum;
 	TTaskExtPtr task ;
 	MidiEvPtr ev;
-			
+	
 	while ((ev = MidiGetCommand(refNum))) {         		
 			
 			switch (ev->evType) {
@@ -159,6 +183,7 @@ void* event_handler(void* arg)
 			}
 			MSFreeEv(ev, FreeList(Memory(gClients)));
 	}
+
 	exit:
 	pthread_exit(0);
 }
@@ -353,6 +378,7 @@ long* MidiGetTimeAddr ()
 	 
 	if (gClients->nbAppls == 0) {
 		OpenMemory (Memory(gClients));
+		patch_sigs (gSigList);
 	}
 	
 	if (gClients->nbAppls < MaxAppls) {
@@ -415,6 +441,7 @@ void MidiClose (short ref)
 	
 		if (gClients->nbAppls == 0) {
 			CloseMemory(Memory(gClients));
+			restore_sigs ();
 		} 
 	}
 	
@@ -1132,6 +1159,65 @@ void MidiReset ()
   int err;
   TMidiCloseArgs args;
   CALL(kMidiReset,&args);
+}
+
+
+/*--------------------------------------------------------------------*/
+static void panic ()
+{
+	TMidiCloseArgs args;
+	int i, err;
+	for (i=0; i<MaxAppls; i++) {
+		if (gClients->appls[i]) {
+			args.refnum = gClients->appls[i]->refNum;
+			CALL(kMidiClose,&args);
+		}
+	}
+	if (msfd > 0) close (msfd);
+}
+
+/*--------------------------------------------------------------------*/
+static void sighandle (int signum)
+{
+	sighandler prev = gSigs[signum];
+	panic ();
+
+	if (prev) {
+		prev (signum);
+	}
+	else if (signal (signum, SIG_DFL) != SIG_ERR) {
+		raise (signum);
+	}
+	else {
+		raise (SIGSTOP);
+	}
+}
+
+/*--------------------------------------------------------------------*/
+static void patch_sigs (int * list)
+{
+	void * sh; int signum;
+	while (*list) {
+		signum = *list;
+		sh = signal (signum, sighandle);
+		if (sh != SIG_ERR) {
+			gSigs[signum] = sh;
+		}
+		else {
+			gSigs[signum] = 0;
+		}
+		list++;
+	}
+}
+
+/*--------------------------------------------------------------------*/
+static void restore_sigs ()
+{
+	int i; sighandler sh;
+	for (i=0; i<kMaxSigs; i++) {
+		sh = gSigs[i];
+		signal (i, sh ? sh : SIG_DFL);
+	}
 }
 
 
