@@ -501,17 +501,9 @@
 //6A4
 		6A0644A002C7BD230CC91562 = {
 			children = (
-				6A0644AC02C7C26E0CC91562,
 			);
 			isa = PBXGroup;
 			name = Documentation;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		6A0644AC02C7C26E0CC91562 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.man;
-			path = native.1;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -520,16 +512,9 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				6A0644BD02C7C4400CC91562,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 1;
-		};
-		6A0644BD02C7C4400CC91562 = {
-			fileRef = 6A0644AC02C7C26E0CC91562;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6A8008AE02C7B68F0CC91562 = {
 			fileEncoding = 4;
