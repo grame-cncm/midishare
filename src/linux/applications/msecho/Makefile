@@ -1,15 +1,17 @@
-cppappl := $(patsubst %.cpp, %, $(wildcard *.cpp))
-cappl := $(patsubst %.c, %, $(wildcard *.c))
+
+cappl := msecho
 options := -I../../Include -Wall -O6 `gtk-config --cflags --libs` -lMidiShare -lpthread
+DEST=/usr/local/bin
 
-
-all : $(cppappl) $(cappl)
+all : $(cappl)
  
-$(cppappl) : % : %.cpp  
-	gcc $(options) $< -o $@
- 
+  
 $(cappl) : % : %.c
 	gcc $(options) $< -o $@
 
 clean :
-	rm $(cppappl) $(cappl)
+	rm $(cappl)
+
+install :
+	cp $(cappl) $(DEST)
+	echo chmod +s $(DEST)/$(cappl)
