@@ -54,7 +54,15 @@ typedef struct FarPtr(TAppl) 		TApplPtr;
 typedef struct FarPtr(TClients) 	TClientsPtr;
 typedef struct FarPtr(TConnection) 	TConnectionPtr;
 
+
+#ifdef PascalNames
 typedef unsigned char MSName[MaxApplNameLen];
+#else
+typedef char MSName[MaxApplNameLen];
+#endif
+
+
+
 
 /*------------------------------------------------------------------------*/
 /* inter-applications connections representation                          */
@@ -99,8 +107,6 @@ typedef struct TClients {
 /* macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #define CheckRefNum( g, r)    ((r>=0) && (r<MaxAppls) && g->appls[r])
-
-#define RcvFifoHead(appl)     (MidiEvPtr)(appl->rcv.head)
 #define DTasksFifoHead(appl)  (MidiEvPtr)(appl->dTasks.head)
 
 #endif
