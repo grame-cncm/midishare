@@ -40,7 +40,7 @@ enum {
 	 };
 
 #define 	MSCodeRsrcName "\pMidiShare"
-#define 	Align(val)			(((val) >> 2) << 4)	/* 32 bits alignment macro */
+//#define 	Align(val)			(((val) >> 2) << 4)	/* 32 bits alignment macro */
 
 /*_______________________________________________________________________________*/
 /* MidiShare code resource structure */
@@ -73,8 +73,9 @@ void __Startup__()
 	memSize = codeSize + sizeof(TMSGlobal) + 4;
 	msMem = NewPtrSys (memSize);
 	if (msMem) {
-		codeMem = (Ptr)(Align((long)msMem + sizeof(TMSGlobal)) + 4);
+//		codeMem = (Ptr)(Align((long)msMem + sizeof(TMSGlobal)) + 4);
 		if (vm) HoldMemory(msMem, memSize);
+		codeMem = (Ptr)((long)msMem + sizeof(TMSGlobal));
 		BlockMove(*codeHandler, codeMem, codeSize);			/* duplicates the CODE resource 	*/
 
 		cPtr = (codeResPtr)(codeMem);
