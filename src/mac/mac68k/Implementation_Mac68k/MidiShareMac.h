@@ -45,9 +45,7 @@ extern "C" {
  
 /*--------------------------- Global MidiShare environment --------------------*/
 
-pascal	void 		MidiShareSpecialInit	(void) 						={0x7037, 0x2078, 0x00B8, 0x4E90};
 pascal	short 		MidiGetVersion	(void) 								={0x7000, 0x2078, 0x00B8, 0x4E90};
-
 pascal	short 		MidiCountAppls	(void) 								={0x7001, 0x2078, 0x00B8, 0x4E90};
 pascal	short 		MidiGetIndAppl 	(short index) 						={0x7002, 0x2078, 0x00B8, 0x4E90};		
 pascal	short 		MidiGetNamedAppl(MidiName name) 					={0x7003, 0x2078, 0x00B8, 0x4E90};
