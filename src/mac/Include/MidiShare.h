@@ -294,6 +294,11 @@ enum{	MIDIOpenAppl=1,
 				Byte unused[2];
 			} keySign;
 
+			struct {							/* for paramchg & 14-bits ctrl	*/
+				short num;						/* param or ctrl num			*/
+				short val;						/* 14-bits value				*/
+			} param;
+
 			struct {							/* for MidiFile sequence number */
 				unsigned short number;
 				short unused;
@@ -344,7 +349,7 @@ enum{	MIDIOpenAppl=1,
 	typedef long SlotRefNum;
 	#define Slot(ref) 			((ref) & 0xffff)
 
-	typedef enum { MidiInputSlot=1, MidiOutputSlot } SlotDirection;
+	typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 	typedef struct TSlotInfos {
 		SlotName 		name;
 		SlotDirection 	direction;
