@@ -20,6 +20,7 @@
   
   modifications history:
    [08-09-99] DF - struct cell added
+   [13-09-99] DF - 'PascalNames' definition moved to platform dependent header
 
 */
 
@@ -43,8 +44,6 @@
 #endif
 
 #define FarPtr(type)           type FAR *
-
-#define PascalNames
 
 typedef unsigned long ulong;
 typedef unsigned char uchar;
