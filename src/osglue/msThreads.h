@@ -27,8 +27,10 @@
 
 #ifdef WIN32
 	typedef LPTHREAD_START_ROUTINE ThreadProcPtr;
+#	define ThreadProc(proc, arg)	DWORD WINAPI proc(LPVOID arg)
 #else
 	typedef void * ( * ThreadProcPtr) (void * ptr);
+#	define ThreadProc(proc, arg)	void * proc(void * arg)
 #endif
 
 typedef void * msThreadPtr;
