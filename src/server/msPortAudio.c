@@ -56,7 +56,7 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
 	int device, maxdev;
     err = Pa_Initialize();
   	if( err != paNoError ) goto error_recovery;
-  	
+
   	// Load audio sizr from the .ini file
   	gAudioSize = GetAudioBufFSize(g->clock.timeRes);
   	
