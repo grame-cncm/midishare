@@ -19,6 +19,7 @@ libinstall:
 	make -i -C library install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
 	cp $(CONF) /etc/$(CONF)
+	cp Include/MidiShare.h /usr/local/include
 
 install: libinstall
 	install MidiShare.o $(MODF)
@@ -40,6 +41,7 @@ clientsinstall:
 
 libuninstall:
 	rm -f /dev/MidiShare
+	rm  /usr/local/include/MidiShare.h
 	make -C library uninstall 
 
 uninstall: libuninstall
