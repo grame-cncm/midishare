@@ -227,10 +227,11 @@ enum{   MIDIOpenAppl=1,
 * All events are built using one or several fixed size cells (16 bytes)
 * Most events use  one cell. Some other like SysEx events use several linked cells.
 *******************************************************************************/
-
+#ifndef __IGNORE_TYPES__
 	typedef unsigned char Byte;
 	typedef void * Ptr;
 	typedef int Boolean;
+#endif
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
