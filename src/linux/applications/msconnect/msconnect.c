@@ -1,7 +1,7 @@
 /****************************************************************************
 *****************************************************************************
 *																			*
-*                     		msConnect, version GTK							*
+*                     		msConnect, GTK version 							*
 *																			*
 *****************************************************************************
 *****************************************************************************/
@@ -12,27 +12,24 @@
 #include "MidiShare.h"
 
 /****************************************************************************
-						Les variables globales de msConnect 
+						Global variables for msConnect 
 *****************************************************************************/
 
-static short 		gRefNum = -1;		// numéro de référence MidiShare de msConnect
+static short 		gRefNum = -1;		// msConnect MidiShare reference number
 
-static short		gCurRow = 0;		// numéro de ligne de l'application selectionnée à l'affichage
-static short		gCurRef = 0;		// numéro de référence de l'application selectionnée à l'affichage
+static short		gCurRow = 0;		// line number of the selected displayed aplication
+static short		gCurRef = 0;		// reference number of the selected displayed aplication
 
-static GtkWidget*	gSrcList = 0;		// liste des sources
-static GtkWidget*	gAppList = 0;		// liste des applications clientes
-static GtkWidget*	gDstList = 0;		// liste des destinations
+static GtkWidget*	gSrcList = 0;		// sources list
+static GtkWidget*	gAppList = 0;		// applications list
+static GtkWidget*	gDstList = 0;		// destinations list
 
-static int			gUpdateFlag=FALSE;	// Vrai quand un update des listes est en cours et 
-										// qu'il ne faut pas tenir compte des callbacks engendrées
-static int			gNeedRebuild=FALSE;	// Positionner par l'applAlarm pour indiquer un changement
-										// dans la liste des applications clientes
-static int			gNeedRefresh=FALSE;	// Positionner par l'ApplAlarm pour indiquer un changement 
-										// de connexions
+static int			gUpdateFlag=FALSE;	// true when a list update is being done and callbacks must be ignored
+static int			gNeedRebuild=FALSE;	// set up by the applAlarm when the applications list has been changed
+static int			gNeedRefresh=FALSE;	// set up by the applAlarm when connections have changed
 
 /****************************************************************************
-								Mise a jour des listes
+								Lists management
 *****************************************************************************/
 
 #define row2ref(row)  MidiGetIndAppl(1+row)
@@ -42,7 +39,6 @@ static void rebuildLists()
 	short 	i, c;
 	gchar* 	txt[2];
 
-	//printf("rebuildlist\n");
 	gUpdateFlag=TRUE;	
 	
 	gtk_clist_freeze(GTK_CLIST(gSrcList));
@@ -74,12 +70,10 @@ static void refreshLists()
 {
 	short r, i, c, a;
 	
-	//printf("refreshlist\n");
-	r = row2ref(gCurRow);		// refnum de l'appli dont ont va afficher les liens
+	r = row2ref(gCurRow);		// application number which lines are displayed
 	if (r < 0) r = 0;
 	
 	gUpdateFlag=TRUE;
-	
 	
 	gtk_clist_freeze(GTK_CLIST(gSrcList));
 	gtk_clist_freeze(GTK_CLIST(gAppList));
@@ -105,7 +99,7 @@ static void refreshLists()
 }		
 
 /****************************************************************************
-			Callback de gestion des selections dans les listes
+			List selections callbacks
  ***************************************************************************/
 
 static void select_src(GtkWidget *widget, gint row, gint column, GdkEventButton *event, gpointer data)
@@ -135,7 +129,7 @@ static void unselect_dst(GtkWidget *widget, gint row, gint column, GdkEventButto
 
 
 /****************************************************************************
-						Construction des listes
+						List construction
 *****************************************************************************/
 
 static GtkWidget* makelist(GtkWidget** plist, gchar* lstname,GtkSelectionMode mode, GtkSignalFunc selfun, GtkSignalFunc unselfun)
@@ -176,13 +170,12 @@ static void initLists()
 
 
 /****************************************************************************
-				Surveillance des clients MidiShare
+				MidiShare clients management
 *****************************************************************************/
-// MypplAlarm se contente de positionner des codes
-// que la fonction periodique check_update exploite
-// pour mettre a jour les listes
+// MypplAlarm updates globals variables that the periadical check_update
+// function use to update the lists
 	
-// Alarme de contexte MidiShare
+// MidiShare context alarm
 void MyApplAlarm (short refNum, long msg)
 {
 	unsigned int code = msg & 0xFFFF;
@@ -202,7 +195,7 @@ void MyApplAlarm (short refNum, long msg)
 	}
 }
 
-// Fonction periodique GTK
+// GTK periodical function 
 gint check_update( gpointer data )
 {
 	if (gNeedRebuild) {
@@ -224,7 +217,7 @@ gint check_update( gpointer data )
 
 										
 /****************************************************************************
-						Definition des callbacks 
+						Callbacks  definition
 *****************************************************************************/
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
@@ -251,7 +244,7 @@ int main(int argc, char *argv[] )
 	gtk_init (&argc, &argv);
 	gRefNum = MidiOpen("msConnect");
 
-	// Construction de l'interface utilisateur
+	// User interface construction
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "msConnect");
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
@@ -266,7 +259,7 @@ int main(int argc, char *argv[] )
 	gtk_container_add(GTK_CONTAINER(window), hbox);	
 	gtk_widget_show_all (window);
 	
-	// connexion des signaux
+	// signal connexion
 	gtk_signal_connect(
 			GTK_OBJECT(window), "delete_event", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
@@ -277,7 +270,7 @@ int main(int argc, char *argv[] )
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
 	
-	// installation de la surveillance des appli MidiShare
+	// MidiShare applAlarm initialisation
 	MidiSetApplAlarm(gRefNum, MyApplAlarm);
 	gtk_timeout_add( 100, check_update, NULL);
 
