@@ -48,7 +48,7 @@ void TActiveSensing::Initialize (TUDPSocket * sok, short rate)
 void TActiveSensing::Run (long date, short refNum, long a1, long a2)
 {
 	if (fSocket) {
-		SocketStatus err = fPacket->Send (fSocket, (IPAddrPtr)a1);
+		fPacket->Send (fSocket, (IPAddrPtr)a1);
 		if (a2) {
 			Schedule (date + 50, refNum, a1, a2-1);
 		}

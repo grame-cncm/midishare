@@ -195,7 +195,7 @@ void TInetControler::Bye ()
 		if (fActiveSensing) fActiveSensing->Clear ();
 		if (fDTasks) fDTasks->Clear ();
 	}
-	SocketStatus err = bye.Send (&fSocket, fNetInfos.BroadcastAddress());
+	bye.Send (&fSocket, fNetInfos.BroadcastAddress());
 }
 
 //____________________________________________________________
