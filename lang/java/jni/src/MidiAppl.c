@@ -31,7 +31,9 @@
 /*	
 /* History : 20/07/96 Suppression des fonction SetData et GetData : utilisation de MidiSetField
 /*          19/03/02 Thread bloquant sur MacOS9
-/*	    17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
+/*          17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
+/*	    05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback
+/*	    un pour le thread de l'application. 
 /*		
 /*****************************************************************************/
 
@@ -76,7 +78,8 @@
 /*--------------------------------------------------------------------------*/
 typedef struct ApplContext {
    JavaVM * fJvm;
-   JNIEnv * fEnv;
+   JNIEnv * fCallbackEnv;
+   JNIEnv * fApplEnv;
    jmethodID fMid;
    jobject fObj;
    jclass fClass;
@@ -87,12 +90,12 @@ typedef struct ApplContext {
 /*--------------------------------------------------------------------------*/
 static void  MSALARMAPI ApplAlarm( short ref,long code)
 {	
-        MidiEvPtr e;
-        
-	if ((e = MidiNewEv(typeAlarm))) {
-		MidiSetField(e,0,code);
-		MidiSendIm (ref+128, e);
-  	}
+    MidiEvPtr e;
+    
+    if ((e = MidiNewEv(typeAlarm))) {
+            MidiSetField(e,0,code);
+            MidiSendIm (ref+128, e);
+    }
 }
 
 
@@ -101,7 +104,7 @@ static int CheckThreadEnv(ApplContext* context)
 {
     if (context->fAttached) {
          return true;
-    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fEnv, NULL) == 0) {
+    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fCallbackEnv, NULL) == 0) {
         context->fAttached = true;
         return true;
     }else{
@@ -112,47 +115,47 @@ static int CheckThreadEnv(ApplContext* context)
 /*--------------------------------------------------------------------------*/
 static void MSALARMAPI JavaTask ( long date, short refNum, long a1,long a2,long a3 )
 {
-        ApplContext* context = MidiGetInfo(refNum);
-        jclass class;
-        jmethodID mid;
-        jobject task;
-        jobject appl;
-        jfieldID taskptr;
-     
-        if (context && CheckThreadEnv(context)) {
-            appl = (jobject)a1;
-            task = (jobject)a2;
-            class = (*context->fEnv)->GetObjectClass(context->fEnv, task);
-            mid = (*context->fEnv)->GetMethodID(context->fEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
-            taskptr = (*context->fEnv)->GetFieldID(context->fEnv, class, "taskptr",  "I");
-            (*context->fEnv)->SetIntField(context->fEnv,task,taskptr,0); 
-            (*context->fEnv)->CallVoidMethod(context->fEnv, task, mid, appl,date);
-            (*context->fEnv)->DeleteGlobalRef(context->fEnv, appl);
-            (*context->fEnv)->DeleteGlobalRef(context->fEnv, task);
-        }else{
-            printf("ReceiveAlarm error : cannot callback Java task\n");
-        }
+    ApplContext* context = MidiGetInfo(refNum);
+    jclass class;
+    jmethodID mid;
+    jobject task;
+    jobject appl;
+    jfieldID taskptr;
+    
+    if (context && CheckThreadEnv(context)) {
+        appl = (jobject)a1;
+        task = (jobject)a2;
+        class = (*context->fCallbackEnv)->GetObjectClass(context->fCallbackEnv, task);
+        mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
+        taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "I");
+        (*context->fCallbackEnv)->SetIntField(context->fCallbackEnv,task,taskptr,0); 
+        (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, task, mid, appl,date);
+        (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, appl);
+        (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, task);
+    }else{
+        printf("ReceiveAlarm error : cannot callback Java task\n");
+    }
 }
                             
 /*--------------------------------------------------------------------------*/
 static void MSALARMAPI ReceiveAlarm( short ref)
 {
-        #if defined (__Macintosh__) && defined(__MacOS9__)
-            UniversalProcPtr proc = MidiGetInfo(ref);
+    #if defined (__Macintosh__) && defined(__MacOS9__)
+        UniversalProcPtr proc = MidiGetInfo(ref);
+        
+        if (proc) {
+            CallUniversalProc(proc, 0);
+            WakeUpProcess(&gJavaProcess);
+        }
+    #else
+        ApplContext* context = MidiGetInfo(ref);
             
-            if (proc) {
-                CallUniversalProc(proc, 0);
-                WakeUpProcess(&gJavaProcess);
-            }
-        #else
-            ApplContext* context = MidiGetInfo(ref);
-             
-            if (context && CheckThreadEnv(context)) {   
-                (*context->fEnv)->CallVoidMethod(context->fEnv, context->fObj, context->fMid);
-            }else{
-                printf("ReceiveAlarm error : cannot callback Java MidiEventLoop\n");
-            }
-        #endif
+        if (context && CheckThreadEnv(context)) {   
+            (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, context->fObj, context->fMid);
+        }else{
+            printf("ReceiveAlarm error : cannot callback Java MidiEventLoop\n");
+        }
+    #endif
 }
 
 
@@ -177,8 +180,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
         context->fObj = (*env)->NewGlobalRef(env,obj);
         context->fAttached = false;
         
-        // Keep the calling env to be able to use DeleteGlobalRef if the real-time thread env is not captured
-        if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fEnv, NULL) != 0) goto error;
+        if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fApplEnv, NULL) != 0) goto error;
          
         MidiSetInfo(ref,context);
         
@@ -216,8 +218,8 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
         ApplContext* context = MidiGetInfo(ref);
         
         if (context) {
-            (*context->fEnv)->DeleteGlobalRef(context->fEnv, context->fClass);
-            (*context->fEnv)->DeleteGlobalRef(context->fEnv, context->fObj);
+            (*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fClass);
+            (*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fObj);
             free(context);
         }
             
@@ -233,7 +235,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 {
         jclass cls;
         jfieldID taskptr;
-        MidiEvPtr taskev;
+        MidiEvPtr taskev = 0;
         
         #if defined (__Macintosh__) && defined(__MacOS9__)
             taskev = MidiDTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
