@@ -59,11 +59,9 @@ unsigned long fifosize (fifo * ff)
 void fifoput (vtype fifo * ff, fifocell * cl) 
 {
 	vtype fifocell * tail;
-//printf (">> fifoput in %lx\n", (long)cl);
-//pfifo (ff);
+
     cl->link = fifo_end(ff);	/* set the cell next pointer to the end marker */
 	while (1) {
-//        LWARX (&ff->tail);
 		tail = ff->tail;		/* read the tail cell */
 		/* try to link the cell to the tail cell */
 		if (CAS (&tail->link, fifo_end(ff), cl)) {
@@ -74,11 +72,8 @@ void fifoput (vtype fifo * ff, fifocell * cl)
             CASLNE (&ff->tail, (void *)tail, fifo_end(ff));
         }
 	} 
-    if (!CASLNE (&ff->tail, (void *)tail, fifo_end(ff)))
-//printf ("====> fifoput CASLNE failed\n");
-//pfifo (ff);
+	CASLNE (&ff->tail, (void *)tail, fifo_end(ff));
 	msAtomicInc (&ff->count);
-//printf ("<< fifoput out\n");
 }
 
 #else
@@ -113,32 +108,35 @@ fifocell * fifoget (vtype fifo * ff)
 {
 	vtype fifocell * head;
 	fifocell * next; 
-	long ic, oc, val[3];
+	long count, val[3];
 	short done = 0;
 	
 //printf (">> fifoget in\n");
 	do {
 		LWARX (&ff->head);
+		count = ff->count.value;
         head = ff->head;				/* read the head cell */
 		next = head->link;				/* read the next cell */
-        if (head == ff->tail) {			/* is queue empty or tail falling behind? */
-            printf ("---> fifoget: queue empty or ? (%lx %lx %ld)\n", (long)head, (long)next, fifosize(ff));
-			pfifo(ff);
-            if (next == fifo_end(ff))	/* is queue empty?             */
-                return 0;				/* queue is empty; return NULL */
-            /* tail is pointing to head in a non empty queue, */
-            /* try to set tail to the next cell               */
-            if (!CASLNE (&ff->tail, (void *)head, fifo_end(ff)))
-				pfifo(ff);
-        }
-        else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
-            val[0] = next->value[0];	 /* we read the next cell value */
-            val[1] = next->value[1];
-            val[2] = next->value[2];
-            /* and we try to set head to the next cell */
-            done = STWCX (&ff->head, (void *)head, next);
-        }
-        else printf ("---> fifoget: uncatched test\n");
+		if (count == ff->count.value) {
+			if (head == ff->tail) {			/* is queue empty or tail falling behind? */
+	//            printf ("---> fifoget: queue empty or ? (%lx %lx %lx)\n", (long)head, (long)next, fifo_end(ff));
+	//			pfifo(ff);
+				if (head->link == fifo_end(ff))	/* is queue empty?             */
+					return 0;				/* queue is empty; return NULL */
+				/* tail is pointing to head in a non empty queue, */
+				/* try to set tail to the next cell               */
+				CASLNE (&ff->tail, (void *)head, fifo_end(ff));
+	//          if (!CASLNE (&ff->tail, (void *)head, fifo_end(ff)))
+	//				pfifo(ff);
+			}
+			else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
+				val[0] = next->value[0];	 /* we read the next cell value */
+				val[1] = next->value[1];
+				val[2] = next->value[2];
+				/* and we try to set head to the next cell */
+				done = STWCX (&ff->head, (void *)head, next);
+			}
+		}
 	} while (!done);
 	msAtomicDec (&ff->count);
 	head->value[0] = val[0]; 	/* and finally copy the value to the deqeued cell */
@@ -190,7 +188,7 @@ fifocell * oldfifoget (vtype fifo * ff)
 
 #else
 
-fifocell * fifoget (vtype fifo * ff) 
+fifocell *  (vtype fifo * ff) 
 {
 	fifocell * head;
 	fifocell * next; 

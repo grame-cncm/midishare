@@ -127,14 +127,14 @@ static inline int CASL (register vtype void * addr, register void * value)
 static inline int CASLNE (register vtype void * addr, register void * value, register void * eq) 
 {
 	register int result;
-	register long tmp, next;
+	register long tmp, link;
 	asm volatile (
-       "# CASLNE					\n"
+        "# CASLNE				\n"
 		"	lwarx	%3, 0, %1	\n"         /* creates a reservation on addr  */
 		"	cmpw	%3, %2		\n"         /* test value at addr             */
 		"	bne-	1f          \n"         /* fails if not equal to value    */
-		"	lwzx	%4, 0, %3	\n"
-		"	cmpw	%4, %5		\n"         /* test value at link addr        */
+		"	lwzx	%4, 0, %2	\n"         /* load the link pointed by value */
+		"	cmpw	%4, %5		\n"         /* test if equal to eq            */
 		"	beq-	1f          \n"
         "	sync            	\n"         /* synchronize instructions       */
 		"	stwcx.	%4, 0, %1	\n"         /* if the reservation is not altered */
@@ -146,7 +146,7 @@ static inline int CASLNE (register vtype void * addr, register void * value, reg
         "   li      %0, 0       \n"
         "2:                     \n"
        :"=r" (result)
-	   : "r" (addr), "r" (value), "0" (tmp), "r" (next), "r" (eq)
+	   : "r" (addr), "r" (value), "0" (tmp), "r" (link), "r" (eq)
  	);
 	return result;
 }
