@@ -54,14 +54,14 @@ class TTicksScheduler  :public TSynchroniserInterface, public TSchedulerInterfac
 		
 		// non precise (pour les cas ou la date en ticks n'est pas connue)
 		void SetTempo (ULONG tempo){fSynchroniser->SetTempo(fSynchroniser->GetPosTicks(), tempo);}
-		void SetTempo (ULONG  date_ticks, ULONG tempo){  fSynchroniser->SetTempo(date_ticks, tempo);}
+		void SetTempo (ULONG  date_ticks, ULONG tempo){fSynchroniser->SetTempo(date_ticks, tempo);}
 		
 		ULONG GetPosTicks (){ return fSynchroniser->GetPosTicks();}
 		
 		void RcvClock(ULONG date_ms){ fSynchroniser->RcvClock();}
 		
-		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks) {	fScheduler->ScheduleTickTask(task,date_ticks);}
- 		void ScheduleTickTaskInt(TTicksTask* task, ULONG date_ticks){	fScheduler->ScheduleTickTaskInt(task,date_ticks);}
+		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks){fScheduler->ScheduleTickTask(task,date_ticks);}
+ 		void ScheduleTickTaskInt(TTicksTask* task, ULONG date_ticks){fScheduler->ScheduleTickTaskInt(task,date_ticks);}
 };
 
 typedef TTicksScheduler FAR * TTicksSchedulerPtr;

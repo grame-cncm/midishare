@@ -44,11 +44,11 @@ class TSynchroniserInterface {
 		virtual ULONG ConvertTickToMs(ULONG date_tick) = 0;
 		virtual ULONG ConvertMsToTick (ULONG date_ms) = 0;
 		
-		virtual void  SetTempo (ULONG date_ticks, ULONG tempo) = 0;
- 		virtual void  SetTempo (ULONG tempo) = 0;
- 		virtual ULONG GetTempo () = 0;
+		virtual void  SetTempo(ULONG date_ticks, ULONG tempo) = 0;
+ 		virtual void  SetTempo(ULONG tempo) = 0;
+ 		virtual ULONG GetTempo() = 0;
  		
- 		virtual void  RcvClock (ULONG date_ms) = 0;
+ 		virtual void  RcvClock(ULONG date_ms) = 0;
  		virtual Boolean IsSchedulable(ULONG date_tick) = 0;
 };
 

@@ -27,7 +27,7 @@
 #include "TTempoMapVisitor.h"
 #include "UTools.h"
 
-void TTempoMapVisitor::Visite (TTempoPtr ev,Boolean forward)
+void TTempoMapVisitor::Visite(TTempoPtr ev,Boolean forward)
 {
 	if (forward) {
 		fTempoConverter.Update(ev->GetDate(),ev->GetTempoForward()); 
@@ -38,7 +38,7 @@ void TTempoMapVisitor::Visite (TTempoPtr ev,Boolean forward)
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMapVisitor::Visite (TTimeSignPtr ev,Boolean forward) 
+void TTempoMapVisitor::Visite(TTimeSignPtr ev,Boolean forward) 
 {
 	if (forward) {
 		fTimeConverter.Update(ev->GetDate(),ev->GetFNum(),ev->GetFDenom(),ev->GetFnClocks(),ev->GetFn32nd());

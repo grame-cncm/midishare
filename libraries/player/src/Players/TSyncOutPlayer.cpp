@@ -108,7 +108,7 @@ void TSyncOutPlayer::PlaySliceBackward()
 
 /*----------------------------------------------------------------------------*/
 
-void TSyncOutPlayer::SetPosTicks (ULONG date_ticks) 
+void TSyncOutPlayer::SetPosTicks(ULONG date_ticks) 
 { 
 	// Set the pos on the previous SongPos
 	

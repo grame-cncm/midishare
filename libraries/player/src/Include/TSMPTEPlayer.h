@@ -81,7 +81,7 @@ class TSMPTEPlayer : public TGenericPlayerInterface {
 	 	
 	  public:
 	  	
-	 	TSMPTEPlayer (TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte, TMidiApplPtr appl)
+	 	TSMPTEPlayer(TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte, TMidiApplPtr appl)
 	 		:fPlayer(player),fRunningState(state),fMidiAppl(appl),fSmpteInfos(smpte),fSMPTEtask(this){}
 	 	virtual ~TSMPTEPlayer(){}
 	  
@@ -99,11 +99,11 @@ class TSMPTEPlayer : public TGenericPlayerInterface {
 		
 		ULONG GetPosTicks();
 		
-		void SetTempo (ULONG tempo);
-		ULONG GetTempo ();
-		void RcvClock (ULONG date_ms);
+		void SetTempo(ULONG tempo);
+		ULONG GetTempo();
+		void RcvClock(ULONG date_ms);
 		
-		void ReceiveEvents (MidiEvPtr e);
+		void ReceiveEvents(MidiEvPtr e);
 };
  
 typedef TSMPTEPlayer FAR * TSMPTEPlayerPtr;

@@ -42,8 +42,8 @@ class TScoreIterator {
 	
 	private:
 	 
-		void SetPosTicksForward (ULONG date_ticks);
-		void SetPosTicksBackward (ULONG date_ticks);
+		void SetPosTicksForward(ULONG date_ticks);
+		void SetPosTicksBackward(ULONG date_ticks);
 	
 	protected:
 	
@@ -59,9 +59,9 @@ class TScoreIterator {
 	
 	public:	
 	
-		TScoreIterator ();
-		TScoreIterator (TScorePtr score);
-		TScoreIterator (TScorePtr score,TEventPtr cur);
+		TScoreIterator();
+		TScoreIterator(TScorePtr score);
+		TScoreIterator(TScorePtr score,TEventPtr cur);
 		
 		virtual ~TScoreIterator();
 		
@@ -84,7 +84,7 @@ class TScoreIterator {
 		TEventPtr NextDateEv();
 		TEventPtr PrevDateEv();
 		
-		TEventPtr SetPosTicks (ULONG date_ticks);
+		TEventPtr SetPosTicks(ULONG date_ticks);
 };
 
 typedef class TScoreIterator  FAR * TScoreIteratorPtr;
@@ -102,14 +102,14 @@ class TScoreIterator1 :	public TScoreIterator {
 		
 			virtual ~TScoreIterator1(){}
 		
-			TScoreIterator1 (TScorePtr score) 
+			TScoreIterator1(TScorePtr score) 
 			{
 				fScore = score; 
 				fNextIt = 0;
 				Init();
 			}
 
-			TScoreIterator1 (TScorePtr score,TEventPtr cur) 
+			TScoreIterator1(TScorePtr score,TEventPtr cur) 
 			{ 
 				fScore = score;
 				fNextIt = 0;

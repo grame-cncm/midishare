@@ -63,7 +63,7 @@ ULONG TScoreFollower::GetPosTicks() {return GetVisitor().CurDateTicks();}
 
 /*--------------------------------------------------------------------------*/
 
-TEventPtr TScoreFollower::SetPosBBU (const TPos& pos)
+TEventPtr TScoreFollower::SetPosBBU(const TPos& pos)
 {
 	if (!GetIterator().IsFirstEv() && GetVisitor().SupEq (GetIterator().CurDate(), pos)){
 		SetPosBBUBackward(pos);
@@ -77,7 +77,7 @@ TEventPtr TScoreFollower::SetPosBBU (const TPos& pos)
 }
 /*--------------------------------------------------------------------------*/
 
-TEventPtr TScoreFollower::SetPosMs (ULONG date_ms)
+TEventPtr TScoreFollower::SetPosMs(ULONG date_ms)
 {
 	ULONG date_ten_micro = date_ms * 100;
 	
@@ -94,7 +94,7 @@ TEventPtr TScoreFollower::SetPosMs (ULONG date_ms)
 
 /*--------------------------------------------------------------------------*/
 
-TEventPtr TScoreFollower::SetPosTicks (ULONG date_ticks)
+TEventPtr TScoreFollower::SetPosTicks(ULONG date_ticks)
 {
 	if (!GetIterator().IsFirstEv() && (GetIterator().CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
@@ -113,7 +113,7 @@ TEventPtr TScoreFollower::SetPosTicks (ULONG date_ticks)
  \param  date_ticks is the date in ticks.
 */
 
-void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
+void TScoreFollower::SetPosTicksBackward(ULONG date_ticks)
 {
 	do {
 		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
@@ -127,7 +127,7 @@ void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
  \param  date_ticks is the date in ticks.
 */
 
-void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
+void TScoreFollower::SetPosTicksForward(ULONG date_ticks)
 {
 	while (!GetIterator().IsLastEv() && GetIterator().CurDate() < date_ticks){ 
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);
@@ -141,7 +141,7 @@ void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
  \param  date_ticks is the date in 10 microseconds.
 */
 
-void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
+void TScoreFollower::SetPosMicroBackward(ULONG date_ten_micro)
 {
 	do {
 		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
@@ -155,7 +155,7 @@ void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
  \param  date_ticks is the date in 10 microseconds.
 */
 
-void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
+void TScoreFollower::SetPosMicroForward(ULONG date_ten_micro)
 {
 	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), date_ten_micro)){ 
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);
@@ -169,7 +169,7 @@ void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
  \param  pos is the date in BBU representation.
 */ 
 
-void TScoreFollower::SetPosBBUBackward (const TPos& pos)
+void TScoreFollower::SetPosBBUBackward(const TPos& pos)
 {
 	do {
 		GetIterator().CurEv()->Accept(&GetVisitor(),false); 
@@ -183,7 +183,7 @@ void TScoreFollower::SetPosBBUBackward (const TPos& pos)
  \param  pos is the date in BBU representation.
 */ 
 
-void TScoreFollower::SetPosBBUForward (const TPos& pos)
+void TScoreFollower::SetPosBBUForward(const TPos& pos)
 {
 	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), pos)){	
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);

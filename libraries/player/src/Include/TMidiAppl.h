@@ -147,7 +147,7 @@ class TMidiAppl {
 		// Prototypes for Midi Callbacks
 		/*--------------------------------------------------------------------------*/
 
-		static  void MSALARMAPI GenericTask (ULONG date, short refnum, long a1, long a2, long a3);
+		static  void MSALARMAPI GenericTask(ULONG date, short refnum, long a1, long a2, long a3);
 		static  void MSALARMAPI GenericReceiveAlarm(short ref);	
 		static  void MSALARMAPI GenericApplAlarm(short ref, long code);	
 		

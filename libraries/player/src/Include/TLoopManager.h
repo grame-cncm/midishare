@@ -1,20 +1,29 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
+
+  Copyright © Grame 1996-2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 
 // ===========================================================================
 //	TLoopManager.h			    
 // ===========================================================================
-//
-//	Management of the Loop
-// 
 
 
 #ifndef __TLoopManager__
@@ -26,29 +35,36 @@
 #include "TScoreFollower.h"
 #include "TScoreMarker.h"
 
-//-----------------------
+//--------------------
 // Class TLoopManager 
-//-----------------------
+//--------------------
+
+#define kLoopEndOffset 2
+
+/*!
+	\brief Management of the Loop.
+*/
 
 class TLoopManager {
 
 	private:
+		
+        TScoreObjFollower	fFollower;
+        TScoreMarker		fLoopEndMarker;
+        TPlayerScorePtr		fScore;
+        Boolean			fLoopState;
+        ULONG			fLoopStart;
 	
-		TPlayerScorePtr 	fScore;
-		TScoreFollowerPtr	fFollower;
-		TScoreMarkerPtr		fLoopEndMarker;
-		ULONG            	fLoopStart;
-		short 				fLoopState;
+	public:
 		
-	public :
+		TLoopManager(TPlayerScorePtr score, ULONG tpq)
+			:fFollower(score,tpq),fLoopEndMarker(typeLoopEnd),fScore(score),fLoopState(kLoopOff),fLoopStart(0){}
+		virtual ~TLoopManager () {fLoopEndMarker.Remove(fScore);}
 		
-		TLoopManager(TPlayerScorePtr score, ULONG tpq);
-		~TLoopManager ();
-		
-		void SetLoop (short state) {fLoopState = state;}
-		short GetLoop () {return fLoopState;}
+		void SetLoop (Boolean state) {fLoopState = state;}
+		Boolean GetLoop () {return fLoopState;}
 		Boolean IsLoopOn(){ return fLoopState == kLoopOn; }
-		Boolean IsLoopPlaced(){ return fLoopEndMarker->IsInserted(); }
+		Boolean IsLoopPlaced(){ return fLoopEndMarker.IsInserted(); }
 		
 		long SetLoopStartTicks (ULONG date_ticks);
 		long SetLoopStartBBU (const TPos& pos);
@@ -57,12 +73,9 @@ class TLoopManager {
 		long SetLoopEndBBU (const TPos& pos);
 		long SetLoopEndMs(ULONG date_ms);
 		
-		ULONG GetLoopEndTicks() 	{return fLoopEndMarker->GetDateTicks();}
+		ULONG GetLoopEndTicks() 	{return fLoopEndMarker.GetDateTicks()+kLoopEndOffset;}
 		ULONG GetLoopStartTicks() 	{return fLoopStart;}
-	
-		
 };
-
 
 typedef TLoopManager FAR * TLoopManagerPtr;
 

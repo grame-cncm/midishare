@@ -221,7 +221,7 @@ TEventPtr TScoreIterator::PrevDateEv()
 
 /*----------------------------------------------------------------------------*/
 
-TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
+TEventPtr TScoreIterator::SetPosTicks(ULONG date_ticks)
 {
 	if (!IsFirstEv() && (CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
@@ -234,14 +234,14 @@ TEventPtr TScoreIterator::SetPosTicks (ULONG date_ticks)
 
 /*----------------------------------------------------------------------------*/
 
-void TScoreIterator::SetPosTicksBackward (ULONG date_ticks)
+void TScoreIterator::SetPosTicksBackward(ULONG date_ticks)
 {
 	do {PrevEv();} while (!IsFirstEv() && (CurDate() >= date_ticks));
 }
 
 /*----------------------------------------------------------------------------*/
 
-void TScoreIterator::SetPosTicksForward (ULONG date_ticks)
+void TScoreIterator::SetPosTicksForward(ULONG date_ticks)
 {
 	while (!IsLastEv() && (CurDate() < date_ticks)) {NextEv();}
 }

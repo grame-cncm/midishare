@@ -49,7 +49,7 @@ class TRunningPlayer : public TPlayerInterface {
 	 	
 	  public:
 	  	
-	 	TRunningPlayer (TPlayerInterfacePtr player, TRunningStatePtr state);
+	 	TRunningPlayer(TPlayerInterfacePtr player, TRunningStatePtr state);
 	 	virtual ~TRunningPlayer(){}
 	  
 		void Start();

@@ -114,11 +114,11 @@ class TTickPlayer : public TTickPlayerInterface {
 		void Stop();	
 		void Cont(ULONG date_ticks);
 		
- 		void PlaySliceForward ();
- 		void PlaySliceBackward ();
+ 		void PlaySliceForward();
+ 		void PlaySliceBackward();
  		
- 		ULONG GetPosTicks () ;
- 		void  SetPosTicks (ULONG date_ticks);
+ 		ULONG GetPosTicks() ;
+ 		void  SetPosTicks(ULONG date_ticks);
   };
 
 typedef TTickPlayer FAR * TTickPlayerPtr;

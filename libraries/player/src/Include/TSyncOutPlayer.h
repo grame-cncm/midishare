@@ -61,14 +61,12 @@ class TSyncOutPlayer :public TPlayerInterface {
 		void PlaySliceForward();
  		void PlaySliceBackward() ;
 
-		void SetPosTicks (ULONG date_ticks) ;
+		void SetPosTicks(ULONG date_ticks) ;
 		ULONG GetPosTicks();
 		
-		void SetTempo (ULONG tempo);
-		ULONG GetTempo ();
-		void RcvClock (ULONG date_ms);
-		
-};
- 
+		void SetTempo(ULONG tempo);
+		ULONG GetTempo();
+		void RcvClock(ULONG date_ms);
+}; 
 
 #endif

@@ -58,7 +58,7 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 
 /*--------------------------------------------------------------------------*/
 
-TScheduler::~TScheduler ()
+TScheduler::~TScheduler()
 { 
 #if defined (__Macintosh__) && defined (__MacOS9__)
 	if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
@@ -104,7 +104,7 @@ void TScheduler::ScheduleTickTask(TTicksTaskPtr task, ULONG date_ticks)
 // Internal functions
 /*--------------------------------------------------------------------------*/
 
-void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms) 
+void TScheduler::ExecuteTaskInt(TTicksTaskPtr task, ULONG date_ms) 
 {
 	RemoveTask(task);
 	task->Clear(); // Important
@@ -131,7 +131,7 @@ void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 // Real-Time callback
 /*--------------------------------------------------------------------------*/
 
-void MSALARMAPI ExecuteTask (ULONG date_ms, short refnum, long scheduler, long task, long a3) 
+void MSALARMAPI ExecuteTask(ULONG date_ms, short refnum, long scheduler, long task, long a3) 
 {
 	((TSchedulerPtr)scheduler)->ExecuteTaskInt((TTicksTaskPtr)task,date_ms);
 }

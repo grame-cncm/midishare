@@ -62,15 +62,15 @@ class TEventDispatcher : public TEventReceiverInterface {
 
 	public:
 	
-		TEventDispatcher() { fSuccessor = 0;}
-		TEventDispatcher(TEventDispatcher* successor){ fSuccessor = successor;}
+		TEventDispatcher() {fSuccessor = 0;}
+		TEventDispatcher(TEventDispatcher* successor){fSuccessor = successor;}
 		virtual ~TEventDispatcher(){}
 		
-		void SetSuccessor(TEventDispatcher* successor){ fSuccessor = successor;}
+		void SetSuccessor(TEventDispatcher* successor){fSuccessor = successor;}
 	
 		virtual void ReceiveEvents(MidiEvPtr e)
 		{ 
-			if (fSuccessor) { fSuccessor->ReceiveEvents(e); } else { MidiFreeEv(e);}
+			if (fSuccessor) {fSuccessor->ReceiveEvents(e); } else {MidiFreeEv(e);}
 		}
 		
 };

@@ -42,7 +42,7 @@
 
 class TEvent {
 
-	public :
+	public:
 
 	 	TEvent* fNext;  // Pointers for double-linked list 
 	 	TEvent* fPrev;	// Pointers for double-linked list 
@@ -51,23 +51,23 @@ class TEvent {
 	 	
 	 	// Use of the MidiShare memory allocator
 
-		void*	operator new (size_t)				{ return MidiNewCell(); }  
-		void 	operator delete(void* p, size_t) 	{ MidiFreeCell((MidiEvPtr)p); }
+		void*	operator new (size_t)				{return MidiNewCell();}  
+		void 	operator delete(void* p, size_t) 	{MidiFreeCell((MidiEvPtr)p);}
 			
-		TEvent	() 				{ fNext = fPrev = 0;fEvent = 0; }
-		TEvent	(MidiEvPtr e) 	{ fNext = fPrev = 0;fEvent = e; }
+		TEvent() 				{fNext = fPrev = 0;fEvent = 0;}
+		TEvent(MidiEvPtr e) 	{fNext = fPrev = 0;fEvent = e;}
 
-		virtual ~TEvent()  		{ if (fEvent) MidiFreeEv(fEvent); } 
+		virtual ~TEvent()  		{if (fEvent) MidiFreeEv(fEvent);} 
 		
-		Byte 		GetType() 	{ return EvType(fEvent);}
-		ULONG 		GetDate() 	{ return Date(fEvent);}
-		void 		SetDate(ULONG date) { Date(fEvent) = date;}
+		Byte 		GetType() 	{return EvType(fEvent);}
+		ULONG 		GetDate() 	{return Date(fEvent);}
+		void 		SetDate(ULONG date) {Date(fEvent) = date;}
 		
-		short  		GetTrackNum() { return RefNum(fEvent);}
-		void  		SetTrackNum(short tracknum) { RefNum(fEvent) = (unsigned char)tracknum;}
-		MidiEvPtr  	MidiEvent() 	{ return fEvent;}
+		short  		GetTrackNum() {return RefNum(fEvent);}
+		void  		SetTrackNum(short tracknum) {RefNum(fEvent) = (unsigned char)tracknum;}
+		MidiEvPtr  	MidiEvent() 	{return fEvent;}
 		
-		virtual void Accept (TScoreVisitorInterfacePtr v, Boolean forward) {}  // Score Visitor
+		virtual void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {}  // Score Visitor
 };
 
 typedef TEvent FAR * TEventPtr;
@@ -79,14 +79,13 @@ typedef TEvent FAR * TEventPtr;
 	\brief The class for Note events.
 */
 
-class TNote :public TEvent {
+class TNote : public TEvent {
 
 	public:
  
- 		TNote	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+ 		TNote(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
  		virtual ~TNote(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
- 
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TNote FAR * TNotePtr;
@@ -98,13 +97,13 @@ typedef TNote FAR * TNotePtr;
 	\brief The class for KeyOn events.
 */
 
-class TKeyOn :public TEvent {
+class TKeyOn : public TEvent {
 
 	public:
 
-		TKeyOn	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
+		TKeyOn(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TKeyOn(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TKeyOn FAR * TKeyOnPtr;
@@ -116,13 +115,13 @@ typedef TKeyOn FAR * TKeyOnPtr;
 	\brief The class for KeyOff events.
 */
 
-class TKeyOff :public TEvent {
+class TKeyOff : public TEvent {
 
 	public:
 
 		TKeyOff	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TKeyOff(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TKeyOff FAR * TKeyOffPtr;
@@ -134,13 +133,13 @@ typedef TKeyOff FAR * TKeyOffPtr;
 	\brief The class for KeyPress events.
 */
 
-class TKeyPress :public TEvent {
+class TKeyPress : public TEvent {
 
  	public:
 	
 		TKeyPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TKeyPress(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TKeyPress FAR * TKeyPressPtr;
@@ -152,13 +151,13 @@ typedef TKeyPress FAR * TKeyPressPtr;
 	\brief The class for CtrlChange events.
 */
 
-class TCtrlChange :public TEvent {
+class TCtrlChange : public TEvent {
 
  	public:
 	
 		TCtrlChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TCtrlChange(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }   
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
  
 };
 
@@ -171,13 +170,13 @@ typedef TCtrlChange FAR * TCtrlChangePtr;
 	\brief The class for ProgChange events.
 */
 
-class TProgChange :public TEvent {
+class TProgChange : public TEvent {
 
  	public:
 	
 		TProgChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TProgChange(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TProgChange FAR * TProgChangePtr;
@@ -189,13 +188,13 @@ typedef TProgChange FAR * TProgChangePtr;
 	\brief The class for ChanPress events.
 */
 
-class TChanPress :public TEvent {
+class TChanPress : public TEvent {
 
  	public:
 	
 		TChanPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TChanPress(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TChanPress FAR * TChanPressPtr;
@@ -207,14 +206,13 @@ typedef TChanPress FAR * TChanPressPtr;
 	\brief The class for PitchWheel events.
 */
 
-class TPitchBend :public TEvent {
+class TPitchBend : public TEvent {
 
  	public:
 	
 		TPitchBend	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TPitchBend(){}
-		void	Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
- 
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
 };
 
 typedef TPitchBend FAR * TPitchBendPtr;
@@ -226,13 +224,13 @@ typedef TPitchBend FAR * TPitchBendPtr;
 	\brief The class for Tune events.
 */
 
-class TTune :public TEvent {
+class TTune : public TEvent {
 
 	public:
 
 		TTune (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TTune(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TTune FAR * TTunePtr;
@@ -244,13 +242,13 @@ typedef TTune FAR * TTunePtr;
 	\brief The class for SysEx events.
 */
 
-class TSysEx :public TEvent {
+class TSysEx : public TEvent {
 
 	public:
 
 		TSysEx (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
 		virtual ~TSysEx(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
 typedef TSysEx FAR * TSysExPtr;
@@ -262,7 +260,7 @@ typedef TSysEx FAR * TSysExPtr;
 	\brief The class for Tempo events.
 */
 
-class TTempo :public TEvent {
+class TTempo : public TEvent {
 
  	public:
 	
@@ -273,13 +271,12 @@ class TTempo :public TEvent {
 			SetTempoBackward(kDefaultTempo);
 		}
 		virtual ~TTempo(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }   
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
 		
-		ULONG GetTempoForward()  { return Tempo(fEvent);}
-		ULONG GetTempoBackward() { return ((ULONG *)&Link(fEvent))[0];}
-		void SetTempoForward(ULONG val)  { Tempo(fEvent) = val;}
-		void SetTempoBackward(ULONG val) { ((ULONG *)&Link(fEvent))[0] = val;}
-
+		ULONG GetTempoForward()  {return Tempo(fEvent);}
+		ULONG GetTempoBackward() {return ((ULONG *)&Link(fEvent))[0];}
+		void SetTempoForward(ULONG val)  {Tempo(fEvent) = val;}
+		void SetTempoBackward(ULONG val) {((ULONG *)&Link(fEvent))[0] = val;}
 };
 
 typedef TTempo FAR * TTempoPtr;
@@ -291,7 +288,7 @@ typedef TTempo FAR * TTempoPtr;
 	\brief The class for TimeSign events.
 */
 
-class TTimeSign :public TEvent {
+class TTimeSign : public TEvent {
 
  	public:
 	
@@ -305,27 +302,27 @@ class TTimeSign :public TEvent {
 			SetBn32nd(kDefaultN32);
 		}
 		virtual ~TTimeSign(){}
-		void Accept (TScoreVisitorInterfacePtr v, Boolean forward) { v->Visite(this, forward); }  
+		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 		
 		Byte GetFNum() 		{return TSNum(fEvent);}
 		Byte GetFDenom() 	{return TSDenom(fEvent);}
 		Byte GetFnClocks() 	{return TSClocks(fEvent);}  
 		Byte GetFn32nd() 	{return TS32nd(fEvent);}
 
-		Byte GetBNum() 		{return ((char *)&Link(fEvent))[0];}
-		Byte GetBDenom() 	{return ((char *)&Link(fEvent))[1];}
-		Byte GetBnClocks() 	{return ((char *)&Link(fEvent))[2];}
-		Byte GetBn32nd() 	{return ((char *)&Link(fEvent))[3];}
+		Byte GetBNum() 		{return ((char*)&Link(fEvent))[0];}
+		Byte GetBDenom() 	{return ((char*)&Link(fEvent))[1];}
+		Byte GetBnClocks() 	{return ((char*)&Link(fEvent))[2];}
+		Byte GetBn32nd() 	{return ((char*)&Link(fEvent))[3];}
 		
-		void SetFNum(Byte val) 		{ TSNum(fEvent)= val;}
-		void SetFDenom(Byte val) 	{ TSDenom(fEvent)= val;}
-		void SetFnClocks(Byte val) 	{ TSClocks(fEvent)= val;}
-		void SetFn32nd(Byte val) 	{ TS32nd(fEvent)= val;}
+		void SetFNum(Byte val) 		{TSNum(fEvent)= val;}
+		void SetFDenom(Byte val) 	{TSDenom(fEvent)= val;}
+		void SetFnClocks(Byte val) 	{TSClocks(fEvent)= val;}
+		void SetFn32nd(Byte val) 	{TS32nd(fEvent)= val;}
 		
-		void SetBNum(Byte val) 		{ ((char *)&Link(fEvent))[0]= val;}
-		void SetBDenom(Byte val) 	{ ((char *)&Link(fEvent))[1]= val;}
-		void SetBnClocks(Byte val) 	{ ((char *)&Link(fEvent))[2]= val;}
-		void SetBn32nd(Byte val) 	{ ((char *)&Link(fEvent))[3]= val;}
+		void SetBNum(Byte val) 		{((char*)&Link(fEvent))[0] = val;}
+		void SetBDenom(Byte val) 	{((char*)&Link(fEvent))[1] = val;}
+		void SetBnClocks(Byte val) 	{((char*)&Link(fEvent))[2] = val;}
+		void SetBn32nd(Byte val) 	{((char*)&Link(fEvent))[3] = val;}
 };
 
 typedef TTimeSign FAR * TTimeSignPtr;

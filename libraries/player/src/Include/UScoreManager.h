@@ -38,8 +38,8 @@ class UScoreManager {
 
 	public:
 	
-		static void Apply (TScorePtr score, TScoreVisitorInterfacePtr fun) ;
-		static void Apply (TScorePtr score, TScoreVisitorInterfacePtr fun, ULONG begin, ULONG end) ;
+		static void Apply(TScorePtr score, TScoreVisitorInterfacePtr fun);
+		static void Apply(TScorePtr score, TScoreVisitorInterfacePtr fun, ULONG begin, ULONG end);
 };
 
 #endif

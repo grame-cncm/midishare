@@ -164,8 +164,8 @@ class TTicksTask {
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
 		
-		void Clear () {fTask = 0;}
-		void Kill () {MidiForgetTask(&fTask);}
+		void Clear() {fTask = 0;}
+		void Kill() {MidiForgetTask(&fTask);}
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
@@ -177,10 +177,10 @@ class TTicksTask {
 		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
-		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
+		void Forget() { if (IsRunning ()) fStatus = kTaskForget;}
 		
-		Boolean IsRunning () 	{return (fStatus == kTaskRunning);}
-		Boolean IsIdle () 	 	{return (fStatus == kTaskIdle);}
+		Boolean IsRunning() 	{return (fStatus == kTaskRunning);}
+		Boolean IsIdle() 	 	{return (fStatus == kTaskIdle);}
 		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
 };
@@ -191,8 +191,8 @@ typedef TTicksTask FAR * TTicksTaskPtr;
 // Prototypes for Real-time callback
 //-----------------------------------
 
-void MSALARMAPI ScheduleTask (ULONG date, short refnum, long a1, long a2, long a3); 
-void MSALARMAPI ReScheduleTask (ULONG date, short refnum, long a1, long a2, long a3); 
-void MSALARMAPI ExecuteTask (ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ScheduleTask(ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ReScheduleTask(ULONG date, short refnum, long a1, long a2, long a3); 
+void MSALARMAPI ExecuteTask(ULONG date, short refnum, long a1, long a2, long a3); 
 
 #endif

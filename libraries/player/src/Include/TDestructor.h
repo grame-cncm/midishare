@@ -64,33 +64,33 @@ class TDestructor {
 		TPlayerInterfacePtr 		fPlayer1;
 		TPlayerInterfacePtr 		fPlayer2;
 		TPlayerInterfacePtr 		fPlayer3;
-		TClockSenderPtr 		fClockSender;
-		TClockConverterPtr      	fClockConverter;
-		TLoopManagerPtr         	fLoopManager;
-		TScoreFollowerPtr       	fInserter;
-		TEventRecorderPtr		fRecorder;
-		TScoreStatePtr   		fScoreState;
-		TEventSenderInterfacePtr  	fEventSender;
-		TTimeManagerPtr			fTimeManager;
+		TClockSenderPtr				fClockSender;
+		TClockConverterPtr			fClockConverter;
+		TLoopManagerPtr				fLoopManager;
+		TScoreFollowerPtr			fInserter;
+		TEventRecorderPtr			fRecorder;
+		TScoreStatePtr				fScoreState;
+		TEventSenderInterfacePtr	fEventSender;
+		TTimeManagerPtr				fTimeManager;
 		
 	public:
 		
 		TDestructor(TPlayerSynchroniserPtr 	synchro,
                             TEventDispatcherPtr	 	receiver,
                             TSchedulerInterfacePtr 	scheduler,
-                            TTickPlayerInterfacePtr 	tickplayer,
+                            TTickPlayerInterfacePtr tickplayer,
                             TChaserInterfacePtr 	chaser,
                             TPlayerInterfacePtr 	player1,
                             TPlayerInterfacePtr 	player2,
                             TPlayerInterfacePtr 	player3,
                             TClockSenderPtr 		clocksender,
-                            TClockConverterPtr      	clockconverter,
-                            TLoopManagerPtr         	loopmanager,
-                            TScoreFollowerPtr       	inserter,
+                            TClockConverterPtr      clockconverter,
+                            TLoopManagerPtr         loopmanager,
+                            TScoreFollowerPtr       inserter,
                             TEventRecorderPtr		recorder,
                             TScoreStatePtr   		scorestate,
-                            TEventSenderInterfacePtr  	eventsender,
-                            TTimeManagerPtr		timemanager
+                            TEventSenderInterfacePtr eventsender,
+                            TTimeManagerPtr	timemanager
                             )
 
 		{

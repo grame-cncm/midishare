@@ -46,8 +46,8 @@ class TEventReceiver : public TEventDispatcher {
 		TPlayerInterfacePtr  fPlayer;
 		TLoopManagerPtr      fLoopManager;
 	
-	 	void ReceiveLoopEnd (MidiEvPtr e);
-	 	void ReceiveStop (MidiEvPtr e);
+	 	void ReceiveLoopEnd(MidiEvPtr e);
+	 	void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -55,7 +55,7 @@ class TEventReceiver : public TEventDispatcher {
 			:TEventDispatcher(successor),fPlayer(player),fLoopManager(loopmanager){}
 		virtual ~TEventReceiver(){}
 	
-		virtual void ReceiveEvents (MidiEvPtr e);
+		virtual void ReceiveEvents(MidiEvPtr e);
 };
 
 
@@ -72,11 +72,11 @@ class TClockEventReceiver : public TEventReceiver {
 		
 		TClockConverterPtr fClockConverter;
 	
-		void ReceiveSongPos (MidiEvPtr e);
-		void ReceiveClock (MidiEvPtr e);
-		void ReceiveStart (MidiEvPtr e);
-		void ReceiveContinue (MidiEvPtr e);
-		void ReceiveStop (MidiEvPtr e);
+		void ReceiveSongPos(MidiEvPtr e);
+		void ReceiveClock(MidiEvPtr e);
+		void ReceiveStart(MidiEvPtr e);
+		void ReceiveContinue(MidiEvPtr e);
+		void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -84,7 +84,7 @@ class TClockEventReceiver : public TEventReceiver {
 			:TEventReceiver(player,loopmanager,successor),fClockConverter(converter){}
 		virtual ~TClockEventReceiver(){}
 	
-		void ReceiveEvents (MidiEvPtr e);
+		void ReceiveEvents(MidiEvPtr e);
 };
 
 
@@ -99,7 +99,7 @@ class TExtEventReceiver : public TEventReceiver {
 
 	private:
 	
-		void ReceiveTempo (MidiEvPtr e);
+		void ReceiveTempo(MidiEvPtr e);
 
 	public:
 	
@@ -121,8 +121,8 @@ class TSMPTEEventReceiver : public TEventReceiver {
 
 	private:
 	
-		void ReceiveStart (MidiEvPtr e);
-		void ReceiveStop (MidiEvPtr e);
+		void ReceiveStart(MidiEvPtr e);
+		void ReceiveStop(MidiEvPtr e);
 
 	public:
 	
@@ -130,7 +130,7 @@ class TSMPTEEventReceiver : public TEventReceiver {
 			:TEventReceiver(player,loopmanager,successor){}
 		virtual ~TSMPTEEventReceiver(){}
 	
-		void ReceiveEvents (MidiEvPtr e);
+		void ReceiveEvents(MidiEvPtr e);
 };
 
 #endif

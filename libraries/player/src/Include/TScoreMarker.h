@@ -57,7 +57,7 @@ class TScoreMarker {
 		}
 		
 		// The marker MUST be removed from the score before destroying it.
-		virtual ~TScoreMarker () {if (fEvent) delete (fEvent);}
+		virtual ~TScoreMarker() {if (fEvent) delete (fEvent);}
 		
 		void Insert(TScorePtr score, TEventPtr prev, ULONG date_ticks)
 		{ 

@@ -33,11 +33,11 @@
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Init () {fTempoVisitor.Init();}
+void TPlayerSynchroniserExt::Init() {fTempoVisitor.Init();}
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Start ()
+void TPlayerSynchroniserExt::Start()
 { 
 	fOffset = MidiGetTime();
 	fState->SetRunning();
@@ -45,7 +45,7 @@ void TPlayerSynchroniserExt::Start ()
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Stop () 
+void TPlayerSynchroniserExt::Stop() 
 { 
 	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	fState->SetIdle();
@@ -53,7 +53,7 @@ void TPlayerSynchroniserExt::Stop ()
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserExt::Cont (ULONG date_ticks) 
+void TPlayerSynchroniserExt::Cont(ULONG date_ticks) 
 { 
 	ULONG tempo = fTempoVisitor.GetTempo();
 	fTempoVisitor.Init(); // Important  (Tempo Map must be re-initialized)
@@ -70,7 +70,7 @@ Boolean TPlayerSynchroniserExt::IsSchedulable (ULONG date_ticks) {return fState-
 
 /*--------------------------------------------------------------------------*/
 
-ULONG TPlayerSynchroniserExt::GetPosTicks () 
+ULONG TPlayerSynchroniserExt::GetPosTicks() 
 {
 	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	return fTempoVisitor.CurDateTicks();
@@ -78,7 +78,7 @@ ULONG TPlayerSynchroniserExt::GetPosTicks ()
 
 /*--------------------------------------------------------------------------*/
 
-void  TPlayerSynchroniserExt::SetPosTicks (ULONG date_ticks){fTempoVisitor.UpdateTicks(date_ticks);}
+void  TPlayerSynchroniserExt::SetPosTicks(ULONG date_ticks){fTempoVisitor.UpdateTicks(date_ticks);}
 
 /*--------------------------------------------------------------------------*/
 

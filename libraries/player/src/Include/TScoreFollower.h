@@ -105,7 +105,7 @@ typedef TScoreObjFollower FAR * TScoreObjFollowerPtr;
 \brief  A score follower that use TTempoMapVisitor and TScoreIterator references.
 */
 
-class TScoreRefFollower : public TScoreFollower{
+class TScoreRefFollower : public TScoreFollower {
 
 	private:
 	

@@ -42,7 +42,7 @@
  
 /*--------------------------------------------------------------------------*/
 
- long TScoreInserter::InsertTrack(short tracknum,MidiSeqPtr s)
+ long TScoreInserter::InsertTrack(short tracknum, MidiSeqPtr s)
  { 
  	MidiSeqPtr s1 = UMidi::BuildAllTrack(s); // Make the sequence
   	if (!s1) return kErrEvent;
