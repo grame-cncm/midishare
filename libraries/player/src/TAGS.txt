@@ -1,6 +1,7 @@
 
 Tags :
 ------------------------
+11/02/03  V204   (static)			: Main branch, release version 2.04
 01/02/02  V203   (static)			: Main branch, release version 2.03
 ??/??/??  V202   (static)			: Main branch, release version 2.02
 ??/??/??  new_scheduler (branch) 	: Implementation of a simplified ticks scheduler
