@@ -73,6 +73,10 @@ typedef struct lifo {
 	vtype unsigned long	ic;		/*+ input (push) count	+*/
 	vtype 		  cell*	top;	/*+ top of the stack	+*/
 	vtype unsigned long	oc;		/*+ output (pop) count	+*/
+#ifdef __POWERPC__
+	long 	unused [5];		/* lifo size must be at least 32 bytes */
+							/* to avoid livelock in multiprocessor */
+#endif
 } lifo;
 
 
@@ -87,6 +91,10 @@ static inline void lfinit(lifo* lf)
 	lf->oc = 0;
 }
 
+static inline cell* lfavail(lifo* lf) { 
+	return (cell*)lf->top;
+}
+
 
 #ifdef __Pentium__
 
@@ -95,10 +103,6 @@ static inline void lfinit(lifo* lf)
 #else
 #define LOCK ""
 #endif
-
-static inline cell* lfavail(lifo* lf) { 
-	return (cell*)lf->top;
-}
 
 static inline void lfpush (lifo * lf, cell * cl) 
 {
@@ -166,6 +170,65 @@ static inline unsigned long lfsize (lifo * lf)
 
 #ifdef __Macintosh__
 # ifdef __POWERPC__
+
+static void lfpush (register lifo * lf, register cell * cl) 
+{
+	register long tmp;
+	asm {
+		addi	lf, lf, 4
+	loop:
+		lwarx	tmp, 0, lf       /* creates a reservation on lf    */
+		stw		tmp, 0(cl)       /* link the new cell to the lifo  */
+		sync                     /* synchronize instructions       */
+		stwcx.	cl, 0, lf        /* if the reservation is not altered */
+		                         /* modify lifo top               */
+		bne-	loop             /* otherwise: loop and try again */
+
+		addi	lf, lf, 4
+	inc:
+		lwarx	tmp, 0, lf       /* creates a reservation on lf->count */
+		addi	tmp, tmp, 1      /* inc count                      */
+		sync                     /* synchronize instructions       */
+		stwcx.	tmp, 0, lf       /* conditionnal store             */
+		bne-	inc 
+	}
+}
+	
+static cell* lfpop (register lifo * lf) 
+{
+	register cell * result;
+	register long a, b;
+	asm {
+		addi	lf, lf, 4
+	loop:
+		lwarx	a, 0, lf         /* creates a reservation on lf    */
+		cmpwi	a, 0             /* test if the lifo is empty      */
+		beq-	empty
+		lwz		b, 0(a)          /* next cell in b                */
+		sync                     /* synchronize instructions       */
+		stwcx.	b, 0, lf         /* if the reservation is not altered */
+		                         /* modify lifo top                */
+		bne-	loop             /* otherwise: loop and try again  */
+
+		addi	lf, lf, 4
+	dec:
+		lwarx	b, 0, lf         /* creates a reservation on lf->count */
+		addi	b, b, -1         /* dec count                      */
+		sync                     /* synchronize instructions       */
+		stwcx.	b, 0, lf         /* conditionnal store             */
+		bne-	dec
+		 
+	empty:
+		mr		result, a
+	}
+	return result;
+}
+
+static inline unsigned long lfsize (lifo * lf) 
+{
+	return lf->oc;
+}
+
 # else
 
 static inline void lfpush (register lifo * lf, register cell * cl) 
