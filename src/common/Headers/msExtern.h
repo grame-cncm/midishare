@@ -70,6 +70,5 @@ void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 
 void DriverWakeUp (TApplPtr appl);
 void DriverSleep  (TApplPtr appl);
-Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos);
 
 #endif
