@@ -39,6 +39,7 @@
 #include "msMemory.h"
 #include "msSeq.h"
 #include "msTypes.h"
+#include "msMem.h"
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
