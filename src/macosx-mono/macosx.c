@@ -73,15 +73,15 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*                      Drivers loading                     					*/
 /*------------------------------------------------------------------------------*/
 
-typedef void (* Start) ();
+typedef void (* DriverFun) ();
 
 /*------------------------------------------------------------------------------*/
 void *  LoadLibrary( const char *filename, const char *symbol)
 {
 	void * handle = dlopen(filename,RTLD_LAZY);
-	Start fun ;
+	DriverFun fun ;
 	
-	if (handle &&(fun = (Start) dlsym(handle,symbol))) {
+	if (handle &&(fun = (DriverFun) dlsym(handle,symbol))) {
 		(*fun)(); 
 		return handle;
 	}else {
@@ -91,7 +91,13 @@ void *  LoadLibrary( const char *filename, const char *symbol)
 }
 
 /*------------------------------------------------------------------------------*/
-void FreeLibrary(void * handle){ dlclose(handle);}
+
+void FreeLibrary(void * handle, const char *symbol)
+{ 
+	DriverFun fun;
+	if (fun = (DriverFun) dlsym(handle,symbol)) (*fun)(); 
+	dlclose(handle);
+}
 
 
 /*------------------------------------------------------------------------------*/
@@ -133,7 +139,7 @@ void SpecialSleep  (TMSGlobalPtr g)
         gMacOSXDriver = 0;
         while (drv) {
                 next = drv->next;
-                FreeLibrary (drv->handle);
+                FreeLibrary (drv->handle,"_Stop");
                 DisposeMemory (drv);
                 drv = next;
         }
