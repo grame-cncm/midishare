@@ -45,10 +45,6 @@
 extern msKernelPrefs * gPrefs;
 msThreadPtr gTimeThread = 0;
 
-//#include "dlfcn.h"
-//#include "msPrefs.h"
-//#include "portaudio.h"
-
 #if defined(linux)
 
 	typedef struct {
@@ -183,6 +179,51 @@ static void * RTCTimeHandler (void * ptr)
 }
 #endif
 
+#ifdef WIN32
+
+typedef struct {
+	 UINT 	wTimerID;
+	 UINT 	wTimerRes;
+} WinTimer, * WinTimerPtr;
+WinTimer gWinTimer;
+/*__________________________________________________________________________*/
+/*	Interrupt handlers														*/
+/*__________________________________________________________________________*/
+static void CALLBACK TimerProc(UINT wID,UINT wMsg,DWORD dwUser,DWORD dw1,DWORD dw2)
+{
+	ClockHandler((TMSGlobalPtr)dwUser);
+}
+
+void OpenMMTimeInterrupts(TMSGlobalPtr g)
+{
+	TIMECAPS tc;
+	MMRESULT res;
+	WinTimerPtr t = &gWinTimer;
+
+	if ( timeGetDevCaps(&tc,sizeof(TIMECAPS)) == TIMERR_NOERROR ) {
+		t->wTimerRes = 1;
+		res = timeBeginPeriod (t->wTimerRes);	
+
+		if (res != TIMERR_NOERROR) return;
+		t->wTimerID = timeSetEvent(1,t->wTimerRes,TimerProc,(DWORD)g,TIME_PERIODIC);
+	}
+}
+
+/*_________________________________________________________________________*/
+void CloseMMTimeInterrupts(TMSGlobalPtr g)
+{
+	MMRESULT res;
+	WinTimerPtr t = &gWinTimer;
+
+	if (t->wTimerID ) {
+		res = timeKillEvent(t->wTimerID);
+		t->wTimerID = 0;
+	}
+	timeEndPeriod (t->wTimerRes);
+}
+
+#endif
+
 /*__________________________________________________________________________*/
 /*      Interrupt handlers                                                                                                              */
 /*__________________________________________________________________________*/
@@ -204,11 +245,13 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 			}
 			break;
 #endif
+#ifndef WIN32
 		case kTimeModeAudio:
             OpenPortAudio (g, gPrefs ? gPrefs->audioDev : 0);
 			break;
-#ifdef WIN32
+#else
 		case kTimeModeMMSystem:
+			OpenMMTimeInterrupts (g);
 			break;
 #endif
 		default:
@@ -230,11 +273,13 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 			close_rtc (gRTCfd);
 			break;
 #endif
+#ifndef WIN32
 		case kTimeModeAudio:
             ClosePortAudio ();
 			break;
-#ifdef WIN32
+#else
 		case kTimeModeMMSystem:
+			CloseMMTimeInterrupts (g);
 			break;
 #endif
 		default:
