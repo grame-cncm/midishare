@@ -21,7 +21,7 @@
 #define FAR
 #define NEAR
 #define MFAPI
-#include "MidiShare.h"
+#include "GenericMidiShare.h"
 #define nil 0
 #define  errno  /* a revoir */
 #endif
