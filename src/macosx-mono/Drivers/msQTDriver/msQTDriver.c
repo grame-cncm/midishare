@@ -21,7 +21,7 @@
 */
 
 #include <Carbon/Carbon.h>
-#include <QuickTimeMusic.h>
+#include <QuickTime/QuickTimeMusic.h>
 
 #include "MidiShare.h"
 #include "msQTDriver.h"
@@ -173,13 +173,15 @@ static void SetupFilter (MidiFilterPtr filter)
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi ()
 {
+      
 	TDriverInfos infos = { QTDriverName, kQTDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
         
   	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
    	refNum = MidiRegisterDriver(&infos, &op);
-   	if (refNum == MIDIerrSpace) return false;
+      
+        if (refNum == MIDIerrSpace) return false;
      
 	data->refNum = refNum;
 	data->slotRef = MidiAddSlot (refNum, QTSlotName, MidiOutputSlot);
