@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
-// Used by msMMDriver.rc
+// Used by msPTDriver.rc
 //
 
 // Next default values for new objects
