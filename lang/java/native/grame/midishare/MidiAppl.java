@@ -248,11 +248,6 @@ class MidiApplImpl {
 		void Close(){}
 }
 
-/**
- Internal use
-*/
-final class MidiApplNative extends MidiApplImpl {}
-
 
 /**
  Internal use : polling class

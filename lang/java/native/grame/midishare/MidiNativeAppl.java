@@ -22,7 +22,7 @@
 
 package grame.midishare;
 
-import grame.midishare.MidiTask;
+import grame.midishare.*;
 import java.util.*;
 
 
@@ -52,5 +52,11 @@ public class MidiNativeAppl extends MidiAppl {
 		}
 		
 }
+
+/**
+ Internal use
+*/
+final class MidiApplNative extends MidiApplImpl {}
+
 
 
