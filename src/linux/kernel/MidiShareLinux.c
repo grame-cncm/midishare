@@ -23,6 +23,7 @@
               mem allocation functions moved to mem.c
 	      
    [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+   [22-06-01] SL - New CloseAll function to close remaining application associated with a file descriptor
              
 */
   
@@ -68,7 +69,7 @@
 #include "msExtern.h"
 #include "msSync.h" 
 #include "msEvents.h" 
-
+#include "msAppFun.h" 
 
 /*_______________________________________________________________________*/
 /* Linux desc structure                                                  */
@@ -86,10 +87,23 @@ typedef struct {
 	NEW_WAIT_QUEUE		commandsQueue; 	/* to be used by the user real-time thread */
 	Boolean 		wakeFlag;	/* used for wake up of the real-time thread */
 	Boolean 		status;    	/* running mode : user or kernel */
+	struct file*            file;		/* file descriptor */
 	
 } LinuxContext, * LinuxContextPtr;
 
-static void intrpt_routine(void * arg);
+static void TimerTask(void * arg);
+
+/* 
+  	The machine structure (TLinux structure) is globally allocated so that the TimerTask 
+   	can still access it after CloseTimerInterrupt has been called.
+   	The CloseAll function is called in a context where interruptible_sleep_on
+   	does not suspend the calling code. Thus a synchronization bug between
+	the TimerTask and the cleanup code (MidiShareSleep) was occuring.
+*/
+
+static TLinux  gMachine ;
+
+
 
 #define GetCommand(c)		(&(((LinuxContextPtr)c)->commands))
 #define GetCommandQueue(c)	(&(((LinuxContextPtr)c)->commandsQueue))
@@ -118,11 +132,12 @@ void FlushCommandFifo(TApplContextPtr context)
 
 TApplContextPtr CreateApplContext ()
 {
-	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc (sizeof(LinuxContext), GFP_KERNEL);
+	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc(sizeof(LinuxContext), GFP_KERNEL);
 	fifoinit(&ptr->commands);
 	INIT_WAIT_QUEUE(ptr->commandsQueue);
 	ptr->wakeFlag = false;
 	ptr->status = kKernelMode;
+	ptr->file = 0;
 	return ptr;
 }
 
@@ -137,13 +152,35 @@ void DisposeApplContext (TApplContextPtr context)
 }
 
 /*_________________________________________________________________________*/
-void SetUserMode (short refnum, TClientsPtr g)
+/* close all remaining applications associated with a file descriptor */
+
+void CloseAll (TMSGlobalPtr gm, struct file* f)
+{
+	TClientsPtr g = Clients(gm);
+	int i;
+	
+	for (i = 0; i < MaxAppls; i++){
+		TApplPtr appl = g->appls[i];
+		if (appl) {
+			LinuxContextPtr c = (LinuxContextPtr)appl->context;
+			if (c && (c->file == f)) MSClose(i,gm);
+		}
+	}
+
+}
+
+/*_________________________________________________________________________*/
+
+void SetUserMode (short refnum, TClientsPtr g,struct file* f)
 {
 	if (CheckRefNum(g, refnum)) {
 		TApplPtr appl = g->appls[refnum];
 		if (appl) {
 			LinuxContextPtr c = (LinuxContextPtr)appl->context;
-			if (c) c->status = kUserMode;
+			if (c) {
+				c->status = kUserMode;
+				c->file = f;
+			}
 		}
 	}
 }
@@ -283,7 +320,7 @@ static void InitMachine (TLinuxPtr machine)
 	machine->timerTask.next = NULL;			/* Next item in list - queue_task will do this for us */
 	#endif
 	machine->timerTask.sync = 0;    		/* A flag meaning we haven't been inserted into a task queue yet */
-	machine->timerTask.routine = intrpt_routine;   	/* The function to run */
+	machine->timerTask.routine = TimerTask;   	/* The function to run */
 	machine->timerTask.data = gMem;        		/* the arg parameter to the interrupt routine : the MidiShare global data */
 	INIT_WAIT_QUEUE(machine->stopQueue);
 	machine->status = true;
@@ -291,7 +328,7 @@ static void InitMachine (TLinuxPtr machine)
 
 /*__________________________________________________________________________*/
 
-static void intrpt_routine(void * arg)
+static void TimerTask(void * arg)
 {
 	TMSGlobalPtr g  = (TMSGlobalPtr) arg;
 	TLinuxPtr machine = (TLinuxPtr) g->local;
@@ -311,34 +348,27 @@ static void intrpt_routine(void * arg)
 	*/
 	
 	/* As the timer resolution is 100 HZ, does 10 ClockHandler per interrupt */ 
-	
-	for (i = 0; i<10; i++) {
-		ClockHandler(g);
-	}
-	
-	if (!machine->status) 
-    		wake_up_interruptible(&machine->stopQueue);   
-  	else {
-    		queue_task(&machine->timerTask, &tq_timer);  
+		
+	if (!machine->status) {
+		wake_up_interruptible(&machine->stopQueue);   
+  	}else {
+		for (i = 0; i<10; i++) ClockHandler(g);
+		queue_task(&machine->timerTask, &tq_timer);  
   	}
 }
-
 
 /*__________________________________________________________________________*/
 
 void SpecialWakeUp (TMSGlobalPtr g)
 {
-	g->local = (void*)kmalloc (sizeof(TLinux), GFP_KERNEL);
+	/* access the global structure */
+	g->local = &gMachine;  
 	if (g->local) InitMachine (g->local);
 }
 
 /*__________________________________________________________________________*/
 
-void SpecialSleep  (TMSGlobalPtr g)
-{
-	if (g->local) kfree (g->local);
-	g->local = 0;
-}
+void SpecialSleep  (TMSGlobalPtr g){}
 
 /*__________________________________________________________________________*/
 

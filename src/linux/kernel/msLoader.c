@@ -19,6 +19,9 @@
   grame@rd.grame.fr
   
   [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+  [22-06-01] SL - The device close function calls mskCloseAll to close all
+   		  remaining application associated with a file descriptor
+
 
 */
 
@@ -49,7 +52,7 @@
 
 /* Global variables */
 
-typedef int (*KernelMth) (unsigned long userptr);
+typedef int (*KernelMth) (unsigned long userptr, struct file* f);
 
 static KernelMth KernelMthTable[kMaxMth];
 
@@ -108,7 +111,7 @@ char* itoa (long n, char s[])
 
 /*__________________________________________________________________________________*/
 
-int MidiReset (unsigned long userptr) 
+int MidiReset (unsigned long userptr, struct file * f) 
 {
 	int n = MSCountAppls(Clients(gMem));
 	
@@ -132,33 +135,24 @@ static int myopen(struct inode *inode, struct file * f)
 
 static int myclose(struct inode *inode, struct file * f)
 {
+	mskCloseAll(f);
 	MOD_DEC_USE_COUNT;
 	return 0;
 }
 
 /*__________________________________________________________________________________*/
 
-static ssize_t myread(struct file * f, char * s, size_t n, loff_t * i)
-{
-	return 0;
-}
+static ssize_t myread(struct file * f, char * s, size_t n, loff_t * i){ return -EINVAL; }
 
 /*__________________________________________________________________________________*/
 
-static ssize_t mywrite(struct file * f, const char * s, size_t n, loff_t * i)
-{
-	return -EINVAL;
-}
+static ssize_t mywrite(struct file * f, const char * s, size_t n, loff_t * i){ return -EINVAL; }
 
 
 /*__________________________________________________________________________________*/
 /* kernel implementation */
 
-static int mskNullMth(unsigned long userptr)
-{
-	return 0;
-}
-
+static int mskNullMth(unsigned long userptr,struct file * f){ return 0; }
 
 /*__________________________________________________________________________________*/
 /* Init the ioctl method table */ 
@@ -274,7 +268,7 @@ static void initMthTable() {
 
 static int myioctl(struct inode *inode, struct file *f, unsigned int msg, unsigned long param)
 { 
-  return (* KernelMthTable[msg]) (param); 
+  return (* KernelMthTable[msg]) (param,f); 
 }
 
 
@@ -285,10 +279,6 @@ struct file_operations myops = {
 	open : myopen,
 	release : myclose,
 };
-
-/*__________________________________________________________________________*/
-
-Boolean IsMidiShareRunning (TMSGlobalPtr g){ return (g->local!=0); }
 
 /*__________________________________________________________________________________*/
 
@@ -312,7 +302,6 @@ int init_module()
 
 void cleanup_module()
 {
-	if (IsMidiShareRunning(gMem)) MidiShareSleep(gMem);
 	if (unregister_chrdev(kMidiShareMajor, kMidiShareName) < 0) prnt("Error when closing MidiShare module");
 }
 

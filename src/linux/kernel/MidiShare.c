@@ -21,6 +21,8 @@
   modifications history:
    [08-09-99] DF - adaptation to new data structures
    [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+   [22-06-01] SL - New mskCloseAll function to close remaining application associated with a file descriptor
+
 
 */
 
@@ -46,7 +48,9 @@
 MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g);
-void      SetUserMode (short refnum, TClientsPtr g);
+void      SetUserMode (short refnum, TClientsPtr g, struct file* f);
+void 	  CloseAll (TMSGlobalPtr gm, struct file* f);
+
 
 //_________________________________________________________
 // DECLARATION DES VARIABLES GLOBALES
@@ -62,7 +66,7 @@ MSFunctionType(void) MidiShareSpecialInit(unsigned long defaultSpace) {
 
 /*__________________________________________________________________________________*/
 
-int mskGetVersion(unsigned long userptr)
+int mskGetVersion(unsigned long userptr , struct file* f)
 {
 	TMidiGetVersionArgs args;
 	
@@ -74,7 +78,7 @@ int mskGetVersion(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskCountAppls(unsigned long userptr) 
+int mskCountAppls(unsigned long userptr , struct file* f) 
 { 
 	TMidiCountApplsArgs args;
 	
@@ -86,7 +90,7 @@ int mskCountAppls(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetIndAppl(unsigned long userptr) 
+int mskGetIndAppl(unsigned long userptr , struct file* f) 
 { 
 	TMidiGetIndApplArgs args;
 	
@@ -99,7 +103,7 @@ int mskGetIndAppl(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetNamedAppl(unsigned long userptr)
+int mskGetNamedAppl(unsigned long userptr , struct file* f)
 { 
 	TMidiGetNamedApplArgs args;
 	MSName  buffer ;
@@ -116,7 +120,7 @@ int mskGetNamedAppl(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetSyncInfo (unsigned long userptr)
+int mskGetSyncInfo (unsigned long userptr , struct file* f)
 { 
 	/*
 	TMidiGetSyncInfoArgs args;
@@ -129,7 +133,7 @@ int mskGetSyncInfo (unsigned long userptr)
 }
 /*__________________________________________________________________________________*/
 
-int mskSetSyncMode (unsigned long userptr)
+int mskSetSyncMode (unsigned long userptr , struct file* f)
 { 
 	/*
 	TMidiSetSyncModeArgs args;
@@ -143,16 +147,16 @@ int mskSetSyncMode (unsigned long userptr)
 /*__________________________________________________________________________________*/
 /* unimplemented functions : to be done later */
 
-int mskGetExtTime (unsigned long userptr){ return 0 ;}
-int mskInt2ExtTime (unsigned long userptr){ return 0 ;}
-int mskExt2IntTime (unsigned long userptr){ return 0 ;}
-int mskTime2Smpte (unsigned long userptr){ return 0 ;}
-int mskSmpte2Time (unsigned long userptr){ return 0 ;}
-int mskGetTimeAddr  (unsigned long userptr){ return 0 ;}
+int mskGetExtTime (unsigned long userptr , struct file* f){ return 0 ;}
+int mskInt2ExtTime (unsigned long userptr , struct file* f){ return 0 ;}
+int mskExt2IntTime (unsigned long userptr , struct file* f){ return 0 ;}
+int mskTime2Smpte (unsigned long userptr , struct file* f){ return 0 ;}
+int mskSmpte2Time (unsigned long userptr , struct file* f){ return 0 ;}
+int mskGetTimeAddr  (unsigned long userptr , struct file* f){ return 0 ;}
 
 /*__________________________________________________________________________________*/
 
-int mskOpen(unsigned long userptr)
+int mskOpen(unsigned long userptr ,struct file* f)
 {
 	TMidiOpenArgs args;
 	MSName  buffer ;
@@ -161,7 +165,7 @@ int mskOpen(unsigned long userptr)
 	
 	strncpy_from_user(buffer, args.name, MaxApplNameLen);
 	args.refnum = MSOpen (buffer, gMem);
-	SetUserMode (args.refnum, Clients(gMem));
+	SetUserMode (args.refnum, Clients(gMem),f);
 		
 	if (copy_to_user((TMidiOpenArgs *)userptr, &args, sizeof(TMidiOpenArgs))) return -EFAULT;
 
@@ -170,7 +174,7 @@ int mskOpen(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskClose(unsigned long userptr)
+int mskClose(unsigned long userptr , struct file* f)
 {
 	TMidiCloseArgs args;
 	TClientsPtr clients = Clients(gMem);
@@ -185,7 +189,7 @@ int mskClose(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetName   (unsigned long userptr){ 
+int mskGetName(unsigned long userptr , struct file* f){ 
 
 	TMidiGetNameArgs args;
 	MidiName resname;
@@ -207,7 +211,7 @@ int mskGetName   (unsigned long userptr){
 
 /*__________________________________________________________________________________*/
 
-int mskSetName  (unsigned long userptr){ 
+int mskSetName  (unsigned long userptr , struct file* f){ 
 
 	TMidiSetNameArgs args;
 	MSName  buffer ;
@@ -224,12 +228,12 @@ int mskSetName  (unsigned long userptr){
 /*__________________________________________________________________________________*/
 /* unimplemented functions : done on the library side */
 
-int mskGetInfo  (unsigned long userptr){ return 0 ;}
-int mskSetInfo  (unsigned long userptr){ return 0 ;}
+int mskGetInfo  (unsigned long userptr , struct file* f){ return 0 ;}
+int mskSetInfo  (unsigned long userptr , struct file* f){ return 0 ;}
 
 /*__________________________________________________________________________________*/
 
-int mskGetFilter  (unsigned long userptr){ 
+int mskGetFilter  (unsigned long userptr , struct file* f){ 
 
 	TMidiGetFilterArgs args;
 	
@@ -242,7 +246,7 @@ int mskGetFilter  (unsigned long userptr){
 
 /*__________________________________________________________________________________*/
 
-int mskSetFilter  (unsigned long userptr){ 
+int mskSetFilter  (unsigned long userptr , struct file* f){ 
 
 	TMidiSetFilterArgs args;
 	
@@ -255,7 +259,7 @@ int mskSetFilter  (unsigned long userptr){
 
 /*__________________________________________________________________________________*/
 
-int mskSetRcvAlarm   (unsigned long userptr)
+int mskSetRcvAlarm   (unsigned long userptr , struct file* f)
 {	
 	TMidiSetRcvAlarmArgs args;
 	
@@ -267,7 +271,7 @@ int mskSetRcvAlarm   (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskSetApplAlarm   (unsigned long userptr)
+int mskSetApplAlarm   (unsigned long userptr , struct file* f)
 {
 	TMidiSetApplAlarmArgs args;
 	
@@ -279,7 +283,7 @@ int mskSetApplAlarm   (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskConnect(unsigned long userptr)
+int mskConnect(unsigned long userptr , struct file* f)
 {
 	TMidiConnectArgs args;
 	
@@ -290,7 +294,7 @@ int mskConnect(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskIsConnected(unsigned long userptr)
+int mskIsConnected(unsigned long userptr , struct file* f)
 {
 	TMidiIsConnectedArgs args;
 	
@@ -303,12 +307,12 @@ int mskIsConnected(unsigned long userptr)
 /*__________________________________________________________________________________*/
 /* unimplemented functions : to be done later */
 
-int mskGetPortState  (unsigned long userptr){ return 0 ;}
-int mskSetPortState (unsigned long userptr){ return 0 ;}
+int mskGetPortState  (unsigned long userptr , struct file* f){ return 0 ;}
+int mskSetPortState (unsigned long userptr , struct file* f){ return 0 ;}
 
 /*__________________________________________________________________________________*/
 
-int mskGetTime(unsigned long userptr)
+int mskGetTime(unsigned long userptr , struct file* f)
 {
 	TMidiGetTimeArgs args;
 	
@@ -362,40 +366,40 @@ void InitStructTbl()
 
 /*__________________________________________________________________________________*/
 
-int mskSend(unsigned long ue)
+int mskSend(unsigned long userptr , struct file* f)
 {
 	MidiEvPtr e;
 	
-	e = ev_from_user((MidiEvPtr)ue,gMem);
+	e = ev_from_user((MidiEvPtr)userptr,gMem);
 	if (e) MSSend (RefNum(e),e, SorterList(gMem));
 	return 0;	
 }
 
 /*__________________________________________________________________________________*/
 
-int mskSendIm(unsigned long ue)
+int mskSendIm(unsigned long userptr , struct file* f)
 {
 	MidiEvPtr e;
 	
-	e = ev_from_user((MidiEvPtr)ue,gMem);
+	e = ev_from_user((MidiEvPtr)userptr,gMem);
 	if (e) MSSendAt (RefNum(e),e, CurrTime(gMem), SorterList(gMem));
 	return 0;	
 }
 
 /*__________________________________________________________________________________*/
 
-int mskSendAt(unsigned long ue)
+int mskSendAt(unsigned long userptr , struct file* f)
 {
 	MidiEvPtr e;
 	
-	e = ev_from_user((MidiEvPtr)ue,gMem);
+	e = ev_from_user((MidiEvPtr)userptr,gMem);
 	if (e) MSSend (RefNum(e),e, SorterList(gMem));
 	return 0;	
 }
 
 /*__________________________________________________________________________________*/
 
-int mskCountEvs(unsigned long userptr)
+int mskCountEvs(unsigned long userptr , struct file* f)
 { 
 	TMidiCountEvsArgs args;
 	
@@ -504,7 +508,7 @@ static int mskGetEvAux(MidiEvPtr ke, TMidiGetEvArgs* arg, TMidiGetEvArgs* userpt
 
 /*__________________________________________________________________________________*/
 
-int mskGetEv(unsigned long userptr)
+int mskGetEv(unsigned long userptr , struct file* f)
 {
 	TMidiGetEvArgs 	arg;
 	MidiEvPtr ev;
@@ -525,7 +529,7 @@ int mskGetEv(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetCommand(unsigned long userptr)
+int mskGetCommand(unsigned long userptr , struct file* f)
 {
 	TMidiGetEvArgs 	arg;
 	MidiEvPtr ev;
@@ -553,7 +557,7 @@ int mskGetCommand(unsigned long userptr)
 /* A REVOIR */
 /*__________________________________________________________________________________*/
 
-int mskAvailEv (unsigned long userptr)
+int mskAvailEv (unsigned long userptr , struct file* f)
 {
 	TMidiAvailEvArgs 	arg;
 
@@ -621,7 +625,7 @@ static MidiEvPtr ev_from_user (MidiEvPtr ue, TMSGlobalPtr g)
 
 /*__________________________________________________________________________________*/
 
-int mskFlushEvs(unsigned long userptr)
+int mskFlushEvs(unsigned long userptr , struct file* f)
 { 
 	TMidiFlushEvsArgs args;
 	
@@ -634,17 +638,17 @@ int mskFlushEvs(unsigned long userptr)
 /*__________________________________________________________________________________*/
 /* unimplemented functions */
 
-int mskReadSync(unsigned long userptr){ return 0 ;}
-int mskWriteSync(unsigned long userptr){ return 0 ;}
+int mskReadSync(unsigned long userptr , struct file* f){ return 0 ;}
+int mskWriteSync(unsigned long userptr , struct file* f){ return 0 ;}
 
 /*__________________________________________________________________________________*/
 /* unimplemented functions : done on the libarary side */
 
-int mskCall(unsigned long userptr){ return 0 ;}
+int mskCall(unsigned long userptr , struct file* f){ return 0 ;}
 
 /*__________________________________________________________________________________*/
 
-int mskTask(unsigned long userptr){ 
+int mskTask(unsigned long userptr , struct file* f){ 
 
 	TMidiTaskArgs args;
 	
@@ -659,11 +663,11 @@ int mskTask(unsigned long userptr){
 
 /*__________________________________________________________________________________*/
 
-int mskDTask(unsigned long userptr){ return mskTask(userptr);}
+int mskDTask(unsigned long userptr , struct file* f){ return mskTask(userptr,f);}
 
 /*__________________________________________________________________________________*/
 
-int mskForgetTask (unsigned long userptr){ 
+int mskForgetTask (unsigned long userptr , struct file* f){ 
 
 	TMidiForgetTaskArgs args;
 	
@@ -676,7 +680,7 @@ int mskForgetTask (unsigned long userptr){
 
 /*__________________________________________________________________________________*/
 
-int mskCountDTasks(unsigned long userptr)
+int mskCountDTasks(unsigned long userptr , struct file* f)
 { 
 	TMidiCountDTasksArgs args;
 	
@@ -689,7 +693,7 @@ int mskCountDTasks(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskFlushDTasks(unsigned long userptr)
+int mskFlushDTasks(unsigned long userptr , struct file* f)
 { 
 	TMidiFlushDTasksArgs args;
 	
@@ -700,7 +704,7 @@ int mskFlushDTasks(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskGetDTask(unsigned long userptr)
+int mskGetDTask(unsigned long userptr , struct file* f)
 {
 	TMidiGetEvArgs 	arg;
 	MidiEvPtr ev;
@@ -721,7 +725,7 @@ int mskGetDTask(unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskNewFilter (unsigned long userptr)
+int mskNewFilter (unsigned long userptr , struct file* f)
 {
 	TMidiNewFilterArgs args;
 	
@@ -733,7 +737,7 @@ int mskNewFilter (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskFreeFilter (unsigned long userptr)
+int mskFreeFilter (unsigned long userptr , struct file* f)
 {
 	TMidiFreeFilterArgs args;
 	
@@ -745,7 +749,7 @@ int mskFreeFilter (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskAcceptChan (unsigned long userptr)
+int mskAcceptChan (unsigned long userptr , struct file* f)
 {
 	TMidiAcceptChanArgs args;
 	
@@ -757,7 +761,7 @@ int mskAcceptChan (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskAcceptPort (unsigned long userptr)
+int mskAcceptPort (unsigned long userptr , struct file* f)
 {
 	TMidiAcceptPortArgs args;
 	
@@ -769,7 +773,7 @@ int mskAcceptPort (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskAcceptType (unsigned long userptr)
+int mskAcceptType (unsigned long userptr , struct file* f)
 {
 	TMidiAcceptTypeArgs args;
 	
@@ -781,7 +785,7 @@ int mskAcceptType (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskIsAcceptedChan (unsigned long userptr)
+int mskIsAcceptedChan (unsigned long userptr , struct file* f)
 {
 	TMidiIsAcceptedChanArgs args;
 	
@@ -794,7 +798,7 @@ int mskIsAcceptedChan (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskIsAcceptedPort (unsigned long userptr)
+int mskIsAcceptedPort (unsigned long userptr , struct file* f)
 {
 	TMidiIsAcceptedPortArgs args;
 	
@@ -807,7 +811,7 @@ int mskIsAcceptedPort (unsigned long userptr)
 
 /*__________________________________________________________________________________*/
 
-int mskIsAcceptedType (unsigned long userptr)
+int mskIsAcceptedType (unsigned long userptr , struct file* f)
 {
 	TMidiIsAcceptedTypeArgs args;
 	
@@ -821,20 +825,20 @@ int mskIsAcceptedType (unsigned long userptr)
 /*__________________________________________________________________________________*/
 /* release 1.80 additionnal entry points */
 /*__________________________________________________________________________________*/
-int mskRegisterDriver (unsigned long userptr)
+int mskRegisterDriver (unsigned long userptr , struct file* f)
 {
 	TMidiRegisterDriverArgs args;
 
 	if (copy_from_user(&args, (TMidiRegisterDriverArgs *)userptr, sizeof(TMidiRegisterDriverArgs))) return -EFAULT;
 	args.refnum = MSRegisterDriver (&args.infos, &args.op, gMem);
-	SetUserMode (args.refnum, Clients(gMem));
+	SetUserMode (args.refnum, Clients(gMem),f);
 		
 	return (copy_to_user((short *)userptr, &args.refnum, sizeof(args.refnum))) 
 			? -EFAULT : 0;
 }
 
 /*__________________________________________________________________________________*/
-int mskUnregisterDriver (unsigned long userptr)
+int mskUnregisterDriver (unsigned long userptr , struct file* f)
 {
 	short refnum;
 	if (copy_from_user(&refnum, (short *)userptr, sizeof(refnum))) return -EFAULT;
@@ -843,7 +847,7 @@ int mskUnregisterDriver (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskCountDrivers (unsigned long userptr)
+int mskCountDrivers (unsigned long userptr , struct file* f)
 {
 	short count = MSCountDrivers (Clients(gMem));
 	return (copy_to_user((short *)userptr, &count, sizeof(count))) 
@@ -851,7 +855,7 @@ int mskCountDrivers (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskGetIndDriver (unsigned long userptr)
+int mskGetIndDriver (unsigned long userptr , struct file* f)
 {
 	TMidiGetIndDriverArgs args;
 	
@@ -862,7 +866,7 @@ int mskGetIndDriver (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskGetDriverInfos (unsigned long userptr)
+int mskGetDriverInfos (unsigned long userptr , struct file* f)
 {
 	TMidiGetDriverInfosArgs args;
 	if (copy_from_user(&args, (TMidiGetDriverInfosArgs *)userptr, sizeof(TMidiGetDriverInfosArgs))) return -EFAULT;
@@ -876,7 +880,7 @@ int mskGetDriverInfos (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskAddSlot (unsigned long userptr)
+int mskAddSlot (unsigned long userptr , struct file* f)
 {
 	TMidiAddSlotArgs args;
 	SlotName name;
@@ -889,7 +893,7 @@ int mskAddSlot (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskSetSlotName (unsigned long userptr)
+int mskSetSlotName (unsigned long userptr , struct file* f)
 {
 	TMidiSetSlotNameArgs args;
 	SlotName name;
@@ -901,7 +905,7 @@ int mskSetSlotName (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskGetIndSlot (unsigned long userptr)
+int mskGetIndSlot (unsigned long userptr , struct file* f)
 {
 	TMidiGetIndSlotArgs args;
 	if (copy_from_user(&args, (TMidiGetIndSlotArgs *)userptr, sizeof(TMidiGetIndSlotArgs))) return -EFAULT;
@@ -911,7 +915,7 @@ int mskGetIndSlot (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskRemoveSlot  (unsigned long userptr)
+int mskRemoveSlot  (unsigned long userptr , struct file* f)
 {
 	SlotRefNum slot;
 	if (copy_from_user(&slot, (SlotRefNum *)userptr, sizeof(SlotRefNum))) return -EFAULT;
@@ -920,7 +924,7 @@ int mskRemoveSlot  (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskGetSlotInfos (unsigned long userptr)
+int mskGetSlotInfos (unsigned long userptr , struct file* f)
 {
 	TMidiGetSlotInfosArgs args;
 	if (copy_from_user(&args, (TMidiGetSlotInfosArgs *)userptr, sizeof(TMidiGetSlotInfosArgs))) return -EFAULT;
@@ -934,7 +938,7 @@ int mskGetSlotInfos (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskConnectSlot (unsigned long userptr)
+int mskConnectSlot (unsigned long userptr , struct file* f)
 {
 	TMidiConnectSlotArgs args;
 	if (copy_from_user(&args, (TMidiConnectSlotArgs *)userptr, sizeof(TMidiConnectSlotArgs))) return -EFAULT;
@@ -943,7 +947,7 @@ int mskConnectSlot (unsigned long userptr)
 }
 
 /*__________________________________________________________________________________*/
-int mskIsSlotConnected (unsigned long userptr)
+int mskIsSlotConnected (unsigned long userptr , struct file* f)
 {
 	TMidiIsSlotConnectedArgs args;
 	if (copy_from_user(&args, (TMidiIsSlotConnectedArgs *)userptr, sizeof(TMidiIsSlotConnectedArgs))) return -EFAULT;
@@ -951,3 +955,7 @@ int mskIsSlotConnected (unsigned long userptr)
 	return (copy_to_user((Boolean *)userptr, &args.result, sizeof(Boolean)))
 		? -EFAULT : 0;
 }
+
+/*__________________________________________________________________________________*/
+void mskCloseAll (struct file* f){ CloseAll(gMem,f);}
+
