@@ -13,7 +13,7 @@
 		};
 		01205B34015611757F000001 = {
 			isa = PBXLibraryReference;
-			path = libJMidi.1.0.7.jnilib;
+			path = libJMidi.1.0.9.jnilib;
 			refType = 3;
 		};
 		01205B35015611757F000001 = {
@@ -34,7 +34,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = libJMidi.1.0.7.jnilib;
+				PRODUCT_NAME = libJMidi.1.0.9.jnilib;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -44,7 +44,7 @@
 			isa = PBXLibraryTarget;
 			name = libJMidi.jnilib;
 			productInstallPath = /usr/local/lib;
-			productName = libJFaust.jnilib;
+			productName = libJMidi.jnilib;
 			productReference = 01205B34015611757F000001;
 			shouldUseHeadermap = 0;
 		};
