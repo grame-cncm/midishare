@@ -1,5 +1,5 @@
 
-OPTIONS = -Dmacintosh
+OPTIONS = -Dmacintosh -D__Types__
 LIB = -lmidishare
 CFLAGS := -O3 $(OPTIONS)
 CC    = cc
@@ -25,7 +25,7 @@ TOutEvents : TOutEvents.c TOutEvents.h
 
 makefile : makefile.osx
 	cp -f makefile.osx makefile
-	rm $(TESTS)
+	rm -f $(TESTS)
 
 run :
 	[ -d $(RES) ] || mkdir $(RES)
