@@ -198,6 +198,7 @@ error :
 		MIDIClientDispose(gClient);
 		gClient = NULL;
 	}
+	return 0;
 }
 
 //_________________________________________________________
