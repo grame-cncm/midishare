@@ -288,7 +288,7 @@ static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound)
 	
 	nr.info.flags = 0;
 	nr.info.reserved = 0;
-	nr.info.polyphony = 16;
+	nr.info.polyphony = 8;
 	nr.info.typicalPolyphony = 0x00010000;
 	err = NAStuffToneDescription (qt->allocator, sound, &nr.tone);
 	if (err == noErr) {
