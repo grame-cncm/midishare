@@ -19,6 +19,7 @@
 ;;              SetRecordFilterPlayer entry-points.
 ;;   21/11/03 : Converted to functional API. (HKT)
 ;;   19/04/03 : Add MidiFreeMidiFileInfos, MidiFreePlayerState and MidiFreePos
+;;	 22-03-04 : Correct MidiFreeMidiFileInfos, MidiFreePlayerState and MidiFreePos for OpenMcl interface
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1043,19 +1044,19 @@
   (ccl::make-record :<m>idi<f>ile<i>nfos))
 
 (defun MidiFreeMidiFileInfos (info)
-  (ccl::dispose-record info))
+  (ccl::free info))
 
 (defun MidiNewPlayerState ()
   (ccl::make-record :<p>layer<s>tate))
 
 (defun MidiFreePlayerState (state)
-  (ccl::dispose-record state))
+  (ccl::free state))
 
 (defun MidiNewPos ()
   (ccl::make-record :<p>os))
 
 (defun MidiFreePos (pos)
-  (ccl::dispose-record pos))
+  (ccl::free pos))
 
 )
 
