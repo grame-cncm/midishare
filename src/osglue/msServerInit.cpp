@@ -100,11 +100,6 @@ void * msServerInit (int shmemSize, int debug)
 	setSigActions();
 	atexit (msExit);
 #endif
-	if (!debug) {
-		char buff[512], dir[400];
-		sprintf (buff, "%s%c%s", TLog::DefaultDir(dir, 400), kDirSep, kLogName);
-		gLog.Open (buff);
-	}
 	gEnv.shmem = new ShMem (&gLog);
 	if (!gEnv.shmem) goto err;
 	gEnv.shmemPtr = gEnv.shmem->Create (kShMemId, shmemSize);
@@ -125,6 +120,11 @@ void msServerClose()
 //___________________________________________________________________
 // log facilities
 //___________________________________________________________________
+void OpenLog (const char *logfile)
+{
+	gLog.Open (logfile);
+}
+
 void LogWrite (const char *msg)
 {
 	gLog.Write (msg);

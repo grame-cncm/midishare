@@ -23,12 +23,29 @@
 
 #include "msFunctions.h"
 #include "msKernel.h"
+#include "msKernelPrefs.h"
 #include "msServerInit.h"
+
+/*____________________________________________________________________________*/
+void init (int argc, char *argv[])
+{
+	msCmdLinePrefs args;
+	msKernelPrefs * prefs;
+	
+	ReadArgs (&args, argc, argv);
+	prefs = ReadPrefs (args.conffile ? args.conffile : 0);
+	OpenLog (args.logfile ? args.logfile : prefs->logfile);
+	AdjustPrefs (prefs, &args);
+	LogPrefs (prefs);
+}
 
 /*____________________________________________________________________________*/
 int main (int argc, char *argv[])
 {
-	TMSGlobalPublic * pubMem = msServerInit (sizeof(TMSGlobalPublic), true);
+	TMSGlobalPublic * pubMem;
+	OpenLog (0);
+	init (argc, argv);
+	pubMem = msServerInit (sizeof(TMSGlobalPublic), true);
 	if (pubMem) {
 		char msg[512]; int version;
 		MidiShareSpecialInit (40000, pubMem);

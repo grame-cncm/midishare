@@ -40,6 +40,7 @@ void * msServerInit (int shmemSize, int debug);
 void msServerClose();
 
 /* log facilities */
+void OpenLog 		(const char *file); // if null log messages to stderr
 void LogWrite 		(const char *msg);
 void LogWriteErr 	(const char *msg);
 

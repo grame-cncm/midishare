@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "msKernelPrefs.h"
 #include "msServerInit.h"
@@ -47,6 +48,8 @@
 #	endif
 #endif
 
+#define kArgs "[-c initfile -l logfile -m memSize -t timeMode -r timeRes]"
+
 #define memorySectionName "memory"
 #define driverSectionName "drivers"
 #define timeSectionName   "time"
@@ -67,13 +70,13 @@
 
 #define DriverMaxEntry	2048
 
-static unsigned long GetMemSize ();
+static unsigned long GetMemSize (char * file);
 static int  TimeModeStr2TimeMode (char *str);
-static int  GetTimeMode ();
-static int  GetTimeRes ();
-static void GetLog (char *buffer, int len);
-static void GetAudioDev (char *buffer, int len);
-static char * GetDrivers (char *buffer, int len);
+static int  GetTimeMode (char * file);
+static int  GetTimeRes (char * file);
+static void GetLog (char * file, char *buffer, int len);
+static void GetAudioDev (char * file, char *buffer, int len);
+static char * GetDrivers (char * file, char *buffer, int len);
 static void ScanDrivers (msKernelPrefs * prefs, char *buffer);
 static int  readnum (char *str);
 static void usage (char *name);
@@ -93,17 +96,19 @@ static msKernelPrefs gPrefs = { 0 };
 //________________________________________________________________________
 // exported functions implementation
 //________________________________________________________________________
-msKernelPrefs * ReadPrefs ()
+msKernelPrefs * ReadPrefs (const char * conffile)
 {
 	static char buffer[DriverMaxEntry];
 	
-	gPrefs.memory   = GetMemSize();
-	gPrefs.timeMode = GetTimeMode();
-	gPrefs.timeRes  = GetTimeRes();
+	char * confName = conffile ? conffile : profileName;
+
+	gPrefs.memory   = GetMemSize(confName);
+	gPrefs.timeMode = GetTimeMode(confName);
+	gPrefs.timeRes  = GetTimeRes(confName);
 	gPrefs.drvCount = 0;
-	GetLog (gPrefs.logfile, sizeof(gPrefs.logfile));
-	GetAudioDev (gPrefs.audioDev, sizeof(gPrefs.audioDev));
-	if (GetDrivers (buffer, DriverMaxEntry)) {
+	GetLog (confName, gPrefs.logfile, sizeof(gPrefs.logfile));
+	GetAudioDev (confName, gPrefs.audioDev, sizeof(gPrefs.audioDev));
+	if (GetDrivers (confName, buffer, DriverMaxEntry)) {
 		ScanDrivers (&gPrefs, buffer);
 	}
 	return &gPrefs;
@@ -132,29 +137,49 @@ void LogPrefs (msKernelPrefs * prefs)
 	LogWrite (buffer);
 	sprintf (buffer, "Drivers count      : %d", (int)prefs->drvCount);
 	LogWrite (buffer);
-	LogWrite ("active:");
-	for (i=0; i<prefs->drvCount; i++) {
-		sprintf (buffer, "    %s", DrvName(prefs, i));
-		LogWrite (buffer);		
+	if (prefs->drvCount) {
+		LogWrite ("  active:");
+		for (i=0; i<prefs->drvCount; i++) {
+			sprintf (buffer, "     %s", DrvName(prefs, i));
+			LogWrite (buffer);		
+		}
 	}
 }
 
 //________________________________________________________________________
-void AdjustPrefs (msKernelPrefs * prefs, int argc, char *argv[])
+void AdjustPrefs (msKernelPrefs * prefs, msCmdLinePrefs * args)
+{
+	if (args->logfile) strncpy (prefs->logfile, args->logfile, MaxLogName);
+	if (args->memory != -1) prefs->memory = args->memory;
+	if (args->timeMode > 0) prefs->timeMode = args->timeMode;
+	if (args->timeRes > 0) prefs->timeRes = args->timeRes;
+}
+
+//________________________________________________________________________
+void ReadArgs (msCmdLinePrefs * prefs, int argc, char *argv[])
 {
 	int i; int val; char msg[256];
 	
+	prefs->memory = -1;
+	prefs->timeMode = -1;
+	prefs->timeRes = -1;
+	prefs->conffile = 0;
+	prefs->logfile = 0;
+	
 	for (i=1; i<argc; i++) {
 		char * ptr = argv[i];
-		
+
 		if (*ptr++ == '-') {
 			char c = *ptr;
 			ptr = argv[++i];
+			if (i == argc) usage (argv[0]);
 
 			switch (c) {
 
-				case 'l':
-					strcpy (prefs->logfile, ptr);
+				case 'c': 	prefs->conffile = ptr;
+					break;
+
+				case 'l': 	prefs->logfile = ptr;
 					break;
 
 				case 'm':
@@ -211,16 +236,16 @@ static void usage (char *str)
 {
 	char buffer[1024], * name = strrchr (str, pathSep);
 	if (!name) name = str;
-	sprintf (buffer, "usage: %s [-l logfile -m memSize -t timeMode -r timeRes]\n", name);
+	sprintf (buffer, "usage: %s %s\n", name, kArgs);
 	LogWrite (buffer);
 	exit (1);
 }
 
 //________________________________________________________________________
-static unsigned long GetMemSize ()
+static unsigned long GetMemSize (char *file)
 {
 	unsigned long n;
-	n = get_private_profile_int (memorySectionName, memSizeStr, kDefaultSpace, profileName);
+	n = get_private_profile_int (memorySectionName, memSizeStr, kDefaultSpace, file);
 	return  n ? n : kDefaultSpace;
 }
 
@@ -266,42 +291,42 @@ static int checkPrefs (msKernelPrefs * prefs)
 }
 
 //________________________________________________________________________
-static int GetTimeMode ()
+static int GetTimeMode (char *file)
 {
 	char buffer[256]; unsigned long n;
-	n = get_private_profile_string (timeSectionName, timeModeStr, "", buffer, 256, profileName);
+	n = get_private_profile_string (timeSectionName, timeModeStr, "", buffer, 256, file);
 	return  n ? TimeModeStr2TimeMode (buffer) : defaultTimeMode;
 }
 
 //________________________________________________________________________
-static int GetTimeRes ()
+static int GetTimeRes (char *file)
 {
 	unsigned long n;
-	n = get_private_profile_int (timeSectionName, timeResStr, kDefaultTimeRes, profileName);
+	n = get_private_profile_int (timeSectionName, timeResStr, kDefaultTimeRes, file);
 	return  n ? n : kDefaultTimeRes;
 }
 
 //________________________________________________________________________
-static void GetLog (char *buffer, int len)
+static void GetLog (char *file, char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (logSectionName, logFileStr, defaultLog, buffer, len, profileName);	
+	n = get_private_profile_string (logSectionName, logFileStr, defaultLog, buffer, len, file);	
 	if (!n) strcpy (buffer, defaultLog);
 }
 
 //________________________________________________________________________
-static void GetAudioDev (char *buffer, int len)
+static void GetAudioDev (char *file, char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (timeSectionName, audiodevStr, kDefaultAudioDev, buffer, len, profileName);	
+	n = get_private_profile_string (timeSectionName, audiodevStr, kDefaultAudioDev, buffer, len, file);	
 	if (!n) strcpy (buffer, kDefaultAudioDev);
 }
 
 //________________________________________________________________________
-static char * GetDrivers (char *buffer, int len)
+static char * GetDrivers (char *file, char *buffer, int len)
 {
 	unsigned long n;
-	n = get_private_profile_string (driverSectionName, activeDriversStr, "", buffer, len, profileName);	
+	n = get_private_profile_string (driverSectionName, activeDriversStr, "", buffer, len, file);	
 	return  n ? buffer : 0;
 }
 

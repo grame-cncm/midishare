@@ -45,9 +45,19 @@ typedef struct {
 	char          audioDev[MaxAudioDevName];
 } msKernelPrefs;
 
+typedef struct {
+	unsigned long memory;
+	int           timeMode;
+	int           timeRes;    // time resolution in ms
+	char *        conffile;
+	char *        logfile;
+} msCmdLinePrefs;
+
+
 //________________________________________________________________________
-msKernelPrefs * ReadPrefs   ();
-void            AdjustPrefs (msKernelPrefs * prefs, int argc, char *argv[]);
+msKernelPrefs * ReadPrefs   (const char * conffile);
+void            ReadArgs    (msCmdLinePrefs * prefs, int argc, char *argv[]);
+void            AdjustPrefs (msKernelPrefs * prefs, msCmdLinePrefs * args);
 char *          DrvName     (msKernelPrefs * prefs, short index);
 void 			LogPrefs    (msKernelPrefs * prefs);
 

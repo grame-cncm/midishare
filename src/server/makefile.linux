@@ -8,8 +8,8 @@ INC = -I../common/Headers -I../osglue -I../lib
 CFLAGS := -O3 -Wall -DMSKernel $(INC)
 CC = gcc
 
-SRC := $(wildcard *.c) 
-OBJ := $(OSOBJ) $(patsubst %.c, %.o, $(SRC)) 
+SRC := $(wildcard *.c) ../lib/profport.c
+OBJ := $(OSOBJ) $(patsubst %.c, %.o, $(SRC))
 DEST = /usr/lib
 
 
