@@ -35,6 +35,7 @@
 #include <Memory.h>
 #include <Packages.h>
 #include <Resources.h>
+#include <Sound.h>
 #include <TextUtils.h>
 #include <ToolUtils.h>
 #include <Types.h>
@@ -42,6 +43,7 @@
 #include "LVAL.h"
 #include "MidiShareMac.h"
 #include "msKernel.h"
+#include "SignatureToApp.h"
 
 pascal unsigned long main (short message, short item, short numItems, short CPanelID,
 					EventRecord *theEvent, unsigned long cdevValue, DialogPtr CPDialog);
@@ -51,22 +53,25 @@ void MidiPrintn (long n);
 /*_______________________________________________________________________*/
 /* constants definition */
 enum {
-	kLVal		= -4048,			/* LVal resource				*/
-	kStrings		= -4064,			/* str#						*/
-	kIcon			= -4064,			/* cicon						*/
+	kLVal		= -4048,			/* LVal resource			*/
+	kStrings		= -4064,		/* str#						*/
+	kIcon			= -4064,		/* cicon					*/
 	kNoMidiShare	= 1
 };
 
 enum {	
-	iIcon		= 1,					/* MidiShare icon				*/
-	iMidiShare,					/* MidiShare title				*/
-	iVersion,						/* Version number				*/
-	iMemory1,					/* static text					*/
-	iMemory2,					/* static text					*/
-	iEvents,						/* Events count				*/
-	iSize,						/* Allocated memory size			*/
-	iMsg							/* bottom message				*/
+	iIcon		= 1,			/* MidiShare icon			*/
+	iMidiShare,					/* MidiShare title			*/
+	iVersion,					/* Version number			*/
+	iMemory1,					/* static text				*/
+	iMemory2,					/* static text				*/
+	iEvents,					/* Events count				*/
+	iSize,						/* Allocated memory size	*/
+	iMsg,						/* bottom message			*/
+	iSetup						/* setup button				*/
 };
+
+#define DriverManagerSign	'SlCt'
 
 #define kDelete		0x08		/* character codes for various keys */
 #define leftArrow	0x1c
@@ -78,15 +83,18 @@ enum {
 /* data structure and type definitions */
 typedef struct {
 	DialogPtr	dlgPtr;	
-	short	dlgItems;
-	long		LVal;					/* desired allocated events		*/
-	long		oldLVal;				/* previous value (for Undo)		*/
-	Boolean	hasIcn;				/* icn, colorQD and sys < 7.0		*/
-	Handle	icn;					/* cicn						*/
+	short		dlgItems;
+	long		LVal;				/* desired allocated events		*/
+	long		oldLVal;			/* previous value (for Undo)	*/
+	Boolean		hasIcn;				/* icn, colorQD and sys < 7.0	*/
+	Handle		icn;				/* cicn							*/
+	short 		state;
 } Storage, * StoragePtr, ** StorageHdle;
-	
-#define Supported(version)	((version) > 170)
 
+enum { kNotInstalled=1, kUnsupportedVersion, kClear, kChangeDisplay }; 	
+#define Supported(version)	((version) >= 180)
+
+static void SetItemText (StorageHdle ourHandle, short item, Str255 text);
 Boolean InitCdev (DialogPtr CPdialog, short numItems, StorageHdle * sto);
 void 	UpdateCdev (StorageHdle ourHandle);
 void 	UpdateSize (StorageHdle ourHandle);
@@ -94,9 +102,10 @@ void 	ValidateChanges (StorageHdle ourHandle);
 void 	DoEditCommand (StorageHdle ourHandle, short message);
 void 	UndoCdev (StorageHdle ourHandle);
 void 	DrawCdevItem (StorageHdle ourHandle, short item);
+void 	LoadDriverManager (StorageHdle ourHandle);
 
 /*_______________________________________________________________________*/
-/*	Main Cdev Function														  */
+/*	Main Cdev Function													 */
 pascal unsigned long main (short message, short item, short numItems, short CPanelID,
 					EventRecord *theEvent, unsigned long cdevValue, DialogPtr CPDialog)
 {
@@ -124,6 +133,8 @@ pascal unsigned long main (short message, short item, short numItems, short CPan
 				break;
 			case hitDev:
 				itemHit = item-numItems;
+				if (itemHit == iSetup)
+					LoadDriverManager (ourStorage);
 				break;
 			case keyEvtDev:
 				theChar = theEvent->message & charCodeMask;
@@ -142,8 +153,14 @@ pascal unsigned long main (short message, short item, short numItems, short CPan
 					DoEditCommand (ourStorage,message);
 				}
 				else if ((theChar==kDelete) || ((theChar>=leftArrow) && (theChar<=downArrow)) ||
-						((theChar>='0') && (theChar<='9')))
+						((theChar>='0') && (theChar<='9'))) {
 					UpdateSize(ourStorage);
+					if ((*ourStorage)->state == kClear) {
+						SetItemText (ourStorage, iMsg, 
+							"\pChanges won't take effect until first MidiOpen.");
+						(*ourStorage)->state = kChangeDisplay;
+					}
+				}
 				else {
 					message = nulDev;
 					theEvent->what = nullEvent;
@@ -215,6 +232,17 @@ static void SetItemText (StorageHdle ourHandle, short item, Str255 text)
 	if (h) SetDialogItemText (h, text);
 }
 
+static void DisableButton (StorageHdle ourHandle, short item)
+{
+	Handle h; short itemType; Rect r;
+	StoragePtr storage = *ourHandle;
+	GetDialogItem (storage->dlgPtr, item, &itemType, &h, &r);
+	if (h) {
+		itemType += 128;
+		SetDialogItem(storage->dlgPtr, item, itemType, h, &r);
+	}
+}
+
 static void SetItemValue (StorageHdle ourHandle, short item, long val)
 {
 	Handle h; Rect r; Str255 str;
@@ -241,7 +269,21 @@ static long GetItemValue (StorageHdle ourHandle, short item)
 }
 
 /*_______________________________________________________________________*/
-/*	changes validation										 				  */
+void LoadDriverManager (StorageHdle ourStorage)
+{
+	if ((*ourStorage)->state >= kClear) {
+		Boolean launched; OSErr err;
+		err = SignatureToApp (DriverManagerSign, 0, 0, &launched, 
+							Sig2App_LaunchApplication, launchContinue);
+		if ((err != noErr) || !launched) {
+			SetItemText (ourStorage, iMsg, "\pMidiShare Drivers Manager not found");
+			SysBeep (30);
+		}
+	}
+}
+
+/*_______________________________________________________________________*/
+/*	changes validation										 			 */
 void ValidateChanges (StorageHdle ourHandle)
 {
 	LVALResHdl  LValRes; LVALResPtr LValPtr;
@@ -385,12 +427,19 @@ void DrawCdevItem (StorageHdle ourHandle, short item)
 				str[str[0]] = str[str[0]-1];
 				str[str[0]-1] = '.';
 				str[0] += 1;
-				if (!Supported(version)) 
+				if (!Supported(version)) {
 					SetItemText (ourHandle, iMsg, "\pUnsupported MidiShare version, changes will be ignored.");
+					storage->state = kUnsupportedVersion;
+				}
+				else storage->state = kClear;
 			}
 			else {
 				GetIndString (str, kStrings, kNoMidiShare);
 				SetItemText (ourHandle, iMsg, "\pPlease drop MidiShare on your system folder and restart.");
+				storage->state = kNotInstalled;
+			}
+			if (storage->state != kClear) {
+				DisableButton (ourHandle, iSetup);
 			}
 			break;
 		case iSize:
