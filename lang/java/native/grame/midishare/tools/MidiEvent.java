@@ -259,35 +259,30 @@ public final class MidiEvent {
 	     
 	  	sb.append(dateToString(Midi.GetDate(event)));
 	    
-	    
 	    while (sb.length() < 16) sb.append(' ');
-	   //	sb.setLength (16);
-	    
+	     
 	    sb.append(Midi.GetPort(event) );
 	    sb.append('/') ;
 	    sb.append(Midi.GetChan(event)+1) ;
 	    
-	   while (sb.length() < 21) sb.append(' ');
-	    //sb.setLength (21);
+	   	while (sb.length() < 21) sb.append(' ');
 	    
 	    int type = Midi.GetType(event);
 	    sb.append(eventType[type]) ;
 	   
 	    while (sb.length() < 34) sb.append(' ');
-	    //sb.setLength (32);
 	     
-	     if ( dataLength[type] == TEXT) {
+	    if ( dataLength[type] == TEXT) {
 	     	String str = Midi.GetText(event);
-	     	 sb.append( str.substring(0, 10)) ;
-	     }else {
+	     	sb.append(str.substring(0, Math.min(str.length(), 10))) ;
+	    }else {
 	        for (int i = 0 ; i < dataLength[type] ; i++) {
 	        	while (sb.length() < (34 +  i * 4)) sb.append(' ');
-	        	//if (i > 0) sb.setLength ((i - 1)*4 + 36);
-		     	 sb.append(Midi.GetField(event,i)) ;
+	        	 sb.append(Midi.GetField(event,i)) ;
 			  }
-	     }
-	  	 return new String(sb);
-}
+	    }
+	  	return new String(sb);
+	}
 
 
  	/**
@@ -1052,7 +1047,7 @@ public static final int valueOf(String s) {
                for (c = 0; c <len;c++) Midi.AddField(e,p[c]);
                if (Midi.CountFields(e) < len ) /* if event smaller than len then*/
                {
-                   Midi.FreeEv(e);        /*     we run out of memory, free it */
+                   Midi.FreeEv(e);   /*     we run out of memory, free it */
                    e = 0;            /*     and return nil */
                }
            }
