@@ -24,6 +24,10 @@
 #include <MacMemory.h>
 #endif
 
+#ifdef __Windows__
+#include <windows.h>
+#endif
+
 #ifdef __Linux__
 
 # ifdef MODVERSIONS
@@ -48,24 +52,39 @@
 /*_________________________________________________________________________*/
 FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
 {
-#ifdef __Macintosh__
+#if defined (__Macintosh__)
 	return NewPtrSys (size);
-#endif
-
-#ifdef __Linux__
+#elif defined (__Linux__)
 	return (void*)malloc(size);
+#elif defined (__Windows__)
+	HLOCAL h = LocalAlloc (LMEM_FIXED, size + sizeof(HLOCAL));
+	if (h) {
+		HLOCAL * ptr = (HLOCAL *)LocalLock (h);
+		if (ptr) {
+			*ptr++ = h;
+			return ptr;
+		}
+	}
+	return 0;
 #endif
 }
 
 /*_________________________________________________________________________*/
 void DisposeMemory  (FarPtr(void) memPtr)
 {
-#ifdef __Macintosh__
+#if defined (__Macintosh__)
 	if (memPtr) DisposePtr ((Ptr)memPtr);
-#endif
-
-#ifdef __Linux__
+#elif defined (__Linux__)
 	if (memPtr) free(memPtr);
+#elif defined (__Windows__)
+	HLOCAL * ptr = (HLOCAL *)memPtr;
+	if (ptr) {
+		HLOCAL h = *--ptr;
+		if (h) {
+			LocalUnlock (h);
+			LocalFree (h);
+		}
+	}
 #endif
 }
 

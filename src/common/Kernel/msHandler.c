@@ -213,7 +213,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 
 			if( (type >= typeQuarterFrame) || (type < typePrivate)) {
 				if( RefNum(ev) & 0x80)	{	        /* refnum is marked			*/
-					RefNum(ev) = refNum;
+					RefNum(ev) = (Byte)refNum;
 					Accept( g, appl, ev);		    /* event is for appl itself */
 				}
 				else {					        	/* standard event received  */

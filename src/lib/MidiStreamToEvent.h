@@ -95,6 +95,9 @@ void 		MidiParseReset(StreamFifoPtr f);
 void 		MidiParseInitMthTbl (ParseMethodTbl tbl);
 void 		MidiParseInitTypeTbl(Status2TypeTbl table);
 
+#ifdef WIN32
+#define inline __inline
+#endif
 static inline MidiEvPtr MidiParseByte (StreamFifoPtr f, Byte c) { return (*f->parse)(f,c); }
 
 #ifdef __cplusplus

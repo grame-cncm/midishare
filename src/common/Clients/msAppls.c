@@ -268,9 +268,9 @@ void closeClient (short ref, TMSGlobalPtr g)
 	RemAllDstCon (appl, FreeList(Memory(g)));
 	MSFlushEvs (ref, clients);
 	MSFlushDTasks (ref, clients);
+	DisposeApplContext (appl->context);
 	FreeAppl (appl);
 	clients->appls[ref] = 0;
-	DisposeApplContext (appl->context);
 }
 
 /*===========================================================================

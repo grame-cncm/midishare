@@ -22,6 +22,10 @@
 
 #include "EventToMidiStream.h"
 
+#ifdef WIN32
+enum { false, true };
+#endif
+
 /*------------------------------------------------------------------------*/
 #define NRPLSB		98		/* non registr. param number (lsb)	*/
 #define NRPMSB		99		/* non registr. param number (msb)	*/
@@ -468,7 +472,7 @@ static void Ctrl14bLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 		f->count= 5;
 	}
 	f->data[5] = ControlChg + Chan(e);
-	f->data[4] = n;
+	f->data[4] = (Byte)n;
 	f->data[3] = v >> 7;
 	f->data[2] = n+32;
 	f->data[1] = v & 0x7F;

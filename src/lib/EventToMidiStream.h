@@ -61,6 +61,9 @@ void MidiStreamReset 		(Ev2StreamPtr f);
 MidiEvPtr 	MidiStreamPutEvent	(Ev2StreamPtr f, MidiEvPtr e);
 Boolean		MidiStreamGetByte	(Ev2StreamPtr f, Byte *code);
 
+#ifdef WIN32
+#define inline __inline
+#endif
 static inline short MidiStreamCountByte (Ev2StreamPtr f) { return f->count;}
 
 #ifdef __cplusplus

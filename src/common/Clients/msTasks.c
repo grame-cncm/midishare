@@ -185,7 +185,7 @@ static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr 
 # endif
 #endif /* __Macintosh__ */
 
-#ifdef __Linux__
+#if defined(__Linux__) || defined(__Windows__)
 static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 {
 	if (*taskPtr == content) {
