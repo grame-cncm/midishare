@@ -141,7 +141,13 @@ void TEventRecorder::Insert(MidiEvPtr e)
 	Date(e) = date_ticks;
 	TrackNum(e) = (unsigned char)fRecordtrack;
 	
-	fScore->InsertBeforeEvent(cur, TEventFactory::GenericCreateEvent(e));
+	// If there is an event at the insertion date, insert after
+	if (date_ticks == fIterator->CurDate()) {
+		fScore->InsertAfterEvent(cur, TEventFactory::GenericCreateEvent(e));
+	// otherwise insert before the next event which date is > date_ticks
+	}else {
+		fScore->InsertBeforeEvent(cur, TEventFactory::GenericCreateEvent(e));
+	}
 }
 
 /*--------------------------------------------------------------------------*/
