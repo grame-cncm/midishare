@@ -20,7 +20,7 @@
 
 */
 
-
+#include <Carbon/Carbon.h>
 #include <QuickTimeMusic.h>
 #include "MidiShare.h"
 #include "msQTDriver.h"

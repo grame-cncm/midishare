@@ -19,7 +19,7 @@
   grame@rd.grame.fr
 
 */
-
+#include <Carbon/Carbon.h>
 
 #include "iiwusynth.h"
 #include "MidiShare.h"
@@ -98,20 +98,20 @@ static void LoadSlot (char * section, char* fullname)
         SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(SynthDriverName),1);
         TSlotInfos infos;
         
-  	if (MidiGetSlotInfos (refNum, &infos)) {
-		char buff[kMaxEntryLen];
-		unsigned long n;
-		n= get_private_profile_string (section, infos.name, "", buff, kMaxEntryLen, fullname);
-          	if (n) {
-			unsigned short i, c = CountCnx (buff);
-			for (i=0; i<c; i++) {
-				short port = GetCnx (buff, i);
-				if (port != CnxError) {
-					MidiConnectSlot (port, refNum, true);
+	  	if (MidiGetSlotInfos (refNum, &infos)) {
+			char buff[kMaxEntryLen];
+			unsigned long n;
+			n= get_private_profile_string (section, infos.name, "", buff, kMaxEntryLen, fullname);
+	          	if (n) {
+				unsigned short i, c = CountCnx (buff);
+				for (i=0; i<c; i++) {
+					short port = GetCnx (buff, i);
+					if (port != CnxError) {
+						MidiConnectSlot (port, refNum, true);
+					}
 				}
 			}
 		}
-	}
 }
 //________________________________________________________________________
 static void SaveSlot (char * section, char* fullname)
