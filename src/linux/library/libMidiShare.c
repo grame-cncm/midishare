@@ -934,6 +934,7 @@ MidiEvPtr MidiTask   (TaskPtr routine, long date, short ref, long a1,long a2,lon
 		args.refnum = ref;
 		args.utask = ev;
 		CALL (kMidiTask, &args);
+		MSFreeEv(ev, FreeList(Memory(gClients)));
 		return args.ktask;
 	}else
 		return 0;	
@@ -963,6 +964,7 @@ MidiEvPtr MidiDTask   (TaskPtr routine, long date, short ref, long a1,long a2,lo
 		args.refnum = ref;
 		args.utask = ev;
 		CALL (kMidiDTask, &args);
+		MSFreeEv(ev, FreeList(Memory(gClients)));
 		return args.ktask;
 	}else
 		return 0;
@@ -981,7 +983,6 @@ void  MidiForgetTask  (MidiEvPtr *taskptr)
 		args.utask = 0;
 		args.taskptr = taskptr;
 		CALL(kMidiForgetTask,&args);
-		MSFreeEv(args.utask, FreeList(Memory(gClients)));
 	}
 }
 

@@ -282,6 +282,23 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 
 /*__________________________________________________________________________*/
 
+MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g)
+{
+	if( CheckRefNum( g, refNum)) {
+		TApplPtr appl = g->appls[refNum]; 
+		LinuxContextPtr context = (LinuxContextPtr)appl->context;
+		
+		if (fifosize(&context->commands) == 0){
+			context->wakeFlag = false;
+			interruptible_sleep_on(&context->commandsQueue);
+		} 
+		return (MidiEvPtr)fifoavail(&context->commands);
+	}
+	return 0; 
+}
+
+/*__________________________________________________________________________*/
+
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {

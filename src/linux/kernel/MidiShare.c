@@ -42,6 +42,7 @@
 
 //_________________________________________________________
 void CallQuitAction (TApplContextPtr context);
+MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetCommand (short refNum, TClientsPtr g);
 MidiEvPtr MSGetDTask (short refNum, TClientsPtr g);
 
@@ -364,8 +365,7 @@ static void InitStructTbl();
 #define kSmallStruct 	1
 #define kPrivateStruct 	2
 #define kSexStruct 	3
-#define kProcessStruct  4
-#define kDeadStruct  	5
+#define kDeadStruct  	4
 
 static MidiEvPtr ev_from_user( MidiEvPtr ue, TMSGlobalPtr g);
 static MidiEvPtr cell_from_user (MidiEvPtr uc, TMSGlobalPtr g);
@@ -385,9 +385,8 @@ void InitStructTbl()
   for (i=typeReserved;i<=typeLastReserved;i++) 	gEvStruct[i]= kUndefStruct;
   gEvStruct[typeQuarterFrame] = kSmallStruct;
   gEvStruct[typeSpecific]     = kSexStruct;
-  gEvStruct[typeProcess]    = kProcessStruct;
-  gEvStruct[typeDProcess]   = kProcessStruct;
-  
+  gEvStruct[typeProcess]    = kPrivateStruct;
+  gEvStruct[typeDProcess]   = kPrivateStruct;
   gEvStruct[typeDead]       = kDeadStruct;
 }
 
@@ -453,7 +452,6 @@ static void setUserLink(MidiEvPtr ue, MidiEvPtr l)
 	copy_to_user(&ue->link, &l, sizeof(MidiEvPtr));
 }
 
-
 /*__________________________________________________________________________________*/
 
 static int mskGetEvAux(MidiEvPtr ke, TMidiGetEvArgs* arg, TMidiGetEvArgs* userptr)
@@ -481,12 +479,6 @@ static int mskGetEvAux(MidiEvPtr ke, TMidiGetEvArgs* arg, TMidiGetEvArgs* userpt
 			}
 		  	copy_to_user(userptr, arg, sizeof(TMidiGetEvArgs));
 		  	return res;
-			
-		case kProcessStruct :
-			arg->e = (MidiEvPtr)ke->info.linkST; /* restore the extension (a pointer to a user event) */
-			copy_to_user(userptr, arg, sizeof(TMidiGetEvArgs));
-			(MidiEvPtr)ke->info.linkST = 0;
-			return res;
 		
 		case kDeadStruct :
 			//prnt("GET kDeadStruct ");
@@ -567,22 +559,26 @@ int mskGetCommand(unsigned long userptr)
 {
 	TMidiGetEvArgs 	arg;
 	MidiEvPtr ev;
+	int res;
 	
 	if (copy_from_user(&arg, (TMidiGetEvArgs* )userptr, sizeof(TMidiGetEvArgs))) return -EFAULT;
 	
 	/* check that the event is not a forgeted task */
 	
-	while ((ev = MSGetCommand(arg.r, Clients(gMem))) && (EvType(ev) == typeDead)) {
+	while ((ev = MSAvailCommand(arg.r, Clients(gMem))) && (EvType(ev) == typeDead)) {
+		MSFreeEv(MSGetCommand(arg.r, Clients(gMem)),FreeList(Memory(gMem)));
+	}
+	/* MSAvailCommand blocks if no event is available and always returns an event  */
+	
+	res = mskGetEvAux(ev, &arg, (TMidiGetEvArgs*)userptr);
+	
+	if (res == 0) { /* successfull copy */
+		ev = MSGetCommand(arg.r, Clients(gMem));  /* get the event from the fifo and free it */
 		MSFreeEv(ev,FreeList(Memory(gMem)));
 	}
 	
-	mskGetEvAux(ev, &arg, (TMidiGetEvArgs* )userptr);
-		
-	MSFreeEv(ev,FreeList(Memory(gMem)));
-	
 	return 0;
 }
-
 
 /* A REVOIR */
 /*__________________________________________________________________________________*/
@@ -597,7 +593,6 @@ int mskAvailEv (unsigned long userptr)
 	
 	return 0;
 }
-
 
 /*__________________________________________________________________________________*/
 
@@ -623,10 +618,6 @@ static MidiEvPtr ev_from_user (MidiEvPtr ue, TMSGlobalPtr g)
 		switch (gEvStruct[ke->evType]) {
 				
 			case kSmallStruct :
-				return ke;
-				
-			case kProcessStruct :
-				(MidiEvPtr)ke->info.linkST = ue; /* keeps the user event in the extension cell */
 				return ke;
 		
 			case kPrivateStruct :
@@ -657,7 +648,6 @@ static MidiEvPtr ev_from_user (MidiEvPtr ue, TMSGlobalPtr g)
 	}
 	return 0;
 }
-
 
 /*__________________________________________________________________________________*/
 
@@ -714,11 +704,7 @@ int mskForgetTask (unsigned long userptr){
 	
 	if (ktask && ((EvType(ktask) == typeProcess) || (EvType(ktask) == typeDProcess)))
 	 {
-      		/* clean the usertask pointer */
-		
-		EvType(ktask) = typeDead;
-		args.utask = (MidiEvPtr)LinkST(ktask);
-		LinkST(ktask) = 0;
+     		EvType(ktask) = typeDead;
 		*args.taskptr = 0;
 	}
 	

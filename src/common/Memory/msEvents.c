@@ -27,7 +27,7 @@
 #include "msEvents.h"
 
 #define Debug(s)
-#define defaultTime			0
+#define defaultTime		0
 
 /*__________________________________________________________________________*/
 #define kCountFieldsError	0
@@ -50,61 +50,61 @@ typedef void      (*AddFieldMethodPtr)   (lifo* freelist, MidiEvPtr ev, long v);
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static void 	InitNewEvMth		( NewEvMethodPtr * table);
-static void 	InitFreeEvMth		( FreeEvMethodPtr * table);
-static void 	InitCopyEvMth		( CopyEvMethodPtr * table);
+static void 	InitNewEvMth	( NewEvMethodPtr * table);
+static void 	InitFreeEvMth	( FreeEvMethodPtr * table);
+static void 	InitCopyEvMth	( CopyEvMethodPtr * table);
 static void 	InitCountFieldsMth	( CountFieldsMethodPtr * table);
-static void 	InitSetFieldMth		( SetFieldMethodPtr * table);
-static void 	InitGetFieldMth		( GetFieldMethodPtr * table);
-static void 	InitAddFieldMth		( AddFieldMethodPtr * table);
+static void 	InitSetFieldMth	( SetFieldMethodPtr * table);
+static void 	InitGetFieldMth	( GetFieldMethodPtr * table);
+static void 	InitAddFieldMth	( AddFieldMethodPtr * table);
 
-static MidiEvPtr NewUndefEv		( lifo* freelist, short typeNum);
-static MidiEvPtr NewSmallEv		( lifo* freelist, short typeNum);
-static MidiEvPtr NewSexEv		( lifo* freelist, short typeNum);
+static MidiEvPtr NewUndefEv	( lifo* freelist, short typeNum);
+static MidiEvPtr NewSmallEv	( lifo* freelist, short typeNum);
+static MidiEvPtr NewSexEv	( lifo* freelist, short typeNum);
 static MidiEvPtr NewPrivateEv	( lifo* freelist, short typeNum);
 
-static void 	FreeUndefEv	    ( lifo* freelist, MidiEvPtr e);
-static void 	FreeSmallEv		( lifo* freelist, MidiEvPtr e);
-static void 	FreeSexEv		( lifo* freelist, MidiEvPtr e);
+static void 	FreeUndefEv	( lifo* freelist, MidiEvPtr e);
+static void 	FreeSmallEv	( lifo* freelist, MidiEvPtr e);
+static void 	FreeSexEv	( lifo* freelist, MidiEvPtr e);
 static void 	FreePrivateEv	( lifo* freelist, MidiEvPtr e);
 
 static MidiEvPtr CopyUndefEv	( lifo* freelist, MidiEvPtr ev);
 static MidiEvPtr CopySmallEv	( lifo* freelist, MidiEvPtr ev);
 static MidiEvPtr CopyPrivateEv	( lifo* freelist, MidiEvPtr ev);
-static MidiEvPtr CopySexEv		( lifo* freelist, MidiEvPtr ev);
+static MidiEvPtr CopySexEv	( lifo* freelist, MidiEvPtr ev);
 
-static void	SetFUndefEv		( MidiEvPtr e, unsigned long f, long v);
-static void	SetFSmallEv		( MidiEvPtr e, unsigned long f, long v);
-static void	SetF2_16Ev		( MidiEvPtr e, unsigned long f, long v);
-static void	SetFTempo		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFUndefEv	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSmallEv	( MidiEvPtr e, unsigned long f, long v);
+static void	SetF2_16Ev	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFTempo	( MidiEvPtr e, unsigned long f, long v);
 static void	SetFSMPTEOffset	( MidiEvPtr e, unsigned long f, long v);
 static void	SetFTimeSign	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFKeySign		( MidiEvPtr e, unsigned long f, long v);
-static void	SetFSexEv		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFKeySign	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSexEv	( MidiEvPtr e, unsigned long f, long v);
 static void	SetFPrivateEv	( MidiEvPtr e, unsigned long f, long v);
 
-static long	GetFUndefEv		( MidiEvPtr e, unsigned long f);
-static long	GetFSmallEv		( MidiEvPtr e, unsigned long f);
-static long	GetFSexEv		( MidiEvPtr e, unsigned long f);
+static long	GetFUndefEv	( MidiEvPtr e, unsigned long f);
+static long	GetFSmallEv	( MidiEvPtr e, unsigned long f);
+static long	GetFSexEv	( MidiEvPtr e, unsigned long f);
 static long	GetFPrivateEv	( MidiEvPtr e, unsigned long f);
-static long	GetF2_16Ev		( MidiEvPtr e, unsigned long f);
-static long	GetFTempo		( MidiEvPtr e, unsigned long f);
+static long	GetF2_16Ev	( MidiEvPtr e, unsigned long f);
+static long	GetFTempo	( MidiEvPtr e, unsigned long f);
 static long	GetFSMPTEOffset	( MidiEvPtr e, unsigned long f);
 static long	GetFTimeSign	( MidiEvPtr e, unsigned long f);
-static long	GetFKeySign		( MidiEvPtr e, unsigned long f);
+static long	GetFKeySign	( MidiEvPtr e, unsigned long f);
 
 static long	CountFUndefEv	( MidiEvPtr e);
-static long	Count0Field		( MidiEvPtr e);
-static long	Count1Field		( MidiEvPtr e);
+static long	Count0Field	( MidiEvPtr e);
+static long	Count1Field	( MidiEvPtr e);
 static long	Count2Fields	( MidiEvPtr e);
 static long	Count3Fields	( MidiEvPtr e);
 static long	Count4Fields	( MidiEvPtr e);
 static long	Count6Fields	( MidiEvPtr e);
-static long	CountFSexEv		( MidiEvPtr e);
+static long	CountFSexEv	( MidiEvPtr e);
 
-static void	AddFUndefEv		( lifo* freelist, MidiEvPtr e, long v);
-static void	AddNoField		( lifo* freelist, MidiEvPtr e, long v);
-static void	AddFSexEv		( lifo* freelist, MidiEvPtr e, long v);
+static void	AddFUndefEv	( lifo* freelist, MidiEvPtr e, long v);
+static void	AddNoField	( lifo* freelist, MidiEvPtr e, long v);
+static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
 
 /* data storage */
@@ -220,23 +220,12 @@ void InitEvents ()
 	#endif
 }
 
-#ifdef __Macintosh__
-#	define NewProcessEv		NewPrivateEv
-#	define FreeProcessEv	FreePrivateEv
-#	define CopyProcessEv	CopyPrivateEv
-#	define CountFProcessEv	Count4Fields
-#	define SetFProcessEv	SetFPrivateEv
-#	define GetFProcessEv	GetFPrivateEv
-#endif
-
-#ifdef __Linux__
-#	define NewProcessEv		NewSmallEv
-#	define FreeProcessEv	FreeSmallEv
-#	define CopyProcessEv	CopySmallEv
-#	define CountFProcessEv	CountFUndefEv
-#	define SetFProcessEv	SetFUndefEv
-#	define GetFProcessEv	GetFUndefEv
-#endif
+#define NewProcessEv	NewPrivateEv
+#define FreeProcessEv	FreePrivateEv
+#define CopyProcessEv	CopyPrivateEv
+#define CountFProcessEv	Count4Fields
+#define SetFProcessEv	SetFPrivateEv
+#define GetFProcessEv	GetFPrivateEv
 
 /*===========================================================================
   Internal functions implementation
