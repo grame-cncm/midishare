@@ -55,11 +55,13 @@ TPlayer::TPlayer():fFactory(this)
 
 /*--------------------------------------------------------------------------*/
 
-TPlayer::~TPlayer()
-{
-	fFactory.DestroyPlayer(&fPlayer);
-	TMidiAppl::Close();
-}
+/*
+Destructor for fScore must be called before the MidiShare client is closed, otherwise
+the MidiShare memory mamaner is not more available. TMidiAppl::Close() will be lastly 
+called by the TMidiAppl destructor.
+*/
+
+TPlayer::~TPlayer() {fFactory.DestroyPlayer(&fPlayer);}
 
 /*--------------------------------------------------------------------------*/
 // Open/Close
@@ -124,8 +126,8 @@ void TPlayer::SetPosMs (long date_ms) {fPlayer->SetPosMs(date_ms);}
 // Tracks management
 /*--------------------------------------------------------------------------*/
 
- MidiSeqPtr TPlayer::GetAllTrack ()	{ return (fRunningState.IsIdle()) ? fScore.GetAllTrack(): 0;}
- MidiSeqPtr TPlayer::GetTrack (short tracknum) { return (fRunningState.IsIdle()) ? fScore.GetTrack(tracknum): 0;}
+ MidiSeqPtr TPlayer::GetAllTrack () {return (fRunningState.IsIdle()) ? fScore.GetAllTrack(): 0;}
+ MidiSeqPtr TPlayer::GetTrack (short tracknum) {return (fRunningState.IsIdle()) ? fScore.GetTrack(tracknum): 0;}
 
  /*--------------------------------------------------------------------------*/
 
@@ -227,7 +229,7 @@ void TPlayer::SetParam (short tracknum, short p, short v)
 
 /*--------------------------------------------------------------------------*/
 
- short TPlayer::GetParam (short tracknum, short p)	{return fTrackTable.GetParam (tracknum, p);}
+ short TPlayer::GetParam (short tracknum, short p) {return fTrackTable.GetParam (tracknum, p);}
 
 /*--------------------------------------------------------------------------*/
 // Synchronisation management
@@ -235,7 +237,7 @@ void TPlayer::SetParam (short tracknum, short p, short v)
 
 void TPlayer::SetSynchroIn (short state) 
 { 
-	if (fRunningState.IsIdle() && (state>= 0 ) && (state < kMaxSyncIn)) {
+	if (fRunningState.IsIdle() && (state>= 0) && (state < kMaxSyncIn)) {
 		fSyncIn = state;
 
 		TPlayerMemento memento;
@@ -252,7 +254,7 @@ void TPlayer::SetSynchroIn (short state)
 
   void TPlayer::SetSynchroOut (short state)
  {
- 	if(fRunningState.IsIdle() && (state>= 0 ) && (state < kMaxSyncOut)) {
+ 	if(fRunningState.IsIdle() && (state>= 0) && (state < kMaxSyncOut)) {
  		fSyncOut = state;
   
    		TPlayerMemento memento;
@@ -267,11 +269,11 @@ void TPlayer::SetSynchroIn (short state)
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetSMPTEOffset (SmpteLocPtr smptepos) { fSmpteInfos.SetSMPTEOffset(smptepos); }
+ void TPlayer::SetSMPTEOffset (SmpteLocPtr smptepos) {fSmpteInfos.SetSMPTEOffset(smptepos);}
  
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetTempo(long tempo){fPlayer->SetTempo(tempo);}
+ void TPlayer::SetTempo(long tempo) {fPlayer->SetTempo(tempo);}
  
 /*--------------------------------------------------------------------------*/
 // Step playing
@@ -331,11 +333,11 @@ long TPlayer::SetLoopEndBBU (PosPtr pos)
 
 /*--------------------------------------------------------------------------*/
 
-long TPlayer::SetLoopStartMs(long date_ms){ return fLoopManager->SetLoopStartMs(date_ms);}
+long TPlayer::SetLoopStartMs(long date_ms) {return fLoopManager->SetLoopStartMs(date_ms);}
  
 /*--------------------------------------------------------------------------*/
 
-long TPlayer::SetLoopEndMs(long date_ms){ return fLoopManager->SetLoopEndMs(date_ms);}
+long TPlayer::SetLoopEndMs(long date_ms) {return fLoopManager->SetLoopEndMs(date_ms);}
 	
 	
 /*--------------------------------------------------------------------------*/
@@ -346,16 +348,16 @@ void TPlayer::SetRecordMode (short state)
 {  
 	if(fRunningState.IsRunning()){
 		fPlayer->Stop();
- 		fEventReceiver->SetRecordMode (state);
+ 		fEventReceiver->SetRecordMode(state);
  		fPlayer->Cont();
  	}else{
- 		fEventReceiver->SetRecordMode (state);
+ 		fEventReceiver->SetRecordMode(state);
  	}
 }
 
 /*--------------------------------------------------------------------------*/
 
- void TPlayer::SetRecordFilter(MidiFilterPtr filter) { fEventReceiver->SetRecordFilter(filter); }
+ void TPlayer::SetRecordFilter(MidiFilterPtr filter) {fEventReceiver->SetRecordFilter(filter);}
  
 /*--------------------------------------------------------------------------*/
 
