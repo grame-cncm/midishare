@@ -179,12 +179,10 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TMSGlobalPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TMSGlobalPtr g)
 {
-	if (CheckGlobRefNum(g,ref)) {
-		MidiEvPtr e = MSNewEv (typeMidiSetInfo, &g->memory.freeList);
-		if (e) {
-			Date(e) = g->pub->time;
-			MSSendSync (ref, e, g);
-		}
+	MidiEvPtr e = MSNewEv (typeMidiSetInfo, &g->memory.freeList);
+	if (e) {
+		Date(e) = g->pub->time;
+		MSSendSync (ref, e, g);
 	}
 }
 
@@ -448,6 +446,8 @@ void closeClient (short ref, TMSGlobalPtr g)
 	FreeAppl (appl);
 }
 
+#endif /* MSKernel */
+
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
@@ -466,8 +466,6 @@ void setName (MidiName dst, MidiName name)
 	*dst = 0;
 #endif
 }
-
-#endif /* MSKernel */
 
 static Boolean equalApplName (TApplPublicPtr ap, MidiName name)
 {
