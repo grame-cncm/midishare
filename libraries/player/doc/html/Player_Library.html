@@ -1,0 +1,183 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Player Library 2.0</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<P><CENTER><TABLE WIDTH="245" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <H1><CENTER><FONT COLOR="#0000ff">&nbsp;Player Library 2.0</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></P>
+
+<P><CENTER><HR></CENTER></P>
+
+<H2><CENTER>Introduction</CENTER></H2>
+
+<P>The <B>Player library</B> is provided to allow the development
+of a complete multi-tracks MidiShare sequencer. Each Player is
+a MidiShare application, has up to 256 tracks, four different
+synchronization mode, events chase and loop markers. Sequences
+in MidiShare format can be set in the Player. Functions are provided
+to read on write MIDIfiles and convert them to the MidiShare sequence
+format. This library was first developed to be used in the Symbolic
+Composer music composition environment. It has been continually
+refined over 3 years in order to provide a stable and general
+API. The Player library 2.0 has been completely rewritten, to
+make the source code publicly available. This library is currently
+used in different applications : <B><A HREF="http://www.grame.fr/Elody/">Elody</A></B>
+(Grame), <B><A HREF="http://www.ircam.fr/produits/logiciels/log-forum/patchwork-e.html">PatchWork</A></B>
+and <B><A HREF="http://www.ircam.fr/produits/logiciels/log-forum/openmusic-e.html">OpenMusic</A></B>
+(IRCAM), <B><A HREF="http://symcom.hypermart.net/">Symbolic Composer</A></B>
+(Peter Stone), <B>Java Applets Japer </B>and<B> Pann</B> (<A 
+HREF="http://www.speech.kth.se/~roberto/home.html">Roberto Bresin</A>),
+<B><A HREF="http://www.visualpiano.com/">Visual Piano</A> </B>(Smart
+Concept) and <B><A HREF="http://www.grame.fr/MidiShare/Using/Softs/Prie/Prie.html">Prie</A></B>
+(Alfio Fazio)</P>
+
+<P><BR>
+<HR ALIGN=LEFT></P>
+
+<H2><CENTER>Source code</CENTER></H2>
+
+<P>The Player library source code is released as a set of C++
+classes and C code distributed under the <B>Artistic Licence.</B>
+It is organized as separate components which could be reused is
+other context. The code uses a lot of <B>Design Patterns</B> from
+the catalog defined by Gamma [Gam94] as well as the interface
+concept from the Java language.</P>
+
+<P><HR ALIGN=LEFT></P>
+
+<H2><CENTER>General overview</CENTER></H2>
+
+<H2><CENTER><TABLE WIDTH="450" BORDER="1" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%"><IMG SRC="images/image0.gif" WIDTH="539" HEIGHT="249"
+      ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></H2>
+
+<H2><CENTER>&nbsp;</CENTER></H2>
+
+<UL>
+  <LI>The synchronizer and scheduler provide the musical time for
+  the system. The synchronizer supports 3 modes of synchronization.
+  <LI>The tickplayer plays the score using the tick scheduler to
+  schedule tasks.
+  <LI>The chaser keeps internally the whole state of program change,
+  volume, pan or other controller information which are inserted
+  in the tracks and send these events when needed.
+  <LI>The score contains events to be played.
+  <LI>The event sender is in charge of sending events delivered
+  by the ticks player or the chaser.
+  <LI>The event receiver handles incoming events, which can be
+  synchronization events, events to be recorded , special events
+  (markers..)
+  <LI>The tracktable contains various state information associated
+  with each track.
+  <LI>The loopmanager is in charge of the loop management.
+</UL>
+
+<P><HR ALIGN=LEFT></P>
+
+<H2><CENTER>Components</CENTER></H2>
+
+<P>The different components are implemented as<B> patterns of
+C++ classes </B>using several patterns described in Gamma [Gam94].
+The whole Player is built by combining several components which
+are described in the following pages using the <B>OMT</B> (Object
+Modeling Technique) notation :</P>
+
+<P>&nbsp;</P>
+
+<UL>
+  <LI><A HREF="Time_Model.html">Musical Time Model</A>
+  <LI><A HREF="Synchroniser.html">Synchronization/Scheduling</A>
+  <LI><A HREF="Players1.html">Synchronizable Players</A>
+  <LI><A HREF="Players2.html">Generic Players</A>
+  <LI><A HREF="Event_Receiving.html">Events Receivers</A>
+  <LI><A HREF="Event_Sending.html">Events Senders</A>
+  <LI><A HREF="Score.html">Score management</A>
+  <LI><A HREF="Loop.html">Loop management</A>
+  <LI><A HREF="Tracks.html">Tracks management</A>
+  <LI><A HREF="Chase.html">Chase management</A>
+  <LI><A HREF="MIDIFile.html">MIDIFile management</A>
+  <LI><A HREF="Factory.html">Object Factory</A>
+</UL>
+
+<P><HR ALIGN=LEFT></P>
+
+<H2><CENTER>State diagrams</CENTER></H2>
+
+<P>Several components have a notion of state :<BR>
+</P>
+
+<UL>
+  <LI>The Player can have one of the following state : <B>kIdle</B>,
+  <B>kPlaying</B>, <B>kPause</B>, <B>kRecording</B>, <B>kWaiting</B>.
+  This state will change each time one of the transport function
+  like <B>Start</B>, <B>Stop</B>, <B>Pause</B>.. is used. There
+  are two state diagrams depending of the synchronization mode
+  : <A HREF="Player_State1.html">Player state diagram1</A>, <A
+  HREF="Player_State2.html">Player state diagram2.</A>
+  <LI>The Scheduler (<B>TScheduler</B> class) allows to schedule
+  <B>tick Tasks</B> which dates are expressed in tick values. Tick
+  Tasks state evolution is explained in the the <A HREF="Task_State.html">following
+  state diagram</A>.
+</UL>
+
+<P><HR ALIGN=LEFT></P>
+
+<H2><CENTER>Classes hierarchy diagrams</CENTER></H2>
+
+<P>Here are several diagrams representing the classes hierarchy
+: <A HREF="images/PClass1.gif">diagram1,</A> <A HREF="images/PClass2.gif">diagram2,
+</A><A HREF="images/PClass3.gif">diagram3,</A> and <A HREF="images/PClass4.gif">diagram4.</A></P>
+
+<P><HR ALIGN=LEFT></P>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<H2><CENTER>Limitations and improvements</CENTER></H2>
+
+<P><CENTER><B>1)</B> Tempo events are not inserted in the score
+when the player is recording in clock or external synchronization
+mode.</CENTER></P>
+
+<P><CENTER><B>2) </B>Some of the classes can easily be re-used,
+although the whole library is probably to &quot;sequencer oriented&quot;,
+and could be generalized. One possible improvement is to detach
+the whole player lib from the &quot;score concept&quot; which
+basically suppose that events to be played are contained in a
+score data structure. It means that some classes are not general
+enough. A more general concept could be a &quot;event producer
+&quot; mechanism able to produce events to be played coming either
+from a pre-calculated data structure (like the score) or from
+a more dynamic generation principle.</CENTER></P>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<P><HR ALIGN=LEFT></P>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<H3><CENTER><FONT COLOR="#0000ff">References<BR>
+</FONT></CENTER></H3>
+
+<UL>
+  <LI><CENTER><B>[Gam94]</B> Erich Gamma, Richard Helm, Ralph Johnson,
+  John Vlissides; Design Patterns: Elements of Reusable Object-Oriented
+  Software, Addison-Wesley, 1994.</CENTER>
+  <LI><CENTER><B>[Str97] </B>Bjarne Stroustrup; The C++ Programming
+  Language, 3rd Edition, Addison-Wesley Publishing Company, 1997.
+<BR>
+  </CENTER>
+</UL>
+
+</BODY>
+</HTML>

@@ -1,0 +1,57 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Score management</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="255" HEIGHT="44" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%" HEIGHT="28">
+      <H1><CENTER><FONT COLOR="#0000ff">Score management</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<H1><CENTER><HR></CENTER></H1>
+
+<P>The internal score is a doubled linked list of events allocated
+using the MidiShare memory manager. The events used in the score
+are not basic MidiShare events but use a more complex data structure
+(TEvent) which allows to keep additional datas. All tracks are
+mixed in a unique score but are distinguished by the reference
+number of their events. The Tempo Map has always the reference
+number 0. Events in the score are instances of sub-classes of
+the <B>TEvent</B> class<B>.<BR>
+</B></P>
+
+<UL>
+  <LI><B>TScore</B>: the base score class, a doubled linked list
+  of <B>TEvent</B> objects.
+  <LI><B>TPlayerScore</B>: add additional behavior to the base
+  <B>TScore</B> class.
+  <LI><B>TScoreVisitor </B>: a generic score visitor.
+  <LI><B>TScoreIterator</B> : a generic robust score iterator :
+  robust means that events can be added/removed in the score even
+  when iterators are placed on the score.
+  <LI><B>TScoreFollower</B> : a class which combines a score tempo
+  visitor and a score iterator, in several format: BBU, ticks,
+  millisecond.
+  <LI><B>UScoreManager</B> : utility class : iterates a function
+  on events in the score.
+  <LI><B>TScoreInserter </B>: utility class to insert buffer of
+  events in the score.
+</UL>
+
+<P>Dates are expressed as relatives values in the MIDIFile. In
+the internal score, dates are converted in absolute values starting
+from the beginning of the score. The <B>tickplayer</B> plays the
+score using tasks where dates are expressed in ticks values. Tasks
+are scheduled using the <B>SheduleTickTask</B> method of the scheduler
+. Tasks are executed using the <B>Execute</B> method. The <B>tickplayer</B>
+use a object which implement the <B>TEventSenderInterface</B>
+to actually play events.
+
+</BODY>
+</HTML>

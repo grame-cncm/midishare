@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 2.0 Mac">
+  <TITLE>Chase management</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1 ALIGN=CENTER><TABLE WIDTH="261" HEIGHT="44" BORDER="1" CELLSPACING=
+"2" CELLPADDING="0">
+<TR>
+<TD WIDTH="100%" HEIGHT="28"><H1 ALIGN=CENTER><FONT COLOR="#0000FF">Chase management</FONT></H1>
+</TD></TR>
+</TABLE>
+</H1>
+
+<H1 ALIGN=CENTER><HR></H1>
+
+<P>Chase Events makes sure that a Player is playing the correct patch regardless
+of the position in which the track was started. To do that, the Player keeps
+internally the whole state of program change, volume, pan or other controller
+information which are inserted in the tracks. This state in automatically
+updated when the Player moves in both directions. Chase Events can then
+re-send MIDI events that occurred previously in the tracks.The following
+types of events are chased: program change, controller (volumes, sustain..),
+pitch-bend, channel pressure, key pressure and tune.The chase management
+system is built using the following elements :</P>
+
+<P><BR>
+</P>
+
+<UL>
+  <LI><B>THashTable</B> : hashtable used to keep events during chase.
+  <LI><B>TEventTable</B> : array of hashtable to memorize various types of
+  events: keyOff, controllers, program change..
+  <LI><B>TChaserVisitor</B> : a score visitor, which uses a <B>TEventTable</B>
+  object to keep events to chase.
+  <LI><B>TChaserIterator</B> : a score iterator able to send chase events
+  when needed.
+</UL>
+</BODY>
+</HTML>

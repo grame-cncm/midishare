@@ -1,0 +1,61 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Synchronization &amp; Scheduling</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="409" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <H1><CENTER><FONT COLOR="#0000ff">Synchronization &amp; Scheduling</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<P><CENTER><TABLE WIDTH="320" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <P><CENTER><IMG SRC="images/image6.gif" WIDTH="515" HEIGHT="279"
+      ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="0"></CENTER></TD>
+  </TR>
+</TABLE></CENTER></P>
+
+<P>The heart of the <B>synchronization </B>and<B> scheduling</B>
+system is built using two components : a <B>scheduler</B> and
+a <B>synchronizer</B>.</P>
+
+<P>The <B>scheduler</B> allows to schedule tasks which dates are
+expressed in ticks units. It interacts with the <B>synchronizer</B>
+component which provides ticks to real-time conversion functions.
+The <B>scheduler</B> interacts with the <B>synchronizer</B> to
+check if tasks can be scheduled and to convert dates expressed
+in ticks values in dates in millisecond. The <B>synchronizer</B>
+maintains the current tempo and converts dates for the <B>scheduler</B>.
+When the tempo change the synchronizer forces the <B>scheduler</B>
+to reschedule pending tasks. Several kind of synchronizer are
+available :<BR>
+</P>
+
+<UL>
+  <LI><B>TPlayerSynchroniserInt</B> : internal synchronizer, tempo
+  is read in the score.
+  <LI><B>TPlayerSynchroniserClock</B> : clock synchronizer, tempo
+  is calculated from the incoming clocks events.
+  <LI><B>TPlayerSynchroniserExt</B> : external synchronizer, tempo
+  can be changed when incoming tempo events are received or using
+  a <B>SetTempo</B> function.
+</UL>
+
+<P>The <B>scheduler</B> maintains a list of tasks to be scheduled
+and use the MidiShare normal task scheduling mechanism. There
+is no time sorting algorithm implemented in the current ticks
+scheduler, so this model may not be efficient enough for a general
+tick scheduling mechanism. It's sufficient for a sequencer because
+only a few number of tasks will be inserted at the same time in
+the scheduler.
+
+</BODY>
+</HTML>

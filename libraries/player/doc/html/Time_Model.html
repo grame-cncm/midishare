@@ -1,0 +1,57 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Musical Time Model</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="280" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <H1><CENTER><FONT COLOR="#0000ff">Musical Time Model</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<P><CENTER><TABLE WIDTH="364" BORDER="1" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <P><CENTER><IMG SRC="images/image5.gif" ALIGN="BOTTOM" BORDER="0"
+      WIDTH="364" HEIGHT="254" NATURALSIZEFLAG="3"></CENTER></TD>
+  </TR>
+</TABLE></CENTER></P>
+
+<P><CENTER>&nbsp;</CENTER></P>
+
+<P>The MidiShare time model is based on a continuous model of
+millisecond <B>real-time</B>. Although this basic model is suitable
+for a lot of applications like real-time Midi treatments, it is
+not well suited with a sequencer model. Sequencers usually use
+a <B>musical time model </B>where dates in the score are expressed
+in ticks values to be converted in real-time using a tempo information.
+The Player library contains a musical time component used to convert
+between the different notion of time: time in Bar, Beat, Unit,
+time in ticks, and time in millisecond.</P>
+
+<P><CENTER><B>BBU &lt;====&gt; TimeSign &lt;====&gt; Ticks &lt;====&gt;
+Tempo &lt;===&gt; Millisecond</B></CENTER></P>
+
+<P>Several classes are provided to deal with time conversion :<BR>
+</P>
+
+<UL>
+  <LI><B>TTime </B>and<B> TTimeConverter </B>: to manage time expressed
+  in BBU, define a data structure to manage BBU position and provides
+  conversion functions between BBU and ticks representation. A
+  limited algebra is provided to add and subtract dates in BBU.
+  <LI><B>TTempoConverter</B> : to manage time expressed in millisecond,
+  provides conversion functions between millisecond and ticks representation.
+  <LI><B>TTempoMap : </B>a component which composes a <B>TTimeConverter</B>
+  and a<B> TTempoConverter.</B>
+  <LI><B>TTempoMapVisitor</B> : a component which inherits from
+  <B>TScoreVisitor </B>and <B>TTempoMap.</B>
+</UL>
+
+</BODY>
+</HTML>

@@ -1,0 +1,44 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Synchronizable Players</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="312" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <H1><CENTER><FONT COLOR="#0000ff">Synchronizable Players</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<H1><CENTER><TABLE WIDTH="312" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <P><CENTER><IMG SRC="images/image3.gif" WIDTH="365" HEIGHT="415"
+      ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="0"></CENTER></TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<P>There are several classes of players which implement the same
+<B>TPlayerInterface.<BR>
+</B></P>
+
+<UL>
+  <LI><B>TSyncInPlayer</B> : a synchronizable player, composed
+  with a <B>tickplayer</B>, a <B>scheduler</B>, a <B>synchronizer</B>
+  and a <B>chaser</B>. By changing the synchronizer component,
+  several different synchronizable players can be built.
+  <LI><B>TSyncOutPlayer : </B>a player decorator, using the <B>Decorator
+  pattern</B>. Decorates a <B>TSyncInPlayer </B>object and add
+  the ability to send synchronization messages : <B>start</B>,
+  <B>stop</B>, <B>continue</B>, <B>songpos</B>, and <B>clock</B>.
+  <LI><B>TRunningPlayer</B> : combines a player object and a global
+  state object.
+</UL>
+
+</BODY>
+</HTML>
