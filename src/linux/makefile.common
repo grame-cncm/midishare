@@ -1,6 +1,6 @@
 
 TARGET = ../linux/msCommon.o
-OPTIONS = -D__Linux__ -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX  -D__NO_VERSION__ -D__LittleEndian__ 
+OPTIONS = -D__Linux__ -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX  -D__NO_VERSION__ 
 INC = Headers
 CFLAGS := -O6 -Wall $(OPTIONS) -I$(INC)
 CC = gcc
@@ -10,17 +10,19 @@ K = Kernel
 M = Memory
 S = Sorter
 
-SRC = $(C)/*.c $(K)/*.c $(M)/*.c $(S)/*.c
+SRC = $(C)/ms[^M]*.c $(K)/*.c $(M)/ms[^S]*.c $(S)/*.c
 
 OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
-      $(C)/msFilter.o $(C)/msMail.o $(C)/msTasks.o $(C)/msXmtRcv.o \
+      $(C)/msFilter.o $(C)/msTasks.o $(C)/msXmtRcv.o \
       $(K)/msHandler.o $(K)/msInit.o $(K)/msSmpte.o $(K)/msTime.o \
       $(M)/msEvents.o $(M)/msFields.o $(M)/msMem.o $(M)/msMemory.o \
-      $(M)/msSeq.o $(S)/msSorter.o
+      $(S)/msSorter.o
 
 $(TARGET) : $(OBJ)
 	ld -m elf_i386 -r -o $(TARGET) $(OBJ)
 
+$(S)/msSorter.o:
+	$(CC) $(CFLAGS) -D__LittleEndian__ -c $(S)/msSorter.c -o $(S)/msSorter.o
 dep:
 	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
 
