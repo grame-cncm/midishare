@@ -1044,7 +1044,7 @@ Boolean MidiShare ()
 }
 
 /*******************/
-/* MidiReset  */>
+/* MidiReset  */
 /*******************/
 
 void MidiReset () 
