@@ -4,3 +4,5 @@ v. 1.00 : first release (version number unavailable)
 v. 1.10 : version number support added on command line
           bug corrected in remote initialization method
 		  bug corrected in remote destructor method (was resulting in pure virtual method call)
+v. 1.11 : bug corrected with dynamic cast
+		  option '-h' renamed to '-v'
