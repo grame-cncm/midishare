@@ -27,7 +27,6 @@
 
 
 /*____________________________________________________________________________*/
-void InitHorloge ( TMSGlobalPtr g);
 void InitTime (TMSGlobalPtr g);
 void OpenTime (TMSGlobalPtr g);
 
