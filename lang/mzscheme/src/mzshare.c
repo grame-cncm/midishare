@@ -6,12 +6,25 @@
 /*  	Grame  MidiPlayer for schemers. */
 /*  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" */
 
-
+#ifdef WIN32
 #include <sys/unistd.h>
 #include "include/MidiShare.h"
-#include "include/escheme.h"
 #include "include/player.h"
+#include "include/escheme.h"
 #include "include/mstype.h"
+#endif
+
+#ifdef __Linux__
+#include <MidiShare.h>
+#include <Player.h>
+#include <escheme.h>
+#include "mstype.h"
+#define MSALARMAPI
+
+typedef short BOOLEAN;
+
+#endif
+
 
 
 #ifndef __UseMSThunking__
@@ -25,7 +38,7 @@
 /* is the command, the proc contain no arg  */
 
 
-void MSALARMAPI  myLinkScheme( short);
+void MSALARMAPI  myLinkScheme( short ref);
 
 
 /* here we just get the name of the proc for the refNum */

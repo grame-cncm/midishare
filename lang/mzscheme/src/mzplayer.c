@@ -6,11 +6,22 @@
 /*  	Grame  MidiPlayer for schemers. */
 /*  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" */
 
+#ifdef WIN32
 #include "include/escheme.h"
 #include "include/player.h"
 #include "include/mstype.h"
 #include <stdlib.h>
+#endif
 
+#ifdef __Linux__
+#include <Player.h>
+#include <escheme.h>
+#include "mstype.h"
+#define MSALARMAPI
+
+typedef short BOOLEAN;
+
+#endif
 
 /* adapted from forum PLT on struct implement in C */ 
  
