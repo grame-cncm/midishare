@@ -26,7 +26,6 @@
 #ifndef __LFFIFO__
 #define __LFFIFO__
 
-//#include "msTypes.h"
 #include "msSync.h"
 #ifdef __Pentium__
 #include "lflifo.h"
@@ -46,8 +45,9 @@
 
  fifoput  (fifo* ff, cell* cl)	: append cell cl to fifo tail
  fifoget  (fifo* ff)-> cell*	: pop head cell of ff
+ fifoavail(fifo* ff)-> cell*	: return the head cell
  fifoclear(fifo* ff)-> cell*	: return the head cell and initialize
- fifosize (fifo* ff) -> n		: number of cells in fifo ff
+ fifosize (fifo* ff)-> n		: number of cells in fifo ff
  ------------------------------------------------------------------
 
  Warning : all operations expect non-null lifo and cell pointers.
@@ -133,7 +133,7 @@ static inline cell* fifoget (fifo * ff)
 	return c;
 }
 
-static inline cell* fifoclear (fifo * ff) 
+static  cell* fifoclear (fifo * ff) 
 {
 	cell* v;
 	INT_OFF();
