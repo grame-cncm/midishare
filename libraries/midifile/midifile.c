@@ -31,7 +31,7 @@
 
  */
  
-#include "Midifile.h"
+#include "midifile.h"
 
 #ifdef __Macintosh__
         #include <Errno.h>
