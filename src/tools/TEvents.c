@@ -27,20 +27,34 @@
  * Test d'allocation et de transmission des 思始ements MidiShare.
  *
  * GRAME	Mardi 8 D残embre 1992	DF
+ *          Lundi 20 Septembre 1999 SL Adapation Linux (plus de MidiAvailEv)
  */
 
 #include <stdio.h>
-#include <String.h>
-#include <StdLib.h>
 
 #ifdef __Windows__
+#	include <String.h>
+#	include <StdLib.h>
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
 #	define PROTOTYPE
 #endif
 
+
+#ifdef __Linux__
+#	include "MidiShare.h"
+#	define CNAME
+#	define CTASKS
+#	define nil 0
+#	define MidiAvailEv(r)  MidiGetEv(r)
+#endif
+
+
 #ifdef __Macintosh__
+#	include <String.h>
+#	include <StdLib.h>
+#	include "MidiShare.h"
 /*
 #include <Desk.h>
 #include <Dialogs.h>
@@ -64,10 +78,8 @@
 #include <Values.h>
 #include <Windows.h>
 */
-#include "MidiShare.h"
-#define PASCALNAME
-#define PASCALTASKS
-
+#	define PASCALNAME
+#	define PASCALTASKS
 #endif
 
 #define true	1
@@ -134,12 +146,12 @@ char *typeListe[] =
 
 typedef int (* GetEvFuncPtr)( MidiEvPtr e);
 
-int GetNote( MidiEvPtr e);
-int GetEvents( MidiEvPtr e);
-int GetNoExt( MidiEvPtr e);
-int GetPrivate( MidiEvPtr e);
-int GetCtrl( MidiEvPtr e);
-int GetNothing( MidiEvPtr e);
+static int GetNote( MidiEvPtr e);
+static int GetEvents( MidiEvPtr e);
+static int GetNoExt( MidiEvPtr e);
+static int GetPrivate( MidiEvPtr e);
+static int GetCtrl( MidiEvPtr e);
+static int GetNothing( MidiEvPtr e);
 
 
 /* ============= tableau des fonctions de r残up屍ation des 思始ements =============*/

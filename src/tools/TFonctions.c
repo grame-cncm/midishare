@@ -29,9 +29,8 @@
  */
 
 #include <stdio.h>
-#include <String.h>
 
-#ifdef PC
+#ifdef __Windows__
 #	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
@@ -48,6 +47,14 @@
 #	define unused4
 #endif
 
+#ifdef __Linux__
+#	include "MidiShare.h"
+#	define CNAME
+#	define CTASKS
+#	define nil 0
+#endif
+
+
 #define true	1
 #define false	0
 #define flush	fflush( stdout)
@@ -59,12 +66,14 @@ short refNum= nil;
 MidiName ApplName 	= "\pFonctions";
 MidiName NewName 	= "\pNewName";
 MidiName DriverName = "\pMidiShare";
+MidiName TestName   = "\pTest";
 #endif
 
 #ifdef CNAME
 MidiName ApplName 	= "Fonctions";
 MidiName NewName 	= "NewName";
 MidiName DriverName = "MidiShare";
+MidiName TestName   = "Test";
 #endif
 
 
@@ -152,7 +161,7 @@ static void OpenClose()
 	fprintf( stdout, "\nMidiOpen et MidiClose :\n");flush;
 	for( i=0; i<256; i++)
 	{
-		if( (r[i]= MidiOpen( "\ptest")) < 0)
+		if( (r[i]= MidiOpen( TestName)) < 0)
 			break;
 	}
 	fprintf( stdout, "    nombre max. d'applications ouvertes : %d\n", i+2);
@@ -820,6 +829,7 @@ static void Tolerance()
 	MidiFreeEv( (MidiEvPtr)nil);
 	fprintf( stdout, "%s\n", OK);
 
+#ifdef __Macintosh__
 	fprintf( stdout, "    OldMidiSetField : ");flush;
 	OldMidiSetField( (MidiEvPtr)nil, 0, 0L);
 	fprintf( stdout, "%s\n", OK);
@@ -831,6 +841,7 @@ static void Tolerance()
 	fprintf( stdout, "    OldMidiCountFields : ");flush;
 	OldMidiCountFields( (MidiEvPtr)nil);
 	fprintf( stdout, "%s\n", OK);
+#endif
 
 	fprintf( stdout, "    MidiSetField : ");flush;
 	MidiSetField( (MidiEvPtr)nil, 0L, 0L);
