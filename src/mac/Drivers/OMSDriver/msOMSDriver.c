@@ -28,6 +28,7 @@
 #include "MidiShare.h"
 #include "msOMSDriver.h"
 #include "EmulLinearise.h"
+#include "SavingState.h"
 
 #include "OMS.h"
 
@@ -36,14 +37,15 @@
 /* constants definitions             */
 #define MidiShareDrvRef	 127
 
-#define MySignature		'Mshd'
-#define InputPortID		'in  '
-#define OutputPortID	'out '
+enum { 	MySignature = 'Msom', InputPortID = 'in  ', OutputPortID = 'out ',
+		StateType = 'stOM' };
+#define StateFile	"\pmsOMS Driver State"	
 
 #define kOMSInputNodes (omsIncludeInputs+omsIncludeReal+omsIncludeVirtual)
 #define kOMSOutputNodes (omsIncludeOutputs+omsIncludeReal+omsIncludeVirtual)
 
 typedef struct {
+	short			refNum;					// MidiShare refnum (for OMS callback)          
 	short			CompatMode;				// current OMS compatibility mode          
 	short 			OutputPortRefNum;       // OMS output port refNum
 	short			InputPortRefNum;		// OMS input port refNum
@@ -66,6 +68,7 @@ typedef struct {
 	
 	P2EInfos            pei; 				// Packet to event conversion structure
 	OMSMIDIPacket255	mPack2;				// Statically allocated OMS packet
+	Boolean 			reloadOMS;
 
 } DriverData, *DriverDataPtr;
 
@@ -117,31 +120,15 @@ static pascal void	MyReadHook2(OMSMIDIPacket *pkt, long myRefCon);
 static pascal void 	MyAppHook(OMSAppHookMsg *pkt, long myRefCon);
 
 static OSErr GetOutputPorts(DriverDataPtr data);
-static OSErr GetInputPorts(DriverDataPtr data);
+static OSErr GetInputPorts (DriverDataPtr data);
 
 static Boolean 	OpenOMS(OSType appSignature, OSType inPortID, OSType outPortID, DriverDataPtr data);
 static void 	OMSDispose(OSType appSignature, DriverDataPtr data);
 static OSErr 	PrepareConnectionsParams(DriverDataPtr data);
-static OSErr 	MakeConnections(OSType appSignature, OSType inPortID, DriverDataPtr data);
+static Boolean	IOSetup (OSType appSignature, OSType inPortID, DriverDataPtr data);
 
-#ifdef __CodeRsrc__
-void __Startup__();
-void __Startup__()
-{
-	if (CheckOMS())
-		SetUpMidi ();
-}
-#endif
-
-static asm void storage () {  	/* total 104 bytes */
-	dc.l	0 					/* dynamic memory ptr */
-	dc.w	0					/* MidiShare refnum */
-	dc.l	0,0,0,0,0,0,0,0		/* MidiShare filter */
-	dc.l	0,0,0,0,0,0,0,0
-	dc.l	0,0,0,0,0,0,0,0
-}
-
-static inline StoragePtr 	GetStorage() 	{ return (StoragePtr)storage; }
+Storage gStorage;
+static inline StoragePtr 	GetStorage() 	{ return &gStorage; }
 static inline short 		GetRefNum ()	{ StoragePtr mem = GetStorage(); return mem->refNum; }
 static inline DriverDataPtr GetData ()		{ StoragePtr mem = GetStorage(); return mem->data; }
 
@@ -201,39 +188,60 @@ static void PStrCpy (unsigned char *src, unsigned char * dst, short max)
 		*dst++ = *src++;
 }
 
-//____________________________________________________________________________________
-
 /* -----------------------------------------------------------------------------*/
-/* Driver required callbacks                                                    */
-/* -----------------------------------------------------------------------------*/
-static void WakeUp (short r)
+static void InitSlotsTables (DriverDataPtr data)
 {
-	int i;
-	StoragePtr mem = GetStorage();
-	DriverDataPtr data = (DriverDataPtr)NewPtrSys(sizeof(DriverData));
-	if (!data) return;
-	
-	mem->data = data;
-	data->OMSRunning = false;
-	data->pei.src = 0;
-	data->pei.len = 0;
-	data->pei.cont = 0;
-	
+	short i;
 	for (i = 0; i<64; i++) {
 		data->slot2OMSOut[i] = -1;
 		data->slot2OMSIn[i] = -1;
 		data->slot2OutIndex[i] = -1;
 		data->slot2InIndex[i] = -1;
 	}
-	
-	if (!mem->refNum) mem->refNum = r;
+}
 
+/* -----------------------------------------------------------------------------*/
+/* Driver required callbacks                                                    */
+/* -----------------------------------------------------------------------------*/
+static void WakeUp (short r)
+{
+	StoragePtr mem = GetStorage();
+	DriverDataPtr data = (DriverDataPtr)NewPtrSys(sizeof(DriverData));
+	if (!data) return;
+	
+	mem->data = data;
+	data->refNum = r;
+	data->OMSRunning = false;
+	data->pei.src = 0;
+	data->pei.len = 0;
+	data->pei.cont = 0;
+	OMSInputNodes(data) = 0;
+	OMSOutputNodes(data) = 0;
+	
+	InitSlotsTables (data);
 	InitTypeTbl(data->typeTbl);
 	InitLinearizeMthTbl(data->e2p, data->p2e);
 
 	if (OpenOMS (MySignature, InputPortID, OutputPortID, data)){
 		MidiConnect (MidiShareDrvRef, r, true);
 		MidiConnect (r, MidiShareDrvRef, true);
+	}
+	data->reloadOMS = false;
+	RestoreDriverState (r, StateFile);
+}
+
+/* -----------------------------------------------------------------------------*/
+static void DisposeOMSMemory (DriverDataPtr data)
+{
+	if (data) {
+		if (OMSInputNodes(data)) {
+			OMSDisposeHandle (OMSInputNodes(data));
+			OMSInputNodes(data) = 0;
+		}
+		if (OMSOutputNodes(data)) {
+			OMSDisposeHandle (OMSOutputNodes(data));
+			OMSOutputNodes(data) = 0;
+		}
 	}
 }
 
@@ -243,19 +251,14 @@ static void Sleep (short r)
 	StoragePtr mem = GetStorage();
 	DriverDataPtr data = mem->data;
 	
+	CloseMidi ();
 	if (data) {
-		if (OMSInputNodes(data)) {
-			DisposeHandle ((Handle)OMSInputNodes(data));
-			OMSInputNodes(data) = 0;
-		}
-		if (OMSOutputNodes(data)) {
-			DisposeHandle ((Handle)OMSOutputNodes(data));
-			OMSOutputNodes(data) = 0;
-		}
+		DisposeOMSMemory (data);
 		OMSDispose (MySignature, data);
 		DisposePtr ((Ptr)data);
 		mem->data = 0;
 	}
+	doneFlag = true;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -283,6 +286,30 @@ static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 }
 
 
+/* -----------------------------------------------------------------------------*/
+void DoIdle()
+{
+	DriverDataPtr data = GetData (); SlotRefNum sref;
+	
+	if (data && data->reloadOMS) {
+		short n = (*OMSInputNodes(data))->numNodes;
+		DisposeOMSMemory (data);
+		OMSCloseConnections (MySignature, InputPortID, n,ConnectionParams(data));
+		DisposePtr ((Ptr)ConnectionParams(data));
+		InitSlotsTables (data);
+
+		do {
+			sref = MidiGetIndSlot (data->refNum, 1);
+			if (sref > 0) MidiRemoveSlot (sref);
+		} while (sref > 0);
+		
+		IOSetup (MySignature, InputPortID, data);
+
+		RestoreDriverState (data->refNum, StateFile);
+		data->reloadOMS = false;
+	}
+}
+
 
 /* -----------------------------------------------------------------------------*/
 /* MidiShare part                                                               */
@@ -293,7 +320,7 @@ static pascal void ReceiveEvents (short r)
 	E2PInfos 	i; Boolean contFlag;
 	DriverDataPtr data = GetData();
 	
-	if (!data) {
+	if (!data || data->reloadOMS) {
 		MidiFlushEvs (r);
 		return;
 	}
@@ -342,6 +369,7 @@ Boolean SetUpMidi ()
 	op.sleep = Sleep;
 	op.slotInfo = SlotInfo; 
 	mem->refNum = 0;
+	mem->data = 0;
 
 	if (MidiGetNamedAppl (OMSDriverName) > 0)  // still running
 		return true;
@@ -361,7 +389,12 @@ Boolean SetUpMidi ()
 void CloseMidi ()
 {
 	StoragePtr mem = GetStorage();
-	MidiUnregisterDriver (mem->refNum);
+	short ref = mem->refNum;
+	mem->refNum = 0;
+	if (ref > 0) {
+		SaveDriverState (ref, StateFile, MySignature, StateType);
+		MidiUnregisterDriver (ref);
+	}
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -386,7 +419,7 @@ static pascal void	MyReadHook2(OMSMIDIPacket *pkt, long myRefCon)
 	P2EInfos(data).src= pkt->data;
 	P2EInfos(data).len= pkt->len;
 
-	if (slot >= 0) SendDatas(GetRefNum(), slot, pkt->flags & 3, MidiGetTime(), data);
+	if (slot >= 0) SendDatas(data->refNum, slot, pkt->flags & 3, MidiGetTime(), data);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -395,70 +428,30 @@ static pascal void MyAppHook(OMSAppHookMsg *pkt, long myRefCon)
 	DriverDataPtr data = (DriverDataPtr)myRefCon;
 	
 	switch (pkt->msgType) {
-		case omsMsgModeChanged:
-			//printf("omsMsgModeChanged\n");
-			/* Respond to compatibility mode having changed */
-			//gCompatMode = pkt->u.modeChanged.newMode;
-			/* this will cause side effects in the event loop */
+		case omsMsgModeChanged:		// ignored
 			break;
+
 		case omsMsgDestDeleted:
-			//printf("omsMsgDestDeleted\n");
-			//if (gChosenOutputID == pkt->u.nodeDeleted.uniqueID) {
-			//	gOutNodeRefNum = -1;	/* invalid */
-				//gEmul.OutNodeRefNum = -1; /* invalid */
-			///}
-			break;
 		case omsMsgSourceDeleted:
-			//printf("omsMsgSourceDeleted\n");
-			break;
-			
 		case omsMsgNodesChanged:
-			//printf("omsMsgNodesChanged\n");
-			//GetOutputPorts();
-			//GetInputPorts();
-			//printf("p\n");
-			//gNodesChanged = TRUE;
-			break;
-		
 		case omsMsgDifferentStudioSetup:
-			//printf("omsMsgDifferentStudioSetup\n");
+			data->reloadOMS = true;
 			break;
 	}
-}
-
-
-/* -----------------------------------------------------------------------------*/
-static void NodeInfoCopy (OMSNodeInfoListH dst, OMSNodeInfoListH src, long size)
-{
-	char * cdst = *(char **)dst;
-	char * csrc = *(char **)src;
-	while (size--)
-		*cdst++ = *csrc++;
 }
 
 /* -----------------------------------------------------------------------------*/
 static OSErr GetOutputPorts(DriverDataPtr data) 
 {
-	int i; SlotRefNum sref; OMSNodeInfoListH nodesInfos, h;
-	long size; short refNum = GetRefNum();
+	int i; SlotRefNum sref; OMSNodeInfoListH h;
 	
-	nodesInfos = OMSGetNodeInfo(kOMSOutputNodes);
-	if (!nodesInfos) return 1;
+	h = OMSGetNodeInfo(kOMSOutputNodes);
+	if (!h) return 1;
 
-	size = InlineGetHandleSize ((Handle)nodesInfos);
-	h = (OMSNodeInfoListH)NewHandleSys (size);
-	if (!h) {
-		OMSDisposeHandle (nodesInfos);
-		return 1;
-	}
-
-	NodeInfoCopy (h, nodesInfos, size);
-	OMSDisposeHandle (nodesInfos);
 	OMSOutputNodes(data) = h;
-	
 	numNodeOut(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeOut(data); i++) {			
-		sref = MidiAddSlot (refNum);
+		sref = MidiAddSlot (data->refNum);
 		if (sref < 0) return 1;
 		slot2OutIndex(data)[Slot(sref)] = i;
 		slot2OMSOut(data)[Slot(sref)] = (*h)->info[i].ioRefNum;
@@ -470,26 +463,15 @@ static OSErr GetOutputPorts(DriverDataPtr data)
 /* -----------------------------------------------------------------------------*/
 static OSErr GetInputPorts (DriverDataPtr data)
 {
-	int i; SlotRefNum sref; OMSNodeInfoListH nodesInfos, h;
-	long size; short refNum = GetRefNum();
+	int i; SlotRefNum sref; OMSNodeInfoListH h;
 	
-	nodesInfos = OMSGetNodeInfo(kOMSInputNodes);
-	if (!nodesInfos) return 1;
+	h = OMSGetNodeInfo(kOMSInputNodes);
+	if (!h) return 1;
 	
-	size = InlineGetHandleSize ((Handle)nodesInfos);
-	h = (OMSNodeInfoListH)NewHandleSys (size);
-	if (!h) {
-		OMSDisposeHandle (nodesInfos);
-		return 1;
-	}
-	
-	NodeInfoCopy (h, nodesInfos, size);
-	OMSDisposeHandle (nodesInfos);
 	OMSInputNodes(data) = h;
-	
 	numNodeIn(data) = (*h)->numNodes;
 	for (i = 0; i < numNodeIn(data); i++) {	
-		sref = MidiAddSlot (refNum);
+		sref = MidiAddSlot (data->refNum);
 		if (sref < 0) return 1;
 		slot2InIndex(data)[Slot(sref)] = i;
 		slot2OMSIn(data)[Slot(sref)] =  (*h)->info[i].ioRefNum;
@@ -538,33 +520,18 @@ static short GetSlotFromRef( DriverDataPtr data, short refNum)
 /* -----------------------------------------------------------------------------*/
 static OSErr PrepareConnectionsParams (DriverDataPtr data)
 {
-	int i;
+	short i, n = numNodeIn(data);
 
-	ConnectionParams(data) = (OMSConnectionParamsPtr)NewPtrSys(numNodeIn(data) * sizeof(OMSConnectionParams));
+	ConnectionParams(data) = (OMSConnectionParamsPtr)NewPtrSys(n * sizeof(OMSConnectionParams));
 	
-	if (ConnectionParams(data) != NULL) {
-		for (i=0; i< numNodeOut(data); i++) {
-			ConnectionParams(data)[i].nodeUniqueID = (*OMSOutputNodes(data))->info[i].uniqueID;
+	if (ConnectionParams(data)) {
+		for (i=0; i< n; i++) {
+			ConnectionParams(data)[i].nodeUniqueID = (*OMSInputNodes(data))->info[i].uniqueID;
 			ConnectionParams(data)[i].appRefCon = 0;
 		}
-	}else {
-		return 1;
-	}
-
-	return 0;
-}
-
-/* -----------------------------------------------------------------------------*/
-static OSErr MakeConnections(OSType appSignature, OSType inPortID, DriverDataPtr data)
-{
-	OSErr err;
-	// Gestion des connections
-	err = OMSOpenConnections(appSignature,inPortID,(*OMSInputNodes(data))->numNodes,ConnectionParams(data),false);
-	if (err != noErr && err != 2) {
-		//printf("Error returned from OMSOpenConnections()\n");
-		return 1;
-	}else 
 		return 0;
+	}
+	return 1;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -592,46 +559,45 @@ static void SendEvents (short slot, OMSMIDIPacket255 *pkt, DriverDataPtr data)
 }
 
 /* -----------------------------------------------------------------------------*/
+static Boolean IOSetup (OSType appSignature, OSType inPortID, DriverDataPtr data)
+{
+	short n; OSErr err;
+	
+	err = GetInputPorts (data);
+	if (err != noErr) return false;
+	err = GetOutputPorts (data);
+	if (err != noErr) return false;
 
+	err = PrepareConnectionsParams (data);
+	if (err != noErr) return false;
+	
+	n = numNodeIn(data);
+	err = OMSOpenConnections (appSignature, inPortID, n, ConnectionParams(data), false);
+
+	return err == noErr;
+}
+
+/* -----------------------------------------------------------------------------*/
 Boolean	OpenOMS(OSType appSignature, OSType inPortID, OSType outPortID, DriverDataPtr data)
 {
 	OSErr err;
 	OMSAppHookUPP appHook; OMSReadHook2UPP readHook2;
 	
-#ifdef powerc
 	appHook = NewOMSAppHook(MyAppHook);
 	readHook2 = NewOMSReadHook2(MyReadHook2);
-#else
-	appHook = MyAppHook;
-	readHook2 = MyReadHook2;
-#endif
-	
+
 	/*	Sign in to OMS */
 	err = OMSSignIn(appSignature, (long)data, "\pmsOMS", appHook, &CompatMode(data));
 	if (err) return (err!= noErr);
 	
-	/*	Add an input port */
 	err = OMSAddPort(appSignature, inPortID, omsPortTypeInput2, readHook2, (long)data, &InputPortRefNum(data));
 	if (err) goto errexit;
 	
-	/*	Add an output port */
 	err = OMSAddPort(appSignature, outPortID, omsPortTypeOutput, NULL, 0L, &OutputPortRefNum(data));
 	if (err) goto errexit;
 	
-	// Info on OMS input/output
-	err = GetInputPorts (data);
-	if (err) goto errexit;
-
-	err = GetOutputPorts (data);
-	if (err) goto errexit;
-
-	// Build connections
-	err = PrepareConnectionsParams (data);
-	if (err) goto errexit;
-	
-	// Connections management
-	err = MakeConnections (appSignature, inPortID, data);
-	if (err) goto errexit;
+	if (!IOSetup (appSignature, inPortID, data))
+		 goto errexit;
 	 
 	OMSRunning(data) = true;
 	return true;
