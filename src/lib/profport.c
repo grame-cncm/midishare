@@ -2,8 +2,8 @@
 History : 
 01-28-02 : Change the location of temporary files created in write_private_profile_string
 		   now done in TmpDirectory.
-01-29-02 : Correct bug wthe the '=' character is not present.
-
+01-29-02 : Correct bug when the '=' character is not present.
+06-18-02 : Return default value if file does not exist, new write_private_profile_int function.
 */
 
 
@@ -69,7 +69,7 @@ int get_private_profile_int(char *section,
     int len = strlen(entry);
     int i;
     
-    if( !fp ) return(0);
+    if( !fp ) return(def); /* Return default value if file does not exist */
     sprintf(t_section,"[%s]",section); /* Format the section name */
     /*  Move through file 1 line at a time until a section is matched or EOF */
     do
@@ -123,7 +123,7 @@ int get_private_profile_string(char *section, char *entry, char *def,
     char t_section[MAX_LINE_LENGTH];
     int len = strlen(entry);
     
-    if( !fp ) return(0);
+    if( !fp ) return(0); 
      sprintf(t_section,"[%s]",section);    /* Format the section name */
     /*  Move through file 1 line at a time until a section is matched or EOF */
     do
@@ -262,4 +262,19 @@ int write_private_profile_string(char *section,
     return(1);
 }
 
-
+/***************************************************************************
+ * Function:    write_private_profile_int()
+ * Arguments:   <char *> section - the name of the section to search for
+ *              <char *> entry - the name of the entry to find the value of
+ *              <int> buffer - the value to be written
+ *              <char *> file_name - the name of the .ini file to read from
+ * Returns:     TRUE if successful, otherwise FALSE
+ ***************************************************************************/
+ 
+int write_private_profile_int(char *section,
+    char *entry, int val, char *file_name)
+{
+    char buffer [64];
+    sprintf(buffer, "%d", val);
+    return write_private_profile_string(section,entry, buffer, file_name);
+}

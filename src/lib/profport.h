@@ -16,6 +16,7 @@ extern "C" {
 int get_private_profile_int(char *, char *, int, char *);
 int get_private_profile_string(char *, char *, char *, char *, int, char *);
 int write_private_profile_string(char *, char *, char *, char *);
+int write_private_profile_int(char *section, char *entry, int val, char *file_name);
 
 #ifdef __cplusplus
 }
