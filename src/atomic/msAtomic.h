@@ -40,7 +40,7 @@
 # include "msAtomicTypeIntel.h"
 # include "msAtomicWin32.h"
 
-#elif defined(CW_OSX)  /* this is for CodeWarrior compiler on Macintosh */
+#elif defined(__MWERKS__)  /* this is for CodeWarrior compiler on Macintosh */
 # include "msAtomicTypePPC.h"
 # include "msAtomicPPC_CW.h"
 #else
