@@ -84,14 +84,14 @@ short refNum= nil;
 #ifdef PASCALNAME
 MidiName ApplName   = "\pFonctions";
 MidiName NewName    = "\pNewName";
-MidiName DriverName = "\pMidiShare";
+MidiName MidiShareName = "\pMidiShare";
 MidiName TestName   = "\pTest";
 #endif
 
 #ifdef CNAME
 MidiName ApplName   = "Fonctions";
 MidiName NewName    = "NewName";
-MidiName DriverName = "MidiShare";
+MidiName MidiShareName = "MidiShare";
 MidiName TestName   = "Test";
 #endif
 
@@ -158,9 +158,9 @@ short Environment()
 		print ("%d  %s\n", n, OK);
 		if( n!= refNum)
 			print ("Warning : wrong refNum\n");
-		n= MidiGetNamedAppl( DriverName);
+		n= MidiGetNamedAppl( MidiShareName);
 		if( n!= 0)
-			print ("Warning : wrong refNum for %s : %d\n", DriverName, n);
+			print ("Warning : wrong refNum for %s : %d\n", MidiShareName, n);
 	}
 	else
 	{
@@ -485,7 +485,7 @@ void Events( short isFreeMem)
 }
 
 /*____________________________________________________________________*/
-long CountOfEvents( MidiSeqPtr s)
+static long CountOfEvents( MidiSeqPtr s)
 {
 	long count= 0;
 	MidiEvPtr e;
