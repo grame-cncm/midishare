@@ -31,11 +31,12 @@
 #ifdef __MacOS9__
 	#include <mactypes.h> 
 #else
+	//#include <CoreServices/CoreServices.h>
 	typedef unsigned char Boolean;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	enum { false, true };
-//	#include <CoreServices/CoreServices.h>
+
 #endif 
                                    
 # ifdef __POWERPC__
@@ -72,12 +73,7 @@ typedef unsigned long ulong;
 #endif
 
 typedef unsigned char uchar;
-#define FarPtr(type)           type FAR *
-
-typedef struct cell {
-	struct cell* link;		/*+ next cell in the list 	+*/
-					/*+ any data here		+*/
-} cell;
+#define FarPtr(type)  type FAR *
 
 
 #endif
