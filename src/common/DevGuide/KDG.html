@@ -307,8 +307,8 @@ be done in less than 50 usec.</P>
 <P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
 BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
 
-<P>The following functions are to provide by any platform dependant
-implementation :</P>
+<P>The following functions are to be provided by any platform
+dependant implementation :</P>
 
 <PRE><FONT COLOR="#990000">void SpecialWakeUp (TMSGlobalPtr g)</FONT></PRE>
 
@@ -365,8 +365,8 @@ function which takes as argument the type of the desired memory.</P>
 <P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
 BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
 
-<P>The following functions are to provide by any platform dependant
-implementation :</P>
+<P>The following functions are to be provided by any platform
+dependant implementation :</P>
 
 <PRE><FONT COLOR="#990000">FarPtr(void) AllocateMemory (MemoryType type, long size)</FONT></PRE>
 
@@ -437,8 +437,8 @@ implementation interface file.</P>
 <P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
 BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
 
-<P>The following functions are to provide by any platform dependant
-implementation :</P>
+<P>The following functions are to be provided by any platform
+dependant implementation :</P>
 
 <PRE><FONT COLOR="#990000">TApplContextPtr CreateApplContext ()</FONT></PRE>
 
@@ -508,27 +508,8 @@ when a client application call MidiOpen or MidiClose.</P>
 <P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
 BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
 
-<P>The following functions are to provide by any platform dependant
-implementation :</P>
-
-<P><I>Functions to modify shared linked lists:</I></P>
-
-<PRE><FONT COLOR="#990000">FarPtr(void) PopSync (msListPtr adr)</FONT></PRE>
-
-<BLOCKQUOTE>
-  <P>should pop and return the first element of the list pointed
-  by `adr'</P></BLOCKQUOTE>
-
-<PRE><FONT COLOR="#990000">void PushSync (msListPtr adr, msListPtr link)</FONT></PRE>
-
-<BLOCKQUOTE>
-  <P>should push the `link' element to the list pointed by `adr'</P></BLOCKQUOTE>
-
-<PRE><FONT COLOR="#990000">void PushSyncList (msListPtr adr, msListPtr head, msListPtr tail)</FONT></PRE>
-
-<BLOCKQUOTE>
-  <P>should link the `tail' element to the list pointed by `adr'
-  and store the `head' element at the head of the list.</P></BLOCKQUOTE>
+<P>The following functions are to be provided by any platform
+dependant implementation :</P>
 
 <P><I>Function to exchange a value in memory:</I></P>
 
@@ -551,26 +532,54 @@ implementation :</P>
   return true in case of success. This function should take account
   of that it could be interrupted by the the task to forget itself.</P></BLOCKQUOTE>
 
-<P><I>Function for applications fifo management:</I></P>
+<P><I>Function for fifo management:</I></P>
 
-<PRE><FONT COLOR="#990000">MidiEvPtr ClearFifo (TFifoPtr fifo)</FONT></PRE>
-
-<BLOCKQUOTE>
-  <P>should provide a synchronized way to clear the head and count
-  fields of the `fifo' argument. The fifo tail field should points
-  to the fifo head.</P></BLOCKQUOTE>
-
-<PRE><FONT COLOR="#990000">MidiEvPtr PopFifoEv (TFifoPtr fifo)</FONT></PRE>
+<PRE><FONT COLOR="#990000">void fifoinit (fifo* ff)</FONT></PRE>
 
 <BLOCKQUOTE>
-  <P>should provide a synchronized way to pop an event from the
-  `fifo' argument and to update the fifo count field.</P></BLOCKQUOTE>
+  <P>initialise fifo ff to empty</P></BLOCKQUOTE>
 
-<PRE><FONT COLOR="#990000">void PushFifoEv (TFifoPtr fifo, MidiEvPtr ev)</FONT></PRE>
+<PRE><FONT COLOR="#990000">void fifoput (fifo* ff, cell* cl)</FONT></PRE>
 
 <BLOCKQUOTE>
-  <P>should provide a synchronized way to push an event to the
-  `fifo' argument and to update the fifo count field.</P></BLOCKQUOTE>
+  <P>append cell cl to fifo tail.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">cell* fifoget (fifo* ff)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>pop head cell of fifo ff.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">cell* fifoclear (fifo* ff)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>return the fifo head cell and initialize to empty.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">unsigned long fifosize (fifo* ff)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>return the number of cells in fifo ff.</P></BLOCKQUOTE>
+
+<P><I>Function for lifo management:</I></P>
+
+<PRE><FONT COLOR="#990000">void lfinit (lifo* lf)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>initialise lifo lf to empty</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void lfpush (lifo* ff, cell* cl)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>push cell cl on top of lifo lf</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">cell* lfpop (lifo* ff)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>pop top cell of lifo lf</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">cell* lfsize (lifo* ff)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>return the umber of cells in lifo lf</P></BLOCKQUOTE>
 
 <P><I>Semaphores implementation:</I></P>
 
@@ -593,242 +602,250 @@ implementation :</P>
 
 <P>&nbsp;</P>
 
-<H1><A NAME="RTFToC15"></A><IMG SRC="red_car.gif" WIDTH="12"
+<H1><A NAME="RTFToC15"></A><IMG SRC="red_car.gif" WIDTH="12" 
 HEIGHT="12" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"> 4.
 Source code</H1>
 
-<H2><A NAME="RTFToC16"></A>4.1. Headers</H2>
-
-<P>Header files generally used by all the kernel components</P>
-
 <BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTypes.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e0ab">type definitions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msDefs.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e0ab">MidiShare constants definitions,
-        basic MidiShare data types structures</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msExtern.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e0ab">defines all the functions to
-        provide for a platform dependant implementation</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<P>Header files specific to each kernel components</P>
-
-<BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msKernel.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">kernel global data structure</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the alarm call
-        function</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppFun.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the application
-        configuration functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
-        types and data structures for the clients applications management</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the connections
-        management functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events memory
-        management functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events fields
-        access functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the filters management
-        functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the initialization
-        functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the mailbox functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
-        types and data structures for the memory management</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
-        sequences functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the smpte functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter data structures
-        and external functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSync.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">some macros build on top of
-        the synchronization functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">task extension structure and
-        task management functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
-        time management functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.h</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
-        input / output functions</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<H2><A NAME="RTFToC17"></A>4.2. Kernel</H2>
-
-<P>The kernel implementation provides the glue for all its components.
-It is in charge of initializing all these components and providing
-the time task. MidiShare time functions are implemented in this
-section.</P>
-
-<BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msHandler.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes the clock handler
-        implementation and the dispatch of the events returned by the
-        sorter.</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides initialization functions
-        (including MidiShareWakeUp and MidiShareSleep). Also in charge
-        of the MidiShare version number.</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">smpte functions (not yet implemented)</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes time and time conversions
-        functions.</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<H2><A NAME="RTFToC18"></A>4.3. Clients</H2>
-
-<P>The clients part of the implementation includes all the functions
-dedicated to an application configuration, connections management,
-tasks and alarms management, sending and receiving events.</P>
-
-<BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">implementation of an application
-        alarm call</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides applications configuration
-        functions (MidiOpen, MidiClose, setting and getting alarms, setting
-        and getting filters...)</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">inter-applications connections
-        management implementation</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">filters management implementation</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">synchronized mailbox functions</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">realtime and deferred tasks
-        management</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides functions for sending
-        and receiving MidiShare events.</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<H2><A NAME="RTFToC19"></A>4.4. Memory</H2>
-
-<P>The memory section of the implementation is in charge of the
-musical events memory management. It includes also the sequences
-management functions.</P>
-
-<BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides the functions for
-        the MidiShare events management.</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">utilities for event fields
-        access</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">global memory management :
-        opening and closing the memory, growing the MidiShare memory
-        space, getting free space.</TD> 
-    </TR>
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">sequences management implementation</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<H2><A NAME="RTFToC20"></A>4.5. Sorter</H2>
-
-<BLOCKQUOTE>
-  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
-    <TR>
-      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.c</TD> 
-      <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter implementation.</TD> 
-    </TR>
-  </TABLE></P></BLOCKQUOTE>
-
-<P>&nbsp;
+  <H2><A NAME="RTFToC16"></A>4.1. Headers</H2>
+  <P>Header files generally used by all the kernel components</P>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0"
+    HEIGHT="154">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="17">&nbsp;msTypes.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="17">type definitions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="30">&nbsp;msDefs.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="30">MidiShare constants
+          definitions, basic MidiShare data types and structures</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="25">&nbsp;msExtern.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="25">defines all the
+          functions to be provided for a platform dependant implementation</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="19">&nbsp;lffifo.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="19">defines and implements
+          the fifo management functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="18">&nbsp;lflifo.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="18">defines and implements
+          the lifo management functions</TD> 
+      </TR>< 
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee" HEIGHT="30">&nbsp;mem.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e0ab" HEIGHT="30">defines the basic
+          memory allocation functions to be provided for a platform dependant
+          implementation</TD> 
+      </TR>
+    </TABLE></P></BLOCKQUOTE>
+  <P>Header files specific to each kernel components</P>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0"
+    HEIGHT="154">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msKernel.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">kernel global data structure</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the alarm call
+          function</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppFun.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the application
+          configuration functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
+          types and data structures for the clients applications management</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the connections
+          management functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events memory
+          management functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events fields
+          access functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the filters management
+          functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the initialization
+          functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the mailbox functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
+          types and data structures for the memory management</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+          sequences functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the smpte functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter data structures
+          and external functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSync.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">macros and shared data structures</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">task extension structure and
+          task management functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+          time management functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.h</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+          input / output functions</TD> 
+      </TR>
+    </TABLE></P></BLOCKQUOTE>
+  <H2><A NAME="RTFToC17"></A>4.2. Kernel</H2>
+  <P>The kernel implementation provides the glue for all its components.
+  It is in charge of initializing all these components and providing
+  the time task. MidiShare time functions are implemented in this
+  section.</P>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msHandler.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes the clock handler
+          implementation and the dispatch of the events returned by the
+          sorter.</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides initialization functions
+          (including MidiShareWakeUp and MidiShareSleep). Also in charge
+          of the MidiShare version number.</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">smpte functions (not yet implemented)</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes time and time conversions
+          functions.</TD> 
+      </TR>
+    </TABLE></P></BLOCKQUOTE>
+  <H2><A NAME="RTFToC18"></A>4.3. Clients</H2>
+  <P>The clients part of the implementation includes all the functions
+  dedicated to an application configuration, connections management,
+  tasks and alarms management, sending and receiving events.</P>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">implementation of an application
+          alarm call</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides applications configuration
+          functions (MidiOpen, MidiClose, setting and getting alarms, setting
+          and getting filters...)</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">inter-applications connections
+          management implementation</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">filters management implementation</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">synchronized mailbox functions</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">realtime and deferred tasks
+          management</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides functions for sending
+          and receiving MidiShare events.</TD> 
+      </TR>
+    </TABLE></P></BLOCKQUOTE>
+  <H2><A NAME="RTFToC19"></A>4.4. Memory</H2>
+  <P>The memory section of the implementation is in charge of the
+  musical events memory management. It includes also the sequences
+  management functions.</P>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides the functions for
+          the MidiShare events management.</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">utilities for event fields
+          access</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">global memory management :
+          opening and closing the memory, growing the MidiShare memory
+          space, getting free space.</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">sequences management implementation</TD> 
+      </TR>
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;mem.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">the basic memory allocation
+          functions</TD> 
+      </TR>
+    </TABLE></P></BLOCKQUOTE>
+  <H2><A NAME="RTFToC20"></A>4.5. Sorter</H2>
+  <BLOCKQUOTE>
+    <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+      <TR>
+        <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.c</TD> 
+        <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter implementation.</TD> 
+      </TR>
+    </TABLE>
+  </BLOCKQUOTE>
+</BLOCKQUOTE>
 
 </BODY>
 </HTML>
