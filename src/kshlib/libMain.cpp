@@ -25,6 +25,7 @@
 #include "msKernelPrefs.h"
 #include "msKernel.h"
 #include "msEvents.h"
+#include "msExtern.h"
 
 #include "msLog.h"
 
@@ -104,6 +105,8 @@ static msKernelPrefs * init ()
 	CheckPrefs (prefs);
 	return prefs;
 }
+
+void CallNetSend  (TMSGlobalPtr g, TApplPtr appl) {}
 
 /*____________________________________________________________________________*/
 void  MSInitialize ()
