@@ -71,6 +71,7 @@ MidiEvPtr gTask = 0;
 TimeType  gLastCall;
 int gCount  = 1500;
 long gLastTime = 0;
+long gFlag = 0;
 
 #include <mach/mach_time.h>
 static void TimeTask (long date, short refNum, long a1,long a2,long a3);
@@ -117,6 +118,9 @@ static void InitTask (long date, short refNum, long a1,long a2,long a3 )
 static void TimeTask (long date, short refNum, long a1,long a2,long a3)
 {
 	TimeType t;
+
+	if (gFlag)
+		fprintf (stderr, "TimeTask called with gFlag=%ld\n", gFlag);
 	gTask = 0;
 	getTime(t);
 	storeTime (gLastCall, t);
@@ -191,6 +195,8 @@ int main (int argc, char *argv[])
 	getc(stdin);
 */
 	MidiForgetTask (&gTask);
+	fprintf (stderr, "%d MidiForgetTask done (%lx)\n", gRef, (long)gTask);
+    gFlag = 1;
 	MidiClose (gRef);
 	print_result (stdout, stdout);
 	return 0;

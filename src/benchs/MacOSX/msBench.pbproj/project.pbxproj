@@ -59,6 +59,7 @@
 			productInstallPath = /usr/local/bin;
 			productName = msBenchAppl;
 			productReference = D3F82BC804822EAE00053103;
+			shouldUseHeadermap = 0;
 		};
 		D3F82BC804822EAE00053103 = {
 			isa = PBXExecutableFileReference;
@@ -127,7 +128,6 @@
 				F5665021047FD2940178F97B,
 				F5665022047FD2940178F97B,
 			);
-			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F566501F047FD2940178F97B;
 			productRefGroup = F566502C047FD3180178F97B;
@@ -208,6 +208,7 @@
 			name = msBenchDriver;
 			productName = msBenchDriver;
 			productReference = F566502B047FD3180178F97B;
+			shouldUseHeadermap = 0;
 		};
 		F566502B047FD3180178F97B = {
 			isa = PBXLibraryReference;
