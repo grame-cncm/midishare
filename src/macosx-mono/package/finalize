@@ -14,16 +14,25 @@ echo "creation des liens symboliques (dylib)"
 echo suppression des dossiers CVS
 find Distribution -type d -name CVS -exec rm -rf {} \; 2>/dev/null
 
+echo remove the .DS_Store files
+find Distribution -name ".DS_Store" -exec rm -f {} \;
+
+echo generates install.log
+cd Distribution
+find . -depth -print | sed -e 's/^\.//' > ../install.log
+mv -f ../install.log Applications/MidiShare
+cd ..
+
 echo verification des droits des fichiers et des dossiers
-find Distribution -type d -exec chmod 775 {} \;
+find Distribution -type d -exec chmod 755 {} \;
 find Distribution -type f -exec chmod g+w {} \;
 find Distribution -type f -exec chmod o-w {} \;
 
 chown -R root:wheel Distribution/*
 chown -R root:admin Distribution/Applications/*
 
-echo remove the .DS_Store files
-find Distribution -name ".DS_Store" -exec rm -f {} \;
+chmod 775 Distribution/Applications
+chmod 775 Distribution/System
 
 echo verification des fichiers caches
 cd Distribution/Applications/MidiShare/
