@@ -1,4 +1,4 @@
-MAN1=/usr/man/man1
+MAN1=/usr/local/man/man1
 Target = msInetDriver.1
 
 install :
