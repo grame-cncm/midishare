@@ -38,7 +38,8 @@ class TScoreState :public TScoreFollower {
 			SetPosTicks(date_ticks);
 	
 			TPos pos = fTempoVisitor->CurDateBBU();
-			state->date =  fTempoVisitor->CurDateMicro() / 100;
+			state->date_ms =  fTempoVisitor->CurDateMicro() / 100;
+			state->date_ticks =  date_ticks;
 			
 			state->bar  = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
