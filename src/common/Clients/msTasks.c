@@ -131,9 +131,8 @@ MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
+MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
 {
-#ifndef __Linux__  /* never called under Linux */
 	TApplPtr appl;
 	MidiEvPtr ev;
 	if( CheckRefNum( g, refnum)) {
@@ -148,7 +147,6 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g, long currtime)
 			}
 		}
 	}	
-#endif
 }
 
 
