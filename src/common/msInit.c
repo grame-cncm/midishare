@@ -37,7 +37,7 @@
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return Version(g);
+	return g->pub->version;
 }
 
 #ifdef MSKernel

@@ -52,10 +52,10 @@
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
-
 typedef FarPtr(void)				TApplContextPtr;
-
 typedef struct FarPtr(TConnections) TConnectionsPtr;
+typedef struct FarPtr(TAppl) 		TApplPtr;
+typedef struct FarPtr(TApplPublic) 	TApplPublicPtr;
 
 #ifdef PascalNames
 typedef unsigned char MSName[MaxApplNameLen];
@@ -79,7 +79,6 @@ typedef struct TApplPublic{
     short           refNum;      /* reference number             */
     short           drvidx;      /* driver specific info index   */
     TConnections    cnx;         /* intput/output connections    */
-    MidiFilterPtr   filter;      /* client mapping of the filter */
 } TApplPublic;
 
 typedef struct TClientsPublic {
@@ -99,25 +98,21 @@ typedef struct TClientsPublic {
 #define folder(c)       pub(c, folder)
 
 #ifdef MSKernel
-typedef struct FarPtr(TAppl) 		TApplPtr;
 typedef struct FarPtr(TClients) 	TClientsPtr;
 
 /*------------------------------------------------------------------------*/
-/* MidiShare private application data structures                          */
+/* MidiShare server private application data structures                   */
 typedef struct TAppl{
 	TApplPublic *   pub;
-    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
     fifo            rcv;         /* received events fifo         */
     fifo            dTasks;      /* defered tasks fifo           */
     MidiFilterPtr   filter;      /* server mapping of the filter */
     RcvAlarmPtr     rcvAlarm;    /* the client receive alarm (used only internaly)     */
     ApplAlarmPtr    applAlarm;   /* the client application alarm (used only internaly) */
-    TDriverPtr		driver;      /* driver specific information  */
     TApplContextPtr context;     /* system dependent context     */
+    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
+    TDriverPtr		driver;      /* driver specific information  */
 } TAppl;
-
-/*------------------------------------------------------------------------*/
-/* MidiShare public and private clients management structures             */
 
 typedef struct TClients {
 	TClientsPublic * pub;
@@ -132,10 +127,11 @@ typedef struct TClients {
 } TClients;
 
 #define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r])
+#define CheckGlobRefNum( g, r)  ((r>=0) && (r<MaxAppls) && Clients(g)->appls[r])
 #define CheckClientsCount(g)	((nbAppls(g) + nbDrivers(g)) < MaxAppls - 2)
 
-#define DTasksFifoHead(appl)  	(MidiEvPtr)(appl->dTasks.head)
-#define GetApplPtr(g, ref)		g->appls[ref]
+#define DTasksFifoHead(appl)  	 (MidiEvPtr)(appl->dTasks.head)
+#define GetApplPublicPtr(g, ref) g->appls[ref]->pub
 
 /*--------------------------------------------------------------------------*/
 /* functions                                                                */
@@ -144,12 +140,23 @@ short GetIndClient (short index, short folderRef, TClientsPtr g);
 
 #else
 
-typedef struct FarPtr(TApplPublic) 		TApplPtr;
+/*------------------------------------------------------------------------*/
+/* MidiShare client private application data structures                   */
+typedef struct TAppl{
+	TApplPublic *   pub;
+    fifo            rcv;         /* received events fifo         */
+    fifo            dTasks;      /* defered tasks fifo           */
+    MidiFilterPtr   filter;      /* server mapping of the filter */
+    RcvAlarmPtr     rcvAlarm;    /* the client receive alarm     */
+    ApplAlarmPtr    applAlarm;   /* the client application alarm */
+} TAppl;
+
 typedef struct FarPtr(TClientsPublic) 	TClientsPtr;
 
-#define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
-#define GetApplPtr(g, ref)		&g->appls[ref]
+#define CheckRefNum( g, r)       ((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
+#define CheckGlobRefNum( g, r)   ((r>=0) && (r<MaxAppls) && g->appls[r])
+#define GetApplPublicPtr(g, ref) &g->appls[ref]
 
-#endif
+#endif /* MSKernel */
 
 #endif

@@ -26,11 +26,7 @@
 #ifndef __msTasks__
 #define __msTasks__
 
-#include "lflifo.h"
-#include "lffifo.h"
-#include "msDefs.h"
-#include "msTypes.h"
-#include "msAppls.h"
+#include "msKernel.h"
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
@@ -45,17 +41,17 @@ typedef struct TTaskExt
 
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3, 
-                                   lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
-                                   lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
-                                   lifo* freelist, fifo* schedlist);
+MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, long a1,
+                                   long a2,long a3, TMSGlobalPtr g);
+MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, long a1,
+                                   long a2,long a3, TMSGlobalPtr g);
+MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, long a1,
+                                   long a2,long a3, TMSGlobalPtr g);
 
 MSFunctionType(void)      MSForgetTask	(MidiEvPtr *e);
-MSFunctionType(void)      MSFlushDTasks	(short refnum, TClientsPtr g);
-MSFunctionType(void)      MSExec1DTask	(short refnum, TClientsPtr g);
-MSFunctionType(unsigned long) MSCountDTasks	(short refnum, TClientsPtr g);
+MSFunctionType(void)      MSFlushDTasks	(short refnum, TMSGlobalPtr g);
+MSFunctionType(void)      MSExec1DTask	(short refnum, TMSGlobalPtr g);
+MSFunctionType(unsigned long) MSCountDTasks	(short refnum, TMSGlobalPtr g);
 
 /*__________________________________________________________________________________*/
 Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);

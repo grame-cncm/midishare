@@ -28,7 +28,7 @@
 
 
 #define AllocateNewFilter(size)		(MidiFilterPtr)AllocateMemory(kernelSharedMemory, size)
-#define FreeFilter(filter)			DisposeMemory(filter)
+#define FreeFilter(filter)			DisposeMemory(filter, kernelSharedMemory)
 
 
 MSFunctionType(MidiFilterPtr) MSNewFilter (void) {

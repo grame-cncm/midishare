@@ -42,6 +42,6 @@ typedef enum {
 } MemoryType;
 
 FarPtr(void) AllocateMemory (MemoryType type, unsigned long size);
-void         DisposeMemory  (FarPtr(void) memPtr);
+void         DisposeMemory  (FarPtr(void) memPtr, MemoryType type);
 
 #endif

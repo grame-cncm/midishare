@@ -26,16 +26,18 @@
 #ifndef __msXmtRcv__
 #define __msXmtRcv__
 
-#include "msTypes.h"
-#include "msAppls.h"
-#include "lffifo.h"
+#include "msKernel.h"
 
-MSFunctionType(void)        MSSendIm   (short refNum, MidiEvPtr e, fifo* schedlist, unsigned long curdate);
-MSFunctionType(void)        MSSend     (short refNum, MidiEvPtr e, fifo* schedlist);
-MSFunctionType(void)        MSSendAt   (short refNum, MidiEvPtr e, unsigned long d, fifo* schedlist);
-MSFunctionType(unsigned long) MSCountEvs (short refNum, TClientsPtr g);
-MSFunctionType(MidiEvPtr)   MSGetEv    (short refNum, TClientsPtr g);
-MSFunctionType(MidiEvPtr)   MSAvailEv  (short refNum, TClientsPtr g);
-MSFunctionType(void)        MSFlushEvs (short refNum, TClientsPtr g);
+MSFunctionType(void)        MSSendIm   (short refNum, MidiEvPtr e, TMSGlobalPtr g);
+MSFunctionType(void)        MSSend     (short refNum, MidiEvPtr e, TMSGlobalPtr g);
+MSFunctionType(void)        MSSendAt   (short refNum, MidiEvPtr e, unsigned long d, TMSGlobalPtr g);
+MSFunctionType(unsigned long) MSCountEvs (short refNum, TMSGlobalPtr g);
+MSFunctionType(MidiEvPtr)   MSGetEv    (short refNum, TMSGlobalPtr g);
+MSFunctionType(MidiEvPtr)   MSAvailEv  (short refNum, TMSGlobalPtr g);
+MSFunctionType(void)        MSFlushEvs (short refNum, TMSGlobalPtr g);
+
+#ifndef MSKernel
+MSFunctionType(MidiEvPtr)   MSSendSync (short refNum, MidiEvPtr e, TMSGlobalPtr g);
+#endif
 
 #endif

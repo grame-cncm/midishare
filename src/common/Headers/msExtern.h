@@ -52,6 +52,13 @@ MutexResCode OpenMutex  (MutexRef ref);
 MutexResCode CloseMutex (MutexRef ref);
 #endif
 
+TApplContextPtr CreateApplContext ();
+void			DisposeApplContext (TApplContextPtr context);
+void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
+void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
+void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
+void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
+
 #ifdef MSKernel
 /*------------------------------------------------------------------------------*/
 /*                      initializations : wakeup & sleep                        */
@@ -66,18 +73,22 @@ void CloseTimeInterrupts(TMSGlobalPtr g);
 /*------------------------------------------------------------------------------*/
 /*                   client applications context and tasks                      */
 /*------------------------------------------------------------------------------*/
-TApplContextPtr CreateApplContext ();
-void			DisposeApplContext (TApplContextPtr context);
-void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
-void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
-void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
-void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 
 void DriverWakeUp (TApplPtr appl);
 void DriverSleep  (TApplPtr appl);
 
 long RealTimeOffset (THorlogePtr h);
 void AdjustTimer    (THost context, long offset, long period);
+
+#else
+
+Boolean   InitComm         (TMSGlobalPtr g);
+void      CloseComm        (TMSGlobalPtr g);
+
+Boolean   CheckMidiShare   (TMSGlobalPtr g);
+void      SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
+MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
+char *    GetShMemID (MidiFilterPtr filter);
 
 #endif /* MSKernel */
 

@@ -30,71 +30,53 @@
 #include "msEvents.h"
 #include "msExtern.h"
 #include "msSync.h"
+#include "msXmtRcv.h"
 
+#ifdef MSKernel
+#	define GetAppl(g, ref)	g->clients.appls[ref]
+#else
+#	define GetAppl(g, ref)	g->appls[ref]
+#endif
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */
 MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
-                             lifo* freelist, fifo* schedlist)
+                             long a1,long a2,long a3, TMSGlobalPtr g)
 {
-	MidiEvPtr ev;
-	MidiSTPtr ext;
-	
-	ev= MSNewEv (typeProcess, freelist);
-	if( ev) {
-		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
-		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
-	}
+	MSTask (task, date, r, a1, a2, a3, g);
 }
 
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
-                             lifo* freelist, fifo* schedlist)
+                             long a1,long a2,long a3, TMSGlobalPtr g)
 {
-	MidiEvPtr ev;
-	MidiSTPtr ext;
-	
-	ev= MSNewEv( typeProcess, freelist);
+	MidiEvPtr ev = MSNewEv (typeProcess, &g->memory.freeList);
 	if( ev) {
-		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
-		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
+		TTaskExtPtr ext = (TTaskExtPtr)LinkST(ev);
+		ext->fun  = task;
+		ext->arg1 = a1;
+		ext->arg2 = a2;
+		ext->arg3 = a3;
+		Date(ev)  = date;
+		MSSend (r, ev, g);
 	}
 	return ev;
 }
 
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
-                             lifo* freelist, fifo* schedlist)
+                             long a1,long a2,long a3, TMSGlobalPtr g)
 {
-	MidiEvPtr ev;
-	MidiSTPtr ext;
-	
-	ev= MSNewEv( typeDProcess, freelist);
+	MidiEvPtr ev = MSNewEv (typeDProcess, &g->memory.freeList);
 	if( ev) {
-		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
-		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
-		fifoput (schedlist, (cell*)ev);
+		TTaskExtPtr ext = (TTaskExtPtr)LinkST(ev);
+		ext->fun  = task;
+		ext->arg1 = a1;
+		ext->arg2 = a2;
+		ext->arg3 = a3;
+		Date(ev)  = date;
+		MSSend (r, ev, g);
 	}
 	return ev;
 }
@@ -109,39 +91,41 @@ MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(unsigned long) MSCountDTasks (short refnum, TClientsPtr g)
+MSFunctionType(unsigned long) MSCountDTasks (short refnum, TMSGlobalPtr g)
 {
-	return CheckRefNum( g, refnum) ? fifosize (&g->appls[refnum]->dTasks) : 0;
+	return CheckGlobRefNum(g, refnum) ? fifosize(&GetAppl(g,refnum)->dTasks) : 0;
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
+MSFunctionType(void) MSFlushDTasks (short refnum, TMSGlobalPtr g)
 {
 	MidiEvPtr ev, next;
-	if (CheckRefNum(g, refnum)) {
-		ev = (MidiEvPtr)fifoclear (&g->appls[refnum]->dTasks);
+	if (CheckGlobRefNum(g, refnum)) {
+		ev = (MidiEvPtr)fifoclear (&GetAppl(g,refnum)->dTasks);
 		while (ev) {
 			next= Link(ev);
-			MSFreeEv (ev, FreeList(g->memory));
+			MSFreeEv (ev, &g->memory.freeList);
 			ev = next;
 		}
 	}
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
+MSFunctionType(void) MSExec1DTask (short refnum, TMSGlobalPtr g)
 {
-	TApplPtr appl;
-	MidiEvPtr ev;
-	if( CheckRefNum( g, refnum)) {
-		appl = g->appls[refnum];
-		if (fifosize (&g->appls[refnum]->dTasks)) {
-			ev = (MidiEvPtr)fifoget (&appl->dTasks);
+	if( CheckGlobRefNum( g, refnum)) {
+		TApplPtr appl = GetAppl(g,refnum);
+		if (fifosize (&appl->dTasks)) {
+			MidiEvPtr ev = (MidiEvPtr)fifoget (&appl->dTasks);
 			if (ev) {
                 /* you can assume that the calling process owns the deferred task ie : 
                    the task is located in its address space */
+#ifdef MSKernel
                 CallDTaskCode (appl->context, ev);
-				MSFreeEv (ev, FreeList(g->memory));		
+#else
+                CallDTaskCode (g->context, ev);
+#endif
+				MSFreeEv (ev, &g->memory.freeList);		
 			}
 		}
 	}	

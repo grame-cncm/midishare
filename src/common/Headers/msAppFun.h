@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -25,28 +25,39 @@
 
 #include "msKernel.h"
 
+#ifdef MSKernel
+typedef TClientsPtr __localappltype;
+#else
+typedef TMSGlobalPtr __localappltype;
+#endif
+
 /*------------------------------------------------------------------------*/
 /* functions declarations                                                 */
+#ifdef MSKernel
 void     InitAppls (TClientsPtr g, MSMemoryPtr mem);
+#endif
 
 MSFunctionType(short)     MSOpen         (MidiName name, TMSGlobalPtr g);
 MSFunctionType(void)      MSClose        (short ref, TMSGlobalPtr g);
 
+/* functions based on public memory  */
 MSFunctionType(short)     MSCountAppls   (TClientsPtr g);
 MSFunctionType(short)     MSGetIndAppl   (short index, TClientsPtr g);
 MSFunctionType(short)     MSGetNamedAppl (MidiName name, TClientsPtr g);
 
 MSFunctionType(MidiName)     MSGetName  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetName  (short ref, MidiName name, TClientsPtr g);
 MSFunctionType(FarPtr(void)) MSGetInfo  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetInfo  (short ref, FarPtr(void) info, TClientsPtr g);
 
-MSFunctionType(MidiFilterPtr) MSGetFilter  (short ref, TClientsPtr g);
-MSFunctionType(void)          MSSetFilter  (short ref, MidiFilterPtr filter, TClientsPtr g);
+/* commands handled by the server  */
+MSFunctionType(void)         MSSetName  (short ref, MidiName name, __localappltype g);
+MSFunctionType(void)         MSSetInfo  (short ref, FarPtr(void) info, __localappltype g);
+MSFunctionType(void)         MSSetFilter  (short ref, MidiFilterPtr filter, __localappltype g);
 
-MSFunctionType(RcvAlarmPtr)  MSGetRcvAlarm  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetRcvAlarm  (short ref, RcvAlarmPtr alarm, TClientsPtr g);
-MSFunctionType(ApplAlarmPtr) MSGetApplAlarm (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetApplAlarm (short ref, ApplAlarmPtr alarm, TClientsPtr g);
+/* functions locally handled  */
+MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, __localappltype g);
+MSFunctionType(RcvAlarmPtr)  MSGetRcvAlarm  (short ref, __localappltype g);
+MSFunctionType(void)         MSSetRcvAlarm  (short ref, RcvAlarmPtr alarm, __localappltype g);
+MSFunctionType(ApplAlarmPtr) MSGetApplAlarm (short ref, __localappltype g);
+MSFunctionType(void)         MSSetApplAlarm (short ref, ApplAlarmPtr alarm, __localappltype g);
 
 #endif

@@ -28,6 +28,12 @@
 #include "msAlarms.h"
 #include "msConnx.h"
 #include "msDefs.h"
+#include "msEvents.h"
+#include "msKernel.h"
+#include "msMemory.h"
+#include "msXmtRcv.h"
+
+#define CnxState(e)		Chan(e)
 
 /*===========================================================================
   MidiShare external functions implementation
@@ -35,14 +41,27 @@
 MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
 {
 	if( CheckRefNum(g,src) && CheckRefNum(g,dest) ) {
-		TApplPtr appl = GetApplPtr(g, src);
-		TConnectionsPtr srcCnx = &pub(appl, cnx);		
+		TApplPublicPtr appl = GetApplPublicPtr(g, src);
+		TConnectionsPtr srcCnx = &appl->cnx;		
 		return IsAcceptedBit(srcCnx->dst, dest);
 	}
 	return false;
 }
 
-#ifdef MSKernel
+#ifndef MSKernel
+MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TMSGlobalPtr g)
+{
+	MidiEvPtr e = MSNewEv (typeMidiConnect, &g->memory.freeList);
+	if (e) {
+		e->info.cnx.src = src;
+		e->info.cnx.dst = dest;
+		CnxState(e) = state;
+		Date(e) = g->pub->time;
+		MSSend (0, e, g);
+	}
+}
+
+#else
 
 #define byteNum(ref)   (ref/(MaxAppls/8))
 
@@ -56,10 +75,11 @@ static void SetConnection   (TApplPtr appSrc, TApplPtr appDest, TClientsPtr g);
 /*===========================================================================
   MidiShare kernel functions implementation
 =========================================================================== */
-MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TClientsPtr g)
+MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TMSGlobalPtr env)
 {
 	TApplPtr appSrc, appDest;
 
+	TClientsPtr g = Clients(env);
 	if (CheckRefNum(g,src) && CheckRefNum(g,dest)) {
 		appSrc  = g->appls[src]; 
 		appDest = g->appls[dest];
@@ -73,11 +93,10 @@ MSFunctionType(void) MSConnect (short src, short dest, Boolean state, TClientsPt
 /*__________________________________________________________________________*/
 /* 	- RemAllDstCon : remove all the application output connections          */
 /*__________________________________________________________________________*/
-void RemAllDstCon (TApplPtr appl)
+void RemAllDstCon (TApplPublicPtr appl)
 {
-	TConnectionsPtr cnx = &pub(appl, cnx);
-	int i;
-	   
+	TConnectionsPtr cnx = &appl->cnx;
+	int i;	   
 	for (i=0; i<MaxAppls/8; i++)
 		cnx->dst[i] = 0;
 }

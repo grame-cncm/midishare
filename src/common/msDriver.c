@@ -29,14 +29,14 @@
 #include "msMem.h"
 #include "msTypes.h"
 
-#define NewSlot(size)		(SlotInfosPtr)AllocateMemory(kernelSharedMemory, size)
-#define FreeSlot(slot)		DisposeMemory(slot)
-#define FreeDriver(drv)		DisposeMemory(drv)
+#define NewSlot(size)		(SlotInfosPtr)AllocateMemory(kStdMemory, size)
+#define FreeSlot(slot)		DisposeMemory(slot, kStdMemory)
+#define FreeDriver(drv)		DisposeMemory(drv, kStdMemory)
 
 #define NewMap(size)	(PortMapPtr)AllocateMemory(kStdMemory, size)
+#define FreeMap(map)		DisposeMemory(map, kStdMemory)
 #define NewSlotInfo()	(SInfosPtr)AllocateMemory(kStdMemory, sizeof(SInfos))
-#define FreeMap(map)		DisposeMemory(map)
-#define FreeSlotInfo(info)	DisposeMemory(info)
+#define FreeSlotInfo(info)	DisposeMemory(info, kStdMemory)
 
 #define CheckDriversCount(g)        (nbDrivers(g) < MaxDrivers - 1)
 #define CheckDriverRefNum( g, r)    (CheckRefNum(g, r) && (folder(g->appls[r])==kDriverFolder))

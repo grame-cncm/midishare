@@ -25,84 +25,108 @@
 
 #include "msXmtRcv.h"
 #include "msEvents.h"
-#include "lffifo.h"
+#include "msExtern.h"
 
+/*__________________________________________________________________________*/
+#ifdef MSKernel
+MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, TMSGlobalPtr g)
+{
+	if( e) {
+		RefNum(e)= (uchar)refNum;
+		fifoput (SorterList(g), (cell*)e);
+	}
+}
+
+#else
+
+MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, TMSGlobalPtr g)
+{
+	if( e) {
+		RefNum(e)= (uchar)refNum;
+		SendToServer (e, g);
+	}
+}
+
+MSFunctionType(MidiEvPtr) MSSendSync (short refNum, MidiEvPtr e, TMSGlobalPtr g)
+{
+	if( e) {
+		RefNum(e)= (uchar)refNum;
+		return SendToServerSync (e, g);
+	}
+	return 0;
+}
+
+#endif
 
 /*===========================================================================
   MidiShare external functions implementation
 =========================================================================== */
-MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, fifo* schedlist, 
-								unsigned long curdate)
-{
-	if( e) {
-		RefNum(e) = (uchar)refNum;
-		Date(e)   = curdate;
-		fifoput (schedlist, (cell*)e);
-	}
-}
+#ifdef MSKernel
+#	define GetAppl(g, ref)	g->clients.appls[ref]
+#else
+#	define GetAppl(g, ref)	g->appls[ref]
+#endif
 
-/*__________________________________________________________________________*/
-MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, fifo* schedlist)
+MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, TMSGlobalPtr g)
 {
 	if( e) {
-		RefNum(e)= (uchar)refNum;
-		fifoput (schedlist, (cell*)e);
+		Date(e)   = g->pub->time;
+		MSSend (refNum, e, g);
 	}
 }
 
 /*__________________________________________________________________________*/
 MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d, 
-								fifo* schedlist)
+								TMSGlobalPtr g)
 {
 	if( e) {
-		RefNum(e)= (uchar)refNum;
 		Date(e)= d;
-		fifoput (schedlist, (cell*)e);
+		MSSend (refNum, e, g);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(unsigned long) MSCountEvs (short refNum, TClientsPtr g)
+MSFunctionType(unsigned long) MSCountEvs (short refNum, TMSGlobalPtr g)
 {
-	if( CheckRefNum( g, refNum)) {
-		TApplPtr appl = g->appls[refNum]; 
+	if (CheckGlobRefNum( g, refNum)) {
+		TApplPtr appl = GetAppl(g,refNum); 
 		return fifosize (&appl->rcv);
 	}
 	return 0;
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSGetEv (short refNum, TClientsPtr g)
+MSFunctionType(MidiEvPtr) MSGetEv (short refNum, TMSGlobalPtr g)
 {
-	if( CheckRefNum( g, refNum)) {
-		TApplPtr appl = g->appls[refNum]; 
+	if (CheckGlobRefNum( g, refNum)) {
+		TApplPtr appl = GetAppl(g,refNum); 
 		return (MidiEvPtr)fifoget (&appl->rcv);
 	}
 	return 0; 
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSAvailEv (short refNum, TClientsPtr g)
+MSFunctionType(MidiEvPtr) MSAvailEv (short refNum, TMSGlobalPtr g)
 {
-	if( CheckRefNum( g, refNum)) {
-		TApplPtr appl = g->appls[refNum]; 
+	if (CheckGlobRefNum( g, refNum)) {
+		TApplPtr appl = GetAppl(g,refNum); 
 		return (MidiEvPtr)fifoavail (&appl->rcv);
 	}
 	return 0;
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSFlushEvs (short refNum, TClientsPtr g)
+MSFunctionType(void) MSFlushEvs (short refNum, TMSGlobalPtr g)
 {
 	TApplPtr appl;
 	MidiEvPtr ev, next;
 
-	if( CheckRefNum( g, refNum)) {
-		appl = g->appls[refNum]; 
+	if (CheckGlobRefNum( g, refNum)) {
+		appl = GetAppl(g,refNum); 
 		ev = (MidiEvPtr)fifoclear (&appl->rcv);
 		while( ev) {
 			next= Link(ev);
-			MSFreeEv (ev, FreeList(g->memory));
+			MSFreeEv (ev, &g->memory.freeList);
 			ev= next;
 		}
 	}

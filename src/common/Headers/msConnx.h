@@ -28,11 +28,11 @@
 
 #include "msTypes.h"
 #include "msAppls.h"
+#include "msKernel.h"
 
-void RemAllDstCon (TApplPtr appl);
-//void RemAllSrcCon (TApplPtr appl);
+void RemAllDstCon (TApplPublicPtr appl);
 
-MSFunctionType(void)    MSConnect     (short src, short dest, Boolean state, TClientsPtr g);
+MSFunctionType(void)    MSConnect     (short src, short dest, Boolean state, TMSGlobalPtr g);
 MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g);
 
 #endif

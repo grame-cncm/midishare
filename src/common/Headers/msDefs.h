@@ -109,8 +109,15 @@
 #define typeRcvAlarm       150   /* RcvAlam         		*/
 #define typeApplAlarm      151   /* ApplAlam        		*/
 
+#define typeMidiOpen       152
+#define typeMidiOpenRes    153   /* server reply to MidiOpen */
+#define typeMidiClose      154
+#define typeMidiConnect    155
+#define typeMidiSetName    156
+#define typeMidiSetInfo    157
+#define typeMidiSetFilter  158
 
-#define typeReserved       152   /*152..254 reserved for future extensions */
+#define typeReserved       160   /*160..254 reserved for future extensions */
 
 #define typeDead           255   /* dead Task or DTask                     */
 
@@ -168,6 +175,7 @@
 #define MIDIerrIndex    -4   /* bad access index (events)     */
 #define MIDIerrEv       -5   /* event argument is nil         */
 #define MIDIerrUndef    -6   /* event argument is undef       */
+#define MIDIerrComm     -7   /* client / server communication error */
 
 
 /******************************************************************************
@@ -276,16 +284,21 @@ enum{   MIDIOpenAppl=1,
 
             } keySign;
             
-	    struct {            /* for paramchg & 14-bits ctrl  */
+	        struct {            /* for paramchg & 14-bits ctrl  */
             	short num;      /* param or ctrl num            */
             	short val;      /* 14-bits value                */
             } param;
-
 
             struct {            /* for MidiFile sequence number */
                 unsigned short number;
                 short unused;
             } seqNum;
+
+            
+	        struct {            /* for typeMidiConnect events   */
+            	short src;      /* src ref number               */
+            	short dst;      /* dest ref number              */
+            } cnx;         /* state is stored in the chan field */
 
 			short shortFields[2];/* for 14-bits controlers		*/
             long longField;
@@ -472,9 +485,9 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 *             Client and server access macros to public memory sections
 *******************************************************************************/
 #ifdef MSKernel
-#	define pub(g, f)       	(g->pub->f)
+#	define pub(g, f)   (g->pub->f)
 #else
-#	define pub(g, f)       	(g->f)
+#	define pub(g, f)   (g->f)
 #endif
 
 #endif

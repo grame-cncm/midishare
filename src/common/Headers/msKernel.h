@@ -39,24 +39,36 @@
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
 typedef struct TMSGlobalPublic {
-	unsigned long  	time;         /* the current 32 bits (milliseconds) date  */
-	short 			version;      /* the current kernel version               */
-	unsigned long  	size;         /* the current public segment size          */
-	TClientsPublic 	clients;      /* clients applications information         */
+	unsigned long  	time;      /* the current 32 bits (milliseconds) date */
+	short 			version;   /* the current kernel version              */
+	unsigned long  	size;      /* the current public segment size         */
+	TClientsPublic 	clients;   /* clients applications information        */
 } TMSGlobalPublic;
 
-/*--------------------------------------------------------------------------*/
-/* public fields access macros                                              */
-/*--------------------------------------------------------------------------*/
+typedef struct TMSGlobal FAR *  TMSGlobalPtr;
+
+/*------------------------------------------------------------------------*/
+/* public fields access macros                                            */
+/*------------------------------------------------------------------------*/
 #define CurrTime(g)         pub(g, time)
 #define Version(g)          pub(g, version)
 #define Size(g)             pub(g, size)
 
+/* common fields access macros */
+#define Memory(g)           (&g->memory)
+#define Clients(g)          (&g->clients)
+
 #ifndef MSKernel
-	typedef struct TMSGlobalPublic FAR *  TMSGlobalPtr;
+
+	typedef struct TMSGlobal {
+		TMSGlobalPublic * pub;
+		TMSMemory     memory;          /* kernel memory management        */
+		TApplPtr      appls[MaxAppls]; /* clients applications management */
+    	TApplContextPtr context;       /* system dependent context        */
+	} TMSGlobal;
+
 #else
 
-	typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 	typedef struct THorloge  FAR *  THorlogePtr;
 	typedef FarPtr(void)			THost;   /* reserved for platform dependant
 	                                            storage */
@@ -69,16 +81,16 @@ typedef struct TMSGlobalPublic {
 	} TimeInfo, *TimeInfoPtr;
 
 	typedef struct THorloge{          /* time management (no public section) */
-		 long           reenterCount; /* count of clockHandler reenters       */
-		 TimeInfo		rtOffset;     /* offset to real time clock            */
-		 long			adjustCount;  /* clocks adjustment count              */
-		 long			offset;       /* current real-time clock offset       */
+		 long           reenterCount; /* count of clockHandler reenters      */
+		 TimeInfo		rtOffset;     /* offset to real time clock           */
+		 long			adjustCount;  /* clocks adjustment count             */
+		 long			offset;       /* current real-time clock offset      */
 	} THorloge;
 
 	typedef struct TMSGlobal {
 		TMSGlobalPublic * pub;
-		THorloge      clock;         /* time management (no public section) */
 		TMSMemory     memory;        /* kernel memory management            */
+		THorloge      clock;         /* time management (no public section) */
 		TClients      clients;       /* clients applications management     */
 		TSorter       sorter;        /* sorter specific storage             */
 		fifo          toSched;       /* events to be scheduled              */
@@ -90,10 +102,8 @@ typedef struct TMSGlobalPublic {
 /*--------------------------------------------------------------------------*/
 #	define SorterList(g)       (&g->toSched)
 #	define Sorter(g)           (&g->sorter)
-#	define Clients(g)       	(&g->clients)
-#	define Memory(g)           (&g->memory)
 #	define TimeOffset(g)       (g->clock.rtOffset)
-#	define Appls(g)       		(g->clients.appls)
+#	define Appls(g)       	   (g->clients.appls)
 #	define ActiveAppl(g)       (g->clients.activesAppls)
 #	define NextActiveAppl(g)   (g->clients.nextActiveAppl)
 

@@ -25,10 +25,11 @@
 
 #include "msKernel.h"
 
-
+#ifdef MSKernel
 /*____________________________________________________________________________*/
 void InitTime (TMSGlobalPtr g);
 void OpenTime (TMSGlobalPtr g);
+#endif
 
 /*____________________________________________________________________________*/
 MSFunctionType(unsigned long) MSGetTime (TMSGlobalPtr g);

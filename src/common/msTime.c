@@ -30,13 +30,13 @@
   =========================================================================== */		
 MSFunctionType(unsigned long) MSGetTime (TMSGlobalPtr g)
 {
-	return CurrTime(g);
+	return g->pub->time;
 }
 
 /*__________________________________________________________________________________*/
 MSFunctionType(FarPtr(unsigned long)) MSGetTimeAddr(TMSGlobalPtr g)
 {
-	return &CurrTime(g);
+	return &g->pub->time;
 }
 
 /*__________________________________________________________________________________*/
