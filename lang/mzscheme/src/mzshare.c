@@ -460,7 +460,10 @@ Scheme_Object *sch_newFilter(int argc, Scheme_Object **argv)
   sf = (shFilter *)scheme_malloc(sizeof(shFilter));
   sf->type = filter_type;
   sf->filter_ptr = MidiNewFilter();
-  return (Scheme_Object *) sf; 
+  if (sf->filter_ptr)
+    {return (Scheme_Object *) sf;}
+  else
+    {return scheme_false;}
 }
 
 
@@ -630,7 +633,11 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiNewCell();
-  return (Scheme_Object *) sne;   
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}
+     
 }
 
 
@@ -655,10 +662,13 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiNewEv((short)SCHEME_INT_VAL(argv[0]));
-  return (Scheme_Object *) sne ;    
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}   
 }
 
-
+/*
  Scheme_Object *sch_isEv(int argc, Scheme_Object **argv)
 {   
   shNewEv *oe;
@@ -667,7 +677,7 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
   oe = (shNewEv *)argv[0];
   return oe->midi_ev_ptr ? scheme_true : scheme_false ;
 }
-
+*/
 
  Scheme_Object *sch_copyEv(int argc, Scheme_Object **argv)
 {   
@@ -679,7 +689,10 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiCopyEv(oe->midi_ev_ptr);
-  return (Scheme_Object *) sne;
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}
 }
 
 /* events memory is managed by midi-share */
@@ -987,7 +1000,10 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   sns = (shNewSeq *)scheme_malloc(sizeof(shNewSeq));
   sns->type = seq_type;
   sns->midi_seq_ptr = MidiNewSeq();
-  return (Scheme_Object *) sns;
+  if (sns->midi_seq_ptr )
+    {return (Scheme_Object *) sns;}
+  else
+    {return scheme_false;}
 }
 
 
@@ -1154,7 +1170,7 @@ static Scheme_Object *sch_getEv(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiGetEv((short)SCHEME_INT_VAL(argv[0]));
-  if (0 !=  sne->midi_ev_ptr)
+  if (sne->midi_ev_ptr)
     {return (Scheme_Object *) sne;}
   else
     {return scheme_false;}
@@ -1169,7 +1185,10 @@ static Scheme_Object *sch_getEv(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiAvailEv((short)SCHEME_INT_VAL(argv[0]));
-  return (Scheme_Object *) sne;
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}
 }
 
 
@@ -1237,7 +1256,7 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("midi-copy-ev", scheme_make_prim_w_arity(sch_copyEv,"midi-copy-ev", 1, 1), env);
   scheme_add_global("midi-free-ev", scheme_make_prim_w_arity(sch_freeEv,"midi-free-ev", 1, 1), env);
   /* JH for sanity I add the midi-ev? predicat */
-  scheme_add_global("midi-ev?", scheme_make_prim_w_arity(sch_isEv,"midi-ev?", 1, 1), env);
+  //scheme_add_global("midi-ev?", scheme_make_prim_w_arity(sch_isEv,"midi-ev?", 1, 1), env);
 
   scheme_add_global("midi-set-field!", scheme_make_prim_w_arity(sch_setField,"midi-set-field!", 3, 3), env);
   scheme_add_global("midi-get-field", scheme_make_prim_w_arity(sch_getField,"midi-get-field", 2, 2), env);
