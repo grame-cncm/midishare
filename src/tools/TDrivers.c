@@ -129,13 +129,15 @@ static void silentsleep (short unused1) { }
 static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos) 
 {	
 	short i = 0;
-	if (Slot(slot) > MaxSlot) return false;
+	if (slot.slotRef > MaxSlot) {
+		return false;
+	}
 #ifdef PASCALNAME
 	infos->name[i++] = 1;
 #endif
-	infos->name[i++] = '0' + slot;
+	infos->name[i++] = '0' + slot.slotRef;
 	infos->name[i] = 0;
-	infos->direction = (slot & 1) ? MidiInputSlot : MidiOutputSlot;
+	infos->direction = (slot.slotRef & 1) ? MidiInputSlot : MidiOutputSlot;
 	return true;
 }
 
@@ -377,7 +379,7 @@ void Slots()
 	print ("    MidiGetSlotInfos : \n");flush;
 	for (i=1; i<=2; i++) {
 		sr = MidiGetIndSlot (r1, i);
-		if (sr > 0) {
+		if (sr.slotRef > 0) {
 			if (MidiGetSlotInfos (sr, &islot)) {
 #ifdef PASCALNAME
 				s = (char *)&islot.name[1];
@@ -392,7 +394,7 @@ void Slots()
 		else print ("Warning : MidiGetIndSlot invalid slot refnum (%lx)\n", sr);
 	}
 	sr = MidiGetIndSlot (r1, 50);
-	if (sr > 0) {
+	if (sr.slotRef > 0) {
 		print ("Warning : MidiGetIndSlot returned refnum %lx for slot 50\n", sr);
 	}
 
@@ -431,7 +433,8 @@ void Slots()
 		print ("Warning : MidiGetSlotInfos returned infos for removed slot\n");				
 	}
 	sr = MidiGetIndSlot (r1, 1);
-	if (sr != sref2) print ("Warning : remaining slot is %lx\n", sr);
+	if (sr.slotRef != sref2.slotRef) 
+		print ("Warning : remaining slot is %lx\n", sr);
 	MidiUnregisterDriver (r1);
 }
 
@@ -521,13 +524,13 @@ void SendingAndReceiving()
 			send (2, r3, true);
 
 			print ("    Driver to client :\n");
-			print ("       send from slot %d:\n", (int)(sref1 &0xffff));
-			send (sref1 &0xffff, r1, true);
-			print ("       send from slot %d:\n", (int)(sref2 &0xffff));
-			send (sref2 &0xffff, r1, true);
+			print ("       send from slot %d:\n", (int)(sref1.slotRef));
+			send (sref1.slotRef, r1, true);
+			print ("       send from slot %d:\n", (int)(sref2.slotRef));
+			send (sref2.slotRef, r1, true);
 			MidiConnectSlot (0, sref2, false);
-			print ("       send from slot %d (disconnected)\n", (int)(sref2 &0xffff));
-			send (sref2 &0xffff, r1, false);
+			print ("       send from slot %d (disconnected)\n", (int)(sref2.slotRef));
+			send (sref2.slotRef, r1, false);
 			print ("       send from slot %d (don't exist)\n", 50);
 			send (50, r1, false);
 		}
