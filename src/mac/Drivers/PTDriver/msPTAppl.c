@@ -479,7 +479,7 @@ static void InitState (StatePtr g)
 	g->buffers = kDefaultBuffers;
 	g->noisein = kDefaultNoiseIn;
 	g->noiseout = kDefaultNoiseOut;
-	g->bend = kMinBendLength;
+	g->bendlength = kMinBendLength;
 	g->vol = kDefaultVol;
 	g->bend = kDefaultBend;
 	g->fftsize = kMinFFTSize;
@@ -557,11 +557,9 @@ static void Initialize()
 	if (!MidiShare()) AlertUser ("\pMidiShare is required");
 	if (MidiGetVersion() < 182) AlertUser ("\prequire MidiShare version 1.82 or later");
 	if (MidiGetNamedAppl (PTDriverName) > 0) AlertUser ("\pPitchTracker driver is still running");
+	if (!AudioWakeUp(gState.fftsize)) AlertUser ("\pAudio initialization failed");
 	if (!SetUpMidi(&gState)) AlertUser ("\pMidiShare initialization failed");
-	if (!AudioWakeUp()) {
-		CloseMidi();
-		AlertUser ("\pAudio initialization failed");
-	}
+	
 	foreGround = true;
 	dlogFilterProcPtr = NewModalFilterProc (DlogFilterProc);
 	SetUpMenus();
