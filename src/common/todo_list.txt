@@ -1,0 +1,15 @@
+
+MidiShare Kernel To Do List / Wish List
+
+
+------------------------------------------------------------------------------
+- specification and implementation of the Drivers Manager.
+
+- MidiShare extension with a set of Mutex, Semaphore, and Critical Section 
+  functions that are suitable for real-time use, and provide cross-platform 
+  data security for developers.
+
+
+------------------------------------------------------------------------------
+last modified: Monday, 12-Jul-1999
+	- Dominique Fober fober@rd.grame.fr
