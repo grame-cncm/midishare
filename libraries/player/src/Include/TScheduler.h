@@ -52,13 +52,38 @@ typedef TSchedulerInterface FAR * TSchedulerInterfacePtr;
 // Class TScheduler 
 //-----------------------
 
+/*
+
+The scheduler use a fixed length task table, this in order to avoid having to lock/unlock 
+a shared data structure when several threads (normal thread and task execution thread)
+access this data structure to insert/remove tasks.
+
+Each task inserted in the scheduler will be associated with a unique number used to 
+index the task in the tasktable.
+
+This index number is set in the task data structure the first time the task is inserted
+in the tasktable. (see InsertTask method)
+
+In the context of the Player, there should be no more than 3 tasks in the tasktable:
+- playtask for the tickplayer
+- synchro task (when in kInternalSync mode)
+- clock task (when in kClockSyncOut mode)
+
+A more general data structure would have to be defined if the scheduler/ticktask classes
+are used in a more demanding use.
+
+*/
+
+#define TableLength 8
+
 class TScheduler :public TSchedulerInterface{
 
 	friend class TTicksTask;
 
 	private:
 	
-		TTicksTask* fHeadTasks;
+		ULONG 		fTaskIndex;
+		TTicksTask* fTaskTable[TableLength];
 		
 		#if GENERATINGCFM
 			UPPTaskPtr fUPPScheduleTask;
@@ -123,42 +148,39 @@ class TTicksTask {
 	private:
 	
 		MidiEvPtr 	fTask;
-		TTicksTask* fNextTask;
-		TScheduler* fScheduler;
 		ULONG 		fDate_ticks;
 		Boolean		fStatus;
-		
-		void		SetNextTask(TTicksTask* inTask){ fNextTask = inTask;}
-		TTicksTask*	GetNextTask(){ return fNextTask;}
-		
+		short		fIndex;
+	
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
-		
-		Boolean IsRunning () {return (fStatus == kTaskRunning);}
-		Boolean IsIdle () 	 {return (fStatus == kTaskIdle);}
-	
+			
 		void Clear () {MidiForgetTask(&fTask);}
-		void SetScheduler(TScheduler* sh)  {fScheduler = sh;}
 		
-		void SetDate(ULONG date) { fDate_ticks = date;}
-		ULONG GetDate() { return fDate_ticks;}
-		
+		void  SetDate(ULONG date) {fDate_ticks = date;}
+		ULONG GetDate() {return fDate_ticks;}
+		short GetIndex() {return fIndex;}
+		void  SetIndex(short index) {fIndex = index;}
+			
 	public:
 	
 		TTicksTask() 
 		{
 			fTask = 0; 
-			fScheduler = 0; 
-			fNextTask = 0; 
 			fDate_ticks = 0;
 			fStatus = kTaskIdle;
+			fIndex = -1;
 		}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
 		
+		Boolean IsRunning () {return (fStatus == kTaskRunning);}
+		Boolean IsIdle () 	 {return (fStatus == kTaskIdle);}
+		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
-
+		
+	
 };
 
 typedef TTicksTask FAR * TTicksTaskPtr;
