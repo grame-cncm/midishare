@@ -148,6 +148,7 @@ void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm, short refNum)
 	}
 }
 
+
 /*_________________________________________________________________________*/
 
 void CallQuitAction (TApplContextPtr context)
@@ -276,7 +277,7 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
-	sleep_on(&machine->stopQueue);
+	interruptible_sleep_on(&machine->stopQueue);
 }
 
 /*__________________________________________________________________________*/
@@ -289,7 +290,7 @@ MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 		
 		if (fifosize(&context->commands) == 0){
 			context->wakeFlag = false;
-			sleep_on(&context->commandsQueue);
+			interruptible_sleep_on(&context->commandsQueue);
 		} 
 		return (MidiEvPtr)fifoget(&context->commands);
 	}
@@ -322,7 +323,5 @@ unsigned int MSPoll(short refNum, TClientsPtr g, struct file * f, poll_table * w
 	
 	return mask; 
 }
-
-
 
 
