@@ -47,7 +47,7 @@ class TEventRecorder :public TEventDispatcher {
 		void ReceiveDefaultEvent(MidiEvPtr e);
 		void EraseTrack();
 		
-		Boolean	AcceptEv (MidiEvPtr e) 	{ return IsAcceptedBit(fRecFilter->evType,EvType(e));}
+		Boolean	AcceptEv (MidiEvPtr e) 	{ return MidiIsAcceptedType(fRecFilter,EvType(e));}
 		Boolean IsRecording () 			{ return (fRecordtrack > 0);}
 		Boolean IsErasing () 			{ return (fRecordmode == kEraseOn);}
 	
