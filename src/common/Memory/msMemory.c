@@ -46,7 +46,7 @@ MSFunctionType(ulong) MSDesiredSpace (MSMemoryPtr g)
 
 MSFunctionType(ulong) MSTotalSpace (MSMemoryPtr g)
 {
-	return g ? g->totalSpace : 0;
+	return g->active ? g->totalSpace : g->desiredSpace;
 }
 
 MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
@@ -60,7 +60,7 @@ MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
 
 MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
 {
-	return g ? lfsize (FreeList(g)) : 0;
+	return g->active ? lfsize (FreeList(g)) : g->desiredSpace;
 }
 
 /*===========================================================================
