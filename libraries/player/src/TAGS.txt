@@ -1,6 +1,7 @@
 
 Tags :
 ------------------------
+01/02/02  V203   (static)			: Main branch, release version 2.03
 ??/??/??  V202   (static)			: Main branch, release version 2.02
 ??/??/??  new_scheduler (branch) 	: Implementation of a simplified ticks scheduler
 ??/??/??  Tritonus (branch) 		: Tritonus branch (Open Source Java Sound API implementation www.tritonus.org)
