@@ -364,7 +364,7 @@ static void SetupFilter (MidiFilterPtr filter)
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi (Boolean *autoQuit)
 {
-	TDriverInfos infos = { OMSDriverName, 100, 0};
+	TDriverInfos infos = { OMSDriverName, kOMSDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	StoragePtr mem = GetStorage();
 

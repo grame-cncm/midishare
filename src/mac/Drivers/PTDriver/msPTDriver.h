@@ -25,6 +25,8 @@
 #define __msPTDriver__
 
 #define PTDriverName	"\pPitchTracker Driver"
+#define kPTDriverVersion	100
+
 
 typedef struct state {
 	Boolean		showWindow;

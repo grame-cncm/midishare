@@ -317,7 +317,7 @@ static void AudioSleep ()
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi (StatePtr state)
 {
-	TDriverInfos infos = { PTDriverName, 100, 0};
+	TDriverInfos infos = { PTDriverName, kPTDriverVersion, 0};
 	TDriverOperation op = { 0, 0, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
 	short refNum; 

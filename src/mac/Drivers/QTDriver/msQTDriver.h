@@ -24,6 +24,7 @@
 #ifndef __msQTDriver__
 #define __msQTDriver__
 
+#define kQTDriverVersion	100
 #define QTDriverName	"\pQuickTime Driver"
 
 extern Boolean doneFlag;
