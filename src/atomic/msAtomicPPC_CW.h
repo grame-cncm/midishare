@@ -50,10 +50,10 @@ static inline int STWCX (register vtype void * addr, register void * value, regi
 									/* stores the new value at addr   */
 		bne-	failed      
         li      result, 1  
-		bl		exit      
+		bl		atomic_exit      
 	failed: 
         li      result, 0
-	exit:
+	atomic_exit:
  	}
     return result;
 }
@@ -75,10 +75,10 @@ static inline int CAS (register vtype void * addr, register void * value, regist
                                    /* stores the new value at addr   */
         bne-	failed
         li      result, 1
-        bl		exit
+        bl		atomic_exit
 	failed:
         li      result, 0
-    exit:
+    atomic_exit:
 	}
 	return result;
 }
@@ -101,10 +101,10 @@ static inline int CASL (register vtype void * addr, register void * value)
                                    /* stores the new value at addr   */
         bne-	failed
         li      result, 1
-        bl		exit
+        bl		atomic_exit
 	failed:
         li      result, 0
-    exit:
+    atomic_exit:
 	}
 	return result;
 }
@@ -128,10 +128,10 @@ static inline int CASLNE (register vtype void * addr, register void * value, reg
 									/* stores the new value at addr   */
         bne-	failed
         li      result, 1
-        bl		exit
+        bl		atomic_exit
 	failed:
         li      result, 0
-    exit:
+    atomic_exit:
  	}
 	return result;
 }
