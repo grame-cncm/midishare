@@ -18,7 +18,7 @@
 /*  version 1.00
 /*  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions.
 /*  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, new SetTempoPlayer function.
-/*  version 2.06  24/10/03  New SetPosTicks and Version functions.
+/*  version 2.06  24/10/03  New SetPosTicks and Version functions, ticks field in PlayerState.
 /*
 /*------------------------------------------------------------------*/
 
@@ -39,7 +39,7 @@ enum playerstatus {kIdle = 0, kPause, kRecording, kPlaying, kWaiting};
 #define kMuteOff  		0
 #define kSoloOn  		1
 #define kSoloOff  		0
-enum trackparameter 	{kMute = 0,  kSolo};
+enum trackparameter {kMute = 0, kSolo};
 
 /*--------------------------------------------------------------------------*/
 /* Recording management */
@@ -67,13 +67,13 @@ enum loop {kLoopOn = 0, kLoopOff};
 /*--------------------------------------------------------------------------*/
 
 enum rcvsynchro	{kInternalSync = 0, kClockSync, kSMPTESync, kExternalSync};
-enum sendsynchro{kNoSyncOut = 0, kClockSyncOut};
+enum sendsynchro {kNoSyncOut = 0, kClockSyncOut};
 
 /*--------------------------------------------------------------------------*/
 /* MIDIfile */
 /*--------------------------------------------------------------------------*/
 
-enum midifiletypes	{midifile0 = 0, midifile1, midifile2};
+enum midifiletypes {midifile0 = 0, midifile1, midifile2};
 
 #define TicksPerQuarterNote	0
 #define Smpte24			24
@@ -110,7 +110,7 @@ enum midifiletypes	{midifile0 = 0, midifile1, midifile2};
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct PlayerState  * PlayerStatePtr;
+typedef struct PlayerState * PlayerStatePtr;
 typedef struct PlayerState{
 	long date;
 	long tempo;
@@ -124,11 +124,12 @@ typedef struct PlayerState{
 	short state;
 	short syncin;
 	short syncout;
+        long ticks;
 }PlayerState;
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct Pos  * PosPtr;
+typedef struct Pos * PosPtr;
 typedef struct Pos{
 	short bar;
 	short beat;
@@ -137,14 +138,12 @@ typedef struct Pos{
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct MidiFileInfos  * MidiFileInfosPtr;
-typedef struct MidiFileInfos
-{
+typedef struct MidiFileInfos * MidiFileInfosPtr;
+typedef struct MidiFileInfos{
 	long format;		/* file format			*/
 	long timedef;		/* time representation		*/
 	long clicks;		/* ticks per quarter/frame	*/
 	long tracks;		/* tracks number             	*/
-
 }MidiFileInfos;
 
 /*--------------------------------------------------------------------------*/
@@ -167,11 +166,11 @@ void   ClosePlayer(short refnum);
 void  StartPlayer(short refnum);
 void  ContPlayer(short refnum);
 void  StopPlayer(short refnum);
-void  PausePlayer(short refnum) ;
+void  PausePlayer(short refnum);
 
 // Record management
 
-void  SetRecordModePlayer(short refnum, short state) ;
+void  SetRecordModePlayer(short refnum, short state);
 void  RecordPlayer(short refnum, short tracknum);
 void  SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 

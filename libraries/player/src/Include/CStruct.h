@@ -17,7 +17,6 @@
 \brief	Definition of C structures used for the external API.
 */
 
-
 #ifndef __CStruct__
 #define __CStruct__
 
@@ -39,7 +38,7 @@ typedef struct PlayerState{
 	short state;
 	short syncin;
 	short syncout;
-
+        long ticks;
 }PlayerState;
 
 /*--------------------------------------------------------------------------*/

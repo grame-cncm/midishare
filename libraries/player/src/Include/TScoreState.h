@@ -41,6 +41,7 @@ class TScoreState : public TScoreObjFollower {
 	
 			TPos pos = GetVisitor().CurDateBBU();
 			state->date = GetVisitor().CurDateMicro() / 100;
+                        state->ticks = date_ticks;
 			
 			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
