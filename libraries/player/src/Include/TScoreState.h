@@ -50,14 +50,14 @@ class TScoreState : public TScoreObjFollower {
 	
 			TPos pos = GetVisitor().CurDateBBU();
 			state->date = GetVisitor().CurDateMicro() / 100;
-                        state->ticks = date_ticks;
+			state->ticks = date_ticks;
 			
 			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
 			state->unit = (short)pos.GetUnit() + 1;
 			
-			state->tsnum = GetVisitor().GetNum ();
-			state->tsdenom = GetVisitor().GetDenom ();
+			state->tsnum = GetVisitor().GetNum();
+			state->tsdenom = GetVisitor().GetDenom();
 			state->tsclick= GetVisitor().GetNClocks();
 			state->tsquarter = GetVisitor().GetN32nd();
 		} 

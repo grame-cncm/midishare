@@ -72,6 +72,11 @@ class TTimeConverter {
 		short GetNClocks() 	{return fNClocks;}
 		short GetN32nd() 	{return fN32nd;}
 		
+		void SetNum(short val)     {fNumerator = val;}
+		void SetDenom(short val)   {fDenominator= val;}
+		void SetNClocks(short val)  {fNClocks = val;}
+		void SetN32nd(short val) {fN32nd = val;}
+		
 		Boolean Inf (const TPos& p1, const TPos& p2) {return fInt.Inf(p1,p2);}
 		Boolean Sup (const TPos& p1, const TPos& p2) {return fInt.Sup(p1,p2);}
 		Boolean InfEq (const TPos& p1, const TPos& p2) {return fInt.InfEq(p1,p2);}

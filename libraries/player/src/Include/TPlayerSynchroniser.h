@@ -133,7 +133,7 @@ class TPlayerSynchroniserInt : public TPlayerSynchroniser {
 		TScoreIterator	fIterator;
 		TScoreRefFollower fFollower;
 		
-		void  PlaySlice ();	
+		void  PlaySlice();	
 	
 	public:
 		

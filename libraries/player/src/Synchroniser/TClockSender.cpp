@@ -61,7 +61,7 @@ void TClockSender::Cont(ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-/* Internal functions
+// Internal functions
 /*--------------------------------------------------------------------------*/
 
 void TClockSender::NextClock (ULONG date_ms) 

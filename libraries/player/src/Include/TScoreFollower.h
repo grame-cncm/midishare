@@ -41,14 +41,14 @@ class TScoreFollower {
 
 	private:
 	
-		void SetPosBBUForward (const TPos& pos);
-		void SetPosBBUBackward (const TPos& pos);
+		void SetPosBBUForward(const TPos& pos);
+		void SetPosBBUBackward(const TPos& pos);
 		
-		void SetPosMicroForward (ULONG date_ten_micro);
-		void SetPosMicroBackward (ULONG date_ten_micro);
+		void SetPosMicroForward(ULONG date_ten_micro);
+		void SetPosMicroBackward(ULONG date_ten_micro);
 		
-		void SetPosTicksForward (ULONG date_ticks);
-		void SetPosTicksBackward (ULONG date_ticks);
+		void SetPosTicksForward(ULONG date_ticks);
+		void SetPosTicksBackward(ULONG date_ticks);
 	
 	protected:
 	
@@ -58,13 +58,13 @@ class TScoreFollower {
 	public:
 	
  		TScoreFollower(){}
- 		virtual ~TScoreFollower (){}
+ 		virtual ~TScoreFollower(){}
  		
 		void Init();
 		
- 		TEventPtr SetPosTicks (ULONG date_ticks); 
- 		TEventPtr SetPosBBU (const TPos& pos);
- 		TEventPtr SetPosMs (ULONG date_ms);
+ 		TEventPtr SetPosTicks(ULONG date_ticks); 
+ 		TEventPtr SetPosBBU(const TPos& pos);
+ 		TEventPtr SetPosMs(ULONG date_ms);
  		
  		ULONG GetPosTicks();
 };
@@ -92,7 +92,7 @@ class TScoreObjFollower : public TScoreFollower {
 		
 	public:
 	
- 		TScoreObjFollower(TScorePtr score, ULONG tpq):fIterator(score),fTempoVisitor(tpq){}
+ 		TScoreObjFollower(TScorePtr score, ULONG tpq):fIterator(score),fTempoVisitor(tpq){Init();}
  		virtual ~TScoreObjFollower(){}
 };
 
@@ -119,7 +119,7 @@ class TScoreRefFollower : public TScoreFollower{
 		
 	public:
 	
- 		TScoreRefFollower(TScoreIterator& iterator, TTempoMapVisitor& visitor):fIterator(iterator),fTempoVisitor(visitor){}
+ 		TScoreRefFollower(TScoreIterator& iterator, TTempoMapVisitor& visitor):fIterator(iterator),fTempoVisitor(visitor){Init();}
  		virtual ~TScoreRefFollower(){}
 };
 

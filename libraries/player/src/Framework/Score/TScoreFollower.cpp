@@ -31,7 +31,33 @@
 
 /*--------------------------------------------------------------------------*/
 
-void  TScoreFollower::Init (){GetVisitor().Init(); GetIterator().Init();}
+void  TScoreFollower::Init()
+{
+	TTempoMapVisitor& visitor = GetVisitor();
+	visitor.Init(); 
+	GetIterator().Init();
+	
+	/*
+	Move to the next tick to get the correct tempo value,
+	then reset the position to 0 and force the tempo to be the one
+	read in the events located at date 0.
+	Do the same with time signature.
+	*/
+	
+	SetPosTicks(1);
+	ULONG tempo = visitor.GetTempo();
+	short num = visitor.GetNum();
+	short denom = visitor.GetDenom();
+	short nclocks = visitor.GetNClocks();
+	short n32nd = visitor.GetN32nd();
+	
+	SetPosTicks(0);
+	visitor.SetTempo(0,tempo);
+	visitor.SetNum(num);
+	visitor.SetDenom(denom);
+	visitor.SetNClocks(nclocks);
+	visitor.SetN32nd(n32nd);
+}
 
 ULONG TScoreFollower::GetPosTicks() {return GetVisitor().CurDateTicks();}
 

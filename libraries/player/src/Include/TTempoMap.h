@@ -70,6 +70,11 @@ class TTempoMap {
 		short GetDenom()   {return fTimeConverter.GetDenom();}
 		short GetNClocks()  {return fTimeConverter.GetNClocks();}
 		short GetN32nd()    {return fTimeConverter.GetN32nd();}
+		
+		void SetNum(short val)     {fTimeConverter.SetNum(val);}
+		void SetDenom(short val)   {fTimeConverter.SetDenom(val);}
+		void SetNClocks(short val)  {fTimeConverter.SetNClocks(val);}
+		void SetN32nd(short val)    {fTimeConverter.SetN32nd(val);}
 			
 		ULONG GetTempo()   {return fTempoConverter.GetTempo();}
 		void SetTempo(ULONG date_ticks,ULONG tempo) {fTempoConverter.Update(date_ticks,tempo);}
