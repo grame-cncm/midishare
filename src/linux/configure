@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+
+COM=../common
+MEM=$COM/Memory
+
+echo creating $COM/makefile
+cp makefile.common  $COM/makefile
+
+echo creating $MEM/makefile
+cp makefile.lib     $MEM/makefile
+
+if [ ! -d $MEM/lib ]
+then
+	echo creating object directory $MEM/lib
+	mkdir $MEM/lib
+fi
+
+chmod +x checksu
+
+echo end of configure
