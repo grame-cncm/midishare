@@ -74,7 +74,9 @@ int TPipe::Open (const char *name, int perm)
 	if (fPipe == PipeErrCode) {
 		return false;
 	}
+#ifndef linux
 	if (fcntl(fPipe, F_NOCACHE, 1) == -1) perror ("TPipe::Open fcntl");
+#endif
 	fBuffSize = kInternalPipeBuffSize;
 	SetName (name);
 	return true;
