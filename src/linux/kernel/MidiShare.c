@@ -60,14 +60,10 @@ TMSGlobalPtr	gMem = &gMSMem;
 
 
 /*--------------------------- Global MidiShare environment --------------------*/
+
 MSFunctionType(void) MidiShareSpecialInit(unsigned long defaultSpace) {
   	MSSpecialInit (defaultSpace, gMem);
 }
-
-
-/*__________________________________________________________________________________*/
-/* Utilities */
-
 
 /*__________________________________________________________________________________*/
 
@@ -678,22 +674,6 @@ int mskTask(unsigned long userptr){
 int mskDTask(unsigned long userptr){ return mskTask(userptr);}
 
 /*__________________________________________________________________________________*/
-/*
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	
-	Boolean ret = false;
-	
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		ret = true;
-	}
-	return ret;
-}
-*/
-
-/*__________________________________________________________________________________*/
 
 int mskForgetTask (unsigned long userptr){ 
 
@@ -754,7 +734,7 @@ int mskGetDTask(unsigned long userptr)
 	
 	ev = MSGetDTask(arg.r, Clients(gMem));
 	mskGetEvAux(ev, &arg, (TMidiGetEvArgs*)userptr);
-	//MSFreeEv(ev,FreeList(Memory(gMem)));
+	MSFreeEv(ev,FreeList(Memory(gMem)));
 	
 	return 0;
 }
