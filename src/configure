@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+
+SUB="client server osglue common"
+
+function makemake ()
+{
+	os=$1
+    for a in $SUB
+    do
+        echo making makefile for $a
+        echo make -C $a -f makefile.$os makefile
+        make -C $a -f makefile.$os makefile
+    done
+}
+
+echo -n "Determining processor... "
+res=$(cpp -dM << !
+!
+)
+arch=i386
+echo $res | grep __ppc__ 2>&1 > /dev/null
+[ $? -eq 0 ] && arch=powerpc
+echo $arch
+
+if [ $arch == "powerpc" ]
+then
+	echo Calling conf powerpc
+	makemake osx
+elif [ $arch == "i386" ]
+then
+	echo Calling conf i386
+	makemake osx
+else
+	echo error: architecture undefined
+	exit 0
+fi
+
+echo end of configure
