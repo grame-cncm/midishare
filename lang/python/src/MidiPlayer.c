@@ -24,6 +24,17 @@
 #include <Player.h>
 
 
+
+static PyObject *
+PyOpen(PyObject *self, PyObject *args)
+{
+	char *name;
+	if (!PyArg_ParseTuple(args, "s", &name))
+        return NULL;
+	return Py_BuildValue("i", OpenPlayer(name));
+}
+
+
 static PyObject *
 PyClose(PyObject *self, PyObject *args)
 {
@@ -36,21 +47,223 @@ PyClose(PyObject *self, PyObject *args)
 }
 
 
+
 static PyObject *
-PyOpen(PyObject *self, PyObject *args)
+PyStart(PyObject *self, PyObject *args)
 {
-	char *name;
-	if (!PyArg_ParseTuple(args, "s", &name))
-        return NULL;
-	return Py_BuildValue("i", OpenPlayer(name));
+	
+}
+
+static PyObject *
+PyCont(PyObject *self, PyObject *args)
+{
+	
+}
+
+static PyObject *
+PyPause(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyStop(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetRecordMode(PyObject *self, PyObject *args)
+{
+	
+}
+
+static PyObject *
+PyRecord(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetRecordFilter(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetPosBBU(PyObject *self, PyObject *args)
+{
+	
+}
+
+static PyObject *
+PySetPosMs(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetLoop(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetLoopStartBBU(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetLoopEndBBU(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetLoopStartMs(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetLoopEndMs(PyObject *self, PyObject *args)
+{
+	
 }
 
 
 
-/*--------------------------------------------------------------------------*/
-/* FOR COMMON FIELDS MANAGEMENT */
-/*--------------------------------------------------------------------------*/
+static PyObject *
+PySetSynchroIn(PyObject *self, PyObject *args)
+{
+	
+}
 
+static PyObject *
+PySetSynchroOut(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetTempo(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetSMPTEOffset(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetState(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetEndScore(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetForwardStep(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyBackwardStep(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetAllTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+static PyObject *
+PySetAllTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySetTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+static PyObject *
+PySetParam(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyGetParam(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyInsertAllTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyInsertTrack(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PySave(PyObject *self, PyObject *args)
+{
+	
+}
+
+
+static PyObject *
+PyLoad(PyObject *self, PyObject *args)
+{
+	
+}
 
 static PyMethodDef MidiPlayer_methods[] = {
 	{"Open", PyOpen, METH_VARARGS, "OpenPlayer"},
