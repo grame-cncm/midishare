@@ -105,10 +105,19 @@
 #define typeRcvAlarm    150   	/* RcvAlam         						*/
 #define typeApplAlarm   151   	/* ApplAlam        						*/
 
-#define typeReserved    152     /*152..254 reserved for future extensions */
-#define typeLastReserved 254	/*152..254 reserved for future extensions */
-		
-#define typeDead		255		/* dead Task or DTask					  */
+#define typeMidiOpen       152
+#define typeMidiOpenRes    153   /* server reply to MidiOpen */
+#define typeMidiClose      154
+#define typeMidiConnect    155
+#define typeMidiSetName    156
+#define typeMidiSetInfo    157
+#define typeMidiSetFilter  158
+
+#define typeReserved       159   /*159..254 reserved for future extensions */
+
+#define typeDead           255   /* dead Task or DTask                     */
+
+#define typeMidiCommSync	typeContinue
 
 		
 #define true 1
@@ -608,6 +617,7 @@ Boolean MidiIsAcceptedPort(MidiFilterPtr f, short port);
 Boolean MidiIsAcceptedChan(MidiFilterPtr f, short chan);
 Boolean MidiIsAcceptedType(MidiFilterPtr f, short type);
 
+short MidiGetLibVersion ();
 
 #ifdef __cplusplus
 }
