@@ -58,8 +58,8 @@ void SendPan(void);
 
 void MSALARMAPI ReceiveEvents(register short);
 
-void LoadState (StatePtr state);
-void SaveState (StatePtr state);
+void LoadApplState (StatePtr state);
+void SaveApplState (StatePtr state);
 BOOL CALLBACKAPI AboutDlgProc(HWND hDlg,UINT message,UINT wParam,LONG lParam);
 
 
@@ -157,7 +157,7 @@ Boolean InitScroller(HWND hDlg, int ID, int txtID, int min, int max, int state)
 //______________________________________________________________________
 Boolean Initialize(HWND hDlg)
 {
-	LoadState (gState);
+	LoadApplState (gState);
 	AboutDlgProcInst= (DLGPROC)MakeProcInstance(AboutDlgProc,ghInst);
 	if (!AboutDlgProcInst)
 		return false;
@@ -277,7 +277,7 @@ BOOL CALLBACKAPI UniversalCtrlDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
 					break;
 				case IDD_QUITTER :
 					if (abouthDlg) EndDialog (abouthDlg, TRUE);
-					SaveState(gState);
+					SaveApplState(gState);
 					EndDialog(hDlg,TRUE);
 					break;
 			}
@@ -337,22 +337,22 @@ void SendProgChge(void)
 		MidiSendIm (myRefNum,e);
 	 }
 }
-
+void   MidiShareSpecialInit(unsigned long defaultSpace);
 /* ----------------------------------------------------------------------------
 
 MidiShare client application setup
 
 ---------------------------------------------------------------------------- */
 Boolean SetUpMidi(void) {
-	  if (!MidiShare()) {
+	if (!MidiShare()) {
 		AlertUser("Can't access to 'MSHARE.DLL'");
 		return false;
-  }
-  myRefNum = MidiOpen(AppliName);
-  if ( myRefNum == MIDIerrSpace ) {
+	}
+	myRefNum = MidiOpen(AppliName);
+	if ( myRefNum == MIDIerrSpace ) {
 		AlertUser("Too much MidiShare client applications");
 		return false;
-  }
+	}
 	MidiSetRcvAlarm(myRefNum,ReceiveEvents);
 	MidiConnect(myRefNum,0,true);
 	return true;
@@ -385,7 +385,7 @@ void MSALARMAPI ReceiveEvents(register short r) {
  Private profile functions
 
 ---------------------------------------------------------------------------- */
-void SaveState (StatePtr state)
+void SaveApplState (StatePtr state)
 {
 	char buff[30];
 
@@ -413,7 +413,7 @@ void SaveState (StatePtr state)
 }
 
 //________________________________________________________________________
-void LoadState (StatePtr state)
+void LoadApplState (StatePtr state)
 {
 	int x, y;
 
