@@ -13,7 +13,6 @@ The folder contains several simple MidiShare applications in console mode.
 - msSendSeq : allows to play a MidiShare sequence.
 - msSequencer : a simple sequencer with record and play features.
 - msTutorial : tutorial for MidiShare programming.
-- msPlayer : a MIDIFile player that use the Player library
 
 ===============
 Installation
@@ -21,9 +20,6 @@ Installation
 You must have MidiShare compiled and installed on your machine. The MidiShare Linux kernel 
 is available at ftp://www.grame.fr/pub/midishare-kernel/
 
-
-To compile the msPlayer application,you must have the Player library compiled and installed 
-on your machine.The Player library is available at ftp://www.grame.fr/pub/midishare-lib/
 
 
 To compile all applications: 

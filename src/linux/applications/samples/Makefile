@@ -2,7 +2,7 @@ INC=../Headers
 OPTIONS=-D __Linux__
 
 
-all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock msPlayer
+all : msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 
 
 install:
 
@@ -43,10 +43,7 @@ msClock : msClock.c      /usr/lib/libMidiShare.so
 	gcc   msClock.c -g $(OPTIONS) -I$(INC) -o msClock -lMidiShare 
 
 
-msPlayer : msPlayer.c Player.h /usr/lib/libPlayer.so
-	gcc msPlayer.c  -g $(OPTIONS) -o msPlayer -lMidiShare -lPlayer 
-
 
 
 clean:
-	rm msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock msPlayer
+	rm msTutorial msSendNote msArpege msSequencer msSendSeq msDisplay msMidiPlayer msEcho msClock 
