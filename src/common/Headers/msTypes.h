@@ -37,17 +37,33 @@
 
 
 #ifdef __Macintosh__
-# include "MacTypes.h"
+# include <MacTypes.h>
 # define MSFunctionType(type)   pascal type
+
+typedef unsigned long ulong;
+
 #else
 # define MSFunctionType(type)   type
 #endif
 
-#define FarPtr(type)           type FAR *
+#ifdef __Windows__
+	typedef unsigned char Byte;
+	typedef char * Ptr;
+	typedef unsigned char Boolean;
+	enum { false = 0, true };
+#endif
 
-typedef unsigned long ulong;
+#ifdef __Linux__
+#	include <linux/types.h>
+
+	typedef unsigned char Byte;
+	typedef char * Ptr;
+	typedef unsigned char Boolean;
+	enum { false = 0, true };
+#endif
+
 typedef unsigned char uchar;
-
+#define FarPtr(type)           type FAR *
 
 typedef struct cell {
 	struct cell* link;		/*+ next cell in the list +*/
