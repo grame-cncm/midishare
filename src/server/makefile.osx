@@ -7,7 +7,7 @@
 
 TARGET = midishared
 
-LIBS = ../msServerCommonLib.o ../msOSGlueLib.o portaudio/src/lib/libportaudio.a
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o libportaudio.a
 
 COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
 COMINC := $(wildcard ../common/Headers/*.h)

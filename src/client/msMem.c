@@ -73,9 +73,9 @@ FarPtr(void) AllocateFilter (unsigned long size)
     int i; FilterInfo * ptr;
     unsigned long fsize = sizeof(FilterInfo) + size;
 
-    for (i = 0; i < MaxFilters; i++) {
+    for (i = 1; i < MaxFilters; i++) {
         ShMemID id = CreateShMKey (i);
-        SharedMemHandler mh = msSharedMemCreate(id, fsize, (void **)&ptr);
+        SharedMemHandler mh = msSharedMemCreate (id, fsize, (void **)&ptr);
         if (mh) {
             ptr->memh = mh;
 #ifdef WIN32
@@ -91,21 +91,23 @@ FarPtr(void) AllocateFilter (unsigned long size)
 
 void * GetShMemID (MidiFilterPtr filter)
 {
-	if (filter) {
+    void * ret = 0;
+
+    if (filter) {
         FilterInfo * fptr = (FilterInfo *)filter;
         fptr--;
 #ifdef WIN32
-        return fptr->id;
+        ret = fptr->id;
 #else
-        return &fptr->id;
+        ret = &fptr->id;
 #endif
     }
-    return 0;
+    return ret;
 }
 
 void FreeFilter (FarPtr(void) filter)
 {
-	if (filter) {
+    if (filter) {
         FilterInfo * fptr = (FilterInfo *)filter;
         fptr--;
         msSharedMemClose (fptr->memh);

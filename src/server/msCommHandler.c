@@ -68,21 +68,26 @@ static void SetFilter (short ref, MidiEvPtr e)
 #ifdef WIN32
     char fid[20];
     Event2Text (e, fid, 20);
-    id = fid;
+    id = *fid ? fid : 0;
 #else
     id = e->info.longField;
 #endif
-    memh = msSharedMemOpen (id, (void **)&fsptr);
-    if (memh) {
-        MidiSetFilter (ref, (MidiFilterPtr)++fsptr);
+    if (id) {
+        memh = msSharedMemOpen (id, (void **)&fsptr);
+        if (memh) {
+            MidiSetFilter (ref, (MidiFilterPtr)++fsptr);
+        }
+        else  printf ("msSharedMemOpen failed\n");
     }
+    else  MidiSetFilter (ref, 0);
 }
 
 /*____________________________________________________________________________*/
 static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
 {
-    char msg[256]; MidiEvPtr res = 0; 
-    char name[256]; short ref; char refmap[32];
+    char msg[256]; MidiEvPtr res = 0;
+    char name[256]; short ref;
+    static char refmap[32];
 
     if (EvType(e) >= typeReserved)
         goto unexpected;
@@ -121,7 +126,9 @@ static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
         case typeMidiConnect:
             MidiConnect (e->info.cnx.src, e->info.cnx.dst, CnxState(e));
             MidiFreeEv (e);
-            break;
+            res = MidiNewEv (typeMidiCommSync);
+            if (!res) goto memfail;
+           break;
         case typeMidiSetName:
             Event2Text (e, name, 256);
             MidiSetName (RefNum(e), name);
