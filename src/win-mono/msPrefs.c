@@ -36,15 +36,25 @@ static char * disable  			= "disable";
 
 #define kDefaultSpace	40000
 //________________________________________________________________________
+static char * GetProfileFullName ()
+{
+	static char buff [1024];
+	char dir[512];
+	if (GetCurrentDirectory(512, dir)) {
+		sprintf (buff, "%s\\%s", dir, profileName);
+		if (GetFileAttributes(buff) != -1)
+			return buff;
+	}
+	return profileName;
+}
+
+//________________________________________________________________________
 unsigned long LoadSpace()
 {
-	char * defaultEntry= "40000", buff[256];
-	unsigned long desiredSpace=0, n;
-
-	n= GetPrivateProfileString (memorySectionName, memDefault, defaultEntry, buff,
-										255, profileName);
-	desiredSpace = n ? atol (buff) : kDefaultSpace;
-	return  (desiredSpace > 0) ? desiredSpace : kDefaultSpace;
+	unsigned long n;
+	n= GetPrivateProfileInt (memorySectionName, memDefault, kDefaultSpace, 
+		GetProfileFullName());
+	return  n ? n : kDefaultSpace;
 }
 
 static __inline Boolean DrvSeparator (c) { return ((c)==' ') || ((c)=='	'); }
@@ -68,7 +78,7 @@ unsigned short CountDrivers()
 	unsigned long n; unsigned short count = 0;
 
 	n= GetPrivateProfileString (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, profileName);
+										DriverMaxEntry, GetProfileFullName());
 	if (n) {
 		char * ptr = NextDriver (buff, true);
 		while (ptr) {
@@ -86,7 +96,7 @@ Boolean GetDriver(short index, char *dst, short bufsize)
 	unsigned long n;
 
 	n= GetPrivateProfileString (driverSectionName, active, defaultEntry, buff,
-										DriverMaxEntry, profileName);
+										DriverMaxEntry, GetProfileFullName());
 	if (!n) return false;
 	ptr = NextDriver (buff, true);
 	while (index-- && ptr)
