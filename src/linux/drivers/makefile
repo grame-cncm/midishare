@@ -1,5 +1,5 @@
 
-DIRS = raw
+DIRS = raw net
 
 all:
 	make -C ../../lib
