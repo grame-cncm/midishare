@@ -194,7 +194,7 @@ static void DataInit (SerialDrvPtr data)
 	MidiParseInitTypeTbl (data->s2t);
 	MidiParseInitMthTbl (data->rTbl);
 	MidiStreamInitMthTbl (data->lTbl);
-	for (i=0; i<64; i++) data->slotIndex[i] = -1;
+	for (i=0; i<256; i++) data->slotIndex[i] = -1;
 	for (i=0; i<2; i++) {
 		data->scc[i].checkTask = 0;
 		data->scc[i].state = false;

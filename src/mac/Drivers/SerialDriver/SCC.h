@@ -45,7 +45,7 @@ typedef struct {
 	short 			refNum;
 	SCC				scc[2];
 	SlotRefNum		slot[2];
-	short			slotIndex[64];
+	short			slotIndex[256];
 	LinearizeMthTbl	lTbl;
 	ParseMethodTbl	rTbl;
 	Status2TypeTbl	s2t;
