@@ -72,7 +72,7 @@ inline Boolean MidiShare() { return true; }
 
 static short 	refNum= 0;
 static short 	version= 0;
-static TFilter	myFilter;					/* application filter */
+static MidiFilterPtr myFilterPtr = 0;
 
 #ifdef PASCALNAME
 MidiName ApplName = "\pFiltres";
@@ -111,17 +111,41 @@ char *typeListe[] =
 /*148 */	"Specific",		"Reserved"
 };
 
+
+#ifdef _Filter_Direct_Access_
+#include "FilterUtils.h"
+static TFilter	myFilter;					/* application filter */
+#define NewFilter()	&myFilter
+#define FreeFilter(f)	
+#define AcceptType(f,i)	AcceptBit(f->evType, i)
+#define AcceptChan(f,i)	AcceptBit(f->channel, i)
+#define AcceptPort(f,i)	AcceptBit(f->port, i)
+#define RejectType(f,i)	RejectBit(f->evType, i)
+#define RejectChan(f,i)	RejectBit(f->channel, i)
+#define RejectPort(f,i)	RejectBit(f->port, i)
+
+#else
+#define NewFilter()	MidiNewFilter()
+#define FreeFilter(f)	MidiFreeFilter (f);
+#define AcceptType(f,i)	MidiAcceptType(f, i, true)
+#define AcceptChan(f,i)	MidiAcceptChan(f, i, true)
+#define AcceptPort(f,i)	MidiAcceptPort(f, i, true)
+#define RejectType(f,i)	MidiAcceptType(f, i, false)
+#define RejectChan(f,i)	MidiAcceptChan(f, i, false)
+#define RejectPort(f,i)	MidiAcceptPort(f, i, false)
+#endif
+
 /*____________________________________________________________________*/
 static void ResetFilter (void)
 {
 	short i;
 
 	for (i = 0; i<256; i++) { 										
-		AcceptBit(myFilter.evType,i);		/* accepte tous les types d'思始ements	*/
-		AcceptBit(myFilter.port,i);			/* en provenance de tous les ports		*/
+		AcceptType(myFilterPtr,i);		/* accepte tous les types d'思始ements	*/
+		AcceptPort(myFilterPtr,i);		/* en provenance de tous les ports		*/
 	}
 	for (i = 0; i<16; i++)
-		AcceptBit(myFilter.channel,i);		/* et sur tous les canaux Midi			*/		
+		AcceptChan(myFilterPtr,i);		/* et sur tous les canaux Midi			*/		
 }
 
 /*____________________________________________________________________*/
@@ -200,16 +224,16 @@ void Events( void)
 	ResetFilter(); 
 	for(i=typeNote; i<=typePrivate; i++) {
 		print ("  %s : ", typeListe[i]);
-		RejectBit(myFilter.evType,i);
+		RejectType(myFilterPtr,i);
 		TestEvent( i);
-		AcceptBit(myFilter.evType,i);
+		AcceptType(myFilterPtr,i);
 		flush;
 	}
 	for(i=typeQuarterFrame; i<=typeSpecific; i++) {
 		print ("  %s : ", typeListe[i]);
-		RejectBit(myFilter.evType,i);
+		RejectType(myFilterPtr,i);
 		TestEvent( i);
-		AcceptBit(myFilter.evType,i);
+		AcceptType(myFilterPtr,i);
 		flush;
 	}
 }
@@ -257,9 +281,9 @@ void Canaux( void)
 	ResetFilter();
 	for(i=0; i<16; i++) {
 		print ("  canal %d : ", i);
-		RejectBit(myFilter.channel,i);
+		RejectChan(myFilterPtr,i);
 		TestCanal( i);
-		AcceptBit(myFilter.channel,i);
+		AcceptChan(myFilterPtr,i);
 		flush;
 	}
 }
@@ -307,9 +331,9 @@ void Ports( void)
 	ResetFilter();
 	for(i=0; i<LastPort; i++) {
 		print ("  port %d : ", i);
-		RejectBit(myFilter.port,i);
+		RejectPort(myFilterPtr,i);
 		TestPort( i);
-		AcceptBit(myFilter.port,i);
+		AcceptPort(myFilterPtr,i);
 		flush;
 	}
 }
@@ -319,8 +343,13 @@ int Open (void)
 {
 	refNum= MidiOpen( ApplName);
 	if (refNum > 0) {
+		myFilterPtr = NewFilter();
+		if (!myFilterPtr) {
+			Close ();
+			return false;
+		}
 		MidiConnect( refNum, refNum, true);
-		MidiSetFilter( refNum, &myFilter );
+		MidiSetFilter( refNum, myFilterPtr);
 		return true;
 	}
 	return false;
@@ -329,9 +358,11 @@ int Open (void)
 /*____________________________________________________________________*/
 void Close (void)
 {
+	if (myFilterPtr) FreeFilter (myFilterPtr);
 	MidiClose( refNum);
 }
 
+#include <Memory.h>
 /*____________________________________________________________________*/
 main(void)
 {
