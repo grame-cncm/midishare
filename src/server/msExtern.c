@@ -36,6 +36,7 @@
 #include "msServerContext.h"
 #include "msRTListenProc.h"
 #include "msKernelPrefs.h"
+#include "msLog.h"
 
 #if defined(__MacOSX__) || defined(linux)
 #	include "dlfcn.h"
@@ -70,7 +71,7 @@ static void * LoadDriver (char *drvName)
 	void * handle = dlopen(drvName,RTLD_LAZY);
 	Start fun; Boolean res;
 	
-	printf ("load driver %s\n", drvName);
+	printf ("load driver %s (%lx)\n", drvName, (long)handle);
 	if (handle && (fun = (Start) dlsym(handle,"_Start")) && (res = (*fun)()))
 		return handle;
 	if (handle) dlclose(handle);
@@ -104,9 +105,10 @@ void SpecialWakeUp (TMSGlobalPtr g)
 {
 	unsigned short i, n = CountDrivers ();
 	for (i=0; i<n; i++) {
-		gDrvRefs[i] = LoadDriver (GetDriverName(i));
+        char *name = GetDriverName(i);
+		gDrvRefs[i] = LoadDriver (name);
 		if (!gDrvRefs[i]) 
-			fprintf (stderr, "LoadLibrary error\n");
+			LogWriteErr ("Error while loading driver \"%s\"", name);
 	}
 }
 
