@@ -1,0 +1,180 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare 1.80 Release Notes</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiShare 1.80 Release Notes</CENTER></H1>
+
+<P><HR ALIGN=LEFT></P>
+
+<UL>
+  <LI><A HREF="#ancre2248559">About the release 1.80</A>
+  <LI><A HREF="#ancre2248845">Overview of the MidiShare Drivers
+  Management</A>
+  <LI><A HREF="#ancre2250428">General operation</A>
+  <LI><A HREF="#ancre2258896">The MidiShare driver</A>
+  <LI><A HREF="#ancre2270587">Slots Management</A>
+  <LI><A HREF="#ancre2259183">Additionnal change codes</A>
+  <LI><A HREF="#ancre2261470">Connections restrictions</A>
+  <LI><A HREF="#ancre2265811">Obsolete functions</A>
+</UL>
+
+<H2><HR ALIGN=LEFT><BR>
+<A NAME="ancre2248559"></A>About the release 1.80</H2>
+
+<BLOCKQUOTE>
+  <P>MidiShare version 1.80 is an Open Source Release: its source
+  code is publicly available under the GNU Library General Public
+  License. The kernel architecture has been slightly revised in
+  order to facilitates porting on new platforms. A GNU/Linux version
+  has been designed, based on this architecture.<BR>
+  The main change consists in removing the IO drivers from the
+  kernel itself and in providing mechanisms to plug these drivers
+  dynamically as external ressources. Therefore, a new manager,
+  the Drivers Manager, is part of the MidiShare kernel architecture:
+  it is in charge of the drivers activation, it also routes the
+  events to their final destination according to the drivers setup.<BR>
+  This document describes these changes and gives the reference
+  of the new functions and data structures introduced with this
+  new architecture. The reader is supposed to be familiar with
+  the MidiShare Developer Documentation.</P></BLOCKQUOTE>
+
+<H2><A NAME="ancre2248845"></A>Overview of the MidiShare Drivers
+Management</H2>
+
+<BLOCKQUOTE>
+  <P>The underlying idea of the drivers management is that a driver
+  behaves like any MidiShare client except for a special call required
+  to register (or unregister) as a driver. All the MidiShare API,
+  extended by a set of new functions detailed below, are available
+  to the drivers. Therefore, input / output operations may be performed
+  using the standard MidiShare mecanisms:</P></BLOCKQUOTE>
+
+<UL>
+  <UL>
+    <LI>MidiShare events to be send to the physical ports may be
+    handled in real-time using a MidiShare received alarm.
+    <LI>events received by the driver from the physical ports may
+    be given to the MidiShare kernel using standard MidiSend functions.
+  </UL>
+</UL>
+
+<H2><A NAME="ancre2250428"></A>General operation</H2>
+
+<BLOCKQUOTE>
+  <P>Loading drivers in memory is a platform dependant operation
+  (so as unloading), in charge of the Drivers Manager. It is the
+  driver responsability to register and unregister: it may be done
+  at any time. However, the driver should act according to the
+  MidiShare state:</P>
+  <P>- when MidiShare is dormant, the driver should be dormant</P>
+  <P>- when MidiShare wakes up, the driver should also be woken.</P>
+  <P>Therefore, in order to be notified of the kernel state changes,
+  a driver should provide callbacks at register time. The TDriverOperation
+  data structure is intended to store these callbacks:</P>
+  <PRE>
+       typedef struct TDriverOperation {
+		void 		(* wakeup) (void);
+		void 		(* sleep)  (void);
+		long		reserved[3];
+	} TDriverOperation;</PRE>
+  <P>The following functions are provided for drivers management
+  :</P>
+  <PRE>short    <A HREF="MSH_Fonctions/MidiRegisterDriver.html">MidiRegisterDriver</A>  (TDriverInfos * infos, TDriverOperation *op)
+void 	 <A HREF="MSH_Fonctions/MidiUnregisterDriver.html">MidiUnregisterDriver</A>(short refnum)
+short	 <A HREF="MSH_Fonctions/MidiCountDrivers.html">MidiCountDrivers</A>    ()
+short	 <A HREF="MSH_Fonctions/MidiGetIndDriver.html">MidiGetIndDriver</A>    (short index)
+Boolean  <A HREF="MSH_Fonctions/MidiGetDriverInfos.html">MidiGetDriverInfos</A>  (short refnum, TDriverInfos * infos)</PRE>
+</BLOCKQUOTE>
+
+<H2><A NAME="ancre2258896"></A>The MidiShare driver</H2>
+
+<BLOCKQUOTE>
+  <P>Like the MidiShare application, automatically opened with
+  the first client, a MidiShare driver is created at wakeup time:
+  it should be considered as the driver image of the MidiShare
+  application. As MidiShare client applications should connect
+  to MidiShare to communicate with the drivers, the MidiShare drivers
+  should connect to the driver image of MidiShare to communicate
+  with the client applications.<BR>
+  The MidiShare reference number is 0 for the client applications
+  and 127 for the drivers.</P></BLOCKQUOTE>
+
+<H2><A NAME="ancre2270587"></A>Slots Management</H2>
+
+<BLOCKQUOTE>
+  <P>To differenciate between MidiShare logical ports and input
+  / ouput ports supported by a driver (Serial ports, USB...) we'll
+  talk about 'slots' when we'll refer to a driver port.<BR>
+  A driver should declare all its available slots using the MidiAddSlot
+  function, which returns a system unique slot reference number.
+  This reference number is composed of the driver reference number
+  and a slot reference number unique in the driver context.</P>
+  <PRE>	typedef struct {
+		short	drvRef;	/* the driver reference number */
+		short slotRef;	/* the slot reference number   */
+	} SlotRefNum;</PRE>
+  <P>The following functions are provided for the slots management
+  :</P>
+  <PRE>
+SlotRefNum	<A HREF="MSH_Fonctions/MidiAddSlot.html">MidiAddSlot</A>     (short refnum, SlotName name, SlotDirection direction)
+SlotRefNum	<A HREF="MSH_Fonctions/MidiGetIndSlot.html">MidiGetIndSlot</A>  (short refnum, short index)
+void        <A HREF="MSH_Fonctions/MidiRemoveSlot.html">MidiRemoveSlot</A>  (SlotRefNum slot)
+Boolean     <A HREF="MSH_Fonctions/MidiGetSlotInfos.html">MidiGetSlotInfos</A>(SlotRefNum slot, TSlotInfos * infos)</PRE>
+  <P>MidiShare allows dynamic routing of the events from one port
+  to any of the available slots. For this reason, a slot can be
+  connected to one or several MidiShare ports. The Driver Manager
+  is in charge of dispatching the events to or from the drivers
+  according to the connections set between the event port and the
+  drivers slots.<BR>
+  The following functions are provided for the slot connections
+  management :</P>
+  <PRE>
+void    <A HREF="MSH_Fonctions/MidiConnectSlot.html">MidiConnectSlot</A> (short port, SlotRefNum slot, Boolean state)
+Boolean <A HREF="MSH_Fonctions/MidiIsSlotConnected.html">MidiIsSlotConnected</A> (short port, SlotRefNum slot)</PRE>
+</BLOCKQUOTE>
+
+<H2><A NAME="ancre2259183"></A>Additionnal change codes</H2>
+
+<BLOCKQUOTE>
+  <P>The following alarm codes are defined to notify the client
+  applications of changes concerning the drivers:</P>
+  <PRE>
+MIDIOpenDriver     /* notified when a driver opens */
+MIDICloseDriver    /* notified when a driver closes */
+MIDIAddSlot	       /* notified when a slot is added to the system */
+MIDIRemoveSlot     /* notified when a slot is removed from the system */
+MIDIChgSlotConnect /* notified when the slots connections change */</PRE>
+</BLOCKQUOTE>
+
+<PRE></PRE>
+
+<H2><A NAME="ancre2261470"></A>Connections restrictions</H2>
+
+<BLOCKQUOTE>
+  <P>Regular MidiShare clients and MidiShare drivers are considered
+  to be part of separate communication folders. An additionnal
+  connection rule is given : a connection is not allowed to cross
+  a folder boundary. Therefore, connections can be made between
+  regular clients or between drivers but NOT between a driver and
+  a regular client. Such connections requests will be silently
+  ignored by the kernel.</P></BLOCKQUOTE>
+
+<H2><A NAME="ancre2265811"></A>Obsolete functions</H2>
+
+<BLOCKQUOTE>
+  <P>The functions below are obsolete:</P>
+  <PRE>
+Boolean MidiGetPortState (short port)	
+void    MidiSetPortState (short port, Boolean state)</PRE>
+  <P>For compatibility, the corresponding entry points are supported
+  in the Macintosh version but the functions do nothing and MidiGetPortState
+  always returns true.</P></BLOCKQUOTE>
+
+<P><BR>
+<HR ALIGN=LEFT>
+
+</BODY>
+</HTML>

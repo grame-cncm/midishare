@@ -1,0 +1,120 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiGetSlotInfos </TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiGetSlotInfos</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Gives information about a slot: it includes the slot name,
+  the slot direction and its connection set to the MidiShare ports</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    Boolean <A HREF="MidiGetSlotInfos.html" TARGET="Page">MidiGetSlotInfos</A> (SlotRefNum ref, TSlotInfos * infos);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>ref</CODE>
+    <DD>a 32-bit integer, the slot reference number.
+    <DT><CODE>infos</CODE>
+    <DD>a pointer to a TSlotInfos structure to be filled with the
+    slot characteristics.
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>typedef struct TSlotInfos {
+        SlotName       name;
+        SlotDirection  direction;    
+        char           cnx[32];
+        long           reserved[2]; <I><FONT COLOR="#0000af">/* reserved for future use */</FONT></I>
+} TSlotInfos;
+  </PRE>
+  <P><B>Fields</B>:</P>
+  <UL>
+    <LI>name : contains the slot name.
+    <LI>direction : indicates the slot direction, defined like below
+    <LI>cnx : a 256 bits field to indicates the 256 ports connections
+    state.
+  </UL>
+  <PRE></PRE>
+  <P><B>Types</B>:</P>
+  <PRE>typedef enum {  MIDIInputSlot=1, 
+                MIDIOutputSlot,
+                MIDIInputOutputSlot } SlotDirection;</PRE>
+</BLOCKQUOTE>
+
+<PRE>
+
+<IMG SRC="../MSH_ArtWork/result.jpg" WIDTH="200" HEIGHT="20" 
+ALIGN="TOP" NATURALSIZEFLAG="0"></PRE>
+
+<BLOCKQUOTE>
+  <P>The result is a Boolean value which indicates whether MidiShare
+  has been able to get information about the slot or not.</P></BLOCKQUOTE>
+
+<PRE>
+
+<HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></PRE>
+
+<BLOCKQUOTE>
+  <PRE>
+
+<I>Print information about a driver slots.</I>
+
+
+void PrintSlotsInfos(short driverRef)
+{
+    TDriverInfos dInfos; TSlotInfos sInfos;
+    
+    if (<A HREF="MidiGetDriverInfos.html" TARGET="Page">MidiGetDriverInfos</A> (driverRef, &amp;dInfos)) {
+      short     i, j; SlotRefNum ref;
+        printf( &quot;List of %s slots :\n&quot;, dInfos.name);
+        for( i = 1; i &lt;= dInfos.slots; i++ )
+        {
+            ref = <A HREF="MidiGetIndSlot.html" TARGET="Page">MidiGetIndSlot</A>(driverRef, i);
+            if (<A HREF="MidiGetSlotInfos.html" TARGET="Page">MidiGetSlotInfos</A> (ref, &amp;sInfos)) {
+                printf(&quot;\n%i : %s : &quot;, ref, sInfos.name);
+                switch (sInfos.direction) 
+                {
+                    case MIDIInputSlot:
+                        printf(&quot;input slot&quot;);
+                        break;
+                    case MIDIOutputSlot:
+                        printf(&quot;output slot&quot;);
+                        break;
+                    case MIDIInputOutputSlot:
+                        printf(&quot;input/output slot&quot;);
+                        break;
+                }
+                printf(&quot; : connected ports : &quot;);
+                for (j = 0; j &lt; 256; j++) {
+                    if (IsAcceptedBit (dInfos.cnx, i))
+                        printf(&quot;%d &quot;, i);
+                }
+            }
+        }
+    }
+}
+ </PRE>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

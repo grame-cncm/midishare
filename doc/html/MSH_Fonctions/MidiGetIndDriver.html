@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetIndDriver</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetIndDriver</H1>
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the reference of number of a driver from its order number. The <A HREF="../MSH_Fonctions/MidiGetIndDriver.html" TARGET="Page">MidiGetIndDriver</A> function allows to know the reference number of any driver by giving its order number (a number between 1 and <A HREF="../MSH_Fonctions/MidiCountDrivers.html" TARGET="Page">MidiCountDrivers</A>()). 
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+    short <A HREF="../MSH_Fonctions/MidiGetIndDriver.html" TARGET="Page">MidiGetIndDriver</A> (short index);
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>index </CODE>
+	<DD>a 16-bit integer, is the index number of a driver between 1 and <A HREF="../MSH_Fonctions/MidiCountDrivers.html" TARGET="Page">MidiCountDrivers</A>().  
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a driver reference number or MIDIerrIndex if the index is out of range. 
+</P></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiGetDriverInfos </TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiGetDriverInfos</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Gives information about a driver: it includes the driver name,
+  its version number and its slots count.</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    Boolean <A HREF="MidiGetDriverInfos.html" TARGET="Page">MidiGetDriverInfos</A> (short ref, TDriverInfos * infos);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>ref</CODE>
+    <DD>a 16-bit integer, it is the reference number of the driver.
+    <DT><CODE>infos</CODE>
+    <DD>a pointer to a TDriverInfos structure to be filled with the
+    driver characteristics.
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>typedef struct TDriverInfos {
+        DriverName  name;
+        short       version;
+        short       slots;
+        long        reserved[2]; <I><FONT COLOR="#0000af">/* reserved for future use */</FONT></I>
+
+} TDriverInfos;
+  </PRE>
+  <P><B>Fields</B>:</P>
+  <UL>
+    <LI>name: contains the driver name.
+    <LI>version : contains the driver version number
+    <LI>slots : contains the number of slots declared by the driver.
+  </UL>
+</BLOCKQUOTE>
+
+<PRE>
+
+<IMG SRC="../MSH_ArtWork/result.jpg" WIDTH="200" HEIGHT="20" 
+ALIGN="TOP" NATURALSIZEFLAG="0"></PRE>
+
+<BLOCKQUOTE>
+  <P>The result is a Boolean value which indicates whether MidiShare
+  has been able to get information about the driver or not.</P></BLOCKQUOTE>
+
+<PRE>
+
+
+<HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></PRE>
+
+<BLOCKQUOTE>
+  <P>Print information about all the registered MidiShare drivers</P>
+  <PRE>
+void PrintDriverInfos(void)
+{
+    TDriverInfos infos;
+    short ref, i, n = <A HREF="MidiCountDrivers.html" TARGET="Page">MidiCountDrivers</A>();
+    
+    printf( &quot;List of MidiShare drivers :\n&quot; );
+    
+    for( i = 1; i &lt;= n; i++ ) {
+        ref = <A HREF="MidiGetIndDriver.html" TARGET="Page">MidiGetIndDriver</A>(i);
+        if (<A HREF="MidiGetDriverInfos.html" TARGET="Page">MidiGetDriverInfos</A> (ref, &amp;infos))
+            printf(&quot;%i : %s v%d.%d - %d slots\n&quot;, ref, infos.name
+                            infos.verson/100, infos.version%100, infos.slots );
+    }
+}</PRE>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>

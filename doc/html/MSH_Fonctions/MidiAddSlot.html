@@ -1,0 +1,73 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiAddSlot</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" BACKGROUND="../MSH_ArtWork/wpat.jpg">
+
+<H1><CENTER>MidiAddSlot</CENTER></H1>
+
+<P><HR ALIGN=LEFT><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH="200"
+HEIGHT="20" ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <P>Add a new slot to a driver. MidiShare applications owning
+  a &quot;context alarm&quot; will be informed of the new slot
+  with the MIDIAddSlot alarm code.</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <PRE>
+    SlotRefNum <A HREF="MidiAddSlot.html" TARGET="Page">MidiAddSlot</A> (short drvRefNum, SlotName name, SlotDirection direction);</PRE>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="3"></P>
+
+<BLOCKQUOTE>
+  <DL>
+    <DT><CODE>drvRefNum</CODE>
+    <DD>the MidiShare reference number of the owner driver.
+    <DT><CODE>name</CODE>
+    <DD>the slot name.
+    <DT><CODE>direction</CODE>
+    <DD>the slot direction which may be in <I>MidiInputSlot</I>,
+    <I>MidiOutputSlot</I> or <I>MidiInputOutputSlot</I>
+    <DD>&nbsp;
+  </DL>
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH="200" HEIGHT="20"
+ALIGN="TOP" NATURALSIZEFLAG="0"></P>
+
+<BLOCKQUOTE>
+  <P>The result is a 32-bit integer, a MidiShare unique slot reference
+  number.</P>
+  <P>&nbsp;</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH="36" HEIGHT="40" 
+ALIGN="LEFT" NATURALSIZEFLAG="0"></P>
+
+<BLOCKQUOTE>
+  <P>A SlotRefNum is composed of the driver reference number associated
+  to a unique number in the driver context. Its structure is defined
+  as:</P>
+  <BLOCKQUOTE>
+    <PRE> typedef struct {
+     short drvRef;
+     short slotRef;
+ } SlotRefNum;</PRE>
+  </BLOCKQUOTE>
+  <P>A macro defined as:</P>
+  <PRE>        #define Slot(ref) (((ref).slotRef)</PRE>
+  <P>gives the slot reference number.</P>
+  <P>This part is the base of the Driver Manager events dispatching
+  : events sent to MidiShare by a driver or given to a driver by
+  MidiShare should always carry their slot reference number in
+  their port field<I>.</I>
+</BLOCKQUOTE>
+
+</BODY>
+</HTML>
