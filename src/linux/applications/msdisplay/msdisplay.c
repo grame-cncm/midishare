@@ -1,11 +1,10 @@
 /****************************************************************************
 *****************************************************************************
 *																			*
-*                     		msDisplay, GTK version							*
+*                     		msDisplay, GTK version			    *
 *																			*
 *****************************************************************************
 *****************************************************************************/
-
 
 #include <stdio.h>
 #include <gtk/gtk.h>
@@ -16,17 +15,21 @@
 						Global variables for msDisplay  
 *****************************************************************************/
 
+#define MAXEV 100
+
 static short 		gRefNum = -1;		// msDisplay MidiShare reference number
 static GtkWidget*	gEventList = 0;		// received events list
-static long			gCount = 0;			// received events number
+static long		gCount = 0;		// received events number
 
+
+static int min (int a, int b) { return (a < b) ?a : b;}
 
 /****************************************************************************
 						Build the display list
 *****************************************************************************/
 static GtkWidget* makeEventList(GtkWidget** plist)
 {
-	int		c;
+	int c;
 	static gchar* Colonnes[]={"#", "hh:mm:ss.nnn", "Port", "Chan", "Type", "Data"};
 	GtkWidget *scroll, *list;
 
@@ -71,33 +74,47 @@ static char* EvName(MidiEvPtr e)
 	return "Undefined";
 }
 
-static char* EvFields(MidiEvPtr ev)
+static char * DatasToText(MidiEvPtr e , char *buff)
 {
-	//int snprintf (char *str, size_t size, const char *format, ...); 
-	static char buffer[150];
-	int	space, pos, field, fcount, wcount;
+	char *ptr= buff;
+	int i, max;
+
+	*ptr= 0;
+	switch (EvType(e)) {
+		//case typeTextual:
+		case typeText:
+		case typeCopyright:
+		case typeSeqName:
+		case typeInstrName:
+		case typeLyric:
+		case typeMarker:
+		case typeCuePoint:
+			for( i=0, max= min(MidiCountFields(e), 18); i< max; i++)
+				*ptr++= (char)MidiGetField(e, i);
+			*ptr= 0;
+			break;
+		case typeSMPTEOffset:
+			for( i=0; i< 6; i++, ptr+=3) 
+				sprintf( ptr, "%-2ld ", MidiGetField(e, i));
+			break;
 	
-	buffer[0] = 0;
-	fcount = MidiCountFields(ev);
-	space = 149; pos = 0; field = 0; wcount = 0;
-	while ( (field < fcount) && (space > 0) && (wcount != -1) ) {
-		wcount = snprintf(&buffer[pos], space, "%ld ", MidiGetField(ev, field));
-		field++; pos += wcount; space -= wcount;
+		default:
+			for( i=0, max= min(MidiCountFields(e), 5); i< max; i++, ptr+=4)
+				sprintf( ptr, "%-3ld ", MidiGetField(e, i));
 	}
-	
-	return buffer;
+	return buff;
 }
 
-#define MAXEV 100
-	
+
 void display_1_event(MidiEvPtr e)
 {
-		long 		t, hh, mn, ss, nnn;
-		char* 		txt[6];
-		char		buf0[8];
-		char		buf1[16];
-		char		buf2[8];
-		char		buf3[8];
+		long 	t, hh, mn, ss, nnn;
+		char* 	txt[6];
+		char	buf0[8];
+		char	buf1[16];
+		char	buf2[8];
+		char	buf3[8];
+		char 	buf4[50];
 		
 		t = Date(e);
 		nnn = t%1000; t /= 1000;
@@ -110,24 +127,24 @@ void display_1_event(MidiEvPtr e)
 		txt[2] = buf2; sprintf(buf2, "%d", Port(e));
 		txt[3] = buf3; sprintf(buf3, "%d", Chan(e));
 		txt[4] = EvName(e);
-		txt[5] = EvFields(e);
+		txt[5] = DatasToText(e, buf4);
 		gtk_clist_append(GTK_CLIST(gEventList), txt);
 		gCount++; 
 		if (gCount>MAXEV) gtk_clist_remove(GTK_CLIST(gEventList),0);
 }
 
 // GTK periodical function 
+
 gint display_events( gpointer data )
 {
 	MidiEvPtr e;
-	long	c;
-	
-	c = MidiCountEvs(gRefNum);
+	long c = MidiCountEvs(gRefNum);
 	
 	// if we are too late, remove some events
 	while (c > MAXEV) { MidiFreeEv(MidiGetEv(gRefNum)); c--; }
 	
 	if (c>0) {
+	
 		while ( (c>0) && (e=MidiGetEv(gRefNum)) ) {
 			display_1_event(e);
 			MidiFreeEv(e);
