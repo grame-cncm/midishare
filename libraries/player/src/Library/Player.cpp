@@ -56,6 +56,7 @@ void  EXPORT SetRecordFilterPlayer(short refnum, MidiFilterPtr filter);
 
 void  EXPORT SetPosBBUPlayer(short refnum, PosPtr pos);
 void  EXPORT SetPosMsPlayer(short refnum, long date_ms);
+void  EXPORT SetPosTicksPlayer(short refnum, long date_ticks);
 
 // Loop management
 
@@ -69,12 +70,12 @@ long  EXPORT SetLoopEndMsPlayer(short refnum, long date_ms);
 
 void  EXPORT SetSynchroInPlayer(short refnum, short state);
 void  EXPORT SetSynchroOutPlayer(short refnum, short state);
-void  EXPORT SetSMPTEOffsetPlayer(short refnum, SmpteLocPtr smptepos) ;
+void  EXPORT SetSMPTEOffsetPlayer(short refnum, SmpteLocPtr smptepos);
 void  EXPORT SetTempoPlayer(short refnum, long tempo);
 
 // State management
 
-void  EXPORT GetStatePlayer(short refnum, PlayerStatePtr playerstate) ;
+void  EXPORT GetStatePlayer(short refnum, PlayerStatePtr playerstate);
 void  EXPORT GetEndScorePlayer(short refnum, PlayerStatePtr playerstate);
 
 // Step playing 
@@ -217,6 +218,14 @@ void  EXPORT SetPosMsPlayer(short refnum, long date_ms)
 }
 
 /*--------------------------------------------------------------------------*/
+
+void  EXPORT SetPosTicksPlayer(short refnum, long date_ticks)
+{
+	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
+	if (player) player->SetPosTicks(date_ticks);
+}
+
+/*--------------------------------------------------------------------------*/
 // Loop management
 /*--------------------------------------------------------------------------*/
 
@@ -231,7 +240,7 @@ void  EXPORT SetLoopPlayer(short refnum, short state)
 long  EXPORT SetLoopStartBBUPlayer (short refnum, PosPtr pos)
 {
 	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
-	return (player) ? player->SetLoopStartBBU(pos) :kErrSequencer;
+	return (player) ? player->SetLoopStartBBU(pos) : kErrSequencer;
 }
 
 /*--------------------------------------------------------------------------*/
