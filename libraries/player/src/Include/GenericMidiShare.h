@@ -17,6 +17,7 @@
 	#define true 1
 	#define false 0
 	#define nil 0
+	#define errno 
 	#define FAR
 	#define EXPORT
 	#define MSALARMAPI
@@ -29,6 +30,9 @@
 		#include <midishare.h>
 	#endif
 	
+	#define FAR
+	#define NEAR
+	#define MFAPI
 	/* New type definition */
 	typedef struct TFilter * MidiFilterPtr;
 
@@ -42,7 +46,6 @@
 
     #define  EXPORT  __declspec(dllexport)
     #define  MFAPI
-
     #define __DEBUG__ 0
 
   #endif
@@ -51,10 +54,7 @@
 	#define true 1
 	#define false 0
 	#define nil 0
-	
-	/* New type definition */
-	typedef struct TFilter * MidiFilterPtr;
-	
+		
   #endif
 #endif
 
