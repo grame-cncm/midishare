@@ -7,9 +7,11 @@ INIT = $(RC)/init.d
 
 # make, make install of the full MidiShare distribution
 
-midishare: common
-	make -C kernel
+midishare: kernel
 	make -f appls
+
+kernel: common
+	make -C kernel
 
 common:
 	make -C ../common
