@@ -24,7 +24,12 @@
 #ifndef __EventToMidiStream__
 #define __EventToMidiStream__
 
+
+#ifdef MODULE
+#include "MidiShareKernel.h"
+#else
 #include "MidiShare.h"
+#endif
 
 /*------------------------------------------------------------------------*/
 typedef struct Ev2StreamRec * Ev2StreamPtr;

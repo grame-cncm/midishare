@@ -24,8 +24,11 @@
 #ifndef __MidiStreamToEvent__
 #define __MidiStreamToEvent__
 
-
+#ifdef MODULE
+#include "MidiShareKernel.h"
+#else
 #include "MidiShare.h"
+#endif
 
 /*------------------------------------------------------------------------*/
 typedef struct StreamFifo  * StreamFifoPtr;
