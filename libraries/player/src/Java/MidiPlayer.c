@@ -498,3 +498,60 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_Save
 	
 	return 0;
 }
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer1_SetEventProducer
+ (JNIEnv * inEnv, jclass cl, jint refnum, jint producer){
+
+	 SetEventProducer(refnum,(void*)producer);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_GetEventProducer
+  (JNIEnv * inEnv, jclass cl, jint refnum){
+
+	return (jint)GetEventProducer(refnum);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeScoreProducer
+  (JNIEnv * inEnv, jclass cl, jint seq){
+
+	return (jint)MakeScoreProducer((MidiSeqPtr)seq);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeSeqProducer
+  (JNIEnv * inEnv, jclass cl, jint p1, jint p2){
+
+	return (jint)MakeSeqProducer((void*)p1, (void*)p2);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeMixProducer
+  (JNIEnv * inEnv, jclass cl, jint p1, jint p2){
+
+	return (jint)MakeMixProducer((void*)p1, (void*)p2);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeReactiveProducer
+  (JNIEnv * inEnv, jclass cl, jint p, jint f){
+
+	return (jint)MakeReactiveProducer((void*)p, (void*)f);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeEventFilter
+  (JNIEnv *inEnv , jclass ce, jint ev){
+  
+  	return (jint)MakeEventFilter((MidiEvPtr)ev);
+ }
+  

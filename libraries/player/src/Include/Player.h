@@ -232,6 +232,17 @@ short  GetParamPlayer (short refnum, short tracknum, short  param);
 long   InsertAllTrackPlayer(short refnum,MidiSeqPtr s);
 long   InsertTrackPlayer(short refnum, short tracknum, MidiSeqPtr s);
 
+// Event management
+
+void  	SetEventProducer (short refnum, void* producer);
+void* 	GetEventProducer (short refnum);
+
+void*	MakeScoreProducer (MidiSeqPtr seq);
+void*	MakeSeqProducer (void* p1, void* p2);
+void*	MakeMixProducer (void* p1, void* p2);
+void*	MakeReactiveProducer (void* p1, void* p2);
+void*	MakeEventFilter (void* p1);
+
 
 // Midifile management
 
