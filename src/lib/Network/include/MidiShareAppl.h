@@ -75,3 +75,4 @@ inline MidiName MidiShareAppl::GetName ()				{ return MidiGetName (fRefNum); }
 inline Boolean 	MidiShareAppl::Opened ()				{ return fRefNum > 0; }
 
 #endif
+

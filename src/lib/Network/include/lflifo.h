@@ -96,7 +96,7 @@ static void lfpush (vtype lifo * lf, cell * cl)
 		:
 		:"c" (lf), "d" (cl), "a" (lf->top)
 		);	
-	atomic_inc (&lf->count);
+	atomic_inc ((atomic_t *)&lf->count);
 }
 
 static cell* lfpop (vtype lifo * lf)
@@ -118,7 +118,7 @@ static cell* lfpop (vtype lifo * lf)
 		:"=a" (v)
 		:"m" (*lf), "a" (lf->top), "d" (lf->oc)
 		:"ecx", "ebx" );
-	atomic_dec (&lf->count);
+	atomic_dec ((atomic_t *)&lf->count);
 	return v;
 }
 

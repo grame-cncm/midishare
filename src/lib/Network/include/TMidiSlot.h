@@ -53,3 +53,4 @@ class TMidiSlot
 /*_______________________________________________________________________________*/
 inline Boolean TMidiSlot::Opened()	{ return fRefNum.slotRef != undefinedRefNum; }
 #endif
+
