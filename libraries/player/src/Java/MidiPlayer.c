@@ -27,13 +27,6 @@
 /*          28/11/97  version 1.09  JNI compatible
 /*****************************************************************************/
 
-#ifdef __Macintosh__
-	#include <midisharePPC.h>
-	/* New type definition */
-	typedef struct TFilter * MidiFilterPtr;
-#endif
-
-
 
 #include "Player.h"
 #include "MidiPlayer.h"
