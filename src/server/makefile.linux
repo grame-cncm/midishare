@@ -60,7 +60,7 @@ dep: makefile
 clean:
 	make -C ../common clean
 	make -C ../osglue clean
-	rm -f $(OBJ) $(TARGET) $(KLIB)*
+	rm -f $(OBJ) $(TARGET)
 
 ../msServerCommonLib.o: makefile $(COMSRC) $(COMINC)
 	make -C ../common server
