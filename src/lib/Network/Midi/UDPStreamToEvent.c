@@ -177,7 +177,16 @@ static MidiEvPtr rcvType (UDPStreamPtr f, Byte c)
 //_____________________________________________________________________________
 static MidiEvPtr rcvIgnore (UDPStreamPtr f, Byte c)
 {
-	if (! --f->length) 	parseComplete (f);
+	if (! --f->length) 	{
+//		parseComplete (f);
+		MidiEvPtr e = f->ptrCur;
+		f->ptrCur = 0;
+		f->shortDst = &f->length;
+		f->parse  = rcvShortHigh;
+		f->next  = rcvType;
+		f->index = 0;
+		if (e) MidiFreeEv (e);
+	}
 	return 0;
 }
 
