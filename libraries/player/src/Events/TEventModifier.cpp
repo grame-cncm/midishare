@@ -118,6 +118,8 @@ void TEventModifier::ReceiveEvents(MidiEvPtr e)
 			
 				case typeKeyOn:
 				case typeKeyOff:
+				case typePitchWheel:
+				case typeCtrlChange:
 					if (isFunOn()) { Modify(MidiCopyEv(e));}
 					break;
 					
@@ -325,6 +327,39 @@ MidiEvPtr  TEventModifier::HandleKeyOn(MidiEvPtr ev, TFunPtr fun)
 	return copy;
 }
 
+/*--------------------------------------------------------------------------*/
+
+MidiEvPtr  TEventModifier::HandlePitchBend(MidiEvPtr ev, TFunPtr fun)
+{
+	MidiEvPtr copy = MidiCopyEv(ev);
+	if (!copy) return copy;
+	
+	Chan(copy) = Range((signed)Chan(copy)+ fun->GetChan(), 0,15);
+	Port(copy) = Range((signed)Port(copy)+ fun->GetPort(), 0,15);
+	Date(copy) = ((fSynchroniser->ConvertMsToTick(Date(copy)) - fun->GetDate())
+		 * fun->GetCoeff())/1000 + fun->GetOffset() + fun->GetDate();
+	
+	fun->InsertEvent(ev);
+	return copy;
+}
+
+/*--------------------------------------------------------------------------*/
+
+MidiEvPtr  TEventModifier::HandleVolume(MidiEvPtr ev, TFunPtr fun)
+{
+	MidiEvPtr copy = MidiCopyEv(ev);
+	if (!copy) return copy;
+	
+	Vel(copy) = Range ((signed)Vel(copy) + fun->GetVel(),0,127);
+	Chan(copy) = Range((signed)Chan(copy)+ fun->GetChan(), 0,15);
+	Port(copy) = Range((signed)Port(copy)+ fun->GetPort(), 0,15);
+	Date(copy) = ((fSynchroniser->ConvertMsToTick(Date(copy)) - fun->GetDate())
+		 * fun->GetCoeff())/1000 + fun->GetOffset() + fun->GetDate();
+	
+	fun->InsertEvent(ev);
+	return copy;
+}
+
 
 /*--------------------------------------------------------------------------*/
 
@@ -402,6 +437,14 @@ void TEventModifier::Modify(MidiEvPtr ev)
 			case typeKeyOff:
 				transEv = HandleKeyOff(ev, fun);
 				break;
+				
+			case typePitchWheel:
+				transEv = HandlePitchBend(ev, fun);
+				break;
+			
+			case typeCtrlChange:
+				if (Pitch(ev) == 7) transEv = HandleVolume(ev, fun);
+				break;
 		}
 	
 		if (transEv) {
@@ -410,8 +453,15 @@ void TEventModifier::Modify(MidiEvPtr ev)
 			Date(transEv) = UTools::Max (cur_date_ticks, Date(transEv)); 
 			
 			// Insertion
+			
 			if (curEv = fIterator1->SetPosTicks(Date(transEv))) {
-				fScore->InsertBeforeEvent(curEv, TEventFactory::GenericCreateEvent(transEv));
+				UTools::SendVal(curEv->GetType());
+				// si insertion a la meme date qu'un ev existant, insere deriere
+				if (Date(transEv) == fIterator1->CurDate()) {
+					fScore->InsertAfterEvent(curEv, TEventFactory::GenericCreateEvent(transEv));
+				}else {
+					fScore->InsertBeforeEvent(curEv, TEventFactory::GenericCreateEvent(transEv));
+				}
 				min_date_ticks = UTools::Min (min_date_ticks, Date(transEv));
 			}
 		}
