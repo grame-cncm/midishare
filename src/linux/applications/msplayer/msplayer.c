@@ -392,13 +392,6 @@ int main(int argc, char *argv[] )
 	vbox = gtk_vbox_new (FALSE, 10);
 
 	gtk_box_pack_start (GTK_BOX (vbox),
-                  createSynchroBox (TRUE, "Synchro", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
-                             TRUE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (vbox),
-                  createTransportBox (TRUE, "Transport", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
-                             TRUE, TRUE, 0);
-
-	gtk_box_pack_start (GTK_BOX (vbox),
                   createDateBBUBox (TRUE, "Date : Bar Beat Unit", 1, 15, 20, GTK_BUTTONBOX_START),
                              TRUE, TRUE, 0);
 
@@ -406,6 +399,15 @@ int main(int argc, char *argv[] )
                   createDateMSBox (TRUE, "Date : Min Sec Ms", 1, 15, 20, GTK_BUTTONBOX_START),
                              TRUE, TRUE, 0);
 
+
+	gtk_box_pack_start (GTK_BOX (vbox),
+                  createSynchroBox (TRUE, "Synchro", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
+                             TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox),
+                  createTransportBox (TRUE, "Transport", 20, 55, 20, GTK_BUTTONBOX_SPREAD),
+                             TRUE, TRUE, 0);
+
+	
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
 	
