@@ -25,11 +25,19 @@
 
 #include <Carbon/Carbon.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int 	ReadPos (char *profileName, Point *p);
 void 	WritePos (char *profileName, WindowRef win);
 void 	AdjustLocation (WindowRef win);
 
 int ReadIntState (char *profile, char *section, char *entry, int defVal);
 void WriteIntState (char *profile, char *section, char *entry, int val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
