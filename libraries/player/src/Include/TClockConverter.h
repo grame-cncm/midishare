@@ -32,7 +32,9 @@
 #include <math.h>
 
 #ifndef round
-//static float round(float val){return (float)floor(val+0.5f);}
+#ifdef __MSWindows__
+static float round(float val){return (float)floor(val+0.5f);}
+#endif
 #endif
 
 //-----------------------
