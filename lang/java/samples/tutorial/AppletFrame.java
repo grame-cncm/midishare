@@ -133,6 +133,10 @@ class OurAppletContext implements AppletContext {
 	OurAppletContext(Toolkit toolkit) {
 		ourToolkit = toolkit;
 	}
+    
+    public void setStream(java.lang.String string ,java.io.InputStream in) {}
+    public java.io.InputStream getStream(java.lang.String string ) {return null;}
+     public Iterator getStreamKeys( ) {return null;}
 
 	public Image getImage(java.net.URL url) {
 		return ourToolkit.getImage(url);
