@@ -20,7 +20,7 @@
 #include <math.h>
 
 #ifndef round
-static float round(float val){return (float)floor(val+0.5f);}
+//static float round(float val){return (float)floor(val+0.5f);}
 #endif
 
 //-----------------------
@@ -54,14 +54,15 @@ class TClockConverter {
 		
 		float ConvertTickToTickAtPrevSP (float date_ticks) 
 		{ 
-			return ConvertSongPosToTick(ConvertTickToSongPos(date_ticks));
+			float prev_songpos = floor((date_ticks * 4.0f)/fTicks_per_quarter);
+			return ConvertSongPosToTick(prev_songpos);
 		}
 		
 		float ConvertTickToTickAtPrevClock (float date_ticks) 
 		{ 
-			return ConvertClockToTick(ConvertTickToClock(date_ticks));
+			float prev_clock = floor((24.0f * date_ticks)/fTicks_per_quarter);
+			return 	ConvertClockToTick(prev_clock);
 		}
-		
 };
 
 

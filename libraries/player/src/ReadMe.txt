@@ -54,7 +54,7 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 21/01/04 : Version 2.06 : New SetPosTicks and Version functions, ticks field in PlayerState.
 
-??/??/?? : Next version : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa)
+??/??/?? : Next version : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa). Correct bug in ConvertTickToTickAtPrevSP and ConvertTickToTickAtPrevClock : floor must be used.
 
 ==================
 General Remarks
