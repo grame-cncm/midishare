@@ -15,12 +15,12 @@ import java.applet.Applet;
 import java.awt.event.*;
 import java.applet.*;
 
-import grame.midishare.Midi;
+import grame.midishare.*;
 
 
 public class TutorialPart1 extends Applet 
  {
-     	TextArea text;
+    TextArea text;
 	Button start, go;
 	int testnumber ;
 	int ourRefNum  = -1;
@@ -331,20 +331,132 @@ public class TutorialPart1 extends Applet
 		sendText (Midi.typeCuePoint, "Reverb here") ;
 	}
 	
+	
+	
+	void listOfDrivers ()
+	{
+		int ref, n = Midi.CountDrivers();
+
+		text.appendText("\n\nList of MidiShare drivers\n");
+		text.appendText("-------------------------------------\n");
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printDriverInfo(ref);
+			text.appendText("-------------------------------------\n");
+		}
+	}
+	
+	void printDriverInfo (int ref)
+	{
+		DriverInfos infos = new DriverInfos();
+		SlotInfos slot = new SlotInfos();
+		
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+		text.appendText("Reference number ");
+		text.appendText(String.valueOf(ref));
+		text.appendText("\nname : ");
+		text.appendText(infos.name);
+		text.appendText("\nslots : ");
+		text.appendText(String.valueOf(infos.slots));
+		text.appendText("\nversion : ");
+		text.appendText(String.valueOf(infos.version));
+		text.appendText("\n");
+		
+		for (int i = 0 ;i < infos.slots; i++) {
+			Midi.GetSlotInfos(Midi.GetIndSlot(ref,i+1), slot);
+			text.appendText("slot name : " );
+			text.appendText(slot.name);
+			text.appendText("\nslot direction : ");
+			text.appendText(String.valueOf(slot.direction));
+			text.appendText("\n");
+		}
+	}
+
 	void test18 ()
 	{
-		text.appendText("\n\n<TEST 18>Close the JavaTutorial application\n");
+		text.appendText( "\n\n<TEST 18>Display MidiShare drivers informations");
+	 	listOfDrivers();
+	}
+	
+	void printPortInfo (int ref, int port)
+	{
+		DriverInfos infos = new DriverInfos();
+		SlotInfos slot = new SlotInfos();
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+			
+		for (int i = 0 ;i < infos.slots; i++) {
+			int slotref = Midi.GetIndSlot(ref,i+1);
+			int res = Midi.IsSlotConnected(port, slotref);
+			if (res > 0) {  // if port is connected this this slot
+				text.appendText("\n-------------------------------------\n");
+				Midi.GetSlotInfos(slotref, slot);
+				text.appendText("port number : " );
+				text.appendText(String.valueOf(port));
+				text.appendText("\nslot name : " );
+				text.appendText(slot.name);
+				text.appendText("\nslot direction : ");
+				text.appendText(String.valueOf(slot.direction));
+				text.appendText("\n");
+			}
+		}
+	}
+
+	
+	void test19 ()
+	{
+		text.appendText( "\n\n<TEST 19>Display port to slot connection state");
+		int ref, n = Midi.CountDrivers();
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printPortInfo(ref,0);			// display connection state of port 0
+			printPortInfo(ref,1);			// display connection state of port 1
+		}
+	 	
+	}
+	
+	void connectPort (int ref, int port)
+	{
+		DriverInfos infos = new DriverInfos();
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+			
+		for (int i = 0 ;i < infos.slots; i++) {
+			int slotref = Midi.GetIndSlot(ref,i+1);
+			Midi.ConnectSlot(port,slotref,1);
+		}
+	}
+	
+	void test20 ()
+	{
+		text.appendText( "\n\n<TEST 20>Connect port to slot and dsiplay new connection state");
+		int ref, n = Midi.CountDrivers();
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			connectPort (ref,10);		    // connect port 10 to all slots of all drivers
+		}
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printPortInfo(ref,10);			// display connection state of port 10
+		}
+	}
+	
+	void test21 ()
+	{
+		text.appendText("\n\n<TEST 21>Close the JavaTutorial application\n");
 		Midi.Close (ourRefNum);
 		listOfAppl ();
 		//System.Runtime.exit();
 	}
-	
+
 	
 	public boolean action( Event e , Object o) 
 	{
 		if (e.target == go) {
 			testnumber++;
 			switch (testnumber){
+				
 				case 1 : test1(); break;
 				case 2 : test2(); break;
 				case 3 : test3(); break;
@@ -363,7 +475,10 @@ public class TutorialPart1 extends Applet
 				case 16 : test16(); break;
 				case 17 : test17(); break;
 				case 18 : test18(); break;
-				}
+				case 19 : test19(); break;
+				case 20 : test20(); break;
+				case 21 : test21(); break;
+			}
 			return true;
 		  }
 		
