@@ -1096,10 +1096,10 @@ main()
 		Sending(); flush;
 //		Mail(); flush;
 		Tasks(true); flush;
-/*		Synchro(); flush;
+		Synchro(); flush;
 		Tolerance(); flush;
 		NoMem(); flush;
-*/		MidiClose( refNum);
+		MidiClose( refNum);
 	}
 	else print ("MidiShare is not installed !\n");
 	print ("\nEnd of functions test.\n");
