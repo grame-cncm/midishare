@@ -678,7 +678,7 @@ void Sending()
 	MidiClose(r);
 	MidiFlushEvs( refNum);
 	if( (n= MidiFreeSpace())!= free)
-		print ("Warning : incoherent FreeSpace : %ld\n", n);
+		print ("Warning : incoherent FreeSpace : %ld (lost: %ld)\n", n, free-n);
 }
 
 /*____________________________________________________________________*/
@@ -1094,7 +1094,7 @@ main()
 		Sequences( true); flush;
 		Time(); flush;
 		Sending(); flush;
-		Mail(); flush;
+//		Mail(); flush;
 		Tasks(true); flush;
 		Synchro(); flush;
 		Tolerance(); flush;
