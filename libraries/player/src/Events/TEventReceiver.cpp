@@ -50,7 +50,6 @@ void TEventReceiver::ReceiveEvents(MidiEvPtr e)
 		case typeLoopEnd: ReceiveLoopEnd(e); break;
 		case typeScoreEnd: ReceiveStop(e); break;
 	}
-	
 	TEventDispatcher::ReceiveEvents(e); // Calls the next object ReceiveEvents method
 }
 

@@ -67,15 +67,12 @@ MidiEvPtr TFun::RemoveEvent( MidiEvPtr e)
 }
 
 /*----------------------------------------------------------------------------*/
-
 TEventModifier::TEventModifier(TEventSenderInterfacePtr sender, TPlayerSynchroniserPtr synchro, 
-TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr successor) 
-	:TEventDispatcher(successor)
+	TSchedulerInterfacePtr	scheduler,  TEventDispatcherPtr successor) :TEventDispatcher(successor)
 {
 	fEventUser = sender;
 	fSynchroniser = synchro;
 	fScheduler = scheduler;
-	fRunningState = state;
 	
 	// Initialisation 
 	
@@ -110,39 +107,37 @@ void TEventModifier::ReceiveEvents(MidiEvPtr e)
 {
 	MidiEvPtr e1;
 		
-	if (fRunningState->IsRunning()) {
-	
-		switch (EvType(e)) {
-			
-				case typeNote:
-					if (isFunOn() && (e1 = UMidi::NoteToKeyOff(e))) {
-						Modify(MidiCopyEv(e));   // keyOn
-						Modify(e1);  			 // keyOff
-					}
-					break;
-					
-				case typeKeyOn:
-				case typeKeyOff:
-					if (isFunOn()) { Modify(MidiCopyEv(e));}
-					break;
-					
-				case typeFunOn:
-					InsertFun(e);
-					break;
-					
-				case typeFunOff:
-					RemoveFun(Generation(e));
-					break;
+	switch (EvType(e)) {
+		
+			case typeNote:
+				if (isFunOn() && (e1 = UMidi::NoteToKeyOff(e))) {
+					Modify(MidiCopyEv(e));   // keyOn
+					Modify(e1);  			 // keyOff
+				}
+				break;
 				
-				/*
-				A REVOIR
-				default:
-					fEventUser->CopyAndUseEvent(e,Date(e));
-					break;
-				*/
-					
-		}
+			case typeKeyOn:
+			case typeKeyOff:
+				if (isFunOn()) { Modify(MidiCopyEv(e));}
+				break;
+				
+			case typeFunOn:
+				InsertFun(e);
+				break;
+				
+			case typeFunOff:
+				RemoveFun(Generation(e));
+				break;
+			
+			/*
+			A REVOIR
+			default:
+				fEventUser->CopyAndUseEvent(e,Date(e));
+				break;
+			*/
+				
 	}
+
 	TEventDispatcher::ReceiveEvents(e);
 }
 

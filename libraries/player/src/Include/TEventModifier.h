@@ -99,6 +99,9 @@ typedef TFun FAR * TFunPtr;
 //-----------------------
 // Class TEventModifier
 //-----------------------
+// 
+// Event reception is always on : it has to be filtered
+//
 
 class TEventModifier :public TEventDispatcher, public TTickPlayerInterface {
 
@@ -108,12 +111,11 @@ class TEventModifier :public TEventDispatcher, public TTickPlayerInterface {
 		
 		TFunPtr		fTransSeq;			// List of Transformations
 		TPlayTask1* fPlayTask;			// Playing task
-		ULONG		fLast_task_ticks; 	// Date of tha last playing task	
+		ULONG		fLast_task_ticks; 	// Date of the last playing task	
 	
 		TScoreIteratorPtr	 		fIterator,fIterator1;
 		TPlayerScorePtr			 	fScore;
 		TPlayerSynchroniserPtr   	fSynchroniser;
-		TRunningStatePtr 			fRunningState;
 		TEventSenderInterfacePtr    fEventUser;
 		TSchedulerInterfacePtr		fScheduler;
 		TChaserInterfacePtr 	  	fChaser;
@@ -139,7 +141,7 @@ class TEventModifier :public TEventDispatcher, public TTickPlayerInterface {
 	public:
 	
 		TEventModifier(TEventSenderInterfacePtr sender, TPlayerSynchroniserPtr synchro,
-		TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr successor) ;
+		TSchedulerInterfacePtr	scheduler, TEventDispatcherPtr successor) ;
 		
 		~TEventModifier();
 	
