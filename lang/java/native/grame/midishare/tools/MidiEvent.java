@@ -337,7 +337,7 @@ public static final int valueOf(String s) {
        
    */
   
-  static int Note (int pitch, int vel, int dur,int chan,int port) {
+  public static int Note (int pitch, int vel, int dur,int chan,int port) {
   		int note = Midi.NewEv(Midi.typeNote);
   		
   		if (note != 0) {
@@ -357,7 +357,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyOn (int pitch, int vel, int chan,int port) {
+  public static int KeyOn (int pitch, int vel, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyOn);
   		
   		if (key != 0) {
@@ -376,7 +376,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyOff (int pitch, int vel, int chan,int port) {
+  public static int KeyOff (int pitch, int vel, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyOff);
   		
   		if (key != 0) {
@@ -395,7 +395,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyPress (int ctrl, int val, int chan,int port) {
+  public static int KeyPress (int ctrl, int val, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyPress);
   		
   		if (key != 0) {
@@ -414,7 +414,7 @@ public static final int valueOf(String s) {
        
    */
   
-  static int CtrlChange (int ctrl, int val, int chan,int port) {
+  public static int CtrlChange (int ctrl, int val, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeCtrlChange);
   		
   		if (key != 0) {
@@ -433,7 +433,7 @@ public static final int valueOf(String s) {
        
   */
   
-  static int ProgChange (int pgm, int chan,int port) {
+  public static int ProgChange (int pgm, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeProgChange);
   		
   		if (key != 0) {
@@ -451,7 +451,7 @@ public static final int valueOf(String s) {
        
    */
    
-   static int ChanPress (int ch, int chan,int port) {
+   public static int ChanPress (int ch, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeChanPress);
   		
   		if (key != 0) {
@@ -470,7 +470,7 @@ public static final int valueOf(String s) {
        
    */
 
-    static int PitchWheel(int wheel, int chan, int port){
+    public static int PitchWheel(int wheel, int chan, int port){
            int offset = 8192;
            int min = -8192;
            int max = 8191;
@@ -494,7 +494,7 @@ public static final int valueOf(String s) {
     more memory space. 
 	*/
 	
-	static int SongPos( int pos, int port)
+	public static int SongPos( int pos, int port)
        {
            int e = Midi.NewEv( Midi.typeSongPos);
 
@@ -516,7 +516,7 @@ public static final int valueOf(String s) {
        
    	*/
    
-	static int SongSel (int song, int port)
+	public static int SongSel (int song, int port)
        {
            int e = Midi.NewEv( Midi.typeSongSel);
 
@@ -537,7 +537,7 @@ public static final int valueOf(String s) {
    	*/
    
        
-       static int Start (int port)
+       public static int Start (int port)
        {
            int e = Midi.NewEv( Midi.typeStart );
 
@@ -555,7 +555,7 @@ public static final int valueOf(String s) {
        
    	*/
        
-         static int Continue (int port)
+       public  static int Continue (int port)
        {
            int e = Midi.NewEv( Midi.typeContinue );
 
@@ -574,7 +574,7 @@ public static final int valueOf(String s) {
    		*/
        
 
-	  static int Stop (int port)
+	public  static int Stop (int port)
        {
            int e = Midi.NewEv( Midi.typeStop );
 
@@ -593,7 +593,7 @@ public static final int valueOf(String s) {
    		*/
        
 
-	  static int Tune (int port)
+	 public static int Tune (int port)
        {
            int e = Midi.NewEv( Midi.typeTune);
 
@@ -610,7 +610,7 @@ public static final int valueOf(String s) {
        more memory space. 
        
    		*/
-        static int ActiveSens (int port)
+      public  static int ActiveSens (int port)
        {
            int e = Midi.NewEv( Midi.typeActiveSens);
 
@@ -627,7 +627,7 @@ public static final int valueOf(String s) {
        more memory space. 
        
    		*/
-        static int Reset (int port)
+       public static int Reset (int port)
        {
            int e = Midi.NewEv( Midi.typeReset);
 
@@ -645,7 +645,7 @@ public static final int valueOf(String s) {
 
        
        
-       static int SysEx (int[] p, int chan, int port)
+      public static int SysEx (int[] p, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeSysEx );
            int c,len = p.length;
@@ -671,7 +671,7 @@ public static final int valueOf(String s) {
 
        
        
-       static int Stream (int[] p, int chan, int port)
+       public static int Stream (int[] p, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeStream );
            int c,len = p.length;
@@ -697,7 +697,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int QuarterFrame( int type, int nibble, int port)
+       public static int QuarterFrame( int type, int nibble, int port)
        {
            int e = Midi.NewEv( Midi.typeQFrame );
 
@@ -717,7 +717,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int CtrlChange14b(int ctrl, int val, int chan, int port)
+       public static int CtrlChange14b(int ctrl, int val, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeCtrl14b );
 
@@ -737,7 +737,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-        static int NonRegParam(int param, int val, int chan, int port)
+       public static int NonRegParam(int param, int val, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeNonRegParam );
 
@@ -757,7 +757,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-        static int RegParam(int param, int val, int chan, int port)
+      public  static int RegParam(int param, int val, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeRegParam );
 
@@ -777,7 +777,7 @@ public static final int valueOf(String s) {
 	*/
 
 
-        static int  SeqNum(int num, int port)
+      public  static int  SeqNum(int num, int port)
        {
            int e = Midi.NewEv( Midi.typeSeqNum );
 
@@ -796,7 +796,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int Text (String str, int chan, int port)
+      public static int Text (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeText);
 
@@ -816,7 +816,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int Copyright (String str, int chan, int port)
+     public  static int Copyright (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeCopyright);
 
@@ -836,7 +836,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int SeqName (String str, int chan, int port)
+      public static int SeqName (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeSeqName);
 
@@ -855,7 +855,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int InstrName (String str, int chan, int port)
+      public static int InstrName (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeInstrName);
 
@@ -874,7 +874,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int Lyric (String str, int chan, int port)
+       public static int Lyric (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeLyric);
 
@@ -894,7 +894,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int Marker (String str, int chan, int port)
+       public static int Marker (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeMarker);
 
@@ -913,7 +913,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-       static int CuePoint (String str, int chan, int port)
+       public static int CuePoint (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeCuePoint);
 
@@ -932,7 +932,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-        static int ChanPrefix (int prefix)
+      public  static int ChanPrefix (int prefix)
        {
            int e = Midi.NewEv( Midi.typeChanPrefix);
 
@@ -949,7 +949,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-        static int EndTrack ()
+      public  static int EndTrack ()
        {
     	   return Midi.NewEv( Midi.typeEndTrack);
        }
@@ -962,7 +962,7 @@ public static final int valueOf(String s) {
 	*/
 
 
-       static int Tempo(float tempo)
+      public static int Tempo(float tempo)
        {
            int e =  Midi.NewEv(Midi.typeTempo);     
 
@@ -980,7 +980,7 @@ public static final int valueOf(String s) {
 	*/
 
 
-       static int  SMPTEOffset(int format, int hr, int mn, int sec, int frames, int subframes)
+     public  static int  SMPTEOffset(int format, int hr, int mn, int sec, int frames, int subframes)
        {
            int e =  Midi.NewEv(Midi.typeSMPTEOffset);   
 
@@ -1003,7 +1003,7 @@ public static final int valueOf(String s) {
        */
 
 
-      static int   TimeSign (int date, int num, int denom, int click, int quarterDef)
+      public static int   TimeSign (int date, int num, int denom, int click, int quarterDef)
        {
            int e =  Midi.NewEv(Midi.typeTimeSign);   
 
@@ -1023,7 +1023,7 @@ public static final int valueOf(String s) {
 		*/
 
 
-      static int KeySign (int sharpflats, int minor)
+      public static int KeySign (int sharpflats, int minor)
        {
           int e =  Midi.NewEv(Midi.typeKeySign);  
 
@@ -1042,7 +1042,7 @@ public static final int valueOf(String s) {
     */
 
 
-       static int   Specific (byte[] p)
+      public  static int   Specific (byte[] p)
        {
            int e =  Midi.NewEv( Midi.typeSpecific );
            int    c,len = p.length;
