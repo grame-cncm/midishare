@@ -1,6 +1,6 @@
 
 TARGET = libPlayer.so.1.0
-TARGETJAVA = libJPlayer.so
+TARGETJAVA = libJPlayer.so.1.0
 
 LIB = /usr/lib/libPlayer.so
 INC=../src/Include 
@@ -8,8 +8,8 @@ INC1=./
 
 # SET THE PATHNAME  for ../JDKxx/include HERE
 
-INC2=/home/letz/jdk117/include
-INC3=/home/letz/jdk117/include/genunix
+INC2=/home/letz/j2sdk1.3/include
+INC3=/home/letz/j2sdk1.3/include/linux
 
 INCF = /usr/local/include
 
