@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="Player32" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
@@ -17,12 +17,12 @@ CFG=Player32 - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "Player32 - Win32 Release" (based on\
- "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Player32 - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "Player32 - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -44,8 +44,8 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /Zp2 /MT /W3 /GX /Ob1 /I "..\src\Include" /I "." /D "WIN32" /D "__MSWindows__" /D "__Windows__" /D "__UseMSOldInterface__" /YX /FD /c
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x410 /d "NDEBUG"
 # ADD RSC /l 0x410 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -70,10 +70,10 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /Zp2 /MTd /W3 /GX /Zi /Od /I "..\src\Include" /I "." /D "WIN32" /D "_DEBUG" /D "__MSWindows__" /D "__Windows__" /D "__UseMSOldInterface__" /YX /FD /c
+# ADD CPP /nologo /Zp2 /MTd /W3 /GX /ZI /Od /I "..\src\Include" /I "." /D "WIN32" /D "_DEBUG" /D "__MSWindows__" /D "__Windows__" /D "__UseMSOldInterface__" /YX /FD /c
 # SUBTRACT CPP /Fr
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o NUL /win32
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x410 /d "_DEBUG"
 # ADD RSC /l 0x410 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -351,11 +351,11 @@ SOURCE=.\Dllmain.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\mshare32.lib
+SOURCE=.\Player32.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\Player32.rc
+SOURCE=.\mshare32.lib
 # End Source File
 # End Target
 # End Project
