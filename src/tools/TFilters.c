@@ -108,7 +108,7 @@ char *typeListe[] =
 /*136 */	"Copyright",	"SeqName",		"InstrName",	"Lyric",
 /*140 */	"Marker",		"CuePoint",		"ChanPrefix",	"EndTrack",
 /*144 */	"Tempo",		"SMPTEOffset",	"TimeSign",		"KeySign",
-/*148 */	"Specific",		"Reserved"
+/*148 */	"Specific",		"PortPrefix",   "RcvAlarm", 	"ApplAlarm","Reserved"
 };
 
 #ifdef _Filter_Direct_Access_
@@ -226,7 +226,7 @@ void Events( void)
 		AcceptType(myFilterPtr,i);
 		flush;
 	}
-	for(i=typeQuarterFrame; i<=typeSpecific; i++) {
+	for(i=typeQuarterFrame; i<=typePortPrefix; i++) {
 		print ("  %s : ", typeListe[i]);
 		RejectType(myFilterPtr,i);
 		TestEvent( i);
