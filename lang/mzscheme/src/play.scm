@@ -7,6 +7,9 @@
 ;  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" 
 
 
+;;(load-extension "MidiShare.so")
+;;(load-extension "Player.so")
+
 
 (load-extension "mzshare3216")
 
