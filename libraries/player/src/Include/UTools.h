@@ -33,6 +33,8 @@ class UTools {
 	
 		static void SendVal(ULONG val);
 		static void  MidiPrintText ( char * s);
+		static ULONG Min (ULONG a, ULONG b) {return (a <b) ? a : b;}
+		static ULONG Max (ULONG a, ULONG b) {return (a >=b) ? a : b;}
 	
 };
 
