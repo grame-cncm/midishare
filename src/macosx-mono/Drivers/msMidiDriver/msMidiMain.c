@@ -69,7 +69,7 @@ pthread_t create_thread (int priority, threadProcPtr proc)
 		return thread;	
 	else {
 		//printf ("pthread_create failed: (%s)\n");
-        }
+    }
 	return 0;	
 }
 
@@ -96,7 +96,6 @@ void stopThread (pthread_t thread)
 
 
 //________________________________________________________________________________________
-
 void MyNotifyProc(const MIDINotification *message, void *refCon)
 {
         if (message->messageID == kMIDIMsgSetupChanged) {
@@ -124,23 +123,18 @@ static Boolean InitMidiClient ()
 	//set_cancel();
 	
 	err = MIDIClientCreate(CFSTR("MidiShare"), MyNotifyProc, NULL, &gClient);
-	//printf("MIDIClientCreate OK\n");
 	if (!gClient) {
 		printf("Can not open Midi client\n");
 		goto error;
 	}
 	
 	err = MIDIInputPortCreate(gClient, CFSTR("Input port"), MyReadProc, NULL, &gInPort);
-	//printf("MIDIInputPortCreate OK\n");
-	
 	if (!gInPort) {
 		printf("Can not open Midi in port\n");
 		goto error;
 	}
 	
 	err = MIDIOutputPortCreate(gClient, CFSTR("Output port"), &gOutPort);
-	//printf("MIDIOutputPortCreate OK\n");
-	
 	if (!gOutPort) {
 		printf("Can not open Midi out port\n");
 		goto error;
@@ -164,14 +158,12 @@ static void * MidiThread (void * ptr)
 //_________________________________________________________
 void Start()
 {
-	//printf("Start DRIVER\n");
 	gRefNum = MidiRegisterDriver (&drvInfos, &drvOps);
 }
 
 //_________________________________________________________
 void Stop()
 {
-	//printf("Stop DRIVER\n");
 	if (gRefNum > 0) MidiUnregisterDriver (gRefNum);
 	gRefNum = -1;
 }
@@ -213,8 +205,8 @@ static void msWakeup (short refnum)
 	
 	MidiSetRcvAlarm (refnum, RcvAlarm);
 	MidiSetApplAlarm (refnum, ApplAlarm);
-        SetupFilter (&gFilter);
-        MidiSetFilter (refnum, &gFilter);	
+    SetupFilter (&gFilter);
+    MidiSetFilter (refnum, &gFilter);	
 	MidiConnect (MidiShareDrvRef, refnum, true);
 	MidiConnect (refnum, MidiShareDrvRef, true);
 	MidiStreamInitMthTbl (gLinMethods);
@@ -226,6 +218,8 @@ static void msWakeup (short refnum)
 	RemoveSlots(gRefNum);
 	AddSlots (refnum);
 	gInit = false;
+	
+	/*LoadState (gInSlots, gOutSlots); */
 	
 	return;
 	

@@ -24,14 +24,15 @@
 #include "msMidiInOut.h"
 #include "msMidiError.h"
 
-static int min(a,b) {return (a<b)?a:b;}
 
 extern short gRefNum;
-static void MyCompletionProc( MIDISysexSendRequest *request );
 
 // Buffer for sending
 static Byte gPacketBuffer [1024];
 static Byte gEvBuffer [16];
+
+static int min(a,b) {return (a<b)?a:b;}
+static void MyCompletionProc( MIDISysexSendRequest *request );
 	
 //_________________________________________________________
 static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
@@ -90,10 +91,9 @@ void SendSysExAux(SlotPtr slot)
 {
 	MIDIPacketList* pktlist = (MIDIPacketList*)gPacketBuffer;
 	MIDIPacket* packet = MIDIPacketListInit(pktlist);
-	unsigned char * ptr ;
+	unsigned char * ptr  = gEvBuffer;
 	int  n = 0;
 	 
-	ptr = gEvBuffer;
 	e = MidiStreamPutEvent (&slot->out, e);
 	while (MidiStreamGetByte (&slot->out, ptr++)) {n++;}
 	

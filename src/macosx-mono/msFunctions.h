@@ -55,27 +55,27 @@ extern "C" {
   void  MIDISHAREAPI MidiClose(short refNum);
 
 /*--------------------------- Application configuration -----------------------*/
-  MidiName              MIDISHAREAPI MidiGetName(short refNum);
-  void                  MIDISHAREAPI MidiSetName(short refNum, MidiName applName);
-  void*                MIDISHAREAPI MidiGetInfo(short refNum);
-  void                  MIDISHAREAPI MidiSetInfo(short refNum,void* InfoZone);
+  MidiName      MIDISHAREAPI MidiGetName(short refNum);
+  void          MIDISHAREAPI MidiSetName(short refNum, MidiName applName);
+  void*         MIDISHAREAPI MidiGetInfo(short refNum);
+  void          MIDISHAREAPI MidiSetInfo(short refNum,void* InfoZone);
   RcvAlarmPtr   MIDISHAREAPI MidiGetRcvAlarm(short refNum);
-  void                  MIDISHAREAPI MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm);
+  void          MIDISHAREAPI MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm);
   ApplAlarmPtr  MIDISHAREAPI MidiGetApplAlarm(short refNum);
-  void                  MIDISHAREAPI MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm);
+  void          MIDISHAREAPI MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm);
 
 /*----------------------------- Filters configuration -------------------------*/
   MidiFilterPtr MIDISHAREAPI MidiGetFilter(short refNum);
-  void                  MIDISHAREAPI MidiSetFilter(short refNum, MidiFilterPtr f);
+  void          MIDISHAREAPI MidiSetFilter(short refNum, MidiFilterPtr f);
  
   MidiFilterPtr MIDISHAREAPI MidiNewFilter (void);
-  void                  MIDISHAREAPI MidiFreeFilter (MidiFilterPtr);
-  void                  MIDISHAREAPI MidiAcceptPort(MidiFilterPtr f, short port, Boolean);
-  void                  MIDISHAREAPI MidiAcceptChan(MidiFilterPtr f, short chan, Boolean);
-  void                  MIDISHAREAPI MidiAcceptType(MidiFilterPtr f, short type, Boolean);
-  Boolean               MIDISHAREAPI MidiIsAcceptedPort(MidiFilterPtr f, short port);
-  Boolean               MIDISHAREAPI MidiIsAcceptedChan(MidiFilterPtr f, short chan);
-  Boolean               MIDISHAREAPI MidiIsAcceptedType(MidiFilterPtr f, short type);
+  void          MIDISHAREAPI MidiFreeFilter (MidiFilterPtr);
+  void          MIDISHAREAPI MidiAcceptPort(MidiFilterPtr f, short port, Boolean);
+  void          MIDISHAREAPI MidiAcceptChan(MidiFilterPtr f, short chan, Boolean);
+  void          MIDISHAREAPI MidiAcceptType(MidiFilterPtr f, short type, Boolean);
+  Boolean       MIDISHAREAPI MidiIsAcceptedPort(MidiFilterPtr f, short port);
+  Boolean       MIDISHAREAPI MidiIsAcceptedChan(MidiFilterPtr f, short chan);
+  Boolean       MIDISHAREAPI MidiIsAcceptedType(MidiFilterPtr f, short type);
 
 /*------------------------- Inter-Application Connections ---------------------*/
   void    MIDISHAREAPI MidiConnect(short src, short dest , Boolean state);
@@ -131,7 +131,7 @@ extern "C" {
   void          MIDISHAREAPI MidiAddSeq(MidiSeqPtr s, MidiEvPtr e);
   void          MIDISHAREAPI MidiFreeSeq(MidiSeqPtr s);
   void          MIDISHAREAPI MidiClearSeq(MidiSeqPtr s);
-  void                  MIDISHAREAPI MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc);
+  void          MIDISHAREAPI MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc);
 
 /*------------------------------------- Time ----------------------------------*/
   unsigned long MIDISHAREAPI MidiGetTime(void);
@@ -142,23 +142,23 @@ extern "C" {
   void MIDISHAREAPI MidiSendAt(short refNum, MidiEvPtr e, unsigned long d);
 
 /*------------------------------------ Receving -------------------------------*/
-  unsigned long         MIDISHAREAPI MidiCountEvs(short refNum);
-  MidiEvPtr                     MIDISHAREAPI MidiGetEv(short refNum);
-  MidiEvPtr                     MIDISHAREAPI MidiAvailEv(short refNum);
-  void                          MIDISHAREAPI MidiFlushEvs(short refNum);
+  unsigned long   MIDISHAREAPI MidiCountEvs(short refNum);
+  MidiEvPtr       MIDISHAREAPI MidiGetEv(short refNum);
+  MidiEvPtr       MIDISHAREAPI MidiAvailEv(short refNum);
+  void            MIDISHAREAPI MidiFlushEvs(short refNum);
 
 /*----------------------------------- Mail boxes ------------------------------*/
   void* MIDISHAREAPI MidiReadSync( void ** adrMem);
    void* MIDISHAREAPI MidiWriteSync(void ** adrMem, void* val);
 
 /*---------------------------------- Task Managing ----------------------------*/
-  void                  MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr     MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr     MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  void                  MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e);
-  long                  MIDISHAREAPI MidiCountDTasks(short refNum);
-  void                  MIDISHAREAPI MidiFlushDTasks(short refNum);
-  void                  MIDISHAREAPI MidiExec1DTask(short refNum);
+  void       MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
+  MidiEvPtr  MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
+  MidiEvPtr  MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
+  void       MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e);
+  long       MIDISHAREAPI MidiCountDTasks(short refNum);
+  void       MIDISHAREAPI MidiFlushDTasks(short refNum);
+  void       MIDISHAREAPI MidiExec1DTask(short refNum);
 
 /*----------------------------------- MidiShare -------------------------------*/
   Boolean       MIDISHAREAPI MidiShare(void);

@@ -30,8 +30,4 @@
 MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e);
 void	MyReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon);
 
-/*
-void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg, 
-			DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
-*/
 #endif

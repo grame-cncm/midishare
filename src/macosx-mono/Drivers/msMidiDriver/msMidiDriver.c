@@ -32,8 +32,8 @@ extern ParseMethodTbl	gParseTbl;
 extern Status2TypeTbl	gTypeTbl;
 
 /* MacOSX Midi client */
-extern MIDIPortRef	gInPort;
-extern MIDIPortRef	gOutPort;
+extern MIDIPortRef		gInPort;
+extern MIDIPortRef		gOutPort;
 extern MIDIClientRef 	gClient;
 
 
@@ -73,7 +73,6 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 	MIDIDeviceRef dev;
 	MIDIEntityRef ref;
 	CFStringRef pmodel;
-	char model[64];
 	
 	n = MIDIGetNumberOfDevices();
 	
@@ -82,7 +81,7 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 		dev = MIDIGetDevice(i);
 		
 		MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &pmodel);
-		CFStringGetCString(pmodel, model, sizeof(model), 0);
+		CFStringGetCString(pmodel, gmodel, sizeof(model), 0);
 		CFRelease(pmodel);
 		
 		m = MIDIDeviceGetNumberOfEntities(dev);
@@ -94,17 +93,11 @@ Boolean GetModel (MIDIEndpointRef device, char* gmodel)
 			p = MIDIEntityGetNumberOfDestinations(ref);
 			
 			for (k = 0; k < o; k++) {
-				if (MIDIEntityGetSource(ref,k) == device) {
-					strcpy(gmodel,model);
-					return true;
-				}
+				if (MIDIEntityGetSource(ref,k) == device) return true;
 			}
 			
 			for (k = 0; k < p; k++) {
-				if (MIDIEntityGetDestination(ref,k) == device) {
-					strcpy(gmodel,model);
-					return true;
-				}
+				if (MIDIEntityGetDestination(ref,k) == device) return true;
 			}
 		}
 	}
@@ -130,7 +123,7 @@ void AddSlots (short refNum)
 		CFStringGetCString(pname, name, sizeof(name), 0);
 		CFRelease(pname);
 		
-		// If found, add the Model name before the device name
+		// If found, add the model name before the device name
 		if (GetModel(src,model)) {
 			strcpy(slotname,model);
 			strcat(slotname,":");
@@ -143,7 +136,7 @@ void AddSlots (short refNum)
 		if (slot) {
 			slot->next = gInSlots;
 			gInSlots = slot;
-			// pas de connection : faite par l'alarme d'application
+			// No connection with the source : done by the application alarme
 		}
 	}
 	
@@ -155,6 +148,7 @@ void AddSlots (short refNum)
 		CFStringGetCString(pname, name, sizeof(name), 0);
 		CFRelease(pname);
 		
+		// If found, add the model name before the device name
 		if (GetModel(dest,model)) {
 			strcpy(slotname,model);
 			strcat(slotname,":");
@@ -257,7 +251,7 @@ void OpenInputSlot (SlotPtr slot)
 //_________________________________________________________
 static void CloseInputSlot (SlotPtr slot)
 {
-	OSStatus err = MIDIPortDisconnectSource(gInPort, slot->src);  // disconnect source
+	OSStatus err = MIDIPortDisconnectSource(gInPort, slot->src);    // disconnect source
 }
 
 //_________________________________________________________

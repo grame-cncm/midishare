@@ -44,9 +44,9 @@
 TMSGlobal       GlobalMem = { 0 };
 TMSGlobalPtr    gMem = &GlobalMem;
 
-Boolean 		gInitLib = false;
+static Boolean 	gInitLib = false;
 
-// To improve : use of a global iniialisation entry point
+// To improve : use of a global initialisation entry point
 #define __MSInitialize() \
 { \
    	if (!gInitLib) { \
