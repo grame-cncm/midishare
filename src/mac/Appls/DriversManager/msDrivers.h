@@ -37,5 +37,6 @@ void 	ChangeConnect	(ListHandle list);
 void 	ListPorts 		(ListHandle list, Boolean fromClick);
 short 	PointToDrvIndex (WindowPtr win, Point p, ListHandle list);
 short	PointToPort 	(WindowPtr win, Point p);
+void 	RefreshPortMap 	();
 
 #endif
