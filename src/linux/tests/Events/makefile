@@ -1,5 +1,5 @@
 SRC = ../../../tools
-CFLAGS = -D __Linux__ -I../../Include -I$(SRC)
+CFLAGS = -D __Linux__ -I../../Include -I$(SRC) -I/usr/src/linux/include/
 MODOPTS=-DMODVERSIONS -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX -D_LOOSE_KERNEL_NAMES -DCONFIG_KERNELD
 MODINC=-I../../../common/Headers
 CC  = gcc
