@@ -2,6 +2,7 @@
 Serial Driver changes history
 =============================
 
+v 1.03 : internal changes in slot infos management - require MidiShare v1.82 or later
 
 v 1.02 : bug corrected: common events with 1 data byte may have incorrect date
 
