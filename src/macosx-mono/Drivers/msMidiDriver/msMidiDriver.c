@@ -199,14 +199,14 @@ static SlotPtr FindSlot (SlotPtr list, short port)
 }
 
 //_________________________________________________________
-void MSALARMAPI KOffTask( long date, short ref, long a1,long a2,long a3)
+void KOffTask( long date, short ref, long a1,long a2,long a3)
 {
 	MidiEvPtr e = (MidiEvPtr)a1;
 	MS2MM ((SlotPtr)a2, e);
 }
 
 //_________________________________________________________
-void MSALARMAPI RcvAlarm  (short refNum )
+void RcvAlarm  (short refNum )
 {
 	SlotPtr slot = 0;
 	MidiEvPtr e = MidiGetEv (refNum);
@@ -269,7 +269,7 @@ static void ScanSlotChanges (SlotPtr slot)
 }
 
 //_________________________________________________________
-void MSALARMAPI ApplAlarm (short refNum, long code )
+void ApplAlarm (short refNum, long code )
 {
 	short alarmCode = (short)code;
 	short ref = (short)(code >> 16);

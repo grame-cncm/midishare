@@ -20,7 +20,6 @@
   
 */
 
-
 #include "MidiShare.h"
 #include "msMidiDriver.h"
 #include "msMidiInOut.h"
@@ -39,8 +38,8 @@ static char * fullProfileName = 0;
 void Start();
 void Stop();
 
-static void MSALARMAPI msWakeup (short refnum);
-static void MSALARMAPI msSleep  (short refnum);
+static void msWakeup (short refnum);
+static void msSleep  (short refnum);
 
 short gRefNum = 0;
 TDriverInfos drvInfos   = { "MacOSX Driver", kMidiDriverVersion, 0 };

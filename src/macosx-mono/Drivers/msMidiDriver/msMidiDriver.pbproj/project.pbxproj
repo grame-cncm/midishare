@@ -62,10 +62,10 @@
 				F54A7D7801FC781301053105,
 				F54A7D7901FC781301053105,
 				F54A7D8401FC781C01053105,
-				F5240F1C0208056001053105,
-				F5240F1E0208058801053105,
-				F5240F1F0208058801053105,
+				F76B9CAB02086D8E01053118,
+				F76B9CAA02086C0B01053118,
 				F54A7D7A01FC781301053105,
+				F76B9CAD02086E8001053118,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -127,6 +127,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				IMPLICITLY_INCLUDED_HEADERS = implicit.h;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-D__POWERPC__ -D__Macintosh__";
@@ -134,6 +135,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
+				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = implicit.h;
 				PRODUCT_NAME = msMidiDriver.1.0.0.dylib;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
@@ -153,6 +155,7 @@
 			files = (
 				F54A7D7E01FC781301053105,
 				F569F8E8020573BA01053105,
+				F76B9CAC02086D8E01053118,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -192,6 +195,7 @@
 		F54A7D8201FC781301053105 = {
 			buildActionMask = 2147483647;
 			files = (
+				F76B9CAE02086E8001053118,
 			);
 			isa = PBXFrameworksBuildPhase;
 			name = "Frameworks & Libraries";
@@ -232,6 +236,49 @@
 		};
 		F569F8E9020573BA01053105 = {
 			fileRef = F569F8E7020573BA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F70
+//F71
+//F72
+//F73
+//F74
+		F76B9CAA02086C0B01053118 = {
+			children = (
+				F5240F1C0208056001053105,
+				F5240F1E0208058801053105,
+				F5240F1F0208058801053105,
+			);
+			isa = PBXGroup;
+			name = lib;
+			refType = 4;
+		};
+		F76B9CAB02086D8E01053118 = {
+			isa = PBXFileReference;
+			path = implicit.h;
+			refType = 4;
+		};
+		F76B9CAC02086D8E01053118 = {
+			fileRef = F76B9CAB02086D8E01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F76B9CAD02086E8001053118 = {
+			isa = PBXFrameworkReference;
+			name = CoreMIDI.framework;
+			path = /System/Library/Frameworks/CoreMIDI.framework;
+			refType = 0;
+		};
+		F76B9CAE02086E8001053118 = {
+			fileRef = F76B9CAD02086E8001053118;
 			isa = PBXBuildFile;
 			settings = {
 			};

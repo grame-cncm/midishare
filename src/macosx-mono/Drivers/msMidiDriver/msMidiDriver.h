@@ -70,8 +70,8 @@ extern SlotPtr gInSlots, gOutSlots;
 // functions definitions
 //_________________________________________________________
 
-void MSALARMAPI RcvAlarm  (short refNum );
-void MSALARMAPI ApplAlarm (short refNum, long code );
+void RcvAlarm  (short refNum );
+void ApplAlarm (short refNum, long code );
 
 void AddSlots (short refnum);
 void RemoveSlots (short refnum);
