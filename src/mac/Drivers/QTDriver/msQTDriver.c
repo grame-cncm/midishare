@@ -210,9 +210,11 @@ Boolean SetUpMidi ()
 	op.sleep = Sleep;
 	op.slotInfo = SlotInfo; 
 
-	if (MidiGetNamedAppl (QTDriverName) > 0)  // still running
+	if (MidiGetNamedAppl (QTDriverName) > 0) {
+		doneFlag = true;
 		return true;
-
+	}
+	
 	refNum = MidiRegisterDriver(&infos, &op);
 	if (refNum == MIDIerrSpace)
 		return false;
