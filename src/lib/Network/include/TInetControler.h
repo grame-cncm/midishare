@@ -46,6 +46,7 @@ class TInetDriver : public MidiShareDriver
 				 TInetDriver (TInetControler *ctrl) : MidiShareDriver(100) { fControler = ctrl;}
 		virtual ~TInetDriver () {}
 
+				void	RcvAlarm (short refnum);
 				void	WakeUp (short r);
 				void	Sleep  (short r);
 	private:
@@ -91,8 +92,8 @@ class TInetControler : public TUDPListener
 				void	Exec1DTask ()	{ fAppl->Exec1DTask (); }
 				
 				// driver specific methods
-				void	WakeUp (short r)	{ needWakeup = true; }
-				void	Sleep  (short r)	{ needSleep = true; }
+				void	WakeUp (short r);
+				void	Sleep  (short r);
 
 				void	CallFatalError 	 (ErrString msg, long err);
 				void	CreateRemoteFailed (strPtr reason); 
@@ -112,7 +113,7 @@ class TInetControler : public TUDPListener
 		virtual short	LocalMTU ()								{ return kMaxPacketBuff; }
 		virtual void	CallCheckRemote  (TRemoteMgr *mgr); 
 		virtual Boolean	CreateRemote	 (MidiEvPtr param);
-
+		
 		TMidiRemote * 	FindUDPRemote (IPNum ip)	{ return fRemoteMgr.FindRemote (ip); }
 				void 	ExecDTasks ();
 				void	CallRemoveRemote (IPNum ip); 
@@ -125,7 +126,7 @@ class TInetControler : public TUDPListener
 		TNetInfos 		fNetInfos;
 		strPtr			fDrvName;
 
-		InetCtrlDTask   fDTasks;
+		InetCtrlDTask * fDTasks;
 	
 	private:
 		MidiEvPtr	RemoteToEv	 (IPNum ip, char * name, PeerTimesPtr times);
@@ -143,7 +144,7 @@ class TInetControler : public TUDPListener
 		TIDPacket		fIDPacket;
 		TUDPSocket		fSocket;
 
-		TActiveSensing	fActiveSensing;
+		TActiveSensing * fActiveSensing;
 };
 
 //_________________________________________________________________________________
@@ -151,21 +152,22 @@ inline void TInetControler::CreateRemoteFailed (strPtr reason)
 				{ INetAlert alert; alert.Report (fDrvName, strRemCreateFailure, reason, 0L); }
 				
 inline void TInetControler::CallFatalError (ErrString msg, long err) 
-				{ fDTasks.FatalError (msg, err); }
+				{ fDTasks->FatalError (msg, err); }
 inline void TInetControler::CallCreateRemote (MidiEvPtr param) 
-				{ fDTasks._Schedule (param, kCreateRemoteTask); }
+				{ fDTasks->_Schedule (param, kCreateRemoteTask); }
 inline void TInetControler::CallCheckRemote (TRemoteMgr *mgr) 
-				{ fDTasks._Schedule (mgr, kCheckRemoteTask); }
+				{ fDTasks->_Schedule (mgr, kCheckRemoteTask); }
 inline void TInetControler::CallCnxRefused (strPtr host) 
-				{ fDTasks._Schedule (host, kCnxRefusedTask); }
+				{ fDTasks->_Schedule (host, kCnxRefusedTask); }
 inline void TInetControler::CallRemoveRemote (IPNum ip) 
-				{ fDTasks._Schedule ((void *)ip, kRemoveRemoteTask); }
+				{ fDTasks->_Schedule ((void *)ip, kRemoveRemoteTask); }
 inline void TInetControler::CallCheckCompletion (IPNum ip, unsigned long timeout, Boolean silently) 
-				{ fDTasks._Schedule (MidiGetTime()+timeout, (void *)ip, 
+				{ fDTasks->_Schedule (MidiGetTime()+timeout, (void *)ip, 
 				  silently ? kSilentCheckCompletion : kCheckCompletion); }
 
 //_________________________________________________________________________________
 inline void TInetDriver::WakeUp (short r)	{ fControler->WakeUp (r); }
 inline void TInetDriver::Sleep  (short r)	{ fControler->Sleep (r); }
+inline void	TInetDriver::RcvAlarm (short r)	{ fControler->RcvAlarm (r); }
 
 #endif
