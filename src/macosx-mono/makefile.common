@@ -1,0 +1,84 @@
+
+TARGET = ../macosx-mono/msCommon.o
+OPTIONS = -D__Macintosh__ -D__POWERPC__
+INC = Headers
+CFLAGS := -O3 -Wall $(OPTIONS) -I$(INC)
+CC = cc
+
+C = Clients
+K = Kernel
+M = Memory
+S = Sorter
+D = Drivers
+
+SRC = $(C)/*.c $(K)/*.c $(M)/*.c $(S)/*.c $(D)/*.c
+
+OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
+      $(C)/msFilter.o $(C)/msMail.o $(C)/msTasks.o $(C)/msXmtRcv.o \
+      $(K)/msHandler.o $(K)/msInit.o $(K)/msSmpte.o $(K)/msTime.o \
+      $(M)/msEvents.o $(M)/msFields.o $(M)/msMemory.o $(M)/msSeq.o \
+      $(S)/msSorter.o $(D)/msDriver.o
+
+$(TARGET) : $(OBJ)
+	ld -r -o $(TARGET) $(OBJ)
+
+dep:
+	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
+
+clean:
+	rm -f $(OBJ) $(TARGET)
+
+# DO NOT DELETE
+
+Clients/msAlarms.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+Clients/msAlarms.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
+Clients/msAlarms.o: Headers/msMemory.h Headers/msDefs.h Headers/msExtern.h
+Clients/msAlarms.o: Headers/msKernel.h Headers/msSorter.h Headers/msDriver.h
+Clients/msAlarms.o: Headers/msTasks.h
+Clients/msAppls.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+Clients/msAppls.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
+Clients/msAppls.o: Headers/msMemory.h Headers/msDefs.h Headers/msAppFun.h
+Clients/msAppls.o: Headers/msKernel.h Headers/msSorter.h Headers/msDriver.h
+Clients/msAppls.o: Headers/msConnx.h Headers/msExtern.h Headers/msTasks.h
+Clients/msAppls.o: Headers/msInit.h Headers/msXmtRcv.h Headers/msMem.h
+Clients/msConnx.o: Headers/msAlarms.h Headers/msAppls.h Headers/lffifo.h
+Clients/msConnx.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
+Clients/msConnx.o: Headers/msMemory.h Headers/msDefs.h Headers/msConnx.h
+Clients/msFilter.o: Headers/msFilter.h Headers/msDefs.h Headers/msTypes.h
+Clients/msFilter.o: Headers/msMem.h
+Clients/msMail.o: Headers/msMail.h Headers/msTypes.h Headers/msSync.h
+Clients/msTasks.o: Headers/msTasks.h Headers/lflifo.h Headers/msTypes.h
+Clients/msTasks.o: Headers/msSync.h Headers/lffifo.h Headers/msDefs.h
+Clients/msTasks.o: Headers/msAppls.h Headers/msMemory.h Headers/msEvents.h
+Clients/msTasks.o: Headers/msExtern.h Headers/msKernel.h Headers/msSorter.h
+Clients/msTasks.o: Headers/msDriver.h
+Clients/msXmtRcv.o: Headers/msXmtRcv.h Headers/msTypes.h Headers/msAppls.h
+Clients/msXmtRcv.o: Headers/lffifo.h Headers/msSync.h Headers/lflifo.h
+Clients/msXmtRcv.o: Headers/msMemory.h Headers/msDefs.h Headers/msEvents.h
+Kernel/msHandler.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
+Kernel/msHandler.o: Headers/lflifo.h Headers/msSync.h Headers/msKernel.h
+Kernel/msHandler.o: Headers/lffifo.h Headers/msAppls.h Headers/msMemory.h
+Kernel/msHandler.o: Headers/msSorter.h Headers/msDriver.h Headers/msExtern.h
+Kernel/msHandler.o: Headers/msTasks.h
+Kernel/msInit.o: Headers/msAppFun.h Headers/msKernel.h Headers/lffifo.h
+Kernel/msInit.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
+Kernel/msInit.o: Headers/msDefs.h Headers/msAppls.h Headers/msMemory.h
+Kernel/msInit.o: Headers/msSorter.h Headers/msDriver.h Headers/msInit.h
+Kernel/msInit.o: Headers/msEvents.h Headers/msExtern.h Headers/msTasks.h
+Kernel/msInit.o: Headers/msTime.h
+Kernel/msSmpte.o: Headers/msSmpte.h Headers/msTypes.h Headers/msKernel.h
+Kernel/msSmpte.o: Headers/lffifo.h Headers/msSync.h Headers/lflifo.h
+Kernel/msSmpte.o: Headers/msDefs.h Headers/msAppls.h Headers/msMemory.h
+Kernel/msSmpte.o: Headers/msSorter.h Headers/msDriver.h
+Kernel/msTime.o: Headers/msTime.h Headers/msKernel.h Headers/lffifo.h
+Kernel/msTime.o: Headers/msSync.h Headers/msTypes.h Headers/lflifo.h
+Kernel/msTime.o: Headers/msDefs.h Headers/msAppls.h Headers/msMemory.h
+Kernel/msTime.o: Headers/msSorter.h Headers/msDriver.h
+Memory/msEvents.o: Headers/msEvents.h Headers/msDefs.h Headers/msTypes.h
+Memory/msEvents.o: Headers/lflifo.h Headers/msSync.h
+Memory/msFields.o: Headers/msFields.h Headers/msDefs.h Headers/msTypes.h
+Memory/msMemory.o: Headers/msDefs.h Headers/msTypes.h Headers/msMemory.h
+Memory/msMemory.o: Headers/lflifo.h Headers/msSync.h Headers/msMem.h
+Memory/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
+Memory/msSeq.o: Headers/lflifo.h Headers/msSync.h Headers/msEvents.h
+Sorter/msSorter.o: Headers/msSorter.h
