@@ -44,12 +44,16 @@ enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
 typedef short 	MutexResCode;
 typedef long 	MutexRef;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef WIN32
-MutexResCode msOpenMutex  (MutexRef ref);
-MutexResCode msCloseMutex (MutexRef ref);
+	MutexResCode msOpenMutex  (MutexRef ref);
+	MutexResCode msCloseMutex (MutexRef ref);
 #else
-MutexResCode OpenMutex  (MutexRef ref);
-MutexResCode CloseMutex (MutexRef ref);
+	MutexResCode OpenMutex  (MutexRef ref);
+	MutexResCode CloseMutex (MutexRef ref);
 #endif
 
 TApplContextPtr CreateApplContext ();
@@ -60,36 +64,40 @@ void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
 void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 
 #ifdef MSKernel
-/*------------------------------------------------------------------------------*/
-/*                      initializations : wakeup & sleep                        */
-/*------------------------------------------------------------------------------*/
-void SpecialWakeUp (TMSGlobalPtr g);
-void SpecialSleep  (TMSGlobalPtr g);
 
-void OpenTimeInterrupts (TMSGlobalPtr g);
-void CloseTimeInterrupts(TMSGlobalPtr g);
+	/*------------------------------------------------------------------------------*/
+	/*                      initializations : wakeup & sleep                        */
+	/*------------------------------------------------------------------------------*/
+	void SpecialWakeUp (TMSGlobalPtr g);
+	void SpecialSleep  (TMSGlobalPtr g);
 
+	void OpenTimeInterrupts (TMSGlobalPtr g);
+	void CloseTimeInterrupts(TMSGlobalPtr g);
 
-/*------------------------------------------------------------------------------*/
-/*                   client applications context and tasks                      */
-/*------------------------------------------------------------------------------*/
+	/*------------------------------------------------------------------------------*/
+	/*                   client applications context and tasks                      */
+	/*------------------------------------------------------------------------------*/
 
-void DriverWakeUp (TApplPtr appl);
-void DriverSleep  (TApplPtr appl);
+	void DriverWakeUp (TApplPtr appl);
+	void DriverSleep  (TApplPtr appl);
 
-long RealTimeOffset (THorlogePtr h);
-void AdjustTimer    (THost context, long offset, long period);
+	long RealTimeOffset (THorlogePtr h);
+	void AdjustTimer    (THost context, long offset, long period);
 
-#else
+	#else
 
-Boolean   InitComm         (TMSGlobalPtr g);
-void      CloseComm        (TMSGlobalPtr g);
+	Boolean   InitComm         (TMSGlobalPtr g);
+	void      CloseComm        (TMSGlobalPtr g);
 
-Boolean   CheckMidiShare   (TMSGlobalPtr g);
-void      SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
-MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
-char *    GetShMemID (MidiFilterPtr filter);
+	Boolean   CheckMidiShare   (TMSGlobalPtr g);
+	void      SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
+	MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
+	char *    GetShMemID       (MidiFilterPtr filter);
 
 #endif /* MSKernel */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -95,7 +95,7 @@ void CloseMemory (MSMemoryPtr g)
 									// otherwise lfpop inlining is splitted by
 									// a stack correction
 									// a bug in CodeWarrior 5  compiler for mac is suspected  
-			DisposeMemory (blk, kStdMemory);
+			DisposeMemory (blk);
 			blk = next;
 		}
 		InitMemory (g, g->desiredSpace);	
@@ -129,7 +129,7 @@ static unsigned long NewBlock (MSMemoryPtr g, unsigned long nbev)
 	
 	if (nbev > 0) {
 		unsigned long size = nbev * sizeof(TMidiEv) + sizeof(void*);
-		blk = (void **)AllocateMemory (kStdMemory, size);
+		blk = (void **)AllocateMemory (size);
 		if (!blk) return 0;
 		lfpush ( BlockList(g), (cell*)blk);
 		cl = (MidiEvPtr)(blk+1);

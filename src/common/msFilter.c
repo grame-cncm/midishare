@@ -27,12 +27,8 @@
 #include "msMem.h"
 
 
-#define AllocateNewFilter(size)		(MidiFilterPtr)AllocateMemory(kernelSharedMemory, size)
-#define FreeFilter(filter)			DisposeMemory(filter, kernelSharedMemory)
-
-
 MSFunctionType(MidiFilterPtr) MSNewFilter (void) {
-	return AllocateNewFilter (sizeof(TFilter));
+	return (MidiFilterPtr)AllocateFilter (sizeof(TFilter));
 }
 
 MSFunctionType(void) MSFreeFilter (MidiFilterPtr filter) {

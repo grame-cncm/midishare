@@ -29,14 +29,14 @@
 #include "msMem.h"
 #include "msTypes.h"
 
-#define NewSlot(size)		(SlotInfosPtr)AllocateMemory(kStdMemory, size)
-#define FreeSlot(slot)		DisposeMemory(slot, kStdMemory)
-#define FreeDriver(drv)		DisposeMemory(drv, kStdMemory)
+#define NewSlot(size)		(SlotInfosPtr)AllocateMemory(size)
+#define FreeSlot(slot)		DisposeMemory(slot)
+#define FreeDriver(drv)		DisposeMemory(drv)
 
-#define NewMap(size)	(PortMapPtr)AllocateMemory(kStdMemory, size)
-#define FreeMap(map)		DisposeMemory(map, kStdMemory)
-#define NewSlotInfo()	(SInfosPtr)AllocateMemory(kStdMemory, sizeof(SInfos))
-#define FreeSlotInfo(info)	DisposeMemory(info, kStdMemory)
+#define NewMap(size)	    (PortMapPtr)AllocateMemory(size)
+#define FreeMap(map)		DisposeMemory(map)
+#define NewSlotInfo()	    (SInfosPtr)AllocateMemory(sizeof(SInfos))
+#define FreeSlotInfo(info)	DisposeMemory(info)
 
 #define CheckDriversCount(g)        (nbDrivers(g) < MaxDrivers - 1)
 #define CheckSlotRef(drv, ref)		((ref>=0) && (ref<MaxSlots) && drv->map[ref])

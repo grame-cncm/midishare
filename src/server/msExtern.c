@@ -143,16 +143,3 @@ Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 	return false; 
 }
 
-/*_________________________________________________________________________*/
-/* memory allocation implementation                                        */
-/*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
-{ 
-	return (void*)malloc(size);
-}
-
-void DisposeMemory (FarPtr(void) memPtr, MemoryType type) 
-{
-	if (memPtr) free(memPtr);
-}
-

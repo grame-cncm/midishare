@@ -20,28 +20,26 @@
 
 */
 
-#ifndef __mem__
-#define __mem__
+#ifndef __msMem__
+#define __msMem__
 
 #include "msTypes.h"
 
 /*------------------------------------------------------------------------------*/
 /*                               memory management                              */
 /*------------------------------------------------------------------------------*/
-/* defines a memory block maximum size: when a client application requests 
-   for a larger block, the allocated memory is splitted in smaller blocks */
-typedef enum {	
-        kStdMemory,        /* no constraints on the allocated memory  */
-                           /* it should only be accessed and owned by the calling process */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-        kSharedMemory,     /* the allocated memory should be shared by the kernel and     */
-                           /* all the client applications.                                */
+	FarPtr(void) AllocateMemory (unsigned long size);
+	void         DisposeMemory  (FarPtr(void) memPtr);
 
-        kernelSharedMemory /* the allocated memory should be shared by the kernel and     */
-                           /* the calling process                                         */
-} MemoryType;
+	FarPtr(void) AllocateFilter (unsigned long size);
+	void         FreeFilter  	(FarPtr(void) filter);
 
-FarPtr(void) AllocateMemory (MemoryType type, unsigned long size);
-void         DisposeMemory  (FarPtr(void) memPtr, MemoryType type);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

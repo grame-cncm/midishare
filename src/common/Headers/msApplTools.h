@@ -29,10 +29,10 @@
 #include "msDriver.h"
 #include "msKernel.h"
 
-#define NewAppl(size)		(TApplPtr)AllocateMemory(kStdMemory, size)
-#define NewDriver(size)		(TDriverPtr)AllocateMemory(kStdMemory, size)
+#define NewAppl(size)		(TApplPtr)AllocateMemory(size)
+#define NewDriver(size)		(TDriverPtr)AllocateMemory(size)
 
-#define FreeAppl(appl)		DisposeMemory(appl, kStdMemory)
+#define FreeAppl(appl)		DisposeMemory(appl)
 
 #ifdef MSKernel
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
