@@ -165,7 +165,7 @@ int main(int argc, char *argv[] )
 
 	// Initialisations
 	gtk_init (&argc, &argv);
-	gRefNum = MidiOpen("msDisplay");
+	gRefNum = MidiOpen(argv[0]);
 	MidiConnect (0,gRefNum,1);
 
 	// User interface construction

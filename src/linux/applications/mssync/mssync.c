@@ -254,7 +254,7 @@ int main(int argc, char *argv[] )
 	// Initialisations
 	gtk_init (&argc, &argv);
 
-	gRefNum = MidiOpen("msSync");
+	gRefNum = MidiOpen(argv[0]);
 	MidiConnect (gRefNum, 0, true);
   	MidiConnect (0, gRefNum, true);
 	InstallFilter(gRefNum);

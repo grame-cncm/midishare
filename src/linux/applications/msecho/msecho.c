@@ -166,7 +166,7 @@ int main(int argc, char *argv[] )
 	// Initialisations
 	gtk_init (&argc, &argv);
 
-	gRefNum = MidiOpen("msEcho");
+	gRefNum = MidiOpen(argv[0]);
 	MidiSetRcvAlarm(gRefNum, EchoAlarm);
 	InstallFilter();
   	MidiConnect (gRefNum, 0, true);

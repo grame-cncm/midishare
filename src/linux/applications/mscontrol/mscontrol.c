@@ -116,7 +116,7 @@ int main(int argc, char *argv[] )
 
 	// Initialisations
 	gtk_init (&argc, &argv);
-	gRefNum = MidiOpen("msControl");
+	gRefNum = MidiOpen(argv[0]);
 	MidiConnect(gRefNum,0,1);
 	MidiConnect(0,gRefNum,1);
 	

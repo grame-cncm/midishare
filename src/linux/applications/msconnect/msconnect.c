@@ -242,7 +242,7 @@ int main(int argc, char *argv[] )
 
 	// Initialisations
 	gtk_init (&argc, &argv);
-	gRefNum = MidiOpen("msConnect");
+	gRefNum = MidiOpen(argv[0]);
 
 	// User interface construction
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
