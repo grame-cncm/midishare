@@ -1,0 +1,782 @@
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 2) "__MidiShare__" "")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 56) "typeNote" "0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 58) "typeKeyOn" "1")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 59) "typeKeyOff" "2")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 60) "typeKeyPress" "3")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 61) "typeCtrlChange" "4")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 62) "typeProgChange" "5")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 63) "typeChanPress" "6")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 64) "typePitchWheel" "7")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 66) "typeSongPos" "8")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 67) "typeSongSel" "9")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 68) "typeClock" "10")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 69) "typeStart" "11")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 70) "typeContinue" "12")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 71) "typeStop" "13")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 73) "typeTune" "14")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 74) "typeActiveSens" "15")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 75) "typeReset" "16")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 77) "typeSysEx" "17")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 78) "typeStream" "18")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 80) "typePrivate" "19")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 81) "typeProcess" "128")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 82) "typeDProcess" "129")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 83) "typeQuarterFrame" "130")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 85) "typeCtrl14b" "131")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 86) "typeNonRegParam" "132")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 87) "typeRegParam" "133")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 89) "typeSeqNum" "134")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 90) "typeTextual" "135")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 91) "typeCopyright" "136")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 92) "typeSeqName" "137")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 93) "typeInstrName" "138")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 94) "typeLyric" "139")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 95) "typeMarker" "140")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 96) "typeCuePoint" "141")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 97) "typeChanPrefix" "142")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 98) "typeEndTrack" "143")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 99) "typeTempo" "144")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 100) "typeSMPTEOffset" "145")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 102) "typeTimeSign" "146")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 103) "typeKeySign" "147")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 104) "typeSpecific" "148")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 105) "typePortPrefix" "149")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 106) "typeRcvAlarm" "150")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 107) "typeApplAlarm" "151")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 109) "typeReserved" "152")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 110) "typeLastReserved" "254")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 112) "typeDead" "255")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 115) "true" "1")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 116) "false" "0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 122) "NoteOff" "0x80")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 123) "NoteOn" "0x90")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 124) "PolyTouch" "0xa0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 125) "ControlChg" "0xb0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 126) "ProgramChg" "0xc0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 127) "AfterTouch" "0xd0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 128) "PitchBend" "0xe0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 129) "SysRealTime" "0xf0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 130) "SysEx" "0xf0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 131) "QFrame" "0xf1")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 132) "SongPos" "0xf2")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 133) "SongSel" "0xf3")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 134) "UnDef2" "0xf4")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 135) "UnDef3" "0xf5")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 136) "Tune" "0xf6")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 137) "EndSysX" "0xf7")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 138) "MClock" "0xf8")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 139) "UnDef4" "0xf9")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 140) "MStart" "0xfa")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 141) "MCont" "0xfb")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 142) "MStop" "0xfc")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 143) "UnDef5" "0xfd")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 144) "ActSense" "0xfe")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 145) "MReset" "0xff")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 154) "ModemPort" "0")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 155) "PrinterPort" "1")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 163) "MIDIerrSpace" "-1")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 164) "MIDIerrRefNum" "-2")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 165) "MIDIerrBadType" "-3")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 166) "MIDIerrIndex" "-4")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 167) "MIDIerrEv" "-5")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 168) "MIDIerrUndef" "-6")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 177) "MIDISyncExternal" "0x8000")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 178) "MIDISyncAnyPort" "0x4000")
+(enum ("" 0)
+ "31"(("MIDIOpenAppl" 1)("MIDICloseAppl" 2)("MIDIChgName" 3)("MIDIChgConnect" 4)("MIDIOpenModem" 5)("MIDICloseModem" 6)("MIDIOpenPrinter" 7)("MIDIClosePrinter" 8)("MIDISyncStart" 9)("MIDISyncStop" 10)("MIDIChangeSync" 11)("MIDIOpenDriver" 12)("MIDICloseDriver" 13)("MIDIAddSlot" 14)("MIDIRemoveSlot" 15)("MIDIChgSlotConnect" 16)("MIDIChgSlotName" 17)))
+(enum-ident ("" 0)
+ "MIDIOpenAppl" 1)
+(enum-ident ("" 0)
+ "MIDICloseAppl" 2)
+(enum-ident ("" 0)
+ "MIDIChgName" 3)
+(enum-ident ("" 0)
+ "MIDIChgConnect" 4)
+(enum-ident ("" 0)
+ "MIDIOpenModem" 5)
+(enum-ident ("" 0)
+ "MIDICloseModem" 6)
+(enum-ident ("" 0)
+ "MIDIOpenPrinter" 7)
+(enum-ident ("" 0)
+ "MIDIClosePrinter" 8)
+(enum-ident ("" 0)
+ "MIDISyncStart" 9)
+(enum-ident ("" 0)
+ "MIDISyncStop" 10)
+(enum-ident ("" 0)
+ "MIDIChangeSync" 11)
+(enum-ident ("" 0)
+ "MIDIOpenDriver" 12)
+(enum-ident ("" 0)
+ "MIDICloseDriver" 13)
+(enum-ident ("" 0)
+ "MIDIAddSlot" 14)
+(enum-ident ("" 0)
+ "MIDIRemoveSlot" 15)
+(enum-ident ("" 0)
+ "MIDIChgSlotConnect" 16)
+(enum-ident ("" 0)
+ "MIDIChgSlotName" 17)
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 221)
+ "Byte"
+ (unsigned-char ()))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 222)
+ "Ptr"
+ (pointer (char ())))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 223)
+ "Boolean"
+ (unsigned-char ()))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 228)
+ "MidiSEXPtr"
+ (pointer (struct-ref "TMidiSEX")))
+(struct ("" 0)
+ "TMidiSEX"
+ (("link" (field (typedef "MidiSEXPtr") 0 4))
+  ("data" (field (array 12 (typedef "Byte")) 4 12))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 233)
+ "TMidiSEX"
+ (struct-ref "TMidiSEX"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 238)
+ "MidiSTPtr"
+ (pointer (struct-ref "TMidiST")))
+(struct ("" 0)
+ "TMidiST"
+ (("val" (field (array 4 (long ())) 0 16))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 249)
+ "TMidiST"
+ (struct-ref "TMidiST"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 254)
+ "MidiEvPtr"
+ (pointer (struct-ref "TMidiEv")))
+(struct ("" 0)
+ "49"
+ (("pitch" (field (typedef "Byte") 0 1))
+  ("vel" (field (typedef "Byte") 1 1))
+  ("dur" (field (unsigned-short ()) 2 2))))
+(struct ("" 0)
+ "50"
+ (("numerator" (field (typedef "Byte") 0 1))
+  ("denominator" (field (typedef "Byte") 1 1))
+  ("nClocks" (field (typedef "Byte") 2 1))
+  ("n32nd" (field (typedef "Byte") 3 1))))
+(struct ("" 0)
+ "51"
+ (("ton" (field (char ()) 0 1))
+  ("mode" (field (typedef "Byte") 1 1))
+  ("unused" (field (array 2 (typedef "Byte")) 2 2))))
+(struct ("" 0)
+ "53"
+ (("num" (field (short ()) 0 2))
+  ("val" (field (short ()) 2 2))))
+(struct ("" 0)
+ "54"
+ (("number" (field (unsigned-short ()) 0 2))
+  ("unused" (field (short ()) 2 2))))
+(union ("" 0)
+ "55"
+ (("note" (field (struct-ref "49") 0 4))
+  ("timeSign" (field (struct-ref "50") 0 4))
+  ("keySign" (field (struct-ref "51") 0 4))
+  ("param" (field (struct-ref "53") 0 4))
+  ("seqNum" (field (struct-ref "54") 0 4))
+  ("shortFields" (field (array 2 (short ())) 0 4))
+  ("longField" (field (long ()) 0 4))
+  ("tempo" (field (long ()) 0 4))
+  ("data" (field (array 4 (typedef "Byte")) 0 4))
+  ("linkSE" (field (typedef "MidiSEXPtr") 0 4))
+  ("linkST" (field (typedef "MidiSTPtr") 0 4))))
+(struct ("" 0)
+ "TMidiEv"
+ (("link" (field (typedef "MidiEvPtr") 0 4))
+  ("date" (field (unsigned-long ()) 4 4))
+  ("evType" (field (typedef "Byte") 8 1))
+  ("refNum" (field (typedef "Byte") 9 1))
+  ("port" (field (typedef "Byte") 10 1))
+  ("chan" (field (typedef "Byte") 11 1))
+  ("info" (field (union-ref "55") 12 4))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 307)
+ "TMidiEv"
+ (struct-ref "TMidiEv"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 312)
+ "MidiSeqPtr"
+ (pointer (struct-ref "TMidiSeq")))
+(struct ("" 0)
+ "TMidiSeq"
+ (("first" (field (typedef "MidiEvPtr") 0 4))
+  ("last" (field (typedef "MidiEvPtr") 4 4))
+  ("undef1" (field (typedef "Ptr") 8 4))
+  ("undef2" (field (typedef "Ptr") 12 4))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 319)
+ "TMidiSeq"
+ (struct-ref "TMidiSeq"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 324)
+ "MidiFilterPtr"
+ (pointer (struct-ref "TFilter")))
+(struct ("" 0)
+ "TFilter"
+ (("port" (field (array 32 (char ())) 0 32))
+  ("evType" (field (array 32 (char ())) 32 32))
+  ("channel" (field (array 2 (char ())) 64 2))
+  ("unused" (field (array 2 (char ())) 66 2))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 331)
+ "TFilter"
+ (struct-ref "TFilter"))
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 336) "DrvNameLen" "32")
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 337)
+ "MidiName"
+ (pointer (char ())))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 338)
+ "DriverName"
+ (array 32 (char ())))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 339)
+ "SlotName"
+ (typedef "DriverName"))
+(struct ("" 0)
+ "72"
+ (("drvRef" (field (short ()) 0 2))
+  ("slotRef" (field (short ()) 2 2))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 347)
+ "SlotRefNum"
+ (struct-ref "72"))
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 348) "Slot ( ref )" "((ref).slotRef)")
+(enum ("" 0)
+ "74"(("MidiInputSlot" 1)("MidiOutputSlot" 2)("MidiInputOutputSlot" 3)))
+(enum-ident ("" 0)
+ "MidiInputSlot" 1)
+(enum-ident ("" 0)
+ "MidiOutputSlot" 2)
+(enum-ident ("" 0)
+ "MidiInputOutputSlot" 3)
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 350)
+ "SlotDirection"
+ (enum-ref "74"))
+(struct ("" 0)
+ "TSlotInfos"
+ (("name" (field (typedef "SlotName") 0 32))
+  ("direction" (field (typedef "SlotDirection") 32 4))
+  ("cnx" (field (array 32 (char ())) 36 32))
+  ("reserved" (field (array 2 (long ())) 68 8))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 356)
+ "TSlotInfos"
+ (struct-ref "TSlotInfos"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 358)
+ "WakeupPtr"
+ (pointer (function
+  ((short ()) )
+  (void ()))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 359)
+ "SleepPtr"
+ (pointer (function
+  ((short ()) )
+  (void ()))))
+(struct ("" 0)
+ "TDriverOperation"
+ (("wakeup" (field (typedef "WakeupPtr") 0 4))
+  ("sleep" (field (typedef "SleepPtr") 4 4))
+  ("reserved" (field (array 3 (long ())) 8 12))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 364)
+ "TDriverOperation"
+ (struct-ref "TDriverOperation"))
+(struct ("" 0)
+ "TDriverInfos"
+ (("name" (field (typedef "DriverName") 0 32))
+  ("version" (field (short ()) 32 2))
+  ("slots" (field (short ()) 34 2))
+  ("reserved" (field (array 2 (long ())) 36 8))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 371)
+ "TDriverInfos"
+ (struct-ref "TDriverInfos"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 376)
+ "SyncInfoPtr"
+ (pointer (struct-ref "TSyncInfo")))
+(struct ("" 0)
+ "TSyncInfo"
+ (("time" (field (long ()) 0 4))
+  ("reenter" (field (long ()) 4 4))
+  ("syncMode" (field (unsigned-short ()) 8 2))
+  ("syncLocked" (field (typedef "Byte") 10 1))
+  ("syncPort" (field (typedef "Byte") 11 1))
+  ("syncStart" (field (long ()) 12 4))
+  ("syncStop" (field (long ()) 16 4))
+  ("syncOffset" (field (long ()) 20 4))
+  ("syncSpeed" (field (long ()) 24 4))
+  ("syncBreaks" (field (long ()) 28 4))
+  ("syncFormat" (field (short ()) 32 2))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 390)
+ "TSyncInfo"
+ (struct-ref "TSyncInfo"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 392)
+ "SmpteLocPtr"
+ (pointer (struct-ref "TSmpteLocation")))
+(struct ("" 0)
+ "TSmpteLocation"
+ (("format" (field (short ()) 0 2))
+  ("hours" (field (short ()) 2 2))
+  ("minutes" (field (short ()) 4 2))
+  ("seconds" (field (short ()) 6 2))
+  ("frames" (field (short ()) 8 2))
+  ("fracs" (field (short ()) 10 2))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 401)
+ "TSmpteLocation"
+ (struct-ref "TSmpteLocation"))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 406)
+ "TaskPtr"
+ (pointer (function
+  ((long ()) (short ()) (long ()) (long ()) (long ()) )
+  (void ()))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 407)
+ "RcvAlarmPtr"
+ (pointer (function
+  ((short ()) )
+  (void ()))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 408)
+ "ApplAlarmPtr"
+ (pointer (function
+  ((short ()) (long ()) )
+  (void ()))))
+(type ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 409)
+ "ApplyProcPtr"
+ (pointer (function
+  ((typedef "MidiEvPtr") )
+  (void ()))))
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 418) "Link ( e )" "( (e)->link )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 419) "Date ( e )" "( (e)->date )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 420) "EvType ( e )" "( (e)->evType )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 421) "RefNum ( e )" "( (e)->refNum )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 422) "Port ( e )" "( (e)->port )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 423) "Canal ( e )" "( (e)->chan )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 424) "Chan ( e )" "( (e)->chan )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 425) "Pitch ( e )" "( (e)->info.note.pitch )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 426) "Vel ( e )" "( (e)->info.note.vel )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 427) "Dur ( e )" "( (e)->info.note.dur )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 428) "Data ( e )" "( (e)->info.data )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 429) "LinkSE ( e )" "( (e)->info.linkSE )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 430) "LinkST ( e )" "( (e)->info.linkST )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 432) "TSNum ( e )" "( (e)->info.timeSign.numerator )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 433) "TSDenom ( e )" "( (e)->info.timeSign.denominator )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 434) "TSClocks ( e )" "( (e)->info.timeSign.nClocks )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 435) "TS32nd ( e )" "( (e)->info.timeSign.n32nd )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 437) "KSTon ( e )" "( (e)->info.keySign.ton )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 438) "KSMode ( e )" "( (e)->info.keySign.mode )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 440) "Tempo ( e )" "( (e)->info.tempo )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 441) "SeqNum ( e )" "( (e)->info.seqNum.number )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 442) "ChanPrefix ( e )" "( (e)->info.data[0] )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 443) "PortPrefix ( e )" "( (e)->info.data[0] )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 445) "First ( e )" "( (e)->first )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 446) "Last ( e )" "( (e)->last )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 447) "FirstEv ( e )" "( (e)->first )")
+(macro ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 448) "LastEv ( e )" "( (e)->last )")
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 463)
+ "MidiShare"
+ (function
+  ((void ()))
+  (int ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 467)
+ "MidiGetVersion"
+ (function
+  ()
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 469)
+ "MidiCountAppls"
+ (function
+  ()
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 470)
+ "MidiGetIndAppl"
+ (function
+  ((short ()) )
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 471)
+ "MidiGetNamedAppl"
+ (function
+  ((typedef "MidiName") )
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 475)
+ "MidiGetSyncInfo"
+ (function
+  ((typedef "SyncInfoPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 476)
+ "MidiSetSyncMode"
+ (function
+  ((unsigned-short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 477)
+ "MidiGetExtTime"
+ (function
+  ()
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 478)
+ "MidiInt2ExtTime"
+ (function
+  ((long ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 479)
+ "MidiExt2IntTime"
+ (function
+  ((long ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 480)
+ "MidiTime2Smpte"
+ (function
+  ((long ()) (short ()) (typedef "SmpteLocPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 481)
+ "MidiSmpte2Time"
+ (function
+  ((typedef "SmpteLocPtr") )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 485)
+ "MidiOpen"
+ (function
+  ((typedef "MidiName") )
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 486)
+ "MidiClose"
+ (function
+  ((short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 490)
+ "MidiGetName"
+ (function
+  ((short ()) )
+  (typedef "MidiName")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 491)
+ "MidiSetName"
+ (function
+  ((short ()) (typedef "MidiName") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 492)
+ "MidiGetInfo"
+ (function
+  ((short ()) )
+  (pointer (void ()))) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 493)
+ "MidiSetInfo"
+ (function
+  ((short ()) (pointer (void ())) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 494)
+ "MidiGetFilter"
+ (function
+  ((short ()) )
+  (typedef "MidiFilterPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 495)
+ "MidiSetFilter"
+ (function
+  ((short ()) (typedef "MidiFilterPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 496)
+ "MidiGetRcvAlarm"
+ (function
+  ((short ()) )
+  (typedef "RcvAlarmPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 497)
+ "MidiSetRcvAlarm"
+ (function
+  ((short ()) (typedef "RcvAlarmPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 498)
+ "MidiGetApplAlarm"
+ (function
+  ((short ()) )
+  (typedef "ApplAlarmPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 499)
+ "MidiSetApplAlarm"
+ (function
+  ((short ()) (typedef "ApplAlarmPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 503)
+ "MidiRegisterDriver"
+ (function
+  ((pointer (typedef "TDriverInfos")) (pointer (typedef "TDriverOperation")) )
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 504)
+ "MidiUnregisterDriver"
+ (function
+  ((short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 505)
+ "MidiCountDrivers"
+ (function
+  ((void ()))
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 506)
+ "MidiGetIndDriver"
+ (function
+  ((short ()) )
+  (short ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 507)
+ "MidiGetDriverInfos"
+ (function
+  ((short ()) (pointer (typedef "TDriverInfos")) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 512)
+ "MidiAddSlot"
+ (function
+  ((short ()) (typedef "MidiName") (typedef "SlotDirection") )
+  (typedef "SlotRefNum")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 513)
+ "MidiGetIndSlot"
+ (function
+  ((short ()) (short ()) )
+  (typedef "SlotRefNum")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 514)
+ "MidiRemoveSlot"
+ (function
+  ((typedef "SlotRefNum") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 515)
+ "MidiSetSlotName"
+ (function
+  ((typedef "SlotRefNum") (typedef "MidiName") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 516)
+ "MidiGetSlotInfos"
+ (function
+  ((typedef "SlotRefNum") (pointer (typedef "TSlotInfos")) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 517)
+ "MidiConnectSlot"
+ (function
+  ((short ()) (typedef "SlotRefNum") (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 518)
+ "MidiIsSlotConnected"
+ (function
+  ((short ()) (typedef "SlotRefNum") )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 523)
+ "MidiConnect"
+ (function
+  ((short ()) (short ()) (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 524)
+ "MidiIsConnected"
+ (function
+  ((short ()) (short ()) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 528)
+ "MidiGetPortState"
+ (function
+  ((short ()) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 529)
+ "MidiSetPortState"
+ (function
+  ((short ()) (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 533)
+ "MidiFreeSpace"
+ (function
+  ()
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 535)
+ "MidiNewCell"
+ (function
+  ()
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 536)
+ "MidiFreeCell"
+ (function
+  ((typedef "MidiEvPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 537)
+ "MidiTotalSpace"
+ (function
+  ()
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 538)
+ "MidiGrowSpace"
+ (function
+  ((long ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 540)
+ "MidiNewEv"
+ (function
+  ((short ()) )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 541)
+ "MidiCopyEv"
+ (function
+  ((typedef "MidiEvPtr") )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 542)
+ "MidiFreeEv"
+ (function
+  ((typedef "MidiEvPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 544)
+ "MidiSetField"
+ (function
+  ((typedef "MidiEvPtr") (long ()) (long ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 545)
+ "MidiGetField"
+ (function
+  ((typedef "MidiEvPtr") (long ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 546)
+ "MidiAddField"
+ (function
+  ((typedef "MidiEvPtr") (long ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 547)
+ "MidiCountFields"
+ (function
+  ((typedef "MidiEvPtr") )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 552)
+ "MidiNewSeq"
+ (function
+  ()
+  (typedef "MidiSeqPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 553)
+ "MidiAddSeq"
+ (function
+  ((typedef "MidiSeqPtr") (typedef "MidiEvPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 554)
+ "MidiFreeSeq"
+ (function
+  ((typedef "MidiSeqPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 555)
+ "MidiClearSeq"
+ (function
+  ((typedef "MidiSeqPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 556)
+ "MidiApplySeq"
+ (function
+  ((typedef "MidiSeqPtr") (typedef "ApplyProcPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 560)
+ "MidiGetTime"
+ (function
+  ()
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 564)
+ "MidiSendIm"
+ (function
+  ((short ()) (typedef "MidiEvPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 565)
+ "MidiSend"
+ (function
+  ((short ()) (typedef "MidiEvPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 566)
+ "MidiSendAt"
+ (function
+  ((short ()) (typedef "MidiEvPtr") (long ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 570)
+ "MidiCountEvs"
+ (function
+  ((short ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 571)
+ "MidiGetEv"
+ (function
+  ((short ()) )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 572)
+ "MidiAvailEv"
+ (function
+  ((short ()) )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 573)
+ "MidiFlushEvs"
+ (function
+  ((short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 577)
+ "MidiReadSync"
+ (function
+  ((pointer (void ())) )
+  (pointer (void ()))) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 578)
+ "MidiWriteSync"
+ (function
+  ((pointer (void ())) (pointer (void ())) )
+  (pointer (void ()))) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 582)
+ "MidiCall"
+ (function
+  ((typedef "TaskPtr") (long ()) (short ()) (long ()) (long ()) (long ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 583)
+ "MidiTask"
+ (function
+  ((typedef "TaskPtr") (long ()) (short ()) (long ()) (long ()) (long ()) )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 584)
+ "MidiDTask"
+ (function
+  ((typedef "TaskPtr") (long ()) (short ()) (long ()) (long ()) (long ()) )
+  (typedef "MidiEvPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 585)
+ "MidiForgetTask"
+ (function
+  ((pointer (typedef "MidiEvPtr")) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 586)
+ "MidiCountDTasks"
+ (function
+  ((short ()) )
+  (long ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 587)
+ "MidiFlushDTasks"
+ (function
+  ((short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 588)
+ "MidiExec1DTask"
+ (function
+  ((short ()) )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 592)
+ "MidiNewFilter"
+ (function
+  ()
+  (typedef "MidiFilterPtr")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 593)
+ "MidiFreeFilter"
+ (function
+  ((typedef "MidiFilterPtr") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 595)
+ "MidiAcceptPort"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 596)
+ "MidiAcceptChan"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 597)
+ "MidiAcceptType"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) (typedef "Boolean") )
+  (void ())) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 599)
+ "MidiIsAcceptedPort"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 600)
+ "MidiIsAcceptedChan"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) )
+  (typedef "Boolean")) (extern))
+(function ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 601)
+ "MidiIsAcceptedType"
+ (function
+  ((typedef "MidiFilterPtr") (short ()) )
+  (typedef "Boolean")) (extern))
+(var ("/System/Library/Frameworks/Midishare.framework/Headers/MidiShare.h" 609)
+ "_OBJC_STRINGS"
+ (array 0 (char ())) (extern))
