@@ -37,10 +37,10 @@ There are two possible compilation targets :
 Compilation of MidiShare WITHOUT drivers
 ==========================================
 
-In the linux folder:
-
-make (or make midishare)
-
+In the linux folder type:
+  ./configure
+then 
+  make (or make midishare)
 
 This compile the MidiShare kernel (the MidiShareKernel.o kernel module) 
 and the shared MidiShare library (libMidiShare.so)
@@ -53,9 +53,10 @@ make install
 Compilation of MidiShare WITH drivers
 =======================================
 
-In the linux folder:
-
-make midishare-alsa
+In the linux folder type :
+  ./configure
+then 
+  make midishare-alsa
 
 
 This compile the MidiShare kernel with ALSA drivers (the MidiShareKernel.o kernel module) 
