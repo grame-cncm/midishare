@@ -1,0 +1,9 @@
+
+Tags :
+------------------------
+??/??/??  V202   (static)			: Main branch, release version 2.02
+??/??/??  new_scheduler (branch) 	: Implementation of a simplified ticks scheduler
+??/??/??  Tritonus (branch) 		: Tritonus branch (Open Source Java Sound API implementation www.tritonus.org)
+??/??/??  Elody (branch) 		    : Elody branch 
+??/??/??  Elody120 (static) 		: Elody release version 1.20 
+??/??/??  Elody120-patches (branch) : Patches on Elody version 1.20 
