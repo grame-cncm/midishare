@@ -7,14 +7,14 @@
 
 TARGET = midishared
 
-LIBS = ../msServerCommonLib.o ../msOSGlueLib.o PortAudioLib.o
+LIBS = ../msServerCommonLib.o ../msOSGlueLib.o portaudio/src/lib/libportaudio.a
 
 COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
-COMOBJ := $(patsubst ../common/%.c, ../common/sobj/%.o, $(COMSRC))
+#COMOBJ := $(patsubst ../common/%.c, ../common/sobj/%.o, $(COMSRC))
+COMINC := $(wildcard ../common/Headers/*.h)
 GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
-GLUEOBJ := $(patsubst %.cpp, %.o, $(GLUESRC))
-PASRC := $(wildcard portaudio/*.c portaudio/pa_common/*.c)
-PAOBJ := $(patsubst %.c, %.o, $(PASRC)) 
+#GLUEOBJ := $(patsubst %.cpp, %.o, $(GLUESRC))
+GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
 
 CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
 CXXFLAGS := $(CFLAGS) -I../osglue/glue -I../osglue/include
@@ -42,26 +42,19 @@ uninstall:
 
 dep: makefile
 	cat makefile.readme makefile.osx > makefile
-	mkdep -a -f makefile $(CFLAGS) -Iportaudio/pa_common $(SRC)
-	mkdep -a -f makefile $(CFLAGS) $(COMSRC)
-	mkdep -a -f makefile $(CXXFLAGS) $(GLUESRC)
+	mkdep -a -f makefile $(CFLAGS) -Iportaudio/src/pa_common $(SRC)
 
 clean: makefile
 	rm -f $(OBJ) $(TARGET)
 
-../msServerCommonLib.o: makefile $(COMOBJ)
+../msServerCommonLib.o: makefile $(COMSRC) $(COMINC)
 	make -C ../common server
 
-../msOSGlueLib.o: makefile $(GLUEOBJ)
+../msOSGlueLib.o: makefile $(GLUESRC) $(GLUEINC)
 	make -C ../osglue
-
-PortAudioLib.o: $(PAOBJ)
-	ld -r -o PortAudioLib.o $(PAOBJ)
 
 # specific rules to differentiate portaudio options
 msPortAudio.o: msPortAudio.c
-	$(CC) $(CFLAGS) -Iportaudio/pa_common $< -c -o $@
-portaudio/%.o: portaudio/%.c
-	$(CC) -O3 -Wall -Iportaudio/pa_common $< -c -o $@
+	$(CC) $(CFLAGS) -Iportaudio/src/pa_common $< -c -o $@
 
 # DO NOT DELETE
