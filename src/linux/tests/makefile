@@ -1,13 +1,25 @@
-INC = ../Include
-OPTIONS =-D __Linux__
-LIB =  /usr/lib/libMidiShare.so.1.0 /usr/lib/libMidiShare.so.1 /usr/lib/libMidiShare.so
 SRC = ../../tools
+CFLAGS = -D __Linux__ -I../Include
+CC  = gcc
+APPLS = TestFunctions TestEvents
 
-all : TestFunctions TestEvents
+appls : $(APPLS)
 
-TestFunctions : $(SRC)/TFonctions.c $(INC)/MidiShare.h $(LIB)
-	gcc $(SRC)/TFonctions.c -I$(INC) -g  $(OPTIONS) -o TestFunctions -lMidiShare -lpthread
+TestFunctions : $(SRC)/TFonctions.c  $(SRC)/TFonctions.h
+	$(CC) $(SRC)/TFonctions.c -g  $(CFLAGS) -o TestFunctions -lMidiShare -lpthread
 
+TestEvents : $(SRC)/TEvents.c $(SRC)/TEvents.h
+	$(CC) $(SRC)/TEvents.c -I$(INC) -g  $(CFLAGS) -o TestEvents -lMidiShare -lpthread
 
-TestEvents : $(SRC)/TEvents.c $(INC)/MidiShare.h  $(LIB)
-	gcc $(SRC)/TEvents.c -I$(INC) -g  $(OPTIONS) -o TestEvents -lMidiShare -lpthread
+fmodule :
+	make -f functions
+
+emodule :
+	make -f events
+
+modules :
+	make -f events
+	make -f functions
+	
+clean :
+	rm $(APPLS)
