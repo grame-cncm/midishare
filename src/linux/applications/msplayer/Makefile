@@ -1,6 +1,8 @@
 
 cappl := msplayer
-options := -I../../Include -Wall -O6 `gtk-config --cflags --libs` -lMidiShare -lpthread -lPlayer
+LIB   := ../lib/msApplsLib.o -lMidiShare -lpthread -lPlayer
+INC   := -I../../Include -I../lib
+options := $(INC) -Wall -O6 `gtk-config --cflags --libs` $(LIB)
 DEST=/usr/local/bin
 
 all : $(cappl)

@@ -1,21 +1,17 @@
 
 cappl := msecho
-GTK   := `gtk-config --cflags --libs`
-LIB   := -lMidiShare -lpthread
-CFLAGS := -I../../Include -Wall -I../lib -O6 `gtk-config --cflags`
-options := $(CFLAGS) `gtk-config --libs` $(LIB)
+LIB   := ../lib/msApplsLib.o -lMidiShare -lpthread
+INC   := -I../../Include -I../lib
+options := -Wall -O6 $(INC) `gtk-config --cflags --libs` $(LIB)
 DEST = /usr/local/bin
-OBJ  = msecho.o ../lib/msApplsLib.o
-CC   = gcc
 
 all : $(cappl)
  
-  
-$(cappl) : $(OBJ)
-	gcc $(options) $(OBJ) -o $(cappl)
+$(cappl) : % : %.c
+	gcc $(options) $< -o $@
 
 clean :
-	rm -f $(cappl) $(OBJ)
+	rm -f $(cappl)
 	
 install :
 	cp $(cappl) $(DEST)

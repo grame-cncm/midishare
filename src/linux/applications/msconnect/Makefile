@@ -1,6 +1,9 @@
 cppappl := $(patsubst %.cpp, %, $(wildcard *.cpp))
 cappl := $(patsubst %.c, %, $(wildcard *.c))
-options := -I../../Include -Wall -O6 `gtk-config --cflags --libs` -lMidiShare -lpthread
+LIB   := ../lib/msApplsLib.o -lMidiShare -lpthread
+INC   := -I../../Include -I../lib
+options := -Wall -O6 $(INC) `gtk-config --cflags --libs` $(LIB)
+DEST = /usr/local/bin
 
 
 all : $(cppappl) $(cappl)
@@ -15,4 +18,4 @@ clean :
 	rm $(cppappl) $(cappl)
 
 install :
-	cp $(cppappl) $(cappl) /usr/local/bin
+	cp $(cppappl) $(cappl) $(DEST)

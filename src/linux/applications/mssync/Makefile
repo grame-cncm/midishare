@@ -1,11 +1,12 @@
 
 cappl := mssync
-options := -I../../Include -Wall -O6 `gtk-config --cflags --libs` -lMidiShare -lpthread -lPlayer
+LIB   := ../lib/msApplsLib.o -lMidiShare -lpthread -lPlayer
+INC   := -I../../Include -I../lib
+options := -Wall -O6 $(INC) `gtk-config --cflags --libs` $(LIB)
 DEST=/usr/local/bin
 
 all : $(cappl)
  
-  
 $(cappl) : % : %.c
 	gcc $(options) $< -o $@
 
