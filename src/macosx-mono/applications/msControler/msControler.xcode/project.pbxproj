@@ -6,7 +6,7 @@
 	objectVersion = 39;
 	objects = {
 		0249A665FF388DC511CA2CEA = {
-			expectedFileType = wrapper.application;
+			explicitFileType = wrapper.application;
 			fallbackIsa = PBXFileReference;
 			isa = PBXApplicationReference;
 			path = msControler.app;
@@ -14,8 +14,8 @@
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		0249A669FF388E3911CA2CEA = {
-			expectedFileType = archive.ar;
 			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
 			name = "libstdc++.a";
 			path = "/usr/lib/libstdc++.a";
 			refType = 0;
@@ -92,18 +92,18 @@
 //063
 //064
 		0640BAA4FFF0323A11CA0E50 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = ApplicationServices.framework;
 			path = /System/Library/Frameworks/ApplicationServices.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
 		0640BAA5FFF0323A11CA0E50 = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
 			refType = 0;
@@ -129,9 +129,9 @@
 			sourceTree = "<group>";
 		};
 		0867D6ABFE840B52C02AAC07 = {
-			expectedFileType = text.plist.strings;
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
@@ -156,6 +156,7 @@
 		195DF8C9FE9D4F0611CA2CBB = {
 			children = (
 				0249A665FF388DC511CA2CEA,
+				D354A6D605BE84C3006B0B2F,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -185,10 +186,12 @@
 			projectDirPath = "";
 			targets = (
 				20286C34FDCF999611CA2CEA,
+				D354A6C605BE84C3006B0B2F,
 			);
 		};
 		20286C29FDCF999611CA2CEA = {
 			children = (
+				D3EE804C05BC065900FE2FFB,
 				20286C2AFDCF999611CA2CEA,
 				20286C2CFDCF999611CA2CEA,
 				20286C32FDCF999611CA2CEA,
@@ -226,11 +229,12 @@
 		};
 		20286C32FDCF999611CA2CEA = {
 			children = (
+				D354A6E505BE857D006B0B2F,
 				20286C33FDCF999611CA2CEA,
 				0249A669FF388E3911CA2CEA,
 				0640BAA4FFF0323A11CA0E50,
 				0640BAA5FFF0323A11CA0E50,
-				4B5F86D1050CCE3000053105,
+				D3EE842105BC5A5600FE2FFB,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -239,9 +243,9 @@
 			sourceTree = "<group>";
 		};
 		20286C33FDCF999611CA2CEA = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
 			refType = 0;
@@ -257,7 +261,7 @@
 			);
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "/Users/fober/src/midishare/dev/macosx-mono/build";
 				HEADER_SEARCH_PATHS = "../macosx-mono ../../../lib";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
@@ -319,6 +323,7 @@
 			files = (
 				0867D6ACFE840B52C02AAC07,
 				D3F5817E0507321600053103,
+				D3EE804D05BC065900FE2FFB,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,7 +343,7 @@
 			files = (
 				20286C3CFDCF999611CA2CEA,
 				0249A66AFF388E3911CA2CEA,
-				4B5F86D2050CCE3000053105,
+				D354A6E605BE857D006B0B2F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -354,39 +359,223 @@
 //202
 //203
 //204
-//4B0
-//4B1
-//4B2
-//4B3
-//4B4
-		4B5F86D1050CCE3000053105 = {
-			expectedFileType = wrapper.framework;
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
-			name = MidiShare.framework;
-			path = /System/Library/Frameworks/MidiShare.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		4B5F86D2050CCE3000053105 = {
-			fileRef = 4B5F86D1050CCE3000053105;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-//4B0
-//4B1
-//4B2
-//4B3
-//4B4
 //D30
 //D31
 //D32
 //D33
 //D34
-		D3F5817D0507321600053103 = {
-			expectedFileType = image.icns;
+		D354A6C605BE84C3006B0B2F = {
+			buildPhases = (
+				D354A6C705BE84C3006B0B2F,
+				D354A6C805BE84C3006B0B2F,
+				D354A6CC05BE84C3006B0B2F,
+				D354A6D005BE84C3006B0B2F,
+				D354A6D405BE84C3006B0B2F,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "/Users/fober/src/midishare/dev/macosx-mono/build";
+				HEADER_SEARCH_PATHS = "../macosx-mono ../../../lib";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = "msControler dev";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = D354A6D605BE84C3006B0B2F;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>msControler</string>
+	<key>CFBundleGetInfoString</key>
+	<string>v.1.2 @ Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msControler.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>msControler</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>v. 1.2</string>
+	<key>CFBundleSignature</key>
+	<string>msCt</string>
+	<key>CFBundleVersion</key>
+	<string>1.2</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+		D354A6C705BE84C3006B0B2F = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6C805BE84C3006B0B2F = {
+			buildActionMask = 2147483647;
+			files = (
+				D354A6C905BE84C3006B0B2F,
+				D354A6CA05BE84C3006B0B2F,
+				D354A6CB05BE84C3006B0B2F,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6C905BE84C3006B0B2F = {
+			fileRef = 0867D6AAFE840B52C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6CA05BE84C3006B0B2F = {
+			fileRef = D3F5817D0507321600053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6CB05BE84C3006B0B2F = {
+			fileRef = D3EE804C05BC065900FE2FFB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6CC05BE84C3006B0B2F = {
+			buildActionMask = 2147483647;
+			files = (
+				D354A6CD05BE84C3006B0B2F,
+				D354A6CE05BE84C3006B0B2F,
+				D354A6CF05BE84C3006B0B2F,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6CD05BE84C3006B0B2F = {
+			fileRef = F7274D690201418F01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6CE05BE84C3006B0B2F = {
+			fileRef = F721C9D90207FE0701053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6CF05BE84C3006B0B2F = {
+			fileRef = F721C9DB020803BC01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6D005BE84C3006B0B2F = {
+			buildActionMask = 2147483647;
+			files = (
+				D354A6D105BE84C3006B0B2F,
+				D354A6D205BE84C3006B0B2F,
+				D354A6D305BE84C3006B0B2F,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6D105BE84C3006B0B2F = {
+			fileRef = 20286C33FDCF999611CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6D205BE84C3006B0B2F = {
+			fileRef = 0249A669FF388E3911CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6D305BE84C3006B0B2F = {
+			fileRef = D3EE842105BC5A5600FE2FFB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6D405BE84C3006B0B2F = {
+			buildActionMask = 2147483647;
+			files = (
+				D354A6D505BE84C3006B0B2F,
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6D505BE84C3006B0B2F = {
+			fileRef = F7274D6B0201418F01053118;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D354A6D605BE84C3006B0B2F = {
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
 			isa = PBXFileReference;
+			path = msControler.app;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D354A6E505BE857D006B0B2F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = MidiShare.framework;
+			path = /System/Library/Frameworks/MidiShare.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D354A6E605BE857D006B0B2F = {
+			fileRef = D354A6E505BE857D006B0B2F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3EE804C05BC065900FE2FFB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = versions.txt;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D3EE804D05BC065900FE2FFB = {
+			fileRef = D3EE804C05BC065900FE2FFB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3EE842105BC5A5600FE2FFB = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = MidiShare.framework;
+			path = ../../build/MidiShare.framework;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3F5817D0507321600053103 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
 			path = msControler.icns;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
@@ -408,9 +597,9 @@
 //F73
 //F74
 		F721C9D90207FE0701053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = states.c;
 			path = ../lib/states.c;
 			refType = 2;
@@ -423,9 +612,9 @@
 			};
 		};
 		F721C9DB020803BC01053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = profport.c;
 			path = ../../../lib/profport.c;
 			refType = 2;
@@ -438,17 +627,17 @@
 			};
 		};
 		F7274D690201418F01053118 = {
-			expectedFileType = sourcecode.c.c;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = msControler.c;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		F7274D6B0201418F01053118 = {
-			expectedFileType = sourcecode.rez;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.rez;
 			path = msControler.r;
 			refType = 4;
 			sourceTree = "<group>";
