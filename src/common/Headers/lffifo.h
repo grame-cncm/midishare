@@ -109,7 +109,7 @@ static inline unsigned long fifosize (fifo * ff)
 	return ff->count;
 }
 
-static inline void fifoput (fifo * ff, cell * c) 
+static inline void fifoput (register fifo * ff, register cell * c) 
 {
 	INT_OFF();
 	c->link = 0;
@@ -119,7 +119,7 @@ static inline void fifoput (fifo * ff, cell * c)
 	INT_ON();
 }
 
-static inline cell* fifoget (fifo * ff) 
+static inline cell* fifoget (register fifo * ff) 
 {
 	cell* c;
 	INT_OFF();
@@ -133,7 +133,7 @@ static inline cell* fifoget (fifo * ff)
 	return c;
 }
 
-static  cell* fifoclear (fifo * ff) 
+static inline cell* fifoclear (register fifo * ff) 
 {
 	cell* v;
 	INT_OFF();

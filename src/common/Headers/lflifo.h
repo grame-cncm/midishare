@@ -164,7 +164,7 @@ static inline unsigned long lfsize (lifo * lf)
 # ifdef __POWERPC__
 # else
 
-static inline void lfpush (lifo * lf, cell * cl) 
+static inline void lfpush (register lifo * lf, register cell * cl) 
 {
 	INT_OFF();
 	cl->link = lf->top;
@@ -173,7 +173,7 @@ static inline void lfpush (lifo * lf, cell * cl)
 	INT_ON();
 }
 
-static inline cell* lfpop (lifo * lf) 
+static inline cell* lfpop (register lifo * lf) 
 {
 	cell* v;
 	INT_OFF();
