@@ -64,7 +64,11 @@ void my_log_function(int level, char* message) {}
 Boolean open_iiwusynth () 
 {
 	DriverDataPtr data = GetData ();
-	iiwu_synth_settings_t settings = IIWU_DEFAULT_SETTINGS;
+	iiwu_synth_settings_t settings = {IIWU_SETTINGS_VERSION, 64 , 
+										IIWU_AUDIO | IIWU_REVERB, 
+										"portaudio", "midishare", 
+										 512, 1024, 44100, IIWU_S16_FORMAT 
+									 };
 	
 	/* allocates the synth */
 	data->synth = new_iiwu_synth(&settings);
