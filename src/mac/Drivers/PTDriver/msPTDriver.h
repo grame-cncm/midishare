@@ -29,6 +29,7 @@
 typedef struct state {
 	Boolean		showWindow;
 	Boolean		autoQuit;
+	Boolean     sflag;
 	long		tune;
 	long 		buffers;
 	long 		noisein;
@@ -43,7 +44,9 @@ typedef struct state {
 
 extern Boolean doneFlag;
 
-Boolean SetUpMidi ();
+Boolean SetUpMidi (StatePtr state);
+Boolean AudioWakeUp ();
+
 void 	CloseMidi ();
 void 	DoIdle ();
 
