@@ -136,6 +136,7 @@ static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
 static pascal void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
 {
 	PlayNote ((QuickTimeEnvPtr)a2, (MidiEvPtr)a1, 0);
+	MidiFreeEv((MidiEvPtr)a1);
 }
 
 /* -----------------------------------------------------------------------------*/
