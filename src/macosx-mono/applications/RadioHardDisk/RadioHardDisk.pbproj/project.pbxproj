@@ -166,6 +166,7 @@
 		};
 		20286C29FDCF999611CA2CEA = {
 			children = (
+				F72D5119020ED59901053118,
 				F7219670020EA10101053118,
 				20286C2AFDCF999611CA2CEA,
 				F7F87C4F020C55C4019D0CEB,
@@ -369,6 +370,11 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F72D5119020ED59901053118 = {
+			isa = PBXFileReference;
+			path = ReadMe.rtf;
+			refType = 2;
 		};
 		F7F1B30D020D352F01A74E8A = {
 			isa = PBXFileReference;
