@@ -34,7 +34,17 @@
 
 #else
   #ifdef WIN32
-     #include "Playerwin32.h"
+    #include <windows.h>
+
+	#define __MSWindows__ 
+	#define __Windows__
+	#define __UseMSOldInterface__
+
+    #define  EXPORT  __declspec(dllexport)
+    #define  MFAPI
+
+    #define __DEBUG__ 0
+
   #endif
   #ifdef  __MSWindows__
 	#include <MidiShare.h>
