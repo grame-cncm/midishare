@@ -96,12 +96,14 @@ static inline Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos)
 
 /*-------------------------------- Slots management ---------------------------*/
 
-static inline SlotRefNum	MidiAddSlot 		(short refnum)
-							{ return MSAddSlot (refnum, Clients(gMem)); }
+static inline SlotRefNum	MidiAddSlot 		(short refnum, MidiName name, SlotDirection direction)
+							{ return MSAddSlot (refnum, name, direction, Clients(gMem)); }
 static inline SlotRefNum	MidiGetIndSlot		(short refnum, short index)
 							{ return MSGetIndSlot (refnum, index, Clients(gMem)); }
 static inline void		MidiRemoveSlot 		(SlotRefNum slot)
 							{ MSRemoveSlot (slot, Clients(gMem)); }
+static inline void		MidiSetSlotName 	(SlotRefNum slot, MidiName name)
+							{ MSSetSlotName (slot, name, Clients(gMem)); }
 static inline Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos)
 							{ return MSGetSlotInfos (slot, infos, Clients(gMem)); }
 static inline void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state)

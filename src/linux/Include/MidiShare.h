@@ -521,9 +521,10 @@ Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos);
 
 /*-------------------------------- Slots management ---------------------------*/
 
-SlotRefNum	MidiAddSlot 		(short refnum);
+SlotRefNum	MidiAddSlot 		(short refnum, MidiName name, SlotDirection direction);
 SlotRefNum	MidiGetIndSlot		(short refnum, short index);
 void		MidiRemoveSlot 		(SlotRefNum slot);
+void		MidiSetSlotName 	(SlotRefNum slot, MidiName name);
 Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
 void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state);
 Boolean		MidiIsSlotConnected	(short port, SlotRefNum slot);
