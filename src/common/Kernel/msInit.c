@@ -26,6 +26,7 @@
 
 #include "msAppFun.h"
 #include "msInit.h"
+#include "msDriver.h"
 #include "msEvents.h"
 #include "msExtern.h"
 #include "msTime.h"
@@ -38,6 +39,9 @@
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
 	InitEvents ();
+#ifdef __Linux__
+	InitStructTbl();
+#endif
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
@@ -45,7 +49,7 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 171;
+	return 172;
 }
 
 
@@ -59,11 +63,13 @@ void MidiShareWakeup (TMSGlobalPtr g)
     OpenMemory (Memory(g));
     OpenTime (g);
     OpenTimeInterrupts (g);
+	Driver(g) = OpenDriverManager();
 }
 
 void MidiShareSleep (TMSGlobalPtr g) 
 {
     CloseTimeInterrupts (g);
     CloseMemory (Memory(g));
+	CloseDriverManager(Driver(g));
     SpecialSleep (g);
 }
