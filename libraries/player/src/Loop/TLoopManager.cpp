@@ -21,7 +21,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-long TLoopManager::SetLoopStartTicks (ULONG date_ticks) 
+long TLoopManager::SetLoopStartTicks(ULONG date_ticks) 
 {
 	if (date_ticks  > GetLoopEndTicks()){
 		return  kErrSequencer;
@@ -34,7 +34,7 @@ long TLoopManager::SetLoopStartTicks (ULONG date_ticks)
 
 /*--------------------------------------------------------------------------*/
 
-long TLoopManager::SetLoopStartBBU (const TPos& pos) 
+long TLoopManager::SetLoopStartBBU(const TPos& pos) 
 {
 	fFollower.SetPosBBU(pos);
 	return SetLoopStartTicks (fFollower.GetPosTicks());
@@ -50,9 +50,9 @@ long TLoopManager::SetLoopStartMs(ULONG date_ms)
 	 
 /*--------------------------------------------------------------------------*/
 
-long TLoopManager::SetLoopEndTicks (ULONG date_ticks) 
+long TLoopManager::SetLoopEndTicks(ULONG date_ticks) 
 {
-	date_ticks-=2; // To avoid glitch when looping 
+	date_ticks -= kLoopEndOffset; // To avoid glitch when looping 
 	if (date_ticks < GetLoopStartTicks()) {
 		return  kErrSequencer;
 	} else {
@@ -65,7 +65,7 @@ long TLoopManager::SetLoopEndTicks (ULONG date_ticks)
 
 /*--------------------------------------------------------------------------*/
 
-long TLoopManager::SetLoopEndBBU (const TPos& pos) 
+long TLoopManager::SetLoopEndBBU(const TPos& pos) 
 {
 	fFollower.SetPosBBU(pos);
 	return SetLoopEndTicks (fFollower.GetPosTicks());

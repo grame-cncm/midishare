@@ -26,6 +26,9 @@
 //--------------------
 // Class TLoopManager 
 //--------------------
+
+#define kLoopEndOffset 2
+
 /*!
 	\brief Management of the Loop.
 */
@@ -58,7 +61,7 @@ class TLoopManager {
 		long SetLoopEndBBU (const TPos& pos);
 		long SetLoopEndMs(ULONG date_ms);
 		
-		ULONG GetLoopEndTicks() 	{return fLoopEndMarker.GetDateTicks();}
+		ULONG GetLoopEndTicks() 	{return fLoopEndMarker.GetDateTicks()+kLoopEndOffset;}
 		ULONG GetLoopStartTicks() 	{return fLoopStart;}
 	
 };
