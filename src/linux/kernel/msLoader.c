@@ -43,7 +43,7 @@
 
 #include "msAppFun.h"
 #include "msLoader.h" 
-
+#include "msInit.h"
 
 /* Global variables */
 
@@ -276,6 +276,9 @@ struct file_operations myops = {
 	myclose		/* close	*/
 };
 
+/*__________________________________________________________________________*/
+
+Boolean IsMidiShareRunning (TMSGlobalPtr g){ return (g->local!=0); }
 
 /*__________________________________________________________________________________*/
 
@@ -299,8 +302,8 @@ int init_module()
 
 void cleanup_module()
 {
-	int r = unregister_chrdev(kMidiShareMajor, kMidiShareName);
-	if (r < 0) prnt("Error when closing MidiShare module");
+	if (IsMidiShareRunning(gMem)) MidiShareSleep(gMem);
+	if (unregister_chrdev(kMidiShareMajor, kMidiShareName) < 0) prnt("Error when closing MidiShare module");
 }
 
 
