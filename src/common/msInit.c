@@ -76,7 +76,7 @@ void MidiShareWakeup (TMSGlobalPtr g)
 #endif
     OpenTime (g);
     OpenTimeInterrupts (g);
-	OpenDrivers(g);
+//	OpenDrivers(g);
 }
 
 void MidiShareSleep (TMSGlobalPtr g) 

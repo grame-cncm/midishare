@@ -61,6 +61,7 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 {
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
+
 	if (CheckClientsCount(clients) && CheckDriversCount(clients)) {
 		TApplPtr appl  = NewAppl(sizeof(TAppl));
 		TDriverPtr drv = NewDriver(sizeof(TDriver));
@@ -343,7 +344,7 @@ MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, 
 void OpenDrivers (TMSGlobalPtr g) 
 {
 	TClientsPtr clients = Clients(g);
-	int ref, n = pub(clients, nbDrivers) - 1;
+	int ref, n = pub(clients, nbDrivers-1);
 	for (ref = MidiShareDriverRef-1; n && ref; ref--) {
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (folder(appl) == kDriverFolder)) {
