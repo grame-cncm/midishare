@@ -36,11 +36,13 @@
 /*           8/10/96  version 1.04 nom des packages en minuscule
 /*           9/01/97  version 1.05 correction bug ReadSysEx (buffer vide apres creation d'une cellule)
 /*           28/11/97 version 1.06 compatible JNI
+/*           14/02/01 version 1.07 fonctions pour la gestion des drivers
 /*
 /*****************************************************************************/
 
 #ifdef __Macintosh__
 	#include "MidiSharePPC.h"
+	#include "MidiFilter.h"
 	#include <Memory.h>   // for NewPtr and DisposePtr
 #endif
 
@@ -987,6 +989,30 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptType
 
 /*--------------------------------------------------------------------------*/
 
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedPort
+	(JNIEnv * env, jclass, jint filter, jint port){
+  
+ 	return MidiIsAcceptedPort((MidiFilterPtr)filter,port);
+ }
+ 
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedChan
+	(JNIEnv * env, jclass cl, jint filter, jint chan){
+  
+ 	return MidiIsAcceptedChan((MidiFilterPtr)filter,chan);
+ }
+ 
+ /*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedType
+	(JNIEnv * env, jclass cl, jint filter, jint type){
+  
+ 	return MidiIsAcceptedType((MidiFilterPtr)filter,type);
+ }
+ 
+/*--------------------------------------------------------------------------*/
+
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_WriteEv
   (JNIEnv * env , jclass cl, jobject ob ){
   
@@ -1040,5 +1066,157 @@ JNIEXPORT jbyte JNICALL Java_grame_midishare_Midi_ReadChar
 	return (long)*str1;
 }
 
+
+/*--------------------------------------------------------------------------*/
+/* FOR DRIVER MANAGEMENT */
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_CountDrivers
+	(JNIEnv * env , jclass cl){
+	
+	return MidiCountDrivers();
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndDriver
+	(JNIEnv * env , jclass cl, jint index){
+	
+	return MidiGetIndDriver(index);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
+	(JNIEnv * inEnv , jclass cl, jint refnum, jobject jinfos){
+	
+	TDriverInfos infos;
+	jfieldID nameAux,version,slots;
+	char *  buffer = NewPtr(128);
+	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
+ 	
+ 	nameAux = (*inEnv)->GetFieldID(inEnv, infosclass, "nameAux",  "I");
+ 	version = (*inEnv)->GetFieldID(inEnv, infosclass, "version",  "S");
+ 	slots = (*inEnv)->GetFieldID(inEnv, infosclass, "slots",  "S");
+ 
+	MidiGetDriverInfos(refnum,&infos);
+	
+	if (buffer) {
+		#ifdef __Macintosh__
+			pTocCopy (buffer, infos.name);
+		#else
+			cTocCopy (buffer, infos.name);
+		#endif	
+	}
+	
+	(*inEnv)->SetIntField(inEnv, jinfos, nameAux, (long) buffer); // Set the C string 
+	(*inEnv)->SetShortField(inEnv, jinfos, version,infos.version) ;
+	(*inEnv)->SetShortField(inEnv, jinfos, slots,infos.slots );
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
+	(JNIEnv * env , jclass cl, jint refnum, jint slotname, jint slotdirection){
+	
+	#ifdef __Macintosh__
+		unsigned char buffer [128];
+		char * midiname = (char*)slotname;
+		cTopCopy (buffer, midiname);
+	#else
+		char buffer [128];
+		char * midiname = (char*)slotname;
+		cTocCopy (buffer, midiname);
+	#endif	
+	
+	return (long) MidiAddSlot(refnum, buffer,slotdirection);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndSlot
+	(JNIEnv * env , jclass cl, jint refnum, jint index){
+	
+	return (long) MidiGetIndSlot(refnum, index);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_RemoveSlot
+	(JNIEnv * env , jclass cl, jint slotrefnum){
+	
+	MidiRemoveSlot(slotrefnum);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
+	(JNIEnv * inEnv , jclass cl, jint slotrefnum, jobject jinfos){
+	
+	TSlotInfos infos;
+	jfieldID nameAux,direction,cnxAux;
+	char *  buffer1 = NewPtr(128);
+	char *  buffer2 = NewPtr(128);
+	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
+	int i;
+ 	
+ 	nameAux = (*inEnv)->GetFieldID(inEnv, infosclass, "nameAux",  "I");
+ 	direction = (*inEnv)->GetFieldID(inEnv, infosclass, "direction",  "I");
+ 	cnxAux = (*inEnv)->GetFieldID(inEnv, infosclass, "cnxAux",  "I"); 
+ 
+	MidiGetSlotInfos(slotrefnum,&infos);
+	
+	if (buffer1) {
+		#ifdef __Macintosh__
+			pTocCopy (buffer1, infos.name);
+		#else
+			cTocCopy (buffer1, infos.name);
+		#endif	
+	}
+	
+	// Copy the connection array into a buffer
+	if (buffer2) {
+		for(i = 0; i< 32; i++) buffer2[i] = infos.cnx[i];
+	}
+	
+	(*inEnv)->SetIntField(inEnv, jinfos, nameAux, (long) buffer1); // Set the C string 
+	(*inEnv)->SetShortField(inEnv, jinfos, direction,infos.direction) ;
+	(*inEnv)->SetIntField(inEnv, jinfos, cnxAux, (long) buffer2); // Set the connection buffer
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_ConnectSlot
+	(JNIEnv * env , jclass cl, jint port, jint slotrefnum, jint state){
+		
+	MidiConnectSlot(port, slotrefnum, state);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsSlotConnected
+	(JNIEnv * env , jclass cl, jint port, jint slotrefnum){
+	
+	return (long) MidiIsSlotConnected(port, slotrefnum);
+}
+
+/*--------------------------------------------------------------------------*/
+
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotNameAux
+	(JNIEnv * env , jclass cl, jint slotrefnum, jint slotname){
+	
+	#ifdef __Macintosh__
+		unsigned char buffer [128];
+		char * midiname = (char*)slotname;
+		cTopCopy (buffer, midiname);
+	#else
+		char buffer [128];
+		char * midiname = (char*)slotname;
+		cTocCopy (buffer, midiname);
+	#endif	
+	
+	MidiSetSlotName(slotrefnum, buffer);
+	
+}
 
 

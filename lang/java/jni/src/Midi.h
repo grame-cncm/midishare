@@ -751,6 +751,118 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptChan
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptType
   (JNIEnv *, jclass, jint, jint, jint);
 
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    IsAcceptedPort
+ * Signature: (II)I
+ */
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedPort
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    IsAcceptedChan
+ * Signature: (II)I
+ */
+
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedChan
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    IsAcceptedType
+ * Signature: (II)I
+ */
+
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedType
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    CountDrivers
+ * Signature: ()I
+ */
+
+
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_CountDrivers
+	(JNIEnv *, jclass);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    GetIndDriver
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndDriver
+	(JNIEnv *, jclass, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    GetDriverInfosAux
+ * Signature: (ILgrame/midishare/DriverInfos;)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
+	(JNIEnv *, jclass, jint, jobject);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    AddSlotAux
+ * Signature: (III)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
+	(JNIEnv *, jclass, jint, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    GetIndSlot
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndSlot
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    RemoveSlot
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_RemoveSlot
+	(JNIEnv *, jclass, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    GetSlotInfosAux
+ * Signature: (ILgrame/midishare/SlotInfos;)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
+	(JNIEnv *, jclass, jint, jobject);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    ConnectSlot
+ * Signature: (III)V
+ */
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_ConnectSlot
+	(JNIEnv *, jclass, jint, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    IsSlotConnected
+ * Signature: (II)I
+ */
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsSlotConnected
+	(JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     grame_midishare_Midi
+ * Method:    SetSlotNameAux
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotNameAux
+	(JNIEnv *, jclass, jint, jint);
+
 /*
  * Class:     grame_midishare_Midi
  * Method:    WriteEv
