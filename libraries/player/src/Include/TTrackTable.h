@@ -18,8 +18,9 @@
 #define __TTrackTable__
 
  
-#include "TTrack.h"
+#include "GenericMidiShare.h"
 #include "TPlayerConstants.h"
+
 
 //-------------------
 // Class TTrackTable 
@@ -31,38 +32,55 @@
 
 class TTrackTable {
 
-	friend class TTrack;
 
 	private:	
+	
+		struct TTrack {
+
+			friend class TTrackTable;
+		        
+			short fParam[kMaxParam];   // Parameter table for one track
+			
+		 	TTrack(){Init();}	
+		 	virtual ~TTrack(){}
+		 		
+		 	void Init() 
+		 	{
+		 		fParam[kSolo] = kSoloOff; 
+		 		fParam[kMute] = kMuteOff;
+		 	}
+		 	
+		};
+
 		
-		TTrackPtr 	fTracktable[kMaxTrack];   		// Track table
-		long 		fSolo;							// Global Solo state
+		TTrack 	fTracktable[kMaxTrack];   	// Track table
+		long 	fSolo;			    	// Number of solo tracks
 		
 		Boolean	IsValid (short tracknum , short param)  
 		{ 
-			return ((tracknum >= 0) && (tracknum < kMaxTrack) && (param >= 0) && (param <kMaxParam));
+			return ((tracknum >= 0) && (tracknum < kMaxTrack) && (param >= 0) && (param < kMaxParam));
 		}
 		
-		Boolean	IsNewValue(short tracknum, short param,short value) { return (value != fTracktable[tracknum]->fParam[param]);}
+		Boolean	IsNewValue(short tracknum, short param, short value) {return (value != fTracktable[tracknum].fParam[param]);}
 		
-	public :
+	public:
  	
- 		TTrackTable();
- 		virtual ~TTrackTable();
+ 		TTrackTable():fSolo(0){}
+ 		virtual ~TTrackTable(){}
  	
-		void		SetParam (short tracknum, short param, short value);
-		short		GetParam (short tracknum, short param);
+		void	SetParam (short tracknum, short param, short value);
+		short	GetParam (short tracknum, short param);
 	
 		MidiEvPtr 	IsPlayable (MidiEvPtr e);
 		void 		Clear();
 		
 		Boolean IsOnTrack(short tracknum) 
 		{ 
-			return ((fSolo > 0) &&  (fTracktable[tracknum]->fParam[kSolo]))
-				| ((fSolo == 0) && (!fTracktable[tracknum]->fParam[kMute]));
+			return ((fSolo > 0) &&  (fTracktable[tracknum].fParam[kSolo] == kSoloOn))
+                                |((fSolo == 0) && (fTracktable[tracknum].fParam[kMute] == kMuteOff));
 		}
 				
-		Boolean IsOffTrack( short tracknum) { return (!IsOnTrack(tracknum));}
+		Boolean IsOffTrack(short tracknum) {return (!IsOnTrack(tracknum));}
 	
 };
 

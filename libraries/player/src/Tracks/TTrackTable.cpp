@@ -21,39 +21,30 @@
 
 /*--------------------------------------------------------------------------*/
 
-TTrackTable::TTrackTable ()
+void TTrackTable::SetParam(short tracknum, short param, short value)
 {
-	fSolo = kSoloOff;
-	for (short i = 0; i< kMaxTrack; i++) {fTracktable[i] = new TTrack();}
-}
-
-/*--------------------------------------------------------------------------*/
-
-TTrackTable::~TTrackTable () { for (short i = 0; i< kMaxTrack; i++) { delete(fTracktable[i]);} }
-
-/*--------------------------------------------------------------------------*/
-
-void TTrackTable::SetParam (short tr, short p, short v)
-{
-	if (IsValid (tr,p) && IsNewValue(tr,p,v)){ // If params are valid 
-		
-		fTracktable[tr]->fParam[p] = v;
-		if (p == kSolo) { if (v == kSoloOn) fSolo++; else fSolo--;}
+	if (IsValid(tracknum, param) && IsNewValue(tracknum, param, value)) // If params are valid 
+	{ 
+		fTracktable[tracknum].fParam[param] = value;
+		if (param == kSolo) {if (value == kSoloOn) fSolo++; else fSolo--;}
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-short  TTrackTable::GetParam (short tr, short p) { return (IsValid (tr,p)) ? fTracktable[tr]->fParam[p] : -1;}
+short TTrackTable::GetParam(short tracknum, short param) 
+{
+    return (IsValid(tracknum, param)) ? fTracktable[tracknum].fParam[param] : -1;
+}
 
 /*--------------------------------------------------------------------------*/
 
-MidiEvPtr TTrackTable::IsPlayable (MidiEvPtr e) { return (IsOnTrack(TrackNum(e))) ? MidiCopyEv(e): 0; }
+MidiEvPtr TTrackTable::IsPlayable(MidiEvPtr e) {return (IsOnTrack(TrackNum(e))) ? MidiCopyEv(e): 0;}
 
 /*--------------------------------------------------------------------------*/
 
 void TTrackTable::Clear()
 {
-	fSolo = kSoloOff;
-	for (short i = 0; i< kMaxTrack; i++) { fTracktable[i]->Init();}
+	fSolo = 0;
+	for (short i = 0; i< kMaxTrack; i++) fTracktable[i].Init();
 }
