@@ -116,7 +116,6 @@ static void Port2SlotAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 						fifoput (&appl->rcv, (cell *)copy);
 						if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 					}
-					break;
 				}
 				mask <<= 1;
 			}
