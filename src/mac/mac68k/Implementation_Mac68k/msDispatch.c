@@ -25,6 +25,7 @@
 
 #include "msDispatch.h"
 #include "msAppFun.h"
+#include "msDrvFun.h"
 #include "msInit.h"
 #include "msMail.h"
 #include "msSmpte.h"
@@ -124,6 +125,17 @@ static asm void MSFunctionsTbl() {
 		jmp MSSmpte2Time
 		jmp MSGetTimeAddr
 		jmp MDesiredSpace		// 0x43
+		jmp MSRegisterDriver	// 0x44
+		jmp MSUnregisterDriver
+		jmp MCountDrivers		// 0x46
+		jmp MGetIndDriver
+		jmp MGetDriverInfos
+		jmp MAddSlot			// 0x49
+		jmp MGetIndSlot		// 0x4A
+		jmp MRemoveSlot
+		jmp MGetSlotInfos
+		jmp MConnectSlot		// 0x4D
+		jmp MIsSlotConnected
 }
 
 static pascal void doNothing (TMSGlobalPtr unused1) {}
