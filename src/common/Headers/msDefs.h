@@ -332,8 +332,10 @@ typedef DriverName SlotName;
 
 /*----------------------- drivers and slots information -----------------------*/
 
-typedef long SlotRefNum;
-#define Slot(ref) 			((ref) & 0xffff)
+typedef struct {
+	short	drvRef;
+	short 	slotRef;
+} SlotRefNum;
 
 typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 typedef struct TSlotInfos {

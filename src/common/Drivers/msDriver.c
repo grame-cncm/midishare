@@ -40,7 +40,7 @@
   =========================================================================== */
 static void clearSlot2PortMap (char * map);
 static void clearPort2SlotMap (char * map);
-static short CountSlots (TClientsPtr g);
+//static short CountSlots (TClientsPtr g);
 
 
 /*===========================================================================
@@ -129,12 +129,16 @@ MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum slotref;
-	if (!CheckDriverRefNum(g, drvRef))
-		return MIDIerrRefNum;
+	TDriverPtr drv; SlotRefNum slot;
+	
+	slot.drvRef = drvRef;
+	if (!CheckDriverRefNum(g, drvRef)) {
+		slot.slotRef = MIDIerrRefNum;
+		return slot;
+	}
 	
 	drv = Driver(g->appls[drvRef]);
-	slotref.u.lvalue = MIDIerrSpace;
+	*(long *)(&slot) = MIDIerrSpace;
 	if (drv->slotsCount < MaxSlots) {
 		short ref; PortMapPtr map;
 		map = NewMap (sizeof(PortMap));
@@ -144,26 +148,25 @@ MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, TClientsPtr g)
 			clearSlot2PortMap (map);
 			drv->map[ref] = map;
 			drv->slotsCount++;
-			slotref.u.s.drvRef = drvRef;
-			slotref.u.s.slotRef = ref;
+			slot.drvRef = drvRef;
+			slot.slotRef = ref;
 			if (g->nbAppls)
 				CallAlarm (drvRef, MIDIAddSlot, g);
 		}
 	}
-	return slotref.u.lvalue;	
+	return slot;	
 }
 
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum ref; short i, slotRef;
-	ref.u.lvalue = slot;
-	if (!CheckDriverRefNum(g, ref.u.s.drvRef))
+	TDriverPtr drv; short i, slotRef;
+	if (!CheckDriverRefNum(g, slot.drvRef))
 		return;
 
-	drv = Driver(g->appls[ref.u.s.drvRef]);
-	if (CheckSlotRef(drv, ref.u.s.slotRef)) {
-		slotRef = ref.u.s.slotRef;
+	drv = Driver(g->appls[slot.drvRef]);
+	if (CheckSlotRef(drv, slot.slotRef)) {
+		slotRef = slot.slotRef;
 		FreeMap(drv->map[slotRef]);
 		drv->map[slotRef] = 0;
 		for (i=0; i<MaxPorts; i++) {
@@ -171,26 +174,25 @@ MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 		}
 		drv->slotsCount--;
 		if (g->nbAppls)
-			CallAlarm (ref.u.s.drvRef, MIDIRemoveSlot, g);
+			CallAlarm (slot.drvRef, MIDIRemoveSlot, g);
 	}
 }
 
 /*____________________________________________________________________________*/
 MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum ref;
-	ref.u.lvalue = slot;
-	if (!CheckDriverRefNum(g, ref.u.s.drvRef))
+	TDriverPtr drv;
+	if (!CheckDriverRefNum(g, slot.drvRef))
 		return false;
 
-	drv = Driver(g->appls[ref.u.s.drvRef]);
-	if (CheckSlotRef(drv, ref.u.s.slotRef) && drv->op.slotInfo) {
-		short i; PortMapPtr map = drv->map[ref.u.s.slotRef];
+	drv = Driver(g->appls[slot.drvRef]);
+	if (CheckSlotRef(drv, slot.slotRef) && drv->op.slotInfo) {
+		short i; PortMapPtr map = drv->map[slot.slotRef];
 		for (i=0; i<PortMapSize; i++)
 			infos->cnx[i] = map[i];
 		infos->reserved[0] = 0;
 		infos->reserved[1] = 0;
-		return DriverSlotInfos (g->appls[ref.u.s.drvRef], slot, infos);
+		return DriverSlotInfos (g->appls[slot.drvRef], slot, infos);
 	}
 	return false;
 }
@@ -198,10 +200,13 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 /*____________________________________________________________________________*/
 MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum ref;
+	TDriverPtr drv; SlotRefNum slot;
 	short n = -1;
-	if (!CheckDriverRefNum(g, refnum))
-		return MIDIerrRefNum;
+	slot.drvRef = refnum;
+	if (!CheckDriverRefNum(g, refnum)) {
+		slot.slotRef = MIDIerrRefNum;
+		return slot;
+	}
 
 	drv = Driver(g->appls[refnum]);
 	if (index>0 && index<= drv->slotsCount) {
@@ -209,24 +214,23 @@ MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPtr 
 			n++;
 			if (drv->map[n]) index--;
 		} while (index);
-		ref.u.s.drvRef = refnum;
-		ref.u.s.slotRef = n;
-		return ref.u.lvalue;
+		slot.drvRef = refnum;
+		slot.slotRef = n;
 	}
-	return MIDIerrIndex;
+	else *(long *)(&slot) = MIDIerrIndex;
+	return slot;
 }
 
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum ref;
+	TDriverPtr drv;
 	short slotRef; Boolean change = false;
-	ref.u.lvalue = slot;
-	slotRef = ref.u.s.slotRef;
-	if (!CheckDriverRefNum(g, ref.u.s.drvRef))
+	slotRef = slot.slotRef;
+	if (!CheckDriverRefNum(g, slot.drvRef))
 		return;
 
-	drv = Driver(g->appls[ref.u.s.drvRef]);
+	drv = Driver(g->appls[slot.drvRef]);
 	if (CheckSlotRef(drv, slotRef)) {
 		if (state) {
 			if (!IsAcceptedBit(drv->port[port], slotRef)) {
@@ -240,22 +244,21 @@ MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, 
 			change = true;
 		}
 		if (change && g->nbAppls)
-			CallAlarm (ref.u.s.drvRef, MIDIChgSlotConnect, g);
+			CallAlarm (slot.drvRef, MIDIChgSlotConnect, g);
 	}
 }
 
 /*____________________________________________________________________________*/
 MSFunctionType(Boolean) MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g)
 {
-	TDriverPtr drv; IntSlotRefNum ref;
-	ref.u.lvalue = slot;
-	if (!CheckDriverRefNum(g, ref.u.s.drvRef))
+	TDriverPtr drv;
+	if (!CheckDriverRefNum(g, slot.drvRef))
 		return false;
 
-	drv = Driver(g->appls[ref.u.s.drvRef]);
-	return CheckSlotRef(drv, ref.u.s.slotRef) ?
-		   IsAcceptedBit (drv->port[port], ref.u.s.slotRef) && 
-		   IsAcceptedBit (drv->map[ref.u.s.slotRef], port)
+	drv = Driver(g->appls[slot.drvRef]);
+	return CheckSlotRef(drv, slot.slotRef) ?
+		   IsAcceptedBit (drv->port[port], slot.slotRef) && 
+		   IsAcceptedBit (drv->map[slot.slotRef], port)
 		   : false;
 }
 
