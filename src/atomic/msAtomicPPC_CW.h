@@ -24,6 +24,41 @@
 #define __msAtomicPPC_CW__
 
 //----------------------------------------------------------------
+// Memory reservation only
+//----------------------------------------------------------------
+static inline void LWARX (register vtype void * addr) 
+{
+	register long tmp;
+	asm {
+        lwarx	tmp, 0, addr       /* creates a reservation on addr  */
+ 	}
+}
+
+//----------------------------------------------------------------
+// Store conditionnal
+//----------------------------------------------------------------
+static inline int STWCX (register vtype void * addr, register void * value, register void * newvalue) 
+{
+    register int result;
+	register long tmp;
+	asm {
+		lwz		tmp, 0(addr)        /* load value in pointed by addr  */
+		cmpw	tmp, value	        /* test value at addr             */
+		bne-	failed      
+        sync                     	/* synchronize instructions       */
+		stwcx.	newvalue, 0, addr   /* if the reservation is not altered */
+									/* stores the new value at addr   */
+		bne-	failed      
+        li      result, 1  
+		bl		exit      
+	failed: 
+        li      result, 0
+	exit:
+ 	}
+    return result;
+}
+
+//----------------------------------------------------------------
 // Compare and swap
 //----------------------------------------------------------------
 static inline int CAS (register vtype void * addr, register void * value, register void * newvalue) 
@@ -71,6 +106,33 @@ static inline int CASL (register vtype void * addr, register void * value)
         li      result, 0
     exit:
 	}
+	return result;
+}
+
+//----------------------------------------------------------------
+// Compare and swap link if not equal to eq
+//----------------------------------------------------------------
+static inline int CASLNE (register vtype void * addr, register void * value, register void * equal) 
+{
+	register int result;
+	register long tmp, link;
+	asm {
+		lwarx	tmp, 0, addr    	/* creates a reservation on addr  */
+		cmpw	tmp, value	    	/* test value at addr             */
+		bne-	failed          	/* fails if not equal to value    */
+		lwzx	link, 0, value  	/* load the link pointed by value */
+		cmpw	link, equal	    	/* test if equal to equal         */
+		beq-	failed     
+        sync                    	/* synchronize instructions       */
+		stwcx.	link, 0, addr 		/* if the reservation is not altered */
+									/* stores the new value at addr   */
+        bne-	failed
+        li      result, 1
+        bl		exit
+	failed:
+        li      result, 0
+    exit:
+ 	}
 	return result;
 }
 
