@@ -3,7 +3,7 @@ CXX  = gcc
 INC = -I../../Include -I../../../lib/Network/include -I../../../common/Headers
 NETLIB = ../../../lib/Network/msNetDriverLib.o
 LIB = $(NETLIB) -Wl,-L../../library -lMidiShare -lpthread
-CXXFLAGS = -g $(INC) -D__Pentium__
+CXXFLAGS = -g $(INC) -O3 -Wall -D__Pentium__
 CFLAGS = $(CXXFLAGS)
 
 BIN=/usr/local/bin

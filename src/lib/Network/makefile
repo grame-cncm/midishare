@@ -1,7 +1,7 @@
 
 CXX  = gcc
 INC = -I../../linux/Include/ -I./include -I../../common/Headers
-CXXFLAGS = -g $(INC) -D__Pentium__
+CXXFLAGS = -g $(INC) -D__Pentium__ -O3 -Wall
 CFLAGS = $(CXXFLAGS)
 
 OBJ =	FTMA.o \
