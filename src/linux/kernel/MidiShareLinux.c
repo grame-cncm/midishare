@@ -307,9 +307,8 @@ Boolean MSCompareAndSwap (void **adr, void *compareTo, void *swapWith)
 }
 
 /*__________________________________________________________________________*/
-
-MutexResCode OpenMutex  (MutexRef ref)	{ return kSuccess; }
-MutexResCode CloseMutex (MutexRef ref)	{ return kSuccess; }
+void msOpenMutex  (unsigned int mutex) {}
+void msCloseMutex (unsigned int mutex) {}
 
 /*_________________________________________________________________________*/
 /* initialization part, including time task                                */
