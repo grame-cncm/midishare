@@ -21,6 +21,7 @@
    modifications history:
    
  	 [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
+	 [22-06-01] SL - Remove signal handling code, now done in the kernel module
 
 */
 
@@ -35,28 +36,6 @@
 
 TClients   	gLClients = {0};
 TClients*	gClients = &gLClients;          /* The global MidiShare structure   */
-
-
-/*________________________________________________________ */
-/* signal handling parameters and variables                */
-/* list of signals to be patched */
-int gSigList [] = {
-	SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGTRAP,
-	SIGABRT, SIGBUS, SIGFPE, 
-	SIGSEGV, SIGPIPE, SIGTERM, SIGSTKFLT, 
-	0
-};
-
-/* array to store the previous signal handlers */
-typedef void (*sighandler) (int);
-#define kMaxSigs  32
-sighandler gSigs [kMaxSigs] = { 0 };
-
-/* functions prototypes */
-static void panic ();
-static void sighandle (int signum);
-static void patch_sigs (int * list);
-static void restore_sigs ();
 
 
 /*--------------------------------------------------------------------*/
@@ -341,10 +320,7 @@ long* MidiGetTimeAddr ()
 	args.name = name;
   	CALL(kMidiOpen,&args);
 	 
-	if (ApplsCount(gClients) == 0) {
-		OpenMemory (Memory(gClients));
-		patch_sigs (gSigList);
-	}
+	if (ApplsCount(gClients) == 0) OpenMemory (Memory(gClients));
 	
 	if (ApplsCount(gClients) < MaxAppls) {
 	
@@ -396,10 +372,8 @@ void MidiClose (short ref)
 		Appls(gClients)[ref] = 0;
 		ApplsCount(gClients)--;
 	
-		if (ApplsCount(gClients) == 0) {
-			CloseMemory(Memory(gClients));
-			restore_sigs ();
-		} 
+		if (ApplsCount(gClients) == 0) CloseMemory(Memory(gClients));
+		
 	}
 	pthread_mutex_unlock(Mutex(gClients));
 }
@@ -1192,63 +1166,3 @@ void MidiSetSlotName (SlotRefNum slot, MidiName name)
 	args.name = name;
 	CALL(kMidiSetSlotName,&args);
 }
-
-/*--------------------------------------------------------------------*/
-static void panic ()
-{
-	TMidiCloseArgs args;
-	int i;
-	for (i=0; i<MaxAppls; i++) {
-		if (Appls(gClients)[i]) {
-			args.refnum = Appls(gClients)[i]->refNum;
-			CALL(kMidiClose,&args);
-		}
-	}
-	if (Device(gClients) > 0) close (Device(gClients));
-}
-
-/*--------------------------------------------------------------------*/
-static void sighandle (int signum)
-{
-	sighandler prev = gSigs[signum];
-	panic ();
-
-	if (prev) {
-		prev (signum);
-	}
-	else if (signal (signum, SIG_DFL) != SIG_ERR) {
-		raise (signum);
-	}
-	else {
-		raise (SIGSTOP);
-	}
-}
-
-/*--------------------------------------------------------------------*/
-static void patch_sigs (int * list)
-{
-	void * sh; int signum;
-	while (*list) {
-		signum = *list;
-		sh = signal (signum, sighandle);
-		if (sh != SIG_ERR) {
-			gSigs[signum] = sh;
-		}
-		else {
-			gSigs[signum] = 0;
-		}
-		list++;
-	}
-}
-
-/*--------------------------------------------------------------------*/
-static void restore_sigs ()
-{
-	int i; sighandler sh;
-	for (i=0; i<kMaxSigs; i++) {
-		sh = gSigs[i];
-		signal (i, sh ? sh : SIG_DFL);
-	}
-}
-
-
