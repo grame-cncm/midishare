@@ -17,7 +17,7 @@ VPATH = ../common ../osglue ../osglue/glue ../osglue/unix
 CC = gcc
 
 SRC := $(wildcard *.c)
-OBJ := $(patsubst %.c, %.o, $(SRC)) 
+OBJ := $(patsubst %.c, %.o, $(SRC)) libMain.o
 DEST = /usr/lib
 COMP = -compatibility_version 1 -current_version 1
 

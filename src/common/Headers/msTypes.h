@@ -45,7 +45,9 @@ typedef unsigned char uchar;
 	typedef unsigned char Boolean;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
+# ifndef __cplusplus
 	enum { false, true };
+# endif
 
 #elif defined(WIN32)
 #	include <windows.h>
@@ -60,7 +62,7 @@ typedef unsigned char uchar;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
-#ifndef __cplusplus
+# ifndef __cplusplus
 	enum { false = 0, true };
 # endif
 #elif defined(macintosh)
