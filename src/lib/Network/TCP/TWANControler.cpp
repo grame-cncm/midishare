@@ -225,7 +225,11 @@ void TWANControler::CheckCompletion  (IPNum id, Boolean silently)
 //_________________________________________________________________________________
 TSocket *  TWANControler::GetSpecialSocket (IPNum ip)
 {
+#ifdef WIN32
+	TSocket * s = (TSocket *)fTCPRemote.Find (ip);
+#else
 	TSocket * s = dynamic_cast<TSocket *>(fTCPRemote.Find (ip));
+#endif
 	return s;
 }
 
