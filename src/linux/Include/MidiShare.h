@@ -102,12 +102,12 @@
 #define typeKeySign		147		/* MidiFile key signature						*/
 #define typeSpecific	148		/* MidiFile sepcific meta event					*/
 
-#define typeRcvAlarm    149     /* RcvAlam         */
-#define typeApplAlarm   150     /* ApplAlam        */
+#define typeRcvAlarm    149     /* RcvAlarm         							*/
+#define typeApplAlarm   150     /* ApplAlarm       								*/
 
 
-#define typeReserved     151    /*149..254 reserved for future extensions */
-#define typeLastReserved 254	/* 149..254	reserved for future extensions		*/
+#define typeReserved     151    /*151..254 reserved for future extensions 		*/
+#define typeLastReserved 254	/*151..254 reserved for future extensions		*/
 		
 #define typeDead		255		/* dead Task or DTask							*/
 		
@@ -551,6 +551,18 @@ void		MidiFlushDTasks (short refnum);
 
 void		MidiExec1DTask 	(short refnum);
 
+/*---------------------------------- Filter Managing ----------------------------*/
+
+MidiFilterPtr MidiNewFilter  (void);
+void          MidiFreeFilter (MidiFilterPtr filter);
+
+void MidiAcceptPort(MidiFilterPtr f, short port, Boolean state);
+void MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state);
+void MidiAcceptType(MidiFilterPtr f, short type, Boolean state);
+
+Boolean MidiIsAcceptedPort(MidiFilterPtr f, short port);
+Boolean MidiIsAcceptedChan(MidiFilterPtr f, short chan);
+Boolean MidiIsAcceptedType(MidiFilterPtr f, short type);
 
 
 #ifdef __cplusplus
