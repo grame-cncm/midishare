@@ -1,1 +1,88 @@
-// ===========================================================================// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory // 1996-2003, and is distributed as Open Source software under the Artistic License;// see the file "Artistic" that is included in the distribution for details.//// Grame : Computer Music Research Laboratory// Web : http://www.grame.fr/Research// E-mail : MidiShare@rd.grame.fr// ===========================================================================// ===========================================================================//	TTickPlayer.cpp			    // ===========================================================================////	Player in ticks //#include "TTickPlayer.h"#include "UTools.h"/*--------------------------------------------------------------------------*/void TTickPlayer::PlaySliceForward() {   	TEventPtr cur;	while ((cur = fIterator.NextDateEv())) {		cur->Accept(&fSliceVisitor, true);	}}/*--------------------------------------------------------------------------*/void TTickPlayer::PlaySliceBackward() {	TEventPtr cur;	while ((cur = fIterator.PrevDateEv())) {		cur->Accept(&fSliceVisitor, false);	}}/*--------------------------------------------------------------------------*/void TTickPlayer::PlaySlice(ULONG date_ms) {   TEventPtr cur;		if (fIterator.IsLastEv()) {		fEventUser->CopyAndUseEvent(fIterator.CurEv(),date_ms);	}else {			// For all events at the same date		while ((cur = fIterator.NextDateEv())) {fEventUser->CopyAndUseEvent(cur,date_ms);}				// Schedule the PlayTask for the date of the next events in ticks		fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());	}}/*--------------------------------------------------------------------------*/void TTickPlayer::Init() {fIterator.Init();}/*--------------------------------------------------------------------------*/void TTickPlayer::Start() {fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());}/*--------------------------------------------------------------------------*/void TTickPlayer::Stop() {fPlayTask.Forget();}/*--------------------------------------------------------------------------*/void TTickPlayer::Cont(ULONG date_ticks) { 	fIterator.SetPosTicks(date_ticks);	fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate()); }/*--------------------------------------------------------------------------*/void TTickPlayer::SetPosTicks(ULONG date_ticks) {fIterator.SetPosTicks(date_ticks);}/*--------------------------------------------------------------------------*/ULONG TTickPlayer::GetPosTicks() {return fIterator.CurDate();}/*--------------------------------------------------------------------------*/void TPlayTask::Execute(TMidiApplPtr appl, ULONG date_ms) {fPlayer->PlaySlice(date_ms);}
+// ===========================================================================
+// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
+// see the file "Artistic" that is included in the distribution for details.
+//
+// Grame : Computer Music Research Laboratory
+// Web : http://www.grame.fr/Research
+// E-mail : MidiShare@rd.grame.fr
+// ===========================================================================
+
+
+// ===========================================================================
+//	TTickPlayer.cpp			    
+// ===========================================================================
+//
+//	Player in ticks 
+//
+
+#include "TTickPlayer.h"
+#include "UTools.h"
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::PlaySliceForward() 
+{
+   	TEventPtr cur;
+	while ((cur = fIterator.NextDateEv())) {
+		cur->Accept(&fSliceVisitor, true);
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::PlaySliceBackward() 
+{
+	TEventPtr cur;
+	while ((cur = fIterator.PrevDateEv())) {
+		cur->Accept(&fSliceVisitor, false);
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+void TTickPlayer::PlaySlice(ULONG date_ms) 
+{
+   TEventPtr cur;	
+	if (fIterator.IsLastEv()) {
+		fEventUser->CopyAndUseEvent(fIterator.CurEv(),date_ms);
+	}else {
+	
+		// For all events at the same date
+		while ((cur = fIterator.NextDateEv())) {fEventUser->CopyAndUseEvent(cur,date_ms);}
+		
+		// Schedule the PlayTask for the date of the next events in ticks
+		fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::Init() {fIterator.Init();}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::Start() {fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate());}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::Stop() {fPlayTask.Forget();}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::Cont(ULONG date_ticks) 
+{ 
+	fIterator.SetPosTicks(date_ticks);
+	fScheduler->ScheduleTickTask(&fPlayTask, fIterator.CurDate()); 
+}
+
+/*--------------------------------------------------------------------------*/
+
+void TTickPlayer::SetPosTicks(ULONG date_ticks) {fIterator.SetPosTicks(date_ticks);}
+
+/*--------------------------------------------------------------------------*/
+
+ULONG TTickPlayer::GetPosTicks() {return fIterator.CurDate();}
+
+/*--------------------------------------------------------------------------*/
+
+void TPlayTask::Execute(TMidiApplPtr appl, ULONG date_ms) {fPlayer->PlaySlice(date_ms);}
