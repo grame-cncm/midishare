@@ -333,11 +333,12 @@ typedef DriverName SlotName;
 /*----------------------- drivers and slots information -----------------------*/
 
 typedef long SlotRefNum;
-typedef enum { kInputSlot=1, kOutputSlot } SlotDirection;
+typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 typedef struct TSlotInfos {
 	SlotName 		name;
 	SlotDirection 	direction;
 	char 			cnx[32];	// bit field : 256 ports connection state
+	long			reserved[2];
 } TSlotInfos;
 
 typedef void (* WakeupPtr) 	(short refnum);
@@ -347,12 +348,14 @@ typedef struct TDriverOperation {
 	WakeupPtr   wakeup;
 	SleepPtr    sleep;
 	SlotInfoPtr slotInfo;
+	long		reserved[2];
 } TDriverOperation;
 
 typedef struct TDriverInfos {
 	DriverName  name;
 	short 		version;
 	short 		slots;			// slots count - ignored at register time
+	long		reserved[2];
 } TDriverInfos;
 
 
