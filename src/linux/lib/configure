@@ -4,13 +4,7 @@
 LIB=../../lib
 INC=../Include
 
-echo creating $LIB/makefile
-cp make.lib   $LIB/makefile
-
-echo creating $LIB/make.module
-cp make.module $LIB
-
-echo making aliases
+echo Making aliases
 cd $INC
 ln -s $LIB/*.h .
 
@@ -20,7 +14,7 @@ do
 	[ -h k$a ] || ln -s $a k$a
 done
 
-echo making dependencies
+echo Making dependencies
 make dep >/dev/null 2>&1
 
 echo end of lib configure
