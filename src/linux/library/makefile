@@ -1,6 +1,6 @@
 
 TARGET = libMidiShare.so.1.0
-FLAGS := -O0 -Wall -g 
+FLAGS := -O0 -Wall -g -D_REENTRANT
 CFLAGS := $(FLAGS) -fPIC
 LIB = /usr/lib/libMidiShare.so
 CC = gcc
