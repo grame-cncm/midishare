@@ -288,7 +288,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
 /*--------------------------------------------------------------------------*/
  
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempoFactor
-	(JNIEnv *, jclass, jint refnum, jfloat factor){
+	(JNIEnv * inEnv, jclass cl, jint refnum, jfloat factor){
 
  	SetTempoFactorPlayer(refnum,  factor);
  }
