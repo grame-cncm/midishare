@@ -21,6 +21,8 @@
 
 */
 
+#include "misc.h"
+
 
 #include <errno.h> 
 #include <pwd.h> 
@@ -143,8 +145,11 @@ SocketStatus TUDPSocket::SetOptions (Boolean local)
 	ret = 1;
 	ret = setsockopt (fRef, SOL_SOCKET, SO_SNDLOWAT, &ret, sizeof(int));
 	if (local) {
-		ret = 1;
-		ret = setsockopt (fRef, SOL_SOCKET, SO_DONTROUTE, &ret, sizeof(int));
+        ret = 1;
+        ret = setsockopt (fRef, SOL_SOCKET, SO_USELOOPBACK, &ret, sizeof(int));
+        if (ret == -1) logmsg ("SO_USELOOPBACK failed");
+        ret = 1;
+        ret = setsockopt (fRef, SOL_SOCKET, SO_DONTROUTE, &ret, sizeof(int));
 		ret = 1;
 		return setsockopt (fRef, SOL_SOCKET, SO_BROADCAST, &ret, sizeof(int));
 	}

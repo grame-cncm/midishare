@@ -178,9 +178,12 @@ Boolean SetUpMidi ()
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
 	
+printf ("SetUpMidi called\n");
 	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
 	
+printf ("MidiRegisterDriver: ");
 	refNum = MidiRegisterDriver(&infos, &op);
+printf ("%d\n", (int)refNum);
 	if (refNum == MIDIerrSpace)return false;
 	
 	data->refNum = refNum;
@@ -319,5 +322,13 @@ static void PlayPitchWheel (QuickTimeEnvPtr qt, MidiEvPtr e)
 }
 
 /* -----------------------------------------------------------------------------*/
-Boolean Start(){return SetUpMidi();}
-void Stop(){CloseMidi();}
+Boolean Start()
+{
+printf ("msQTDriver: Start called\n");
+	return SetUpMidi();
+}
+
+void Stop()
+{
+	CloseMidi();
+}

@@ -112,15 +112,8 @@
 		0867D6ABFE840B52C02AAC07 = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-		};
-		0867D6ACFE840B52C02AAC07 = {
-			fileRef = 0867D6AAFE840B52C02AAC07;
-			isa = PBXBuildFile;
-			settings = {
-			};
+			path = Info.plist;
+			refType = 2;
 		};
 //080
 //081
@@ -155,6 +148,7 @@
 				05952DFCFFF02D1B11CA0E50,
 				05952DFDFFF02D1B11CA0E50,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 20286C29FDCF999611CA2CEA;
 			projectDirPath = "";
@@ -270,7 +264,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		20286C35FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -282,7 +275,7 @@
 		20286C36FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				0867D6ACFE840B52C02AAC07,
+				D36BC4F30470D96600053103,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,12 +310,29 @@
 //202
 //203
 //204
+//D30
+//D31
+//D32
+//D33
+//D34
+		D36BC4F30470D96600053103 = {
+			fileRef = 0867D6AAFE840B52C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F50
 //F51
 //F52
 //F53
 //F54
 		F56B0B4A045C462301670810 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msConnect.c;
 			refType = 2;
@@ -334,6 +344,7 @@
 			};
 		};
 		F56B0B4C045C462D01670810 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = msConnect.r;
 			refType = 2;
@@ -345,6 +356,7 @@
 			};
 		};
 		F56B0B4F045C48E601670810 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = states.c;
 			path = ../lib/states.c;
@@ -357,6 +369,7 @@
 			};
 		};
 		F56B0B54045C48F401670810 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = profport.c;
 			path = ../../../lib/profport.c;

@@ -99,6 +99,7 @@ static void  MSContextInitialize (TMSGlobalPtr g)
 /*____________________________________________________________________________*/
 void  MSInitialize ()
 { 
+printf ("MidiShare library initialized\n");
     InitEvents ();
     InitMemory (Memory(gMem), kDefaultCLientSpace);
     OpenMemory (Memory(gMem));

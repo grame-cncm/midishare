@@ -37,6 +37,12 @@
 #include "msRTListenProc.h"
 #include "msKernelPrefs.h"
 
+#if defined(__MacOSX__)
+#	include "dlfcn.h"
+typedef Boolean (* Start) ();
+typedef void (* Stop) ();
+#endif
+
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
 MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
 /*------------------------------------------------------------------------------*/
@@ -56,16 +62,40 @@ static void * gDrvRefs[MaxDrivers] = { 0 };
 /*------------------------------------------------------------------------------*/
 static void * LoadDriver (char *drvName) 
 {
-	printf ("load driver %s\n", drvName);
 #ifdef WIN32
+	printf ("load driver %s\n", drvName);
 	return LoadLibrary (drvName);
+
+#elif defined(__MacOSX__)
+	void * handle = dlopen(drvName,RTLD_LAZY);
+	Start fun; Boolean res;
+	
+	printf ("load driver %s\n", drvName);
+	if (handle && (fun = (Start) dlsym(handle,"_Start")) && (res = (*fun)()))
+		return handle;
+	if (handle) dlclose(handle);
+	return 0;
+
+#else
+# error "LoadDriver: target OS undefined"
 #endif
 }
+
+/*------------------------------------------------------------------------------*/
 static void UnloadDriver (void * drvref) 
 {
-	printf ("unload driver %lx\n", (long)drvref);
 #ifdef WIN32
+	printf ("unload driver %lx\n", (long)drvref);
 	FreeLibrary ((HMODULE)drvref);
+
+#elif defined(__MacOSX__)
+	Stop fun = (Stop) dlsym(drvref, "_Stop");
+	printf ("unload driver %lx\n", (long)drvref);
+	if (fun) (*fun)(); 
+	dlclose(drvref);
+
+#else
+# error "LoadDriver: target OS undefined"
 #endif
 }
 
