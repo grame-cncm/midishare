@@ -48,12 +48,10 @@ user=$(ls -ld $HOME | sed -e's/  */ /g' | cut -d' ' -f3)
 /usr/sbin/chown $user $NEWUMSF
 
 # moves the ini files to the new user MidiShare folder
-# and delete the old one
 move_old $UMSF1
 
 
-# moves the ini files to the new user MidiShare folder
-# and delete the old one
+# put a message into the old .MidiShare
 if [ -d $UMSF2 ]
 then
 	cat <<! > $UMSF2/ReadMe.txt
@@ -64,5 +62,9 @@ The .MidiShare folder isn't used any more.
 !
 /usr/sbin/chown $user $UMSF2
 fi
+
+# check for hostname
+hostconfig=/etc/hostconfig
+grep "^HOSTNAME" $hostconfig || echo "HOSTNAME=-AUTOMATIC-" >> $hostconfig
 
 exit 0
