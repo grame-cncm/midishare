@@ -263,7 +263,7 @@ int main(int argc, char *argv[] )
   	MidiConnect (0, gRefNum, true);
 	InstallFilter(gRefNum);
 	MidiSetRcvAlarm(gRefNum, ReceiveEvents);
-
+	
 	// Adjustments description  
 	gTempo 	= gtk_adjustment_new (120.0, 10.0, 241.0, 1.0, 8.0, 1.0);
 
@@ -289,17 +289,14 @@ int main(int argc, char *argv[] )
 	gtk_widget_show_all (window);
 	
 	// Connexion of signals
-	gtk_signal_connect(
-			GTK_OBJECT(window), "delete_event", 
-			GTK_SIGNAL_FUNC(my_delete_action), NULL
-	);
-	
+		
 	gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
-	
+
 	gtk_main ();
+
 
 	return(0);
 }
