@@ -27,9 +27,12 @@
 #ifndef __msTypes__
 #define __msTypes__
 
+/* For all platforms */
+# define FAR
+
+
 #ifdef __Macintosh__
 # include <MacTypes.h>                                                          
-# define FAR
 # ifdef __POWERPC__
 # define MSFunctionType(type)   type
 # else 
@@ -64,8 +67,8 @@ typedef unsigned char uchar;
 #define FarPtr(type)           type FAR *
 
 typedef struct cell {
-	struct cell* link;		/*+ next cell in the list +*/
-						    /*+ any data here		  +*/
+	struct cell* link;		/*+ next cell in the list 	+*/
+					/*+ any data here		+*/
 } cell;
 
 
