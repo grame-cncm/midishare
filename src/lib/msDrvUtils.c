@@ -107,7 +107,7 @@ void Set1DriverState (short refNum, short slotsCount, void * ptr, long size)
 	for (i=1; i<=slotsCount; i++) {
 		sref = MidiGetIndSlot (refNum, i);
 		if ((sref.slotRef >= 0) && MidiGetSlotInfos (sref, &sInfos)) {
-			RestoreSlot (sref, &sInfos, ptr, size);
+			RestoreSlot (sref, &sInfos, (char *)ptr, size);
 		}
 	}
 }
@@ -121,7 +121,7 @@ void SetDriversState (void * ptr, long size)
 	for (i=1; i<=n; i++) {
 		short ref = MidiGetIndDriver (i);
 		if ((ref > 0) && MidiGetDriverInfos (ref, &dInfos)) {
-			char * buff = getDriverLocation (&dInfos, ptr, size);			
+			char * buff = getDriverLocation (&dInfos, (char *)ptr, size);			
 			if (buff) {
 				buff += sizeof(TDriverInfos);
 				offset = (long)buff - (long)ptr;
