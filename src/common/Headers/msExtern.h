@@ -38,19 +38,10 @@
 /*                                synchronization                               */
 /*------------------------------------------------------------------------------*/
 /* mutex definitions */
-enum { kMemoryMutex = 1, kWakeUpMutex };
-enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
+enum { kOpenCloseMutex = 0, kMutexCount };
 
-typedef short 	MutexResCode;
-typedef long 	MutexRef;
-
-#ifdef __Windows__
-MutexResCode msOpenMutex  (MutexRef ref);
-MutexResCode msCloseMutex (MutexRef ref);
-#else
-MutexResCode OpenMutex  (MutexRef ref);
-MutexResCode CloseMutex (MutexRef ref);
-#endif
+void msOpenMutex  (unsigned int mutex);
+void msCloseMutex (unsigned int mutex);
 
 
 /*------------------------------------------------------------------------------*/

@@ -57,7 +57,9 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 	TApplPtr appl, drv;
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
-	if (clients->nbAppls == 0) {
+
+	msOpenMutex (kOpenCloseMutex);
+    if (clients->nbAppls == 0) {
 		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
 		if (drv) {
 			TDriverInfos infos;
@@ -83,6 +85,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
 	}
+	msCloseMutex (kOpenCloseMutex);
 	return ref;
 }
 
@@ -94,6 +97,7 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 	if (!CheckApplRefNum(clients, ref) || (ref == MidiShareRef))
 		return;
 		
+	msOpenMutex (kOpenCloseMutex);
 	closeClient (ref, g);
 	clients->nbAppls--;
 	if (clients->nbAppls == 1) {
@@ -107,6 +111,7 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 	} else {
 		CallAlarm(ref, MIDICloseAppl, clients);
 	}
+	msCloseMutex (kOpenCloseMutex);
 }
 
 /*____________________________________________________________________________*/
