@@ -9,7 +9,7 @@
 // ===========================================================================
 
 /*****************************************************************************/
-/* MidiPlayer.c : JNI interface to the Player library
+/* MidiPlayer2.c : JNI interface to the Player library
 /*
 /* Copyright GRAME May 1996-1999
 /*
@@ -84,7 +84,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_OpenAux
   (JNIEnv * inEnv, jclass cl, jint midiname){
   
   	
@@ -101,7 +101,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Close
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Close
   (JNIEnv * inEnv, jclass cl, jint ref){
 
  	ClosePlayer(ref);
@@ -109,7 +109,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Close
  
  /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Start
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Start
   (JNIEnv * inEnv, jclass cl, jint ref){
 
  	StartPlayer(ref);
@@ -117,7 +117,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Close
 
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Cont
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Cont
   (JNIEnv * inEnv, jclass cl, jint ref){
 
  	ContPlayer(ref);
@@ -125,7 +125,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Cont
 
  /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Pause
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Pause
   (JNIEnv * inEnv,  jclass cl, jint ref){
 
  	PausePlayer(ref);
@@ -133,7 +133,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Cont
 
  /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Stop
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Stop
   (JNIEnv * inEnv, jclass cl, jint ref){
 
  	StopPlayer(ref);
@@ -141,14 +141,14 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Cont
 
  /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetRecordMode
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetRecordMode
   (JNIEnv * inEnv, jclass cl, jint refnum, jint mode){
 
  	SetRecordModePlayer(refnum, mode);
  }
  
  /*--------------------------------------------------------------------------*/
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Record
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_Record
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum){
 
  	RecordPlayer(refnum, tracknum);
@@ -156,7 +156,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Record
  
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetRecordFilter
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetRecordFilter
   (JNIEnv * inEnv, jclass cl, jint refnum, jint filter){
 
  	SetRecordFilterPlayer(refnum, (MidiFilterPtr)filter);
@@ -164,7 +164,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetRecordFilter
  
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetPosBBU
   (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos){
 
  	Pos tpos;
@@ -187,7 +187,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
 
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosMs
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetPosMs
   (JNIEnv * inEnv, jclass cl, jint refnum, jint date_ms){
 
  	SetPosMsPlayer(refnum, date_ms);
@@ -195,7 +195,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
  
  /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosTicks
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetPosTicks
   (JNIEnv * inEnv, jclass cl, jint refnum, jint date_ticks){
 
  	SetPosTicksPlayer(refnum, date_ticks);
@@ -203,14 +203,14 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
  
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetLoop
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetLoop
   (JNIEnv * inEnv, jclass cl, jint refnum, jint loopstate){
 
  	SetLoopPlayer(refnum, loopstate);
  }
 
 /*--------------------------------------------------------------------------*/
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartBBU
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetLoopStartBBU
   (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos){
   
  	Pos tpos;
@@ -232,7 +232,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartBBU
  }
  
  /*--------------------------------------------------------------------------*/
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopEndBBU
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetLoopEndBBU
   (JNIEnv * inEnv, jclass cl, jint refnum , jobject pos){
 
  	Pos tpos;
@@ -256,7 +256,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopEndBBU
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartMs
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetLoopStartMs
   (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
 
  	return SetLoopStartMsPlayer(refnum, date);
@@ -264,7 +264,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartMs
 
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopEndMs
+ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetLoopEndMs
   (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
 
  	return SetLoopEndMsPlayer(refnum, date);
@@ -272,7 +272,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartMs
 
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroIn
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetSynchroIn
   (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate){
 
  	SetSynchroInPlayer(refnum,  syncstate);
@@ -280,7 +280,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartMs
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroOut
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetSynchroOut
   (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate){
 
  	SetSynchroOutPlayer(refnum,  syncstate);
@@ -288,7 +288,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroOut
   
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetTempo
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tempo){
 
  	SetTempoPlayer(refnum,  tempo);
@@ -296,7 +296,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
  
 /*--------------------------------------------------------------------------*/
  
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempoFactor
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetTempoFactor
 	(JNIEnv * inEnv, jclass cl, jint refnum, jfloat factor){
 
  	SetTempoFactorPlayer(refnum,  factor);
@@ -304,7 +304,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempoFactor
 
  
 /*--------------------------------------------------------------------------*/
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSMPTEOffset
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetSMPTEOffset
   (JNIEnv * inEnv, jclass cl, jint refnum, jobject smptepos){
   
  	TSmpteLocation tsmptepos;
@@ -334,7 +334,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSMPTEOffset
  
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetState
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_GetState
   (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate){
 
  	PlayerState tstate;
@@ -380,7 +380,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetState
  
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetEndScore
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_GetEndScore
  (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate){
 
  	PlayerState tstate;
@@ -425,13 +425,13 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetEndScore
 
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_ForwardStep
+ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_ForwardStep
   (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate){
 
  	ForwardStepPlayer(refnum, stepstate);
  }
  /*--------------------------------------------------------------------------*/
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_BackwardStep
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_BackwardStep
    (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate){
 
 
@@ -439,7 +439,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_BackwardStep
  }
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetAllTrack
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_GetAllTrack
   (JNIEnv * inEnv, jclass cl, jint refnum){
 
  	return  (jint)GetAllTrackPlayer(refnum);
@@ -447,35 +447,35 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetAllTrack
  
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetTrack
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_GetTrack
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum){
 
  	return (jint)GetTrackPlayer(refnum, tracknum);
  }
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetTrack
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetTrack
   (JNIEnv *inEnv, jclass cl, jint refnum, jint tracknum, jint seq){
 
  	return SetTrackPlayer(refnum, tracknum, (MidiSeqPtr)seq);
  }
 /*--------------------------------------------------------------------------*/
 
- JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetAllTrack
+ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_SetAllTrack
   (JNIEnv * inEnv, jclass cl, jint refnum , jint seq, jint tpq){
 
    	return SetAllTrackPlayer(refnum, (MidiSeqPtr)seq, tpq);
  }
  
 /*--------------------------------------------------------------------------*/
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetParam
+JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer2_SetParam
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param, jint value){
 
  	SetParamPlayer( refnum, tracknum,  param ,  value);
  }
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetParam
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_GetParam
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param){
 
  	return GetParamPlayer(refnum, tracknum, param);
@@ -483,7 +483,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetParam
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertAllTrack
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_InsertAllTrack
   (JNIEnv * inEnv, jclass cl, jint refnum, jint seq){
 
  	return InsertAllTrackPlayer(refnum, (MidiSeqPtr)seq);
@@ -491,7 +491,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertAllTrack
  
  /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertTrack
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_InsertTrack
   (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint seq){
 
  	return InsertTrackPlayer(refnum,tracknum, (MidiSeqPtr)seq);
@@ -499,7 +499,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertTrack
  
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Load
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_Load
   (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj){
 
 	/* no more implemented */
@@ -509,7 +509,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Load
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Save
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer2_Save
   (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj){
 
 	/* no more implemented */
