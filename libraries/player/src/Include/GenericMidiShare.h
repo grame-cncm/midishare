@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -25,13 +25,23 @@
 	#define MFAPI
 #endif
 
-#ifdef __Macintosh__
-	#define MidiSharePPC_68k
+#ifdef __Macintosh__ 
+	#ifdef __MacOS9__
+		#define MidiSharePPC_68k
+                #define __SupportOldSTDef__
+	#else
+		//#define MSALARMAPI
+	#endif
+	
+	
 	#include <MidiShare.h>
-	#define FAR
-	#define NEAR
-	#define MFAPI
+	
+	
+	//#define FAR
+	//#define NEAR
+	//#define MFAPI
 #endif
+
 
 #ifdef  __MSWindows__
 	#ifdef WIN32

@@ -28,7 +28,7 @@
 /*	     06/11/02  version 1.10  Add null pointer checking for objects coming from Java side
 /*****************************************************************************/
 
-#include "Player.h"
+#include <Player.h>
 #include "MidiPlayer.h"
 
 /*--------------------------------------------------------------------------*/

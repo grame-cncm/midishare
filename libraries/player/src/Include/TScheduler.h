@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,13 +12,12 @@
 // ===========================================================================
 //	TScheduler.h		    
 // ===========================================================================
-//
-// A TScheduler object allows to schedule Tasks which dates are in ticks, using a
-// synchroniser object to convert dates in ticks in dates in millisecond.
-//
-// The scheduler maintains a list of pending tasks, rescheduling them if
-// necessary after a Tempo change.
-
+/*!
+ \brief A TScheduler object allows to schedule Tasks which dates are in ticks, using a
+ synchroniser object to convert dates in ticks in dates in millisecond.
+ The scheduler maintains a list of pending tasks, rescheduling them if
+ necessary after a Tempo change.
+*/
 
 #ifndef __TScheduler__
 #define __TScheduler__
@@ -83,7 +82,7 @@ class TScheduler :public TSchedulerInterface{
 		ULONG 		fTaskIndex;
 		TTicksTask* fTaskTable[TableLength];
 		
-		#if GENERATINGCFM
+		#if defined (__Macintosh__) && defined (__MacOS9__)
 			UPPTaskPtr fUPPExecuteTask;
 		#else
 			TaskPtr fUPPExecuteTask;
@@ -131,6 +130,9 @@ typedef TScheduler FAR * TSchedulerPtr;
 *             : kTaskIdle  ==> Forget ==> kTaskIdle (ATTENTION reste dans l'Žtat kTaskIdle)
 */
 
+/*!
+  \brief The base class for tasks in ticks time.
+*/
 
 class TTicksTask {
 	

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TMidiAppl.h			    
 // ===========================================================================
-//
-//  A Class to wrap a MidiShare application
-//
 
 
 #ifndef __TMidiAppl__
@@ -24,9 +21,13 @@
 #include "TPlayerConstants.h"
 
 
-//-----------------------
+//-----------------
 // Class TMidiTask 
-//-----------------------
+//-----------------
+
+/*!
+  \brief  A Class to wrap a MidiShare task.
+*/
 
 class TMidiTask {
 	
@@ -51,9 +52,13 @@ class TMidiTask {
 
 typedef TMidiTask FAR * TMidiTaskPtr;
 
-//-----------------------
+//-----------------
 // Class TMidiAppl 
-//-----------------------
+//-----------------
+
+/*!
+  \brief A Class to wrap a MidiShare application.
+*/
 
 class TMidiAppl{
 
@@ -61,7 +66,7 @@ class TMidiAppl{
 	
 	private:
 		
-	#if GENERATINGCFM
+	#if defined (__Macintosh__) && defined (__MacOS9__)
 		UPPTaskPtr 		fUPPGenericTask;
 		UPPRcvAlarmPtr 	fUPPGenericReceiveAlarm;
 		UPPApplAlarmPtr fUPPGenericApplAlarm;
@@ -73,15 +78,12 @@ class TMidiAppl{
 		
 	public :
 	
-	#ifdef __Macintosh__
-		#if GENERATINGCFM
-			void NewMidiTask(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
-			void NewMidiCall(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3);
-		#else
-			void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
-			void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
-		#endif
-
+	#if defined (__Macintosh__) && defined (__MacOS9__)
+		void NewMidiTask(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
+		void NewMidiCall(UPPTaskPtr routine, ULONG date, long a1,long a2,long a3);
+	#else
+		void NewMidiTask(TaskPtr routine, ULONG date, long a1,long a2,long a3, MidiEvPtr* adr);
+		void NewMidiCall(TaskPtr routine, ULONG date, long a1,long a2,long a3);
 	#endif
 	
 	

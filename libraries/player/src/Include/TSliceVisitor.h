@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -11,10 +11,11 @@
 // ===========================================================================
 //	TSliceVisitor.h			    
 // ===========================================================================
-//
-//	Visitor for Step playing mode.
-//  Only KeyOn event are played, actually KeyOn are "transformed" in Note event
-//  with a fixed duration.
+/*!
+	\brief Visitor for Step playing mode.
+  Only KeyOn event are played, actually KeyOn are "transformed" in Note event
+  with a fixed duration.
+*/
 
 
 #ifndef __TSliceVisitor__

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -27,6 +27,7 @@
 #include "UMidi.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 
 /*--------------------------------------------------------------------------*/
@@ -128,7 +129,10 @@ void TPlayer::Close()
 // Transport
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::Start() { fPlayer->Start(); }
+void TPlayer::Start() { 
+printf("Start\n");
+fPlayer->Start(); 
+}
 
 /*--------------------------------------------------------------------------*/
 
@@ -207,7 +211,8 @@ void TPlayer::SetPosMs (long date_ms) { fPlayer->SetPosMs(date_ms); }
  }
 
 /*--------------------------------------------------------------------------*/
-   long TPlayer::InsertAllTrack(MidiSeqPtr s)
+
+long TPlayer::InsertAllTrack(MidiSeqPtr s)
  {
  	if (UMidi::IsEmpty(s)) return kNoErr;
  
@@ -287,12 +292,12 @@ void TPlayer::SetSynchroIn (short state)
  		fSyncOut = state;
   
    		TPlayerMemento memento;
-		memento.SaveState(this);			// Save the current state
+		memento.SaveState(this);		// Save the current state
   		
 	 	fFactory->DestroyPlayer(&fPlayer);	// Delete the current Player
 	 	fPlayer = fFactory->CreatePlayer();	// Allocate a new Player
 	 	
-	 	memento.RestoreState(this);			// Restore the current state
+	 	memento.RestoreState(this);		// Restore the current state
 	 }
  }
 

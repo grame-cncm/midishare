@@ -1,6 +1,6 @@
 /* ===========================================================================
    This file is Copyright (c) Grame, Computer Music Research Laboratory 
-   1996-1999, and is distributed as Open Source software under the Artistic License;
+   1996-2003, and is distributed as Open Source software under the Artistic License;
    see the file "Artistic" that is included in the distribution for details.
 
    Grame : Computer Music Research Laboratory
@@ -1208,7 +1208,7 @@ static MidiEvPtr read_sysex( MIDIFilePtr fd, short status)
 {
 	MidiEvPtr ev1,ev2;
 	unsigned long len;
-	short c;
+	short c = 0;
 	
 	ev1 = MidiNewEv(typeSysEx);			
 	ev2 = MidiNewEv(typeStream);
@@ -1220,7 +1220,7 @@ static MidiEvPtr read_sysex( MIDIFilePtr fd, short status)
 		MidiAddField( ev2, status);			/* store the first byte in the stream event */
 		len= ReadVarLen1( fd,ev2);			/* message length bytes are put in the Stream event	*/
 		
-		while( len--)
+		while(len--)
 		{
 			c= getc( fd->fd);				/* read the datas	*/
 			fd->_cnt--;

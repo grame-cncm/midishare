@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -89,7 +89,10 @@ TEventPtr TScoreFollower::SetPosTicks (ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is < date_ticks
+/*!
+ \brief Set the iterator pos on the first event which date is < date_ticks
+ \param  date_ticks is the date in ticks.
+*/
 
 void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
 {
@@ -101,7 +104,10 @@ void TScoreFollower::SetPosTicksBackward (ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is > date_ticks
+/*!
+ \brief Set the iterator pos on the first event which date is > date_ticks
+ \param  date_ticks is the date in ticks.
+*/
 
 void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
 {
@@ -112,7 +118,10 @@ void TScoreFollower::SetPosTicksForward (ULONG date_ticks)
 }
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is < date_ten_micro
+/*!
+ \brief Set the iterator pos on the first event which date is < date_ten_micro
+ \param  date_ticks is the date in 10 microseconds.
+*/
 
 void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
 {
@@ -124,7 +133,10 @@ void TScoreFollower::SetPosMicroBackward  (ULONG date_ten_micro)
 }	
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is > date_ten_micro
+/*!
+ \brief Set the iterator pos on the first event which date is > date_ten_micro
+ \param  date_ticks is the date in 10 microseconds.
+*/
 
 void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
 {
@@ -135,7 +147,10 @@ void TScoreFollower::SetPosMicroForward  (ULONG date_ten_micro)
 }
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is < pos
+/*!
+ \brief Set the iterator pos on the first event which date is < pos
+ \param  pos is the date in BBU representation.
+*/ 
 
 void TScoreFollower::SetPosBBUBackward (const TPos& pos)
 {
@@ -146,7 +161,10 @@ void TScoreFollower::SetPosBBUBackward (const TPos& pos)
 }
 
 /*--------------------------------------------------------------------------*/
-// Set the iterator pos on the first event which date is > pos
+/*!
+ \brief Set the iterator pos on the first event which date is > pos
+ \param  pos is the date in BBU representation.
+*/ 
 
 void TScoreFollower::SetPosBBUForward (const TPos& pos)
 {

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -38,7 +38,7 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 	
 	for (short line = 0 ; line<TableLength; line++) {fTaskTable[line] = 0;}
 		
-	#if GENERATINGCFM
+	#if defined (__Macintosh__) && defined (__MacOS9__)
 		fUPPExecuteTask = NewTaskPtr(ExecuteTask);
 	#else
 		fUPPExecuteTask = (TaskPtr)ExecuteTask;
@@ -49,14 +49,14 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 
 TScheduler::~TScheduler ()
 { 
-	#if GENERATINGCFM
+	#if defined (__Macintosh__) && defined (__MacOS9__)
 		if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
 	#endif
 	
 	TTicksTaskPtr task;
 	
 	for (short line =  0 ; line<TableLength; line++) {
-		if (task = fTaskTable[line]) task->Kill();
+		if ((task = fTaskTable[line])) task->Kill();
 	}
 }
 
@@ -67,8 +67,9 @@ TScheduler::~TScheduler ()
 void TScheduler::ReScheduleTasks() 
 {
 	TTicksTaskPtr task;
+	
 	for (short line = 0 ; line<TableLength; line++) {
-		if (task = fTaskTable[line]) ScheduleRealTime(task);
+		if ((task = fTaskTable[line])) ScheduleRealTime(task);
 	}
 }
 
@@ -110,7 +111,7 @@ void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms)
 void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 {
 	if (fSynchro->IsSchedulable(task->GetDate())) {
-		task->Kill(); // Important
+    		task->Kill(); // Important
 		fMidiAppl->NewMidiTask(fUPPExecuteTask, fSynchro->ConvertTickToMs(task->GetDate()),(long)this,(long)task,0, &task->fTask);
 	}
 }		

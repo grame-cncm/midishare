@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,9 +12,9 @@
 // ===========================================================================
 //	TClockSender.h		    
 // ===========================================================================
-//
-//	Manage Midi events related to Clock synchronization
-//
+/*!
+	\brief Manage Midi events related to Clock synchronization.
+*/
 
 #ifndef __TClockSender__
 #define __TClockSender__
@@ -24,9 +24,9 @@
 #include "TEventSenderInterface.h"
 
 
-//-----------------------------
+//--------------------
 // Class TClockSender 
-//-----------------------------
+//--------------------
 
 class TClockSender{
 
@@ -62,9 +62,13 @@ class TClockSender{
 typedef TClockSender FAR * TClockSenderPtr;
 
 
-//-----------------------
+//------------------
 // Class TClockTask 
-//-----------------------
+//------------------
+
+/*!
+  \brief Task to send clocks events.
+*/
 
 class TClockTask :public TTicksTask {
 

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2001, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -9,10 +9,11 @@
 // ===========================================================================
 
 // ===========================================================================
-//	TTickScheduler.cpp			   ©1996-1998 Grame All rights reserved.
+//	TTickScheduler.h		  
 // ===========================================================================
 //
-// Combines a scheduler and a synchroniser
+//   Combines a scheduler and a synchroniser.
+//
 
 #ifndef __TTickScheduler__
 #define __TTickScheduler__
@@ -26,7 +27,7 @@
 // Class TTickScheduler 
 //-----------------------
 
-class TTicksScheduler  :public TSynchroniserInterfacePtr, public TSchedulerInterfacePtr{
+class TTicksScheduler  :public TSynchroniserInterface, public TSchedulerInterface{
 
 	private:
 	

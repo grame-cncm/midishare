@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -25,7 +25,7 @@ MidiEvPtr UMidi::NoteToKeyOff (MidiEvPtr e1)
 	MidiEvPtr e2;
 	EvType(e1) = typeKeyOn;
 	
-	if (e2 = MidiCopyEv(e1)) {
+	if ((e2 = MidiCopyEv(e1))) {
 		EvType(e2) = typeKeyOff;
 		Date(e2) = Date(e1)+MidiGetField(e1,2);
 	}
@@ -66,7 +66,7 @@ MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr src)
 					break;
 			
 				case typeNote:
-					if (e1 = MidiCopyEv(e)){
+					if ((e1 = MidiCopyEv(e))){
 						EvType(e1) = typeKeyOff;	// Type change
 						Vel(e1) = 64;
 						Date(e1) += Dur(e);
@@ -93,7 +93,7 @@ MidiEvPtr  UMidi::AddSeq(MidiEvPtr e1, MidiEvPtr e2)
 {
 	MidiEvPtr next;
 	
-	while(next= Link(e1))				/* tant qu'une séquence n'est finie */
+	while((next= Link(e1)))				/* tant qu'une séquence n'est finie */
 	{
 		if(Date(next) <= Date(e2))		/* date inférieure dans la même seq */
 			e1 = next;					/* rien à faire : on continue		*/
@@ -104,7 +104,7 @@ MidiEvPtr  UMidi::AddSeq(MidiEvPtr e1, MidiEvPtr e2)
 			e2 = next;
 		}
 	}
-	if(Link(e1) = e2)			/* linke avec la fin de l'autre séquence 	*/
+	if((Link(e1) = e2))			/* linke avec la fin de l'autre séquence 	*/
 		while(Link(e2))
 			e2 = Link(e2);
 	return e2;					/* et renvoie le dernier evt de la séquence */
@@ -118,7 +118,7 @@ void  UMidi::MixeSeq(MidiSeqPtr src, MidiSeqPtr dest)
 	
 	if(dest && src)							/* dest et src existent		*/
 	{
-		if(firstSrc= src->first)				/* src non vide				*/
+		if((firstSrc= src->first))				/* src non vide				*/
 		{
 			if(!(firstDest = dest->first))		/* si destination est vide	*/
 			{

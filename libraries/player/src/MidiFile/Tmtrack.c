@@ -1,6 +1,6 @@
 /* ===========================================================================
 * The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-* 1996-1999, and is distributed as Open Source software under the Artistic License;
+* 1996-2003, and is distributed as Open Source software under the Artistic License;
 * see the file "Artistic" that is included in the distribution for details.
 *
 * Grame : Computer Music Research Laboratory
@@ -93,9 +93,9 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
- void SetSeqRef( MidiSeqPtr seq, register short refNum)
+ void SetSeqRef(MidiSeqPtr seq,  short refNum)
 {
-	register MidiEvPtr ev;
+	 MidiEvPtr ev;
 	
 	ev= seq->first;
 	while( ev)
@@ -106,10 +106,10 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 }
 
 /*--------------------------------------------------------------------------*/
- char *GetBeginKey( register char *buff)
+ char *GetBeginKey( char *buff)
 {
-	register char *start= nil;
-	register long k, l;
+	 char *start= nil;
+	 long k, l;
 	
 	k= *(long *)Player;
 	l= strlen(Player);
@@ -129,7 +129,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
  MidiEvPtr RestoreSeqName( char *buff)
 {
 	MidiEvPtr ev= nil;
-	register char *tmp;
+	 char *tmp;
 	
 	if( tmp= GetBeginKey( buff))			/* recherche le dŽbut de la clŽ */
 	{
@@ -150,7 +150,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /* renvoie le premier ŽvŽnement de type SeqName ou TrackName de la sŽquence */
  MidiEvPtr GetTrackName( MidiSeqPtr seq, MidiEvPtr *prec)
 {
-	register MidiEvPtr ev, p= nil;
+	 MidiEvPtr ev, p= nil;
 	
 	ev= seq->first;
 	while( ev)
@@ -170,8 +170,8 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /* renvoie le numŽro de rŽfŽrence d'un evt SeqName transfŽrŽ dans un buffer */
  short GetEvRef( char *buff, int keyLen, short numPiste)	
 {
-	register short refNum, i=0;
-	register char *tmp;
+	 short refNum, i=0;
+	 char *tmp;
 	char strRef[4];
 	
 	refNum= numPiste;
@@ -190,10 +190,10 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*   	renvoie le refNum d'une seq	(par dŽfaut: numŽro de piste)			*/
  short GetSeqRef( MidiSeqPtr seq, short numPiste)
 {
-	register MidiEvPtr ev, ori;
-	register short refNum;
+	 MidiEvPtr ev, ori;
+	 short refNum;
 	MidiEvPtr prec= nil;
-	register int i, n, l;
+	 int i, n, l;
 	char buff[512];
 
 	refNum= numPiste;
@@ -232,7 +232,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*--------------------------------------------------------------------------*/
  void DelEndTrack( MidiSeqPtr seq)
 {
-	register MidiEvPtr ev, prev, tmp;
+	 MidiEvPtr ev, prev, tmp;
 	
 	prev= nil;
 	ev= seq->first;
@@ -261,9 +261,9 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
- MidiEvPtr AddSeq( register MidiEvPtr e1, register MidiEvPtr e2)
+ MidiEvPtr AddSeq( MidiEvPtr e1, MidiEvPtr e2)
 {
-	register MidiEvPtr next;
+	 MidiEvPtr next;
 	
 	while( next= Link(e1))				/* tant qu'une sŽquence n'est finie */
 	{
@@ -285,7 +285,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*--------------------------------------------------------------------------*/
  void MixeSeq( MidiSeqPtr src, MidiSeqPtr dest)
 {
-	register MidiEvPtr firstSrc, firstDest;
+	 MidiEvPtr firstSrc, firstDest;
 	
 	if( dest && src)							/* dest et src existent		*/
 	{
@@ -310,9 +310,9 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 /*--------------------------------------------------------------------------*/
 /* when events are at the same date, events from e1 will be before events from e2 */
 
-static MidiEvPtr AddSeqOrder( register MidiEvPtr e1, register MidiEvPtr e2, Boolean order)
+static MidiEvPtr AddSeqOrder( MidiEvPtr e1, MidiEvPtr e2, Boolean order)
 {
-	register MidiEvPtr next;
+	 MidiEvPtr next;
 	
 	while( next= Link(e1))					/* tant qu'une sequence n'est pas finie */
 	{
@@ -353,7 +353,7 @@ static MidiEvPtr AddSeqOrder( register MidiEvPtr e1, register MidiEvPtr e2, Bool
 
 static void MixeSeqOrder( MidiSeqPtr src, MidiSeqPtr dest)
 {
-	register MidiEvPtr firstSrc, firstDest;
+	 MidiEvPtr firstSrc, firstDest;
 	
 	if( dest && src)							/* dest et src existent		*/
 	{
@@ -475,8 +475,8 @@ static MidiSeqPtr WriteTempoAndTimeSign (MidiSeqPtr seq)
 /*--------------------------------------------------------------------------*/
 static void SetSeqPort( MidiSeqPtr seq)
 {
-	register MidiEvPtr ev, prev, tmp;
-	register port = 0;
+        MidiEvPtr ev, prev, tmp;
+        int port = 0;
 	
 	prev= nil;
 	ev= seq->first;
@@ -502,7 +502,7 @@ static void SetSeqPort( MidiSeqPtr seq)
 }
 
 /*--------------------------------------------------------------------------*/
-void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest , int i)
+void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest, int i)
 {
 	SetSeqRef( seq, GetSeqRef(seq, i));	/* restitue le refnum		*/
 	SetSeqPort (seq);					/* restitue le Port         */
@@ -512,10 +512,10 @@ void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest , int i)
 }
 
 /*--------------------------------------------------------------------------*/
-int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
+int TryToReadTrack (  midiFILE *fd, MidiSeqPtr dest, int i)
 {
-	register MidiSeqPtr seq;
-	register ret= 0;
+	 MidiSeqPtr seq;
+	 int ret= 0;
 
 
 	if( seq = MidiFileReadTrack(fd)){		/* lecture de la piste		*/
@@ -541,9 +541,9 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
- int ReadTracks( register midiFILE *fd, MidiSeqPtr dest)
+ int ReadTracks( midiFILE *fd, MidiSeqPtr dest)
 {
-	register int i, ret= 0;
+	 int i, ret= 0;
 	
 	for (i=0; i< fd->ntrks && !ret; i++)
 	{
@@ -562,8 +562,8 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
  void InitTrackListe( void)
 {
-	register int i;
-	register char *tmp;
+	 int i;
+	 char *tmp;
 	
 	tmp= trackListe;
 	for( i= 0; i< maxTrack; i++)
@@ -571,10 +571,10 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
- Boolean WriteEndTrack( register midiFILE *fd, register MidiEvPtr prev)
+ Boolean WriteEndTrack( midiFILE *fd, MidiEvPtr prev)
 {
-	register MidiEvPtr ev;
-	register Boolean ret= false;
+	 MidiEvPtr ev;
+	 Boolean ret= false;
 	MidiSeqPtr seq;
 	
 	if( ev= MidiNewEv( typeEndTrack))		/* alloue un evt fin de piste	*/
@@ -607,9 +607,9 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
  Boolean WriteSeqName( midiFILE *fd, MidiEvPtr ev, short ref, short numPiste)
 {
-	register MidiEvPtr name;
-	register Boolean ret= false;
-	register char *tmp;
+	 MidiEvPtr name;
+	 Boolean ret= false;
+	 char *tmp;
 	char buff[6];
 	
 	if( ref== numPiste)						/* refNum Žgal au num de piste	*/
@@ -633,11 +633,11 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
- Boolean WriteTrackFormat2( register midiFILE *fd, MidiSeqPtr seq,
-								  register short ref, short numPiste)
+ Boolean WriteTrackFormat2( midiFILE *fd, MidiSeqPtr seq,
+								   short ref, short numPiste)
 {
-	register Boolean firstName= true, ret= true;
-	register MidiEvPtr ev, lastWrite= nil;
+	 Boolean firstName= true, ret= true;
+	 MidiEvPtr ev, lastWrite= nil;
 
 	ev= seq->first;
 	while( ev && ret)
@@ -661,12 +661,12 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
- Boolean WriteTrackFormat1( register midiFILE *fd, MidiSeqPtr seq,
-								  register short ref, short numPiste)
+ Boolean WriteTrackFormat1( midiFILE *fd, MidiSeqPtr seq,
+								   short ref, short numPiste)
 {
-	register Boolean firstName= true, ret= true;
-	register MidiEvPtr ev, lastWrite= nil;
-	register short type;
+	 Boolean firstName= true, ret= true;
+	 MidiEvPtr ev, lastWrite= nil;
+	 short type;
 
 	ev= seq->first;
 	while( ev && ret)
@@ -694,11 +694,11 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 }
 
 /*--------------------------------------------------------------------------*/
- Boolean WriteTempoMap( register midiFILE *fd, MidiSeqPtr seq)
+ Boolean WriteTempoMap( midiFILE *fd, MidiSeqPtr seq)
 {
-	register MidiEvPtr ev, lastWrite= nil;
-	register short type;
-	register Boolean ret= true;
+	 MidiEvPtr ev, lastWrite= nil;
+	 short type;
+	 Boolean ret= true;
 
 	ev= seq->first;
 	while( ev && ret)
@@ -725,8 +725,8 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
  void AnalyseSeq( midiFILE *fd, MidiSeqPtr seq)
 {
-	register MidiEvPtr ev;
-	register short type;
+	 MidiEvPtr ev;
+	 short type;
 
 	ev= seq->first;
 	if( fd->format== midifile1)						/* c'est un format 1	*/
@@ -753,8 +753,8 @@ int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
 static Boolean AddPortPrefix(MidiSeqPtr seq)
 {
-    register MidiEvPtr ev1,ev2,prev;
-    register short portTable[maxTrack];
+     MidiEvPtr ev1,ev2,prev;
+     short portTable[maxTrack];
     int i;
     
     ev1= seq->first;
@@ -793,9 +793,9 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 }
 
 /*--------------------------------------------------------------------------*/
- void pCopy( register char *dest, register char * src)
+ void pCopy( char *dest,  char * src)
 {
-	register short i;
+	 short i;
 	
 	i= *src++;
 	while( i--)
@@ -804,9 +804,9 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 }
 
 /*--------------------------------------------------------------------------*/
- void cCopy( register char *dest, register char * src)
+ void cCopy( char *dest,  char * src)
 {
-	register short i = 0;
+	short i = 0;
 	
 	while (src[i] != 0) {
 		dest[i] = src[i];
@@ -816,10 +816,10 @@ static Boolean AddPortPrefix(MidiSeqPtr seq)
 }
 
 /*--------------------------------------------------------------------------*/
- Boolean WriteTracks( register midiFILE *fd, register MidiSeqPtr seq)
+ Boolean WriteTracks( midiFILE *fd, MidiSeqPtr seq)
 {
-	register short i=0, numPiste= 0;
-	register Boolean ret= true;
+	 short i=0, numPiste= 0;
+	 Boolean ret= true;
 	
 	if( fd->format== midifile1)
 	{
@@ -924,9 +924,9 @@ int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 
 
 /*--------------------------------------------------------------------------*/
- void ReturnTimeInfos( register midiFILE *fd, MidiFileInfosPtr infos)
+ void ReturnTimeInfos( midiFILE *fd, MidiFileInfosPtr infos)
 {
-	register int t;
+	 int t;
 	
 	if( fd->time & 0x8000)					/* temps smpte	*/
 	{
@@ -945,7 +945,7 @@ int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 int  EXPORT MidiFileLoad( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 {
 	char Cname[256];
-	register midiFILE *fd;					/* descripteur du fichier MidiFile	*/
+	midiFILE *fd;					/* descripteur du fichier MidiFile	*/
 	int ret= 0; 							/* code de retour de la fonction	*/
 	
 	cCopy (Cname, name);

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -25,6 +25,8 @@
 #include "UMidi.h"
 #include "UMath.h"
 
+
+
 /*----------------------------------------------------------------------------*/
 
 TEventPtr TPlayerScore::FirstEvent() { return fScoreBegin;}
@@ -47,7 +49,6 @@ void TPlayerScore::Init()
 	MidiEvPtr e2 = MidiNewEv(typeScoreEnd);
 	MidiEvPtr e3 = MidiNewEv(typeTempo);
 	MidiEvPtr e4 = MidiNewEv(typeTimeSign);
-	
 	if (e2 && e3 && e4) {
 		Date(e3) = Date(e4) = 0;
 		Date(e2) = kEndScoreOffset;
@@ -55,17 +56,16 @@ void TPlayerScore::Init()
 		Tempo(e3) = kDefaultTempoEv;
 		TSNum(e4) = kDefaultNum;  TSDenom(e4) = kDefaultDenom;
 		TSClocks(e4) = kDefaultClocks; TS32nd(e4) = kDefaultN32;
-		
 		TEventPtr tempo = TEventFactory::GenericCreateEvent(e3);
 		fScoreEnd = TEventFactory::GenericCreateEvent(e2);
 		fScoreBegin = TEventFactory::GenericCreateEvent(e4);
-		
 		if (tempo && fScoreBegin  && fScoreEnd) {
 			TScore::InsertAtBeginEvent(fScoreEnd);
 			TScore::InsertAtBeginEvent(fScoreBegin);
 			TScore::InsertAtBeginEvent(tempo);
 		}
 	}
+	
 }
 	
 /*----------------------------------------------------------------------------*/
@@ -144,7 +144,7 @@ short TPlayerScore::InsertEventsAtEnd(MidiEvPtr e1)
 	
 	while (e1) {
 		e2 = Link(e1); // Has to be done before the creation of the TEvent  
-		if (next = TEventFactory::GenericCreateEvent(e1)) {
+		if ((next = TEventFactory::GenericCreateEvent(e1))) {
 			InsertAtEndEvent(next);
 			e1 = e2;
 		}else
@@ -162,7 +162,7 @@ short TPlayerScore::InsertEventsAtEnd(MidiEvPtr e1, short tracknum)
 	
 	while (e1) {
 		e2 = Link(e1); // Has to be done before the creation of the TEvent  
-		if (next = TEventFactory::GenericCreateEvent(e1)) {
+		if ((next = TEventFactory::GenericCreateEvent(e1))) {
 			TrackNum(e1) = (unsigned char)tracknum;
 			InsertAtEndEvent(next);
 			e1 = e2;
@@ -182,8 +182,7 @@ short  TPlayerScore::InsertEventsIn(TScoreIteratorPtr it, MidiEvPtr* adr)
 	while  ((cur = it->NextEv()) && e1) {
 		while (e1 && (Date (e1) < cur->GetDate())) {
 			e2 = Link(e1);  // Has to be done before the creation of the TEvent  
-
-			if (next = TEventFactory::GenericCreateEvent(e1)) {
+			if ((next = TEventFactory::GenericCreateEvent(e1))) {
 				InsertBeforeEvent(cur,next);
 				e1 = e2;
 			}else{
@@ -205,8 +204,7 @@ short TPlayerScore::InsertEventsIn(TScoreIteratorPtr it, MidiEvPtr* adr, short t
 	while  ((cur = it->NextEv()) && e1) {
 		while (e1 && (Date (e1) < cur->GetDate())) {
 			e2 = Link(e1);  // Has to be done before the creation of the TEvent  
-
-			if (next = TEventFactory::GenericCreateEvent(e1)) {
+			if ((next = TEventFactory::GenericCreateEvent(e1))) {
 				TrackNum(e1) = (unsigned char)tracknum;
 				InsertBeforeEvent(cur,next);
 				e1 = e2;
@@ -301,7 +299,7 @@ MidiSeqPtr TPlayerScore::GetAllTrack()
 		TScoreIterator it(this);
 		TEventPtr cur;
 	
-		while (cur = it.NextEv()) {
+		while ((cur = it.NextEv())) {
 			e1 = cur->MidiEvent();
 			if (IsScore (e1)){
 				if (!UMidi::Copy_AddSeq(dst,e1)) {
@@ -329,7 +327,7 @@ MidiSeqPtr TPlayerScore::GetTrack(short tracknum)
 		TScoreIterator it(this);
 		TEventPtr cur;
 	
-		while (cur = it.NextEv()) {
+		while ((cur = it.NextEv())) {
 			e1 = cur->MidiEvent();
 			if (IsScore (e1) && (TrackNum(e1) == tracknum)){
 				if (!UMidi::Copy_AddSeq(dst,e1)) {
@@ -398,7 +396,7 @@ void TPlayerScore::ClearTrack (short tracknum)
 	
 	TScoreIterator1 it(this);
 	
-	while (cur = it.NextEv()) {
+	while ((cur = it.NextEv())) {
 		e = cur->MidiEvent();
 		if (IsScore(e) && (TrackNum(e) == tracknum)){
 			RemoveEvent(cur);

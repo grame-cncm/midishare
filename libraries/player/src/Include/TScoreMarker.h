@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,10 +12,10 @@
 // ===========================================================================
 //	TScoreMarker.h			    
 // ===========================================================================
-//
-//	Markers are special Private events which can be inserted in the score.
-// 
-//  Markers are directly inserted in the score and MUST be removed before destroying the score
+/*!
+ \brief	Markers are special Private events which can be inserted in the score.
+  Markers are directly inserted in the score and MUST be removed before destroying the score.
+*/
 
 #ifndef __TMarker__
 #define __TMarker__
@@ -24,9 +24,9 @@
 #include "TScore.h"
 #include "UDebug.h"
 
-//-----------------------
+//--------------------
 // Class TScoreMarker 
-//-----------------------
+//--------------------
 
 class TScoreMarker {
 
@@ -34,7 +34,7 @@ class TScoreMarker {
 	
 		TEventPtr 	fEvent;
 		
-	public :
+	public:
 		
 		TScoreMarker(Byte type)
 		{

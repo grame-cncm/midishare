@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,14 +12,6 @@
 // ===========================================================================
 //	TChaserIterator.h			    
 // ===========================================================================
-//
-//	The chaser iterator use a chaser visitor to keep the state of KeyOn, CtrlChange, 
-//  ProgChange, KeyPress, ChanPress, PitchBend, Sysex and Tune events when moving 
-//  along the score.
-//  The chaser iterator is used when starting or stopping the Player and will send 
-//  events that occurred previously in the tracks.
-//  
-
 
 
 #ifndef __TChaserIterator__
@@ -34,9 +26,13 @@
 // Class TChaserInterface
 /*--------------------------------------------------------------------------*/
 
+/*!
+	\brief Interface for chase objects.
+*/ 
+
 class TChaserInterface {
 
-	public :
+	public:
 	
 		virtual ~TChaserInterface(){}
 	
@@ -55,6 +51,14 @@ typedef TChaserInterface FAR * TChaserInterfacePtr;
 // Class TChaserIterator
 /*--------------------------------------------------------------------------*/
 
+/*!
+	\brief The chaser iterator use a chaser visitor to keep the state of KeyOn, CtrlChange, 
+    ProgChange, KeyPress, ChanPress, PitchBend, Sysex and Tune events when moving 
+    along the score.
+    The chaser iterator is used when starting or stopping the Player and will send 
+    events that occurred previously in the tracks.
+*/ 
+
 class TChaserIterator :public TChaserInterface{
 
 	private:
@@ -66,7 +70,7 @@ class TChaserIterator :public TChaserInterface{
 		void SetPosTicks (ULONG date_ticks);
 		void GoBeginDateTicks (ULONG date_ticks);
 			
-	public :
+	public:
 	
 		TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user);
 		~TChaserIterator();

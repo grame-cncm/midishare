@@ -1,11 +1,29 @@
+// ===========================================================================
+// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
+// see the file "Artistic" that is included in the distribution for details.
+//
+// Grame : Computer Music Research Laboratory
+// Web : http://www.grame.fr/Research
+// E-mail : MidiShare@rd.grame.fr
+// ===========================================================================
+ 
+// ===========================================================================
+//	TPlayerInterface.h			    
+// ===========================================================================
+/*!
+	\brief 
+*/ 
+
+ 
  
 #ifndef __TPlayerInterface__
 #define __TPlayerInterface__
 
 
-//-----------------------
+//------------------------
 // Class TPlayerInterface 
-//-----------------------
+//------------------------
 
 class TPlayerInterface {
 	
@@ -24,7 +42,7 @@ class TPlayerInterface {
 		virtual void SetPosTicks (ULONG date_ticks) = 0;		
 		virtual ULONG GetPosTicks() = 0;
 		
-		virtual void  SetTempo (ULONG tempo) = 0;
+		virtual void SetTempo (ULONG tempo) = 0;
 		virtual ULONG GetTempo () = 0;
 		
 		virtual void RcvClock (ULONG date_ms) = 0;

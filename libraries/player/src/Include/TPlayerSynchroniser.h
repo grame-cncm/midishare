@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,9 +12,9 @@
 // ===========================================================================
 //	TPlayerSynchroniser.h		    
 // ===========================================================================
-//
-//	Synchroniser : a component which provides musical time representation
-//
+/*!
+	\brief Synchroniser : a component which provides musical time representation.
+*/
 
 #ifndef __TPlayerSynchroniser__
 #define __TPlayerSynchroniser__
@@ -217,9 +217,13 @@ class TPlayerSynchroniserExt :public TPlayerSynchroniser{
 
 typedef TPlayerSynchroniserExt FAR * TPlayerSynchroniserExtPtr;
 
-//-----------------------
+//------------------
 // Class TTempoTask 
-//-----------------------
+//------------------
+
+/*!
+  \brief Task to play events at the same date and possibly reschedule pending tick tasks if the Tempo has changed.
+*/
 
 class TTempoTask :public TTicksTask {
 

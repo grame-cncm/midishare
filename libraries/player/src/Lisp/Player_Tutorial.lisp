@@ -17,6 +17,7 @@
 (midishare) 
 
 
+
 ;;=======================
 ;; Allocate a new player
 ;;=======================
@@ -345,13 +346,13 @@
 
 
 (defun add-track (seq tracknum pitch startdate)
-  (dotimes (i 50)
+  (dotimes (i 500)
     (let ((ev (midinewev typenote)))
       (unless (%null-ptr-p ev)
         (midisetfield ev 0 pitch)
         (midisetfield ev 1 80)
         (midisetfield ev 2 125)
-        (date ev (+ startdate  (* i 1000))) ;; <== date in "ticks"  
+        (date ev (+ startdate  (* i 500))) ;; <== date in "ticks"  
         (ref ev tracknum)  ;; <=== set the track number in the event refnum field 
         (midiaddseq seq ev)))))
 

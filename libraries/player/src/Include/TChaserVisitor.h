@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,10 +12,12 @@
 // ===========================================================================
 //	TChaserVisitor.h			    
 // ===========================================================================
-//
-//	A chaser visitor contains several hastables (instance of the TEventTable class)
-//  Each hastable keeps the state of KeyOn, CtrlChange, ProgChange, KeyPress, ChanPress,
-//  PitchBend, Sysex and Tune events.
+
+/*!
+  \brief A chaser visitor contains several hastables (instance of the TEventTable class)
+  Each hastable keeps the state of KeyOn, CtrlChange, ProgChange, KeyPress, ChanPress,
+  PitchBend, Sysex and Tune events.
+*/
 
 
 #ifndef __TChaserVisitor__
@@ -30,17 +32,24 @@
 class TChaserVisitor :public  TScoreVisitorInterface{
 
 	private:
-	
-		TEventSenderInterfacePtr 	fUser;      // Event user
-
-		TEventTablePtr   	fKeyontable;        // Hashtable for KeyOn 
-		TEventTablePtr   	fCtrlchangetable;	// Hashtable for CtrlChange
-		TEventTablePtr   	fKeypresstable;		// Hashtable for KeyPress
-		TEventTablePtr   	fChanpresstable;	// Hashtable for ChanPress 
-		TEventTablePtr   	fPitchwheeltable;	// Hashtable for PitchBend 
-		TEventTablePtr   	fProgchangetable;	// Hashtable for ProgChange 
-		TEventTablePtr   	fSysextable;		// Hashtable for Sysex
-		MidiEvPtr    		fTune;              // Tune event
+		/*! Event user */
+		TEventSenderInterfacePtr 	fUser;      
+		/*! Hashtable for KeyOn */
+		TEventTablePtr   	fKeyontable;        
+		/*! Hashtable for CtrlChange */
+		TEventTablePtr   	fCtrlchangetable;	
+		/*! Hashtable for KeyPress */
+		TEventTablePtr   	fKeypresstable;		
+		/*! Hashtable for ChanPress */
+		TEventTablePtr   	fChanpresstable;	
+		/*! Hashtable for PitchBend */
+		TEventTablePtr   	fPitchwheeltable;	
+		/*! Hashtable for ProgChange */
+		TEventTablePtr   	fProgchangetable;	
+		/*! Hashtable for Sysex */
+		TEventTablePtr   	fSysextable;		
+		/*! Tune event */
+		MidiEvPtr    		fTune;            
 			
 	public:
 	

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -10,11 +10,11 @@
 
 
 // ===========================================================================
-//	TTimeConverter.cpp			    
+//	TTimeConverter.h		    
 // ===========================================================================
-//
-//	Ticks <===> BBU convertion functions
-//
+/*!
+	\brief Ticks to Bar Beat Unit conversion functions (and the contrary)
+*/
 
 
 #ifndef __TTimeConverter__
@@ -33,8 +33,10 @@ class TTimeConverter  {
 
 	private:
 
-		ULONG 	fLast_timesign ;    // Date of the last timesign change (in ticks)
-		TPos   	fLast_pos;          // Position of the last timesign change
+		/*! Date of the last timesign change (in ticks) */
+		ULONG 	fLast_timesign ;    
+		/*! Position of the last timesign change */
+		TPos   	fLast_pos;         
 		short   fNumerator;         
 		short 	fDenominator;
 		short  	fNClocks;

@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,10 +12,10 @@
 // ===========================================================================
 //	TTempoMapVisitor.h		    
 // ===========================================================================
-//
-// TTempoMapVisitor: an object used to maintain the current Tempo and TimeSign state
-// and provide convertion functions 
-//
+
+/*! 
+  \brief A score visitor which uses a TTempoMap object maintain the current Tempo and TimeSign state.
+*/
 
 #ifndef __TTempoMapVisitor__
 #define __TTempoMapVisitor__
@@ -26,11 +26,11 @@
 #include "TEvent.h"
 
 
-//-----------------------
+//------------------------
 // Class TTempoMapVisitor 
-//-----------------------
+//------------------------
 
-class TTempoMapVisitor :public TScoreVisitorInterface, public TTempoMap {
+class TTempoMapVisitor : public TScoreVisitorInterface, public TTempoMap {
 
 	public :
  

@@ -46,6 +46,9 @@ to correct a synchronization problem on Linux. Works with MidiShare untill versi
 27/04/01 : Version  > 2.03 : Works only with MidiShare version >= 1.85
 Add the management of PortPrefix events in MIDIFiles
 
+06/02/03 : Version 2.04 : Correct a bug in ouput clock synchronization. Doxygen based source documentation.
+Cleanup.
+
 ==================
 General Remarks
 ==================

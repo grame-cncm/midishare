@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2003, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -23,7 +23,6 @@
 
 #include "TMidiAppl.h"
 
-
 /*--------------------------------------------------------------------------*/
 void MSALARMAPI TMidiAppl::GenericTask (ULONG date, short refnum, long a1, long a2, long a3) 
 {
@@ -39,18 +38,14 @@ void MSALARMAPI TMidiAppl::GenericTask (ULONG date, short refnum, long a1, long 
 
 void MSALARMAPI TMidiAppl::GenericReceiveAlarm(short ref) 
 {
-
 	((TMidiApplPtr)MidiGetInfo(ref))->ReceiveAlarm (ref);
-	
 }
 
 /*--------------------------------------------------------------------------*/
 
 void MSALARMAPI TMidiAppl::GenericApplAlarm(short ref, long code) 
 {
-
 	((TMidiApplPtr)MidiGetInfo(ref))->ApplAlarm (ref,code);
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -59,7 +54,7 @@ short TMidiAppl::Open (MidiName name)
 {
 	short i;
 		
-	#if GENERATINGCFM
+	#if defined (__Macintosh__) && defined (__MacOS9__)
 		fUPPGenericTask = NewTaskPtr(GenericTask);
 		fUPPGenericReceiveAlarm =  NewRcvAlarmPtr(GenericReceiveAlarm);
 		fUPPGenericApplAlarm =  NewApplAlarmPtr(GenericApplAlarm);
@@ -67,7 +62,7 @@ short TMidiAppl::Open (MidiName name)
 		fUPPGenericTask = (TaskPtr)GenericTask;
 		fUPPGenericReceiveAlarm =  (RcvAlarmPtr)GenericReceiveAlarm;
 		fUPPGenericApplAlarm = (ApplAlarmPtr)GenericApplAlarm;
-	#endif
+  	#endif
 	
 	fRefnum = MidiOpen(name);
 	fFilter = MidiNewFilter();
@@ -104,7 +99,7 @@ void TMidiAppl::Close()
 		MidiSetRcvAlarm(fRefnum, 0);
 		MidiSetApplAlarm(fRefnum, 0);
 		
-		#if GENERATINGCFM
+		#if defined (__Macintosh__) && defined (__MacOS9__)
 			if (fUPPGenericTask) DisposeRoutineDescriptor (fUPPGenericTask);
 			if (fUPPGenericReceiveAlarm) DisposeRoutineDescriptor (fUPPGenericReceiveAlarm);
 			if (fUPPGenericApplAlarm) DisposeRoutineDescriptor (fUPPGenericApplAlarm);
@@ -118,9 +113,8 @@ void TMidiAppl::Close()
 
 
 /*--------------------------------------------------------------------------*/
-
 #ifdef __Macintosh__
-	#if GENERATINGCFM
+	#ifdef __MacOS9__
 		void TMidiAppl::NewMidiTask (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
 	#else
 		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
@@ -129,15 +123,22 @@ void TMidiAppl::Close()
 	MidiEvPtr ev;
 	MidiSTPtr ext;
 	ev= MidiNewEv(typeProcess);
-	
+     
  	if( ev) {
  		Date(ev)= date;
 		RefNum(ev)= fRefnum;
 		ext= LinkST(ev);
-		ext->ptr1= (Ptr)routine;
-		ext->ptr2= (Ptr)a1;
-		ext->ptr3= (Ptr)a2;
-		ext->ptr4= (Ptr)a3;
+		#ifdef __MacOS9__
+			ext->ptr1= (Ptr)routine;
+			ext->ptr2= (Ptr)a1;
+			ext->ptr3= (Ptr)a2;
+			ext->ptr4= (Ptr)a3;
+		#else
+			ext->val[0]= (long)routine;
+			ext->val[1]= (long)a1;
+			ext->val[2]= (long)a2;
+			ext->val[3]= (long)a3;
+		#endif
 		*adr = ev;
 		MidiSend(fRefnum,ev);
 	}else
@@ -183,7 +184,7 @@ void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long 
 /*--------------------------------------------------------------------------*/
 
 #ifdef __Macintosh__
-	#if GENERATINGCFM
+	#ifdef __MacOS9__
 		void TMidiAppl::NewMidiCall (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3)
 	#else
 		void TMidiAppl::NewMidiCall (TaskPtr routine, ULONG date,  long a1,long a2,long a3)
