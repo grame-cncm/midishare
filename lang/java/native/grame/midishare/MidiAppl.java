@@ -53,8 +53,13 @@ public class MidiAppl{
 
 		static final int typeTask 	= 19;
 		static final int typeAlarm 	= 20;
+		
+		static final int kPollingMode 	= 0; // Calling mode : polling
+		static final int kNativeMode 	= 1; // Calling mode : direct call of the Java code from the native side
 
-		private MidiApplImpl appl;	
+
+		MidiApplImpl appl = null;	
+		int mode;
 		
 		/**
  		* The MidiShare application reference number associated to the object.
@@ -68,7 +73,7 @@ public class MidiAppl{
 
 		public int filter = 0;
 		
-		private native final int  	ApplOpen(int ref);
+		private native final int  	ApplOpen(int ref,int mode);
 		private native final void  	ApplClose(int ref);
 		
 		
@@ -112,7 +117,7 @@ public class MidiAppl{
 		public final boolean ScheduleTask(MidiTask task, int date)
 		{
 			if (task.isIdle()) {
-				return (ScheduleTask(task,date,refnum) != 0);
+				return (ScheduleTask(task,date,refnum,mode) != 0);
 			}else{
       			return false;
       		}
@@ -121,14 +126,25 @@ public class MidiAppl{
 		/**
  		* Schedule a native task.
 		*/
-		private native int ScheduleTask (MidiTask task, int date, int ref);
+		private native int ScheduleTask (MidiTask task, int date, int ref, int mode);
 		
 		
 		/**
  		* Constructor.
 		*/
-		public MidiAppl(){appl = MidiFactory.MakeApplImp();}
-	
+		public MidiAppl() {}
+		
+		/* WARNING : this method must not :
+			- be declared private since MidiNativeAppl could not overwrite it
+			- be declared protected otherwise a derived class could overwrite it by error.
+		*/
+		
+		void Init123456789()  // Find an internal name
+		{
+			mode = kPollingMode;
+			appl = new MidiApplPolling();
+		}
+		
 		/**
 		The <b>Open</B> method applied on an previously allocated MidiAppl instance, opens the
 		corresponding MidiShare application, allocates a new Midi filter, and starts a thread 
@@ -146,7 +162,7 @@ public class MidiAppl{
 			if (Midi.Share() == 0) throw new MidiException ("MidiShare not installed");
 			
 			if (refnum == -1) {
-					
+			
 				if ((refnum = Midi.Open(name)) < 0) {
 					System.out.println (name);
 					System.out.println (refnum);
@@ -155,7 +171,10 @@ public class MidiAppl{
 
 	    		if ((filter = Midi.NewFilter()) == 0) throw new MidiException ("Filter allocation error");
 	    		
-	    		if (ApplOpen(refnum) == 0) throw new MidiException ("Allocation error");
+	    		// Initialise calling mode
+	    		Init123456789(); 
+	    		
+	    		if (ApplOpen(refnum,mode) == 0) throw new MidiException ("Allocation error");
 
 	     		for (i = 0 ; i<256; i++) {
 	                Midi.AcceptPort(filter, i, 1);
@@ -165,9 +184,9 @@ public class MidiAppl{
 	            for (i = 0 ; i<16; i++) { Midi.AcceptChan(filter, i, 1); }
 	            
 	   			Midi.SetFilter(refnum, filter);
+	   			
 	   			appl.Open(this);
-				
-	    	}
+		  	}
 		}
 		
 		
@@ -190,7 +209,7 @@ public class MidiAppl{
 				refnum = -1; 
 			}
 			
-		 	appl.Close();
+		 	if (appl != null) appl.Close();
 		}
 		
 		
@@ -223,6 +242,36 @@ public class MidiAppl{
 						
 }
 
+
+
+/**
+This class allows a simpler manipulation of MidiShare applications in Java. 
+A MidiNativeAppl instance is associated to a MidiShare application. Java code for
+Alarms and Tasks is <b> directly called from the native side</b>. 
+Use this class with caution  : since Java code is called from a native real-time thread, 
+it has to be fast otherwise the application may ruin real-time preformances of the machine.
+*/
+public class MidiNativeAppl extends MidiAppl{
+
+		/**
+ 		* Constructor.
+		*/
+		public MidiNativeAppl() {}
+	
+		/* WARNING : this method must not :
+			- be declared private since MidiNativeAppl could not overwrite it
+			- be declared protected otherwise a derived class could overwrite it by error.
+		*/
+	
+		void Init123456789() 
+		{
+			mode = kNativeMode;
+			appl = new MidiApplNative();
+		}
+		
+}
+
+
 /**
  Internal use
 */
@@ -235,11 +284,11 @@ class MidiApplImpl{
 /**
  Internal use
 */
-final class MidiApplDirect extends MidiApplImpl {}
+final class MidiApplNative extends MidiApplImpl {}
 
 
 /**
- Internal use
+ Internal use : polling class
 */
 final class MidiApplPolling extends MidiApplImpl {
 
@@ -286,26 +335,3 @@ final class MidiPollingThread extends Thread{
  }
  
  
-/**
- Internal use : create the correct MidiApplImpl object for the running JVM
- MidiApplImpl can use polling or direct Java code call.
-*/
-
-
-final class MidiFactory {
-
-	final static Properties machine;
-
-	static final MidiApplImpl MakeApplImp()
-	{
-		if (machine.getProperty("os.name").equals("Mac OS")){
-			return new MidiApplPolling();
-		}else{
-			return new MidiApplDirect();
-		}
-	}
-
-	static {
-		machine = System.getProperties();
-	}
-}

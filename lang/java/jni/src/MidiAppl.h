@@ -13,7 +13,7 @@ extern "C" {
  * Signature: (I)I
  */
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     grame_midishare_MidiAppl
@@ -29,7 +29,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
  * Signature: (Lgrame/midishare/MidiTask;IILgrame/midishare/MidiAppl;)I
  */
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
-	(JNIEnv *, jobject, jobject, jint, jint);
+	(JNIEnv *, jobject, jobject, jint, jint, jint);
 
 
 #ifdef __cplusplus

@@ -66,8 +66,12 @@
 #include "MidiAppl.h"
 #include <stdlib.h>
 
-#define typeTask 19
-#define typeAlarm 20
+#define typeTask 	19
+#define typeAlarm 	20
+
+#define kPollingMode 	0
+#define kNativeMode 	1
+
 
 /*--------------------------------------------------------------------------*/
 typedef struct ApplContext {
@@ -154,13 +158,13 @@ static void MSALARMAPI ReceiveAlarm( short ref)
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
-  (JNIEnv * env , jobject obj, jint ref) {
+  (JNIEnv * env , jobject obj, jint ref , jint mode) {
   
         ApplContext* context;
         jclass cls;
         jsize size;
         int res;
-    
+        
         context = (ApplContext*) malloc(sizeof(ApplContext));
         if (!context) goto error;        
         
@@ -172,7 +176,9 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
         context->fMid = (*env)->GetMethodID(env, context->fClass, "MidiEventLoop", "()V");
         context->fObj = (*env)->NewGlobalRef(env,obj);
         context->fAttached = false;
-        context->fEnv = 0;
+        
+        // Keep the calling env to be able to use DeleteGlobalRef if the real-time thread env is not captured
+        if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fEnv, NULL) != 0) goto error;
          
         MidiSetInfo(ref,context);
         
@@ -184,10 +190,17 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
      	UPPJApplAlarmPtr =  ApplAlarm;
         UPPJRcvAlarmPtr =  ReceiveAlarm ;
     #endif 
-
+    
+        // Configure calling mode
+        switch (mode) {
+            case kNativeMode:
+                MidiSetRcvAlarm(ref,UPPJRcvAlarmPtr);
+                break;
+             case kPollingMode:
+                break;
+        }
+       
         MidiSetApplAlarm(ref,UPPJApplAlarmPtr);
-        MidiSetRcvAlarm(ref,UPPJRcvAlarmPtr);
- 
         return 1;
        
   error :
@@ -201,7 +214,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
   (JNIEnv * env, jobject obj, jint ref) 
 {
         ApplContext* context = MidiGetInfo(ref);
-
+        
         if (context) {
             (*context->fEnv)->DeleteGlobalRef(context->fEnv, context->fClass);
             (*context->fEnv)->DeleteGlobalRef(context->fEnv, context->fObj);
@@ -216,7 +229,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
-	(JNIEnv * env, jobject appl, jobject task, jint date, jint ref)
+	(JNIEnv * env, jobject appl, jobject task, jint date, jint ref, jint mode)
 {
         jclass cls;
         jfieldID taskptr;
@@ -225,7 +238,17 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
         #if defined (__Macintosh__) && defined(__MacOS9__)
             taskev = MidiDTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
         #else
-            taskev = MidiTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
+        
+        // Configure calling mode
+        switch (mode) {
+            case kNativeMode:
+                taskev = MidiTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
+                break;
+            case kPollingMode:
+                taskev = MidiDTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
+                break;
+        }
+            
         #endif
         
         cls = (*env)->GetObjectClass(env, task);
