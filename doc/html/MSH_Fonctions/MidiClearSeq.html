@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiClearSeq</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiClearSeq</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Frees the content of a sequence. <A HREF="../MSH_Fonctions/MidiClearSeq.html" TARGET="Page">MidiClearSeq</A> de-allocates all the events of the given sequence, consequently  this sequence becomes empty.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiClearSeq.html" TARGET="Page">MidiClearSeq</A> (<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> s);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>s </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>,is a pointer on a sequence whose events are to be freed.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Suppress all but the first event of a sequence.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void ClearAllButFirst (<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> s)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    
+    if (s &amp;&amp; First(s))            <I><FONT COLOR="#0000AF">/* Check a non empty sequence */</FONT></I>
+    {
+        e = <A HREF="../MSH_Fonctions/MidiCopyEv.html" TARGET="Page">MidiCopyEv</A>(First(s));<I><FONT COLOR="#0000AF">/* make a copy of the first event */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiClearSeq.html" TARGET="Page">MidiClearSeq</A>(s);    <I><FONT COLOR="#0000AF">/* clear the content of the sequence  */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A>(s, e);    <I><FONT COLOR="#0000AF">/* add the event to the empty sequence */</FONT></I>
+    }
+}
+        
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>a sequence consist of a header of 4 pointers. The first one points to the first event of the sequence. The second one points to the last event. The other two pointers are reserved for future extensions and must be NIL. In an empty sequence, the pointers to the first and last events are NIL.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

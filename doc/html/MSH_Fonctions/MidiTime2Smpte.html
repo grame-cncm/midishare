@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiTime2Smpte</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiTime2Smpte</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Convert a time in millisecond to an SMPTE location.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void <A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A> (long time, short format, <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">SmpteLocPtr</A> loc);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>time </CODE>
+	<DD>a 32-bits time in milliseconds to convert in an SMPTE location.
+<DT><CODE>format </CODE>
+	<DD>a 16-bits integer, the SMPTE format to be used : (0 : 24 f/s, 1 : 25 f/s, 2 : 30DF f/s, 3 : 30 f/s).
+<DT><CODE>loc </CODE>
+	<DD>a pointer to a <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A> record to be filled with the resulting SMPTE location.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Gives the SMPTE start location of the tape.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>     myInfo;
+<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>    myLoc;
+
+<A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>(&amp;myInfo);
+<A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A>( <A HREF="../MSH_Fonctions/MidiInt2ExtTime.html" TARGET="Page">MidiInt2ExtTime</A>(myInfo.syncStart), myInfo.syncFormat, &amp;myLoc);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

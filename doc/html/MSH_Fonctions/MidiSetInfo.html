@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetInfo</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetInfo</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Defines the global information area of an application. The Macintosh desk accessories cannot have global variables. To make up for this drawback, the <A HREF="../MSH_Fonctions/MidiSetInfo.html" TARGET="Page">MidiSetInfo</A> routine allows each application to define a data area. This area remains accessible by <A HREF="../MSH_Fonctions/MidiGetInfo.html" TARGET="Page">MidiGetInfo</A> function, even during the alarm, and also serves as a global context to desk accessories.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSetInfo.html" TARGET="Page">MidiSetInfo</A>( short refNum, void* infoZone );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>infoZone     </CODE>
+	<DD>an arbitrary 32-bit value, generally a pointer or a handle. 
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Example to be supplied.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,49 @@
+<HTML>
+<HEAD>
+   <TITLE>typeKeySign  (code 147)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeKeySign  (code 147)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A Key Signature event (form the Midi File 1.0 specification). This event cannot be sent to external Midi devices. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P><A HREF="../MSH_Fonctions/typeKeySign.html" TARGET="Page">typeKeySign</A> events have 2 fields :</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+<DT><CODE>0</CODE>
+	<DD>from -7 (7 flats) to 7 (7 sharps), (8-bits field)
+<DT><CODE>1</CODE>
+	<DD>form 0 (major key) to 1 (minor key), (8-bits field)
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a Key Signature event and returns a pointer to the event or NIL if there is no more memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> KeySign (long date, long sharpflats, long minor)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeKeySign.html" TARGET="Page">typeKeySign</A>))    <I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;                    
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 0, sharpflats);
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 1, minor);
+    }
+    return e;
+}
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetPortState</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetPortState</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the Midi port state. The switching on or off of Midi ports is controlled by the <A HREF="../MSH_Fonctions/MidiSetPortState.html" TARGET="Page">MidiSetPortState</A> and <A HREF="../MSH_Fonctions/MidiGetPortState.html" TARGET="Page">MidiGetPortState</A> routines. These must be used with care since they affect all the applications.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal Boolean    <A HREF="../MSH_Fonctions/MidiGetPortState.html" TARGET="Page">MidiGetPortState</A>(short port);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>port </CODE>
+	<DD>a port number from 0 to 255.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is true if the port is open or false if the port is closed.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print the state of all the Midi ports.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintPortsState(void)
+{
+    short i;
+    
+    printf( "Midi ports state :\n");
+    for( i = 0; i &lt; 256; ++i )
+    {
+        if ( <A HREF="../MSH_Fonctions/MidiGetPortState.html" TARGET="Page">MidiGetPortState</A>( i ) )
+            printf(" %i is open \n", i );
+        else
+            printf(" %i is closed \n", i );
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>On the Atari, there is just one Midi port (port 0), and on the Macintosh there are just two ports (port modem: 0, port printer: 1). But the future LAN version of MidiShare will allow up to 256 ports to be used. Therefore, applications must consider that 256 ports are available.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,30 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSEXPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSEXPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>An extension cell for variable length events like <A HREF="../MSH_Fonctions/typeSysEx.html" TARGET="Page">typeSysEx</A>.
+<P> 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct TMidiSEX *<A HREF="../MSH_Fonctions/MidiSEXPtr.html" TARGET="Page">MidiSEXPtr</A>;    
+typedef struct TMidiSEX
+{
+    <A HREF="../MSH_Fonctions/MidiSEXPtr.html" TARGET="Page">MidiSEXPtr</A> link;    <I><FONT COLOR="#0000AF">// link to next cell                </FONT></I>
+    Byte data[12];      <I><FONT COLOR="#0000AF">// 12 data bytes                    </FONT></I>
+} TMidiSEX;                        
+
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,69 @@
+<HTML>
+<HEAD>
+   <TITLE>typeLyric  (code 139)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeLyric  (code 139)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A lyric event (from the Midi File 1.0 specification). This event cannot be sent to external Midi devices.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P><A HREF="../MSH_Fonctions/typeLyric.html" TARGET="Page">typeLyric</A> events have a variable number of character fields. </P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a <A HREF="../MSH_Fonctions/typeLyric.html" TARGET="Page">typeLyric</A> event from a character string and returns a pointer to the event or NIL if there is not enough memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> Lyric ( long date, char *s, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    long    c=0;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeLyric.html" TARGET="Page">typeLyric</A>) )        <I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;        <I><FONT COLOR="#0000AF">/* These information are common to all */</FONT></I>
+        Chan(e) = chan;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+        Port(e) = port;
+        for (c=0; *s; s++, c++) <I><FONT COLOR="#0000AF">/* Build the event while counting the */</FONT></I>
+            <A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A>(e ,*s);<I><FONT COLOR="#0000AF">/* characters of the original string */</FONT></I>
+        if (c != <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e)) {    <I><FONT COLOR="#0000AF">/* Check the length of the event*/</FONT></I>
+            <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A>(e);    <I><FONT COLOR="#0000AF">/* if we run out of memory : free the */</FONT></I>
+            return 0;        <I><FONT COLOR="#0000AF">/* event and return NIL */</FONT></I>
+        }
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Convert a <A HREF="../MSH_Fonctions/typeLyric.html" TARGET="Page">typeLyric</A> event into a character string. Assume s big enough.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void GetText (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e, char *s)
+{
+    short c=0, i=0;
+    
+    c = <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e);
+    while (i&lt;c) *s++ = <A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A>(e, i++);
+    *s = 0;
+}
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

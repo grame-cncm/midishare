@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiAddSeq</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiAddSeq</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Inserts an event in to a sequence while maintaining the dates in time order. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A> (<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> s, <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>s </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>, it is a pointer to the sequence to be modified. 
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, it is a pointer  to the event to be added.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a sequence of 10 midi clock every 250 ms.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>    s;
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+long    d;
+
+s = <A HREF="../MSH_Fonctions/MidiNewSeq.html" TARGET="Page">MidiNewSeq</A>();
+for (d=0; d&lt; 2500; d+=250) 
+{
+    e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A> (<A HREF="../MSH_Fonctions/typeClock.html" TARGET="Page">typeClock</A>);
+    Date(e) = d;
+    <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A> (s, e);
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>if you are concerned about  application speed, you must realise that sequences are single linked lists of time ordered events, so it takes more time for <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A> to insert an event in the middle of a sequence than at either at the beginning or the end.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

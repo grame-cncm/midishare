@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetPortState</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetPortState</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>For opening and closing of a Midi port. The implementation of Midi ports is controlled by the <A HREF="../MSH_Fonctions/MidiSetPortState.html" TARGET="Page">MidiSetPortState</A> and <A HREF="../MSH_Fonctions/MidiGetPortState.html" TARGET="Page">MidiGetPortState</A> routines. These must be used with care since they affect all the applications. A closed port is available for other uses (printing, AppleTalk, etc.). The Midi applications holding a "context alarm" will be informed of this change in the ports state.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSetPortState.html" TARGET="Page">MidiSetPortState</A>( short port, Boolean state );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>port </CODE>
+	<DD>a 16-bit integer, the port number to control.
+<DT><CODE>state </CODE>
+	<DD>a Boolean, True : to open a port, False : to close a port.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Open port 0.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSetPortState.html" TARGET="Page">MidiSetPortState</A>(0, 1);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

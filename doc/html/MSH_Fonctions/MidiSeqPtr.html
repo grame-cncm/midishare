@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSeqPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSeqPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A sequence of time ordered events (see <A HREF="../MSH_Fonctions/MidiNewSeq.html" TARGET="Page">MidiNewSeq</A>, <A HREF="../MSH_Fonctions/MidiFreeSeq.html" TARGET="Page">MidiFreeSeq</A>, <A HREF="../MSH_Fonctions/MidiClearSeq.html" TARGET="Page">MidiClearSeq</A>, <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A>, <A HREF="../MSH_Fonctions/MidiApplySeq.html" TARGET="Page">MidiApplySeq</A>).
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">TMidiSeq</A> *<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>;    
+typedef struct <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">TMidiSeq</A>
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> first;      <I><FONT COLOR="#0000AF">// pointer to the first event of the sequence                 </FONT></I>
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> last;       <I><FONT COLOR="#0000AF">// pointer to the last event of the sequence                 </FONT></I>
+    Ptr undef1;
+    Ptr undef2;
+} <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">TMidiSeq</A>;
+    
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/macrodef.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Macros for accessing a sequence.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+#define FirstEv(e) ( (e)-&gt;first )
+#define LastEv(e)  ( (e)-&gt;last )
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

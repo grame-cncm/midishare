@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+   <TITLE>ApplAlarmPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>ApplAlarmPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A context alarm, a user defined callback installed with <A HREF="../MSH_Fonctions/MidiSetApplAlarm.html" TARGET="Page">MidiSetApplAlarm</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+typedef pascal void (* <A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A>)( short refNum, long code );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>code     </CODE>
+	<DD>a 32-bit integer, the context modification code : 0xRRRRMMMM where RRRR is the Reference number of the involved application and MMMM the type of change (see <A HREF="../MSH_Fonctions/MidiChangeCodes.html" TARGET="Page">MidiChangeCodes</A>). 
+
+</DL></BLOCKQUOTE>
+</BODY></HTML>

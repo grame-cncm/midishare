@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetField</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetField</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the index field value of an event. Field index start from 0. Depending of the event type and field nature, the field format can be 8, 16 or 32-bit. <A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A> deals with all the format conversion and the result is always a 32-bit integer.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e, long f);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, it is a pointer to the event to be accessed. 
+<DT><CODE>f </CODE>
+	<DD>a 32-bit integer, it is the field number to be read (numbered from 0).
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 32-bit integer, the value of the field. Fields are considered as unsigned. 
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>An universal method for printing of a MidiShare event.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintEv(<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e)
+{
+    long i, n;
+
+    n = <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e);
+    printf( "Event %x content :\n", e );
+    printf( " link : %x\n", Link(e) );
+    printf( " date : %i\n", Date(e) );
+    printf( " type : %i\n", EvType(e) );
+    printf( "  ref : %i\n", RefNum(e) );
+    printf( " port : %i\n", Port(e) );
+    printf( " chan : %i\n", Chan(e) );
+    printf( " %i fields ( ", n );
+    for(i=0; i&lt;n; ++i) printf("%i ",<A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A>(e,i) );
+    printf( ")\n" );
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>pitch (8-bit), velocity (8-bit) and duration (16-bit)). Some others, like system exclusives have a variable number of fields.</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+</DL></BLOCKQUOTE>
+</BODY></HTML>

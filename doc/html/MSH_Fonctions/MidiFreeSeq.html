@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFreeSeq</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFreeSeq</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Frees a sequence and its content. <A HREF="../MSH_Fonctions/MidiFreeSeq.html" TARGET="Page">MidiFreeSeq</A> first de-allocates all the events of the given sequence and then the sequence header itself.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiFreeSeq.html" TARGET="Page">MidiFreeSeq</A> (<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> s);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>s </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>, is a pointer on a sequence to be freed.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Frees a previously allocated sequence s.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>    s;
+
+s = <A HREF="../MSH_Fonctions/MidiNewSeq.html" TARGET="Page">MidiNewSeq</A>();
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiFreeSeq.html" TARGET="Page">MidiFreeSeq</A>(s);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>Once freed, s is no  longer a valid pointer.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFreeSpace</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFreeSpace</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Returns the available free MidiShare event space. <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A> allows to know at any time the number of cells remaining available from the MidiShare memory manager.  
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A>(void);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<BLOCKQUOTE><I>none</I></BLOCKQUOTE>
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 32-bit integer, the number of available free cells in the MidiShare memory manager.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print informations about MidiShare memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintMemInfo(void)
+{
+    printf("MidiShare memory :\n");
+    printf(" free space  : %i cells\n", <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A>());
+    printf(" used space  : %i cells\n", <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A>() - <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A>());
+    printf(" total space : %i cells\n", <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A>());
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I><A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A> inhibits all interrupts during its execution. If the remaining space is very large <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A> can take a long time to execute and may cause overrun errors with fast incoming Midi data.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiExt2IntTime</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiExt2IntTime</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Converts an external time in millisecond to the value of an internal time. The convertion is made by subtracting the current offset between internal and external time.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long <A HREF="../MSH_Fonctions/MidiExt2IntTime.html" TARGET="Page">MidiExt2IntTime</A>(long time)
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>time </CODE>
+	<DD>a 32-bits time in milliseconds.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+the corresponding internal time, a 32-bits value in milliseconds.
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>When MidiShare is locked we have the following equivalence : </I>
+<BLOCKQUOTE><I>
+
+<P><CODE>    <A HREF="../MSH_Fonctions/MidiExt2IntTime.html" TARGET="Page">MidiExt2IntTime</A>( <A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A>() ) == <A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>();</P></CODE>
+<P>We have also : </P>
+<P><CODE>    <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A> myInfo;</P></CODE>
+<P><CODE>    <A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>(&amp;myInfo);</P></CODE>
+<P><CODE>    <A HREF="../MSH_Fonctions/MidiExt2IntTime.html" TARGET="Page">MidiExt2IntTime</A>(x) == x - myInfo.syncOffset;</P></CODE>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+   <TITLE>FilterPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>FilterPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A filter can be used to specify the events accepted by an application (see <A HREF="../MSH_Fonctions/MidiSetFilter.html" TARGET="Page">MidiSetFilter</A> and <A HREF="../MSH_Fonctions/MidiGetFilter.html" TARGET="Page">MidiGetFilter</A>). For an event to be accepted, the corresponding bits of its port, type and channel must be set to 1 in the filter.
+<P> 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct <A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">TFilter</A> *<A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">FilterPtr</A>;
+typedef struct <A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">TFilter</A>
+{
+    char port[32];                   <I><FONT COLOR="#0000AF">// 256 bits : 1 = port accepted, 0 = port rejected    </FONT></I>
+    char evType[32];                 <I><FONT COLOR="#0000AF">// 256 bits : 1 = type accepted, 0 = type rejected</FONT></I>
+    char channel[2];                 <I><FONT COLOR="#0000AF">//  16 bits : 1 = channel accepted, 0 = channel rejected    </FONT></I>
+    char unused[2];                  <I><FONT COLOR="#0000AF">//  16 bits </FONT></I>
+} <A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">TFilter</A>; 
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/macrodef.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Macros for accessing filter bits.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+#define AcceptBit(a,n)     ( ((char*) (a))[(n)&gt;&gt;3] |=   (1&lt;&lt;((n)&amp;7)) )
+#define RejectBit(a,n)     ( ((char*) (a))[(n)&gt;&gt;3] &amp;=  ~(1&lt;&lt;((n)&amp;7)) )
+#define InvertBit(a,n)     ( ((char*) (a))[(n)&gt;&gt;3] ^=   (1&lt;&lt;((n)&amp;7)) )
+#define IsAcceptedBit(a,n) ( ((char*) (a))[(n)&gt;&gt;3]  &amp;   (1&lt;&lt;((n)&amp;7)) )
+
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

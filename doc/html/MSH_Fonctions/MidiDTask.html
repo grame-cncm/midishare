@@ -1,0 +1,84 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiDTask</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiDTask</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>As  with <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>,  <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A> allows an application to initiate a time delayed function call, but unlike <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>, the call is not achieved under interruption as soon as falling time is due. The address of the routine to be executed and the corresponding arguments are stored in a special buffer. The application can then process these waiting tasks, one by one, using to <A HREF="../MSH_Fonctions/MidiExec1DTask.html" TARGET="Page">MidiExec1DTask</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A> (ProcPtr MyProc, long date, short refNum, long a1, long a2, long a3);
+
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>MyProc     </CODE>
+	<DD>is the address of the function to be called.
+<DT><CODE>date         </CODE>
+	<DD>a 32-bit integer, it is the date at which this call is scheduled. 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3     </CODE>
+	<DD>are 32-bit integers left at the user’s disposal, as arguments to MyProc.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result, a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, is a pointer to a <A HREF="../MSH_Fonctions/typeDProcess.html" TARGET="Page">typeDProcess</A> MidiShare event. The result is NIL if MidiShare runs out of memory.
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyProc (long date,short refNum,long a1,long a2, long a3);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>date         </CODE>
+	<DD>a 32-bit integer, it is the date of the call . 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3     </CODE>
+	<DD>are 32-bit integers that can be freely used.
+
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Schedule Action() procedure call 1000 ms ahead.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    myDTask;
+MyDTask = <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A>(Action,<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>()+1000,myRefNum, a1, a2, a3);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>The result, in myDTask, can be used to test the success of <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A>. It can also be used by <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> to try to "forget" a scheduled task before it happens.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+   <TITLE>SyncInfoPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>SyncInfoPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Record describing the SMPTE synchronisation state of MidiShare (see <A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>).
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A> *<A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">SyncInfoPtr</A>;
+typedef struct <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>
+{
+    long        time;           <I><FONT COLOR="#0000AF">// the current MidiShare date (in milliseconds)</FONT></I>
+    long        reenter;        <I><FONT COLOR="#0000AF">// the current reentrancy count of the interrupt handler</FONT></I>
+    unsigned short syncMode;    <I><FONT COLOR="#0000AF">// the current synchronisation mode as defined by <A HREF="../MSH_Fonctions/MidiSetSyncMode.html" TARGET="Page">MidiSetSyncMode</A></FONT></I>
+    Byte        syncLocked;     <I><FONT COLOR="#0000AF">// the current synchronisation state (0 : unlocked, 1 : locked)</FONT></I>
+    Byte        syncPort;       <I><FONT COLOR="#0000AF">// the current synchronisation port</FONT></I>
+    long        syncStart;      <I><FONT COLOR="#0000AF">// the date MidiShare started beeing locked to external sync (in ms)</FONT></I>
+    long        syncStop;       <I><FONT COLOR="#0000AF">// the date MidiShare stopped being locked to external sync (in ms)</FONT></I>
+    long        syncOffset;     <I><FONT COLOR="#0000AF">// the current offset (<A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A>() - <A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>(), in ms)</FONT></I>
+    long        syncSpeed;      <I><FONT COLOR="#0000AF">// the current value for the timer (implementation dependent)</FONT></I>
+    long        syncBreaks;     <I><FONT COLOR="#0000AF">// the current count of breaks (transition from state locked to unlocked)</FONT></I>
+    short       syncFormat;     <I><FONT COLOR="#0000AF">// the current synchronisation format (0 : 24 f/s, 1 : 25 f/s, 2 : 30DF f/s, 3 : 30 f/s)</FONT></I>
+} <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>; 
+
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetNamedAppl</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetNamedAppl</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Returns the reference number of an application. Knowing an application name, it is possible to find its reference number using the <A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A> function. It is also possible to find the name of an application via its reference number using the <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A> function.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal short    <A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A> (<A HREF="../MSH_Fonctions/MidiName.html" TARGET="Page">MidiName</A> name);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>name </CODE>
+	<DD>the application name.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is the reference number of the application.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Find the reference number of the "MidiShare" pseudo-application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+short    r;
+
+r = <A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A>("MidiShare");<I><FONT COLOR="#0000AF">/* MidiShare reference is always 0 */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, in C, all strings passed as arguments of a MidiShare function must be Pascal strings. In the previous example, one must write : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE><A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A>("\pMidiShare");</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

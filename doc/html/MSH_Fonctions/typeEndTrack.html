@@ -1,0 +1,44 @@
+<HTML>
+<HEAD>
+   <TITLE>typeEndTrack  (code 143)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeEndTrack  (code 143)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>An end of track event (from the Midi File 1.0 specification). This event cannot be sent to external Midi devices.
+
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P><A HREF="../MSH_Fonctions/typeEndTrack.html" TARGET="Page">typeEndTrack</A>  events have no field. </P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a <A HREF="../MSH_Fonctions/typeEndTrack.html" TARGET="Page">typeEndTrack</A>  event. Return a pointer to the event or NIL if there is not enough memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> EndTrack ( long date )
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeEndTrack.html" TARGET="Page">typeEndTrack</A>))    <I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;                    
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

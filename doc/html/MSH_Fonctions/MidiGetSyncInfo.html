@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetSyncInfo</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetSyncInfo</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Fills a <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A> record with information about the current state of the MTC synchronisation.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void <A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A> (<A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">SyncInfoPtr</A> p);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>p</CODE>
+	<DD>a <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">SyncInfoPtr</A>, a pointer to a <A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A> record.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Gives the SMPTE start location of the tape.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>     myInfo;
+<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>    myLoc;
+<A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>(&amp;myInfo);
+<A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A>( <A HREF="../MSH_Fonctions/MidiInt2ExtTime.html" TARGET="Page">MidiInt2ExtTime</A>(myInfo.syncStart), myInfo.syncFormat, &amp;myLoc);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

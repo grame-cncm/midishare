@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetRcvAlarm</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetRcvAlarm</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the address of  a reception alarm of an application. The reception alarm informs of the presence of  these new events in the reception FIFO. This alarm is always called under interruption. Therefore, it must not make use, either directly or indirectly, the Macintosh Memory Manager. However it can have a free access to all the MidiShare functions (except <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A> and <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>). It can also use the global variables of the application, because, before the call, MidiShare restores the global context register of the application. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/RcvAlarmPtr.html" TARGET="Page">RcvAlarmPtr</A> <A HREF="../MSH_Fonctions/MidiGetRcvAlarm.html" TARGET="Page">MidiGetRcvAlarm</A>(short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result, a <A HREF="../MSH_Fonctions/RcvAlarmPtr.html" TARGET="Page">RcvAlarmPtr</A>, it is the address of the receive alarm routine or NIL if no such routine where installed. 
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyRcvAlarm (short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Temporarily disable the application receive alarm.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/RcvAlarmPtr.html" TARGET="Page">RcvAlarmPtr</A> p;
+
+<I><FONT COLOR="#0000AF">/*.....*/</FONT></I>
+
+p = <A HREF="../MSH_Fonctions/MidiGetRcvAlarm.html" TARGET="Page">MidiGetRcvAlarm</A>( myRefNum );
+<A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>( NIL );        <I><FONT COLOR="#0000AF">/* Disable application receive alarm */</FONT></I>
+
+<I><FONT COLOR="#0000AF">/*.....*/</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>( p );        <I><FONT COLOR="#0000AF">/* Restaure application receive alarm */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

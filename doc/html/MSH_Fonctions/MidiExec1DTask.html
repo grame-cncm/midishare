@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiExec1DTask</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiExec1DTask</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Processes the first time delayed task on wait in the applications queue. The time delayed tasks scheduled by <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A> are not processed at a given time, but instead must be called using <A HREF="../MSH_Fonctions/MidiExec1DTask.html" TARGET="Page">MidiExec1DTask</A> which executes the first task in its queue.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiExec1DTask.html" TARGET="Page">MidiExec1DTask</A> (short refnum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Execute the waiting DTasks of a MidiShare application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void ExecuteAllDTasks(short refNum)
+{
+    long    n;
+
+    for (n=<A HREF="../MSH_Fonctions/MidiCountDTasks.html" TARGET="Page">MidiCountDTasks</A>(refNum), n&gt;0; n—)
+    {
+        <A HREF="../MSH_Fonctions/MidiExec1DTask.html" TARGET="Page">MidiExec1DTask</A>(refNum);
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>Generally this function is called from within an applications 'main' function, and as this is not under interruption it is possible to perform operating system calls.</I>
+<BLOCKQUOTE><I>
+
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

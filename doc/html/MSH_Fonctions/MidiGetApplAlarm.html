@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetApplAlarm</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetApplAlarm</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Returns the context alarm of an application. <A HREF="../MSH_Fonctions/MidiGetApplAlarm.html" TARGET="Page">MidiGetApplAlarm</A> allows to know the address of the context alarm function associated to the application. This alarm is automatically called by MidiShare to inform the application of all the changes that happen  to the active Midi applications (name or connection changes, closing, opening, etc.)
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal  <A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A>    <A HREF="../MSH_Fonctions/MidiGetApplAlarm.html" TARGET="Page">MidiGetApplAlarm</A>(short refNum);
+    
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum  </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application. 
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result, a <A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A>, is the address of the alarm routine or NIL if no such routine was installed.
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void MyApplAlarm (short refNum, long code);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum  </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>code     </CODE>
+	<DD>a 32-bit integer, the context modification code. 
+
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Temporarily disables the applications context alarm.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A> p;
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+p = <A HREF="../MSH_Fonctions/MidiGetApplAlarm.html" TARGET="Page">MidiGetApplAlarm</A>( myRefNum );
+<A HREF="../MSH_Fonctions/MidiSetApplAlarm.html" TARGET="Page">MidiSetApplAlarm</A>( myRefNum, NIL );            <I><FONT COLOR="#0000AF">/* Disable application context alarm*/</FONT></I>
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiSetApplAlarm.html" TARGET="Page">MidiSetApplAlarm</A>( myRefNum, p );            <I><FONT COLOR="#0000AF">/* Restore application context alarm*/</FONT></I>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

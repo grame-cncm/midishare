@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFreeCell</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFreeCell</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Frees a cell allocated by <A HREF="../MSH_Fonctions/MidiNewCell.html" TARGET="Page">MidiNewCell</A> function. This is the lowest level  command for accessing the MidiShare Memory Manager. One must be sure to use <A HREF="../MSH_Fonctions/MidiFreeCell.html" TARGET="Page">MidiFreeCell</A> on an individual cell allocated with <A HREF="../MSH_Fonctions/MidiNewCell.html" TARGET="Page">MidiNewCell</A> and not on complete MidiShare events. Not doing so may result in the lose of cells.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiFreeCell.html" TARGET="Page">MidiFreeCell</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> c);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>c </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, a pointer to a basic cell of 16 bytes.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Free a cell previously allocated.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    aCell;
+
+aCell = <A HREF="../MSH_Fonctions/MidiNewCell.html" TARGET="Page">MidiNewCell</A>();
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiFreeCell.html" TARGET="Page">MidiFreeCell</A>( aCell );
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>Cells allocated with <A HREF="../MSH_Fonctions/MidiNewCell.html" TARGET="Page">MidiNewCell</A> must be freed with <A HREF="../MSH_Fonctions/MidiFreeCell.html" TARGET="Page">MidiFreeCell</A> and not with <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A>.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,834 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>MidiShare Kernel Development Guide</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P>&nbsp;</P>
+
+<H1><A NAME="RTFToC1"></A>1. Introduction</H1>
+
+<P>MidiShare is a real-time multi-tasks MIDI operating system
+specially devised for the development of musical applications.
+MidiShare provides high level services to the field of computer
+music and MIDI applications. It is freely available to users and
+developers. MidiShare exists since 1989 and several releases have
+been developped for various platforms : Macintosh, Atari, Windows
+3.1, Windows 95, Windows 32 bits thunk release. Embedded versions
+have also been developped.</P>
+
+<P>The MidiShare source code is publicly available under the <A
+HREF="http://www.gnu.org/copyleft/lgpl.html">GNU Library General
+Public License</A>. You should have received a copy of this license
+along with the MidiShare source code; if not, write to the <A
+HREF="http://www.fsf.org/">Free Software Foundation</A>, Inc.,
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.</P>
+
+<P>This manual is intended for developers who wish to contribute
+to the MidiShare kernel development. It contains a complete description
+of the kernel architecture and of the related source code. A special
+attention is given to the portability issues.</P>
+
+<P>For more information concerning the MidiShare functions and
+the MidiShare applications development issues, you should refer
+to the MidiShare documentation, available at the MidiShare ftp
+sites :<BR>
+<A HREF="ftp://ftp.grame.fr/pub/MidiShare/Documentation/">ftp://ftp.grame.fr/pub/MidiShare/Documentation/</A><BR>
+or <BR>
+<A HREF="ftp://putney.music.uiowa.edu/pub/MidiShare/Documentation/">ftp://putney.music.uiowa.edu/pub/MidiShare/Documentation/</A></P>
+
+<P>Special MidiShare mailing lists exist for both MidiShare applications
+and kernel development:</P>
+
+<UL>
+  <LI>the &quot;<B>midishare-dev</B>&quot; list : for support and
+  discussion about MidiShare compatible applications development.<BR>
+  To subscribe, send the following :<BR>
+  subscribe midishare-dev &lt;your-email-adress&gt;<BR>
+  in the body of a message to <A HREF="mailto:majordomo@rd.grame.fr">majordomo@rd.grame.fr</A>
+  <LI>the &quot;<B>midishare-kernel</B>&quot; list : for support
+  and discussion about MidiShare kernel development, including
+  porting and extension of the kernel.<BR>
+  To subscribe, send the following :<BR>
+  subscribe midishare-kernel&lt;your-email-adress&gt;<BR>
+  in the body of a message to <A HREF="mailto:majordomo@rd.grame.fr">majordomo@rd.grame.fr</A>
+</UL>
+
+<P>If you plan to contribute to the kernel development, you should
+subscribe to the &quot;midishare-kernel&quot; mailing list where
+are discussed all the changes and the development issues. This
+document assumes that you are familiar with the MidiShare Development
+documentation, where are explained all the services provided by
+the kernel to its client applications.</P>
+
+<P>&nbsp;</P>
+
+<H1><A NAME="RTFToC2"></A>2. Kernel Description</H1>
+
+<H2><A NAME="RTFToC3"></A>2.1. General architecture</H2>
+
+<P>MidiShare is based on a client/server model. It is composed
+of six main components : a Memory Manager, a Time Manager, a Task
+Manager, a Communication Manager, a Scheduler and a Ports Manager.</P>
+
+<P>The figure 1 shows the conceptual model of MidiShare :</P>
+
+<UL>
+  <LI>The <I>Scheduler</I> is in charge of delivering scheduled
+  events and tasks at the right date. It allows events to be sent
+  in the future as well as functions to be called in the future.
+  This ability to schedule function calls is a very powerful mechanism
+  which is particularly useful in real-time applications where
+  multiple tasks need to run in parallel with precise timings.
+  The scheduling algorithm used ensures a very low and constant
+  time overhead per event, even when the scheduler is heavily loaded.
+  <LI>The <I>Time Manager</I> maintains the current date of the
+  system. It offers 1ms resolution and supports accurate transparent
+  SMPTE synchronization.
+  <LI>The <I>Communication Manager</I> routes events received from
+  the scheduler to the client applications and ports manager according
+  to the connections set between applications.
+  <LI>The <I>Task Manager</I> is in charge of calling the tasks
+  delivered by the scheduler.
+  <LI>The <I>Memory Manager</I>&nbsp;is specially designed for
+  real-time operations at interrupt level. It provides applications
+  with a convenient and efficient way for storing, copying and
+  deleting MidiShare events without using the host memory manager.
+  <LI>The <I>Ports Manager</I> is in charge of the communications
+  with the drivers. It supports up to 256 ports. It provides the
+  mechanisms to plug the drivers in the kernel at wake up time.
+</UL>
+
+<P><CENTER><IMG SRC="KDG1.gif" ALIGN="BOTTOM" WIDTH="419" HEIGHT="290"
+NATURALSIZEFLAG="3"></CENTER></P>
+
+<P><CENTER>Figure 1 : the conceptual model of MidiShare</CENTER></P>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="RTFToC4"></A>2.2. Changes</H2>
+
+<P>The reorganization of the source code, mainly intended to facilitate
+porting, was the opportunity to introduce some changes in the
+kernel architecture. Non public releases of MidiShare included
+input and output MIDI drivers. The following releases are concerned:</P>
+
+<UL>
+  <LI>MidiShare for the Macintosh up to version 1.68
+  <LI>MidiShare for the Atari up to version 1.68
+  <LI>MidiShare 16 bits for Windows 3.1 up to version 1.57
+  <LI>MidiShare 32 bits for Windows 95 up to version 1.04
+</UL>
+
+<P>In order to facilitate drivers development and to take a better
+account of the different platforms particularities, the drivers
+are now separate components and a new manager, the Ports Manager,
+is part of the kernel architecture. It is in charge of loading
+and plugging these drivers into the kernel.</P>
+
+<P>The Port Manager design is in progress. Therefore, it is not
+present in this distribution of the source code. It is part of
+the first tasks to do to complete the new implementation of the
+kernel. Its design will be discussed on the midishare-kernel mailing
+list.</P>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="RTFToC5"></A>2.3. General operation</H2>
+
+<H3><A NAME="RTFToC6"></A>2.3.1. Waking up MidiShare</H3>
+
+<P>As long as no client application is running, MidiShare is dormant
+and has no effect on the operation of the computer. Following
+the first MidiOpen, MidiShare wakes up and becomes active. It
+should then perform the tasks necessary to come into service.
+These tasks represent:</P>
+
+<UL>
+  <LI>initializing the kernel data structures.
+  <LI>allocating and initializing the MidiShare memory space; both
+  private memory and events memory are concerned.
+  <LI>initializing the Ports Manager.
+  <LI>initializing a task which will be called by interrupt at
+  the MidiShare time resolution rate (should be every millisecond).
+  We'll refer later to this task as the <I>Time Task</I>.
+</UL>
+
+<H3><A NAME="RTFToC7"></A>2.3.2. Putting MidiShare to sleep</H3>
+
+<P>MidiShare returns to its dormant state after the last MidiClose
+is performed. It should then execute the corresponding reverse
+tasks:</P>
+
+<UL>
+  <LI>stopping and releasing the Time Task.
+  <LI>putting the ports Manager to sleep.
+  <LI>releasing the memory space.
+</UL>
+
+<P>After returned to its dormant state, MidiShare should have
+again no effect on the operation of the computer.</P>
+
+<H3><A NAME="RTFToC8"></A>2.3.3. The Time Task</H3>
+
+<P>Most of the MidiShare services are performed by the Time Task.
+Called at the MidiShare time resolution rate, the Time Task is
+in charge of the following:</P>
+
+<UL>
+  <LI>maintaining the date of the system.
+  <LI>calling the Scheduler to perform a one step sorting and to
+  get the ready events.
+  <LI>dispatch the ready events according to their destinations.
+  These destinations are determined by the current connections
+  set. When the destination is a client application, events are
+  stored in its fifo. When the destination is MidiShare itself,
+  events are passed to the Ports Manager.
+  <LI>activating the real-time tasks scheduled by client applications.
+  <LI>activating the real-time receive alarms for the concerned
+  applications ie applications which received a new event in their
+  fifo.
+</UL>
+
+<P>Real-time tasks, receive alarms, inter-applications communication,
+input / output (using MIDI protocol or any other implemented by
+the drivers) are mainly dependent of the Time Task operation.
+As this task should be called every millisecond, a great attention
+must be given to its implementation and especially to its efficiency.</P>
+
+<H3><BR>
+<A NAME="RTFToC9"></A>2.3.4. Events Memory Management</H3>
+
+<P>The MidiShare memory management is based on fixed-sized cells
+(16 bytes) organized into events. The services provided by the
+kernel are widely based on these events: they are used for inter
+application communication, connections set, tasks storage, MIDI
+and MIDIFile data storage... All the events are composed of a
+header cell that may be followed by one or more extension cells.
+Figure 2 describes the different fields forming the common cell
+:</P>
+
+<UL>
+  <LI>the <TT>Link </TT>field is used internally for linking cells.
+  <LI>the Date field contains the falling date of the event (from
+  0 to 2n- 1).
+  <LI>the <TT>refNum </TT>field contains the application reference
+  of the event sender.
+  <LI>the <TT>evType </TT>field contains the type of the event.
+  <LI>the <TT>Port </TT>field contains the destination MIDI port
+  of the event.
+  <LI>the <TT>Chan </TT>field contains the MIDI channel of the
+  event.
+</UL>
+
+<P>These six fields are always present and have always the same
+meaning, whatever the type of the event, and they can be accessed
+directly. The following Info part of an event contains special
+fields who's purpose depends on the event type. In some cases,
+the Info part contains a pointer to one or several extension cells.</P>
+
+<P><CENTER><IMG SRC="KDG2.gif" ALIGN="BOTTOM" WIDTH="81" HEIGHT="81"
+NATURALSIZEFLAG="3"></CENTER></P>
+
+<P><CENTER>Figure 2 : common event structure</CENTER></P>
+
+<P>MIDI messages with 0, 1 or 2 data bytes, use only one cell,
+as shown in figure 2. Their datas are stored in the Info field.</P>
+
+<P>Some events (private events, process or dprocess events) need
+more data storage. An extension cell is allocated and the Info
+field of the main cell points to this extension like shown in
+figure 3.</P>
+
+<P><CENTER><IMG SRC="KDG3.gif" ALIGN="BOTTOM" WIDTH="192" HEIGHT="157"
+NATURALSIZEFLAG="3"></CENTER></P>
+
+<P><CENTER>Figure 3 : 2 cells event structure</CENTER></P>
+
+<P>&nbsp;</P>
+
+<P>Variable length messages like System Exclusive, Stream or some
+MidiFile type messages uses several linked cells to store their
+variable number of fields. Their structure is described on figure
+4. The main cell points to the last extension cell, which points
+to the first extension cell. This structure is intended to provide
+the most efficient way to add datas to a variable length message.
+In particular, it will minimize the operations required to process
+a MIDI System Exclusive stream from input.</P>
+
+<P><CENTER><IMG SRC="KDG4.gif" ALIGN="BOTTOM" WIDTH="357" HEIGHT="332"
+NATURALSIZEFLAG="3"></CENTER></P>
+
+<P><CENTER>Figure 4 : variable length events structure</CENTER></P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<H1><A NAME="RTFToC10"></A>3. Portability issues</H1>
+
+<P>Several low level implementation parts of the kernel are platform
+dependent and generaly concern critical services provided by the
+host operating system. Among them are: installing an interrupt
+service routine, sharing the events memory, switching from the
+MidiShare kernel to a client process and synchronizing the client
+processes. Modern operating systems provides high level functions
+to perform all these tasks but they are generally not suitable
+to operate in a realtime context. In particular, acuracy and efficiency
+issues are critical for a correct operating of the MidiShare kernel.
+Therefore, the implementation problems raised for each point are
+detailed below.</P>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="RTFToC11"></A>3.1. The MidiShare process</H2>
+
+<P>The MidiShare process represents the entity which owns the
+necessary resources for the kernel operations ie memory and interrupt
+service routine. It must ensure of the permanence of these resources
+all along the kernel active period, from wake up time until sleep
+time. The MidiShare process do not necessary refer to a process
+as commonly defined by the operating systems. Its implementation
+is generally dictated by the host operating system and may or
+may not be such a process. One of the design issue is to choose
+the most appropriate system resource for the implementation of
+the MidiShare process. Efficiency and accuracy must be particularly
+taken into account : for example, if the MidiShare process is
+implemented as an operating system process and if the process
+context switching costs are high, the resulting kernel will certainly
+be inefficient as it will have to pay these costs every millisecond.</P>
+
+<P>More generally, the interrupt service routine latency time
+should not exceed 5% of the interrupt periodicity time. In the
+case of MidiShare, it means that serving the interrupt should
+be done in less than 50 usec.</P>
+
+<P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
+BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
+
+<P>The following functions are to provide by any platform dependant
+implementation :</P>
+
+<PRE><FONT COLOR="#990000">void SpecialWakeUp (TMSGlobalPtr g)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>called at wakeup time. If necessary, this function should
+  create the process which will own and manage the kernel critical
+  resources. The argument `g' points to the global MidiShare environment.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void SpecialSleep (TMSGlobalPtr g)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>called at sleep time. If a separate process exists, in charge
+  of the kernel resources, this function should cleanly close and
+  release this process. The argument `g' points to the global MidiShare
+  environment.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void OpenTimeInterrupts (TMSGlobalPtr g)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>this is the last task invoked at wakeup time. This function
+  should activate an interrupt routine called every millisecond.
+  The argument `g' points to the global MidiShare environment.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void CloseTimeInterrupts (TMSGlobalPtr g)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>this is the first task invoked at sleep time. This function
+  should remove the interrupt routine and if necessary, release
+  its associated resources. The argument `g' points to the global
+  MidiShare environment.</P></BLOCKQUOTE>
+
+<H2><A NAME="RTFToC12"></A>3.2. Memory allocation</H2>
+
+<P>Memory is allocated and owned by the MidiShare process. The
+implementation can freely use any way to allocate the kernel internal
+memory. It is different for events and filters memory :</P>
+
+<UL>
+  <LI>events memory must be shared by the MidiShare process and
+  all the client applications : a pointer to a MidiShare event
+  must refer to the same memory location whatever its context of
+  use. It's the responsability of the MidiShare process to allocate
+  such a memory at wake up time.
+  <LI>filters memory must be shared by its application owner and
+  the MidiShare process. It's different from the events memory
+  because a filter is private to one application. Filter memory
+  is allocated by the MidiShare process at application request
+  by the way of the MidiNewFilter function.
+</UL>
+
+<P>The source code clearly separates these services using an allocation
+function which takes as argument the type of the desired memory.</P>
+
+<P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
+BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
+
+<P>The following functions are to provide by any platform dependant
+implementation :</P>
+
+<PRE><FONT COLOR="#990000">FarPtr(void) AllocateMemory (MemoryType type, long size)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>this function should allocates memory according to the desired
+  `type' argument. The `size' argument specifies the desired memory
+  size.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void DisposeMemory (FarPtr(void) memPtr)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>this function should release any memory block previously allocated
+  using `AllocateMemory `. the `memPtr' argument points to the
+  memory block.</P></BLOCKQUOTE>
+
+<P>Memory types are defined as below:</P>
+
+<BLOCKQUOTE>
+  <PRE><FONT COLOR="#990000" SIZE="-1">typedef enum {</FONT>
+<FONT COLOR="#990000" SIZE="-1">   kStdMemory,        /* no constraints on the allocated memory */</FONT>
+<FONT COLOR="#990000" SIZE="-1">                      /* should only be accessed by the calling */</FONT>
+<FONT COLOR="#990000" SIZE="-1">                      /* process */</FONT>
+<FONT COLOR="#990000" SIZE="-1">   kSharedMemory,     /* memory should be shared by the kernel */</FONT>
+<FONT COLOR="#990000" SIZE="-1">                      /* and all the client applications. */</FONT>
+<FONT COLOR="#990000" SIZE="-1">   kernelSharedMemory /* memory should be shared by the kernel */</FONT>
+<FONT COLOR="#990000" SIZE="-1">                      /* and the calling process */</FONT>
+<FONT COLOR="#990000" SIZE="-1">} MemoryType;</FONT></PRE>
+</BLOCKQUOTE>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="RTFToC13"></A>3.3. Tasks and Alarms</H2>
+
+<P>The MidiShare kernel provides realtime tasks and realtime alarms
+to its client applications. Realtime tasks are stored in typeProcess
+events, then inserted in the scheduler and activated at interrupt
+level by the MidiShare process at falling date. Realtime alarms
+are activated at application request in two cases :</P>
+
+<UL>
+  <LI>when a context change occurs: it corresponds to an application
+  alarm, setup using MidiSetApplAlarm, it can be activated at any
+  time, at interrupt or user level.
+  <LI>when news events are stored in the application fifo: it corresponds
+  to a receive alarm, setup using MidiSetRcvAlarm, it will always
+  be activated at interrupt level.
+</UL>
+
+<P>The way used to activate a client task is platform dependent.
+Some operating systems allows the MidiShare process to directly
+call the client code: on the MacOS for example, the application
+context is limited to a register context and can be easily restored
+at no cost, allowing a task to be called by the kernel for an
+application account.</P>
+
+<P>Some other operating systems prevents such mechanisms by keeping
+separate address spaces for each application: this is for example
+the case of Windows 95 where realtime tasks are implemented as
+part of a thread owned by the client application ; activating
+a task consists then in waking up this thread, which raises all
+the problems of acuracy, priority and context switching costs.</P>
+
+<P>As realtime tasks and alarms are among the key services of
+the kernel, their implementation must take a great care of acuracy
+and efficiency. Activation of a client task is defined in the
+implementation interface file.</P>
+
+<P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
+BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
+
+<P>The following functions are to provide by any platform dependant
+implementation :</P>
+
+<PRE><FONT COLOR="#990000">TApplContextPtr CreateApplContext ()</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>called when a MidiShare client opens. This function should
+  provide the information necessary to restore its context at interrupt
+  time.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void DisposeApplContext (TApplContextPtr context)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>called when a MidiShare client quit. If necessary, this function
+  should release the resources allocated to create the application
+  context.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void CallApplAlarm(TApplContextPtr context, ApplAlarmPtr alarm,</FONT>
+<FONT COLOR="#990000">                   short refNum, long alarmCode)</FONT>
+<FONT COLOR="#990000">void CallRcvAlarm (TApplContextPtr context, RcvAlarmPtr alarm,</FONT>
+<FONT COLOR="#990000">                   short refNum)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>these functions should provide a way to activate the corresponding
+  alarms. They receive as arguments the previously created application
+  context and the arguments of the alarm.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void CallTaskCode (TApplContextPtr context, TTaskExtPtr task,</FONT>
+<FONT COLOR="#990000">                   long date, short refNum)</FONT>
+<FONT COLOR="#990000">void CallDTaskCode(TApplContextPtr context, TTaskExtPtr task,</FONT>
+<FONT COLOR="#990000">                   long date, short refNum)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>these functions should provide a way to activate the corresponding
+  tasks. They receive as arguments the previously created application
+  context and part of the arguments of the alarm. User arguments
+  can be accessed using the `task' pointer.</P>
+  <P>Note that `CallDTaskCode' should not provide any particular
+  mechanism to restore the application context: as the function
+  is called by the client application and not at interrupt time,
+  the application context should be already available to the caller.</P></BLOCKQUOTE>
+
+<P>&nbsp;</P>
+
+<H2><A NAME="RTFToC14"></A>3.4. Processes and synchronization</H2>
+
+<P>Concurrent access to critical sections of the MidiShare code
+raises the synchronization problems. Preemptive operating systems
+provides the necessary mechanisms to solve these problems but
+again, these mechanisms are generaly not suitable in a realtime
+context : for example in Windows 95, waiting for a semaphore induce
+priority inversions and results in bad performances from the efficiency
+and acuracy point of view.</P>
+
+<P>The current implementation generaly avoids the use of semaphores
+by the way of lock free shared linked lists. The principle consists
+in trying to modify a shared linked list using the synchronization
+mechanisms generally available with modern micro-processors instructions
+set : for example, the Motorola PowerPC microprocessor family
+allows to put reservations on a memory zone, then, conditionnal
+instructions operates only if the reservation is not altered,
+on the contrary, the program have to loop until success. Such
+mechanisms needs to be implemented using assembly language.</P>
+
+<P>The only semaphore defined by the system is used to synchronize
+the kernel wakeup and sleep tasks. The semaphore is activated
+when a client application call MidiOpen or MidiClose.</P>
+
+<P><IMG SRC="red_car.gif" WIDTH="12" HEIGHT="12" ALIGN="BOTTOM"
+BORDER="0" NATURALSIZEFLAG="3"> <B><FONT COLOR="#000099" SIZE="+1">Implementation</FONT></B></P>
+
+<P>The following functions are to provide by any platform dependant
+implementation :</P>
+
+<P><I>Functions to modify shared linked lists:</I></P>
+
+<PRE><FONT COLOR="#990000">FarPtr(void) PopSync (msListPtr adr)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should pop and return the first element of the list pointed
+  by `adr'</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void PushSync (msListPtr adr, msListPtr link)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should push the `link' element to the list pointed by `adr'</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void PushSyncList (msListPtr adr, msListPtr head, msListPtr tail)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should link the `tail' element to the list pointed by `adr'
+  and store the `head' element at the head of the list.</P></BLOCKQUOTE>
+
+<P><I>Function to exchange a value in memory:</I></P>
+
+<PRE><FONT COLOR="#990000">Boolean CompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo,</FONT>
+<FONT COLOR="#990000">                        FarPtr(void) swapWith)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should compare the `compareTo' argument with the value adressed
+  by `adr'. If equal, the function should swap it with the `swapWith'
+  argument and return true, otherwise, it should do nothing and
+  return false.</P></BLOCKQUOTE>
+
+<P><I>Function to forget a realtime task:</I></P>
+
+<PRE><FONT COLOR="#990000">Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should store a typeDead value into the type field of the `content'
+  argument, clear the event pointed by the `taskPtr' argument and
+  return true in case of success. This function should take account
+  of that it could be interrupted by the the task to forget itself.</P></BLOCKQUOTE>
+
+<P><I>Function for applications fifo management:</I></P>
+
+<PRE><FONT COLOR="#990000">MidiEvPtr ClearFifo (TFifoPtr fifo)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should provide a synchronized way to clear the head and count
+  fields of the `fifo' argument. The fifo tail field should points
+  to the fifo head.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">MidiEvPtr PopFifoEv (TFifoPtr fifo)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should provide a synchronized way to pop an event from the
+  `fifo' argument and to update the fifo count field.</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">void PushFifoEv (TFifoPtr fifo, MidiEvPtr ev)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should provide a synchronized way to push an event to the
+  `fifo' argument and to update the fifo count field.</P></BLOCKQUOTE>
+
+<P><I>Semaphores implementation:</I></P>
+
+<PRE><FONT COLOR="#990000">MutexResCode OpenMutex (MutexRef ref)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should allocate a reservation on the mutex defined by the
+  `ref' argument. Only the kWakeUpMutex constant is currently defined.
+  Other types should be rejected. The returned value is defined
+  as below:</P></BLOCKQUOTE>
+
+<PRE><FONT COLOR="#990000">enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };</FONT></PRE>
+
+<P>&nbsp;</P>
+
+<PRE><FONT COLOR="#990000">MutexResCode CloseMutex (MutexRef ref)</FONT></PRE>
+
+<BLOCKQUOTE>
+  <P>should release a reservation previously allocated using `OpenMutex'</P></BLOCKQUOTE>
+
+<P>&nbsp;</P>
+
+<H1><A NAME="RTFToC15"></A><IMG SRC="red_car.gif" WIDTH="12"
+HEIGHT="12" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"> 4.
+Source code</H1>
+
+<H2><A NAME="RTFToC16"></A>4.1. Headers</H2>
+
+<P>Header files generally used by all the kernel components</P>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTypes.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e0ab">type definitions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msDefs.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e0ab">MidiShare constants definitions,
+        basic MidiShare data types structures</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msExtern.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e0ab">defines all the functions to
+        provide for a platform dependant implementation</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<P>Header files specific to each kernel components</P>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msKernel.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">kernel global data structure</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the alarm call
+        function</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppFun.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the application
+        configuration functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
+        types and data structures for the clients applications management</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the connections
+        management functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events memory
+        management functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the events fields
+        access functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the filters management
+        functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the initialization
+        functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the mailbox functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">constants definition, data
+        types and data structures for the memory management</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+        sequences functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the smpte functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter data structures
+        and external functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSync.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">some macros build on top of
+        the synchronization functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">task extension structure and
+        task management functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+        time management functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.h</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">interface for the MidiShare
+        input / output functions</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H2><A NAME="RTFToC17"></A>4.2. Kernel</H2>
+
+<P>The kernel implementation provides the glue for all its components.
+It is in charge of initializing all these components and providing
+the time task. MidiShare time functions are implemented in this
+section.</P>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msHandler.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes the clock handler
+        implementation and the dispatch of the events returned by the
+        sorter.</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msInit.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides initialization functions
+        (including MidiShareWakeUp and MidiShareSleep). Also in charge
+        of the MidiShare version number.</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSmpte.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">smpte functions (not yet implemented)</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTime.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">includes time and time conversions
+        functions.</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H2><A NAME="RTFToC18"></A>4.3. Clients</H2>
+
+<P>The clients part of the implementation includes all the functions
+dedicated to an application configuration, connections management,
+tasks and alarms management, sending and receiving events.</P>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAlarms.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">implementation of an application
+        alarm call</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msAppls.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides applications configuration
+        functions (MidiOpen, MidiClose, setting and getting alarms, setting
+        and getting filters...)</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msConnx.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">inter-applications connections
+        management implementation</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFilter.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">filters management implementation</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMail.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">synchronized mailbox functions</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msTasks.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">realtime and deferred tasks
+        management</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msXmtRcv.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides functions for sending
+        and receiving MidiShare events.</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H2><A NAME="RTFToC19"></A>4.4. Memory</H2>
+
+<P>The memory section of the implementation is in charge of the
+musical events memory management. It includes also the sequences
+management functions.</P>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msEvents.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">provides the functions for
+        the MidiShare events management.</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msFields.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">utilities for event fields
+        access</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msMemory.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">global memory management :
+        opening and closing the memory, growing the MidiShare memory
+        space, getting free space.</TD> 
+    </TR>
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSeq.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">sequences management implementation</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<H2><A NAME="RTFToC20"></A>4.5. Sorter</H2>
+
+<BLOCKQUOTE>
+  <P><TABLE WIDTH="410" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+    <TR>
+      <TD WIDTH="28%" BGCOLOR="#eeeeee">&nbsp;msSorter.c</TD> 
+      <TD WIDTH="72%" BGCOLOR="#e1e1ab">the sorter implementation.</TD> 
+    </TR>
+  </TABLE></P></BLOCKQUOTE>
+
+<P>&nbsp;
+
+</BODY>
+</HTML>

@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+   <TITLE>typeActiveSens  (code 15)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeActiveSens  (code 15)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A Real Time ActiveSens message. 
+
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>ActiveSens events have no field.</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a ActiveSens event. Return a pointer to the event or NIL if there is no more memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> ActiveSens ( long date, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeActiveSens.html" TARGET="Page">typeActiveSens</A> ) )<I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL*/</FONT></I> 
+    {
+        Date(e) = date;    <I><FONT COLOR="#0000AF">/* These information's are common to all*/</FONT></I>
+        Port(e) = port;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

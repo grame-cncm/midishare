@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiShare</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiShare</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Tests  if MidiShare is resident in memory by looking for a specific pattern of code. This is the first MidiShare function that an application should call.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal Boolean    MidiShare(void);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<BLOCKQUOTE><I>none</I></BLOCKQUOTE>.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is true when MidiShare is loaded, false otherwise. 
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A do-nothing MidiShare application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+#include &lt;MidiShare.h&gt;
+#include &lt;stdio.h&gt;
+
+short    myRefNum;
+
+main()
+{
+    if ( ! MidiShare() )     exit(1);        <I><FONT COLOR="#0000AF">/* Check MidiShare loaded */</FONT></I>
+    myRefNum = <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>("Sample");    <I><FONT COLOR="#0000AF">/* Ask for a reference number */</FONT></I>
+    if ( myRefNum &lt; 1 )     exit(1);        <I><FONT COLOR="#0000AF">/* Check <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A> success */</FONT></I>
+    printf( "refNum : %i \n", myRefNum);<I><FONT COLOR="#0000AF">/* Print the reference number*/</FONT></I>
+    <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>(myRefNum);                <I><FONT COLOR="#0000AF">/* And close */</FONT></I>
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, in C, all strings passed as arguments of a MidiShare function must be Pascal strings. In the previous example, one must write : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE>myRefNum = <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>("\pSample");</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFlushDTasks</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFlushDTasks</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Flushes all the waiting DTasks in the application DTask list.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiFlushDTasks.html" TARGET="Page">MidiFlushDTasks</A> (short refnum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, is the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Flushes all the waiting DTasks in the application DTask list.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+short    myRefNum;
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiFlushDTasks.html" TARGET="Page">MidiFlushDTasks</A> (myRefNum);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

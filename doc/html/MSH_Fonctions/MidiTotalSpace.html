@@ -1,0 +1,54 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiTotalSpace</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiTotalSpace</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the total number of cells allocated to MidiShare. <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A> allows an application to know at any time the total number of cells allocated by the MidiShare memory manager at startup.  
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A>(void);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<BLOCKQUOTE><I>none</I></BLOCKQUOTE>
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+the result is a 32-bit integer, the total number of cells in the MidiShare memory manager.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print information about MidiShare memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintMemInfo(void)
+{
+    printf("MidiShare memory :\n");
+    printf(" free space  : %i cells\n", <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A>());
+    printf(" used space  : %i cells\n", <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A>() - <A HREF="../MSH_Fonctions/MidiFreeSpace.html" TARGET="Page">MidiFreeSpace</A>());
+    printf(" total space : %i cells\n", <A HREF="../MSH_Fonctions/MidiTotalSpace.html" TARGET="Page">MidiTotalSpace</A>());
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

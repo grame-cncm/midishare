@@ -1,0 +1,34 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiChangeCodes</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiChangeCodes</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>When something changes in the global MidiShare environment all the context alarms (see <A HREF="../MSH_Fonctions/MidiSetApplAlarm.html" TARGET="Page">MidiSetApplAlarm</A> and <A HREF="../MSH_Fonctions/MidiGetApplAlarm.html" TARGET="Page">MidiGetApplAlarm</A>) are called with a 32-bits code : 0xRRRRMMMM where RRRR is the reference number of the application involved and MMMM the type of change defined as follows : 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/constants.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+#define MIDIOpenAppl        1      <I><FONT COLOR="#0000AF">// an application was open</FONT></I>
+#define MIDICloseAppl       2      <I><FONT COLOR="#0000AF">// an application was closed</FONT></I>
+#define MIDIChgName         3      <I><FONT COLOR="#0000AF">// an application name has changed</FONT></I>
+#define MIDIChgConnect      4      <I><FONT COLOR="#0000AF">// a connection has changed</FONT></I>
+#define MIDIOpenModem       5      <I><FONT COLOR="#0000AF">// the modem port was open</FONT></I>
+#define MIDICloseModem      6      <I><FONT COLOR="#0000AF">// the modem port was closed</FONT></I>
+#define MIDIOpenPrinter     7      <I><FONT COLOR="#0000AF">// the printer port was open</FONT></I>
+#define MIDIClosePrinter    8      <I><FONT COLOR="#0000AF">// the printer port was closed</FONT></I>
+#define MIDISyncStart       9      <I><FONT COLOR="#0000AF">// MidiShare is now locked to SMPTE sync</FONT></I>
+#define MIDISyncStop        10     <I><FONT COLOR="#0000AF">// SMPTE sync disappeard, MidiShare is now unlocked</FONT></I>
+#define MIDIChangeSync      11     <I><FONT COLOR="#0000AF">// the synchronisation mode has changed</FONT></I>
+
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

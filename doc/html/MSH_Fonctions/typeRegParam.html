@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+   <TITLE>typeRegParam  (code 133)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeRegParam  (code 133)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A Registered Parameter event with a 14-bit parameter number and a 14-bit parameter value. When a <A HREF="../MSH_Fonctions/typeRegParam.html" TARGET="Page">typeRegParam</A> event is sent to external Midi devices, actually four control change messages are sent, two to select the registered parameter number, and two for the parameter value using the 14-bits data-entry controller.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P><A HREF="../MSH_Fonctions/typeRegParam.html" TARGET="Page">typeRegParam</A> events have 2 fields numbered from 0 to 1 :</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+<DT><CODE>0</CODE>
+	<DD>A Registered Parameter number from 0 to 16383. (Field size : 2 byte)
+<DT><CODE>1</CODE>
+	<DD>A Registered Parameter value from 0 to 16383. (Field size : 2 byte)
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a Registered Parameter event. Return a pointer to the event or NIL if there is no more memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> RegParam( long date, short param, short val, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeRegParam.html" TARGET="Page">typeRegParam</A> ) )<I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;        <I><FONT COLOR="#0000AF">/* These information are common to all */</FONT></I>
+        Chan(e) = chan;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+        Port(e) = port;
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e,0,param);    <I><FONT COLOR="#0000AF">/* Fields particular to RegParam  */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e,1,val);
+    }
+    return e;
+}
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

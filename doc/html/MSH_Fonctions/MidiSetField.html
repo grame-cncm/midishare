@@ -1,0 +1,60 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetField</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetField</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Attributes a value to a field of an event. The access to the compulsory fields of the event is done directly. But the access to the variables fields is achieved through the <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A> and <A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A> functions. The function deals with the conversion of this value into the concerned field format (8, 16 or 32-bit).
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>( <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e, long f, long v );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, a pointer to the event to be modified.
+<DT><CODE>f </CODE>
+	<DD>a 32-bit integer, the index number of the field to modify ( from 0 to <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e)-1 ).
+<DT><CODE>v </CODE>
+	<DD>a 32-bit value to put in the field. This value will be converted to the right size (8, 16 or 32-bit).
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A function for creating note events.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> Note(long date, short pitch, short vel, long dur, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    
+    if ( e=<A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeNote.html" TARGET="Page">typeNote</A>) )
+    {
+        Date(e) = date; 
+        Chan(e) = chan;
+        Port(e) = port;
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 0, pitch);
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 1, vel);
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 2, dur);
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

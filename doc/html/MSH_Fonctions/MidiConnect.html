@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiConnect</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiConnect</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Connects or disconnects two applications. The <A HREF="../MSH_Fonctions/MidiConnect.html" TARGET="Page">MidiConnect</A> function allows the switching on or off  of a connection between a source application and a destination application. There is no restrictions in the establishing of these connections, an application can be the source or destination of as many  other applications as you wish. Loops are permitted.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void     <A HREF="../MSH_Fonctions/MidiConnect.html" TARGET="Page">MidiConnect</A> (short src, short dest, boolean state);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>src </CODE>
+	<DD>a 16-bit integer, is the reference number of the source application. 
+<DT><CODE>dest </CODE>
+	<DD>a 16-bit integer, is the reference number of the destination application.
+<DT><CODE>state </CODE>
+	<DD>a boolean, indicates if a connection must be switched on (True) or off (False).
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Open a MidiShare application and connect it to the physical Midi inputs and outputs.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+#include &lt;MidiShare.h&gt;
+#define PHYSMIDI_IO 0        <I><FONT COLOR="#0000AF">/* The MidiShare physical Midi I/O ports*/</FONT></I>
+
+Main()
+{
+    short    myRefNum;
+
+    myRefNum = <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>("<A HREF="../MSH_Fonctions/MidiSample.html" TARGET="Page">MidiSample</A>");
+
+    <A HREF="../MSH_Fonctions/MidiConnect.html" TARGET="Page">MidiConnect</A> (PHYSMIDI_IO, myRefNum, TRUE);<I><FONT COLOR="#0000AF">/* to receive events */</FONT></I>
+    <A HREF="../MSH_Fonctions/MidiConnect.html" TARGET="Page">MidiConnect</A> (myRefNum, 0, TRUE);<I><FONT COLOR="#0000AF">/* to transmit events */</FONT></I>
+
+    <I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+    <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>(myRefNum);
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>the physical Midi inputs and outputs are represented by the pseudo application called "MidiShare" with a reference number of 0 (zero). This pseudo application is automatically created when MidiShare wakes up at the very first <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

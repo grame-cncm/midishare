@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSmpte2Time</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSmpte2Time</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Convert an SMPTE location to a time in millisecond.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long     <A HREF="../MSH_Fonctions/MidiSmpte2Time.html" TARGET="Page">MidiSmpte2Time</A> (<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">SmpteLocPtr</A> loc);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>loc </CODE>
+	<DD>a pointer to a <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A> record to be converted in milliseconds.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+a 32-bits time in milliseconds.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Gives the SMPTE location from its current format to 30 drop frame (format 2).
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>    myLoc; 
+
+<I><FONT COLOR="#0000AF">/*...*/</FONT></I>
+
+<I><FONT COLOR="#0000AF">/* we suppose here myLoc filled with an SMPTE location */</FONT></I>
+<A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A>( <A HREF="../MSH_Fonctions/MidiSmpte2Time.html" TARGET="Page">MidiSmpte2Time</A>(&amp;myLoc), 2, &amp;myLoc);
+
+<I><FONT COLOR="#0000AF">/* now myLoc is filled with the same SMPTE location but in 30 drop frame format */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

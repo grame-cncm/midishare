@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFreeEv</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFreeEv</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Frees a MidiShare event allocated with <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>. <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A> takes into account the event structure by checking the events type. For this reason, <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A> must not be used on cell allocated with <A HREF="../MSH_Fonctions/MidiNewCell.html" TARGET="Page">MidiNewCell</A>. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, it is a pointer to a MidiShare event.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A receive alarm that delete all the received events.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+short    myRefNum;
+.....
+
+void DeleteAll( short refNum )
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+    long n;
+
+    for ( n = <A HREF="../MSH_Fonctions/MidiCountEvs.html" TARGET="Page">MidiCountEvs</A>(refNum); n &gt; 0; Ñn ) 
+    {                                
+        e = <A HREF="../MSH_Fonctions/MidiGetEv.html" TARGET="Page">MidiGetEv</A>( refNum );    <I><FONT COLOR="#0000AF">/* Get an event from the FIFO */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A>( e );            <I><FONT COLOR="#0000AF">/* Then free it */</FONT></I>
+    }
+}
+......
+
+<A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>( myRefNum, DeleteAll );    <I><FONT COLOR="#0000AF">/* Activate the receive alarm */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>For this example it would be simpler and faster to use <A HREF="../MSH_Fonctions/MidiFlushEvs.html" TARGET="Page">MidiFlushEvs</A> to achieve the same result.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Therefore, in C, all function passed as arguments of a MidiShare function must be declared as Pascal. In the previous example, DeleteAll must be declared as : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE>pascal void DeleteAll( short refNum );</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetRcvAlarm</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetRcvAlarm</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Defines the event reception alarm of an application. The alarm will be automatically called by MidiShare to inform the application of the presence of new events in its reception FIFO. This alarm is always called under interruption. It must not use, directly or indirectly, the Macintosh Memory Manager, however it can freely access all the others MidiShare functions, particularly the event management (but not <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A> and <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>). It can also use applications global variables, since MidiShare restores its global context register, before the call.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>( short refNum, <A HREF="../MSH_Fonctions/RcvAlarmPtr.html" TARGET="Page">RcvAlarmPtr</A> alarm );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, the reference number of the application
+<DT><CODE>alarm </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/RcvAlarmPtr.html" TARGET="Page">RcvAlarmPtr</A>, a pointer to a receive alarm routine or NIL to disable receive alarms.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyRcvAlarm (short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A receive alarm that processes all the received events by adding to their date a one second delay.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void OneSecDelay (short refNum)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+    long n;
+
+    for ( n = <A HREF="../MSH_Fonctions/MidiCountEvs.html" TARGET="Page">MidiCountEvs</A>(refNum); n &gt; 0; Ñn ) 
+    {                                
+        e = <A HREF="../MSH_Fonctions/MidiGetEv.html" TARGET="Page">MidiGetEv</A>(refNum);<I><FONT COLOR="#0000AF">/* Get an event from the FIFO */</FONT></I>
+        Date(e) += 1000;        <I><FONT COLOR="#0000AF">/* Add 1000 ms to its date */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiSend.html" TARGET="Page">MidiSend</A>(refNum,e);        <I><FONT COLOR="#0000AF">/* Then send the event */</FONT></I>
+    }
+}
+
+<I><FONT COLOR="#0000AF">/*......*/</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>(myRefNum,OneSecDelay);    <I><FONT COLOR="#0000AF">/* Install the receive alarm*/</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>Such a function could be called repeatedly in the main event loop of the application, but for really accurate time control, it must be installed as a receive alarm with <A HREF="../MSH_Fonctions/MidiSetRcvAlarm.html" TARGET="Page">MidiSetRcvAlarm</A>.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, in C, all  functions passed as arguments of a MidiShare function must be declared as Pascal. In the previous example, OneSecDelay must be declared as : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE>pascal void OneSecDelay (short refNum);</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

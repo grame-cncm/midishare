@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGrowSpace</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGrowSpace</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Tries to increase the memory space of MidiShare.
+<P> 
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiGrowSpace.html" TARGET="Page">MidiGrowSpace</A>(long n);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>n </CODE>
+	<DD>the number of cells to increase the MidiShare memory space.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 32-bit integer, the number of new cells actually allocated. 
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Add 1000 cells to MidiShare memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void TryGrowSpace(void)
+{
+    printf( "Try to allocate 1000 cells : %ld\n", <A HREF="../MSH_Fonctions/MidiGrowSpace.html" TARGET="Page">MidiGrowSpace</A>(1000));
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>On the Atari, <A HREF="../MSH_Fonctions/MidiGrowSpace.html" TARGET="Page">MidiGrowSpace</A> can only be used from a desk accessory, and not from a normal application.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

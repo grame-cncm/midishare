@@ -1,0 +1,372 @@
+<!-- Yann Orlarey  This web page was created by golive  © 1996 by gonet communication GmbH   URL: http://www.gonet.de            -->
+<!--This file created 30/07/96 10:56 by Claris Home Page version 1.0b1-->
+<HTML>
+<HEAD>
+   <TITLE>MidiShare Code Examples</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiShare Code Examples</H1>
+
+<P><HR>We give here some very simple examples of MidiShare programs.
+They have no "user-interface", just a command line like in a
+traditional UNIX environment, in order to keep the listing short.
+They where writed for the Macintosh but you can easily adapt them to
+other computers. The specific points with the Macintosh is that the
+string arguments to MidiShare functions are in Pascal format
+(starting with \p like in "\pExample1") and the user defined
+functions (like tasks and alarms) that are passed to MidiShare
+functions are prefixed with the pascal keyword. If you run these
+examples on another computer, you need to remove both the \p and the
+pascal keyword.</P>
+
+<OL>
+   <LI><A HREF="#1">the shortest MidiShare program</A>
+   
+   <LI><A HREF="#2">still short but safer</A>
+   
+   <LI><A HREF="#3">waiting 3 seconds</A>
+   
+   <LI><A HREF="#4">multitasking</A>
+   
+   <LI><A HREF="#5">real-time event processing</A>
+   
+   <LI><A HREF="#6">a small sequencer</A>
+</OL>
+
+<P><HR><IMG SRC="MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="1"></A>The shortest MidiShare program</H2>
+
+<BLOCKQUOTE><P>Program example are always too long to type. Here is
+the shortest MidiShare program one can write. It starts a MidiShare
+session using the MidiOpen function and then closes the session using
+the MidiClose function. That’s all.</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;MidiShare.h&gt;</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+main()</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	short	myRefNum;
+	
+	myRefNum = MidiOpen("\pExample1");
+	MidiClose(myRefNum);
+}</FONT></CODE></PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="2"></A>Still short but safer</H2>
+
+<P>The previous example was not very safe. Usually you need first to
+test if MidiShare is available, then check its version and finally
+test if you succeed in opening a MidiShare session.</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;MidiShare.h&gt;</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+main()</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	short	myRefNum;
+	
+	if (! MidiShare() ) {
+		printf("error : MidiShare not available\n");
+		exit(0);
+	}
+&nbsp;
+	if ( MidiGetVersion() &lt; 168 ) {
+		printf("error : MidiShare version 1.68 or greater required\n");
+		exit(0);
+	}
+&nbsp;
+	myRefNum = MidiOpen("\pExample2");
+&nbsp;
+	if (myRefNum &lt; 0) {
+		printf("Unable to open a MidiShare session (code %d)\n", 						myRefNum);
+		exit(0);
+	}
+&nbsp;
+	MidiClose(myRefNum);
+}</FONT></CODE></PRE>
+
+<P><HR><IMG SRC="MSH_ArtWork/example3.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="3"></A>Waiting 3 seconds</H2>
+
+<P>In this example we spend 3 seconds printing dots. The checking of
+the previous example have been removed for sake of simplicity.</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;MidiShare.h&gt;
+&nbsp;
+&nbsp;
+main()
+{
+	short   myRefNum;
+	long    stopdate;
+	
+	myRefNum = MidiOpen("\pExample3");
+	stopdate = MidiGetTime() + 3000;
+&nbsp;
+	printf("waiting");
+	while (MidiGetTime() &lt; stopdate) {
+		printf(".");
+	}
+	printf("\n");
+&nbsp;
+	MidiClose(myRefNum);
+}</FONT></CODE></PRE>
+
+<P><HR><IMG SRC="MSH_ArtWork/example4.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="4"></A>Multitasking</H2>
+
+<P>The previous example used a very trivial method of time handling.
+In this example we use a method in which several tasks are scheduled
+in the future. The PrintTask function is used as a repeatitive task
+to print characters. The StopTask is used to inform the program stop.
+</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;MidiShare.h&gt;
+&nbsp;
+long	gStopflag;
+&nbsp;
+pascal void PrintTask (long dt, short ref, long c, long delay, long a3);
+pascal void StopTask (long dt, short ref, long a1, long a2, long a3);</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+main()</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	
+	short	myRefNum;
+	short      i;
+	long       dt;
+&nbsp;
+	myRefNum = MidiOpen("\pExample4");
+	dt = MidiGetTime();
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+	/* schedule the stop task */</FONT></CODE></I><CODE><FONT SIZE=2>
+	gStopflag= 0;
+	MidiTask(StopTask, dt+6150, myRefNum, 0, 0, 0);
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+	/* schedule the print task with different
+	delays and characters to print */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiDTask(PrintTask, dt+100, myRefNum, ' ', 100, 0);
+	MidiDTask(PrintTask, dt+201, myRefNum, 'H', 200, 0);
+	MidiDTask(PrintTask, dt+302, myRefNum, 'E', 300, 0);
+	MidiDTask(PrintTask, dt+403, myRefNum, 'L', 400, 0);
+	MidiDTask(PrintTask, dt+604, myRefNum, 'L', 600, 0);
+	MidiDTask(PrintTask, dt+1005, myRefNum, 'O', 1000, 0);
+&nbsp;
+	printf("Running :\n");
+	
+	while (gStopflag == 0) {
+		for (i = MidiCountDTasks(myRefNum); i; i--) {
+			MidiExec1DTask(myRefNum);
+		}
+	}
+	
+	printf("\nStopped\n");
+&nbsp;
+	MidiClose(myRefNum);
+}</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+&nbsp;
+pascal void PrintTask (long dt, short ref, long c, long delay, long a3)</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	fputc(c, stdout); 
+	fflush(stdout);
+	MidiDTask(PrintTask, dt+delay, ref, c, delay, 0);
+}</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+pascal void StopTask (long dt, short ref, long a1, long a2, long a3)</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	gStopflag= 1;
+}</FONT></CODE></PRE>
+
+<P>In the above example you may have notice that two different
+functions, MidiTask and MidiDTask, are used to schedule function
+calls.</P>
+
+<P>Function calls scheduled with MidiTask are automatically executed
+in real time at interrupt level by MidiShare. These functions must be
+very fast ( &lt; 1ms) and must not call any slow or non-reentrant
+Operating System functions.</P>
+
+<P>Function calls scheduled with MidiDTask behaves differently. They
+are not executed automatically but stored in a special list of
+pending tasks. The application can periodicaly (for example in its
+main event loop) execute pending tasks by calling MidiExec1DTask as
+in this example. In this case slow or non-rentrant functions can be
+safely called within the scheduled function.</P>
+
+<P>In both cases the scheduled functions can use global variables, as
+the A5 register of the application is automatically restored by
+MidiShare before calling the scheduled function.</P>
+
+<P><HR><IMG SRC="MSH_ArtWork/example5.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="5"></A>Real-time event processing</H2>
+
+<P>In this example we see how to install a receive alarm to process
+incoming events in real time. The processing is very simple, received
+events are delayed accordingly to their Midi channel (delay = channel
+number * 100ms).</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;MidiShare.h&gt;
+&nbsp;
+&nbsp;
+pascal void DelayRcvAlarm (short ref);</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+void main()</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	
+	short	myRefNum;
+	short	i;
+	long	dt;</FONT><FONT SIZE=2 COLOR="#0000AF">
+&nbsp;
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* Open the MidiShare session */</FONT></CODE></I><CODE><FONT SIZE=2>
+	myRefNum = MidiOpen("\pExample5");
+	</FONT><FONT SIZE=2 COLOR="#0000AF">
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* Install the receive alarm */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiSetRcvAlarm( myRefNum, DelayRcvAlarm );
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+	/* Connect the application to MidiShare physical I/Os
+	the 3 arguments of MidiConnect are the reference number of the source,
+	the reference number of the destination and the state
+      of the connection (1=connected, 0=not connected) */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiConnect (myRefNum, 0, 1);
+	MidiConnect (0, myRefNum, 1);
+&nbsp;
+	printf("Now Midi events are delayed\n");
+	printf(" &lt;type the ENTER key to stop the program&gt;\n");
+	
+	getc(stdin);
+	
+	printf("\nStopped\n");</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+&nbsp;
+	/* close the MidiShare session */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiClose(myRefNum);
+}</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+&nbsp;
+pascal void DelayRcvAlarm (short ref)</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	MidiEvPtr	e;
+	
+	while ( e = MidiGetEv(ref) ) {
+		Date(e) += Chan(e)*100;
+		MidiSend(ref, e);
+	}
+}</FONT></CODE></PRE>
+
+<P>&nbsp;</P>
+
+<P>The receive alarm is called at interrupt level every time new
+events are received by the application. The argument passed to the
+receive alarm is the reference number of the application.</P>
+
+<P><HR><IMG SRC="MSH_ArtWork/example6.jpg" WIDTH=200 HEIGHT=20
+ALIGN=top></P>
+
+<H2><A NAME="6"></A>A small sequencer</H2>
+
+<P>This example implements a small sequencer able to record and play
+back midi events.</P>
+
+<PRE><CODE><FONT SIZE=2>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;MidiShare.h&gt;
+&nbsp;
+long		gStopFlag;
+MidiSeqPtr	gSequence;
+&nbsp;
+pascal void record (short aRefNum);
+pascal void play (long time, short refnum, long nextEv, long unused1, 							long unused2);</FONT></CODE><B><CODE><FONT SIZE=2>
+&nbsp;
+void main ()</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	short	myRefNum;
+&nbsp;
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* OPEN A MIDISHARE SESSION */</FONT></CODE></I><CODE><FONT SIZE=2>
+	myRefNum = MidiOpen("\pExample6");
+&nbsp;
+&nbsp;
+	printf("type &lt;ENTER&gt; to start recording\n");
+	getc(stdin);
+&nbsp;
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* START RECORDING */</FONT></CODE></I><CODE><FONT SIZE=2>
+	gSequence = MidiNewSeq();		</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* sequence for recording */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiSetRcvAlarm(myRefNum, record);   </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* set rcv alarm for rec */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiConnect(0, myRefNum, true);	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* connect input */</FONT></CODE></I><CODE><FONT SIZE=2>
+	
+	printf("\n\n Now recording.... \n");
+	printf("(type &lt;ENTER&gt; to stop recording and play back)\n");
+	getc(stdin);
+	</FONT></CODE><I><CODE><FONT SIZE=2>
+	/* PLAY BACK */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiConnect(0, myRefNum, false);	</FONT><FONT SIZE=2 COLOR="#0000AF">/* disconnect input */</FONT><FONT SIZE=2>
+	MidiConnect(myRefNum, 0, true);	 </FONT><FONT SIZE=2 COLOR="#0000AF">/* connect output */</FONT><FONT SIZE=2>
+	MidiSetRcvAlarm(myRefNum, 0);	   </FONT><FONT SIZE=2 COLOR="#0000AF">/* remove the rcv alarm */</FONT><FONT SIZE=2>
+	play(MidiGetTime(), myRefNum, (long) FirstEv(gSequence), 0, 0);
+&nbsp;
+	printf("\n\nNow playing back....\n");
+	printf("(type &lt;ENTER&gt; to stop and exit program)\n");
+	getc(stdin);
+	</FONT></CODE><I><CODE><FONT SIZE=2>
+	</FONT><FONT SIZE=2 COLOR="#0000AF">/* STOP PLAY BACK AND EXIT */</FONT></CODE></I><CODE><FONT SIZE=2>
+	gStopFlag = 1;				 </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* set to stop playing */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiFreeSeq(gSequence);		    </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* free the sequence */</FONT></CODE></I><CODE><FONT SIZE=2>
+	MidiClose(myRefNum);			 </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* close the session */</FONT></CODE></I><CODE><FONT SIZE=2>
+}</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+&nbsp;
+/* THE RECEIVE ALARM TO RECORD EVENTS */</FONT></CODE></I><B><CODE><FONT SIZE=2>
+pascal void record (short ref)</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	MidiEvPtr e;
+	
+	while (e = MidiGetEv(ref)) {		</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* get received events */</FONT></CODE></I><CODE><FONT SIZE=2>
+		MidiAddSeq(gSequence,e);	    </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* store into the seq */</FONT></CODE></I><CODE><FONT SIZE=2>
+	}
+}</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+&nbsp;
+/* THE TASK TO PLAYBACK EVENTS */</FONT></CODE></I><B><CODE><FONT SIZE=2>
+pascal void play ( long time, short refnum, long nextEv, long unused1, long unused2)</FONT></CODE></B><CODE><FONT SIZE=2>
+{
+	long		date;
+	MidiEvPtr 	e;
+	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+	/* If we have not been stopped	*/
+	/* and still have events to play	*/</FONT></CODE></I><CODE><FONT SIZE=2>
+	if (!gStopFlag &amp;&amp; nextEv) {			
+		e = (MidiEvPtr) nextEv;	
+		date = Date(e);</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+&nbsp;
+		/* for all the events at the same date */		</FONT></CODE></I><CODE><FONT SIZE=2>
+		while (e &amp;&amp; Date(e) == date) 	{		
+			MidiSendIm(refnum, MidiCopyEv(e));    </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* Send a copy */</FONT></CODE></I><CODE><FONT SIZE=2>
+			e = e-&gt;link;				  </FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">/* Go to next one */</FONT></CODE></I><CODE><FONT SIZE=2>
+		}
+		</FONT></CODE><I><CODE><FONT SIZE=2>
+		</FONT><FONT SIZE=2 COLOR="#0000AF">/* If we still have events to play in future? */</FONT></CODE></I><CODE><FONT SIZE=2>
+		if (e) {	</FONT></CODE><I><CODE><FONT SIZE=2 COLOR="#0000AF">
+			/* schedule the play task again */				</FONT></CODE></I><CODE><FONT SIZE=2>
+			MidiTask(play, Date(e)-date+time, refnum, (long)e, 0, 0);
+		}
+	}
+}</FONT></CODE></PRE>
+
+<P>&nbsp;</P>
+</BODY>
+</HTML>
+
+

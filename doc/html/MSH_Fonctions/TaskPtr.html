@@ -1,0 +1,35 @@
+<HTML>
+<HEAD>
+   <TITLE>TaskPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>TaskPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A task function, a user defined callback used with <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>, <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A> and <A HREF="../MSH_Fonctions/MidiCall.html" TARGET="Page">MidiCall</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+typedef pascal void (* <A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A>)( long date, short refNum, long a1,long a2,long a3 );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>date         </CODE>
+	<DD>a 32-bit integer, it is the date of the call. 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3     </CODE>
+	<DD>are 32-bit integers that can be freely used.
+
+</DL></BLOCKQUOTE>
+</BODY></HTML>

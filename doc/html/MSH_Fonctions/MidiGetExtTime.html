@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetExtTime</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetExtTime</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the current external time i.e. the position of the tape converted in milliseconds.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long <A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A> (void);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<BLOCKQUOTE><I>none</I></BLOCKQUOTE>
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Gives the SMPTE current location of the tape.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>     myInfo;
+<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>    myLoc;
+
+<A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>(&amp;myInfo);
+<A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A>( <A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A>(), myInfo.syncFormat, &amp;myLoc);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>When the tape is stopped, <A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A> returns the stop position of the tape converted in milliseconds.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

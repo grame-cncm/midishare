@@ -1,0 +1,60 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiNewEv</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiNewEv</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Allocates a new event of desirable type.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( short <A HREF="../MSH_Fonctions/typeNum.html" TARGET="Page">typeNum</A> );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE><A HREF="../MSH_Fonctions/typeNum.html" TARGET="Page">typeNum</A> </CODE>
+	<DD>the type of event to be allocated.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, a pointer to a MidiShare event of the desired type, or NIL if the MidiShare memory space is exhausted.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A function for creating note events.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> Note(long date, short pitch, short vel, long dur, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    
+    if ( e=<A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeNote.html" TARGET="Page">typeNote</A>) )
+    {
+        Date(e) = date; Pitch(e) = pitch; Vel(e) = vel;
+        Dur(e) = dur; Chan(e) = chan; Port(e) = port;
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

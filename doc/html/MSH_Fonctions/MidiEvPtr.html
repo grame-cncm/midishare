@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiEvPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiEvPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A MidiShare event. Most events are made of one fixed size cell. Some events like <A HREF="../MSH_Fonctions/typeSysEx.html" TARGET="Page">typeSysEx</A> require additional cells. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">TMidiEv</A> *<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>;        
+typedef struct <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">TMidiEv</A>
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> link;                 <I><FONT COLOR="#0000AF">// link to next event                </FONT></I>
+    unsigned long date;             <I><FONT COLOR="#0000AF">// event date (in ms)                 </FONT></I>
+    Byte evType;                    <I><FONT COLOR="#0000AF">// event type                         </FONT></I>
+    Byte refNum;                    <I><FONT COLOR="#0000AF">// sender reference number             </FONT></I>
+    Byte port;                      <I><FONT COLOR="#0000AF">// Midi port                         </FONT></I>
+    Byte chan;                      <I><FONT COLOR="#0000AF">// Midi channel                         </FONT></I>
+    union {                         <I><FONT COLOR="#0000AF">// info depending of event type :    </FONT></I>
+       struct {                       <I><FONT COLOR="#0000AF">// for notes                    </FONT></I>
+          Byte pitch;                   <I><FONT COLOR="#0000AF">// pitch                      </FONT></I>
+          Byte vel;                     <I><FONT COLOR="#0000AF">// velocity                 </FONT></I>
+          unsigned short dur;           <I><FONT COLOR="#0000AF">// duration                 </FONT></I>
+       } note;
+       Byte data[4];                  <I><FONT COLOR="#0000AF">// for <A HREF="../MSH_Fonctions/typeKeyOn.html" TARGET="Page">typeKeyOn</A> and other small events         </FONT></I>
+       <A HREF="../MSH_Fonctions/MidiSEXPtr.html" TARGET="Page">MidiSEXPtr</A> linkSE;             <I><FONT COLOR="#0000AF">// for <A HREF="../MSH_Fonctions/typeSysEx.html" TARGET="Page">typeSysEx</A> and other variable length events    </FONT></I>
+       <A HREF="../MSH_Fonctions/MidiSTPtr.html" TARGET="Page">MidiSTPtr</A> linkST;              <I><FONT COLOR="#0000AF">// for <A HREF="../MSH_Fonctions/typeProcess.html" TARGET="Page">typeProcess</A> and other special events    </FONT></I>
+    } info;
+} <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">TMidiEv</A>;
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/macrodef.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Macros for accessing the common parts of an event.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+#define Link(e)    ( (e)-&gt;link )
+#define Date(e)    ( (e)-&gt;date )
+#define EvType(e)  ( (e)-&gt;evType )
+#define RefNum(e)  ( (e)-&gt;refNum )    
+#define Port(e)    ( (e)-&gt;port )
+#define Canal(e)   ( (e)-&gt;chan )
+#define Chan(e)    ( (e)-&gt;chan )
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/macrodef.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Macros for accessing the specific parts.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+#define Pitch(e)     ( (e)-&gt;info.note.pitch ) 
+#define Vel(e)       ( (e)-&gt;info.note.vel ) 
+#define Dur(e)       ( (e)-&gt;info.note.dur )
+#define Data(e)      ( (e)-&gt;info.data )
+#define LinkSE(e)    ( (e)-&gt;info.linkSE )
+#define LinkST(e)    ( (e)-&gt;info.linkST )
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>instead of these macros, you should use <A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A> and <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A> which provides a uniform acces to the specific fields of an event.</I>
+<BLOCKQUOTE><I>
+
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,389 @@
+<!-- Yann Orlarey  This web page was created by golive  © 1996 by gonet communication GmbH   URL: http://www.gonet.de            -->
+<!--This file created 30/07/96 10:48 by Claris Home Page version 1.0b1-->
+<HTML>
+<HEAD>
+   <TITLE>MidiShare Overview</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>Overview of a MidiShare application</H1>
+
+<P>This section gives an overview of MidiShare functions as used by a
+typical application.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview1"></A>1-Opening and Closing a MidiShare session
+</H2>
+
+<P>First of all, an application must make sure that MidiShare is
+installed in memory, this check can be completed by the MidiShare
+function.</P>
+
+<P>Then the function MidiOpen should be called to start a MidiShare
+session. This allows MidiShare to record information relative to the
+application context (i.e. its name, the value of A5 register, etc.)
+and to create a reception FIFO and to attribute a unique reference
+number to the application.</P>
+
+<P>Before closing, an application must call the counterpart MidiClose
+function , giving its application reference number as an argument.
+MidiShare can thus be aware of the precise number of active MidiShare
+applications. In theory, there is no objection to an application
+performing several MidiOpen's, under the condition that it performs
+as many corresponding MidiClose's. In total, there must not be more
+than 63 simultaneously open MidiShare applications .</P>
+
+<P>As long as no MidiOpen's are performed, MidiShare is dormant and
+has no affect on the operation of the computer. Following the first
+MidiOpen, MidiShare becomes active, it then creates a task which will
+be called by interrupt every millisecond, and initiates ACIA
+interruption vectors and registers corresponding to the Midi ports.
+MidiShare returns to its dormant state after the last MidiClose is
+performed.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview2"></A>2-Communications and Connections</H2>
+
+<P>For an application to be able to transmit and receive events, it
+must first be connected to one or more sources and destinations.</P>
+
+<P>MidiShare is built around an internal communication mechanism
+which allows the exchange of events in real-time between client
+applications. An application can be thought of as a black box,
+receiving a flow of events at input and producing a flow of events at
+output. These 'black boxes' can be freely connected to others, thus
+forming an arbitrary complex network. This is one of the major
+advantages of MidiShare, that it allows transparent, powerful
+collaboration between applications otherwise totally independent.
+</P>
+
+<P>MIDI hardware ins and outs are performed by a pseudo-application,
+which is always refereed to as application number 0 and named
+'MidiShare'. To communicate with the 'outside world', your
+applications input and/or output should be connected to this
+application.</P>
+
+<P>The implementation of these connections is very simple. The
+MidiConnect function allows the switching on or off connections
+between a source and destination applications and the MidiIsConnected
+function gives the state (on or off) of a connection. There is no
+restriction to the establishing of connections, an application can be
+source or destination of as many applications as you wish and of
+course looping is possible.</P>
+
+<P>In some special cases, it is important that an application can
+obtain information regarding the other active MidiShare applications.
+The MidiCountAppls function returns the number of open MidiShare
+applications. The MidiGetIndAppl function returns the reference
+number of an application by giving an order number (between 1 and the
+result of MidiCountAppls). It is also possible to find the reference
+number of an application by name using the MidiGetNamedAppl function.
+In the same way, knowing an application reference number, it is
+possible to find its name using the MidiGetName function. And last,
+the MidiSetName function allows change of an applications name.</P>
+
+<P>To write 'meta-applications' for the management of connections,
+requiring information on context modifications in MidiShare (opening
+of new applications, changing connections, etc.) , all that is
+required is the definition of a context alarm using the
+MidiSetApplAlarm and MidiGetApplAlarm functions. This alarm function
+will be automatically called by MidiShare to inform the application
+of all the occurred context changes.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview3"></A>3-Sending and receiving</H2>
+
+<P>Once connections have been established, an application can send
+and receive MIDI events. Each application owns a reception FIFO in
+which MidiShare puts a copy of received events. These events may come
+from other applications or from the different Midi ports in active
+use. MidiShare can in theory handle up to 256 ports. The
+implementation of Midi ports is controlled by the MidiSetPortState
+and MidiGetPortState routines, these functions must be used with
+caution since they affect all applications.</P>
+
+<P>The MidiCountEvs function allows an application at any time to
+know the number of events waiting in its reception FIFO. This number
+of events is only limited by the amount of memory available to
+MidiShare. The available events are picked up by repeated calls to
+the MidiGetEv function. The MidiAvailEv function is similar, except
+it allows the reading of a received event while leaving it in the
+FIFO. The MidiFlushEvs function eliminates all the events on wait in
+the reception FIFO.</P>
+
+<P>Events received by applications are duplicates, the application
+can therefore freely dispose of them without any repercussion on
+other applications. However, an application must not forget to free
+them when it no longer needs them.</P>
+
+<P>Each application can select the events it receives by using a
+filter. The filtering process is local to the application and has no
+influence on the events received by the other applications. The
+implementation of these filters is achieved by two routines :
+MidiSetFilter and MidiGetFilter.</P>
+
+<P>MidiShare drives an internal absolute clock of 32 bits which is
+automatically switched on with the first MidiOpen and keeps running
+until the last MidiClose. This clock is used to date (in
+milliseconds) all the received events, as well as to specify the
+sending dates of events to be transmitted. Moreover, it provides all
+the applications with an absolute time reference. Its value can be
+read by the MidiGetTime function.</P>
+
+<P>Three functions facilitate the transmission of events. The
+MidiSendIm function allows the immediate transmission of an event and
+the MidiSend and MidiSendAt functions allow time delayed
+transmission, MidiShare automatically managing the scheduling of the
+transmission time.</P>
+
+<P>(thanks to this mechanism, applications can plan transmission of
+millisecond accuracy up to many days in advance.)</P>
+
+<P>Once an event is transmitted (by the means of MidiSend, MidiSendAt
+or MidiSendIm), it is no longer accessible by the application. This
+event must no longer be refereed to, as to do so would cause
+irreparable damage to MidiShare's event organization.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview4"></A>4-Event managing</H2>
+
+<P>The memory management of a standard application is generally
+performed by the computers 'Memory Manager' (MM). The MM deals with
+dynamic allocation, freeing memory blocks of arbitrary length, and
+memory compacting when necessary (in the case of excessive
+fragmentation of memory). A traditional MM is unsuitable for use in a
+real time context for the following reasons:</P>
+
+<UL>
+   <LI>Only large memory blocks can be allocated efficiently. For
+   example, the Macintosh MM has an overhead of several bytes per
+   allocated blocks, which is prohibitive for the very small groups
+   of bytes associated with Midi events.
+   
+   <LI>The allocation time of a block is not constant, but depends on
+   several factors, one of which being the fragmentation state of the
+   memory. Allocation times can be very long if memory needs to be
+   compacted and therefore a traditional MM cannot guarantee a
+   response time.
+   
+   <LI>A traditional MM is not re-entrant, therefore no routine under
+   interruption can use it either directly or indirectly, without
+   disorganizing the memory space.
+</UL>
+
+<P>To overcome these short-comings, MidiShare possess its own memory
+manager, which is adapted to the Midi event management and available
+under interruption.</P>
+
+<P>MidiShare drives a group of events common to all the applications.
+Each event has compulsory fields (date, channel, port, type, etc.)
+and variable fields that depend of its type.</P>
+
+<P>Allocation is performed by the MidiNewEv function which returns an
+event of a suitable type. The counterpart de-allocation is done by
+the MidiFreeEv function. Another way of allocating an event is to
+duplicate an existing event by the MidiCopyEv function.</P>
+
+<P>It is possible at any time to discover the available remaining
+event space, by the MidiFreeSpace function.</P>
+
+<P>Access to the common event fields can be done directly, but access
+to the variable fields is achieved through the MidiSetField and
+MidiGetField functions.</P>
+
+<P>Some categories of events do not have a fixed number of fields,
+for example Exclusive System messages, in this case the
+MidiCountFields function returns the number of fields in the variable
+length event and the MidiAddField function allows the addition of a
+field at the tail of the variable length event.</P>
+
+<P>For some special applications, it may be necessary to access the
+basic functions of the memory manager. All the events managed by
+MidiShare are implemented in fixed-size cells (16 bytes). Most events
+need just one cell, others like the System Exclusive use a variable
+number of linked cells. Most applications normally does not have to
+worry about storage 'details', nevertheless, two functions are
+provided for low level memory management. The first one, MidiNewCell,
+allows to allocate a simple cell. The second one, MidiFreeCell,
+operates in reverse and de-allocates a cell.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview5"></A>5-Sequence managing</H2>
+
+<P>MidiShare provides basic functionalities for the managing of
+sequences of time ordered events. The MidiNewSeq function allocates a
+new sequence, empty at the start and the MidiAddSeq function inserts
+an event into the sequence, maintaining the time order.</P>
+
+<P>The MidiApplySeq function is an iterating function which allows
+the processing of a sequences events, by a user defined function, the
+address of which is passed as a parameter.</P>
+
+<P>The MidiClearSeq function flushes the contents of a sequence and
+the MidiFreeSeq function frees the sequence events.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview6"></A>6-Real time tasks</H2>
+
+<P>The MidiShare scheduling mechanism is based around the concept of
+alarms. An alarm is a function whose address is sent to MidiShare by
+an application, MidiShare will then call this function in real time
+to indicate the occurrence of an event, even if the application is in
+interrupt.</P>
+
+<P>Each application can define two categories of alarms, the first is
+defined by the MidiSetApplAlarm function, this warns of any change in
+the global context of MidiShare (see paragraph "Communications and
+connections"). The second category is defined by the MidiSetRcvAlarm
+function which informs of the presence of new events in the reception
+FIFO. This alarm is always called under interruption, and therefore,
+it must not use the Macintosh Memory Manager either directly or
+indirectly. However, it can have a free access to all the MidiShare
+functions (apart from MidiOpen or MidiClose) and it may also access
+the global variables of the application, as before the call,
+MidiShare restores its context register.</P>
+
+<P>Macintosh desk accessories cannot have global variables, so to
+make up for this drawback the MidiSetInfo routine allows each
+application to define a data area. The area pointer remains
+accessible by the MidiGetInfo function, even during alarms, and it
+can also be used for global data areas for desk accessories and other
+application.</P>
+
+<P>Once the RcvAlarm is set, the application can organise its
+real-time tasks utilizing its private FIFO. As opposed to traditional
+Midi events, private events are messages that an application sends to
+itself, an application generally makes use of these to remember a
+task to be done at a precise date.</P>
+
+<P>When the date of a private event falls, MidiShare puts the event
+into the applications reception FIFO, where it waits to be picked up
+and handled in the same way as MIDI events.</P>
+
+<P>MidiShare implements a second mechanism to manage tasks. This is a
+time-delayed function call using MidiTask (or MidiCall) and the
+MidiDTask procedures. To achieve this call, MidiShare collects the
+call arguments, as well as the functions address to be called and
+triggers a special event (typeProcess or typeDProcess). When a
+typeProcess event falls MidiShare restores the application context
+and proceeds to the call the function. However, when a typeDProcess
+event falls, the function is not processed immediately, but placed in
+a waiting list belonging to the application.</P>
+
+<P>The MidiCountDTasks allows an application to find the number of
+tasks currently waiting to be executed, they can then be executed
+when required using MidiExec1DTask which executes the next task on
+wait. (Note that actual execution must be initiated by the
+application )</P>
+
+<P>As the MidiTasks are processed under interruption, they must not
+call directly or indirectly the operating system. The MidiDTasks
+allow a by-pass of this obstacle since the application triggers their
+processing (generally in the main loop).</P>
+
+<P>Under certain circumstances, 'forgetting' an already launched but
+not yet processed MidiTask or MidiDTask, can be useful. The
+MidiForgetTask function is used for this purpose. Also an
+applications MidiDTask waiting list can be deleted by MidiFlushDTasks
+function.</P>
+
+<P>In order to simplify communication between application tasks and
+to the manage sharing of variables, two non-interruptable,
+pointer-handling routines are provided. The MidiReadSync function
+reads and sets to NIL the value at a memory address, and the
+MidiWriteSync function updates the value of an address only if its
+current value is NIL.</P>
+
+<P><HR WIDTH="30%" align=CENTER></P>
+
+<H2><A NAME="overview7"></A>7-Midi Time Code Synchronisation</H2>
+
+<P>MidiShare can be synchronised to an external Midi Time Code (MTC)
+using the MidiSetSyncMode function. MidiSetSyncMode takes a parameter
+describing the chosen synchronisation mode (internal or external) and
+the synchronisation input port to be used. The synchronisation mode
+is global and it affects all MidiShare applications. The function
+MidiGetSyncInfo provides information regarding the synchronisation
+process.</P>
+
+<P>When the synchronisation mode is set to internal (the default
+mode), MidiShare is driven by an internal interrupt every
+millisecond. (the "size" of a MidiShare time unit is one millisecond)
+The function MidiGetTime gives MidiShare's internal time, which is
+the time elapsed since the very first MidiOpen, expressed in
+milliseconds.</P>
+
+<P>When the synchronisation mode is set to external, MidiShare looks
+for an incoming MTC. When enough MTC's are detected, MidiShare
+becomes locked to the signal. It warns all the Midi applications, by
+calling their ApplAlarm, if any, with the code using MidiSyncStart. A
+typical sequencer might use this information to start playing a
+sequence according to the position of the tape. The function
+MidiGetExtTime returns the position of the tape in milliseconds.</P>
+
+<P>When an incoming MTC is no longer detected, MidiShare becomes
+unlocked, it automatically adjust its time unit to one millisecond
+and again informs the midi applications via their ApplAlarm with the
+code MidiSyncStop. A typical sequencer application may for example
+decide to stop playing its sequences in this situation.</P>
+
+<P>While MidiShare is locked, it maintains a constant offset between
+its internal time and the external time (the time of the tape), by
+automatically adjusting the size of the time unit to follow the speed
+variations of the incoming MTC. The size of the MidiShare time unit
+will be exactly one millisecond when the MTC runs at its nominal
+speed, it will increase when the MTC slows down and decrease when the
+MTC's speed increases. For example with an MTC format of 25
+frames/second, one frame represents 40 milliseconds (1000/25). In
+this case MidiShare will adjust the size of its time unit in order to
+always have 40 time units per frame whatever the actual speed of the
+incoming MTC. Consequently, from the point of view of a Midi
+application, the duration of one frame at 25 frames/seconds will
+always be 40 milliseconds.</P>
+
+<P>The function MidiGetExtTime returns the external time (the time of
+the tape expressed in milliseconds).</P>
+
+<P>While MidiShare is locked :</P>
+
+<BLOCKQUOTE><P><CODE><FONT SIZE=2>MidiGetTime() - MidiGetExtTime() ==
+constant offset</FONT></CODE></P></BLOCKQUOTE>
+
+<P>The difference between MidiShare's internal time and the tape time
+expressed in millisecond is a constant. Two functions are provided to
+convert between external and internal time MidiInt2ExtTime and
+MidiExt2IntTime :</P>
+
+<BLOCKQUOTE><P><CODE><FONT SIZE=2>MidiInt2ExtTime( MidiGetTime() ) ==
+MidiGetExtTime()</FONT></CODE></P>
+
+<P><CODE><FONT SIZE=2>MidiExt2IntTime( MidiGetExtTime() ) ==
+MidiGetTime()</FONT></CODE></P></BLOCKQUOTE>
+
+<P>Two additional functions, MidiTime2Smpte and MidiSmpte2Time, are
+provided to make conversions between time expressed in millisecond
+and SMPTE time locations. For example :</P>
+
+<BLOCKQUOTE><P><CODE><FONT SIZE=2>MidiTime2Smpt ( MidiGetExtTime(),
+3, &amp;loc )</FONT> </CODE></P></BLOCKQUOTE>
+
+<P>This will set loc with the current SMPTE location of the tape
+using SMPTE format 3 (30 frames / seconds).</P>
+
+<P>These functions can be used to convert SMPTE locations from one
+format to another. For example suppose we want to derive a SMPTE
+location from a current 30 drop frame format, we can write :</P>
+
+<BLOCKQUOTE><P><CODE><FONT SIZE=2>MidiTime2Smpte( MidiSmpte2Time
+(&amp;loc), 2, &amp;loc);</FONT></CODE></P></BLOCKQUOTE>
+
+<P>where 2 means 30 drop frame.</P>
+</BODY>
+</HTML>
+

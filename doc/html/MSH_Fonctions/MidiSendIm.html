@@ -1,0 +1,53 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSendIm</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSendIm</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Immediately sends an event. A copy of the event is sent to all the application destinations.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A>(short refNum, <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>e         </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvePtr.html" TARGET="Page">MidiEvePtr</A>, it is a pointer to the event to send.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>equivalence between <A HREF="../MSH_Fonctions/MidiSend.html" TARGET="Page">MidiSend</A>, <A HREF="../MSH_Fonctions/MidiSendAt.html" TARGET="Page">MidiSendAt</A> and <A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A>.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A>(myRefNum,e);
+
+<I><FONT COLOR="#0000AF">/* is equivalent to */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiSendAt.html" TARGET="Page">MidiSendAt</A>(myRefNum,e,<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>());
+
+<I><FONT COLOR="#0000AF">/* is equivalent to */</FONT></I>
+
+Date(e) = <A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>();
+<A HREF="../MSH_Fonctions/MidiSend.html" TARGET="Page">MidiSend</A>( myRefNum, e );
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

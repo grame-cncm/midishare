@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetApplAlarm</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetApplAlarm</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Defines the context alarm of an application. This alarm will be called by MidiShare on every application  of global context modifications (opening and closing of applications, opening and closing of midi ports, changes in connections between applications, SMPTE synchronisation).
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void  <A HREF="../MSH_Fonctions/MidiSetApplAlarm.html" TARGET="Page">MidiSetApplAlarm</A>(short refNum, <A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A> alarm);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>alarm</CODE>
+	<DD>a <A HREF="../MSH_Fonctions/ApplAlarmPtr.html" TARGET="Page">ApplAlarmPtr</A>, a  pointer to the application context alarm routine.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyApplAlarm (short refNum, long code);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>code     </CODE>
+	<DD>a 32-bit integer, the context modification code : 0xRRRRMMMM where RRRR is the Reference number of the involved application and MMMM the type of change (see <A HREF="../MSH_Fonctions/MidiChangeCodes.html" TARGET="Page">MidiChangeCodes</A>). 
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Example to be supplied.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

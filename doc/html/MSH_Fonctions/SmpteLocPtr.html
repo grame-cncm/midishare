@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+   <TITLE>SmpteLocPtr</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>SmpteLocPtr</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Record describing an SMPTE location (see <A HREF="../MSH_Fonctions/MidiTime2Smpte.html" TARGET="Page">MidiTime2Smpte</A> and <A HREF="../MSH_Fonctions/MidiSmpte2Time.html" TARGET="Page">MidiSmpte2Time</A>).
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/structure.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><PRE>
+typedef struct <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A> *<A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">SmpteLocPtr</A>;
+typedef struct <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>
+{
+    short        format;     <I><FONT COLOR="#0000AF">// (0:24f/s, 1:25f/s, 2:30DFf/s, 3:30f/s)</FONT></I>
+    short        hours;      <I><FONT COLOR="#0000AF">// 0..23</FONT></I>
+    short        minutes;    <I><FONT COLOR="#0000AF">// 0..59</FONT></I>
+    short        seconds;    <I><FONT COLOR="#0000AF">// 0..59</FONT></I>
+    short        frames;     <I><FONT COLOR="#0000AF">// 0..30 (according to format)</FONT></I>
+    short        fracs;      <I><FONT COLOR="#0000AF">// 0..99 (1/100 of frames)</FONT></I>
+} <A HREF="../MSH_Fonctions/SmpteLocPtr.html" TARGET="Page">TSmpteLocation</A>; 
+
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

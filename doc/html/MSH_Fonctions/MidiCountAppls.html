@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiCountAppls</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiCountAppls</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the number of Midi applications currently active. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal short    <A HREF="../MSH_Fonctions/MidiCountAppls.html" TARGET="Page">MidiCountAppls</A>();
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 16-bit integer, the number of currently opened Midi applications.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print the name of all the actives MidiShare applications.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintApplNames(void)
+{
+    short     ref;
+    short     i;
+    
+    printf( "List of MidiShare applications :\n" );
+    for( i = 1; i &lt;= <A HREF="../MSH_Fonctions/MidiCountAppls.html" TARGET="Page">MidiCountAppls</A>(); ++i )
+    {
+        ref = <A HREF="../MSH_Fonctions/MidiGetIndAppl.html" TARGET="Page">MidiGetIndAppl</A>(i);
+        printf("%i : %s \n", ref, <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A>( ref ) );
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Therefore, in C, the result of <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A> is a Pascal string that must be converted to a C string before being printed.</I>
+
+<BLOCKQUOTE><I>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

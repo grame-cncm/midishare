@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+   <TITLE>typeSpecific  (code 148)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeSpecific  (code 148)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A sequencer specific event (from the Midi File 1.0 specification). This event cannot be sent to external Midi devices.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P><A HREF="../MSH_Fonctions/typeSpecific.html" TARGET="Page">typeSpecific</A> events have a variable number of 8-bits fields. </P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a <A HREF="../MSH_Fonctions/typeSpecific.html" TARGET="Page">typeSpecific</A> event from an array of bytes. Returns a pointer to the event or NIL if there is no more memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> Specific ( long date, short len, Byte *p)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    short    c;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeStream.html" TARGET="Page">typeStream</A> ) )    <I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;
+        c = len;                    
+        while (c--) <A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A>(e,*p++);
+        if (<A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e) &lt; len ) <I><FONT COLOR="#0000AF">/* if event smaller than len then*/</FONT></I>
+        {
+            <A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A>(e);        <I><FONT COLOR="#0000AF">/*     we run out of memory, free it */</FONT></I>
+            e = nil;            <I><FONT COLOR="#0000AF">/*     and return nil */</FONT></I>
+        }
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

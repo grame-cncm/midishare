@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiCountFields</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiCountFields</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the number of fields of an event. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, a pointer to the concerned event.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 32-bit integer, the number of fields of the event.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>An universal method for printing of a MidiShare event.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintEv(<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e)
+{
+    long i, n;
+    n = <A HREF="../MSH_Fonctions/MidiCountFields.html" TARGET="Page">MidiCountFields</A>(e);
+    printf( "Event %x content :\n", e );
+    printf( " link : %x\n", Link(e) );
+    printf( " date : %i\n", Date(e) );
+    printf( " type : %i\n", EvType(e) );
+    printf( "  ref : %i\n", RefNum(e) );
+    printf( " port : %i\n", Port(e) );
+    printf( " chan : %i\n", Chan(e) );
+    printf( " %i fields ( ", n );
+    for(i=0; i&lt;n; ++i) printf("%i ",<A HREF="../MSH_Fonctions/MidiGetField.html" TARGET="Page">MidiGetField</A>(e,i) );
+    printf( ")\n" );
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>pitch (8-bit), velocity (8-bit) and duration (16-bit)). Some others, like system exclusive have a variable number of fields.</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+</DL></BLOCKQUOTE>
+</BODY></HTML>

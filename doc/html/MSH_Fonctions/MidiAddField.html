@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiAddField</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiAddField</H1>
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Adds a field at the tail of an event of variable length (for example a System Exclusive or a Stream) and assigns to it the value transmitted as a parameter.
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e, long v);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, it is a pointer to the event to be modified. 
+<DT><CODE>v </CODE>
+	<DD>a 32-bit integer, it is the value of the field to be added. This value is always a long for a purpose of uniformity, but it is internally translate to the right size (a byte in this case). The value of v is actually between 0 and 127 for a System Exclusive and between 0 and 255 for a Stream.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates the System Exclusive message "F0 67 18 05 F7".
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+
+e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A> (<A HREF="../MSH_Fonctions/typeSysEx.html" TARGET="Page">typeSysEx</A>);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x67L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x18L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x05L);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>the leading F0 byte and the tailing F7 byte are automatically added by MidiShare when the message is transmitted. They must not be added by the user.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates the Stream message "F8 F0 67 F8 18 05 F7" that mixes two <A HREF="../MSH_Fonctions/MidiClock.html" TARGET="Page">MidiClock</A> messages (F8) into a System Exclusive.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+long     i;
+
+e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeStream.html" TARGET="Page">typeStream</A>);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0xF8L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0xF0L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x67L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0xF8L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x18L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0x05L);
+<A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A> (e, 0xF7L);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>Streams are sent without any transformation (no running status, no check of coherence). They can be used for example to send a long system exclusive split into several chunks with a little delay between. They can also be used as in the example to mix real time messages in a long system exclusive for maintaining synchronization.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example3.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Create a system exclusive message from an array of values.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+char        tab[3] = {10, 20, 30};
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    aSysEx;
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> Array2SysEx( short len, char* vect, short chan, short port )
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+    
+    e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeSysEx.html" TARGET="Page">typeSysEx</A> );        <I><FONT COLOR="#0000AF">/* a new, empty sysex    */</FONT></I>
+    Chan(e) = chan; Port(e) = port;        <I><FONT COLOR="#0000AF">/* set destination info    */</FONT></I>
+    while (len—) <A HREF="../MSH_Fonctions/MidiAddField.html" TARGET="Page">MidiAddField</A>(e, *vect++);    <I><FONT COLOR="#0000AF">/* append fields    */</FONT></I>
+    return e;
+}
+
+aSysEx = Array2SysEx(3, tab, 0, 0);
+    
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

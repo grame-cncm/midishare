@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiIsConnected</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiIsConnected</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the state of a connection between two MidiShare applications. Connections allow real-time communications of midi events between applications.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal Boolean    <A HREF="../MSH_Fonctions/MidiIsConnected.html" TARGET="Page">MidiIsConnected</A>(short src, short dest);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>src </CODE>
+	<DD>is the reference number of a source application
+<DT><CODE>dest </CODE>
+	<DD>is the reference number of a destination application
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is true when a connection exist between the source and the destination, and false otherwise. 
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print all the sources of an application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintSources(short refNum)
+{
+    short     src;
+    short     i;
+    
+    printf( "Sources of : %s\n", <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A>( refNum) );
+    for( i = 1; i &lt;= <A HREF="../MSH_Fonctions/MidiCountAppls.html" TARGET="Page">MidiCountAppls</A>(); ++i )
+    {
+        src = <A HREF="../MSH_Fonctions/MidiGetIndAppl.html" TARGET="Page">MidiGetIndAppl</A>(i);
+        if ( <A HREF="../MSH_Fonctions/MidiIsConnected.html" TARGET="Page">MidiIsConnected</A>(src, refNum) )
+            printf(" %i : %s \n", src, <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A>( src ) );
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, the result of <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A> is a Pascal string that must be converted to a C string to be printed.</I>
+
+<BLOCKQUOTE><I>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

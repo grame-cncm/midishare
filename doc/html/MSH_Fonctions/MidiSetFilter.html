@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetFilter</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetFilter</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Associates a filter to an application. Each application can select the events to be received by using a filter. The filtering process is local to the application and has no influence on the events received by the other applications. The implementation of these filters is achieved by two routines : <A HREF="../MSH_Fonctions/MidiSetFilter.html" TARGET="Page">MidiSetFilter</A> and <A HREF="../MSH_Fonctions/MidiGetFilter.html" TARGET="Page">MidiGetFilter</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSetFilter.html" TARGET="Page">MidiSetFilter</A>( short refNum, <A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">FilterPtr</A> filter );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>filter     </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/FilterPtr.html" TARGET="Page">FilterPtr</A>, a pointer to the application filter. 
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Example to be supplied.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

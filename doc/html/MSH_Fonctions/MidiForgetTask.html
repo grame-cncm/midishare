@@ -1,0 +1,96 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiForgetTask</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiForgetTask</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Tries to "forget" a previously scheduled Task or DTasks. This is a very powerful, but also dangerous function. An application must be sure that the task has not yet executed before calling <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> *v);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>v </CODE>
+	<DD>is the address of a variable pointing to a previously scheduled Task or DTask but not yet executed. The variable may also contain NIL. In this case <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> does nothing.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/sideeffect.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>The variable, which address is given in parameter, is set to NIL by <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>.
+
+</BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Create an infinite periodic clock (every 250ms) and stop it with <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    theClock;
+
+void InfClock (long date, short refNum, long delay, long a2, long a3)
+{
+    <A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A> (refNum, <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeClock.html" TARGET="Page">typeClock</A>));
+    theClock = <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A> (InfClock, date+delay, refNum, delay, a2, a3);
+}
+
+InfClock(<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>(), myRefNum, 250L, 0L, 0L);  <I><FONT COLOR="#0000AF">/* Start the clock */</FONT></I>
+
+<I><FONT COLOR="#0000AF">/* Wait some time */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>(&amp;theClock);                        <I><FONT COLOR="#0000AF">/* And forget it */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>In the previous example theClock always point to a valid task because InfClock never stop by itself. If the task may decide to stop itself, it must set the pointer to NIL in order to avoid to forget an invalid task.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    theClock;
+
+void CountClock (long date, short refNum, long delay,long count, long a3)
+{
+    if (count &gt; 0)
+    {
+        <A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A> (refNum, <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeClock.html" TARGET="Page">typeClock</A>));
+        theClock = <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A> (CountClock, date+delay, refNum, delay, count-1, a3);
+    } else {
+        theClock = NIL;     <I><FONT COLOR="#0000AF">/* here the task decide to stop itself, so set the pointer to NIL */</FONT></I>
+    }
+}
+
+CountClock(<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>(), myRefNum, 250L, 100L, 0L);    <I><FONT COLOR="#0000AF">/* Start 100 clocks */</FONT></I>
+
+<I><FONT COLOR="#0000AF">/* Wait some time */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>(&amp;theClock);                    <I><FONT COLOR="#0000AF">/* And forget it */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>If <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> happens before the end of the 100 clocks, theClock points to a valid task and <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>(&amp;theClock) is safe. If <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> happens after the end of the 100 clocks, theClock contains NIL and <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A>(&amp;theClock) is safe and will do nothing.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

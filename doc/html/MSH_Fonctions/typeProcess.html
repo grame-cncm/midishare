@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+   <TITLE>typeProcess  (code 128)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeProcess  (code 128)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Process events are automatically created by <A HREF="../MSH_Fonctions/MidiCall.html" TARGET="Page">MidiCall</A> and <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>. They are used to realize time delayed function calls. The function call is achieved under interruption as soon as the scheduling date is due.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>Process events have 4 fields numbered from 0 to 3 :</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+<DT><CODE>0</CODE>
+	<DD>a <A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A>, the address of the function to call. (Field size : 4 byte)
+<DT><CODE>1</CODE>
+	<DD>the first argument of the function. (Field size : 4 byte)
+<DT><CODE>2</CODE>
+	<DD>the second argument of the function. (Field size : 4 byte)
+<DT><CODE>3</CODE>
+	<DD>the third argument of the function. (Field size : 4 byte)
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a Process event in the same way than <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> MakeTask ( <A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A> proc, long date, short refNum, long arg1,
+                    long arg2, long arg3)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeProcess.html" TARGET="Page">typeProcess</A> ) )    <I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 0, (long)proc);    <I><FONT COLOR="#0000AF">/* Fill the 4 fields */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 1, arg1);
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 2, arg2);
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e, 3, arg3);
+        <A HREF="../MSH_Fonctions/MidiSendAt.html" TARGET="Page">MidiSendAt</A>(refNum, e, date);    <I><FONT COLOR="#0000AF">/* and schedule the task */</FONT></I>
+    }
+    return e;
+}
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,69 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiClose</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiClose</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>This is used for closing of a MidiShare application. Every opening of MidiShare with <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A> must be matched by a call to <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>, so that MidiShare can keep track of active applications and release the corresponding internal data structures. All the MidiShare applications owning a "context alarm" will be informed of this closing.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A> (short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application, given by the corresponding <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>A do-nothing MidiShare application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+#include &lt;MidiShare.h&gt;
+#include &lt;stdio.h&gt;
+
+short    myRefNum;
+
+main()
+{
+    if ( ! MidiShare() )     exit(1);        <I><FONT COLOR="#0000AF">/* Check MidiShare loaded */</FONT></I>
+    myRefNum = <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>("Sample");    <I><FONT COLOR="#0000AF">/* Ask for a reference number */</FONT></I>
+    if ( myRefNum &lt; 1 )     exit(1);        <I><FONT COLOR="#0000AF">/* Check <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A> success */</FONT></I>
+    printf( "refNum : %i \n", myRefNum);    <I><FONT COLOR="#0000AF">/* Print the reference number */</FONT></I>
+    <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>(myRefNum);            <I><FONT COLOR="#0000AF">/* And close*/</FONT></I>
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I><A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A> takes care of deleting all the connections of the concerned application. Therefore if an application sends some Midi events and without delay, does a <A HREF="../MSH_Fonctions/MidiClose.html" TARGET="Page">MidiClose</A>, these sent events will probably not be actually transmitted. They just go back to the MidiShare Memory Manager.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Therefore, in C, all strings passed as arguments of a MidiShare function must be Pascal strings. In the previous example, one must write : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE>myRefNum = <A HREF="../MSH_Fonctions/MidiOpen.html" TARGET="Page">MidiOpen</A>("\pSample");</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

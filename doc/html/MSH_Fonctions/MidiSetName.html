@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetName</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetName</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Changes the name of an application.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiSetName.html" TARGET="Page">MidiSetName</A>( short refNum, <A HREF="../MSH_Fonctions/MidiName.html" TARGET="Page">MidiName</A> name );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum  </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>name     </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiName.html" TARGET="Page">MidiName</A>, the new application name.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Change the name of the application "Lisp" to "Common Lisp".
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSetName.html" TARGET="Page">MidiSetName</A>(<A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A>("Lisp"), "Common Lisp");
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, in C, all strings passed as arguments of a MidiShare function must be Pascal strings. In the previous example, one must write : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE><A HREF="../MSH_Fonctions/MidiSetName.html" TARGET="Page">MidiSetName</A><<A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A>("\pLisp"), "\pCommon Lisp");</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

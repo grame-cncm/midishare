@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+   <TITLE>typeKeyPress  (code 3)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeKeyPress  (code 3)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A Polyphonic Key Pressure message with pitch and pressure. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>KeyPress events have 2 fields numbered from 0 to 1 :</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+<DT><CODE>0</CODE>
+	<DD>Pitch, a note number from 0 to 127. (Field size : 1 byte)
+<DT><CODE>1</CODE>
+	<DD>Press, a key pressure from 0 to 127. (Field size : 1 byte)
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a KeyPress event and returns a pointer to the event or NIL if there is no more memory space. Fields are modified using <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A> instead of direct structure access.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> KeyPress( long date, short pitch, short press, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeKeyPress.html" TARGET="Page">typeKeyPress</A> ) )<I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;        <I><FONT COLOR="#0000AF">/* These information are common to all */</FONT></I>
+        Chan(e) = chan;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+        Port(e) = port;
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e,0,pitch);    <I><FONT COLOR="#0000AF">/* These fields are particular to KeyPress */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e,1,press);
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a KeyPress event and returns a pointer to the event or NIL if there is no more memory space. Fields are modified using direct structure access instead of <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> KeyPress( long date, short pitch, short press, short chan, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeKeyPress.html" TARGET="Page">typeKeyPress</A> ) )<I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;        <I><FONT COLOR="#0000AF">/* These information are common to all */</FONT></I>
+        Chan(e) = chan;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+        Port(e) = port;
+        Pitch(e) = pitch;    <I><FONT COLOR="#0000AF">/* These fields are particular to KeyPress*/</FONT></I>
+        Vel(e)     = press;    <I><FONT COLOR="#0000AF">/* Same byte than velocity */</FONT></I>
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

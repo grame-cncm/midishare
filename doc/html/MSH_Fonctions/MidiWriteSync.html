@@ -1,0 +1,49 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiWriteSync</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiWriteSync</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Writes a 32-bit value to a variable only if the previous variable content was NIL. This function is non-interruptable in order to simplify communication between application tasks that run at interrupt level. It can be used to implement "mail boxes" between tasks when used in conjunction with <A HREF="../MSH_Fonctions/MidiReadSync.html" TARGET="Page">MidiReadSync</A>.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void*    <A HREF="../MSH_Fonctions/MidiWriteSync.html" TARGET="Page">MidiWriteSync</A>(void *adrMem, void *val);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>adrMem </CODE>
+	<DD>is the address of a variable to be modified.
+<DT><CODE>val </CODE>
+	<DD>is a 32-bit value to write.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is the previous content of the variable. 
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Example to be supplied.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

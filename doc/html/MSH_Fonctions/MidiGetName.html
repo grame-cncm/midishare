@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetName</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetName</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Gives the name of an application. Knowing an application reference number, it is possible to find its name using the <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A> function. It is also possible to find the reference number of an application via its name using the <A HREF="../MSH_Fonctions/MidiGetNamedAppl.html" TARGET="Page">MidiGetNamedAppl</A> function.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiName.html" TARGET="Page">MidiName</A>p<A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A>(short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is pointer on a character string representing the application name.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Print the name of all the active MidiShare applications.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void PrintApplNames(void)
+{
+    short     ref;
+    short     i;
+    
+    printf( "List of MidiShare applications :\n" );
+    for( i = 1; i &lt;= <A HREF="../MSH_Fonctions/MidiCountAppls.html" TARGET="Page">MidiCountAppls</A>(); ++i )
+    {
+        ref = <A HREF="../MSH_Fonctions/MidiGetIndAppl.html" TARGET="Page">MidiGetIndAppl</A>(i);
+        printf("%i : %s \n", ref, <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A>( ref ) );
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Consequently, in C, the result of <A HREF="../MSH_Fonctions/MidiGetName.html" TARGET="Page">MidiGetName</A> is a Pascal string that must be converted to a C string before being printed.</I>
+
+<BLOCKQUOTE><I>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

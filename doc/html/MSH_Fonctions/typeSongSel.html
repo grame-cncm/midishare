@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+   <TITLE>typeSongSel  (code 9)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>typeSongSel  (code 9)</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/eventdescription.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A Song Select message with a song number. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/fields.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><P>SongSel events have 1 field numbered 0 :</P></BLOCKQUOTE>
+
+<BLOCKQUOTE><DL>
+
+<DT><CODE>0</CODE>
+	<DD>A song number from 0 to 127. (Field size : 1 byte)
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Creates a SongSel event and returns a pointer to the event or NIL if there is no more memory space.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> SongSel ( long date, short song, short port)
+{
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e;
+
+    if ( e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>( <A HREF="../MSH_Fonctions/typeSongSel.html" TARGET="Page">typeSongSel</A> ) )<I><FONT COLOR="#0000AF">/* Allocate a new event. Check not NIL */</FONT></I> 
+    {
+        Date(e) = date;        <I><FONT COLOR="#0000AF">/* These information are common to all */</FONT></I>
+        Port(e) = port;        <I><FONT COLOR="#0000AF">/* kind of events */</FONT></I>
+        <A HREF="../MSH_Fonctions/MidiSetField.html" TARGET="Page">MidiSetField</A>(e,0,song);    <I><FONT COLOR="#0000AF">/* Field particular to SongSel */</FONT></I>
+    }
+    return e;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,83 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiTask</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiTask</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>As with <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A>, <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A> allows an application to initiate a time delayed function call, however with  <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>, the call is achieved under interruption as soon as falling time is due. 
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A> (<A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A> MyProc, long date, short refNum, long a1, long a2,long a3);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>MyProc     </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A>, it is the address of the routine to be called.
+<DT><CODE>date         </CODE>
+	<DD>a 32-bit integer, it is the date at which this call is scheduled. 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3     </CODE>
+	<DD>are 32-bit integers left at the user’s disposal, as arguments to MyProc.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result, a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, is a pointer to a <A HREF="../MSH_Fonctions/typeProcess.html" TARGET="Page">typeProcess</A> MidiShare event. The result is NIL if MidiShare run out of memory.
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyProc (long date, short refNum, long a1, long a2, long a3);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>date         </CODE>
+	<DD>a 32-bit integer, it is the date of the call. 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3     </CODE>
+	<DD>are 32-bit integers that can be freely used.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Schedule a function Action() call 1000 ms ahead.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    myTask;
+
+myTask = <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>(Action,<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>()+1000,myRefNum, a1, a2, a3);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>The result, in myTask, can be used to test the success of <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A>. It can also be used by <A HREF="../MSH_Fonctions/MidiForgetTask.html" TARGET="Page">MidiForgetTask</A> to try to "forget" a scheduled task before it happens.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

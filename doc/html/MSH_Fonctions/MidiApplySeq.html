@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiApplySeq</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiApplySeq</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>This function is an iteration. It allows an application apply a function to all the events of a sequence.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiApplySeq.html" TARGET="Page">MidiApplySeq</A> (<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> s, <A HREF="../MSH_Fonctions/ApplyProcPtr.html" TARGET="Page">ApplyProcPtr</A> MyProc);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>s         </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>, is a pointer to the sequence to be browsed;
+<DT><CODE>MyProc     </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/ApplyProcPtr.html" TARGET="Page">ApplyProcPtr</A> is the address of the function to apply to each event of the sequence.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyProc (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, is a pointer to the current event in the sequence.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Transpose a sequence by one octave.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>    s;
+
+void TransposeOctave (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e)
+{
+    if (     EvType(e) == <A HREF="../MSH_Fonctions/typeNote.html" TARGET="Page">typeNote</A> || 
+        EvType(e) == <A HREF="../MSH_Fonctions/typeKeyOn.html" TARGET="Page">typeKeyOn</A> || 
+        EvType(e) == <A HREF="../MSH_Fonctions/typeKeyOff.html" TARGET="Page">typeKeyOff</A> || 
+        EvType(e) == <A HREF="../MSH_Fonctions/typeKeyPress.html" TARGET="Page">typeKeyPress</A> )
+        {
+            Pitch(e) += 12;    <I><FONT COLOR="#0000AF">/* normally one must check boundaries */</FONT></I>
+        }
+}
+....
+
+<A HREF="../MSH_Fonctions/MidiApplySeq.html" TARGET="Page">MidiApplySeq</A>(s, TransposeOctave);
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed in Pascal on the Macintosh. Therefore, in C, all  functions passed as arguments of a MidiShare function must be declared as Pascal. In the previous example, TransposeOctave should be declared as :</I>
+
+<BLOCKQUOTE><I>
+<P><CODE>pascal void TransposeOctave (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

@@ -1,0 +1,98 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiCall</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiCall</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Initiates a time delayed function call. When the calling date falls, the call is automatically realized by MidiShare under interrupt. <A HREF="../MSH_Fonctions/MidiCall.html" TARGET="Page">MidiCall</A> is presented here for historical reasons, and <A HREF="../MSH_Fonctions/MidiTask.html" TARGET="Page">MidiTask</A> is a better choice of code for completing this task.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiCall.html" TARGET="Page">MidiCall</A> (<A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A> MyProc, long date, short refNum, long a1, long a2, long a3);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>MyProc     </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/TaskPtr.html" TARGET="Page">TaskPtr</A>, is the address of the function to be called.
+<DT><CODE>date     </CODE>
+	<DD>a 32-bit integer, is the date at which this call is scheduled. 
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, it is the reference number of the application.
+<DT><CODE>a1,a2,a3    </CODE>
+	<DD>are 32-bit integers left at the user's disposal, as arguments of MyProc.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    MyProc (long date, short refNum, long a1, long a2, long a3);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>date     </CODE>
+	<DD>a 32-bit integer, is the date of the call . 
+<DT><CODE>refNum      </CODE>
+	<DD>a 16-bit integer, is the reference number of the application.
+<DT><CODE>a1,a2,a3 </CODE>
+	<DD>are 32-bit integers that can be used by the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Send periodically (every 10 ms), a <A HREF="../MSH_Fonctions/MidiClock.html" TARGET="Page">MidiClock</A> message for 30 seconds.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void MyClock (long date, short refNum, long delay, long limit, long a3)
+{
+    if (date &lt; limit)
+    {
+        <A HREF="../MSH_Fonctions/MidiSendIm.html" TARGET="Page">MidiSendIm</A> (refNum, <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A>(<A HREF="../MSH_Fonctions/typeClock.html" TARGET="Page">typeClock</A>));
+        <A HREF="../MSH_Fonctions/MidiCall.html" TARGET="Page">MidiCall</A> (MyClock, date+delay, refNum, delay, limit, a3);
+    }
+}
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+long d;
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+d = <A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>();
+MyClock (d, myRefNum, 10L, d+30000L, 0L); <I><FONT COLOR="#0000AF">/* Start now the clock for 30s */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>As this call  occurs under interruptions, a few precautions should be taken when using it, for example not invoking non-reentrant routines of the Operating System (such as the Memory Manager on the Macintosh for example). However, most of the MidiShare functions are reentrant, they can be used safely under interruption.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/notemac.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>MidiShare was originally developed for Pascal on the Macintosh. Therefore, in C, all functions passed as arguments for a MidiShare function should be declared as Pascal. In the previous example, MyClock should be declared as : </I>
+
+<BLOCKQUOTE><I>
+<P><CODE>pascal void MyClock(long date, short refNum, long delay, long limit, long a3);</P></CODE>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

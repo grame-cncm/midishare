@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiCopyEv</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiCopyEv</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Duplicates an event, taking into account the structure of the event. It can be used to copy any type of events, from simple notes to large system exclusives.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    <A HREF="../MSH_Fonctions/MidiCopyEv.html" TARGET="Page">MidiCopyEv</A> (<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A> e);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>e </CODE>
+	<DD>a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, is a pointer to the event to be copied.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>, a pointer to the copy if the operation was successful. The result is NIL if MidiShare was not able to allocate enough memory space for the copy.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Send from now, 10 times an identical note of pitch 60 every 250 ms.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+short        myRefNum;
+long        d;
+short        i;
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A> (<A HREF="../MSH_Fonctions/typeNote.html" TARGET="Page">typeNote</A>);    <I><FONT COLOR="#0000AF">/* create template note */</FONT></I>
+Pitch(e)= 60;            <I><FONT COLOR="#0000AF">/* fill up its parameters */</FONT></I>
+Vel(e)    = 80;
+Dur(e)    = 250;
+Chan(e)    = 0;
+Port(e) = 0;
+
+for (d=<A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>(), i=0; i&lt;10; i++, d+=250)     <I><FONT COLOR="#0000AF">/* send the 10 copies */</FONT></I>
+    <A HREF="../MSH_Fonctions/MidiSendAt.html" TARGET="Page">MidiSendAt</A> (myRefNum, <A HREF="../MSH_Fonctions/MidiCopyEv.html" TARGET="Page">MidiCopyEv</A>(e), d);      <I><FONT COLOR="#0000AF">/*   of the template */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiFreeEv.html" TARGET="Page">MidiFreeEv</A>(e);                        <I><FONT COLOR="#0000AF">/* and free the template */</FONT></I>
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>it is very important that, once an event is sent, it must never be used again by the application. Therefore, if an application needs to send the same event several times duplicate copies must be used.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

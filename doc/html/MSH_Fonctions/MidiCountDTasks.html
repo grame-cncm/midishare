@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiCountDTasks</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiCountDTasks</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Returns the number of time delayed tasks waiting in the list of an application. Delayed tasks are function calls that where scheduled with <A HREF="../MSH_Fonctions/MidiDTask.html" TARGET="Page">MidiDTask</A> and that are now ready to be executed in the DTasksFifo of the application.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiCountDTasks.html" TARGET="Page">MidiCountDTasks</A> (short refNum);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum </CODE>
+	<DD>a 16-bit integer, the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a 32-bit integer, the number of waiting DTasks.
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Execute the waiting DTasks of a MidiShare application.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+void ExecuteAllDTasks(short refNum)
+{
+    long    n;
+
+    for (n=<A HREF="../MSH_Fonctions/MidiCountDTasks.html" TARGET="Page">MidiCountDTasks</A>(refNum), n&gt;0; n--)
+    {
+        <A HREF="../MSH_Fonctions/MidiExec1DTask.html" TARGET="Page">MidiExec1DTask</A>(refNum);
+    }
+}
+
+</PRE></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>A typical application might execute the queued tasks from with in its 'main' loop,  and since it is not under interruption, operating system calls may be performed. However this does mean that the execution time of these functions cannot be accurately predicted.</I>
+<BLOCKQUOTE><I>
+
+
+</I></BLOCKQUOTE>
+</BODY></HTML>

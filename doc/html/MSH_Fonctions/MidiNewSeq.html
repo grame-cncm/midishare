@@ -1,0 +1,63 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiNewSeq</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiNewSeq</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Allocation of a new empty sequence.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>    <A HREF="../MSH_Fonctions/MidiNewSeq.html" TARGET="Page">MidiNewSeq</A>();
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<BLOCKQUOTE><I>none</I></BLOCKQUOTE>
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+The result is a <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>, a pointer to an empty sequence. 
+
+
+</P></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Create a sequence of 10 Midi clocks.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A> ClockSeq()
+{
+    <A HREF="../MSH_Fonctions/MidiSeqPtr.html" TARGET="Page">MidiSeqPtr</A>    s;
+    <A HREF="../MSH_Fonctions/MidiEvPtr.html" TARGET="Page">MidiEvPtr</A>    e;
+    long    d;
+    
+    s = <A HREF="../MSH_Fonctions/MidiNewSeq.html" TARGET="Page">MidiNewSeq</A>();
+    for (d=0; d&lt; 2500; d+=250) 
+    {
+        e = <A HREF="../MSH_Fonctions/MidiNewEv.html" TARGET="Page">MidiNewEv</A> (<A HREF="../MSH_Fonctions/typeClock.html" TARGET="Page">typeClock</A>);
+        Date(e) = d;
+        <A HREF="../MSH_Fonctions/MidiAddSeq.html" TARGET="Page">MidiAddSeq</A> (s, e);
+    }
+    return s;
+}
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

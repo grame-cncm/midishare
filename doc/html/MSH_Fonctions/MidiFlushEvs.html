@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiFlushEvs</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiFlushEvs</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Flushes all the waiting events in the reception FIFO of the application.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void    <A HREF="../MSH_Fonctions/MidiFlushEvs.html" TARGET="Page">MidiFlushEvs</A>( short refNum );
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>refNum     </CODE>
+	<DD>a 16-bit integer, is the reference number of the application.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Flushes all the waiting events in the application reception FIFO.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+short    myRefNum;
+
+<I><FONT COLOR="#0000AF">/* ....... */</FONT></I>
+
+<A HREF="../MSH_Fonctions/MidiFlushEvs.html" TARGET="Page">MidiFlushEvs</A> (myRefNum);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

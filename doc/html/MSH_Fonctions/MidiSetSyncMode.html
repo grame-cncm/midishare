@@ -1,0 +1,72 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiSetSyncMode</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiSetSyncMode</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Set the synchronisation mode of MidiShare.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal void     <A HREF="../MSH_Fonctions/MidiSetSyncMode.html" TARGET="Page">MidiSetSyncMode</A> (unsigned short mode);
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>mode </CODE>
+	<DD>an unsigned 16-bits word of structure 'xarrrrrrpppppppp'. 
+<DT><CODE>x, b15 </CODE>
+	<DD>is used to choose between internal synchronisation (x=0) and external synchronisation (x=1)
+<DT><CODE>a, b14 </CODE>
+	<DD>is used to choose between synchronisation on port p (a=0) and synchronisation on any port (a=1)
+<DT><CODE>r, b13_b8 </CODE>
+	<DD>is reserved for future use and must be set to 0.
+<DT><CODE>p, b7_b0 </CODE>
+	<DD>is the synchronisation port to be used when x=1 and a=0. When a=1 the port number is ignored, the first port with incoming MTC is used.
+
+</DL></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example1.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Set the synchronisation to external, on any port.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSetSyncMode.html" TARGET="Page">MidiSetSyncMode</A>(MIDISyncExternal | MIDISyncAnyPort);
+
+</PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example2.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Set the synchronisation to external, on port 18.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSetSyncMode.html" TARGET="Page">MidiSetSyncMode</A>(MIDISyncExternal | 18);
+
+</PRE></BLOCKQUOTE>
+
+<P><HR><IMG SRC="../MSH_ArtWork/example3.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+<BLOCKQUOTE><I>
+<P>Set the synchronisation to internal.
+</I></BLOCKQUOTE>
+
+<BLOCKQUOTE><PRE>
+
+<A HREF="../MSH_Fonctions/MidiSetSyncMode.html" TARGET="Page">MidiSetSyncMode</A>(MIDISyncInternal);
+
+</PRE></BLOCKQUOTE>
+</BODY></HTML>

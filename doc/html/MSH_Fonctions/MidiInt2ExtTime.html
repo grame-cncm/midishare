@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiInt2ExtTime</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiInt2ExtTime</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>Convert an internal time in millisecond to an external time. The convertion is made by adding the current offset between internal and external time.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long     <A HREF="../MSH_Fonctions/MidiInt2ExtTime.html" TARGET="Page">MidiInt2ExtTime</A> (long time)
+
+</PRE></P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/arguments.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><DL>
+<DT><CODE>time </CODE>
+	<DD>a 32-bits time in milliseconds
+
+</DL></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+the corresponding external time, a 32-bits value in milliseconds.
+
+</P></BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<I>When MidiShare is locked we have the following equivalence :</I>
+<BLOCKQUOTE><I>
+
+<P><CODE><A HREF="../MSH_Fonctions/MidiInt2ExtTime.html" TARGET="Page">MidiInt2ExtTime</A>( <A HREF="../MSH_Fonctions/MidiGetTime.html" TARGET="Page">MidiGetTime</A>() ) == <A HREF="../MSH_Fonctions/MidiGetExtTime.html" TARGET="Page">MidiGetExtTime</A>();</P></CODE>
+
+<P>and also :</P>
+
+<P><CODE><A HREF="../MSH_Fonctions/SyncInfoPtr.html" TARGET="Page">TSyncInfo</A>     myInfo;</P></CODE>
+<P><CODE><A HREF="../MSH_Fonctions/MidiGetSyncInfo.html" TARGET="Page">MidiGetSyncInfo</A>(&amp;myInfo);</P></CODE>
+<P><A HREF="../MSH_Fonctions/MidiInt2ExtTime.html" TARGET="Page">MidiInt2ExtTime</A>(x) == x + myInfo.syncOffset</P>
+
+</I></BLOCKQUOTE>
+</BODY></HTML>
