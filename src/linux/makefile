@@ -14,7 +14,7 @@ common:
 
 install:
 	./checksu
-	make -i -C library -f install
+	make -i -C library install
 	if [ ! -c /dev/MidiShare ]; then mknod /dev/MidiShare c 151 0; fi
 	insmod MidiShareKernel
 
