@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
 
 */
 
@@ -29,12 +32,12 @@
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static void NEAR Accept			( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
-static void NEAR Propose		( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
-static void NEAR Process		( MidiEvPtr ev);
-static void NEAR DiffProcess	( MidiEvPtr ev);
-static void NEAR DispatchEvents	( TMSGlobalPtr g, MidiEvPtr ev);
-static void NEAR RcvAlarmLoop	( TMSGlobalPtr g);
+static void Accept			( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
+static void Propose		    ( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev);
+static void Process		    ( MidiEvPtr ev);
+static void DiffProcess	    ( MidiEvPtr ev);
+static void DispatchEvents	( TMSGlobalPtr g, MidiEvPtr ev);
+static void RcvAlarmLoop	( TMSGlobalPtr g);
 
 
 /*===========================================================================
@@ -42,7 +45,7 @@ static void NEAR RcvAlarmLoop	( TMSGlobalPtr g);
   ===========================================================================*/ 
 void ClockHandler (TMSGlobalPtr g)
 {
-	 THorlogePtr h;
+	 THorlogePtr h; TDatedEvPtr e;
 	 MidiEvPtr ready;
 
 	 h= &g->currTime;
@@ -52,13 +55,14 @@ void ClockHandler (TMSGlobalPtr g)
 
 	 do {
 		 h->time++;
-		 SorterClock(Sorter(g));
-
-		 NextActiveAppl(g) = ActiveAppl(g);
-		 ready= (MidiEvPtr)SorterGet(Sorter(g));
-
-		 if( ready) DispatchEvents(g, ready);
-		 RcvAlarmLoop(g);
+		 e = (TDatedEvPtr)g->toSched.head;
+		 fifoinit (SorterList(g));
+		 ready = (MidiEvPtr)SorterClock(Sorter(g), e);
+		 if( ready) {
+		 	NextActiveAppl(g) = ActiveAppl(g);
+		 	DispatchEvents(g, ready);
+		 	RcvAlarmLoop(g);
+		 }
 
 	}while( h->reenterCount--);
 }
@@ -68,26 +72,23 @@ void ClockHandler (TMSGlobalPtr g)
 /*===========================================================================
   Internal functions implementation
   ===========================================================================*/ 
-static void NEAR Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
+static void Accept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 
 {
 	if( appl->refNum ) {
-		Link(ev)= 0;
-		Link(RcvFifoTail(appl)) = ev;
-		RcvFifoTail(appl) = ev;
-		RcvFifoCount(appl)++;
+		fifoput (&appl->rcv, (cell *)ev);
 		if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 	}
 	else { 
 		/* refnum 0 is MidiShare refnum */
 		/* event should be handled by the port manager */
 		/* not yet implemented */
-		MSFreeEv( ev, Memory(g));
+		MSFreeEv( ev, FreeList(Memory(g)));
 	}
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev) 
+static void Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev) 
 
 {
 	MidiEvPtr copy;
@@ -100,31 +101,29 @@ static void NEAR Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 	if (!filter
 		|| (IsAcceptedBit( filter->port, Port(ev)) && IsAcceptedBit( filter->evType, type))
 			&& ((type > typePitchWheel) || IsAcceptedBit( filter->channel, canal))) {
-			copy= MSCopyEv( ev, Memory(g));
+			copy= MSCopyEv( ev, FreeList(Memory(g)));
 			if( copy)
 				Accept( g, appl, copy);
 	}
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR ProcessCall( TApplPtr appl, MidiEvPtr ev)
+static void ProcessCall( TApplPtr appl, MidiEvPtr ev)
 {
 	TTaskExtPtr task = (TTaskExtPtr)LinkST(ev);	/* event extension */
 	CallTaskCode (appl->context, task, Date(ev), appl->refNum);
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR AcceptTask(TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
-
+static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
 {
-	Link(ev) = 0;
-	PushFifoEv (&appl->dTasks, ev);
+	fifoput (&appl->dTasks, (cell *)ev);
 }
 
 /*__________________________________________________________________________________*/
 /*	DispatchEvents								*/
 /*__________________________________________________________________________________*/
-static void NEAR DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
+static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 {
 	MSMemoryPtr mem = Memory(g);
 	MidiEvPtr next;
@@ -134,7 +133,7 @@ static void NEAR DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 		type= EvType(ev);
 		next= Link(ev);
 		if( type >= typeReserved) {			/* typeReserved : event is ignored  */
-			MSFreeEv( ev, mem);				/* free the event  					*/
+			MSFreeEv( ev, FreeList(mem));	/* free the event  					*/
 			ev= next;						/* next event						*/
 			continue;						/* and loop							*/
 		}
@@ -154,22 +153,22 @@ static void NEAR DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 						Propose( g,cnx->itsDst,ev);	/* propose to each connected appl */
 						cnx= cnx->nextDst;		    /* loop thru the connection list  */
 					}
-					MSFreeEv( ev, mem);             /* and free the event */
+					MSFreeEv( ev, FreeList(mem));   /* and free the event */
 				}
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
 				ProcessCall( appl, ev);		    /* execute the task				*/
-				MSFreeEv( ev, mem);
+				MSFreeEv( ev, FreeList(mem));
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
-				AcceptTask(g, appl, ev);    	/* store in the appl dtasks fifo*/
+				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
 			}
 			else if( type >= typePrivate) {     /* it's a private event 	*/
 				Accept( g, appl, ev);           /* event is for appl itself */
 			}
-			else MSFreeEv( ev, mem);
+			else MSFreeEv( ev, FreeList(mem));
 		}
-		else MSFreeEv( ev, mem);  /* free the event       */
+		else MSFreeEv( ev, FreeList(mem));  /* free the event       */
 		ev= next;                 /* go to the next event */
 	} while( ev);                 /* and loop             */
 }
@@ -178,7 +177,7 @@ static void NEAR DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 /*	- RcvAlarmLoop - go thru the applications list and when necessary               */
 /*	call the rcvAlarm                                                               */
 /*__________________________________________________________________________________*/
-static void NEAR RcvAlarmLoop( TMSGlobalPtr g)
+static void RcvAlarmLoop( TMSGlobalPtr g)
 {
 	TApplPtr FAR *applPtr, appl;
 	RcvAlarmPtr alarm;

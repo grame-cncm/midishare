@@ -18,11 +18,15 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+
 */
 
 #ifndef __msKernel__
 #define __msKernel__
 
+#include "lffifo.h"
 #include "msDefs.h"
 #include "msAppls.h"
 #include "msTypes.h"
@@ -48,7 +52,8 @@ typedef struct TMSGlobal {
 	THorloge      currTime;      /* time management                     */
 	TMSMemory     memory;        /* memory management                   */
 	TClients      clients;       /* clients applications management     */
-	TsorterBlock  sorter;        /* sorter specific storage             */
+	TSorter       sorter;        /* sorter specific storage             */
+	fifo          toSched;       /* events to be scheduled              */
 	THost         local;         /* for implementation specific purpose */
 	
 } TMSGlobal;
@@ -56,6 +61,7 @@ typedef struct TMSGlobal {
 /*--------------------------------------------------------------------------*/
 /* fields access macros                                                     */
 /*--------------------------------------------------------------------------*/
+#define SorterList(g)       (&g->toSched)
 #define Sorter(g)           (&g->sorter)
 #define Clients(g)       	(&g->clients)
 #define Memory(g)           (&g->memory)
