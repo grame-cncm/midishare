@@ -22,6 +22,10 @@
 
 #include "EventToUDPStream.h"
 
+#ifndef false
+enum {false, true };
+#endif
+
 /*===========================================================================
 	internal functions prototypes
   =========================================================================== */

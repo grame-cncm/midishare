@@ -30,6 +30,10 @@
 #include "MidiShare.h"
 #endif
 
+#ifdef WIN32
+#define inline	_inline
+#endif
+
 /*------------------------------------------------------------------------*/
 typedef struct UDPStream  * UDPStreamPtr;
 typedef MidiEvPtr   	 (* UDPParseMethodPtr)(UDPStreamPtr f, Byte c);

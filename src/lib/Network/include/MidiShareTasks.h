@@ -30,6 +30,8 @@
 
 #if macintosh
 #define msCallback pascal void
+#elif WIN32
+#define msCallback void MSALARMAPI
 #else 
 #define msCallback void
 #endif

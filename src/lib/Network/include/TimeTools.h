@@ -27,6 +27,8 @@
 
 #if macintosh
 #include <Timer.h>
+#elif WIN32
+#include <Windows.h>
 #else
 #include <sys/time.h>
 #endif
@@ -58,6 +60,10 @@ inline void TimeTools::GetTime (TimeInfoPtr time)
 		tmp += t.lo;
 		time->sec = tmp / 1000000;
 		time->usec = tmp - ((double)time->sec * 1000000);
+#elif WIN32
+		DWORD t = GetTickCount ();
+		time->sec = t / 1000;
+		time->usec = (t % 1000) * 1000;
 #else
 		gettimeofday ((struct timeval *)time, 0);
 #endif

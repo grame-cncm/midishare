@@ -26,7 +26,11 @@
 #define __TTCPSocket__
 
 #if !macintosh
+#if WIN32
+#include <windows.h>
+#else
 #include <pthread.h> 
+#endif
 #endif
 
 #include "TSocket.h"
@@ -63,6 +67,11 @@ class TTCPSocket : public TSocket
 #if macintosh
 		OSStatus	Disconnect	(Boolean orderly);
 		OSStatus	Listen 		(IPAddrPtr from, SocketRef ref, void *buff, short *len);
+#elif WIN32
+		DWORD	ThreadCreate (TCPSocketMode mode);
+		HANDLE	fThread;
+		DWORD	fThreadID;
+		BOOL	fRunFlag;
 #else
 		int			ThreadCreate (TCPSocketMode mode);
 		pthread_t	fThread;

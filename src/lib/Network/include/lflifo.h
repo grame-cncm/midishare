@@ -24,7 +24,7 @@
 #ifndef __LFLIFO__
 #define __LFLIFO__
 
-#if macintosh
+#if macintosh || WIN32
 
 typedef unsigned long	atomic_t;
 #define sizeField(lf)		(lf)->count
@@ -142,7 +142,7 @@ static inline short CAS (vtype void * addr, void * value, void * n)
 
 #endif /* __Pentium__ */
 
-#if macintosh
+#if macintosh || WIN32
 static inline void lfpush (register lifo * lf, register cell * cl) 
 {
 	cl->link = lf->top;

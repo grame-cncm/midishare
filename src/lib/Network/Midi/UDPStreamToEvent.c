@@ -132,7 +132,7 @@ void UDPParseInitMthTbl (UDPParseMethodTbl tbl)
 static inline MidiEvPtr parseComplete (UDPStreamPtr f)
 {
 	MidiEvPtr e = f->ptrCur;
-	short d = Date(e) & 0xffff;
+	short d = (short)(Date(e) & 0xffff);
 	f->ptrCur = 0;
 	f->shortDst = &f->length;
 	f->parse  = rcvShortHigh;

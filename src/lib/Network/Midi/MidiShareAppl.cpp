@@ -35,7 +35,7 @@ static msCallback __ReceiveEvents (short refnum)
 static msCallback __ApplAlarm ( short refNum, long code )
 {
 	MidiShareApplPtr appl = (MidiShareApplPtr)MidiGetInfo (refNum);
-	appl->ApplAlarm (refNum, code >> 16, code & 0xffff);
+	appl->ApplAlarm (refNum, (short)(code >> 16), (short)(code & 0xffff));
 }
 
 

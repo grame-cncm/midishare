@@ -31,6 +31,10 @@
 #include "MidiShare.h"
 #endif
 
+#ifdef WIN32
+#define inline _inline
+#endif
+
 /*------------------------------------------------------------------------*/
 typedef struct Ev2UDPStreamRec * Ev2UDPStreamPtr;
 

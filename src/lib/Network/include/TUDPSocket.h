@@ -26,7 +26,11 @@
 #define __TUDPSocket__
 
 #if !macintosh
-#include <pthread.h> 
+#if WIN32
+#include <winsock.h>
+#else
+#include <pthread.h>
+#endif
 #endif
 
 #include "TSocket.h"
@@ -59,6 +63,11 @@ class TUDPSocket : public TSocket
 		TUDPListener *	fClient;
 #if macintosh
 //		TUnitData	fData;
+#elif WIN32
+		DWORD	ThreadCreate ();
+		HANDLE	fThread;
+		DWORD	fThreadID;
+		BOOL	fRunFlag;
 #else
 		int		ThreadCreate ();
 		pthread_t	fThread;

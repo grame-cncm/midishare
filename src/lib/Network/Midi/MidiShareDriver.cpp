@@ -24,17 +24,21 @@
 
 #include "MidiShareDriver.h"
 
+#ifndef WIN32
+#define MSALARMAPI
+#endif
+
 static MidiShareDriver * gThis = 0;	// used for wakeup callback
 /* -----------------------------------------------------------------------------*/
 /* Driver required callbacks                                                    */
 /* -----------------------------------------------------------------------------*/
-static void __WakeUp (short r)
+static void MSALARMAPI __WakeUp (short r)
 {
 	if (gThis) gThis->WakeUp (r);
 }
 
 /* -----------------------------------------------------------------------------*/
-static void __Sleep (short r)
+static void MSALARMAPI __Sleep (short r)
 {
 	MidiShareDriver * appl = (MidiShareDriver *)MidiGetInfo (r);
 	if (appl) appl->Sleep (r);

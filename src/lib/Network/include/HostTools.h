@@ -26,15 +26,16 @@
 #define __HostTools__
 
 #if macintosh
-
 #include <Resources.h>
 #include <TextUtils.h>
 
 #define kMachineNameID	-16413		// systeme resource
 #define kUserNameID		-16096		// systeme resource
 
-#else
+#elif WIN32
+#include <winsock.h>
 
+#else
 #include <unistd.h>
 
 #endif

@@ -156,7 +156,7 @@ void TRemoteList::Remove (IPNum id)
 		r = Find(id, &prev);
 		if (!r) break;
 		adr = prev ? &prev->next : (RemotePtr *)&fRemote.top;
-	} while (!CAS (adr, r, r->next));
+	} while (!CAS ((void **)adr, r, r->next));
 	if (r) {
 		Delete (r);
 	}

@@ -75,6 +75,34 @@ typedef unsigned char * strPtr;
 #define htonl(v)	(v)
 #define htons(v)	(v)
 
+#elif WIN32
+//________________________________________________________________________
+// Windows types definition
+//________________________________________________________________________
+#include <Winsock.h>
+
+#define IPField(a)		(a).sin_addr.s_addr
+#define IPType(a)		(a).sin_family
+#define IPPort(a)		(a).sin_port
+#define PIPField(a)		(a)->sin_addr.s_addr
+#define PPortField(a)	(a)->sin_port
+#define kMaxHostNameLen 255
+#define noErr			0
+
+typedef char 	InetDomainName[kMaxHostNameLen + 1];
+typedef short 	InetSvcRef;
+typedef char 	ErrString[255];
+typedef char 	NameStr[32];
+typedef char * 	strPtr;
+
+typedef unsigned char Boolean;
+typedef unsigned long		IPNum;
+typedef struct sockaddr_in 	IPAddr, * IPAddrPtr;
+typedef SOCKET				SocketRef;
+typedef int 				SocketStatus;
+typedef long 				UPDEvent;
+typedef long 				SockResult;
+
 #else
 //________________________________________________________________________
 // linux types definition
