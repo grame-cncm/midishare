@@ -42,26 +42,26 @@ class TPlayer :public  TMidiAppl{
 
 	private:
 
-		TPlayerFactory   			fFactory;  			// Player factory
-		TGenericPlayerInterfacePtr 	fPlayer;			// Current player
+		TPlayerFactory   		fFactory;  		// Player factory
+		TGenericPlayerInterfacePtr 	fPlayer;		// Current player
 			
-		TTrackTable		  			fTrackTable;		// TrackTable: tracks state
-		TPlayerScore	 			fScore;				// Internal score
+		TTrackTable		  	fTrackTable;		// TrackTable: tracks state
+		TPlayerScore	 		fScore;			// Internal score
 			
-		TEventRecorderPtr  			fEventReceiver;     // The recorder object
+		TEventRecorderPtr  		fEventReceiver;     	// The recorder object
 		TClockConverterPtr  		fClockConverter;	// Shared between several objects
 		TLoopManagerPtr     		fLoopManager;		// Loop manager
-		TScoreInserterPtr  			fInserter;			// For insertion in the score
+		TScoreInserterPtr  		fInserter;		// For insertion in the score
 		
-		TRunningState	 			fRunningState;    	// Running state
+		TRunningState	 		fRunningState;    	// Running state
 		
-		TScoreStatePtr   			fScoreState;		// For internal state 
-		TSMPTEInfos	              	fSmpteInfos;        // For SMPTE synchronization
+		TScoreStatePtr   		fScoreState;		// For internal state 
+		TSMPTEInfos	              	fSmpteInfos;        	// For SMPTE synchronization
 		
-		ULONG	fTick_per_quarter;  // Current resolution
+		ULONG	fTick_per_quarter;  	// Current resolution
 		short   fSyncIn;         	// SynchroIn state
-		short   fSyncOut;		 	// SynchroOut state
-		short   fOutput;		 	// Output state
+		short   fSyncOut;		// SynchroOut state
+		short   fOutput;		// Output state
 			
 	 public:
 	 	
@@ -129,10 +129,16 @@ class TPlayer :public  TMidiAppl{
 		 
 		 // Output
 		 long SetOutput(short output);
+		 
+		 
+		 // Initialization
+		 static void Init() {TEventFactory::Init();}
+		 static void Destroy() {TEventFactory::Destroy();}
 	 	
 };
 
 typedef TPlayer FAR * TPlayerPtr;
+
 
 
 #endif

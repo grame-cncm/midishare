@@ -29,7 +29,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-
 /*--------------------------------------------------------------------------*/
 // Creation/Destruction
 /*--------------------------------------------------------------------------*/
@@ -47,9 +46,6 @@ TPlayer::TPlayer():fFactory(this)
 	fSyncOut = kNoSyncOut;
 	fOutput = kMidiShare;
 	fTick_per_quarter = kDefaultTpq;
-	
-	// Initialisation of the Event Factory
-	TEventFactory::Init();
 }
 
 /*--------------------------------------------------------------------------*/

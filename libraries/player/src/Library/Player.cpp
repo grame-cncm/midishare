@@ -119,11 +119,12 @@ short  EXPORT Version ()  {return kVersion;}
 
 /*--------------------------------------------------------------------------*/
 
-short  EXPORT OpenPlayer (MidiName name )
+short  EXPORT OpenPlayer (MidiName name)
 {
-	TPlayerPtr player = new TPlayer();
+	TPlayer::Init();
+  	TPlayerPtr player = new TPlayer();
 	short res = player->Open(name);
- 	if (res < 0) delete player; 		// correspond a une erreur
+ 	if (res < 0) delete player; 		// when an error occurs
 	return res;
 }
 
