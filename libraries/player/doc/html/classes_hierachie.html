@@ -1,0 +1,59 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Document sans titre</TITLE>
+</HEAD>
+<BODY>
+
+<H3>Structural Patterns</H3>
+
+<P>Structural patterns describe how classes and objects are composed
+to form clusters.</P>
+
+<P>The <B>Composite</B> pattern allows to build structures of
+objects. T</P>
+
+<P>&nbsp;</P>
+
+<P>The <B>Decorator</B> pattern attach additional responsibilities
+to an object dynamically. Decorators provide a flexible alternative
+to subclassing for extending functionality.</P>
+
+<P>&nbsp;</P>
+
+<H3>Creational Patterns</H3>
+
+<H3>&nbsp;</H3>
+
+<H3>Behavioral Patterns</H3>
+
+<P>Behavioral patterns encapsulate algorithms and the assignement
+of responibilities between objects by defining the communication
+between them as separate objects.</P>
+
+<P>- An <B>Iterator</B> is a structure that is used to traverse
+composites. An iterator provides a way to sequentially access
+elements of an aggregate object without knowing the internal objet
+representation or collection structure.</P>
+
+<P>For the score management; the class <B>TScoreIterator</B> allows
+to traverse the score. Moreover the TScoreIterator is a <B>robust
+iterator.</B> It means that elements can be inserted and removed
+in the score while iterators are defined on the score.</P>
+
+<P>- A visitor allows to add news operations on the elements of
+the composite structure without having to modify les classes used
+in the composite structure.</P>
+
+<P>For the score management; the class <B>TScoreVisitor</B> allows
+to add operations on the score elemnts.</P>
+
+<P>&nbsp;</P>
+
+<P>The Chain of Responsability patterns avoid coupling the sender
+of a request to its receiver by giving more than one object a
+chance to handle the request. Chain the receiving objects and
+pass the request along the chain until an object handles it.
+
+</BODY>
+</HTML>

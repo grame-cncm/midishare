@@ -1,0 +1,44 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Time Model</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="303" HEIGHT="44" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%" HEIGHT="28">
+      <H1><CENTER><FONT COLOR="#0000ff">MIDIFile management</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<H1><CENTER><HR></CENTER></H1>
+
+<P>Functions are provided to read on write MIDIfiles and convert
+them to the MidiShare sequence format. When loading a multi-tracks
+MIDIfile, the different tracks of the MIDIfile will correspond
+to different tracks of the MidiShare sequence. This means that
+all events of track 0 have a reference number of 0, all events
+on track 1 have a reference number of 1 and so on. When saving
+a format 1 MIDIfile, the function uses the events reference number
+to create different tracks in the MIDIfile. The function always
+write tracks in ascending order starting from track 0 (which is
+the TempoMap). Notes events are written as a KeyOn/KeyOff pair
+and EndTrack events are written automatically. If the sequence
+does not contain a Tempo Map, the function writes a default Tempo
+of 120 bpm and a Time Signature of 4/4. There are several C files
+for MIDIFile management :<BR>
+</P>
+
+<UL>
+  <LI><B>MIDIFile</B> : contains the basic MIDIFile management
+  functions.
+  <LI><B>TMTracks</B> : define higher level functions <B>MIDIFileLoad</B>
+  and <B>MIDIFileSave</B> which take care of track dispatching
+  when saving and track reconstruction when loading.
+</UL>
+
+</BODY>
+</HTML>

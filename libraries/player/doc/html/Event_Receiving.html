@@ -1,0 +1,52 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <TITLE>Events receivers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffd9ae">
+
+<H1><CENTER><TABLE WIDTH="220" HEIGHT="57" BORDER="1" CELLSPACING="2"
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">
+      <H1><CENTER><FONT COLOR="#0000ff">Event Receivers</FONT></CENTER></H1>
+    </TD>
+  </TR>
+</TABLE></CENTER></H1>
+
+<H1><CENTER><TABLE WIDTH="450" BORDER="1" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%"><IMG SRC="images/image2.gif" WIDTH="457" HEIGHT="434"
+      ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="0"></TD> 
+  </TR>
+</TABLE></CENTER></H1>
+
+<P>Incoming events are treated using a <B>chain of responsibility</B>
+pattern. The <B>TEventReceiverInterface</B> class defines a <B>ReceiventEvents</B>
+method and is the interface all event receiver components have
+to implement. This <B>TEventDispatcher </B>class implements the
+<B>chain of responsibility</B> pattern and so redirect the <B>ReceiveEvents</B>
+call to the next element in the chain of responsibility. All events
+receiver inherit from this class.</P>
+
+<P>The <B>TEventRecorder</B> object is in charge of recording.
+When the player is in record mode, incoming events will be inserted
+in the internal score.</P>
+
+<P><B>TEventReceiver</B> is the base class of event receivers
+which handle synchronization events :<BR>
+</P>
+
+<UL>
+  <LI><B>TClockEventReceiver</B> : used with the Midi clock synchronization
+  mode.
+  <LI><B>TExtEventReceiver</B> : used with the external synchronization
+  mode.
+  <LI><B>TSMPTEEventReceiver</B> : used with the SMPTE synchronization
+  mode.
+</UL>
+
+<P><CENTER>.</CENTER>
+
+</BODY>
+</HTML>
