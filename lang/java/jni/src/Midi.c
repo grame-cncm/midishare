@@ -56,6 +56,10 @@
 	#define MSALARMAPI
 #endif
 
+#ifdef WIN32
+	#include <MidiShare.h>
+#endif
+
 #include "Midi.h"
 
 
@@ -341,7 +345,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetInfo
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetNameAux
   (JNIEnv * env, jclass cl, jint refnum){
   
-	char *  buffer = NewPtr(128);
+	char *  buffer = (char *)NewPtr(128);
 	
 	if (buffer) {
 		MidiName midiname =  MidiGetName(refnum);
@@ -1092,7 +1096,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
 	
 	TDriverInfos infos;
 	jfieldID nameAux,version,slots;
-	char *  buffer = NewPtr(128);
+	char *  buffer = (char *)NewPtr(128);
 	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
  	
  	nameAux = (*inEnv)->GetFieldID(inEnv, infosclass, "nameAux",  "I");
@@ -1159,8 +1163,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
 	
 	TSlotInfos infos;
 	jfieldID nameAux,direction,cnxAux;
-	char *  buffer1 = NewPtr(128);
-	char *  buffer2 = NewPtr(128);
+	char *  buffer1 = (char *)NewPtr(128);
+	char *  buffer2 = (char *)NewPtr(128);
 	jclass infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
 	int i;
  	
