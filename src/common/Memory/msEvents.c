@@ -351,9 +351,9 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
   table[typeRcvAlarm]     = SetFUndefEv;
   table[typeApplAlarm]    = SetFTempo;
   
-  table[typeProcess] 	= SetFUndefEv;
-  table[typeDProcess] 	= SetFUndefEv;
-  table[typeDead]       = SetFUndefEv;
+  table[typeProcess] 	= SetFProcessEv;
+  table[typeDProcess] 	= SetFProcessEv;
+  table[typeDead]       = SetFProcessEv;
 }
 
 /*__________________________________________________________________________________*/
@@ -377,9 +377,9 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
   table[typeRcvAlarm]     = GetFUndefEv;
   table[typeApplAlarm]    = GetFTempo;
   
-  table[typeProcess] 	= GetFUndefEv;
-  table[typeDProcess] 	= GetFUndefEv;
-  table[typeDead]       = GetFUndefEv;
+  table[typeProcess] 	= GetFProcessEv;
+  table[typeDProcess] 	= GetFProcessEv;
+  table[typeDead]       = GetFProcessEv;
 }
 
 /*__________________________________________________________________________________*/
