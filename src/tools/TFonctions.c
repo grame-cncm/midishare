@@ -798,10 +798,14 @@ static void Tasks( Boolean isFreeMem)
 	gContext.res1 = gContext.res2 = false;
 	gContext.t1 = gContext.t2 = 0;
 	time = MidiGetTime()-10 ;
+	
 	gContext.t1= MidiTask( MyTask2, time, refNum, (long)&p1, (long)&p2, (long)&p3);
 	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
 	fprintf( stdout, "%s\n",OK);
-
+	
+	time= MidiGetTime()+4;
+	while( MidiGetTime() <= time);
+	
 	if( !gContext.res1 && isFreeMem)
 		fprintf( stdout, "Warning : task1 not completed !\n");
 	if( gContext.res2 && isFreeMem)
