@@ -398,7 +398,6 @@ static void SendProg ()
 		Chan(e) = CurrentChan;
 		Data(e)[0] = CurrentProg;
 		MidiSendIm (myRefNum, e);
-		SendNote ();
 	}
 }
 
@@ -412,7 +411,6 @@ static void SendCtrl (short num, short val)
 		Data(e)[0] = num;
 		Data(e)[1] = val;
 		MidiSendIm (myRefNum, e);
-		SendNote ();
 	}
 }
 
