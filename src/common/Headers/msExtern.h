@@ -53,8 +53,6 @@ MutexResCode CloseMutex (MutexRef ref);
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g);
 void SpecialSleep  (TMSGlobalPtr g);
-void SaveState     (TMSGlobalPtr g);
-void RestoreState  (TMSGlobalPtr g);
 
 void OpenTimeInterrupts (TMSGlobalPtr g);
 void CloseTimeInterrupts(TMSGlobalPtr g);
