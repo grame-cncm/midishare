@@ -11,6 +11,8 @@ INC1=./
 INC2=/home/letz/jdk117/include
 INC3=/home/letz/jdk117/include/genunix
 
+INCF = /usr/local/include
+
 SRC =../src
 OPTIONS=-D__Linux__ -D_REENTRANT
 MODCFLAGS := -O6 -Wall -DLINUX 
@@ -36,6 +38,8 @@ $(TARGET) :   $(OBJ)
 install: $(LIB).1.0
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
 	if [ ! -f $(LIB).1 ]; then ln -s $(LIB).1.0 $(LIB).1; fi
+	[ -d $(INCF) ] || mkdir $(INCF)
+	install  ../src/Include/Player.h $(INCF)
 
 java : $(OBJJAVA)
 	$(CC)  $(OBJJAVA) -lMidiShare -shared -fPIC -W1,soname,libJPlayer.so.1 -o $(TARGETJAVA)
