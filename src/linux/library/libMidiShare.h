@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-#include "MidiShareKernel.h"
+#include "../kernel/msIOCtl.h"
 
 #include "msAppls.h"
 #include "msEvents.h"
