@@ -48,13 +48,14 @@ extern "C" {
 TApplContextPtr CreateApplContext ();
 void			DisposeApplContext (TApplContextPtr context);
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
-void CallNetSend  (TMSGlobalPtr g, TApplPtr appl);
-void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm);
 void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
 void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
 void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 
 #ifdef MSKernel
+
+    void CallNetSend  (TMSGlobalPtr g, TApplPtr appl);
+    void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm);
 
 	/*------------------------------------------------------------------------------*/
 	/*                      initializations : wakeup & sleep                        */
@@ -75,12 +76,14 @@ void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);
 	long RealTimeOffset (THorlogePtr h);
 	void AdjustTimer    (THost context, long offset, long period);
 
+    MidiFilterPtr GetFilterPtr (MidiEvPtr e);
+
 	#else
 
 	Boolean   InitComm         (TMSGlobalPtr g);
 	void      CloseComm        (TMSGlobalPtr g);
 
-	Boolean   _msCheckMidiShare   (TMSGlobalPtr g);
+	Boolean   _msCheckMidiShare(TMSGlobalPtr g);
 	Boolean   SendToServer     (MidiEvPtr e, TMSGlobalPtr g);
 	MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g);
 	void *    GetShMemID       (MidiFilterPtr filter);

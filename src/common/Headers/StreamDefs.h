@@ -44,8 +44,8 @@ typedef struct EvCommonPart {
 /*------------------------------------------------------------------------*/
 /* header of all the midishare buffers                                    */
 typedef struct msStreamHeader {
-	unsigned long 	serial;  /* buffer serial number                            */
 	short 			magic;   /* intended to discriminate non conformant buffers */
+	unsigned long 	serial;  /* buffer serial number                            */
 	unsigned short 	len;     /* total length of the buffer                      */
 	unsigned short 	cont;    /* optionnal event continuation length             */
 } msStreamHeader, * msStreamHeaderPtr;
