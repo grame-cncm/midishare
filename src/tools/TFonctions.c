@@ -1085,12 +1085,10 @@ void Close()
 /*____________________________________________________________________*/
 main()
 {
-	extern void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace);
 	print ("\nMidiShare functions test.\n");
 	print ("================================\n");
 	
 	if( MidiShare()) {
-//		MidiShareSpecialInit (40000);
 		if( !Environment()) return 1;
 		flush;
 		OpenClose(); flush;
