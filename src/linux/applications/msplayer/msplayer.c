@@ -18,7 +18,6 @@
 *****************************************************************************/
 
 static short 	gRefNum = -1;		// msPlayer MidiShare reference number
-static MidiSeqPtr gSequence;		// Sequence filled with the MIDIFile
 
 GtkWidget *gStart,*gStop,*gCont, *gPause;
 GtkWidget *gInternalSync,*gClockSync,*gSMPTESync;
@@ -361,6 +360,7 @@ int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *vbox;
  	MidiFileInfos info;
+	MidiSeqPtr seq;
 	char applName[256];
 	
 	// Initialisations
@@ -377,10 +377,9 @@ int main(int argc, char *argv[] )
 	gRefNum = OpenPlayer(applName);
 	MidiConnect (gRefNum, 0, true);
   	MidiConnect (0, gRefNum, true);
-
-	gSequence = MidiNewSeq();
-	MidiFileLoad(argv[1], gSequence,&info); 
-	SetAllTrackPlayer(gRefNum,gSequence, info.clicks);
+	seq = MidiNewSeq();
+	MidiFileLoad(argv[1], seq,&info); 
+	SetAllTrackPlayer(gRefNum,seq, info.clicks);
 	
 	// Window definition
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
