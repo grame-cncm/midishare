@@ -71,7 +71,7 @@
 ;;;   29-01-04   Make the MidiShare return 1 or 0 (instead of T and Nil)
 ;;;   17-03-04   Rename type macro to evtype in OpenMCL and CMUCL interfaces
 ;;;   19-03-04   New MidiNewSmpteLocation, MidiFreeSmpteLocation, MidiNewSyncInfo, MidiFreeSyncInfo
-
+;;;   19-03-04   Add nullptr and nullptrp for OpenMCL interface 
 
 (in-package :cl-user)       
     
