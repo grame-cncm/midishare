@@ -8,12 +8,22 @@
 ;; E-mail : MidiShare@rd.grame.fr
 ;; =====================================================================================
 
-;; This file contains definitions for entry points of the Player library
-;; It must be used with the Player shared library named "PlayerSharedPPC"
-;; The PlayerSharedPPC file must be located either in the System Folder/Extension Folder
-;; or in the same folder as the Player_Interface.lisp file.
 
-(ccl::add-to-shared-library-search-path "PlayerSharedPPC")
+;; This file contains definitions for entry points of the Player library
+;; It must be used with the Player.Framework located in /System/Library/Frameworks
+
+
+;; Utilities
+;;===========
+
+(defvar *player-framework* nil)
+
+(defun player-framework ()
+  (or *player-framework*
+      (setq *player-framework*
+            (load-framework-bundle "Player.framework"))))
+
+(player-framework)
 
 ;;===============================
 ;; Date structures ond constants
@@ -96,18 +106,18 @@
  
 (defparameter PLAYERnoErr 			-1)		;; No error			            		 
 (defparameter PLAYERerrAppl			-2)		;; Unable to open MidiShare application	 
-(defparameter PLAYERerrEvent  		        -3)		;; No more MidiShare Memory 			 
-(defparameter PLAYERerrMemory			-4)		;; No more Mac Memory 			       
-(defparameter PLAYERerrSequencer		-5)		;; Sequencer error			          
+(defparameter PLAYERerrEvent  		-3)		;; No more MidiShare Memory 			 
+(defparameter PLAYERerrMemory		-4)		;; No more Mac Memory 			       
+(defparameter PLAYERerrSequencer	-5)		;; Sequencer error			          
 
  ;;-------------------------------------------------------------------------- 
  ;; Errors  :  for MidiFile
  ;;-------------------------------------------------------------------------- 
 
 (defparameter noErr			0)		;; no error 						 
-(defparameter ErrOpen			1)		;; file open error 	 
-(defparameter ErrRead			2)		;; file read error	 
-(defparameter ErrWrite		        3)		;; file write error	 
+(defparameter ErrOpen		1)		;; file open error 	 
+(defparameter ErrRead		2)		;; file read error	 
+(defparameter ErrWrite		3)		;; file write error	 
 (defparameter ErrVol			4)		;; Volume error 	 
 (defparameter ErrGetInfo 		5)		;; GetFInfo error	 
 (defparameter ErrSetInfo		6)		;; SetFInfo error	 
@@ -225,102 +235,151 @@
 ;; Interface to C entry points
 ;;=============================
 
-(define-entry-point ( "Version" ("PlayerSharedPPC")) () :long)
+(defmacro Version ()
+  `(ccl::ppc-ff-call (get-fun-addr "Version" *player-framework*) :signed-halfword))
 
-(define-entry-point ( "OpenPlayer" ("PlayerSharedPPC")) ((name :ptr) ) :short)
-(define-entry-point ( "ClosePlayer" ("PlayerSharedPPC")) ((refnum :short)))
+(defmacro OpenPlayer (name)
+  `(with-cstrs ((s ,name))
+     (ccl::ppc-ff-call (get-fun-addr "OpenPlayer" *player-framework*) :address s :signed-halfword)))
 
-(defun open-player (name)
-  (with-pstrs ((pstr name))
-    (openplayer pstr)))
+(defmacro ClosePlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "ClosePlayer" *player-framework*) :signed-halfword ,refnum :void))
 
+(defun open-player (name) (openplayer name))
+  
 ;;===================
 ;; Transport control
 ;;===================
 
-(define-entry-point ("StartPlayer" ("PlayerSharedPPC")) ((refnum :short)))
-(define-entry-point ("ContPlayer"  ("PlayerSharedPPC")) ((refnum :short)))
-(define-entry-point ("StopPlayer"  ("PlayerSharedPPC")) ((refnum :short)))
-(define-entry-point ("PausePlayer" ("PlayerSharedPPC")) ((refnum :short)))
+(defmacro StartPlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "StartPlayer" *player-framework*) :signed-halfword ,refnum :void))
+
+(defmacro ContPlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "ContPlayer" *player-framework*) :signed-halfword ,refnum :void))
+
+(defmacro StopPlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "StopPlayer" *player-framework*) :signed-halfword ,refnum :void))
+
+(defmacro PausePlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "PausePlayer" *player-framework*) :signed-halfword ,refnum :void))
 
 ;;===================
 ;; Record management
 ;;===================
 
-(define-entry-point ("SetRecordModePlayer" ("PlayerSharedPPC"))  ((refnum :short) (state :short)))
-(define-entry-point ("RecordPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum :short)))
-(define-entry-point ("SetRecordFilterPlayer" ("PlayerSharedPPC"))  ((refnum :short) (filter :ptr)))
+(defmacro SetRecordModePlayer (refnum state)
+  `(ccl::ppc-ff-call (get-fun-addr "StartPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,state :void))
+
+(defmacro RecordPlayer (refnum tracknum)
+  `(ccl::ppc-ff-call (get-fun-addr "RecordPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,tracknum :void))
+
+(defmacro SetRecordFilterPlayer (refnum filter)
+  `(ccl::ppc-ff-call (get-fun-addr "StartPlayer" *player-framework*) :signed-halfword ,refnum  :address ,filter :void))
 
 ;;=====================
 ;; Position management
 ;;=====================
 
-(define-entry-point ("SetPosBBUPlayer" ("PlayerSharedPPC")) ((refnum :short) (pos :ptr)))
-(define-entry-point ("SetPosMsPlayer" ("PlayerSharedPPC")) ((refnum :short)  (date_ms :longint)))
+(defmacro SetPosBBUPlayer (refnum pos)
+  `(ccl::ppc-ff-call (get-fun-addr "SetPosBBUPlayer" *player-framework*) :signed-halfword ,refnum :address ,pos :void))
+
+(defmacro SetPosMsPlayer (refnum date_ms)
+  `(ccl::ppc-ff-call (get-fun-addr "SetPosMsPlayer" *player-framework*) :signed-halfword ,refnum :signed-fullword ,date_ms :void))
 
 ;;==================
 ;; Loop management
 ;;==================
 
-(define-entry-point ("SetLoopPlayer" ("PlayerSharedPPC")) ((refnum :short) (state :short)))
-(define-entry-point ("SetLoopStartBBUPlayer" ("PlayerSharedPPC")) ((refnum :short) (pos :ptr)) :long)
-(define-entry-point ("SetLoopEndBBUPlayer" ("PlayerSharedPPC")) ((refnum :short) (pos :ptr)) :long)
-(define-entry-point ("SetLoopStartMsPlayer"("PlayerSharedPPC")) ((refnum :short)  (date_ms :longint)) :long)
-(define-entry-point ("SetLoopEndMsPlayer" ("PlayerSharedPPC")) ((refnum :short)  (date_ms :longint)) :long)
+(defmacro SetLoopPlayer (refnum state)
+  `(ccl::ppc-ff-call (get-fun-addr "SetLoopPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,state :void))
+
+(defmacro SetLoopStartBBUPlayer (refnum pos)
+  `(ccl::ppc-ff-call (get-fun-addr "SetLoopStartBBUPlayer" *player-framework*) :signed-halfword ,refnum :address ,pos :void))
+
+(defmacro SetLoopEndBBUPlayer (refnum pos)
+  `(ccl::ppc-ff-call (get-fun-addr "SetLoopEndBBUPlayer" *player-framework*) :signed-halfword ,refnum :address ,pos :void))
+
+(defmacro SetLoopStartMsPlayer (refnum date_ms)
+  `(ccl::ppc-ff-call (get-fun-addr "SetLoopStartMsPlayer" *player-framework*) :signed-halfword ,refnum :signed-fullword ,date_ms :void))
+
+(defmacro SetLoopEndMsPlayer (refnum date_ms)
+  `(ccl::ppc-ff-call (get-fun-addr "SetLoopEndMsPlayer" *player-framework*) :signed-halfword ,refnum :signed-fullword ,date_ms :void))
 
 ;;============================
 ;; Synchronisation management
 ;;============================
 
-(define-entry-point ("SetSynchroInPlayer" ("PlayerSharedPPC")) ((refnum :short) (state :short)))
-(define-entry-point ("SetSynchroOutPlayer" ("PlayerSharedPPC")) ((refnum :short) (state :short)))
-(define-entry-point ("SetSMPTEOffsetPlayer" ("PlayerSharedPPC")) ((refnum :short) (smptepos :ptr)))
-(define-entry-point ("SetTempoPlayer" ("PlayerSharedPPC")) ((refnum :short) (tempo :longint)))
+(defmacro SetSynchroInPlayer (refnum state)
+  `(ccl::ppc-ff-call (get-fun-addr "SetSynchroInPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,state :void))
+
+(defmacro SetSynchroOutPlayer (refnum state)
+  `(ccl::ppc-ff-call (get-fun-addr "SetSynchroOutPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,state :void))
+
+(defmacro SetSMPTEOffsetPlayer (refnum smptepos)
+  `(ccl::ppc-ff-call (get-fun-addr "SetSMPTEOffsetPlayer" *player-framework*) :signed-halfword ,refnum  :address ,smptepos :void))
+
+(defmacro SetTempoPlayer (refnum tempo)
+  `(ccl::ppc-ff-call (get-fun-addr "SetTempoPlayer" *player-framework*) :signed-halfword ,refnum  :signed-fullword ,tempo :void))
 
 ;;===================
 ;; State management
 ;;===================
 
-(define-entry-point ("GetStatePlayer" ("PlayerSharedPPC")) ((refnum :short) (playerstate :ptr )))
-(define-entry-point ("GetEndScorePlayer" ("PlayerSharedPPC")) ((refnum :short) (playerstate :ptr )))
+(defmacro GetStatePlayer (refnum playerstate)
+  `(ccl::ppc-ff-call (get-fun-addr "GetStatePlayer" *player-framework*) :signed-halfword ,refnum  :address ,playerstate :void))
+
+(defmacro GetEndScorePlayer (refnum playerstate)
+  `(ccl::ppc-ff-call (get-fun-addr "GetEndScorePlayer" *player-framework*) :signed-halfword ,refnum  :address ,playerstate :void))
 
 ;;==============
 ;; Step playing 
 ;;==============
 
-(define-entry-point ("ForwardStepPlayer" ("PlayerSharedPPC")) ((refnum :short) (flag :short)))
-(define-entry-point ("BackwardStepPlayer" ("PlayerSharedPPC")) ((refnum :short) (flag :short)))
+(defmacro ForwardStepPlayer (refnum flag)
+  `(ccl::ppc-ff-call (get-fun-addr "ForwardStepPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,flag :void))
+
+(defmacro BackwardStepPlayer (refnum flag)
+  `(ccl::ppc-ff-call (get-fun-addr "BackwardStepPlayer" *player-framework*) :signed-halfword ,refnum  :signed-halfword ,flag :void))
 
 ;;====================
 ;; Tracks management
 ;;====================
 
-(define-entry-point ("GetAllTrackPlayer" ("PlayerSharedPPC")) ((refnum :short)) :ptr)
-(define-entry-point ("GetTrackPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum :short)) :ptr)
+(defmacro GetAllTrackPlayer (refnum)
+  `(ccl::ppc-ff-call (get-fun-addr "GetAllTrackPlayer" *player-framework*) :signed-halfword ,refnum  :address))
 
-(define-entry-point ("SetTrackPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum :short) (seq :ptr)) :long)
-(define-entry-point ("SetAllTrackPlayer" ("PlayerSharedPPC")) ((refnum :short) (seq :ptr) (ticks_per_quarter :long)) :long)
+(defmacro GetTrackPlayer (refnum tracknum)
+  `(ccl::ppc-ff-call (get-fun-addr "GetTrackPlayer" *player-framework*) :signed-halfword ,refnum :signed-halfword ,tracknum  :address))
 
-(define-entry-point ("SetParamPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum short) (param short) (value short )))
-(define-entry-point ("GetParamPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum short) (param short)) :short )
+(defmacro SetTrackPlayer (refnum tracknum seq)
+  `(ccl::ppc-ff-call (get-fun-addr "SetTrackPlayer" *player-framework*) :signed-halfword ,refnum :signed-halfword ,tracknum  :address ,seq :signed-fullword))
 
-(define-entry-point ("InsertAllTrackPlayer" ("PlayerSharedPPC")) ((refnum :short) (seq :ptr)) :long)
-(define-entry-point ("InsertTrackPlayer" ("PlayerSharedPPC")) ((refnum :short) (tracknum short)(seq :ptr)) :long)
+(defmacro SetAllTrackPlayer (refnum seq tpq)
+  `(ccl::ppc-ff-call (get-fun-addr "SetAllTrackPlayer" *player-framework*) :signed-halfword ,refnum :address ,seq :address ,seq :signed-fullword, tpq :signed-fullword))
+
+(defmacro SetParamPlayer (refnum track param val)
+  `(ccl::ppc-ff-call (get-fun-addr "SetParamPlayer" *player-framework*) :signed-halfword ,refnum :signed-halfword ,track  
+                     :signed-halfword ,param  :signed-halfword ,val  :void))
+
+(defmacro InsertAllTrackPlayer (refnum seq)
+  `(ccl::ppc-ff-call (get-fun-addr "InsertAllTrackPlayer" *player-framework*) :signed-halfword ,refnum :address ,seq  :signed-fullword ))
+
+(defmacro InsertTrackPlayer (refnum track seq)
+  `(ccl::ppc-ff-call (get-fun-addr "InsertTrackPlayer" *player-framework*) :signed-halfword ,refnum :signed-halfword ,track  :address ,seq  :signed-fullword ))
 
 ;;====================
 ;; Midifile management
 ;;====================
 
-(define-entry-point ("MidiFileSave" ("PlayerSharedPPC")) (( name :ptr) (seq :ptr) (infos :ptr)) :long)
-(define-entry-point ("MidiFileLoad" ("PlayerSharedPPC")) (( name :ptr) (seq :ptr) (infos :ptr)) :long)
+(defmacro MidiFileSave (name seq info)
+  `(with-cstrs ((s ,name))
+     (ccl::ppc-ff-call (get-fun-addr "MidiFileSave" *player-framework*) :address s :address ,seq :address ,info :signed-fullword)))
 
-(defun midi-file-load (name seq info)
-  (with-cstrs ((cstr name))
-    (MidiFileLoad cstr seq info)))
+(defmacro MidiFileLoad (name seq info)
+  `(with-cstrs ((s ,name))
+     (ccl::ppc-ff-call (get-fun-addr "MidiFileLoad" *player-framework*) :address s :address ,seq :address ,info :signed-fullword)))
 
-(defun midi-file-save (name seq info)
-  (with-cstrs ((cstr name))
-    (MidiFileSave cstr seq info)))
-
-
+(defun midi-file-save (name seq info) (MidiFileSave  name seq info))
+(defun midi-file-load (name seq info) (MidiFileLoad  name seq info))
+ 
 
