@@ -39,7 +39,7 @@ void 		NEAR 	AlertUser(LPCSTR);
 Boolean 	SetUpMidi(void);
 
 void MSALARMAPI ReceiveEvents(register short);
-void MSALARMAPI MyEchoTask(unsigned long,short,long,long,long);
+void MSALARMAPI MyEchoTask(long,short,long,long,long);
 BOOL CALLBACKAPI AboutDlgProc(HWND,UINT ,UINT ,LONG );
 
 
@@ -488,7 +488,7 @@ void MSALARMAPI ReceiveEvents(register short r)
 /* --------------------------------------------------------
 Real time echo management task
 -------------------------------------------------------- */
-void MSALARMAPI MyEchoTask(unsigned long d,short ref,long el, long unused3,long unused4)
+void MSALARMAPI MyEchoTask(long d,short ref,long el, long unused3,long unused4)
 {
   MidiEvPtr e;
   unsigned char v,p;
