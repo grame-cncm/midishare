@@ -20,6 +20,7 @@ v 1.86 	    : minor bug in MidiClose corrected (memory not released)
 v 1.87 	    : MacOSX release: framework version
                               extends time management to timer mode
 							  comments supported in conf. files
+v 1.88 	    : open close guarded by a critical section (macosx and windows only)
 
 
 Tags :
