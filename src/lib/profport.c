@@ -1,7 +1,9 @@
 /*
 History : 
 01-28-02 : Change the location of temporary files created in write_private_profile_string
-		   now done in MidiShareDirectory.
+		   now done in TmpDirectory.
+01-29-02 : Correct bug wthe the '=' character is not present.
+
 */
 
 
@@ -85,16 +87,21 @@ int get_private_profile_int(char *section,
         }
     }  while( strncmp(buff,entry,len) );
     ep = strrchr(buff,'=');    /* Parse out the equal sign */
-    ep++;
-    if( !strlen(ep) )          /* No setting? */
-        return(def);
-    /* Copy only numbers fail on characters */
+    if (ep) {
+	    ep++;
+	    if( !strlen(ep) )          /* No setting? */
+	        return(def);
+	    /* Copy only numbers fail on characters */
 
-    for(i = 0; isdigit(ep[i]); i++ )
-        value[i] = ep[i];
-    value[i] = '\0';
-    fclose(fp);                /* Clean up and return the value */
-    return(atoi(value));
+	    for(i = 0; isdigit(ep[i]); i++ )
+	        value[i] = ep[i];
+	    value[i] = '\0';
+	    fclose(fp);                /* Clean up and return the value */
+	    return(atoi(value));
+	}else {
+		 fclose(fp);   
+		 return def; 
+	}
 }
 /**************************************************************************
 * Function:     get_private_profile_string()
@@ -137,13 +144,17 @@ int get_private_profile_string(char *section, char *entry, char *def,
         }
     }  while( strncmp(buff,entry,len) );
     ep = strrchr(buff,'=');    /* Parse out the equal sign */
-    ep++;
-    /* Copy up to buffer_len chars to buffer */
-    strncpy(buffer,ep,buffer_len - 1);
-
-    buffer[buffer_len] = '\0';
-    fclose(fp);               /* Clean up and return the amount copied */
-    return(strlen(buffer));
+    if(ep) {
+   		ep++;
+    	/* Copy up to buffer_len chars to buffer */
+    	strncpy(buffer,ep,buffer_len - 1);
+		buffer[buffer_len] = '\0';
+    	fclose(fp);               /* Clean up and return the amount copied */
+    	return(strlen(buffer));
+    }else {
+    	fclose(fp);
+    	return(0);
+    }
 }
 
 
