@@ -82,6 +82,8 @@ _MidiIsAcceptedType
 _MidiGetPortState
 _MidiSetPortState
 _MidiShareSpecialInit
+
+_LoadBufferSize
 _Pa_Initialize
 _Pa_Terminate
 _Pa_GetHostError

@@ -1,4 +1,4 @@
-__MSInitialize
+
 MidiShare
 MidiGetVersion
 MidiCountAppls
@@ -86,6 +86,9 @@ MidiIsAcceptedType
 MidiGetPortState
 MidiSetPortState
 MidiShareSpecialInit
+
+
+LoadBufferSize
 
 Pa_Initialize
 Pa_Terminate
