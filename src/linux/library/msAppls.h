@@ -30,7 +30,7 @@
 #include "msDefs.h"  
 #include "msMemory.h"  
 
-#define MaxAppls         64		/* maximum allowed applications    */
+#define MaxAppls         128		/* maximum allowed applications    */
 #define MaxApplNameLen   32            /* maximum application name length */
 
 typedef  char MSName[MaxApplNameLen];  /* A REVOIR */
