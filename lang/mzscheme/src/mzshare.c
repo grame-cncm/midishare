@@ -262,7 +262,7 @@ static Scheme_Object *sch_ext2IntTime(int argc, Scheme_Object **argv)
 
 static Scheme_Object *sch_time2Smpte(int argc, Scheme_Object **argv)
 {     
-   TSmpteLocation *ts;
+  TSmpteLocation *ts;
   Scheme_Object *scmSmpte; 
   shSmpteLoc *locTypePtr;
   if (!SCHEME_INTP(argv[0]))
@@ -309,17 +309,17 @@ static Scheme_Object *sch_makeSmpteLoc(int argc, Scheme_Object **argv)
   int i;
   TSmpteLocation *smpte;
   shSmpteLoc *locTypePtr; 
- if (!SCHEME_INTP(argv[0]))
+  if (!SCHEME_INTP(argv[0]))
    scheme_wrong_type("make-smpte-loc", "integer format", 0, argc, argv);
-if (!SCHEME_INTP(argv[1]))
+  if (!SCHEME_INTP(argv[1]))
    scheme_wrong_type("make-smpte-loc", "integer hours", 1, argc, argv);
-if (!SCHEME_INTP(argv[2]))
+  if (!SCHEME_INTP(argv[2]))
    scheme_wrong_type("make-smpte-loc", "integer minutes", 2, argc, argv);
-if (!SCHEME_INTP(argv[3]))
+  if (!SCHEME_INTP(argv[3]))
    scheme_wrong_type("make-smpte-loc", "integer seconds", 3, argc, argv);
-if (!SCHEME_INTP(argv[4]))
+  if (!SCHEME_INTP(argv[4]))
    scheme_wrong_type("make-smpte-loc", "integer frames", 4, argc, argv);
-if (!SCHEME_INTP(argv[5]))
+  if (!SCHEME_INTP(argv[5]))
    scheme_wrong_type("make-smpte-loc", "integer fracs", 5, argc, argv);
   /* first alloc the memory for the c-struct */
   smpte = (TSmpteLocation *) scheme_malloc_atomic(sizeof(TSmpteLocation));
@@ -637,8 +637,7 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
     {return (Scheme_Object *) sne;}
   else
     {return scheme_false;}
-     
-}
+ }
 
 
  Scheme_Object *sch_freeCell(int argc, Scheme_Object **argv)
@@ -668,16 +667,6 @@ static Scheme_Object *sch_growSpace(int argc, Scheme_Object **argv)
     {return scheme_false;}   
 }
 
-/*
- Scheme_Object *sch_isEv(int argc, Scheme_Object **argv)
-{   
-  shNewEv *oe;
-  if (SCHEME_TYPE(argv[0]) != ev_type)
-    scheme_wrong_type("midi-ev?", "midi-event", 0, argc, argv);
-  oe = (shNewEv *)argv[0];
-  return oe->midi_ev_ptr ? scheme_true : scheme_false ;
-}
-*/
 
  Scheme_Object *sch_copyEv(int argc, Scheme_Object **argv)
 {   
@@ -769,7 +758,10 @@ static Scheme_Object *sch_getLink(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr = MidiGetLink(oe->midi_ev_ptr);
-  return (Scheme_Object *) sne;    
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}   
 }
 
 
@@ -1018,7 +1010,6 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   sne = (shNewEv *) argv[1];
   os = (shNewSeq *) argv[0];
   MidiAddSeq(os->midi_seq_ptr,sne->midi_ev_ptr);
-  
   return scheme_void;
 }
 
@@ -1031,7 +1022,6 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   os = (shNewSeq *) argv[0];
   MidiFreeSeq(os->midi_seq_ptr);
   os->type = seq_type_killed ;
-
   return scheme_void;
 }
 
@@ -1056,7 +1046,10 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr= MidiGetFirstEv(os->midi_seq_ptr);
-  return (Scheme_Object *) sne;
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}
 }
 
 
@@ -1072,7 +1065,6 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   os = (shNewSeq *) argv[0];
   MidiSetFirstEv(os->midi_seq_ptr,sne->midi_ev_ptr);
   return scheme_void;
-    
 }
 
 
@@ -1086,7 +1078,10 @@ Scheme_Object *sch_newSeq(int argc, Scheme_Object **argv)
   sne = (shNewEv *)scheme_malloc(sizeof(shNewEv));
   sne->type = ev_type;
   sne->midi_ev_ptr= MidiGetLastEv(os->midi_seq_ptr);
-  return (Scheme_Object *) sne;
+  if (sne->midi_ev_ptr)
+    {return (Scheme_Object *) sne;}
+  else
+    {return scheme_false;}
 }
 
  Scheme_Object *sch_setLastEv(int argc, Scheme_Object **argv)
@@ -1109,8 +1104,6 @@ static Scheme_Object *sch_getTime(int argc, Scheme_Object **argv)
   return scheme_make_integer_value_from_unsigned(MidiGetTime());
 }
 
-
-
 static Scheme_Object *sch_sendIm(int argc, Scheme_Object **argv)
 {   
  shNewEv *sne;
@@ -1120,6 +1113,7 @@ static Scheme_Object *sch_sendIm(int argc, Scheme_Object **argv)
    scheme_wrong_type("midi-send-im", "midi-event", 1, argc, argv);
  sne = (shNewEv *) argv[1];
  MidiSendIm((short) SCHEME_INT_VAL(argv[0]),sne->midi_ev_ptr);
+ sne->type = ev_type_killed ;
  return scheme_void;
 }
 
@@ -1133,10 +1127,9 @@ static Scheme_Object *sch_send(int argc, Scheme_Object **argv)
    scheme_wrong_type("midi-send", "midi-event", 1, argc, argv);
  sne = (shNewEv *) argv[1];
  MidiSend((short)SCHEME_INT_VAL(argv[0]),sne->midi_ev_ptr);
+ sne->type = ev_type_killed ;
  return scheme_void;
 }
-
-
 
 static Scheme_Object *sch_sendAt(int argc, Scheme_Object **argv)
 {   
@@ -1149,9 +1142,9 @@ static Scheme_Object *sch_sendAt(int argc, Scheme_Object **argv)
    scheme_wrong_type("midi-send-at", "integer  => date", 2, argc, argv);
  sne = (shNewEv *) argv[1];
  MidiSendAt((short)SCHEME_INT_VAL(argv[0]), sne->midi_ev_ptr,SCHEME_INT_VAL(argv[2]));
+ sne->type = ev_type_killed ;
  return scheme_void;
 }
-
 
 /** reception ***/
 static Scheme_Object *sch_countEvs(int argc, Scheme_Object **argv)
