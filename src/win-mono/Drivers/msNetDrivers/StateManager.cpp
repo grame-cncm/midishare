@@ -21,10 +21,30 @@
 */
 
 
-#include <stdio.h>
-#include <string.h>
+#include <Windows.h>
 
+#include "MidiShare.h"
+#include "FilterUtils.h"
 #include "StatesManager.h"
+#include "TInetAddress.h"
+
+extern char * profileName;
+char * HostsIn = "Hosts input connections";
+char * HostsOut = "Hosts output connections";
+#define kMaxEntryLen	1024
+
+//____________________________________________________________
+static void GetPorts (char *dst, TSlotInfos *infos)
+{
+	char * cnx = infos->cnx, num[10];
+	short i;
+	for (i=0; i<256; i++) {
+		if (IsAcceptedBit (cnx, i)) {
+			wsprintf (num, "%d ", i);
+			lstrcat (dst, num);
+		}
+	}
+}
 
 //____________________________________________________________
 // StatesManager
@@ -36,9 +56,64 @@ StatesManager::~StatesManager ()
 //____________________________________________________________
 void StatesManager::SaveState (IPNum ip)
 {
+	TInetAddress addr (ip); char buff [kMaxEntryLen];
+	if (!fState) return;
+	Handle h = fState->GetState ();
+	if (h) {
+		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
+		buff[0] = 0;
+		GetPorts (buff, infos++);
+		WritePrivateProfileString (HostsIn, addr.IP2String(), buff, profileName);
+		buff[0] = 0;
+		GetPorts (buff, infos);
+		WritePrivateProfileString (HostsOut, addr.IP2String(), buff, profileName);
+	}
+}
+
+static __inline Boolean CnxSeparator(char c) { return ((c)==' ') || ((c)=='	'); }
+//________________________________________________________________________
+char * NextCnx (char *ptr, Boolean first)
+{
+	Boolean skipped = first;
+	while (*ptr) {
+		if (CnxSeparator(*ptr))	skipped = true;
+		else if (skipped)		return ptr;
+		ptr++;
+	}
+	return 0;
+}
+
+//____________________________________________________________
+static void SetPorts (char *buff, TSlotInfos *infos)
+{
+	char * cnx = infos->cnx, *ptr; int i;
+	ptr = NextCnx (buff, true);
+	while (ptr) {
+		i = atoi (ptr);
+		if (i || (*ptr == '0'))
+			AcceptBit (cnx, i);
+		ptr = NextCnx (ptr, false);
+	}
 }
 
 //____________________________________________________________
 void StatesManager::LoadState (IPNum ip)
 {
+	TInetAddress addr (ip); char buff [kMaxEntryLen];
+	Handle h = NewHandle (sizeof(TSlotInfos) * 2);
+	if (h) {
+		DWORD n, m;
+		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
+		memset (infos, 0, GetHandleSize(h));
+		n = GetPrivateProfileString (HostsIn, addr.IP2String(), "", buff, 
+								kMaxEntryLen, profileName);	
+		if (n) SetPorts (buff, infos);
+		m = GetPrivateProfileString (HostsOut, addr.IP2String(), "", buff, 
+								kMaxEntryLen, profileName);	
+		if (m) SetPorts (buff, ++infos);
+		if ((n + m) && fState) {
+			fState->SetState (h);
+		}
+		else DisposeHandle (h);
+	}
 }
