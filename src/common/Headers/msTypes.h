@@ -28,9 +28,19 @@
 #define __msTypes__
 
 #ifdef __Macintosh__
-# include <MacTypes.h>                                                          
+#ifdef __MacOS9__
+	# include <mactypes.h> 
+#else
+	typedef unsigned char Boolean;  
+	typedef unsigned char Byte;     
+	typedef char * Ptr;   
+	#define false 0
+	#define true 1
+#endif 
+                                   
 # ifdef __POWERPC__
 # define MSFunctionType(type)   type
+# define FAR
 # else 
 # define MSFunctionType(type)   pascal type
 # define FAR

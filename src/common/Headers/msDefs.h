@@ -31,7 +31,12 @@
 #ifdef __Macintosh__
 #	define  MSALARMAPI
 #	define  FAR
+#	define	MIDISHAREAPI
+#ifdef __MacOS9__
 #   define  ALARMTYPE   pascal
+#else
+#   define  ALARMTYPE
+#endif
 #endif
 
 #ifdef WIN32
@@ -204,10 +209,10 @@ enum{   MIDIOpenAppl=1,
 		MIDICloseAppl,
 		MIDIChgName,
 		MIDIChgConnect,
-		MIDIOpenModem,		// now obsolete
-		MIDICloseModem,		// now obsolete
-		MIDIOpenPrinter,	// now obsolete
-		MIDIClosePrinter,	// now obsolete
+		MIDIOpenModem,		/* now obsolete */
+		MIDICloseModem,		/* now obsolete */
+		MIDIOpenPrinter,	/* now obsolete */
+		MIDIClosePrinter,	/* now obsolete */
         MIDISyncStart,
         MIDISyncStop,
         MIDIChangeSync,

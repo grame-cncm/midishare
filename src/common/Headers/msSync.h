@@ -40,6 +40,6 @@ void    INT_ON(void)  = {0x46DF};
 /*------------------------------------------------------------------------------*/
 /*                             synchronization functions                        */
 /*------------------------------------------------------------------------------*/
-Boolean CompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith);
+Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith);
 
 #endif

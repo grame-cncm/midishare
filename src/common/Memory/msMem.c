@@ -21,7 +21,11 @@
 */
 
 #ifdef __Macintosh__
-#include <MacMemory.h>
+	#ifdef MacOS9
+	#include <MacMemory.h> 
+	#else
+	#include <stdlib.h>
+	#endif
 #endif
 
 #ifdef __Windows__
@@ -53,7 +57,11 @@
 FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
 {
 #if defined (__Macintosh__)
-	return NewPtrSys (size);
+	#ifdef MacOS9
+		return NewPtrSys (size);
+	#else
+		return (void*)malloc(size);
+	#endif
 #elif defined (__Linux__)
 	return (void*)malloc(size);
 #elif defined (__Windows__)
@@ -73,7 +81,11 @@ FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
 void DisposeMemory  (FarPtr(void) memPtr)
 {
 #if defined (__Macintosh__)
-	if (memPtr) DisposePtr ((Ptr)memPtr);
+	#ifdef MacOS9
+		if (memPtr) DisposePtr ((Ptr)memPtr);
+	#else
+		if (memPtr) free(memPtr);
+	#endif
 #elif defined (__Linux__)
 	if (memPtr) free(memPtr);
 #elif defined (__Windows__)

@@ -57,4 +57,8 @@ MSFunctionType(long)      MSCountDTasks	(short refnum, TClientsPtr g);
 MSFunctionType(void)      MSFlushDTasks	(short refnum, TClientsPtr g);
 MSFunctionType(void)      MSExec1DTask	(short refnum, TClientsPtr g);
 
+/*__________________________________________________________________________________*/
+Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
+
+
 #endif

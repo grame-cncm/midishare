@@ -31,9 +31,6 @@
 #include "msSync.h"
 
 
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
-
-
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */
@@ -154,36 +151,6 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
   Internal functions implementation
   =========================================================================== */
 
-#ifdef __Macintosh__
-# ifdef __POWERPC__
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false;
-//	return CompareAndSwap (taskPtr, content, 0);
-}
-
-# else
-
-static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr content)
-{
-	Boolean ret = false;
-	INT_OFF();
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		ret = true;
-	}
-	INT_ON();
-	return ret;
-}
-
-# endif
-#endif /* __Macintosh__ */
 
 #if defined(__Linux__) || defined(__Windows__)
 static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)

@@ -37,7 +37,7 @@
 #define kLenEvent           16            /* len of a MidiShare event      */
 #define kLenDatas           kLenEvent-4   /* len of a sysex extension data */
 
-// -- Method prototypes
+/* -- Method prototypes */
 typedef MidiEvPtr (*NewEvMethodPtr)      (lifo* freelist, short typeNum);
 typedef MidiEvPtr (*CopyEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
 typedef void      (*FreeEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
