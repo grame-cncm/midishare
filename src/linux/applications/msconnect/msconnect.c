@@ -138,7 +138,7 @@ static GtkWidget* makelist(GtkWidget** plist, gchar* lstname,GtkSelectionMode mo
 	static gchar* Colonnes[2];
 	GtkWidget *scroll, *list;
 	
-	Colonnes[0] = "#";
+	Colonnes[0] = "#  ";
 	Colonnes[1] = lstname;
 
 	scroll = gtk_scrolled_window_new(NULL, NULL);	
