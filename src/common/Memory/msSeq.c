@@ -88,7 +88,7 @@ MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
 		MidiEvPtr next, e = s->first;
 		while (e) {
 			next = Link(e);
-			MSFreeCell (e, freelist);
+			MSFreeEv (e, freelist);
 			e = next;
 		}
 		s->first = s->last = 0;
