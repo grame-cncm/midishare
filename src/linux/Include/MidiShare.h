@@ -7,15 +7,15 @@
  * MidiShare is a multi-tasking, real-time software environment, specially 
  * devised for the developing of MIDI applications with a triple target :
  * 
- * 	¥To propose solutions to currently met problems when developing 
+ * 	´To propose solutions to currently met problems when developing 
  * 	 a real-time MIDI application : memory management, communication management, 
  *	 time management, task management. 
  * 
- * 	¥To enable the real-time and multi-tasking functioning of these applications, 
+ * 	´To enable the real-time and multi-tasking functioning of these applications, 
  * 	 i.e. to enable the sharing of all the necessary resources and their 
  * 	 simultaneous access.
  *
- * 	¥To make easier cooperation between independent MIDI applications by  proposing 
+ * 	´To make easier cooperation between independent MIDI applications by  proposing 
  * 	 a real-time mechanism of inter-application communications.
  * 
  * This file contains a complete description of all the MidiShare functions and 
@@ -353,11 +353,12 @@ enum{   MIDIOpenAppl=1,
 		long			reserved[2];
 	} TSlotInfos;
 
+	typedef void (* WakeupPtr) 	(short refnum);
+	typedef void (* SleepPtr) 	(short refnum);
 	typedef struct TDriverOperation {
-		void 		(* wakeup) (short refNum);
-		void 		(* sleep)  (short refNum);
-		Boolean 	(* slotInfo)  (SlotRefNum slot, TSlotInfos * infos);
-		long		reserved[2];
+		WakeupPtr wakeup;
+		SleepPtr sleep;
+		long	reserved[3];
 	} TDriverOperation;
 
 	typedef struct TDriverInfos {
