@@ -93,6 +93,7 @@ void *  LoadLibrary( const char *filename, const char *symbol)
 	if (handle && (fun = (Start) dlsym(handle,symbol)) && (res = (*fun)())) {
 		return handle;
 	}else {
+		Report("MidiShare", "can't load driver",filename);
 		if (handle) dlclose(handle);
 		return 0;
 	}
@@ -259,7 +260,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 				paFloat32,     
 				NULL,
 				SAMPLE_RATE,
-				gAudioSize/10,    /* frames per buffer */
+				gAudioSize/10,  /* frames per buffer */
 				0,              /* number of buffers, if zero then use default minimum */
 				paClipOff,      /* we won't output out of range samples so don't bother clipping them */
 				AudioClockHandler,
@@ -271,7 +272,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	 return;
 	 
 error_recovery:
-	 printf("Cannot open audio timer \n");
+	 Report("MidiShare", "cannot open audio timer","");
 	 CloseTimeInterrupts(g);
 }
 
