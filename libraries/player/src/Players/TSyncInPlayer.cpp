@@ -42,7 +42,12 @@ TSyncInPlayer::TSyncInPlayer ( 	TPlayerSynchroniserPtr synchroniser,
 
 void TSyncInPlayer::Start()
 {
-	fChaser->Init();
+	// Initialisation 
+	fSynchroniser->Init();
+	fChaser->Init(); 
+	fTickPlayer->Init();
+	
+	// Start
 	fSynchroniser->Start();
 	fTickPlayer->Start();
 }
