@@ -26,6 +26,50 @@
 #define inline __inline__
 
 //----------------------------------------------------------------
+// Memory reservation only
+//----------------------------------------------------------------
+static inline void LWARX (register vtype void * addr) 
+{
+	asm volatile (
+       "# LWARX					\n"
+        "	lwarx	r0, 0, %0	\n"         /* creates a reservation on addr  */
+       :
+	   : "r" (addr)
+       : "r0"
+ 	);
+}
+
+//----------------------------------------------------------------
+// Store conditionnal
+//----------------------------------------------------------------
+static inline int STWCX (register vtype void * addr, register void * value, register void * newvalue) 
+{
+    register int result;
+	asm volatile (
+       "# STWCX					\n"
+		"	lwz		r0, 0(%1)	\n"         /* load value in pointed by addr  */
+		"	cmpw	r0, %2		\n"         /* test value at addr             */
+		"	bne-	1f          \n"
+        "	sync            	\n"         /* synchronize instructions       */
+		"	stwcx.	%3, 0, %1	\n"         /* if the reservation is not altered */
+                                            /* stores the new value at addr   */
+		"	bne-	0f          \n"
+        "   li      %0, 1       \n"
+		"	b		2f          \n"
+        "0:                     \n"
+        "   li      %0, 5       \n"
+		"	b		2f          \n"
+        "1:                     \n"
+        "   li      %0, 0       \n"
+        "2:                     \n"
+       :"=r" (result)
+	   : "r" (addr), "r" (value), "r" (newvalue)
+       : "r0"
+ 	);
+    return result;
+}
+
+//----------------------------------------------------------------
 // Compare and swap
 //----------------------------------------------------------------
 static inline int CAS (register vtype void * addr, register void * value, register void * newvalue) 
@@ -76,6 +120,36 @@ static inline int CASL (register vtype void * addr, register void * value)
         "2:                     \n"
        :"=r" (result)
 	   : "r" (addr), "r" (value), "0" (tmp), "r" (next)
+ 	);
+	return result;
+}
+
+//----------------------------------------------------------------
+// Compare and swap link if not equal to eq
+//----------------------------------------------------------------
+static inline int CASLNE (register vtype void * addr, register void * value, register void * eq) 
+{
+	register int result;
+	register long tmp, next;
+	asm volatile (
+       "# CASLNE					\n"
+		"	lwarx	%3, 0, %1	\n"         /* creates a reservation on addr  */
+		"	cmpw	%3, %2		\n"         /* test value at addr             */
+		"	bne-	1f          \n"         /* fails if not equal to value    */
+		"	lwzx	%4, 0, %3	\n"
+		"	cmpw	%4, %5		\n"         /* test value at link addr        */
+		"	beq-	1f          \n"
+        "	sync            	\n"         /* synchronize instructions       */
+		"	stwcx.	%4, 0, %1	\n"         /* if the reservation is not altered */
+                                            /* stores the new value at addr   */
+		"	bne-	1f          \n"
+        "   li      %0, 1       \n"
+		"	b		2f          \n"
+        "1:                     \n"
+        "   li      %0, 0       \n"
+        "2:                     \n"
+       :"=r" (result)
+	   : "r" (addr), "r" (value), "0" (tmp), "r" (next), "r" (eq)
  	);
 	return result;
 }
