@@ -18,6 +18,7 @@
 #include "GenericMidiShare.h"
 
 
+
 /*--------------------------------------------------------------------------*/
 extern int MidiFile_errno;		/* used similarly to errno				*/
 								/* to read just in error case, if the	*/
@@ -61,6 +62,7 @@ enum { midifile0= 0, midifile1, midifile2};
 #define MDF_Mark		6			/* marker							*/
 #define MDF_CuePt		7			/* cue point						*/
 #define MDF_ChanPref	0x20		/* MIDI Channel Prefix				*/
+#define MDF_PortPref	0x21		/* MIDI Port Prefix					*/
 #define MDF_EndTrk		0x2F		/* end track						*/
 #define MDF_Tempo		0x51		/* tempo change						*/
 #define MDF_Offset		0x54		/* smpte offset						*/
@@ -71,6 +73,7 @@ enum { midifile0= 0, midifile1, midifile2};
 /* length of the differents meta events */
 #define MDF_NumSeqLen	2
 #define MDF_ChanPrefLen 1
+#define MDF_PortPrefLen 1
 #define MDF_EndTrkLen	0
 #define MDF_TempoLen	3
 #define MDF_OffsetLen	5
@@ -104,7 +107,7 @@ typedef struct midiFILE{			/* MIDI file descriptor		*/
 					/*                 b.8-14 = frame count per sec         */
 					/*			       b.0-7  = tick count per frame        */
 	FILE 	*fd;					/* standard file descriptor             */	
-	fpos_t  trkHeadOffset;			/* track header offset                  */
+	long  	trkHeadOffset;			/* track header offset                  */
 									/* nil if the track is closed           */
 	long	_cnt;					/* count for end track detection		*/
 	MidiSeqPtr keyOff;				/* keyOff coming from typeNote events   */
@@ -152,9 +155,7 @@ inline short ticks_par_quarterNote(MDF_Header *f)	{ return (f)->time; }
 #define frame_par_sec(f)			(((f)->time & 0x8000) >> 8)
 #define ticks_par_frame(f)			((f)->time & 0xFF)
 #define ticks_par_quarterNote(f)	(f)->time
-
 #endif
-
 
 #define MDF_Header_SIZE 14
 #define MDF_Trk_SIZE 	8
