@@ -184,9 +184,12 @@ MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 	drv = Driver(g->appls[slot.drvRef]);
 	if (CheckSlotRef(drv, slot.slotRef)) {
 		slotRef = slot.slotRef;
-		FreeMap(drv->map[slotRef]);
-		FreeSlotInfo(drv->slotInfos[slot.slotRef]);
+		if (drv->map[slotRef])
+			FreeMap(drv->map[slotRef]);
+		if (drv->slotInfos[slotRef])
+			FreeSlotInfo(drv->slotInfos[slotRef]);
 		drv->map[slotRef] = 0;
+		drv->slotInfos[slotRef] = 0;
 		for (i=0; i<MaxPorts; i++) {
 			RejectBit(drv->port[i], slotRef);
 		}
@@ -362,8 +365,10 @@ static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g)
 {
 	short i;
 	for (i = 0; i < MaxSlots; i++) {
-		if (drv->slotInfos[i]) FreeSlotInfo(drv->slotInfos[i]);
-		if (drv->map[i]) FreeMap(drv->map[i]);
+		if (drv->slotInfos[i])
+			FreeSlotInfo(drv->slotInfos[i]);
+		if (drv->map[i])
+			FreeMap(drv->map[i]);
 	}
 	closeClient (ref, g);
 }
