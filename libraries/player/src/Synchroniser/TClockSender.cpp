@@ -74,7 +74,7 @@ void TClockSender::NextClock (ULONG date_ms)
 {
 	fClockCount++;
 	fEventUser->SendEvent(MidiNewEv(typeClock),date_ms);
-	fScheduler->ScheduleTickTaskInt(fClockTask, fClockConverter->ConvertClockToTick(fClockCount));
+	fScheduler->ScheduleTickTask(fClockTask, fClockConverter->ConvertClockToTick(fClockCount));
 }
 
 /*--------------------------------------------------------------------------*/

@@ -34,15 +34,13 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 {
 	fSynchro = synchro;
 	fMidiAppl = appl;
-	fHeadTasks = 0;
+	fTaskIndex = 0;
+	
+	for (short line = 0 ; line<TableLength; line++) {fTaskTable[line] = 0;}
 		
 	#if GENERATINGCFM
-		fUPPScheduleTask = NewTaskPtr(ScheduleTask);
-		fUPPReScheduleTask = NewTaskPtr(ReScheduleTask);
 		fUPPExecuteTask = NewTaskPtr(ExecuteTask);
 	#else
-		fUPPScheduleTask = (TaskPtr)ScheduleTask;
-		fUPPReScheduleTask = (TaskPtr)ReScheduleTask;
 		fUPPExecuteTask = (TaskPtr)ExecuteTask;
 	#endif
 }
@@ -52,18 +50,13 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 TScheduler::~TScheduler ()
 { 
 	#if GENERATINGCFM
-		if (fUPPScheduleTask) DisposeRoutineDescriptor (fUPPScheduleTask);
-		if (fUPPReScheduleTask) DisposeRoutineDescriptor (fUPPReScheduleTask);
 		if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
 	#endif
 	
-	TTicksTaskPtr task = fHeadTasks;
-	fHeadTasks = 0; 
+	TTicksTaskPtr task;
 	
-	while (task) {
-		task->Clear();
-		task->SetScheduler(0); // No more link on the scheduler
-		task = task->GetNextTask();
+	for (short line =  0 ; line<TableLength; line++) {
+		if (task = fTaskTable[line]) task->Kill();
 	}
 }
 
@@ -73,19 +66,9 @@ TScheduler::~TScheduler ()
 
 void TScheduler::ReScheduleTasks() 
 {
-	fMidiAppl->NewMidiCall(fUPPReScheduleTask, MidiGetTime(),(long)this,0,0);
-}
-
-/*--------------------------------------------------------------------------*/
-// Re-schedule pending tasks after a Tempo change : non protected
-/*--------------------------------------------------------------------------*/
-
-void TScheduler::ReScheduleTasksInt() 
-{
-	TTicksTaskPtr task = fHeadTasks;
-	while (task) {
-		ScheduleRealTime(task);
-		task = task->GetNextTask();
+	TTicksTaskPtr task;
+	for (short line = 0 ; line<TableLength; line++) {
+		if (task = fTaskTable[line]) ScheduleRealTime(task);
 	}
 }
 
@@ -95,19 +78,14 @@ void TScheduler::ReScheduleTasksInt()
 
 void TScheduler::ScheduleTickTask(TTicksTaskPtr task, ULONG date_ticks)
 {	
-	fMidiAppl->NewMidiCall(fUPPScheduleTask, MidiGetTime(),(long)this,(long)task,date_ticks);
-}
-
-/*--------------------------------------------------------------------------*/
-// Schedule a "Tick" task : non protected
-/*--------------------------------------------------------------------------*/
-
-void TScheduler::ScheduleTickTaskInt(TTicksTaskPtr task, ULONG date_ticks)
-{	
-	task->SetDate(date_ticks);
-	if (task->IsIdle ()) InsertTask(task); // Non inserted Task
-	task->SetRunning();
-	ScheduleRealTime(task);
+	Boolean res = true;
+	
+	if (task->IsIdle ()) res = InsertTask(task); // Non inserted Task
+	if (res) {
+		task->SetDate(date_ticks);
+		task->SetRunning();
+		ScheduleRealTime(task);
+	}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -132,7 +110,7 @@ void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms)
 void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 {
 	if (fSynchro->IsSchedulable(task->GetDate())) {
-		task->Clear(); // Important
+		task->Kill(); // Important
 		fMidiAppl->NewMidiTask(fUPPExecuteTask, fSynchro->ConvertTickToMs(task->GetDate()),(long)this,(long)task,0, &task->fTask);
 	}
 }		
@@ -146,50 +124,27 @@ void MSALARMAPI ExecuteTask (ULONG date_ms, short refnum, long scheduler, long t
 	((TSchedulerPtr)scheduler)->ExecuteTaskInt((TTicksTaskPtr)task,date_ms);
 }
 
-/*--------------------------------------------------------------------------*/
-
-void MSALARMAPI ReScheduleTask (ULONG date_ms, short refnum, long scheduler, long a2, long a3) 
-{
-	((TSchedulerPtr)scheduler)->ReScheduleTasksInt(); 
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MSALARMAPI ScheduleTask (ULONG date_ms, short refnum, long scheduler, long task, long a3) 
-{
-	((TSchedulerPtr)scheduler)->ScheduleTickTaskInt((TTicksTaskPtr)task,a3);
-}
-
 /*----------------------------------------------------------------------------*/
 
-void  TScheduler::RemoveTask(TTicksTaskPtr task)
+void  TScheduler::RemoveTask(TTicksTaskPtr task){ fTaskTable[task->GetIndex()] = 0;}
+
+/*----------------------------------------------------------------------------*/
+/*
+When inserted for the first time, each task obtain a unique index
+*/
+
+Boolean  TScheduler::InsertTask(TTicksTaskPtr task)
 {
-	TTicksTaskPtr currTask = fHeadTasks;
-	TTicksTaskPtr prevTask = 0;
+	// Warning : No more that TableLength tasks can be used
 	
-	while (currTask) {				// Search for the specified Task
-		if (currTask == task) {
-									// Found it. Adjust linked list.
-			if (prevTask) {
-				prevTask->SetNextTask(currTask->GetNextTask());
-			} else {
-				fHeadTasks = currTask->GetNextTask();
-			}
-			task->SetNextTask(0);
-			break;
-			
-		} else {					// Continue search
-			prevTask = currTask;
-			currTask = currTask->GetNextTask();
-		}
+	if (CheckTaskTable()) {
+		// If first time the task is inserted, set a new index
+		if (task->GetIndex() < 0) task->SetIndex(fTaskIndex++); 
+		fTaskTable[task->GetIndex()] = task;
+		return true;
+	}else {
+		return false;
 	}
-}
+ } 		
 
-/*----------------------------------------------------------------------------*/
 
-void  TScheduler::InsertTask(TTicksTaskPtr task)
-{
-	task->SetNextTask(fHeadTasks);
-	task->SetScheduler(this);
-	fHeadTasks = task;
-} 		

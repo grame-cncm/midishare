@@ -90,7 +90,7 @@ void TPlayerSynchroniserClock::NextClock (ULONG date_ms)
 {
  	fRcv_clock = date_ms;
  	fNextdate_ticks = fClockConverter->ConvertClockToTick(++fClock_count);
- 	fScheduler->ReScheduleTasksInt();
+ 	fScheduler->ReScheduleTasks();
 }
 
 

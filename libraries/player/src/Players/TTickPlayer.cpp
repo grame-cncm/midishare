@@ -73,7 +73,7 @@ void TTickPlayer::PlaySlice (ULONG date_ms)
 		while ( cur = fIterator->NextDateEv()) {fEventUser->CopyAndUseEvent(cur,date_ms);}
 		
 		// Schedule the PlayTask for the date of the next events in ticks
-		fScheduler->ScheduleTickTaskInt(fPlayTask, fIterator->CurDate());
+		fScheduler->ScheduleTickTask(fPlayTask, fIterator->CurDate());
 	}
 }
 

@@ -58,11 +58,11 @@ void TPlayerSynchroniserInt::PlaySlice ()
 		
 		// If Tempo has changed, update the Scheduler
 		if (cur_tempo != fTempoVisitor->GetTempo()){ 
-			fScheduler->ReScheduleTasksInt(); 
+			fScheduler->ReScheduleTasks(); 
 		}
 		
 		// Schedule the PlayTask for the date of the next events
-		fScheduler->ScheduleTickTaskInt(fTempoTask, fIterator->CurDate());
+		fScheduler->ScheduleTickTask(fTempoTask, fIterator->CurDate());
 	}
 }
 
