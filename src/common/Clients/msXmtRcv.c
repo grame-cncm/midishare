@@ -24,6 +24,7 @@
 */
 
 #include "msXmtRcv.h"
+#include "msEvents.h"
 #include "lffifo.h"
 
 
@@ -101,7 +102,7 @@ MSFunctionType(void) MSFlushEvs (short refNum, TClientsPtr g)
 		ev = (MidiEvPtr)fifoclear (&appl->rcv);
 		while( ev) {
 			next= Link(ev);
-			lfpush (FreeList(g->memory), (cell *)ev);
+			MSFreeEv (ev, FreeList(g->memory));
 			ev= next;
 		}
 	}
