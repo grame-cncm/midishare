@@ -1,15 +1,11 @@
 
+DIRS = msconnect mscontrol msdisplay msecho
+
 all:
-	make -C msconnect
-	make -C mscontrol
-	make -C msdisplay
+	for a in $(DIRS); do make -C $$a; done
 	
 clean:
-	make -i -C msconnect clean
-	make -i -C mscontrol clean
-	make -i -C msdisplay clean
+	for a in $(DIRS); do make -i -C $$a clean; done
 
 install:
-	make -C msconnect install
-	make -C mscontrol install
-	make -C msdisplay install
+	for a in $(DIRS); do make -C $$a install; done
