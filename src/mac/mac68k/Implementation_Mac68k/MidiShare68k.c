@@ -17,6 +17,10 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modification history:
+   [08-09-99] fifo functions moved to lffifoh
+              mem allocation functions moved to mem.c
 
 */
 
@@ -27,10 +31,7 @@
 
 #include "msExtern.h"
 #include "msLoader.h" 
-
-void    INT_OFF(void) = {0x40E7, 0x007C, 0x0700};
-void    INT_ON(void)  = {0x46DF};
-
+#include "msSync.h" 
 
 /*_________________________________________________________________________*/
 /* mac 68k desc structure                                                  */
@@ -48,21 +49,6 @@ typedef struct {
 
 #define GetContext(c)	(((Mac68kContextPtr)c)->a5Reg)
 #define TimeTask(g)		(((TMacPtr)g->local)->tm)
-
-
-/*_________________________________________________________________________*/
-/* memory allocation implementation                                        */
-/*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory (MemoryType type, long size)
-{
-	return NewPtrSys (size);
-}
-
-/*_________________________________________________________________________*/
-void   DisposeMemory  (void FAR * memPtr)
-{
-	if (memPtr) DisposePtr ((Ptr)memPtr);
-}
 
 
 /*_________________________________________________________________________*/
@@ -134,35 +120,6 @@ void CallDTaskCode  (TApplContextPtr context, TTaskExtPtr task, long date, short
 /*_________________________________________________________________________*/
 /* synchronization specific part                                           */
 /*_________________________________________________________________________*/
-void * PopSync (msListPtr adr)
-{
-	msListPtr elt;
-	INT_OFF();
-	elt = *adr;
-	if (elt) *adr = *elt;
-	INT_ON();
-	return elt;
-}
-
-/*__________________________________________________________________________*/
-void PushSync (msListPtr adr, msListPtr elt)
-{
-	INT_OFF();
-	*elt = *adr;
-	*adr = elt;
-	INT_ON();
-}
-
-/*__________________________________________________________________________*/
-void PushSyncList (msListPtr adr, msListPtr head, msListPtr tail)
-{
-	INT_OFF();
-	*tail = *adr;
-	*adr = head;
-	INT_ON();
-}
-
-/*__________________________________________________________________________*/
 Boolean CompareAndSwap (void **adr, void *compareTo, void *swapWith) 
 {
 	Boolean retcode = true;
@@ -173,59 +130,6 @@ Boolean CompareAndSwap (void **adr, void *compareTo, void *swapWith)
 	else retcode = false;
 	INT_ON();
 	return retcode;
-}
-
-/*__________________________________________________________________________*/
-MidiEvPtr ClearFifo  (TFifoPtr fifo)
-{
-	MidiEvPtr ev = 0;
-	INT_OFF();
-	ev= fifo->head;
-	fifo->head= 0;
-	fifo->tail= (MidiEvPtr)&fifo->head;
-	fifo->count= 0;
-	INT_ON();
-	return ev;
-}
-
-/*__________________________________________________________________________*/
-MidiEvPtr PopFifoEv  (TFifoPtr fifo)
-{
-	MidiEvPtr ev = 0;
-	INT_OFF();
-	ev= fifo->head;
-	if (ev) {
-		fifo->count--;
-		fifo->head = Link(ev);
-		if (!fifo->head)
-			fifo->tail= (MidiEvPtr)&fifo->head;
-	}
-	INT_ON();
-	return ev;
-}
-
-/*__________________________________________________________________________*/
-void PushFifoEv (TFifoPtr fifo, MidiEvPtr ev)
-{
-	INT_OFF();
-	Link(fifo->tail) = ev;
-	fifo->tail = ev;
-	fifo->count++;
-	INT_ON();
-}
-
-/*__________________________________________________________________________*/
-Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	Boolean ret = false;
-	INT_OFF();
-	if (*taskPtr == content) {
-      	EvType(content) = typeDead;
-    	*taskPtr = 0;
-    	ret = true;
-	}
-	INT_ON();
-	return ret;
 }
 
 /*__________________________________________________________________________*/
