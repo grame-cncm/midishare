@@ -39,12 +39,8 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 	for (short line = 0 ; line<TableLength; line++) {fTaskTable[line] = 0;}
 		
 	#if GENERATINGCFM
-		fUPPScheduleTask = NewTaskPtr(ScheduleTask);
-		fUPPReScheduleTask = NewTaskPtr(ReScheduleTask);
 		fUPPExecuteTask = NewTaskPtr(ExecuteTask);
 	#else
-		fUPPScheduleTask = (TaskPtr)ScheduleTask;
-		fUPPReScheduleTask = (TaskPtr)ReScheduleTask;
 		fUPPExecuteTask = (TaskPtr)ExecuteTask;
 	#endif
 }
@@ -54,13 +50,13 @@ void TScheduler::Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl)
 TScheduler::~TScheduler ()
 { 
 	#if GENERATINGCFM
-		if (fUPPScheduleTask) DisposeRoutineDescriptor (fUPPScheduleTask);
-		if (fUPPReScheduleTask) DisposeRoutineDescriptor (fUPPReScheduleTask);
 		if (fUPPExecuteTask) DisposeRoutineDescriptor (fUPPExecuteTask);
 	#endif
 	
+	TTicksTaskPtr task;
+	
 	for (short line =  0 ; line<TableLength; line++) {
-		if (fTaskTable[line]) fTaskTable[line]->Clear();
+		if (task = fTaskTable[line]) task->Kill();
 	}
 }
 
@@ -70,17 +66,9 @@ TScheduler::~TScheduler ()
 
 void TScheduler::ReScheduleTasks() 
 {
-	ReScheduleTasksInt();
-}
-
-/*--------------------------------------------------------------------------*/
-// Re-schedule pending tasks after a Tempo change : non protected
-/*--------------------------------------------------------------------------*/
-
-void TScheduler::ReScheduleTasksInt() 
-{
+	TTicksTaskPtr task;
 	for (short line = 0 ; line<TableLength; line++) {
-		if (fTaskTable[line]) ScheduleRealTime(fTaskTable[line]);
+		if (task = fTaskTable[line]) ScheduleRealTime(task);
 	}
 }
 
@@ -90,21 +78,15 @@ void TScheduler::ReScheduleTasksInt()
 
 void TScheduler::ScheduleTickTask(TTicksTaskPtr task, ULONG date_ticks)
 {	
-	ScheduleTickTaskInt(task,date_ticks);
+	Boolean res = true;
+	
+	if (task->IsIdle ()) res = InsertTask(task); // Non inserted Task
+	if (res) {
+		task->SetDate(date_ticks);
+		task->SetRunning();
+		ScheduleRealTime(task);
+	}
 }
-
-/*--------------------------------------------------------------------------*/
-// Schedule a "Tick" task : non protected
-/*--------------------------------------------------------------------------*/
-
-void TScheduler::ScheduleTickTaskInt(TTicksTaskPtr task, ULONG date_ticks)
-{	
-	task->SetDate(date_ticks);
-	if (task->IsIdle ()) InsertTask(task); // Non inserted Task
-	task->SetRunning();
-	ScheduleRealTime(task);
-}
-
 
 /*--------------------------------------------------------------------------*/
 // Internal functions
@@ -128,7 +110,7 @@ void TScheduler::ExecuteTaskInt (TTicksTaskPtr task, ULONG date_ms)
 void TScheduler::ScheduleRealTime(TTicksTaskPtr task)
 {
 	if (fSynchro->IsSchedulable(task->GetDate())) {
-		task->Clear(); // Important
+		task->Kill(); // Important
 		fMidiAppl->NewMidiTask(fUPPExecuteTask, fSynchro->ConvertTickToMs(task->GetDate()),(long)this,(long)task,0, &task->fTask);
 	}
 }		
@@ -142,37 +124,27 @@ void MSALARMAPI ExecuteTask (ULONG date_ms, short refnum, long scheduler, long t
 	((TSchedulerPtr)scheduler)->ExecuteTaskInt((TTicksTaskPtr)task,date_ms);
 }
 
-/*--------------------------------------------------------------------------*/
-
-void MSALARMAPI ReScheduleTask (ULONG date_ms, short refnum, long scheduler, long a2, long a3) 
-{
-	((TSchedulerPtr)scheduler)->ReScheduleTasksInt(); 
-}
-
-/*--------------------------------------------------------------------------*/
-
-void MSALARMAPI ScheduleTask (ULONG date_ms, short refnum, long scheduler, long task, long a3) 
-{
-	((TSchedulerPtr)scheduler)->ScheduleTickTaskInt((TTicksTaskPtr)task,a3);
-}
-
 /*----------------------------------------------------------------------------*/
 
 void  TScheduler::RemoveTask(TTicksTaskPtr task){ fTaskTable[task->GetIndex()] = 0;}
 
 /*----------------------------------------------------------------------------*/
 /*
-Lorsqu'elle est insŽrŽe pour la premire fois, chaque tache obtient un indice unique
+When inserted for the first time, each task obtain a unique index
 */
 
-void  TScheduler::InsertTask(TTicksTaskPtr task)
+Boolean  TScheduler::InsertTask(TTicksTaskPtr task)
 {
 	// Warning : No more that TableLength tasks can be used
-	if (fTaskIndex == TableLength) return;
 	
-	// If first time the task is inserted, set a new index
-	if (task->GetIndex() < 0) task->SetIndex(fTaskIndex++); 
-	fTaskTable[task->GetIndex()] = task;
+	if (CheckTaskTable()) {
+		// If first time the task is inserted, set a new index
+		if (task->GetIndex() < 0) task->SetIndex(fTaskIndex++); 
+		fTaskTable[task->GetIndex()] = task;
+		return true;
+	}else {
+		return false;
+	}
  } 		
 
 
