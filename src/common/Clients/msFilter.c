@@ -24,7 +24,7 @@
 */
 
 #include "msFilter.h"
-#include "mem.h"
+#include "msMem.h"
 
 
 #define AllocateNewFilter(size)		(MidiFilterPtr)AllocateMemory(kernelSharedMemory, size)

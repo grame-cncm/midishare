@@ -25,7 +25,7 @@
 
 #include "msDefs.h"
 #include "msMemory.h"
-#include "mem.h"
+#include "msMem.h"
 
 
 #define kMaxEventsPerBlock	8191
