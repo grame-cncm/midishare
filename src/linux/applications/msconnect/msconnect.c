@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "MidiShare.h"
+#include "msApplsTools.h"
 
 /****************************************************************************
 						Global variables for msConnect 
@@ -239,14 +240,18 @@ static void add(GtkWidget *box, GtkWidget *obj)
 int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *hbox;
+	char applName[256];
 
 	// Initialisations
 	gtk_init (&argc, &argv);
-	gRefNum = MidiOpen(argv[0]);
+	StripPath (argv[0], applName);
+	
+	CheckMidiShare (applName);
+	gRefNum = MidiOpen(applName);
 
 	// User interface construction
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), "msConnect");
+	gtk_window_set_title(GTK_WINDOW(window), applName);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
 	hbox = gtk_hbox_new (FALSE, 10);

@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 #include "MidiShare.h"
 #include "Player.h"
+#include "msApplsTools.h"
 
 /****************************************************************************
 						Global variables for msPlayer
@@ -358,16 +359,20 @@ int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *vbox;
  	MidiFileInfos info;
-
-	if (argc!=2) {
-		printf("Usage : msplayer <midifile> \n");
-		return 0;
-	}
+	char applName[256];
 	
 	// Initialisations
 	gtk_init (&argc, &argv);
+	StripPath (argv[0], applName);
+	
+	CheckMidiShare (applName);
 
-	gRefNum = OpenPlayer(argv[0]);
+	if (argc!=2) {
+		printf("Usage : %s <midifile> \n", applName);
+		return 0;
+	}
+
+	gRefNum = OpenPlayer(applName);
 	MidiConnect (gRefNum, 0, true);
   	MidiConnect (0, gRefNum, true);
 
@@ -377,7 +382,7 @@ int main(int argc, char *argv[] )
 	
 	// Window definition
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), "msPlayer");
+	gtk_window_set_title(GTK_WINDOW(window), applName);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
 

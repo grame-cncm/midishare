@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "MidiShare.h"
+#include "msApplsTools.h"
 
 
 /****************************************************************************
@@ -250,11 +251,14 @@ void contSynchro( GtkWidget *widget,gpointer   data )
 int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *vbox;
- 
+ 	char applName[256];
+
 	// Initialisations
 	gtk_init (&argc, &argv);
-
-	gRefNum = MidiOpen(argv[0]);
+	StripPath (argv[0], applName);
+	
+	CheckMidiShare (applName);
+	gRefNum = MidiOpen(applName);
 	MidiConnect (gRefNum, 0, true);
   	MidiConnect (0, gRefNum, true);
 	InstallFilter(gRefNum);
@@ -265,7 +269,7 @@ int main(int argc, char *argv[] )
 
 	// Window definition
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), "msSync");
+	gtk_window_set_title(GTK_WINDOW(window), applName);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
 	vbox = gtk_vbox_new (FALSE, 10);
