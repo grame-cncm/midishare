@@ -25,8 +25,9 @@
 #include "StreamDefs.h"
 #include "msFunctions.h"
 
-#define StreamCountAvail(f) (StreamLength(f->buff) - f->read)
-#define StreamCountCont(f)  (StreamLength(f->buff) - f->read)
+#define StreamCountAvail(f) (f->slen - f->read)
+//#define StreamCountAvail(f) (StreamLength(f->buff) - f->read)
+//#define StreamCountCont(f)  (StreamLength(f->buff) - f->read)
 #define StreamAdjust(f, ptr, size) \
 	f->read += size; \
 	f->loc = ptr
@@ -51,6 +52,9 @@ void msStreamParseInit  (msStreamBufferPtr f, msStreamParseMethodTbl methTbl,
 {
   	f->buff = buffer;
 	f->size = size;
+	f->len = 0;
+    f->slen= 0;
+    f->expected = 0;
 	f->parse= methTbl;
 	f->varLen= 0;
 	f->curEv = 0;
@@ -70,6 +74,9 @@ void msStreamParseReset (msStreamBufferPtr f)
 	f->varLen = 0;
 	if (f->curEv) MidiFreeEv(f->curEv);
 	f->curEv = 0;
+	f->len = 0;
+    f->slen= 0;
+    f->expected = 0;
 }
 
 /*____________________________________________________________________________*/
@@ -104,25 +111,42 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 }
 
 /*____________________________________________________________________________*/
-static int CheckConsistency (msStreamHeaderPtr h, MidiEvPtr e)
+static int CheckConsistency (msStreamBufferPtr f, msStreamHeaderPtr h)
 {
 	/* check for header magic value */
 	if (h->magic != kStreamMagic) return kStreamInvalidHeader;
 	/* check for continuation and params consistency */
-	if ((h->cont && !e) || (!h->cont && e)) return kStreamInvalidParameter;
+	if ((h->cont && !f->curEv) || (!h->cont && f->curEv)) 
+        return kStreamInvalidParameter;
+
+    StreamAdjust(f, ++h, sizeof(msStreamHeader));
 	return kStreamNoError;
 }
 
 /*____________________________________________________________________________*/
-static MidiEvPtr StartReadBuffer (msStreamBufferPtr f, int * retcode)
+static int CheckMultipleStreams (msStreamBufferPtr f, int * retcode)
 {
-	msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
+    if (f->len > f->slen) {
+        int nextLen;
+        msStreamHeaderPtr h = (msStreamHeaderPtr)f->loc;
+        *retcode = CheckConsistency(f, h);
+        if (*retcode != kStreamNoError) return false;
+        
+        nextLen = StreamLength(h);
+        f->slen += nextLen;
+        if (f->slen > f->len) {
+            f->expected = f->slen - f->len;
+            f->slen = f->len;
+        }
+        return true;
+    }
+    return false;
+}
+
+/*____________________________________________________________________________*/
+static MidiEvPtr ContReadEvent (msStreamBufferPtr f, int * retcode)
+{
 	MidiEvPtr e = f->curEv;
-
-	*retcode = CheckConsistency(h, e);
-	if (*retcode != kStreamNoError) return 0;
-
-	StreamAdjust(f, ++h, sizeof(msStreamHeader));
 	if (e) {
 		*retcode = f->parse[EvType(e)](f, e);
 		switch (*retcode) {
@@ -131,13 +155,30 @@ static MidiEvPtr StartReadBuffer (msStreamBufferPtr f, int * retcode)
 				return e;
 			case kStreamNoMoreData:
 				f->curEv = e;
+                if (CheckMultipleStreams (f, retcode))
+                    return ContReadEvent (f, retcode);
+                else msStreamParseRewind(f);
 				break;
 			default:
 				MidiFreeEv(e);
 		}
 	}
+    else *retcode = kStreamParseError;
+    return 0;
+}
+
+/*____________________________________________________________________________*/
+static MidiEvPtr StartReadBuffer (msStreamBufferPtr f, int * retcode)
+{
+	msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
+
+	*retcode = CheckConsistency(f, h);
+	if (*retcode != kStreamNoError) return 0;
+	f->slen = StreamLength(f->buff);
+//    StreamAdjust(f, ++h, sizeof(msStreamHeader));
+	if (f->curEv)
+        return ContReadEvent (f, retcode);
 	else return ReadNewEvent (f, retcode);
-	return 0;
 }
 
 /*____________________________________________________________________________*/
@@ -162,13 +203,19 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 					return e;
 				case kStreamNoMoreData:
 					f->curEv = e;
-					break;
+                    if (CheckMultipleStreams (f, retcode))
+                        return ContReadEvent (f, retcode);
+					else msStreamParseRewind(f);
+                    break;
 				default:
 					MidiFreeEv(e);
 			}
 		}
 	}
-	else {
+	else if (CheckMultipleStreams (f, retcode)) {
+        return ReadNewEvent (f, retcode);
+    }
+    else {
 		msStreamParseRewind(f);
 		*retcode = kStreamNoMoreData;
 	}
@@ -176,13 +223,42 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 }
 
 /*____________________________________________________________________________*/
+MidiEvPtr msStreamStartBuffer (msStreamBufferPtr f, int buflen, int * retcode)
+{
+	f->len = buflen;
+    if (f->expected) {
+        /* previous buffer stopped within a packet */
+        /* buffer header is not present and must not be checked */
+        if (f->expected > buflen) {
+            f->slen = buflen;
+            f->expected -= buflen;
+        }
+        else {
+            f->slen = f->expected;
+            f->expected = 0;
+        }
+        if (f->curEv) {
+            return ContReadEvent (f, retcode);
+        }
+        else {
+            return ReadNewEvent (f, retcode);
+        }
+    }
+    else {
+		return StartReadBuffer (f, retcode);
+    }
+}
+
+/*____________________________________________________________________________*/
 MidiEvPtr msStreamGetEvent (msStreamBufferPtr f, int * retcode)
 {
 	if (!retcode) return 0;
-	if (!f->read)
+/*	if (!f->read)
 		return StartReadBuffer (f, retcode);
 	else 
 		return ReadNewEvent (f, retcode);
+*/
+    return ReadNewEvent (f, retcode);
 }
 
 /*===========================================================================
@@ -204,7 +280,7 @@ static int Data4ParseMth (msStreamBufferPtr f, MidiEvPtr e)
 		StreamAdjust(f, ptr, sizeof(long));
 		return kStreamNoError;
 	}
-	msStreamParseRewind(f);
+//	msStreamParseRewind(f);
 	return kStreamNoMoreData;
 }
 
@@ -220,7 +296,7 @@ static int Ext1ParseMth (msStreamBufferPtr f, MidiEvPtr e)
 		StreamAdjust(f, ptr, (sizeof(long) * 4));
 		return kStreamNoError;
 	}
-	msStreamParseRewind(f);
+//	msStreamParseRewind(f);
 	return kStreamNoMoreData;
 }
 
@@ -233,7 +309,7 @@ static int VarLenParseMth (msStreamBufferPtr f, MidiEvPtr e)
 		StreamAdjust(f, ptr, sizeof(long));
 		return VarLenContMth (f, e);
 	}
-	msStreamParseRewind(f);
+//	msStreamParseRewind(f);
 	return kStreamNoMoreData;
 }
 
@@ -265,7 +341,7 @@ static int VarLenContMth (msStreamBufferPtr f, MidiEvPtr e)
 	}
 	if (f->varLen) {
 		f->parse[EvType(e)] = VarLenContMth;
-		msStreamParseRewind(f);
+//		msStreamParseRewind(f);
 		return kStreamNoMoreData;
 	}
 	else {

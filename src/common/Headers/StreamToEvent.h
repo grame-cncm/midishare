@@ -46,6 +46,9 @@ typedef msStreamParseMethodPtr 	msStreamParseMethodTbl[256];
 typedef struct msStreamBuffer {
   	void * 			buff;         	/* the input buffer ptr	   */
 	unsigned short  size;         	/* the buffer size	       */
+	unsigned short  slen;         	/* the stream actual data length */
+	unsigned short  len;         	/* the buffer actual data length */
+	unsigned short  expected;       /* possible remaining expected data */
 	msStreamParseMethodPtr * parse; /* parse methods table     */
 
   	void * 			loc;         	/* current read location   */
@@ -74,6 +77,7 @@ void	msStreamParseReset (msStreamBufferPtr f);
 	to complete the event.
 	other error codes are mentionned above
 */
+MidiEvPtr msStreamStartBuffer(msStreamBufferPtr f, int buflen, int * retcode);
 MidiEvPtr msStreamGetEvent   (msStreamBufferPtr f, int * retcode);
 int 	  msStreamGetSize    (msStreamBufferPtr f);
 
