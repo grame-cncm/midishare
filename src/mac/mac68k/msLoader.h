@@ -39,7 +39,7 @@ typedef struct TComponent {
 //___________________________________
 // global environment
 typedef struct {	
-	TMSGlobal	msh;
+//	TMSGlobal	msh;
 	char *		savedVector;
 } 
 EGlobal, *EGlobalPtr;
