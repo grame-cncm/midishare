@@ -43,12 +43,7 @@ TMidiSlot::~TMidiSlot()
 Boolean TMidiSlot::Open (MidiName name, SlotDirection dir)
 {
 	if (!Opened()) {
-#if defined(macintosh) && defined(MidiSharePPC_68k)
-		long ref = MidiAddSlot (fDrvRef, name, dir);
-		fRefNum = *(SlotRefNum *)&ref;
-#else
 		fRefNum = MidiAddSlot (fDrvRef, name, dir);
-#endif
 		if (fRefNum.slotRef < 0) {
 			fRefNum.slotRef = undefinedRefNum;
 			return false;
