@@ -41,7 +41,7 @@ char * TLog::DateString (char * buff, short len)
 {
 	time_t t;
 	time(&t);
-	strftime (buff, len, "[%D %T]", localtime(&t));
+	strftime (buff, len, "[%m-%d-%Y %H:%M:%S]", localtime(&t));
 	return buff;
 }
 

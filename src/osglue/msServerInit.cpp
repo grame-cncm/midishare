@@ -39,6 +39,12 @@
 #	define kLogName		"MidiShared.log"
 #endif
 
+#ifndef __MacOSX__
+#define kMainComStopFlag	1
+#else
+#define kMainComStopFlag	0
+#endif
+
 typedef struct {
 	ShMem * shmem;
 	void * shmemPtr;
@@ -76,7 +82,6 @@ static void sigActions (int sig)
 
 static void msExit ()
 {
-	ServerMainComStop (0);
 	msServerClose ();
 }
 
@@ -94,7 +99,7 @@ static void setSigActions ()
 }
 #endif
 
-void * msServerInit (int shmemSize, int debug)
+void * msServerInit (int shmemSize)
 {
 #ifndef WIN32
 	setSigActions();
@@ -113,6 +118,7 @@ err:
 
 void msServerClose()
 {
+	ServerMainComStop (kMainComStopFlag);
 	if (gEnv.shmem) delete gEnv.shmem;
 	gEnv.shmem = 0;
 }

@@ -25,6 +25,15 @@
 #include "msKernel.h"
 #include "msKernelPrefs.h"
 #include "msServerInit.h"
+#include "msCommInit.h"
+
+/*____________________________________________________________________________*/
+static void MainClientServerProc (PipesPair p)
+{
+	char msg[512];
+	sprintf (msg, "New contact: pipes id = %d\n", (int)PPID(p));
+	LogWrite (msg);
+}
 
 /*____________________________________________________________________________*/
 static msKernelPrefs * init (int argc, char *argv[])
@@ -49,18 +58,22 @@ int main (int argc, char *argv[])
 	OpenLog (0);
 	prefs = init (argc, argv);
 	LogPrefs (prefs);
-	pubMem = msServerInit (sizeof(TMSGlobalPublic), true);
+	pubMem = msServerInit (sizeof(TMSGlobalPublic));
 	if (pubMem) {
 		int version;
 		char msg[512];
 
 		/* never call any MidiShare function before MidiShareSpecialInit */
 		MidiShareSpecialInit (40000, pubMem);
-		version = MidiGetVersion();
-		sprintf (msg, "MidiShare Server v.%d.%02d is running", version/100, version%100);
-		LogWrite (msg);
-		printf ("press return to quit\n");
-		getc(stdin);
+
+		/* the main communication server proc needs an initialized kernel */
+		if (ServerMainComInit (MainClientServerProc)) {
+			version = MidiGetVersion();
+			sprintf (msg, "MidiShare Server v.%d.%02d is running", version/100, version%100);
+			LogWrite (msg);
+			printf ("press return to quit\n");
+			getc(stdin);
+		}
 		msServerClose ();
 	}
 	else {

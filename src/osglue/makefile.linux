@@ -11,11 +11,12 @@ OUT = ../msOSGlueLib.o
 all: makefile $(OUT)
 
 $(OUT) : $(OBJ)
-	ld -m elf_i386 -r -o $(OUT) $(OBJ)
+	ld -r -o $(OUT) $(OBJ)
 
 makefile: makefile.linux
 	cp -f makefile.linux makefile
 	rm -f $(OBJ) $(OUT)
+	make dep
 
 clean:
 	rm -f $(OBJ) $(OUT)
