@@ -26,7 +26,7 @@ TClockSender.o TPlayerSynchroniserClock.o TPlayerSynchroniserExt.o TPlayerSynchr
 TTrackTable.o UMidi.o UTools.o Tmtrack.o Midifile.o \
 TEventFactory.o  TMidiAppl.o TScheduler.o TScore.o TScoreFollower.o TScoreIterator.o\
 UScoreManager.o TTempoConverter.o TTempoMap.o TTempoMapVisitor.o TTime.o \
-TTimeConverter.o TTimeManager.o TEventModifier.o
+TTimeConverter.o TTimeManager.o TEventModifier.o TTickConsumer.o
  
 OBJJAVA = $(OBJ) MidiPlayer.o
  
@@ -102,6 +102,10 @@ TSyncOutPlayer.o : $(SRC)/Players/TSyncOutPlayer.cpp
 
 TTickPlayer.o : $(SRC)/Players/TTickPlayer.cpp
 	$(CC) $(SRC)/Players/TTickPlayer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+	
+TTickConsumer.o : $(SRC)/Players/TTickConsumer.cpp
+	$(CC) $(SRC)/Players/TTickConsumer.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+
 
 TPlayerScore.o : $(SRC)/Score/TPlayerScore.cpp
 	$(CC) $(SRC)/Score/TPlayerScore.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
