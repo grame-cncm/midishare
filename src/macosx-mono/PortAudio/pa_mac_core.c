@@ -99,10 +99,12 @@ typedef struct PaHostSoundControl
 /* Run Time -------------- */    
 	PaTimestamp        pahsc_FramesPlayed;
 	long               pahsc_LastPosition;                /* used to track frames played. */
+	
 /* For measuring CPU utilization. */
 //	LARGE_INTEGER      pahsc_EntryCount;
 //	LARGE_INTEGER      pahsc_LastExitCount;
 /* Init Time -------------- */    
+
 	int                pahsc_NumHostBuffers;
 	int                pahsc_FramesPerHostBuffer;
 	int                pahsc_UserBuffersPerHostBuffer;
@@ -232,7 +234,7 @@ static PaError Pa_QueryDevices( void )
     // calculate the number of device available
     sNumDevices = outSize / sizeof(AudioDeviceID);	
     
-    printf("Device number %d\n",sNumDevices);
+    DBUG(("Device number %d\n",sNumDevices));
 						
     // Bail if there aren't any devices
 	if (sNumDevices < 1)
@@ -344,18 +346,18 @@ int deviceGetBufferSize(AudioDeviceID deviceID , AudioStreamBasicDescription *de
         long min = range.mMinimum;
         long max = range.mMaximum;
         
-        printf("BufferSizeRange min  %ld \n", min);
-        printf("BufferSizeRange max %ld \n", max);
+        DBUG(("BufferSizeRange min  %ld \n", min));
+        DBUG(("BufferSizeRange max %ld \n", max));
      }
 
     outSize = sizeof(*desc);
-    printf("sizeof(*desc) %ld \n", outSize);
+    DBUG(("sizeof(*desc) %ld \n", outSize)) ;
     err = AudioDeviceGetProperty(deviceID, 0, false, kAudioDevicePropertyBufferSize, &outSize, desc);
     
     // err = AudioDeviceGetProperty(deviceID, 0, false, kAudioDevicePropertyBufferFrameSize, &outSize, desc);
     
-    printf("deviceID %d \n", deviceID);
-    printf("Buffer frame size %d \n", desc->mFramesPerPacket);
+    DBUG(("deviceID %d \n", deviceID));
+    DBUG(("Buffer frame size %d \n", desc->mFramesPerPacket));
 	
     if (err == kAudioHardwareNoError)
             return true;
@@ -658,7 +660,8 @@ static PaError Pa_TimeSlice( internalPortAudioStream   *past, const AudioBufferL
 		}
 		else
 		{
-/* Convert 16 bit native data to user data and call user routine. */
+		 /* Convert 16 bit native data to user data and call user routine. */
+		 	
 			result = Pa_CallConvertFloat32( past, (float *) inBufPtr, (float *) outBufPtr );
 			if( result != 0) done = 1;
 		}
@@ -688,25 +691,25 @@ OSStatus appPropertyProc(	AudioDeviceID			inDevice,
 	PaHostSoundControl *pahsc = (PaHostSoundControl *) past->past_DeviceData;
 	UInt32 dataSize = 0;
 	AudioStreamBasicDescription formatDesc;
-   
+   /*
 	printf("appPropertyProc inDevice %ld \n", inDevice);
 	printf("appPropertyProc inChannel %ld \n", inChannel);
 	printf("appPropertyProc isInput %ld \n", isInput);
 	printf("appPropertyProc AudioDevicePropertyID %ld \n", inPropertyID);
-	
+	*/
 	if (inPropertyID == kAudioDevicePropertyBufferFrameSize) 
-		printf("kAudioDevicePropertyBufferFrameSize OK \n");
+		DBUG(("kAudioDevicePropertyBufferFrameSize OK \n"));
 	
 	dataSize = sizeof(formatDesc);
 	 
 	err = AudioDeviceGetProperty(inDevice, inChannel, isInput, inPropertyID, &dataSize, &formatDesc);
 	if ( err != noErr ) {
-		printf("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) );
+		DBUG(("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) ));
 		//PRINT(("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) ));
 	} else {
 		//PRINT(("Output Stream Hardware Latency = %d frames.\n", hardwareLatency ));
 		
-		printf("appPropertyProc AudioDeviceGetProperty %ld \n", dataSize);
+		DBUG(("appPropertyProc AudioDeviceGetProperty %ld \n", dataSize));
 	}
 	
 	deviceGetBufferSize(inDevice,&formatDesc);
@@ -810,9 +813,9 @@ PaError PaHost_OpenOutputStream( internalPortAudioStream   *past )
 	PaHostSoundControl *pahsc;
 	const PaDeviceInfo *pad;
 	UInt32          bytesPerHostBuffer;	
-    UInt32		dataSize;
-	UInt32		hardwareLatency = -1;
-	Boolean		writeable = false;
+    UInt32			dataSize;
+	UInt32			hardwareLatency = -1;
+	Boolean			writeable = false;
 	OSStatus        err = noErr;
 	int             bytesPerOutputFrame;
 	AudioStreamBasicDescription formatDesc;
@@ -835,7 +838,7 @@ PaError PaHost_OpenOutputStream( internalPortAudioStream   *past )
 	// change the bufferSize of the device
 	bytesPerHostBuffer = past->past_OutputBufferSize; // FIXME
         
-    printf("bytesPerHostBuffer %d\n",bytesPerHostBuffer);
+    DBUG(("bytesPerHostBuffer %d\n",bytesPerHostBuffer));
 	dataSize = sizeof(UInt32);
 	err = AudioDeviceSetProperty( pahsc->pahsc_OutputAudioDeviceID, 0, 0, false,
 	         kAudioDevicePropertyBufferSize, dataSize, &bytesPerHostBuffer);
@@ -878,7 +881,7 @@ PaError PaHost_OpenOutputStream( internalPortAudioStream   *past )
 	if ( err != noErr ) {
 		PRINT(("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) ));
 	} else {
-		PRINT(("Output Stream Hardware Latency = %d frames.\n", hardwareLatency ));
+		//PRINT(("Output Stream Hardware Latency = %d frames.\n", hardwareLatency ));
 	}
 
 	return result;
@@ -999,34 +1002,38 @@ PaError PaHost_OpenStream( internalPortAudioStream   *past )
 /* Figure out how user buffers fit into WAVE buffers. */
 // FIXME - just force for now
 
+	
 	pahsc->pahsc_UserBuffersPerHostBuffer = 1;
 	pahsc->pahsc_FramesPerHostBuffer = past->past_FramesPerUserBuffer;
 	pahsc->pahsc_NumHostBuffers = 2; // FIXME - dunno?!
 
 	{
 		int msecLatency = (int) ((PaHost_GetTotalBufferFrames(past) * 1000) / past->past_SampleRate);
-		PRINT(("PortAudio on OSX - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
+		//PRINT(("PortAudio on OSX - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
 	}
 	
-/* ------------------ OUTPUT */
+		
+	/* ------------------ OUTPUT */
 	if( (past->past_OutputDeviceID != paNoDevice) && (past->past_NumOutputChannels > 0) )
 	{
 		result = PaHost_OpenOutputStream( past );
 		if( result < 0 ) goto error;
 	}
 
-/* ------------------ INPUT */
+	/* ------------------ INPUT */
 	if( (past->past_InputDeviceID != paNoDevice) && (past->past_NumInputChannels > 0) )
 	{
 		result = PaHost_OpenInputStream( past );
 		if( result < 0 ) goto error;
 	}
-/* ------------------ Notification thread */
+	
+	
+	/* ------------------ Notification thread */
 	
 	if (!sThread) sThread = create_thread(0,NotificationThread,past);
 	
 	/* add internal stream in list */
-	printf("sStreamList %x\n", sStreamList);
+	DBUG(("sStreamList %x\n", sStreamList));
 	past->past_Next = sStreamList;
 	sStreamList = past;
 		
@@ -1051,23 +1058,23 @@ PaError PaHost_StartOutput( internalPortAudioStream *past )
 	{
 		sNumStreams++;
 		
-		if (sNumStreams==1) {
-			printf("PaHost_StartOutput\n");
+		if (sNumStreams == 1) {
+			DBUG(("PaHost_StartOutput\n"));
 			// Associate an IO proc with the device and pass a pointer to the audio data context
 		
 			//err = AudioDeviceAddIOProc(pahsc->pahsc_OutputAudioDeviceID, (AudioDeviceIOProc)appIOProc, past);	
 			err = AudioDeviceAddIOProc(pahsc->pahsc_OutputAudioDeviceID, (AudioDeviceIOProc)appIOProc, sStreamList);	
-			printf("AudioDeviceAddIOProc %ld\n", err);
+			DBUG(("AudioDeviceAddIOProc %ld\n", err));
 			
 			if (err != noErr)  {
-				printf("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) );
+				DBUG(("A CoreAudio error occurred: %s.\n", coreAudioErrorString( err ) ));
 				goto error;
 			}
 					
 			// start playing sound through the device		        
 			err = AudioDeviceStart(pahsc->pahsc_OutputAudioDeviceID, (AudioDeviceIOProc)appIOProc);				
 			
-			printf("AudioDeviceStart %ld\n", err);
+			DBUG(("AudioDeviceStart %ld\n", err));
 			if (err != noErr) goto error;
 		}
 	}
@@ -1159,7 +1166,7 @@ PaError PaHost_StopOutput( internalPortAudioStream *past, int abort )
  	if (sNumStreams==0)// FIXME   if( pahsc->pahsc_OutputAudioDeviceID != ??? )
 		{
 			OSStatus 	err = noErr;
-			printf("PaHost_StopOutput\n");
+			DBUG(("PaHost_StopOutput\n"));
 			
 			err = AudioDeviceStop(pahsc->pahsc_OutputAudioDeviceID, (AudioDeviceIOProc)appIOProc);
 			if (err != noErr) goto Bail;
@@ -1358,11 +1365,11 @@ void stopThread (pthread_t thread)
 {
 	void *threadRet; 
 	if (thread) {
-		printf (" stopThread ..\n");
+		//printf (" stopThread ..\n");
 		pthread_cancel (thread);
-		printf (" pthread_cancel ..\n");
+		//printf (" pthread_cancel ..\n");
 		pthread_join (thread, &threadRet);
-		printf (" pthread_join ..\n");
+		//printf (" pthread_join ..\n");
 	}
 }
 
@@ -1373,13 +1380,13 @@ static void * NotificationThread (void * ptr)
 	PaHostSoundControl *pahsc = (PaHostSoundControl *) past->past_DeviceData;
 	OSStatus  err = noErr;
 	
-	printf("NotificationThread : pahsc->pahsc_OutputAudioDeviceID %ld \n",pahsc->pahsc_OutputAudioDeviceID);
+	DBUG(("NotificationThread : pahsc->pahsc_OutputAudioDeviceID %ld \n",pahsc->pahsc_OutputAudioDeviceID));
 	
 	err = AudioDeviceAddPropertyListener(pahsc->pahsc_OutputAudioDeviceID,0,false,
 	 							kAudioDevicePropertyBufferFrameSize, (AudioDevicePropertyListenerProc)appPropertyProc, past);	
 
 	if ( err != noErr ) {
-		printf("AudioDeviceAddPropertyListener Error %x %ld \n", coreAudioErrorString( err ));
+		DBUG(("AudioDeviceAddPropertyListener Error %x %ld \n", coreAudioErrorString( err )));
 	} else {
 			
 	}
