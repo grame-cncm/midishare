@@ -3,6 +3,7 @@
 
 COM=../common
 MEM=$COM/Memory
+TESTS=./tests
 
 echo creating $COM/makefile
 cp makefile.common  $COM/makefile
@@ -14,6 +15,12 @@ if [ ! -d $MEM/lib ]
 then
 	echo creating object directory $MEM/lib
 	mkdir $MEM/lib
+fi
+
+if [ ! -d $TESTS/obj ]
+then
+	echo creating object directory $TESTS/obj
+	mkdir $TESTS/obj
 fi
 
 chmod +x checksu
