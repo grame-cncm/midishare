@@ -10,9 +10,11 @@ appls="$A/msControler/build/msControler.app \
 	 $A/msDrivers/build/msDrivers.app \
 	 $A/RadioHardDisk/build/RadioHardDisk.app"
 
-
 drivers="$D/msMidiDriver/build/msMidiDriver.*.so \
 	$D/msQTDriver/build/msQTDriver.*.so \
 	$D/msNet/build/msLANDriver.*.so \
 	$D/msNet/build/msWANDriver.*.so"
+
+java="../../../libraries/player/macosx/java/build/libJPlayer.*.jnilib \
+	../../../lang/java/jni/macosx/build/libJMidi.*.jnilib"
 

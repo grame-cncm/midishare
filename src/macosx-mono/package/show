@@ -1,7 +1,0 @@
-#!/bin/sh
-#
-
-h=$(pwd)
-cd Distribution/Applications/MidiShare/
-[ -f .checkinstall ] && mv .checkinstall checkinstall
-[ -d .host_default_config ] && mv .host_default_config host_default_config

@@ -12,17 +12,39 @@ function remove () {
 	fi
 }
 
+echo removing frameworks
 remove MidiShare.framework $DIST/System/Library/Frameworks
+remove Player.framework $DIST/System/Library/Frameworks
 
+echo removing applications...
 for a in $appls
 do
 	remove $(basename $a) $DIST/Applications/MidiShare
 done
 
+echo removing drivers...
 for a in $drivers
 do
 	remove $(basename $a) $DIST/usr/lib
 done
 
+echo removing java...
+for a in $java
+do
+	remove $(basename $a) $DIST/usr/lib/java
+done
+
+echo removing symlinks...
+for a in $DIST/usr/lib/*
+do
+	[ -h $a ] && rm -f $a
+done
+for a in $DIST/usr/lib/java/*
+do
+	[ -h $a ] && rm -f $a
+done
+
+echo removing grame.jar
+remove grame.jar $DIST/Library/Java/Extensions
 
 exit 0
