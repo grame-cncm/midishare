@@ -119,7 +119,7 @@ char *typeListe[] =
 /*136 */	"Copyright",	"SeqName",		"InstrName",	"Lyric",
 /*140 */	"Marker",		"CuePoint",		"ChanPrefix",	"EndTrack",
 /*144 */	"Tempo",		"SMPTEOffset",	"TimeSign",		"KeySign",
-/*148 */	"Specific",		"Reserved"
+/*148 */	"Specific",		"PortPrefix",	"RcvAlarm", 	"ApplAlarm", "Reserved"		
 };
 
 
@@ -167,7 +167,7 @@ GetEvFuncPtr GetEvTable[] = {
 /*135 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt,
 /*140 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt,
 /*145 */		GetNoExt, 	GetNoExt, 	GetNoExt, 	GetNoExt, 	0,
-/*150 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
+/*150 */		GetNoExt,	GetNoExt,	0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*170 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*190 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
 /*210 */		0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
