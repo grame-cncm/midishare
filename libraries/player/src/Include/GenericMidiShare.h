@@ -12,6 +12,15 @@
 #ifndef __GenericMidiShare__
 #define __GenericMidiShare__
 
+#ifdef __Linux__
+	#include "MidiShare.h"
+	#define true 1
+	#define false 0
+	#define nil 0
+	#define FAR
+	#define EXPORT
+	#define MSALARMAPI
+#endif
 
 #ifdef __Macintosh__
 	#if GENERATINGCFM
