@@ -47,7 +47,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	TScoreStatePtr          	scorestate = 0;
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
-	
+	TCombinerPlayerPtr 			combiner = 0;
 	
 	long res;
 	
@@ -88,13 +88,11 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	scheduler->Init(synchro, fUser); // Initialisation 
 	
 	tickplayer 	= new TTickPlayer(fUser->fScore, eventsender, scheduler);
-	// A FINIR
-	TCombinerPlayerPtr combiner = new TCombinerPlayer(tickplayer, 0);
+	combiner 	= new TCombinerPlayer(tickplayer, 0);
 	chaser 		= new TChaserIterator(fUser->fScore, eventsender);
 	player1 	= new TSyncInPlayer(synchro,combiner,chaser);
 	
 
-	
 	switch (fUser->fSyncOut) {
 		
 		case kClockSyncOut:
@@ -143,21 +141,16 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	}
 		
 	
-	//recorder = new TEventModifier(eventsender,fUser->fScore, synchro, fUser->fRunningState,receiver);
-	
-	
 	// Chaine de traitements des ŽvŽnements
 	//--------------------------------------
 	// Modifier ==> Recorder ==> Receiver
 	
 	
-	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver); // en fin de chaine cau utiliser les event
+	recorder = new TEventRecorder(fUser->fScore, synchro, fUser->fRunningState,receiver); // en fin de chaine pour utiliser les event
 	modifier = new TEventModifier(eventsender, synchro, scheduler,fUser->fRunningState,recorder);
 
 	combiner->SetPlayer2(modifier);
 	scorestate = new TScoreState(fUser->fScore,fUser->fTick_per_quarter);
-
-
 	
 	// Affectation 
 	fUser->fClockConverter =  clockconverter;
@@ -169,7 +162,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer ()
 	// Destructor allocation
 	fDestructor = new TDestructor(synchro,receiver,scheduler,tickplayer,
 					chaser,player1,player2,player3,clocksender,clockconverter,
-					loopmanager,inserter,recorder,modifier,scorestate,eventsender,timemanager);
+					loopmanager,inserter,recorder,modifier,scorestate,eventsender,timemanager,combiner);
 					
 	TGenericPlayerInterfacePtr genericplayer = new TGenericPlayer (modifier, player3,timemanager);
 	

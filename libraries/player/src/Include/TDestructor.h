@@ -44,7 +44,6 @@
 #include "TCombinerPlayer.h"
 
 
-
 class TDestructor {
 
 	private:
@@ -66,6 +65,7 @@ class TDestructor {
 		TScoreStatePtr   			fScoreState;
 		TEventSenderInterfacePtr  	fEventSender;
 		TTimeManagerPtr				fTimeManager;
+		TCombinerPlayerPtr          fCombiner;
 		
 	public:
 		
@@ -85,7 +85,8 @@ class TDestructor {
 					TEventModifierPtr			modifier,
 					TScoreStatePtr   			scorestate,
 					TEventSenderInterfacePtr  	eventsender,
-					TTimeManagerPtr				timemanager
+					TTimeManagerPtr				timemanager,
+					TCombinerPlayerPtr          combiner
 					)
 
 		{
@@ -106,6 +107,7 @@ class TDestructor {
 			fScoreState = scorestate;
 			fEventSender = eventsender;
 			fTimeManager = timemanager;
+			fCombiner = combiner;
 		}
 				
 		~TDestructor()
@@ -129,6 +131,7 @@ class TDestructor {
 			if (fScoreState )	delete(fScoreState);
 			if (fEventSender) 	delete(fEventSender);
 			if (fTimeManager) 	delete(fTimeManager);
+			if (fCombiner) 		delete(fCombiner);
 		}
 
 };
