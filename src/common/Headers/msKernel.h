@@ -90,7 +90,7 @@ typedef struct TMSGlobal {
 #define Sorter(g)           (&g->sorter)
 #define Clients(g)       	(&g->clients)
 #define Memory(g)           (&g->memory)
-#define TimeOffset(g)       (g->currTime.rtOffset)
+#define TimeOffset(g)       (g->clock.rtOffset)
 #define Appls(g)       		(g->clients.appls)
 #define ActiveAppl(g)       (g->clients.activesAppls)
 #define NextActiveAppl(g)   (g->clients.nextActiveAppl)

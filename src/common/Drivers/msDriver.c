@@ -48,7 +48,6 @@
   Internal functions prototypes
   =========================================================================== */
 static void clearSlotCnx (char * cnx);
-static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g);
 static SlotInfosPtr findSlot (short ref, SlotInfosPtr slot, SlotInfosPtr * previous);
 static short getNextFreePublicDriver (TClientsPublic * cpub);
 static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name, SlotDirection direction, TClientsPtr g);
@@ -65,14 +64,15 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 		TDriverPtr drv = NewDriver(sizeof(TDriver));
 		if (appl && drv) {
 			for (ref = clients->lastDrvRef - 1; clients->appls[ref]; ref--) {
-				if (ref == clients->lastDrvRef) break;  /* should never happend */
+				if (ref == clients->lastDrvRef) { /* should never happend */
+					break;
+				}
 				if (ref == MidiShareRef + 1) ref=MidiShareDriverRef;
 			}
 			clients->lastDrvRef = ref;
 			makeClient (clients, appl, ref, infos->name, kDriverFolder);
 			makeDriver (clients, drv, ref, infos, op);
 			Driver(appl) = drv;
-			nbDrivers(clients)++;
 			if (nbAppls(clients)) {
 				DriverWakeUp (appl);
 				CallAlarm (ref, MIDIOpenDriver, clients);
@@ -90,20 +90,18 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 {
-	TDriverPtr drv; TAppl saved;
+	TDriverPtr drv;
 	TClientsPtr clients = Clients(g);	
 	if (!CheckDriverRefNum(clients, ref) || (ref == MidiShareDriverRef))
 		return;
 
-	saved = *clients->appls[ref];
+	if (nbAppls(Clients(g))) {			
+		DriverSleep (clients->appls[ref]);		
+		CallAlarm (ref, MIDICloseDriver, clients);
+	}
 	drv = Driver(clients->appls[ref]);
 	closeDriver (ref, drv, g);
 	closeClient (ref, g);
-	nbDrivers(clients)--;
-	if (nbAppls(Clients(g))) {			
-		DriverSleep (&saved);		
-		CallAlarm (ref, MIDICloseDriver, clients);
-	}
 }
 
 /*____________________________________________________________________________*/
@@ -235,7 +233,7 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 	if (!sptr) return false;
 
 	setName (infos->name, pub(sptr,name));
-	infos->direction = pub(sptr, direction);
+	infos->direction = (SlotDirection)pub(sptr, direction);
 	cnxPtr = pub(sptr, cnx);
 	for (i=0; i<MaxPorts/8; i++, cnxPtr++) {
 		infos->cnx[i] = *cnxPtr;
@@ -366,12 +364,41 @@ void makeDriver (TClientsPtr g, TDriverPtr drv, short ref,
 	/* set next driver public information */
 	i = getNextFreePublicDriver (g->pub);     /* get a free index in the public section */
 	if (i < MaxDrivers) {                     /* it should always be */
+		nbDrivers(g)++;
 		drv->pub = &pub(g, drivers[i]);       /* makes the driver pointing to this public area */
 		pub(drv, refNum) = ref;
 		pub(drv, version) = infos->version;
 		pub(drv, slotsCount) = 0;
 		pub(g->appls[ref], drvidx) = i;       /* stores the index of the public driver infos */
 	}
+}
+
+/*____________________________________________________________________________*/
+void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g)
+{
+	SlotInfosPtr slot = drv->slots;
+	
+	/* clear first driver public information */
+	nbDrivers(Clients(g))--;
+	pub(drv, refNum) = MIDIerrRefNum;
+	pub(drv, version) = 0;
+	pub(drv, slotsCount) = 0;
+
+	/* release now the allocated slots */
+	while (slot) {
+		SlotInfosPtr next = slot->next;
+		Clients(g)->nbSlots--;
+
+		/* clear the public slot information */
+		pub(slot,driverRefNum) = MIDIerrRefNum;
+		pub(slot,slotRefNum) = MIDIerrRefNum;
+
+		/* free then the private slot structure */
+		FreeSlot(slot);
+		slot = next;
+	}
+	drv->slots = 0;
+	FreeDriver(drv);
 }
 
 /*===========================================================================
@@ -411,25 +438,6 @@ static SlotInfosPtr findSlot (short ref, SlotInfosPtr slot, SlotInfosPtr * previ
 }
 
 /*____________________________________________________________________________*/
-static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g)
-{
-	SlotInfosPtr slot = drv->slots;
-	
-	/* clear first driver public information */
-	pub(drv, refNum) = MIDIerrRefNum;
-	pub(drv, version) = 0;
-	pub(drv, slotsCount) = 0;
-
-	/* release now the allocated slots */
-	while (slot) {
-		SlotInfosPtr next = slot->next;
-		slot = next;
-	}
-	drv->slots = 0;
-	FreeDriver(drv);
-}
-
-/*____________________________________________________________________________*/
 static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name, 
 					  SlotDirection direction, TClientsPtr g)
 {
@@ -442,7 +450,9 @@ static short makeSlot (SlotInfosPtr slot, short drvRef, SlotName name,
 	
 		/* look for a free reference number */
 		for (ref = g->lastSlot + 1; pub(g,slots[ref].slotRefNum) != MIDIerrRefNum; ref++) {
-			if (ref == g->lastSlot) break;  /* should never happend */
+			if (ref == g->lastSlot) {  /* should never happend */
+				break;
+			}
 			if (ref == MaxSlots - 1) ref=-1;
 		}
 

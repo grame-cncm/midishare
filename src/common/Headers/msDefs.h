@@ -335,7 +335,7 @@ enum{   MIDIOpenAppl=1,
 
 
 /*------------------------------------ names ----------------------------------*/
-#define DrvNameLen 32
+#define DrvNameLen     64
 #define MaxSlotNameLen 64
 
 #ifdef PascalNames

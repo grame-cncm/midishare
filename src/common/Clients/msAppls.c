@@ -69,9 +69,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			infos.version = MSGetVersion (g);
 		    makeClient(clients, appl, MidiShareDriverRef, kMidiShareName, kDriverFolder);
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
-			pub(drv, slotsCount) = 0;
 		    Driver(appl) = drv;
-			nbDrivers(clients)++;
 		}
 		MidiShareWakeup(g);
 		appl = NewAppl (sizeof(TAppl));
@@ -108,13 +106,11 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 	closeClient (ref, g);
 	nbAppls(clients)--;
 	if (nbAppls(clients) == 1) {
-		FreeAppl(clients->appls[MidiShareRef]);
-		clients->appls[MidiShareRef] = 0;
+		closeClient (MidiShareRef, g);
 		nbAppls(clients) = 0;
 		MidiShareSleep(g);
-		FreeAppl(clients->appls[MidiShareDriverRef]);
-		clients->appls[MidiShareDriverRef] = 0;
-		nbDrivers(clients)--;
+		closeDriver (MidiShareDriverRef, Driver(clients->appls[MidiShareDriverRef]), g);
+		closeClient (MidiShareDriverRef, g);
 	} else {
 		CallAlarm(ref, MIDICloseAppl, clients);
 	}
@@ -268,7 +264,7 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 	setName(pub(appl,name), name);	
 	pub(appl, info) = 0;
 	pub(appl, refNum) = (uchar)ref;
-	pub(appl, drvidx) = -1;
+	pub(appl, drvidx) = MIDIerrRefNum;
 	pub(appl, filter) = 0;
 	RemAllDstCon (appl);
 
@@ -285,7 +281,7 @@ void closeClient (short ref, TMSGlobalPtr g)
 	/* clear first application public information */
 	pub(appl, info) = 0;
 	pub(appl, refNum) = MIDIerrRefNum;
-	pub(appl, drvidx) = -1;
+	pub(appl, drvidx) = MIDIerrRefNum;
 	pub(appl, filter) = 0;
 	RemAllDstCon (appl);
 	
@@ -293,8 +289,8 @@ void closeClient (short ref, TMSGlobalPtr g)
 	MSFlushEvs (ref, clients);
 	MSFlushDTasks (ref, clients);
 	DisposeApplContext (appl->context);
-	FreeAppl (appl);
 	clients->appls[ref] = 0;
+	FreeAppl (appl);
 }
 
 /*===========================================================================

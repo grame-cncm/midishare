@@ -31,7 +31,7 @@
 #include "msExtern.h"
 #include "msTime.h"
 
-#define kMidiShareVersion  191    /* the current MidiShare version number */
+#define kMidiShareVersion  192    /* the current MidiShare version number */
 
 static TMSGlobalPublic gPub = { 0 };
 static void InitPublicSection (TMSGlobalPtr g);
@@ -100,6 +100,10 @@ static void InitPublicSection (TMSGlobalPtr g)
 {
 	g->pub = &gPub;
 	g->clients.pub = &gPub.clients;
+	g->clients.lastRef = 0;
+	g->clients.lastDrvRef = MidiShareDriverRef;
+	g->clients.lastSlot = -1;
+
 	pub(g, time)    = 0;
 	pub(g, version) = kMidiShareVersion;
 	pub(g, size)    = sizeof(TMSGlobalPublic);

@@ -28,5 +28,6 @@
 
 #define __Macintosh__
 #define PascalNames
+#define MSKernel
 
 #endif
