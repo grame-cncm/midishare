@@ -38,11 +38,6 @@
 #include "msSeq.h"
 #include "msTypes.h"
 
-/* A REVOIR */
-
-#define typeRcvAlarm  	149
-#define typeApplAlarm  	150
-
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
 
