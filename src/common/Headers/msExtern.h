@@ -52,7 +52,7 @@ MutexResCode OpenMutex  (MutexRef ref);
 MutexResCode CloseMutex (MutexRef ref);
 #endif
 
-
+#ifdef MSKernel
 /*------------------------------------------------------------------------------*/
 /*                      initializations : wakeup & sleep                        */
 /*------------------------------------------------------------------------------*/
@@ -78,5 +78,7 @@ void DriverSleep  (TApplPtr appl);
 
 long RealTimeOffset (THorlogePtr h);
 void AdjustTimer    (THost context, long offset, long period);
+
+#endif /* MSKernel */
 
 #endif

@@ -96,8 +96,6 @@ typedef struct TClientsPublic {
 #define nbAppls(c)      pub(c, nbAppls)
 #define nbDrivers(c)    pub(c, nbDrivers)
 #define nbSlots(c)      pub(c, nbSlots)
-#define appname(c, r)   pub(c->appls[r], name)
-#define appinfo(c, r)   pub(c->appls[r], info)
 #define folder(c)       pub(c, folder)
 
 #ifdef MSKernel
@@ -136,7 +134,8 @@ typedef struct TClients {
 #define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r])
 #define CheckClientsCount(g)	((nbAppls(g) + nbDrivers(g)) < MaxAppls - 2)
 
-#define DTasksFifoHead(appl)  (MidiEvPtr)(appl->dTasks.head)
+#define DTasksFifoHead(appl)  	(MidiEvPtr)(appl->dTasks.head)
+#define GetApplPtr(g, ref)		g->appls[ref]
 
 /*--------------------------------------------------------------------------*/
 /* functions                                                                */
@@ -144,10 +143,12 @@ typedef struct TClients {
 short GetIndClient (short index, short folderRef, TClientsPtr g);
 
 #else
+
 typedef struct FarPtr(TApplPublic) 		TApplPtr;
 typedef struct FarPtr(TClientsPublic) 	TClientsPtr;
 
 #define CheckRefNum( g, r)    	((r>=0) && (r<MaxAppls) && g->appls[r].refNum!=MIDIerrRefNum)
+#define GetApplPtr(g, ref)		&g->appls[ref]
 
 #endif
 

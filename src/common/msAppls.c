@@ -44,6 +44,11 @@
 #endif
 
 #define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (folder(g->appls[ref])==kClientFolder))
+#ifdef MSKernel
+#	define UnusedAppl(g, ref)	(g->appls[ref] == 0)
+#else
+#	define UnusedAppl(g, ref)	(g->appls[ref].refNum == MIDIerrRefNum)
+#endif
 
 /*===========================================================================
   Internal functions prototypes
@@ -52,6 +57,85 @@ static Boolean  equalApplName   (TApplPtr ap, MidiName name);
 
 /*===========================================================================
   External MidiShare functions implementation
+  =========================================================================== */		
+
+/*____________________________________________________________________________*/
+MSFunctionType(short) MSCountAppls (TClientsPtr g)
+{
+	return nbAppls(g);
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
+{
+	short ref = -1;
+	
+	if (index>0 && index<= nbAppls(g)) {
+		TApplPtr appl;
+		do { 
+			ref++;
+			appl = GetApplPtr(g, ref);
+			if (appl && (folder(appl) != kDriverFolder)) index--;
+		} while (index);
+		return ref;
+	}
+	return MIDIerrIndex;
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
+{
+	short ref =0;
+	while (ref < MaxAppls && (UnusedAppl(g,ref) || !equalApplName(GetApplPtr(g, ref), name))) {
+		ref++;
+	}
+	return (ref<MaxAppls) ? ref : (short)MIDIerrIndex;
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
+{
+	if (CheckRefNum(g,ref)) {
+		TApplPtr appl = GetApplPtr(g, ref);
+		return ref ? pub(appl, name) : kMidiShareName;
+	} else {
+		return 0;
+	}
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
+{
+	FarPtr(void) info = 0;
+	if (CheckRefNum(g,ref)) {
+		TApplPtr appl = GetApplPtr(g, ref);
+		info = pub(appl, info);
+	}
+	return info;
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
+{
+	if (CheckRefNum(g,ref)) {
+		TApplPtr appl = GetApplPtr(g, ref);
+		pub(appl, info) = info;
+	}
+}
+
+/*____________________________________________________________________________*/
+MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TClientsPtr g)
+{
+	if (CheckRefNum(g,ref)) {
+		TApplPtr appl = GetApplPtr(g, ref);
+		return pub(appl, filter);
+	}
+	return 0;
+}
+
+#ifdef MSKernel
+/*===========================================================================
+  External MidiShare server functions implementation
   =========================================================================== */		
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
@@ -118,79 +202,12 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSCountAppls (TClientsPtr g)
-{
-	return nbAppls(g);
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
-{
-	short ref = -1;
-	
-	if (index>0 && index<= nbAppls(g)) {
-		TApplPtr appl;
-		do { 
-			ref++;
-			appl = g->appls[ref];
-			if (appl && (folder(appl) != kDriverFolder)) index--;
-		} while (index);
-		return ref;
-	}
-	return MIDIerrIndex;
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
-{
-	short ref =0;
-	while (ref < MaxAppls && (!g->appls[ref] || !equalApplName(g->appls[ref], name))) {
-		ref++;
-	}
-	return (ref<MaxAppls) ? ref : (short)MIDIerrIndex;
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
-{
-	if (CheckRefNum(g,ref)) {
-		return ref ? appname(g, ref) : kMidiShareName;
-	} else {
-		return 0;
-	}
-}
-
-/*____________________________________________________________________________*/
 MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
 		setName(appname(g, ref), name);
 		CallAlarm (ref, MIDIChgName, g);
 	}
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
-{
-	FarPtr(void) info = 0;
-	if (CheckRefNum(g,ref)) {
-		info = appinfo(g,ref);
-	}
-	return info;
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
-{
-	if (CheckRefNum(g,ref)) {
-		 appinfo(g,ref) = info;
-	}
-}
-
-/*____________________________________________________________________________*/
-MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TClientsPtr g)
-{
-	return CheckRefNum(g,ref) ? g->appls[ref]->filter : 0;
 }
 
 /*____________________________________________________________________________*/
@@ -312,6 +329,8 @@ void setName (MidiName dst, MidiName name)
 	*dst = 0;
 #endif
 }
+
+#endif /* MSKernel */
 
 static Boolean equalApplName (TApplPtr ap, MidiName name)
 {

@@ -12,8 +12,8 @@ SSRC := $(wildcard *.c)
 SOBJ := $(patsubst %.c, $(SOUTDIR)/%.o, $(SSRC))
 CSRC := msTime.c	msFilter.c 	msMail.c 	msSmpte.c   msEvents.c \
 		msMemory.c  msFields.c  msSeq.c     msInit.c    msConnx.c  \
-		msAppls.c  \
-		msDriver.c  msTasks.c
+		msAppls.c   
+#		msTasks.c
 COBJ := $(patsubst %.c, $(COUTDIR)/%.o, $(CSRC))
 OBJ  := $(COBJ) $(SOBJ)
 
