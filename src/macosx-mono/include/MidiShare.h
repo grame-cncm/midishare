@@ -244,8 +244,9 @@ enum{   MIDIOpenAppl=1,
 		Ptr ptr2;							
 		Ptr ptr3;
 		Ptr ptr4;	
-	#endif
-		long val[4];					
+	#else
+		long val[4];		
+        #endif
 	}	TMidiST;						
 		
 
