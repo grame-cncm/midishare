@@ -129,6 +129,7 @@ static void Initialize()
 	err = SysEnvirons(1, &gMac);
 	if (gMac.machineType < 0) AlertUser( "\pneed at least 128K ROMs" );
 	hasWNE = TrapAvailable(_WaitNextEvent, ToolTrap);
+	doneFlag = false;											
 		
 	FlushEvents(everyEvent, 0);
 	AEInstallEventHandler ( kCoreEventClass, kAEQuitApplication, 
@@ -148,7 +149,6 @@ void main()
 	MaxApplZone();
 	Initialize();
 	
-	doneFlag = false;											
 	while (!doneFlag) {										/* Main Loop				*/
 		if (hasWNE) 
 			WaitNextEvent(everyEvent, &myEvent, 0, nil);

@@ -134,6 +134,7 @@ static void Initialize()
 	err = SysEnvirons(1, &gMac);
 	if (gMac.machineType < 0) AlertUser( "\pneed at least 128K ROMs" );
 	hasWNE = TrapAvailable(_WaitNextEvent, ToolTrap);
+	doneFlag = false;											
 		
 	InitGraf(&qd.thePort); 
 	InitFonts();
@@ -161,7 +162,6 @@ void main()
 	MaxApplZone();
 	Initialize();
 	
-	doneFlag = false;											
 	while (!doneFlag) {
 		if (hasWNE) 
 			WaitNextEvent(everyEvent, &myEvent, 0, nil);
