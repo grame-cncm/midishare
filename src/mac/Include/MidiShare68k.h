@@ -119,7 +119,11 @@ pascal	long 	  MidiGrowSpace (long n)								={0x7036, 0x2078, 0x00B8, 0x4E90};
 
 pascal	MidiEvPtr MidiNewEv 	(short typeNum) 						={0x7015, 0x2078, 0x00B8, 0x4E90};			
 pascal	MidiEvPtr MidiCopyEv 	(MidiEvPtr e) 							={0x7016, 0x2078, 0x00B8, 0x4E90};			
-pascal	void 	  MidiFreeEv 	(MidiEvPtr e) 							={0x7017, 0x2078, 0x00B8, 0x4E90};					
+pascal	void 	  MidiFreeEv 	(MidiEvPtr e) 							={0x7017, 0x2078, 0x00B8, 0x4E90};
+
+pascal  void    OldMidiSetField  (MidiEvPtr e, short f, long v)         ={0x7018, 0x2078, 0x00B8, 0x4E90};
+pascal  long    OldMidiGetField  (MidiEvPtr e, short f)                 ={0x7019, 0x2078, 0x00B8, 0x4E90};
+pascal  short   OldMidiCountFields (MidiEvPtr e)                        ={0x701B, 0x2078, 0x00B8, 0x4E90};
 
 pascal	void 	MidiSetField 	(MidiEvPtr e, long f, long v) 			={0x703A, 0x2078, 0x00B8, 0x4E90};
 pascal	long	MidiGetField 	(MidiEvPtr e, long f) 					={0x703B, 0x2078, 0x00B8, 0x4E90};
