@@ -8,10 +8,10 @@
 
 
 ;; For Macintosh
-(load-extension "MidiShare.so")
+(load-extension "mzshare.so")
 
 (if (midi-share?)
- (load-extension "Player.so")
+ (load-extension "mzplayer.so")
  (display "(load-extension \"MidiShare\") before loading Player"))
 
 
