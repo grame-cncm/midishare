@@ -87,6 +87,8 @@ typedef struct lifo {
 
 #ifdef __Windows__
 # define inline __inline
+#elif defined(__MacOSX__)
+#define inline __inline__
 #endif
 
 
@@ -112,7 +114,7 @@ static inline cell* lfavail(lifo* lf) {
 #  include "lflifoLinux.h"
 # endif
 
-#elif defined(__Macintosh__)
+#elif defined(__Macintosh__) || defined(__MacOSX__)
 # if defined(__ppc__) && defined(__GNUC__)
 #  include "lflifoppc.h"
 # else
