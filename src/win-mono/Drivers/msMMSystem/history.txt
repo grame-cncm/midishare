@@ -1,8 +1,15 @@
 ---------------------------------------------------------------------------
-MidiShare PitchTracker Driver
+MidiShare Windows MultiMedia Driver
+Built on top of Windows MMSystem
 ---------------------------------------------------------------------------
 Versions history:
 ---------------------------------------------------------------------------
 
 v 1.0.0.0	: first driver release
+v 1.0.1.0	: MMSystem ports are now correctly released at exit time
+v 1.0.2.0	: read init file first in application directory then
+			  if not found in windows directory
+			  log file and init file are created in application directory
+v 1.0.3.0	: bug in RcvAlarm corrected. symptom: MidiShare memory loss. 
+v 1.0.3.3	: no change - published version
 
