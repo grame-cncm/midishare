@@ -160,6 +160,9 @@ void TInetControler::Sleep  (short r)	{ USleep(); }
 Boolean TInetControler::UWakeup (Boolean udpMode)
 {
 	INetAlert alert;
+	if (!Sleeping()) return true;
+	
+	fState = kWakeup;
 	SocketStatus err = fSocket.Open (udpMode);
 	if (err != noErr) {
 		alert.FatalError (fDrvName, strWakeUpFailure, strSockOpenFailure, err);
@@ -173,7 +176,6 @@ Boolean TInetControler::UWakeup (Boolean udpMode)
 		fActiveSensing->Initialize (&fSocket);
 		fActiveSensing->Run (MidiGetTime(), GetRefNum(), (long)fNetInfos.BroadcastAddress(), 5);
 	}
-	fState = kWakeup;
 	fUDPMode = udpMode;
 	return true;
 }
