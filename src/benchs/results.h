@@ -32,10 +32,15 @@ long elapsed (TimeVal t1, TimeVal t2);
 
 #endif
 
+// common declarations to define the bench length and the start time
+#define kBenchLen		1500
+#define kStartTime		1500
+#define kTimeRes		1
+
 void _storeTime (TimeVal t1, TimeVal t2);
 int print_result (FILE * to, FILE * sum);
 int bench_init (long benchlen);
 int bench_done ();
-
+long micro (long value);
 
 #endif

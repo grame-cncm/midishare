@@ -39,9 +39,6 @@
 #define kOutFileName  "msBenchDriver.out.txt"
 #define kSumFileName  "msBenchDriver.sum.txt"
 
-#define kBenchLen		1500
-#define kTimeRes		1
-
 /* ----------------------------------*/
 /* functions declarations            */
 static void FlushReceivedEvents (short r);
@@ -58,7 +55,7 @@ TimeType  gLastCall;
 static void WakeUpBench (short r)
 {
 	MidiSetRcvAlarm (r, FlushReceivedEvents);
-	gTask = MidiTask (InitTask, MidiGetTime()+1, r, 0, 0, 0);
+	gTask = MidiTask (InitTask, kStartTime, r, 0, 0, 0);
 }
 
 /* -----------------------------------------------------------------------------*/

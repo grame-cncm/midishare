@@ -9,6 +9,7 @@
 static long gMax=0;
 static long gCount=0;
 static long * gTable = 0;
+static TimeVal gFirstTime = 0, gLastTime = 0;
 
 //____________________________________________________________
 int bench_init (long benchlen)
@@ -25,20 +26,23 @@ int bench_init (long benchlen)
 
 #ifndef RTC
 //____________________________________________________________
-long elapsed (TimeVal t1, TimeVal t2)
+long elapsed (TimeVal last, TimeVal first)
 {
-	long sec = t1->tv_sec - t2->tv_sec;
-	long usec = t1->tv_usec - t2->tv_usec;
+	long sec = last->tv_sec - first->tv_sec;
+	long usec = last->tv_usec - first->tv_usec;
 	return sec ? (sec * 1000000) + usec : usec;
 }
 #endif
 
 //____________________________________________________________
-void _storeTime (TimeVal t1, TimeVal t2)
+void _storeTime (TimeVal first, TimeVal last)
 {
-    long d = elapsed(t2, t1);
-	if ((gCount < gMax) && (d > 0))
+    long d = elapsed(last, first);
+	if ((gCount < gMax) && (d > 0)) {
+        if (!gCount) gFirstTime = first;
 		gTable[gCount++] = d;
+        gLastTime = last;
+    }
 }
 
 //____________________________________________________________
@@ -90,7 +94,14 @@ static int _print_result (FILE * to, FILE * sumfd, long start, long limit, long 
 	fprintf (sumfd, "max time: %ld\n", max);
 	fprintf (sumfd, "average : %f\n", avg = (float)sum / total);
 	fprintf (sumfd, "std dev : %ld\n", std_dev(start, limit, table, (long)avg));
+	fprintf (sumfd, "elapsed : %ld microsec\n", micro(elapsed(gLastTime, gFirstTime)));
 	return 1;
+}
+
+//____________________________________________________________
+long micro (long value)
+{
+    return value * time_ratio();
 }
 
 //____________________________________________________________

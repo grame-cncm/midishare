@@ -22,8 +22,6 @@
 
 */
 
-//#include <errno.h>
-//#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -43,6 +41,12 @@
 #	include "dlfcn.h"
 typedef Boolean (* Start) ();
 typedef void (* Stop) ();
+#endif
+
+#ifdef msTimeBench
+# include "../benchs/results.h"
+# define kTBOutFile	"msKernelTimeBench.txt"
+# define kTBSumFile	"msKernelTimeBench.sum"
 #endif
 
 /*------------------------------------------------------------------------------*/
@@ -110,8 +114,33 @@ void SpecialWakeUp (TMSGlobalPtr g)
 		if (!gDrvRefs[i]) 
 			LogWriteErr ("Error while loading driver \"%s\"", name);
 	}
+#ifdef msTimeBench
+    bench_init(kBenchLen+kStartTime);
+#endif
 }
 
+/*------------------------------------------------------------------------------*/
+#ifdef msTimeBench
+static void bench_results()
+{
+    FILE * out1=0, *out2=0;
+    out1 = fopen (kTBOutFile, "w");
+    if (!out1) {
+    	LogWriteErr ("cannot print time bench results to \"%s\"", kTBOutFile);
+        return;
+    }
+    out2 = fopen (kTBSumFile, "w");
+    if (!out2) {
+    	LogWriteErr ("cannot print time bench results to \"%s\"", kTBSumFile);
+        fclose (out1);
+        return;
+    }
+    LogWrite ("Print time bench results to \"%s\" and \"%s\"", kTBOutFile, kTBSumFile);
+    print_result (out1, out2);
+	fclose(out1);
+    fclose(out2);
+}
+#endif
 
 /*------------------------------------------------------------------------------*/
 void SpecialSleep  (TMSGlobalPtr g)
@@ -122,6 +151,9 @@ void SpecialSleep  (TMSGlobalPtr g)
 		gDrvRefs[i] = 0;
 	}
     LogWrite ("MidiShare server is sleeping");
+#ifdef msTimeBench
+    bench_results();
+#endif
 }
 
 /*------------------------------------------------------------------------------*/

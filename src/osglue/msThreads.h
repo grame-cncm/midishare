@@ -38,7 +38,16 @@
 typedef void * msThreadPtr;
 typedef cdeclAPI(void) (* SigProcPtr)(int sig);
 
-
+#ifdef __MacOSX__
+enum { 
+	kNormalPriority=0, 
+	kClientHighPriority=60, 
+	kClientRTPriority=62, 
+	kServerHighPriority=61,
+	kServerLRTPriority=63,
+	kServerRTPriority=99 
+};
+#else
 enum { 
 	kNormalPriority=0, 
 	kClientHighPriority=49, 
@@ -47,6 +56,7 @@ enum {
 	kServerLRTPriority=98,
 	kServerRTPriority=99 
 };
+#endif
 
 #ifdef __cplusplus
 extern "C" {

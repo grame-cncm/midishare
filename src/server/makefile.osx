@@ -6,6 +6,7 @@
 #
 
 TARGET = midishared
+TBTARGET = midishareTB
 
 LIBS = ../msServerCommonLib.o ../msOSGlueLib.o
 SLIB = ../msServerSharedLib.o
@@ -18,7 +19,7 @@ GLUEINC := $(wildcard ../osglue/*.h ../osglue/include/*.h)
 LSRC = msIntHandler.c msPortAudio.c profport.c msExtern.c msKernelPrefs.c msMem.c
 LOBJ := $(patsubst %.c, %.o, $(LSRC)) 
 
-CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
+CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel $(TB) -I../common/Headers -I../osglue
 CXXFLAGS := $(CFLAGS) -I../osglue/include
 VPATH = ../common ../common/server ../osglue ../osglue/unix
 CC = gcc
@@ -29,6 +30,11 @@ DEST = /usr/local/bin
 
 $(TARGET) : makefile $(LIBS) $(OBJ)
 	$(CC) $(LIBS) $(OBJ) -lpthread -lstdc++ -lportaudio -framework CoreAudio -o $(TARGET)
+
+bench : $(TBTARGET)
+
+$(TBTARGET) : makefile $(LIBS) $(OBJ) ../benchs/results.o
+	$(CC) $(LIBS) $(OBJ) ../benchs/results.o -lpthread -lstdc++ -lportaudio -framework CoreAudio -o $(TBTARGET)
 
 shlib : $(SLIB)
 $(SLIB) : makefile $(LIBS) $(LOBJ)

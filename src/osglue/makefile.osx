@@ -6,7 +6,7 @@ OBJCPP  = $(patsubst %.cpp, %.o, $(SRCCPP))
 SRC  = $(SRCCPP) dlopen.c
 OBJ  = $(OBJCPP) dlopen.o
 
-CFLAGS = -O3 -Iinclude -Wall
+CFLAGS = -O3 -Iinclude -Wall -D__MacOSX__
 CXXFLAGS = $(CFLAGS)
 
 OUT = ../msOSGlueLib.o
@@ -27,7 +27,7 @@ dep: makefile
 	cat makefile.readme makefile.osx > makefile
 	make -s outdep >> makefile
 
-outdep: makefile
+outdep:
 	mkdep -f __out__ $(CFLAGS) $(LSRC)
 	mkdep -f __dep__ $(CFLAGS) $(USRC)
 	sed -e 's/^\([^ ]*\.o\)/unix\/\1/' __dep__ >> __out__

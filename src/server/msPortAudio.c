@@ -7,6 +7,10 @@
 #include "msLog.h"
 #include "portaudio.h"
 
+#ifdef msTimeBench
+# include "../benchs/results.h"
+#endif
+
 #define SAMPLE_RATE 44100
 #define AUDIO_MS_INT (SAMPLE_RATE/100)
 
@@ -16,11 +20,25 @@ static PortAudioStream * gStream;
 static long gFrames = 0;
 static long gAudioSize = 0;
 
+#ifdef msTimeBench
+    static int benchinitialized=0;
+#endif
+
 /*_________________________________________________________________________*/
 static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
                              unsigned long framesPerBuffer,
                              PaTimestamp outTime, void *userData )
 {
+#ifdef msTimeBench
+	static TimeType lastTime;
+	TimeType t;
+
+	getTime(t);
+    if (benchinitialized)
+        storeTime (lastTime, t);
+    else benchinitialized=1;
+	lastTime = t;
+#endif
  	gFrames += gAudioSize; 	
 	while (gFrames>=AUDIO_MS_INT) {
 		ClockHandler((TMSGlobalPtr)userData);
@@ -102,5 +120,8 @@ void ClosePortAudio ()
 {
 	if(gStream) Pa_CloseStream(gStream);
 	Pa_Terminate();
+#ifdef msTimeBench
+   benchinitialized = 0;
+#endif
 }
 

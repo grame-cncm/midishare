@@ -35,6 +35,8 @@
 # define sleep(n)  usleep(n*1000)
 #endif
 
+#define kTimeout	1500
+
 
 static int siglist [] = {
 	SIGABRT,
@@ -58,9 +60,6 @@ static int siglist [] = {
 #define kOutFileName  "msBenchAppl.out.txt"
 #define kSumFileName  "msBenchAppl.sum.txt"
 
-#define kBenchLen		1500
-#define kTimeRes		1
-
 /* ----------------------------------*/
 /* functions declarations            */
 static void FlushReceivedEvents (short r);
@@ -69,9 +68,10 @@ static void TimeTask( long date, short refNum, long a1,long a2,long a3 );
 
 short gRef = 0;
 MidiEvPtr gTask = 0;
-TimeType  gLastCall;
+TimeType  gFirstCall, gLastCall;
 int gCount  = 1500;
 long gLastTime = 0;
+long gFirstTime = 0;
 long gFlag = 0;
 
 static void TimeTask (long date, short refNum, long a1,long a2,long a3);
@@ -106,6 +106,8 @@ static void sigInit ()
 /* -----------------------------------------------------------------------------*/
 static void InitTask (long date, short refNum, long a1,long a2,long a3 )
 {
+//	getTime(gFirstCall);
+    gFirstTime = MidiGetTime();
 	getTime(gLastCall);
 	gTask = MidiTask (TimeTask, date+kTimeRes, refNum, 0, 0, 0);
 	if (!gTask)
@@ -123,7 +125,8 @@ static void TimeTask (long date, short refNum, long a1,long a2,long a3)
 	getTime(t);
 	storeTime (gLastCall, t);
 	gLastCall = t;
-	gLastTime = MidiGetTime();
+    gLastTime = MidiGetTime();
+	if (bench_done()) return;
 	gTask = MidiTask (TimeTask, date+kTimeRes, refNum, 0, 0, 0);
 	if (!gTask)
 		fprintf (stderr, "TimeTask %d: MidiTask failed\n", refNum);
@@ -177,13 +180,13 @@ int main (int argc, char *argv[])
 //	MidiConnect (gRef, 0, 1);
 //	NoteTask (MidiGetTime(), gRef, 0, 0, 0);
 //	gTask = MidiTask (InitTask, MidiGetTime()+1, gRef, 0, 0, 0);
-	gTask = MidiTask (InitTask, 1500, gRef, 0, 0, 0);
+	gTask = MidiTask (InitTask, kStartTime, gRef, 0, 0, 0);
 
 	sleep (1500);
 	while (!bench_done()) {
 		sleep (100);
 		t = MidiGetTime();
-		if ((t - gLastTime) > 1500) {
+		if ((t - gLastTime) > kTimeout) {
 			fprintf (stderr, "%d time out\n", gRef); 
 			break;
 		}
@@ -193,9 +196,12 @@ int main (int argc, char *argv[])
 	getc(stdin);
 */
 	MidiForgetTask (&gTask);
-	fprintf (stderr, "%d MidiForgetTask done (%lx)\n", gRef, (long)gTask);
+//	fprintf (stderr, "%d MidiForgetTask done (%lx)\n", gRef, (long)gTask);
     gFlag = 1;
 	MidiClose (gRef);
-	print_result (stdout, stdout);
+	print_result (stdout, stderr);
+	fprintf (stderr, "first and last ms times: %ld %ld elapsed: %ld\n", 
+        gFirstTime, gLastTime, gLastTime - gFirstTime);
+//	fprintf (stderr, "real time elapsed: %ld\n", micro(elapsed(gLastCall, gFirstCall)));
 	return 0;
 }
