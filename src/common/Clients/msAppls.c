@@ -23,7 +23,6 @@
 
 */
 
-#include "mem.h"
 #include "msAlarms.h"
 #include "msAppls.h"
 #include "msAppFun.h"
@@ -31,6 +30,7 @@
 #include "msExtern.h"
 #include "msInit.h"
 #include "msXmtRcv.h"
+#include "msMem.h"
 
 #ifdef PascalNames
 # define kMidiShareName 	"\pMidiShare"
@@ -245,10 +245,11 @@ static void setApplName (TApplPtr ap, MidiName name)
 		*dst++ = *name++;
 	}
 #else
-	for (int i=0; *name && (i<MaxApplNameLen); i++) {
+	int i;
+	for (i=0; *name && (i< MaxApplNameLen-1); i++) {
 		*dst++ = *name++;
 	}
-	*dst[MaxApplNameLen-1] = 0;
+	*dst = 0;
 #endif
 }
 
