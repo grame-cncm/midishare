@@ -96,8 +96,8 @@ extern "C" {
  unsigned long 	fifosize (fifo * ff);
  void 			fifoput (vtype fifo * ff, fifocell * cl);
  fifocell * 	fifoget (vtype fifo * ff);
- fifocell * 	fifoavail (vtype fifo * ff); 
- fifocell * 	fifoclear (vtype fifo * ff);
+// fifocell * 	fifoavail (vtype fifo * ff); 
+// fifocell * 	fifoclear (vtype fifo * ff);
 
 #ifdef __cplusplus
 }

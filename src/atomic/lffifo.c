@@ -181,6 +181,7 @@ fifocell *  (vtype fifo * ff)
 
 #endif
 
+/*
 //----------------------------------------------------------------
 fifocell * fifoavail (vtype fifo * ff)
 {
@@ -192,3 +193,4 @@ fifocell * fifoclear (vtype fifo * ff)
 {
     return 0;
 }
+*/
