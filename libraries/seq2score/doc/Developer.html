@@ -1,0 +1,214 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+  <META NAME="GENERATOR" CONTENT="Microsoft FrontPage Express 2.0">
+  <TITLE>Sequence To Score</TITLE>
+</HEAD>
+<BODY>
+
+<P><CENTER><STRONG><FONT SIZE="+1">Sequence To Score</FONT></STRONG><FONT
+ SIZE="-1"> </FONT><STRONG><FONT SIZE="+1"><IMG SRC="StsIco.gif"
+WIDTH="32" HEIGHT="32" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></FONT></STRONG></CENTER></P>
+
+<P><CENTER><FONT SIZE="-1">Alfio Fazio 1999</FONT></CENTER></P>
+
+<P><CENTER><A HREF="mailto:MD5393@mclink.it">MD5393@mclink.it</A></CENTER></P>
+
+<P>&nbsp;</P>
+
+<P><STRONG>Source code notes</STRONG></P>
+
+<P>The STS code allows MidiShare sequences to be written as standard
+CSound score files. It was conceived as the basis for a simple
+PRIE extension (a Win32 based Midi compositional environment by
+the same author). Altough not written with portability considerations
+in mind, it doesn't make use of platform or framework dependent
+routines so it should be compilable on others OS.</P>
+
+<P>Because the look of a CSound score is mainly a question of
+habit and way of working, the code only offers basic formatting
+capabilities. For the same reason no comments are added to the
+final output.</P>
+
+<P>The source is contained in the following files:</P>
+
+<P><TABLE BORDER="1" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD>STS.cpp and h</TD> 
+    <TD>STS code.</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="200">STSUtils.cpp and h</TD> 
+    <TD>Mainly a set of Hashtable-based routines (by Stephane Letz)
+      to find and convert KeyOn KeyOff pairs to typeNote events.</TD> 
+  </TR>
+  <TR>
+    <TD>ThkFunc.h</TD> 
+    <TD>Macros conversion for MidiShare Thunk release.</TD> 
+  </TR>
+</TABLE></P>
+
+<P>All information needed to convert and write a sequence to a
+score file are contained in the following structure:</P>
+
+<P><CODE>typedef struct TScore<BR>
+<FONT SIZE="-1">{<BR>
+</FONT><STRONG>unsigned char</STRONG>* scorefile; Output CSound
+score file<BR>
+<STRONG>unsigned char</STRONG>* addinfile; Additional file to
+merge(GEN settings, others sections, etc.)<BR>
+STSPitchConvert pc;.......Midi pitch conversion settings<BR>
+PitchFunPtr PFunc;........Custom Midi pitch conversion routine<BR>
+<STRONG>short</STRONG> pAction;............Identifies action in
+PFunc<BR>
+STSAmpliConvert ac;.......Midi velocity conversion settings<BR>
+AmpliFunPtr AFunc;........Custom Midi velocity conversion routine<BR>
+<STRONG>short</STRONG> aAction;............Identifies action in
+AFunc<BR>
+<STRONG>int</STRONG> maxamp;...............Amplitude value for
+acAuto: (maxamp / 128) * vel<BR>
+CustomFunPtr CFunc;.......Custom routine to handle MShare privates
+events<BR>
+<STRONG>short</STRONG> cAction;............Identifies action in
+CFunc<BR>
+STSAssignBy ab;...........Tracks/chans to CSound-instruments assignement<BR>
+STSFieldOrder fo;.........p4 and p5 parameters order<BR>
+<STRONG>float</STRONG> defdur;.............Default duration for
+non-notes events<BR>
+<STRONG>bool</STRONG> writesection;........Writes data as CSound
+score or section<BR>
+<STRONG>bool</STRONG> shiftref;............Shifts tracks numbers
+by one (useful for format0 Midifiles)<BR>
+<STRONG>float</STRONG> padout;.............Padding out value (CSound
+f0 statement) for sections<BR>
+<STRONG>float</STRONG> ptable[128];........Custom or default pitch-table
+for pitch conversion<BR>
+<STRONG>float</STRONG> atable[128];........Custom amplitude-table
+for velocity conversion<BR>
+<STRONG>bool</STRONG> events [149];........Events from source
+sequence to consider<BR>
+<STRONG>bool</STRONG> trkchn [256];........Tracks/Channels from
+source sequence to consider<BR>
+}TScore;<BR>
+<BR>
+</CODE></P>
+
+<P>The above structure's fields are accessed after initialization
+by mean of the <EM>ScorePtr </EM>returned by the <STRONG>STS_OpenSession</STRONG>
+routine. This function requires as parameter the path and name
+of the score file to write. A session can be open this way:</P>
+
+<P><CODE><FONT COLOR="#0000ff">ScorePtr sp;</FONT></CODE></P>
+
+<P><CODE><FONT COLOR="#0000ff">sp = STS_OpenSession(&quot;c:\\test.sco&quot;);</FONT></CODE></P>
+
+<P>The initialization routine allocates memory for the structure
+and assigns default values to the various fields.</P>
+
+<P>The 3 functions pointers PFunc, AFunc and CFunc point to default
+(dummy) routines that can be changed as needed. They all require
+a ScorePtr as parameter:</P>
+
+<P><STRONG><CODE>typedef</CODE></STRONG><CODE> <STRONG>float</STRONG>
+(*PitchFunPtr) (ScorePtr sp, <STRONG>long</STRONG> pitch);</CODE></P>
+
+<P><STRONG><CODE>typedef</CODE></STRONG><CODE> <STRONG>float</STRONG>
+(*AmpliFunPtr) (ScorePtr sp, <STRONG>long</STRONG> ampli);</CODE></P>
+
+<P><STRONG><CODE>typedef</CODE></STRONG><CODE> <STRONG>void</STRONG>
+(*CustomFunPtr) (ScorePtr sp, <STRONG>char</STRONG>* str, <STRONG>long</STRONG>
+e);</CODE></P>
+
+<P>The corresponding pAction, aAction and cAction fields can be
+used to change the functions behavior (for instance in a switch)
+depending on their value.</P>
+
+<P>The <EM>events</EM> array contains the MidiShare events codes
+that will be considered during the conversion process. Please
+note that <STRONG>not all</STRONG> the events that can be turned
+on (codes 0 - 148) are really supported. Support is included for:</P>
+
+<UL>
+  <LI><FONT FACE="Courier New">TypeNote...............0</FONT>
+  <LI><FONT FACE="Courier New">TypeKeyOn..............1 (converted
+  to TypeNote)</FONT>
+  <LI><FONT FACE="Courier New">TypeKeyOff.............2 (converted
+  to TypeNote)</FONT>
+  <LI><FONT FACE="Courier New">TypeKeyPress...........3</FONT>
+  <LI><FONT FACE="Courier New">TypeCtrlChange.........4</FONT>
+  <LI><FONT FACE="Courier New">TypeProgChange.........5</FONT>
+  <LI><FONT FACE="Courier New">TypeChannelPress.......6</FONT>
+  <LI><FONT FACE="Courier New">TypePitchWheel.........7</FONT>
+  <LI><FONT FACE="Courier New">TypePrivate............19 - 127</FONT>
+  <LI><FONT FACE="Courier New">TypeCtrl14b............131</FONT>
+  <LI><FONT FACE="Courier New">TypeNonRegParam........132</FONT>
+  <LI><FONT FACE="Courier New">TypeRegParam...........133</FONT>
+</UL>
+
+<P>Depending on the <EM>STSAssingBy</EM> value, the <EM>trkchn</EM>
+array contains the tracks (refnum) or channels that will be transformed
+to CSound instruments. If all events have a refnum value of 0,
+the <EM>shiftref </EM>boolean can be set to true so to force STS
+to convert refnum 0 to CSound instrument i1.</P>
+
+<P>The <EM>ptable</EM> and <EM>atable</EM> arrays can be used
+in conjunction with the <STRONG>STS_LoadCustomTable </STRONG>function
+that allows importing of text files. By default the <EM>ptable</EM>
+array is initialized using an Hertz mapping table, while <EM>atable</EM>
+with values corrsponding to (maxamp / 128) * Midi velocity.</P>
+
+<P>All default values can be changed with more suitable ones.
+When all is ok the main STS function: <STRONG>STS_WriteScore </STRONG>can
+be called. If the sequence to convert has events timestamped using
+dates in ticks, a conversion to milliseconds is necessary. Furthermore,
+KeyOn/Off events need to be translated to TypeNote. The file &quot;StsUtils.cpp&quot;
+contains routines that simplify the conversion process altough,
+obviously, you may prefer to use your owns.</P>
+
+<P>Is given here a simple example that shows the usage of the
+STS code. Some of the default settings are changed before writing
+the score file:</P>
+
+<P><CODE><FONT COLOR="#0000ff">ScorePtr sp;</FONT></CODE></P>
+
+<P><CODE><FONT COLOR="#800000">/* <STRONG>scorefilepath</STRONG>
+is the path of the score file to create, <STRONG>ScoreSeq</STRONG>
+is a MidiSeqPtr to the sequence that will be converted, <STRONG>PTablefile</STRONG>
+is the path of a custom pitch-table text file*/</FONT></CODE></P>
+
+<P><CODE><FONT COLOR="#0000ff">if((sp = <STRONG>STS_OpenSession</STRONG>(scorefilepath))
+!= NULL){</FONT> <FONT COLOR="#800000">/*allocates and initialize*/</FONT></CODE></P>
+
+<BLOCKQUOTE>
+  <P><CODE><FONT COLOR="#800000">/*Instead that as Pch, Midi pitch
+  will be converted using a previously written custom function*/</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#0000ff">sp-&gt;pc = pcFunc;</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#0000ff">sp-&gt;PFunc = MyCustomPitchRoutine;</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#800000">/*Load a table for the custom
+  Pitch function (and so specifying ttPitch), from a text table
+  file. An offset of 60 is indicated so the first Midi note affected
+  by the first file line will be C3. Notes in the range 0 - 59
+  will be converted using the values of the default Hertz table*/</FONT></CODE></P>
+  <P><STRONG><CODE><FONT COLOR="#0000ff">STS_LoadCustomTable</FONT></CODE></STRONG><CODE><FONT
+   COLOR="#0000ff">(sp, PTablefile, ttPitch, 60, 127);</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#800000">/*By default, amplitudes are calculated
+  dividing the maxamp value by 128 and multiplying the result by
+  the Midi velocity given at input. Here the value assigned to
+  maxamp is changed*/</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#0000ff">sp-&gt;maxamp = 7000;</FONT></CODE></P>
+  <P><CODE><FONT COLOR="#800000">/*write the score to file and
+  frees memory*/</FONT></CODE></P>
+  <P><STRONG><CODE><FONT COLOR="#0000ff">STS_WriteScore</FONT></CODE></STRONG><CODE><FONT
+   COLOR="#0000ff">(ScoreSeq, sp);</FONT></CODE></P>
+  <P><STRONG><CODE><FONT COLOR="#0000ff">STS_CloseSession</FONT></CODE></STRONG><CODE><FONT
+   COLOR="#0000ff">(sp);</FONT></CODE></P></BLOCKQUOTE>
+
+<P><CODE><FONT COLOR="#0000ff">}</FONT></CODE></P>
+
+<HR ALIGN=LEFT>
+
+<P>Alfio Fazio 1999
+
+</BODY>
+</HTML>

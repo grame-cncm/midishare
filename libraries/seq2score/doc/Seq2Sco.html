@@ -1,0 +1,106 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+  <META NAME="GENERATOR" CONTENT="Microsoft FrontPage Express 2.0">
+  <TITLE>Sequence To Score</TITLE>
+</HEAD>
+<BODY>
+
+<P><CENTER><STRONG><FONT SIZE="+1">Sequence To Score<IMG SRC="StsIco.gif"
+WIDTH="32" HEIGHT="32" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></FONT></STRONG></CENTER></P>
+
+<P><CENTER><FONT SIZE="-1">Alfio Fazio 1999</FONT></CENTER></P>
+
+<P><CENTER><A HREF="mailto:MD5393@mclink.it">MD5393@mclink.it</A></CENTER></P>
+
+<P>&nbsp;</P>
+
+<P><STRONG>Application notes</STRONG></P>
+
+<P>Sequence To Score (Seq2Sco. exe) is a small Windows 32 application
+that converts MidiShare sequences to standard CSound score files
+(.sco). It is mainly intended as an implementation example of
+the STS code. This portable code is included in the distribution
+package and can be freely modified (LGPL Licence) to build similar
+applications running on others OS and/or to extend its set of
+features.</P>
+
+<P>In spite of its example status, Seq2Sco is fully functional
+and can be used by Windows32 MidiShare users as a normal client
+application. The following graphics and related notes briefly
+illustrate the program usage. If you are interested in developing
+applications using STS, read the <A HREF="Developer.htm">source
+code notes</A>.</P>
+
+<P>&nbsp;</P>
+
+<P><IMG SRC="seq2sco1.gif" WIDTH="600" HEIGHT="432" NATURALSIZEFLAG="3"
+ALIGN="BOTTOM"></P>
+
+<P>&nbsp;</P>
+
+<P>&nbsp;</P>
+
+<P><IMG SRC="seq2sco2.gif" WIDTH="600" HEIGHT="432" NATURALSIZEFLAG="3"
+ALIGN="BOTTOM"></P>
+
+<P>&nbsp;</P>
+
+<P>Custom tables (for pitch or amplitude) and addin files can
+be easily created with a standard text editor able to save as
+plain text.</P>
+
+<P>In a table file, every line of text represents an entry in
+the conversion table. Comments or empty lines (i.e. values that
+you don't want to assign) can be inserted using the CSound comment
+symbol &quot; ; &quot;. For instance, in the following fragment
+of a pitch-table file:</P>
+
+<BLOCKQUOTE>
+  <P><SAMP><FONT FACE="Arial">8.020; comment</FONT></SAMP></P>
+  <P><SAMP><FONT FACE="Arial">;</FONT></SAMP></P>
+  <P><SAMP><FONT FACE="Arial">;comment</FONT></SAMP></P>
+  <P><SAMP><FONT FACE="Arial">9.500 ;comment</FONT></SAMP></P></BLOCKQUOTE>
+
+<P>the Midi notes in the sequence to convert corresponding to
+the line numbers of the file (i.e. 0, 1, 2, 3 if the above 4 lines
+are the firsts in the table file) will be converted that way:</P>
+
+<P><TABLE BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD><STRONG>Midi note value</STRONG></TD> 
+    <TD><STRONG>After conversion</STRONG></TD> 
+  </TR>
+  <TR>
+    <TD>0</TD> 
+    <TD>8.020</TD> 
+  </TR>
+  <TR>
+    <TD>1</TD> 
+    <TD>mapped to that of the default Hertz table</TD> 
+  </TR>
+  <TR>
+    <TD>2</TD> 
+    <TD>mapped to that of the default Hertz table</TD> 
+  </TR>
+  <TR>
+    <TD>3</TD> 
+    <TD>9.500</TD> 
+  </TR>
+</TABLE></P>
+
+<P>This means that lines can contain comments and that they will
+be ignored if starting with a comment symbol. To avoid the need
+to build text files with 128 lines every time a table is required,
+an offset can be specified both for start and end (default is
+0 - 127). So, for instance, a text file with only 12 lines can
+be used to map pitches between C3 and C4 if a start offset of
+60 is specified. The same for amplitudes.</P>
+
+<HR ALIGN=LEFT>
+
+<P>Alfio Fazio 1999
+
+</BODY>
+</HTML>
