@@ -6,6 +6,7 @@ INIT = $(RC)/init.d
 
 midishare: common
 	make -C kernel
+	make -f appls
 
 midishare-alsa: common
 	make -C kernel -f make-alsa
@@ -31,7 +32,7 @@ install: libinstall
 	ln -s $(INIT)/MidiShare $(RC)/rc3.d/S99MidiShare
 	modprobe MidiShare
 	
-appls:
+clients:
 	make -f appls
 
 test:
