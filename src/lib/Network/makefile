@@ -1,10 +1,11 @@
 
 CXX  = gcc
-INC = -I../../linux/Include/ -I./include
+INC = -I../../linux/Include/ -I./include -I../../common/Headers
 CXXFLAGS = -g $(INC) -D__Pentium__
 CFLAGS = $(CXXFLAGS)
 
 OBJ =	FTMA.o \
+	HostTools.o \
 	SkewControler.o \
 	TInetControler.o \
 	TInetTasks.o \
@@ -30,6 +31,7 @@ OBJ =	FTMA.o \
 	./Midi/UDPStreamToEvent.o 
 
 SRC =	FTMA.cpp \
+	HostTools.cpp \
 	SkewControler.cpp \
 	TInetControler.cpp \
 	TInetTasks.cpp \
@@ -65,15 +67,13 @@ clean :
 	rm -f $(OBJ) $(Target)
 
 dep:
-	make -C Midi dep
-	make -C state dep
-	make -C TCP dep
 	makedepend -- $(CXXFLAGS) -- -Y -m $(SRC)
 
 
 # DO NOT DELETE
 
 FTMA.o: ./include/FTMA.h ./include/InetTypes.h
+HostTools.o: ./include/HostTools.h ./include/InetTypes.h
 SkewControler.o: ./include/SkewControler.h ./include/InetTypes.h
 SkewControler.o: ./include/FTMA.h ./include/MidiTools.h
 SkewControler.o: ../../linux/Include/MidiShare.h
@@ -84,7 +84,7 @@ TInetControler.o: ./include/TInetAddress.h ./include/TInetTasks.h
 TInetControler.o: ./include/MidiShareTasks.h ./include/MidiShareDriver.h
 TInetControler.o: ./include/MidiShareAppl.h ./include/MidiShareFilter.h
 TInetControler.o: ../../linux/Include/FilterUtils.h ./include/TNetInfos.h
-TInetControler.o: ./include/TRemoteMgr.h ./include/lflifo.h
+TInetControler.o: ./include/TRemoteMgr.h ../../common/Headers/lflifo.h
 TInetControler.o: ./include/TMidiRemote.h ./include/TMidiOutStream.h
 TInetControler.o: ./include/TMidiPacket.h ./include/TPacket.h
 TInetControler.o: ./include/EventToUDPStream.h ./include/TMidiInStream.h
@@ -101,7 +101,7 @@ TInetTasks.o: ./include/INetAlert.h ./include/StrConstants.h
 TInetTasks.o: ./include/TInetAddress.h ./include/MidiShareDriver.h
 TInetTasks.o: ./include/MidiShareAppl.h ./include/MidiShareFilter.h
 TInetTasks.o: ../../linux/Include/FilterUtils.h ./include/TNetInfos.h
-TInetTasks.o: ./include/TRemoteMgr.h ./include/lflifo.h
+TInetTasks.o: ./include/TRemoteMgr.h ../../common/Headers/lflifo.h
 TInetTasks.o: ./include/TMidiRemote.h ./include/TMidiOutStream.h
 TInetTasks.o: ./include/TMidiPacket.h ./include/TPacket.h
 TInetTasks.o: ./include/TimeTools.h ./include/EventToUDPStream.h
@@ -150,17 +150,18 @@ TRemoteAppl.o: ./include/TMidiInStream.h ./include/UDPStreamToEvent.h
 TRemoteAppl.o: ./include/TRemote.h ./include/TRemoteSlot.h
 TRemoteAppl.o: ./include/TMidiSlot.h ./include/SkewControler.h
 TRemoteAppl.o: ./include/FTMA.h
-TRemoteMgr.o: ./include/TRemoteMgr.h ./include/InetTypes.h ./include/lflifo.h
-TRemoteMgr.o: ./include/TMidiRemote.h ./include/TInetTasks.h
-TRemoteMgr.o: ./include/MidiShareTasks.h ../../linux/Include/MidiShare.h
-TRemoteMgr.o: ./include/MidiShareAppl.h ./include/MidiShareFilter.h
-TRemoteMgr.o: ../../linux/Include/FilterUtils.h ./include/TMidiOutStream.h
-TRemoteMgr.o: ./include/TMidiPacket.h ./include/TPacket.h
-TRemoteMgr.o: ./include/TimeTools.h ./include/EventToUDPStream.h
-TRemoteMgr.o: ./include/TMidiInStream.h ./include/UDPStreamToEvent.h
-TRemoteMgr.o: ./include/TRemote.h ./include/TRemoteSlot.h
-TRemoteMgr.o: ./include/TMidiSlot.h ./include/StatesManager.h
-TRemoteMgr.o: ./include/Handle.h ./include/SkewControler.h ./include/FTMA.h
+TRemoteMgr.o: ./include/TRemoteMgr.h ./include/InetTypes.h
+TRemoteMgr.o: ../../common/Headers/lflifo.h ./include/TMidiRemote.h
+TRemoteMgr.o: ./include/TInetTasks.h ./include/MidiShareTasks.h
+TRemoteMgr.o: ../../linux/Include/MidiShare.h ./include/MidiShareAppl.h
+TRemoteMgr.o: ./include/MidiShareFilter.h ../../linux/Include/FilterUtils.h
+TRemoteMgr.o: ./include/TMidiOutStream.h ./include/TMidiPacket.h
+TRemoteMgr.o: ./include/TPacket.h ./include/TimeTools.h
+TRemoteMgr.o: ./include/EventToUDPStream.h ./include/TMidiInStream.h
+TRemoteMgr.o: ./include/UDPStreamToEvent.h ./include/TRemote.h
+TRemoteMgr.o: ./include/TRemoteSlot.h ./include/TMidiSlot.h
+TRemoteMgr.o: ./include/StatesManager.h ./include/Handle.h
+TRemoteMgr.o: ./include/SkewControler.h ./include/FTMA.h
 TRemoteMgr.o: ./include/TMidiClient.h ./include/TInetAddress.h
 TRemoteMgr.o: ./include/TTCPListener.h ./include/TTCPSocket.h
 TRemoteMgr.o: ./include/TSocket.h
@@ -204,7 +205,7 @@ TRemoteSlot.o: ./include/InetTypes.h ./include/Handle.h
 ./TCP/TMidiClient.o: ./include/MidiShareDriver.h ./include/MidiShareAppl.h
 ./TCP/TMidiClient.o: ./include/MidiShareFilter.h
 ./TCP/TMidiClient.o: ../../linux/Include/FilterUtils.h ./include/TNetInfos.h
-./TCP/TMidiClient.o: ./include/TRemoteMgr.h ./include/lflifo.h
+./TCP/TMidiClient.o: ./include/TRemoteMgr.h ../../common/Headers/lflifo.h
 ./TCP/TMidiClient.o: ./include/TMidiRemote.h ./include/TMidiOutStream.h
 ./TCP/TMidiClient.o: ./include/TMidiPacket.h ./include/EventToUDPStream.h
 ./TCP/TMidiClient.o: ./include/TMidiInStream.h ./include/UDPStreamToEvent.h
@@ -226,7 +227,7 @@ TRemoteSlot.o: ./include/InetTypes.h ./include/Handle.h
 ./TCP/TMidiServer.o: ./include/MidiShareDriver.h ./include/MidiShareAppl.h
 ./TCP/TMidiServer.o: ./include/MidiShareFilter.h
 ./TCP/TMidiServer.o: ../../linux/Include/FilterUtils.h ./include/TNetInfos.h
-./TCP/TMidiServer.o: ./include/TRemoteMgr.h ./include/lflifo.h
+./TCP/TMidiServer.o: ./include/TRemoteMgr.h ../../common/Headers/lflifo.h
 ./TCP/TMidiServer.o: ./include/TMidiRemote.h ./include/TMidiOutStream.h
 ./TCP/TMidiServer.o: ./include/TMidiPacket.h ./include/EventToUDPStream.h
 ./TCP/TMidiServer.o: ./include/TMidiInStream.h ./include/UDPStreamToEvent.h
@@ -244,7 +245,7 @@ TRemoteSlot.o: ./include/InetTypes.h ./include/Handle.h
 ./TCP/TWANControler.o: ./include/MidiShareFilter.h
 ./TCP/TWANControler.o: ../../linux/Include/FilterUtils.h
 ./TCP/TWANControler.o: ./include/TNetInfos.h ./include/TRemoteMgr.h
-./TCP/TWANControler.o: ./include/lflifo.h ./include/TMidiRemote.h
+./TCP/TWANControler.o: ../../common/Headers/lflifo.h ./include/TMidiRemote.h
 ./TCP/TWANControler.o: ./include/TMidiOutStream.h ./include/TMidiPacket.h
 ./TCP/TWANControler.o: ./include/TPacket.h ./include/TimeTools.h
 ./TCP/TWANControler.o: ./include/EventToUDPStream.h ./include/TMidiInStream.h
