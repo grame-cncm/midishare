@@ -21,8 +21,10 @@
 */
 
 #include "msAlarms.h"
+#include "msEvents.h"
 #include "msExtern.h"
 
+#include <stdio.h>
 
 /*_____________________________________________________________________________________*/
 void CallAlarm (short ref, int alarmCode, TClientsPtr g)
@@ -36,8 +38,16 @@ void CallAlarm (short ref, int alarmCode, TClientsPtr g)
 	applPtr = g->appls;                               /* points the applications table   */
 	for( i=0; i<MaxAppls; i++) {                      /* for each application            */
 		appl = *applPtr++;
-		if( appl && appl->applAlarm) {                /* if the alarm exists             */
-			CallApplAlarm (appl->context, appl->applAlarm, pub(appl,refNum), code);
+		if (appl) { 
+           if( appl->applAlarm)         /* if the alarm exists             */
+                CallApplAlarm (appl->context, appl->applAlarm, pub(appl,refNum), code);
+           else if( appl->netFlag) {	/* remote applications can't set an alarm in kernel space */
+                MidiEvPtr alarm = MSNewEv(typeApplAlarm, FreeList(g->memory));
+                if (alarm) {
+                    Tempo(alarm) = code;
+                    CallNetSendAlarm (appl, alarm);
+                }
+            }
 		}
 	}
 }

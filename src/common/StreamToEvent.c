@@ -100,6 +100,7 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 
 	tbl[typeSpecific]      = VarLenParseMth;
 	tbl[typePortPrefix]    = Data4ParseMth;
+	tbl[typeApplAlarm]     = Data4ParseMth;
 	
 	tbl[typeMidiOpen]      = VarLenParseMth;
 	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) tbl[i]= Data4ParseMth;

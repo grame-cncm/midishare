@@ -66,7 +66,7 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 	
 /*  alarms are handled localy both in client and server modes */
 	lin[typeRcvAlarm]      = NullLinearizeMth;
-	lin[typeApplAlarm]     = NullLinearizeMth;
+	lin[typeApplAlarm]     = Data4LinearizeMth;
 
 	lin[typeMidiOpen]      = VarLenLinearizeMth;
 	for (i=typeMidiOpenRes;i<=typeMidiConnect;i++) lin[i]= Data4LinearizeMth;
