@@ -41,8 +41,9 @@ MSFunctionType(Boolean)	MSGetDriverInfos (short refnum, TDriverInfos * infos, TC
 
 /*_______________________________________________________________*/
 /* slots management */
-MSFunctionType(SlotRefNum) MSAddSlot 	  (short refnum, TClientsPtr g);
+MSFunctionType(SlotRefNum) MSAddSlot 	  (short refnum, SlotName name, SlotDirection direction, TClientsPtr g);
 MSFunctionType(SlotRefNum) MSGetIndSlot	  (short refnum, short index, TClientsPtr g);
+MSFunctionType(void) 	MSSetSlotName 	  (SlotRefNum slot, SlotName name, TClientsPtr g);
 MSFunctionType(void)    MSRemoveSlot 	  (SlotRefNum slot, TClientsPtr g);
 MSFunctionType(Boolean)	MSGetSlotInfos 	  (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g);
 MSFunctionType(void)    MSConnectSlot	  (short port, SlotRefNum slot, Boolean state, TClientsPtr g);
