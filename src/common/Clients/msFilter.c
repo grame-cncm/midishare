@@ -18,10 +18,13 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
 
+  modifications history:
+   [06-09-99] DF reducing dependencies by replacing msExtern.h by mem.h
+
 */
 
 #include "msFilter.h"
-#include "msExtern.h"
+#include "mem.h"
 
 
 #define AllocateNewFilter(size)		(MidiFilterPtr)AllocateMemory(kernelSharedMemory, size)
