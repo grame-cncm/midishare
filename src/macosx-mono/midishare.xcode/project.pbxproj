@@ -134,7 +134,7 @@
 		4BE442CF05BE876E00FFBCB9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
+			lastKnownFileType = text.plist.xml;
 			path = Info.plist;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
