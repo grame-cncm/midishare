@@ -38,19 +38,19 @@
 #define kCommBuffSize	2048
 #define kParseBuffSize	2048
 
-typedef struct PipesList * PipesListPtr;
-typedef struct PipesList{
-    PipesListPtr 	next;
+typedef struct CommChans * CommChansPtr;
+typedef struct CommChans{
+    CommChansPtr 	next;
     CommunicationChan comm;
     msThreadPtr 	thread;
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
     char 			buff[kParseBuffSize];
-}PipesList;
+}CommChans;
 
-PipesListPtr gPList = 0;
-msStreamParseMethodTbl 	gParseMthTable;
-msStreamMthTbl			gStreamMthTable;
+CommChansPtr gCCList = 0;
+msStreamParseMethodTbl	gParseMthTable;
+msStreamMthTbl 			gStreamMthTable;
 
 /*____________________________________________________________________________*/
 static char * Event2Text (MidiEvPtr e, char *buff, short len)
@@ -188,7 +188,7 @@ unexpected:
 }
 
 /*____________________________________________________________________________*/
-static Boolean SendEvent (MidiEvPtr e, PipesListPtr pl)
+static Boolean SendEvent (MidiEvPtr e, CommChansPtr pl)
 {
     Ev2StreamPtr stream = &pl->stream;
     long n; short len;
@@ -216,7 +216,7 @@ failed:
 /*____________________________________________________________________________*/
 static ThreadProc(CommHandlerProc, p)
 {
-	PipesListPtr pl = (PipesListPtr)p;
+	CommChansPtr pl = (CommChansPtr)p;
 
 fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
     do {
@@ -249,7 +249,7 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
 }
 
 /*____________________________________________________________________________*/
-static void CloseOneClientChannel (PipesListPtr pl)
+static void CloseOneClientChannel (CommChansPtr pl)
 {
     if (pl->comm) CloseCommunicationChannel (pl->comm);
     if (pl->thread) msThreadDelete (pl->thread);
@@ -259,13 +259,13 @@ static void CloseOneClientChannel (PipesListPtr pl)
 /*____________________________________________________________________________*/
 cdeclAPI(void) CloseAllClientChannels ()
 {
-    PipesListPtr pl = gPList;
+    CommChansPtr pl = gCCList;
     while (pl) {
-        PipesListPtr next = pl->next;
+        CommChansPtr next = pl->next;
         CloseOneClientChannel (pl);
         pl = next;
     }
-    gPList = 0;
+    gCCList = 0;
 }
 
 /*____________________________________________________________________________*/
@@ -273,32 +273,32 @@ void InitCommHandlers ()
 {
     msStreamParseInitMthTbl (gParseMthTable);
     msStreamInitMthTbl (gStreamMthTable);
-    gPList = 0;
+    gCCList = 0;
     atexit (CloseAllClientChannels);
 }
 
 /*____________________________________________________________________________*/
 void NewClientChannel (CommunicationChan cc)
 {
-    msThreadPtr thread; PipesListPtr pl;
+    msThreadPtr thread; CommChansPtr cl;
     
-    pl = (PipesListPtr)malloc (sizeof(PipesList));
-    if (!pl) {
+    cl = (CommChansPtr)malloc (sizeof(CommChans));
+    if (!cl) {
         CloseCommunicationChannel (cc);
-        LogWrite ("NewClientChannel: PipesList memory allocation failed");
+        LogWrite ("NewClientChannel: CommChans memory allocation failed");
         return;
     }
-    msStreamParseInit (&pl->parse, gParseMthTable, pl->buff, kParseBuffSize);
-    msStreamInit (&pl->stream, gStreamMthTable, pl->buff, kParseBuffSize);
-    pl->next = gPList;
-    pl->comm = cc;
-    thread = msThreadCreate (CommHandlerProc, pl, kServerHighPriority);
+    msStreamParseInit (&cl->parse, gParseMthTable, cl->buff, kParseBuffSize);
+    msStreamInit (&cl->stream, gStreamMthTable, cl->buff, kParseBuffSize);
+    cl->next = gCCList;
+    cl->comm = cc;
+    thread = msThreadCreate (CommHandlerProc, cl, kServerHighPriority);
 	if (!thread) {
         CloseCommunicationChannel (cc);
-        free (pl);
+        free (cl);
         LogWrite ("NewClientChannel: msThreadCreate failed");
         return;
     }
-    pl->thread = thread;
-    gPList = pl;
+    cl->thread = thread;
+    gCCList = cl;
 }

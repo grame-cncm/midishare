@@ -58,17 +58,7 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 #define Memory(g)           (&g->memory)
 #define Clients(g)          (&g->clients)
 
-#ifndef MSKernel
-
-	typedef struct TMSGlobal {
-		TMSGlobalPublic * pub;
-		TMSMemory     memory;          /* kernel memory management        */
-		TApplPtr      appls[MaxAppls]; /* clients applications management */
-		short         nbAppls;         /* current local clients count     */
-    	TApplContextPtr context;       /* system dependent context        */
-	} TMSGlobal;
-
-#else
+#if defined(MSKernel)
 
 	typedef struct THorloge  FAR *  THorlogePtr;
 	typedef FarPtr(void)			THost;   /* reserved for platform dependant
@@ -114,6 +104,21 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 /* function declaration                                                     */
 /*--------------------------------------------------------------------------*/
 	void ClockHandler (TMSGlobalPtr g);
+#else
+
+	typedef struct TMSGlobal {
+		TMSGlobalPublic * pub;
+		TMSMemory     memory;          		  /* kernel memory management        */
+		TApplPtr      appls[MaxAppls]; 		  /* clients applications management */
+		TApplPtr      activesAppls[MaxAppls]; /* active client applications list  */
+		TApplPtr  *   nextActiveAppl;         /* ptr in active applications list  */
+		short         nbAppls;         		  /* current local clients count     */
+    	TApplContextPtr context;       		  /* system dependent context        */
+	} TMSGlobal;
+
+#	define ActiveAppl(g)       (g->activesAppls)
+#	define NextActiveAppl(g)   (g->nextActiveAppl)
+
 #endif
 
 #endif

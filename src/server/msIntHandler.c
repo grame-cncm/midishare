@@ -39,13 +39,13 @@
 #include "msMem.h"
 #include "msLog.h"
 #include "msTasks.h"
-#include "msThreads.h"
 #include "msPortAudio.h"
 
 extern msKernelPrefs * gPrefs;
-msThreadPtr gTimeThread = 0;
 
 #if defined(linux)
+#include "msThreads.h"
+msThreadPtr gTimeThread = 0;
 
 	typedef struct {
 		unsigned long  freq;

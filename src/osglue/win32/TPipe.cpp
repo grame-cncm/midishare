@@ -51,6 +51,7 @@ int TPipe::Create (const char * name)
 	}
 	fBuffSize = kBuffSize;
 	fOwner = TRUE;
+	SetName (name);
 	return TRUE;
 }
 
@@ -89,8 +90,10 @@ int TPipe::Open (const char *name, int perm)
 	}
 	else {
 		fPipe = CreateFile (name, perm, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-		if (fPipe != INVALID_HANDLE_VALUE) 
+		if (fPipe != INVALID_HANDLE_VALUE) {
+			SetName (name);
 			return TRUE;
+		}
 	}
 	return FALSE;
 }

@@ -101,18 +101,18 @@ void CallDTaskCode  (TApplContextPtr context, MidiEvPtr e)
 /*_________________________________________________________________________*/
 void DriverWakeUp (TApplPtr appl) 
 {
-	WakeupPtr wakeup = Wakeup(appl);
-	if (wakeup) {
-		wakeup (pub(appl, refNum));
+	WakeupPtr wakeupf = Wakeup(appl);
+	if (wakeupf) {
+		wakeupf (pub(appl, refNum));
 	}
 }
 
 /*_________________________________________________________________________*/
 void DriverSleep (TApplPtr appl)
 {
-	SleepPtr sleep = Sleep(appl);
-	if (sleep) {
-	     sleep (pub(appl, refNum));
+	SleepPtr sleepf = Sleep(appl);
+	if (sleepf) {
+	     sleepf (pub(appl, refNum));
 	}
 }
 

@@ -7,13 +7,16 @@
 
 TARGET = midishared
 
-#LIBS = ../msServerCommonLib.o ../msOSGlueLib.o libportaudio.a
 LIBS = ../msServerCommonLib.o ../msOSGlueLib.o
+SLIB = ../msServerSharedLib.o
 
 COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
 COMINC := $(wildcard ../common/Headers/*.h)
 GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/unix/*.cpp)
 GLUEINC := $(wildcard ../osglue/*.h ../osglue/include/*.h)
+
+LSRC = msIntHandler.c msPortAudio.c profport.c msExtern.c msKernelPrefs.c msMem.c
+LOBJ := $(patsubst %.c, %.o, $(LSRC)) 
 
 CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
 CXXFLAGS := $(CFLAGS) -I../osglue/include
@@ -26,7 +29,11 @@ DEST = /usr/local/bin
 
 $(TARGET) : makefile $(LIBS) $(OBJ)
 	$(CC) $(LIBS) $(OBJ) -lpthread -lstdc++ -lportaudio -framework CoreAudio -o $(TARGET)
-	
+
+shlib : $(SLIB)
+$(SLIB) : makefile $(LIBS) $(LOBJ)
+	ld -r $(LOBJ) -o $(SLIB)
+
 makefile: makefile.osx
 	cat makefile.readme makefile.osx > makefile
 	make dep
@@ -41,7 +48,7 @@ uninstall:
 
 dep:
 	cat makefile.readme makefile.osx > makefile
-	mkdep -a -f makefile $(CFLAGS) -Iportaudio/src/pa_common $(SRC)
+	mkdep -a -f makefile $(CFLAGS) $(SRC)
 
 clean:
 	make -C ../common sclean

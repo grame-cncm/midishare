@@ -34,50 +34,29 @@
 #include "TPipe.h"
 
 #define kMaxPipeName	512
-typedef struct {
-	TPipe  * pipe;
-	char 	name[kMaxPipeName];
-	int		id;
-} PipeDesc;
 
 //___________________________________________________________________
 class TPipesPair
 {
 	public:
 		 	 TPipesPair () : fRead(), fWrite() 
-		 	 			{ 	fNext = 0; fInfos = 0, fCount = 0;
-		 	 				fReadDesc.pipe=&fRead;
-		 	 				fWriteDesc.pipe=&fWrite;
-		 	 			}
+		 	 			{ 	fInfos = 0; fId = 0; fCount = 0; }
 	virtual ~TPipesPair ()	{}
 
 		long	Write 	(void *buff, long len) { return fWrite.Write (buff, len); }
 		long	Read 	(void *buff, long len) { return fRead.Read (buff, len); }
 
-		PipeDesc * 		GetReadPipe ()		{ return &fReadDesc; }
-		PipeDesc * 		GetWritePipe ()		{ return &fWriteDesc; }
-
-		void			Link (TPipesPair * next) 	{ fNext = next; }
-		TPipesPair *	Next ()						{ return fNext; }
+		TPipe * 		GetReadPipe ()		{ return &fRead; }
+		TPipe * 		GetWritePipe ()		{ return &fWrite; }
 		
 		void	SetInfos (void * infos)		{ fInfos = infos; }
 		void *	GetInfos ()					{ return fInfos; }
-		int		GetID ()					{ return fReadDesc.id; }
-
-		int		Inc ()						{ return ++fCount; }
-		int		Dec ()						{ return --fCount; }
-		int		RefCount ()					{ return fCount; }
-
-		void	SetName (PipeDesc * d, char *name, int id)
-				{ sprintf (d->name, "%s%d", name, id); d->id = id; }
 		
 	private:
-		TPipesPair * fNext;
 		TPipe		fRead;
-		PipeDesc  	fReadDesc;
 		TPipe		fWrite;
-		PipeDesc  	fWriteDesc;
 		int			fCount;
+		int			fId;
 		void *  	fInfos;
 };
 

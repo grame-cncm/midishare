@@ -21,6 +21,8 @@
  
 */
 
+#include <stdlib.h>
+
 #ifdef WIN32
 	#include "TMsgChan.h"
 	typedef TMsgChan	MPChan;
@@ -99,46 +101,94 @@ long MPRead (MeetingPointChan mp, MPMsgPtr msg)
 //___________________________________________________________________
 // communication channel management
 //___________________________________________________________________
-static int NewIndexedPipe (TPipesPair * pp, char *basename, int limit)
+static int NewIndexedPipe (TPipe * pipe, char *basename, int limit)
 {
-    int i;
-    PipeDesc * pdesc = pp->GetWritePipe();
+    int i; char name[kMaxPipeName];
 
     for (i=1; i<=limit; i++) {
-        pp->SetName (pdesc, basename, i);
-        if (pdesc->pipe->Create (pdesc->name))
-            return i;
+        snprintf (name, kMaxPipeName, "%s%d", basename, i);
+        if (pipe->Create (name)) {
+			return i;
+		}
     }
     return 0;
 }
 
+static int NewPipe (TPipe * pipe, char *basename, int index)
+{
+    char name[kMaxPipeName];
+	snprintf (name, kMaxPipeName, "%s%d", basename, index);
+	if (pipe->Create (name))
+		return index;
+    return 0;
+}
+
+static int OpenPipe (TPipe * pipe, char *basename, int index)
+{
+    char name[kMaxPipeName];
+	snprintf (name, kMaxPipeName, "%s%d", basename, index);
+	if (pipe->Open (name))
+		return index;
+    return 0;
+}
+
+static CommunicationChan NewCommunicationChannel ()
+{
+	CommunicationChan cc = (CommunicationChan)malloc(sizeof(struct CChan));
+    TPipesPair * pp = new TPipesPair();
+    TPipesPair * rtpp = new TPipesPair();
+
+    if (pp && rtpp && cc) {
+        cc->cc 		= pp;
+		cc->rtcc	= rtpp;
+		cc->id 			= 0;
+		cc->refcount	= 0;
+		return cc;
+	}
+	if (pp) delete pp;
+	if (rtpp) delete rtpp;
+    if (cc) free (cc);
+    return 0;
+}
+
+static long MPSendID (MeetingPointChan mp, int type, int id)
+{
+	MPMsg msg;
+	msg.msg.type = type;
+	msg.msg.id = id;
+#ifdef WIN32
+	msg.addr = kServerAddr;
+#else
+	strncpy (msg.addr, kServerAddr, sizeof(msg.addr)-1);
+#endif
+	return MPWrite (mp, &msg);
+}
+
 CommunicationChan RequestCommunicationChannel (MeetingPointChan mp)
 {
-    /* creates a pair of pipes */
-    TPipesPair * pp = new TPipesPair();
-    if (pp) {
-        MPMsg msg; long ret;
-        PipeDesc * wpdesc = pp->GetWritePipe();
-        PipeDesc * rpdesc = pp->GetReadPipe();
+ 	CommunicationChan cc = NewCommunicationChannel();
 
-        /* creates a first pipe (will be the write pipe) */
-        msg.msg.id = NewIndexedPipe (pp, kClientSndBaseName, kMaxPipeIndex);
-        if (!msg.msg.id) goto err;
+    if (cc) {
+        MPMsg msg; long ret; int id;
+		TPipesPair * pp = (TPipesPair *)cc->cc;
+		TPipesPair * rtpp = (TPipesPair *)cc->rtcc;
+
+        /* creates a first write pipe */
+        id = NewIndexedPipe (pp->GetWritePipe(), kClientSndBaseName, kMaxPipeIndex);
+        if (!id) goto err;
+		else cc->id = id;
+        /* creates the real-time write pipe */
+		if (!NewPipe (rtpp->GetWritePipe(), kClientRTSndBaseName, id)) goto err;
+		else cc->id = id;
 
         /* send a message to the server with the previously allocated id */
-        msg.msg.type = kContactType;
-#ifdef WIN32
-        msg.addr = kServerAddr;
-#else
-        strncpy (msg.addr, kServerAddr, sizeof(msg.addr)-1);
-#endif
-
-        ret = MPWrite (mp, &msg);
+        ret = MPSendID (mp, kContactType, id);
         if (!ret) goto err;
 
         /* opens the pipe with write permission */
-        if (!wpdesc->pipe->Open(wpdesc->name, TPipe::kWritePerm))
-            goto err;
+		if (!pp->GetWritePipe()->Open(TPipe::kWritePerm)) goto err;
+        /* opens the real-time pipe with write permission */
+        if (!rtpp->GetWritePipe()->Open(TPipe::kWritePerm)) goto err;
 
         /* and read the server reply */
         ret = MPRead (mp, &msg);
@@ -147,9 +197,9 @@ CommunicationChan RequestCommunicationChannel (MeetingPointChan mp)
         /* checks the server reply */
         switch (msg.msg.type) {
 			case kContactType:
-				/* and finally opens the read pipe */
-				pp->SetName (rpdesc, kClientRcvBaseName, msg.msg.id);
-				if (!rpdesc->pipe->Open (rpdesc->name)) goto err;
+				/* and finally opens the read pipes */
+				if (!OpenPipe(pp->GetReadPipe(), kClientRcvBaseName, msg.msg.id)) goto err;
+				if (!OpenPipe(rtpp->GetReadPipe(), kClientRTRcvBaseName, msg.msg.id)) goto err;
 				break;
 					
             case kContactAllocationFailed:
@@ -160,15 +210,15 @@ CommunicationChan RequestCommunicationChannel (MeetingPointChan mp)
                 if (msg.msg.type < 0) goto err;
         }
     }
-    return pp;
+    return cc;
 err:
-    CloseCommunicationChannel (pp);
+    CloseCommunicationChannel (cc);
     return 0;
 }
 
 CommunicationChan HandleCommunicationChannelRequest (MeetingPointChan mp)
 {
-	MPMsg msg; TPipesPair * pp = 0;
+	MPMsg msg; CommunicationChan cc = 0;
 	
 	/* read the meeting point channel */
 	long ret = MPRead (mp, &msg);
@@ -180,82 +230,83 @@ CommunicationChan HandleCommunicationChannelRequest (MeetingPointChan mp)
 		MPWrite (mp, &msg);
 		return 0;
 	}
-	else {
-		/* creates a new pair of pipes */
-		pp = new TPipesPair();
-		if (pp) {
-			/* opens the existing client pipe in read only mode */
-			PipeDesc * pdesc = pp->GetReadPipe();
-			pp->SetName (pdesc, kClientSndBaseName, msg.msg.id);
-			if (!pdesc->pipe->Open (pdesc->name)) goto err;
 
-			/* creates a new pipe */
-			pdesc = pp->GetWritePipe();
-			pp->SetName (pdesc, kClientRcvBaseName, msg.msg.id);
-			if (!pdesc->pipe->Create (pdesc->name)) goto err;
+	cc = NewCommunicationChannel();
+    if (cc) {
+		TPipesPair * pp = (TPipesPair *)cc->cc;
+		TPipesPair * rtpp = (TPipesPair *)cc->rtcc;
+		
+		cc->id = msg.msg.id;
+		/* opens the existing client pipe in read only mode */
+ 		if (!OpenPipe (pp->GetReadPipe(), kClientSndBaseName, msg.msg.id)) goto err;
+		/* opens the existing client real-time pipe in read only mode */
+ 		if (!OpenPipe (rtpp->GetReadPipe(), kClientRTSndBaseName, msg.msg.id)) goto err;
 
-			/* sends the reply back to the client */
-			/* the msg type and id actually don't change */
-			ret = MPWrite (mp, &msg);
-			if (!ret) goto err;
+		/* creates a new pipe */
+		if (!NewPipe (pp->GetWritePipe(), kClientRcvBaseName, msg.msg.id)) goto err;
+		/* creates a new real-time pipe */
+		if (!NewPipe (rtpp->GetWritePipe(), kClientRTRcvBaseName, msg.msg.id)) goto err;
 
-			/* and finally opens the new pipe with write permission */
-			if (!pdesc->pipe->Open (pdesc->name, TPipe::kWritePerm))
-				goto err;
-			return pp;
-		}
+		/* sends the reply back to the client */
+		/* the msg type and id actually don't change */
+		ret = MPWrite (mp, &msg);
+		if (!ret) goto err;
+
+		/* and finally opens the new pipes with write permission */
+ 		if (!pp->GetWritePipe()->Open (TPipe::kWritePerm)) goto err;
+ 		if (!rtpp->GetWritePipe()->Open (TPipe::kWritePerm)) goto err;
+ 		return cc;
 	}
 
 err:
 	msg.msg.type = kContactAllocationFailed;
 	ret = MPWrite (mp, &msg);
-    CloseCommunicationChannel (pp);
+    if (cc) CloseCommunicationChannel (cc);
     return 0;
 }
 
 void CloseCommunicationChannel (CommunicationChan cc)
 {
-	if (cc) delete (TPipesPair *)cc;
+	if (cc) {
+		delete (TPipesPair *)cc->cc;
+		delete (TPipesPair *)cc->rtcc;
+		free (cc);
+	}
 }
 
 long CCWrite (CommunicationChan cc, void *buff, long len)
 {
-	return PP(cc)->Write (buff, len);
+	return PP(cc->cc)->Write (buff, len);
 }
 
 long CCRead (CommunicationChan cc, void *buff, long len)
 {
-	return PP(cc)->Read (buff, len);
+	return PP(cc->cc)->Read (buff, len);
 }
 
-short CCGetID (CommunicationChan cc)
+long CCRTWrite (CommunicationChan cc, void *buff, long len)
 {
-	return PP(cc)->GetID ();
+	return PP(cc->rtcc)->Write (buff, len);
 }
 
-int CCInc (CommunicationChan cc)
+long CCRTRead (CommunicationChan cc, void *buff, long len)
 {
-	return PP(cc)->Inc ();
+	return PP(cc->rtcc)->Read (buff, len);
 }
 
-int CCDec (CommunicationChan cc)
-{
-	return PP(cc)->Dec ();
-}
-
-int CCRefCount (CommunicationChan cc)
-{
-	return PP(cc)->RefCount ();
-}
+int		CCInc 		(CommunicationChan cc)		{ return ++cc->refcount; }
+int		CCDec 		(CommunicationChan cc)		{ return --cc->refcount; }
+int		CCRefCount 	(CommunicationChan cc)		{ return cc->refcount; }
+short	CCGetID 	(CommunicationChan cc)		{ return cc->id; }
 
 /*
 void CCSetInfos (CommunicationChan cc, void * infos)
 {
-	PP(cc)->SetInfos (infos);
+	PP(cc->cc)->SetInfos (infos);
 }
 
 void * CCGetInfos (CommunicationChan cc)
 {
-	return PP(cc)->GetInfos ();
+	return PP(cc->cc)->GetInfos ();
 }
 */

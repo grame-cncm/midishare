@@ -22,30 +22,25 @@
 
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "msFunctions.h"
 #include "msExtern.h"
 
-#include "msSharedMem.h"
 #include "osglue.h"
-#include "msCommChans.h"
-#include "msSendToServer.h"
+#include "msLibContext.h"
+#include "msRTClientProc.h"
 
-static SharedMemHandler 	gShMem = 0;
-StreamDesc 			gStream = { { 0 } };
-CommunicationChan 	gComm = 0;
 
 /*____________________________________________________________________________*/
 static void DoCloseComm (void)
 {
-printf ("DoCloseComm\n");
-    if (gComm) CloseCommunicationChannel (gComm);
-    gComm = 0;
-    if (gStream.gParseMthTable) free (gStream.gParseMthTable);
-    gStream.gParseMthTable = 0;
-    if (gStream.gStreamMthTable) free (gStream.gStreamMthTable);
-    gStream.gStreamMthTable = 0;
+	msLibContextPtr c = LibContext;
+	if (c->RTThread) msThreadDelete (c->RTThread);
+	c->RTThread = 0;
+    if (c->cchan) CloseCommunicationChannel (c->cchan);
+    c->cchan = 0;
 }
 
 /*____________________________________________________________________________*/
@@ -57,52 +52,58 @@ static cdeclAPI(void) msCommExit ()
 /*____________________________________________________________________________*/
 static cdeclAPI(void) msShmExit ()
 {
-	if (gShMem) msSharedMemClose (gShMem);
-	gShMem = 0;
+	msLibContextPtr c = LibContext;
+	if (c->msMem) msSharedMemClose (c->msMem);
+	c->msMem = 0;
 }
 
 /*____________________________________________________________________________*/
 void CloseComm (TMSGlobalPtr g)
 {
-    if (!CCDec(gComm)) DoCloseComm ();
+	msLibContextPtr c = (msLibContextPtr)g->context;
+    if (!CCDec(c->cchan)) DoCloseComm ();
 }
 
 /*____________________________________________________________________________*/
 Boolean InitComm (TMSGlobalPtr g)
 {
-    if (!gComm) {
+	msLibContextPtr c = (msLibContextPtr)g->context;
+    if (!c->cchan) {
 		MeetingPointChan mp = OpenMeetingPoint ();
 		if (!mp) return false;
 
-		gStream.gParseMthTable = (msStreamParseMethodPtr *)malloc (sizeof(msStreamParseMethodTbl));
-        if (!gStream.gParseMthTable) return false;
-        gStream.gStreamMthTable = (msStreamMthPtr *)malloc (sizeof(msStreamMthTbl));
-        if (!gStream.gStreamMthTable) return false;
-
-        msStreamParseInitMthTbl (gStream.gParseMthTable);
-        msStreamInitMthTbl (gStream.gStreamMthTable);
-        msStreamParseInit (&gStream.parse, gStream.gParseMthTable, gStream.buff, kParseBuffSize);
-        msStreamInit (&gStream.stream, gStream.gStreamMthTable, gStream.buff, kParseBuffSize);
-
-        gComm = RequestCommunicationChannel (mp);
+        c->cchan = RequestCommunicationChannel (mp);
 		CloseMeetingPoint (mp);
-        if (!gComm) {
+        if (!c->cchan) {
             DoCloseComm ();
             return false;
         }
+		else {
+			msStreamParseReset(&c->std.parse);
+			msStreamReset(&c->std.stream);
+			c->RTThread = msThreadCreate (RTClientProc, g, kClientRTPriority);
+			if (!c->RTThread) {
+				DoCloseComm ();
+				return false;
+			}
+		}
 		atexit (msCommExit);
     }
-	else CCInc (gComm);
+	else CCInc (c->cchan);
     return true;
 }
 
 /*_________________________________________________________________________*/
 Boolean CheckMidiShare (TMSGlobalPtr g)
 {
+	msLibContextPtr c = (msLibContextPtr)g->context;
 	void * ptr;
+
+	if (!c) return false;
 	if (g->pub) return true;
-	gShMem = msSharedMemOpen (kShMemId, &ptr);
-	if (gShMem) {
+
+	c->msMem = msSharedMemOpen (kShMemId, &ptr);
+	if (c->msMem) {
 		g->pub = ptr;
 		atexit (msShmExit);
 	}

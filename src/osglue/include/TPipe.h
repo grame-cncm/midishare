@@ -45,26 +45,34 @@ class TPipe
 		 	 TPipe ();
 	virtual ~TPipe ()	{ Close (); }
 			
-		enum { kReadPerm, kWritePerm, kReadWritePerm };
+		enum { kReadPerm, kWritePerm, kReadWritePerm, kMaxPipeName=512 };
 		
 		int		Create 	(const char * name);
 		int		Open 	(const char *name, int perm=kReadPerm);
+		int		Open 	(int perm=kReadPerm) { return Open (fName, perm); }
 		void	Close 	();
 
 		long	Write 	(void *buff, long len);
 		long	Read 	(void *buff, long len);
+		
+		const char *	GetName () { return fName; }
 
 		// BuffSize represents the internal pipe buffer size for unix
 		// and a value fixed by the implementation for windows
 		long	BuffSize ()		{ return fBuffSize; }
 
 	private:
+		void	SetName (const char * name) { snprintf (fName, kMaxPipeName-1, "%s", name); }
+
 		PipeHandler fPipe;		// the pipe handler
 		long		fBuffSize;	// pipe buffer size
 		int			fOwner;		// a flag to check wether the pipe has been created
+		char 		fName[kMaxPipeName];
+/*
 #ifndef WIN32
 		char *		fPath;		// access path
 #endif
+*/
 };
 
 #endif

@@ -152,10 +152,12 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		ref = RefNum(e);
 		fifoinit (&appl->rcv);
 		fifoinit (&appl->dTasks);
+		appl->refNum = ref;
 		appl->filter = 0;
 		appl->rcvAlarm = 0;
 		appl->applAlarm = 0;
-		g->appls[ref] = appl;
+		appl->rcvFlag = (uchar)kNoRcvFlag;
+		g->appls[appl->refNum] = appl;
 		g->nbAppls++;
 	}
 	else { ref = MIDIerrComm; goto err; }

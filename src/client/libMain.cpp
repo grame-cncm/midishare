@@ -24,6 +24,8 @@
 
 #include "msKernel.h"
 #include "msEvents.h"
+#include "msMem.h"
+#include "msLibContext.h"
 
 #define kDefaultCLientSpace	60000
 #define kMidiShareLibVersion	004
@@ -32,7 +34,6 @@
 extern "C" {
 #endif
 
-	extern TMSGlobalPtr gMem;
 	short MidiGetLibVersion () ;
 	void  MSInitialize () ;
 
@@ -75,13 +76,35 @@ LibMain::~LibMain ()
 #endif
 
 /*____________________________________________________________________________*/
+static void  MSContextInitialize (TMSGlobalPtr g)
+{
+	msLibContextPtr c = (msLibContextPtr)AllocateMemory (sizeof(msLibContext));
+	if (c) {
+		c->cchan = 0;
+		c->send  = StdSend;
+		c->msMem = 0;
+		c->RTThread = 0;
+		fifoinit (&c->RTSnd);
+		
+        msStreamParseInitMthTbl (c->parseMthTable);
+        msStreamInitMthTbl (c->streamMthTable);
+		msStreamParseInit (&c->std.parse, c->parseMthTable, c->std.buff, kCommBuffSize);
+		msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.buff, kCommBuffSize);
+        msStreamInit 	  (&c->std.stream, c->streamMthTable, c->std.buff, kCommBuffSize);
+        msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.buff, kCommBuffSize);
+	}
+	g->context = c;
+}
+
+/*____________________________________________________________________________*/
 void  MSInitialize ()
 { 
     InitEvents ();
     InitMemory (Memory(gMem), kDefaultCLientSpace);
     OpenMemory (Memory(gMem));
-    gMem->pub = 0;		/* shared memory not yet mapped */
-    gMem->context = 0;	/* no contextual information available */
+    gMem->pub = 0;				/* shared memory not yet mapped */
+	gMem->activesAppls[0] = 0;	/* no active application */
+	MSContextInitialize (gMem);
 }
 
 /*____________________________________________________________________________*/

@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
 
 		/* the main communication server proc needs an initialized kernel */
         InitCommHandlers ();
-		if (InitMeetingPoint (MainClientServerProc)) {
+        if (InitMeetingPoint (MainClientServerProc)) {
 			version = MidiGetVersion();
 			LogWrite ("MidiShare Server v.%d.%02d is running", version/100, version%100);
 			printf ("press return to quit\n");

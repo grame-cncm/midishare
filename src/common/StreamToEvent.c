@@ -58,6 +58,12 @@ void msStreamParseInit  (msStreamBufferPtr f, msStreamParseMethodTbl methTbl,
 }
 
 /*____________________________________________________________________________*/
+int msStreamGetSize (msStreamBufferPtr f)
+{
+	return StreamCountAvail(f);
+}
+
+/*____________________________________________________________________________*/
 void msStreamParseReset (msStreamBufferPtr f)
 {
 	msStreamParseRewind(f);
@@ -177,7 +183,6 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 MidiEvPtr msStreamGetEvent (msStreamBufferPtr f, int * retcode)
 {
 	if (!retcode) {
-		*retcode = kStreamInvalidParameter;
 		return 0;
 	}
 	if (!f->read)

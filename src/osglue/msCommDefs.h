@@ -25,16 +25,20 @@
 #define __msCommDefs__
 
 #ifdef WIN32
-#	define kServerContactName 	"msServerContact"
-#	define kClientSndBaseName 	"\\\\.\\pipe\\msClientSnd"
-#	define kClientRcvBaseName 	"\\\\.\\pipe\\msClientRcv"
+#	define kServerContactName 		"msServerContact"
+#	define kClientSndBaseName 		"\\\\.\\pipe\\msClientSnd"
+#	define kClientRcvBaseName 		"\\\\.\\pipe\\msClientRcv"
+#	define kClientRTSndBaseName 	"\\\\.\\pipe\\msClientRTSnd"
+#	define kClientRTRcvBaseName 	"\\\\.\\pipe\\msClientRTRcv"
 #	define From(a)	&a
 
 #else
 
-#	define kServerContactName 	"/tmp/msServerContact"
-#	define kClientSndBaseName 	"/tmp/msClientSnd"
-#	define kClientRcvBaseName 	"/tmp/msClientRcv"
+#	define kServerContactName 		"/tmp/msServerContact"
+#	define kClientSndBaseName 		"/tmp/msClientSnd"
+#	define kClientRcvBaseName 		"/tmp/msClientRcv"
+#	define kClientRTSndBaseName 	"/tmp/msClientRTSnd"
+#	define kClientRTRcvBaseName 	"/tmp/msClientRTRcv"
 #	define From(a)	a
 #endif
 

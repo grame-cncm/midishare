@@ -5,11 +5,10 @@
 #include "msPortAudio.h"
 #include "msExtern.h"
 #include "msLog.h"
-#include "msServerInit.h"
 #include "portaudio.h"
 
 #define SAMPLE_RATE 44100
-#define AUDIO_MS_INT (SAMPLE_RATE/100)
+#define AUDIO_MS_INT (SAMPLE_RATE/1000)
 
 #define AUDIO_DEVICE "Built-in audio controller"
 
@@ -61,12 +60,16 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
   	// Load audio sizr from the .ini file
   	gAudioSize = GetAudioBufFSize(g->clock.timeRes);
   	
-  	// Look for the internal built-in sound device
-    maxdev = Pa_CountDevices();
-  	for (device= 0 ; device<maxdev; device++) {
-  		info = Pa_GetDeviceInfo(device);
-  		if ((strcmp (dev,info->name) == 0) && (info->maxOutputChannels)) break;
-  	}
+	if (strlen (dev)) {
+		// Look for the internal built-in sound device
+		maxdev = Pa_CountDevices();
+		for (device= 0 ; device<maxdev; device++) {
+			info = Pa_GetDeviceInfo(device);
+			if ((strcmp (dev,info->name) == 0) && (info->maxOutputChannels)) break;
+		}
+	}
+	else device = Pa_GetDefaultOutputDeviceID();
+
 	// Open Audio stream
     err = Pa_OpenStream(
 				&gStream,
@@ -91,7 +94,7 @@ void OpenPortAudio (TMSGlobalPtr g, char *dev)
 	 return;
 	 
 error_recovery:
-	 LogWrite ("cannot open audio timer");
+	 LogWrite ("OpenPortAudio: cannot open audio dev \"%s\"", dev);
 	 CloseTimeInterrupts(g);
 }
 

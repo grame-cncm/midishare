@@ -40,7 +40,6 @@
 TPipe::TPipe ()
 {
 	fPipe = PipeErrCode;
-	fPath = 0;
 	fBuffSize = 0;
 	fOwner = false;
 }
@@ -52,7 +51,7 @@ int TPipe::Create (const char * name)
 		return false;
 	}
 	fOwner = true;
-	fPath = strdup (name);
+	SetName (name);
 	return true;
 }
 
@@ -76,7 +75,7 @@ int TPipe::Open (const char *name, int perm)
 		return false;
 	}
 	fBuffSize = kInternalPipeBuffSize;
-	fPath = strdup (name);
+	SetName (name);
 	return true;
 }
 
@@ -86,11 +85,7 @@ void TPipe::Close ()
 	if (fPipe != PipeErrCode)
 		close (fPipe);
 	fPipe = PipeErrCode;
-	if (fPath) {
-		if (fOwner) unlink (fPath);
-		free (fPath);
-		fPath = 0;
-	}
+	if (fOwner) unlink (fName);
 	fBuffSize = 0;
 	fOwner = false;
 }

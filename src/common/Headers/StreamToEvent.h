@@ -75,6 +75,7 @@ void	msStreamParseReset (msStreamBufferPtr f);
 	other error codes are mentionned above
 */
 MidiEvPtr msStreamGetEvent   (msStreamBufferPtr f, int * retcode);
+int 	  msStreamGetSize    (msStreamBufferPtr f);
 
 #ifdef __cplusplus
 }

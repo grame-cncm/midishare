@@ -28,17 +28,18 @@
 #include "msExtern.h"
 #include "msFunctions.h"
 
-#include "msSendToServer.h"
+#include "msLibContext.h"
 
 /*____________________________________________________________________________*/
-static MidiEvPtr ReadFromServer ()
+static MidiEvPtr ReadFromServer (TMSGlobalPtr g)
 {
+    msLibContextPtr c = (msLibContextPtr)g->context;
     MidiEvPtr e = 0;
     while (!e) {
-        long n = CCRead (gComm, gStream.buff, kCommBuffSize);
+        long n = CCRead (c->cchan, c->std.buff, kCommBuffSize);
         if (n > 0) {
             int ret;
-            e = msStreamGetEvent (&gStream.parse, &ret);
+            e = msStreamGetEvent (&c->std.parse, &ret);
             if (e) break;
             else if (ret != kStreamNoMoreData) {
                 fprintf (stderr, "ReadFromServer read error (%d)\n", ret);
@@ -50,37 +51,45 @@ static MidiEvPtr ReadFromServer ()
 }
 
 /*____________________________________________________________________________*/
-Boolean SendToServer (MidiEvPtr e, TMSGlobalPtr g)
+Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
 {
-    Ev2StreamPtr stream = &gStream.stream;
+    msLibContextPtr c = (msLibContextPtr)g->context;
+	Ev2StreamPtr stream = &c->std.stream;
     long n; short len;
 
     msStreamStart (stream);
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
-            n = CCWrite (gComm, gStream.buff, len);
+            n = CCWrite (c->cchan, c->std.buff, len);
             if (n != len) goto failed;
         } while (!msStreamContEvent (stream));
     }
     else {
         len = msStreamSize(stream);
-        n = CCWrite (gComm, gStream.buff, len);
+        n = CCWrite (c->cchan, c->std.buff, len);
         if (n != len) goto failed;
     }
     MidiFreeEv (e);
     return true;
 failed:
     MidiFreeEv (e);
-    fprintf (stderr, "PPWrite failed (%ld)\n", n);
+    fprintf (stderr, "CCWrite failed (%ld)\n", n);
     return false;
+}
+
+/*____________________________________________________________________________*/
+Boolean SendToServer (MidiEvPtr e, TMSGlobalPtr g)
+{
+    msLibContextPtr c = (msLibContextPtr)g->context;
+	return c->send(e, g);
 }
 
 /*____________________________________________________________________________*/
 MidiEvPtr SendToServerSync (MidiEvPtr e, TMSGlobalPtr g)
 {
     if (SendToServer (e, g)) {
-        return ReadFromServer ();
+        return ReadFromServer (g);
     }
     return 0;
 }

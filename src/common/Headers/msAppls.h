@@ -97,7 +97,7 @@ typedef struct TClientsPublic {
 #define nbSlots(c)      pub(c, nbSlots)
 #define folder(c)       pub(c, folder)
 
-#ifdef MSKernel
+#if defined(MSKernel)
 typedef struct FarPtr(TClients) 	TClientsPtr;
 
 /*------------------------------------------------------------------------*/
@@ -143,11 +143,13 @@ short GetIndClient (short index, short folderRef, TClientsPtr g);
 /* MidiShare client private application data structures                   */
 typedef struct TAppl{
 //	TApplPublic *   pub;
+	short 			refNum;
     fifo            rcv;         /* received events fifo         */
     fifo            dTasks;      /* defered tasks fifo           */
     MidiFilterPtr   filter;      /* server mapping of the filter */
     RcvAlarmPtr     rcvAlarm;    /* the client receive alarm     */
     ApplAlarmPtr    applAlarm;   /* the client application alarm */
+    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
 } TAppl;
 
 #define CheckGlobRefNum( g, r)   ((r>=0) && (r<MaxAppls) && g->appls[r])
