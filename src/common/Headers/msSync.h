@@ -20,27 +20,26 @@
 
 */
 
-#ifndef __msSynch__
-#define __msSynch__
+#ifndef __msSync__
+#define __msSync__
 
-#include "msExtern.h"
+#include "msTypes.h"
+
+
+#ifdef __Macintosh__
+# ifdef __POWERPC__
+
+# else
+
+void    INT_OFF(void) = {0x40E7, 0x007C, 0x0700};
+void    INT_ON(void)  = {0x46DF};
+
+# endif
+#endif /* __Macintosh__ */
 
 /*------------------------------------------------------------------------------*/
-/*                             functions                                        */
+/*                             synchronization functions                        */
 /*------------------------------------------------------------------------------*/
-
-/* linked lists management */
-inline MidiEvPtr PopMidiEv 		(MidiEvPtr * list)
-								{ return (MidiEvPtr)PopSync(list); }
-inline void 	 PushMidiEv 	(MidiEvPtr * list, MidiEvPtr ev)
-								{ PushSync(list, (msListPtr)ev); }
-inline void 	 PushMidiList 	(MidiEvPtr * list, MidiEvPtr head, MidiEvPtr tail)
-								{ PushSyncList(list, (msListPtr)head, (msListPtr)tail); }
-
-/* memory blocks management */
-inline MemBlockPtr PopMemBlock 	(MemBlockPtr * list)
-								{ return (MemBlockPtr)PopSync(list); }
-inline void 	   PushMemBlock (MemBlockPtr * list, MemBlockPtr block)
-								{ PushSync(list, (msListPtr)block); }
+Boolean CompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith);
 
 #endif
