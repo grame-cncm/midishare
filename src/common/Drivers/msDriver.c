@@ -108,7 +108,7 @@ MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClie
 /*____________________________________________________________________________*/
 MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 {
-	short ref = MidiShareDriverRef;
+	short ref = MaxAppls;
 	
 	if (index>0 && index<= g->nbDrivers) {
 		TApplPtr appl;
