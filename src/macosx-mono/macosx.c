@@ -212,19 +212,16 @@ void DriverSleep (TApplPtr appl)
 /*      Interrupt handlers                                                                                                              */
 /*__________________________________________________________________________*/
 
-//____________________________________________________________
-
 static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
                              unsigned long framesPerBuffer,
                              PaTimestamp outTime, void *userData )
 {
-  	int i;
-	
-	gFrames += gAudioSize;
-	for (i = 0 ; i < gFrames/AUDIO_MS_INT ; i++) {
+ 	gFrames += gAudioSize;
+ 	
+	while (gFrames>AUDIO_MS_INT) {
 		ClockHandler((TMSGlobalPtr)userData);
+		gFrames-=AUDIO_MS_INT;
 	}
-	gFrames %= AUDIO_MS_INT;
 	
  	return 0; 
 }
