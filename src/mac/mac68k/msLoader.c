@@ -21,12 +21,16 @@
 */
 
 #include "msLoader.h" 
+#include "msInit.h" 
 
-
-pascal void MidiShareSpecialInit(unsigned long defaultSpace);
-void 		msEntryPoint ();
+void 	 msEntryPoint ();
 
 EGlobal gLoader;
+
+//_________________________________________________________
+// Global variable for application mode
+TMSGlobal   	gMSMem = {0};
+TMSGlobalPtr	gMem = &gMSMem;
 
 /*________________________________________________________________________*/
 void InitLoader( EGlobalPtr g)
@@ -41,7 +45,7 @@ void LoadMidiShare()
 	gLoader.savedVector= *(char **)MidiShareVector;
 	c->globalPtr = gMem;
 	*(char **) MidiShareVector = c->code;
-  	MidiShareSpecialInit (40000);
+  	MSSpecialInit (40000, gMem);
 }
 	
 /*________________________________________________________________________*/
