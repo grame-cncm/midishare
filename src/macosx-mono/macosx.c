@@ -42,8 +42,7 @@
 
 #define SAMPLE_RATE 44100
 #define AUDIO_MS_INT (SAMPLE_RATE/100)
-
-#define AUDIO_DEVICE "Built-in audio controller"
+#define DriverMaxEntry	512
 
 typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
 
@@ -228,20 +227,22 @@ static int AudioClockHandler(void *inputBuffer, void *outputBuffer,
 /*_________________________________________________________________________*/
 void OpenTimeInterrupts(TMSGlobalPtr g)
 {
-	
 	PaError err;
 	const PaDeviceInfo* info;
         int bufferSize = LoadBufferSize(); // Load audio size from the .ini file
         int device;
+        char driverName[DriverMaxEntry];
+        
         err = Pa_Initialize();
   	if(err != paNoError) goto error_recovery;
   	
   	gAudioSize = bufferSize*10;
-  	
+        LoadDriverName(driverName,DriverMaxEntry);
+
   	// Look for the internal built-in sound device
   	for (device = 0; device<Pa_CountDevices(); device++) {
-  		info = Pa_GetDeviceInfo(device);
-  		if ((strcmp (AUDIO_DEVICE,info->name) == 0) && (info->maxOutputChannels)) break;
+                info = Pa_GetDeviceInfo(device);
+                if ((strcmp (driverName,info->name) == 0) && (info->maxOutputChannels)) break;
   	}
    
 	// Open Audio stream
@@ -268,7 +269,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	 
 error_recovery:
 
-	 Report("MidiShare", "cannot open audio timer","");
+	 Report("MidiShare", "cannot open audio timer", driverName);
 	 CloseTimeInterrupts(g);
 }
 
