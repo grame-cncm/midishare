@@ -34,6 +34,7 @@
 #include "msInit.h"
 #include "msLoader.h"
 #include "msAppFun.h"
+#include "msDrvFun.h"
 #include "msTasks.h"
 #include "msXmtRcv.h"
 #include "msEvents.h"
@@ -77,7 +78,7 @@ int mskCountAppls(unsigned long userptr)
 { 
 	TMidiCountApplsArgs args;
 	
-	args.appls = MSCountAppls(Clients(gMem));
+	args.count = MSCountAppls(Clients(gMem));
 	if (copy_to_user((TMidiCountApplsArgs *)userptr, &args, sizeof(TMidiCountApplsArgs))) return -EFAULT;
 	
 	return 0 ;
@@ -894,7 +895,7 @@ int mskGetDriverInfos (unsigned long userptr)
 {
 	TMidiGetDriverInfosArgs args;
 	if (copy_from_user(&args, (TMidiGetDriverInfosArgs *)userptr, sizeof(TMidiGetDriverInfosArgs))) return -EFAULT;
-	args.result = MSGetDriverInfos (refnum, &args.infos, Clients(gMem)) {
+	args.result = MSGetDriverInfos (args.refnum, &args.infos, Clients(gMem));
 	if (args.result) {
 		return (copy_to_user((TMidiGetDriverInfosArgs *)userptr, &args, sizeof(TMidiGetDriverInfosArgs)))
 			? -EFAULT : 0;
@@ -909,7 +910,7 @@ int mskAddSlot (unsigned long userptr)
 	TMidiAddSlotArgs args;
 	if (copy_from_user(&args, (TMidiAddSlotArgs *)userptr, sizeof(TMidiAddSlotArgs))) return -EFAULT;
 	args.slotRef = MSAddSlot(args.refnum, Clients(gMem));
-	return (copy_to_user((SlotRefnum *)userptr, &args.slotRef, sizeof(SlotRefnum)))
+	return (copy_to_user((SlotRefNum *)userptr, &args.slotRef, sizeof(SlotRefNum)))
 			? -EFAULT : 0;
 }
 
@@ -919,7 +920,7 @@ int mskGetIndSlot (unsigned long userptr)
 	TMidiGetIndSlotArgs args;
 	if (copy_from_user(&args, (TMidiGetIndSlotArgs *)userptr, sizeof(TMidiGetIndSlotArgs))) return -EFAULT;
 	args.slotRef = MSGetIndSlot(args.refnum, args.index, Clients(gMem));
-	return (copy_to_user((SlotRefnum *)userptr, &args.slotRef, sizeof(SlotRefnum)))
+	return (copy_to_user((SlotRefNum *)userptr, &args.slotRef, sizeof(SlotRefNum)))
 			? -EFAULT : 0;
 }
 
@@ -927,7 +928,7 @@ int mskGetIndSlot (unsigned long userptr)
 int mskRemoveSlot  (unsigned long userptr)
 {
 	SlotRefNum slot;
-	if (copy_from_user(&args, (SlotRefNum *)userptr, sizeof(SlotRefNum))) return -EFAULT;
+	if (copy_from_user(&slot, (SlotRefNum *)userptr, sizeof(SlotRefNum))) return -EFAULT;
 	MSRemoveSlot (slot, Clients(gMem));
 	return 0;
 }
