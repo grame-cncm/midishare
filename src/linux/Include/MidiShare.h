@@ -52,65 +52,66 @@
  * 	of the desirable type and are accessible in an event evType field.
  *******************************************************************************/
 			
-#define typeNote		0 		/* note with pitch, velocity and duration		*/	
+#define typeNote	0 		/* note with pitch, velocity and duration		*/	
 		
-#define typeKeyOn		1 		/* Note On with pitch, velocity 				*/
-#define typeKeyOff		2 		/* Note Off with pitch, velocity 				*/
+#define typeKeyOn	1 		/* Note On with pitch, velocity 				*/
+#define typeKeyOff	2 		/* Note Off with pitch, velocity 				*/
 #define typeKeyPress 	3 		/* Poly Key Pressure with pitch and pressure	*/
 #define typeCtrlChange	4 		/* Control Change with controller ID and value	*/
 #define typeProgChange	5 		/* Program Change with program ID number		*/
 #define typeChanPress	6 		/* Channel Pressure with pressure value			*/
 #define typePitchWheel	7 		/* Pitch Bend Change with LSB and MSB values	*/
 		
-#define typeSongPos		8 		/* Song Position Pointer with LSB and MSB values*/
-#define typeSongSel		9 		/* Song Select with song ID number				*/
-#define typeClock		10 		/* Timing Clock									*/
-#define typeStart		11 		/* Start										*/
+#define typeSongPos	8 		/* Song Position Pointer with LSB and MSB values*/
+#define typeSongSel	9 		/* Song Select with song ID number				*/
+#define typeClock	10 		/* Timing Clock									*/
+#define typeStart	11 		/* Start										*/
 #define typeContinue	12 		/* Continue										*/
-#define typeStop		13		/* Stop											*/
+#define typeStop	13		/* Stop											*/
 		
-#define typeTune		14 		/* Tune Request									*/
+#define typeTune	14 		/* Tune Request									*/
 #define typeActiveSens	15 		/* Active Sensing								*/
-#define typeReset		16		/* System Reset									*/
+#define typeReset	16		/* System Reset									*/
 	
-#define typeSysEx		17 		/* System Exclusive (only data bytes)			*/
-#define typeStream		18 		/* arbitrary midi bytes (data and status codes)	*/
+#define typeSysEx	17 		/* System Exclusive (only data bytes)			*/
+#define typeStream	18 		/* arbitrary midi bytes (data and status codes)	*/
 		
-#define typePrivate		19		/* 19..127 Application's private events			*/
-#define typeProcess		128		/* used by MidiShare for MidiCall and MidiTask	*/
+#define typePrivate	19		/* 19..127 Application's private events			*/
+#define typeProcess	128		/* used by MidiShare for MidiCall and MidiTask	*/
 #define typeDProcess	129		/* used by MidiShare for MidiDTask				*/
-#define typeQuarterFrame 130 	/* Midi time code quarter frame					*/
+#define typeQuarterFrame 130 		/* Midi time code quarter frame					*/
 
-#define typeCtrl14b		131	
+#define typeCtrl14b	131	
 #define typeNonRegParam	132
 #define typeRegParam	133
 
-#define typeSeqNum		134		/* MidiFile sequence number						*/
-#define typeText		135		/* MidiFile text event							*/
-#define typeTextual		typeText
+#define typeSeqNum	134		/* MidiFile sequence number						*/
+#define typeText	135		/* MidiFile text event							*/
+#define typeTextual	typeText
 #define typeCopyright	136		/* MidiFile copyright message					*/
-#define typeSeqName		137		/* MidiFile sequence or track name				*/
+#define typeSeqName	137		/* MidiFile sequence or track name				*/
 #define typeInstrName	138		/* MidiFile nom d'instrument					*/
-#define typeLyric		139		/* MidiFile lyrics								*/
-#define typeMarker		140		/* MidiFile marker								*/
+#define typeLyric	139		/* MidiFile lyrics								*/
+#define typeMarker	140		/* MidiFile marker								*/
 #define typeCuePoint	141		/* MidiFile cue point							*/
 #define typeChanPrefix	142		/* MidiFile Midi Channel Prefix					*/
 #define typeEndTrack	143		/* MidiFile end of track						*/
-#define typeTempo		144		/* MidiFile tempo change						*/
+#define typeTempo	144		/* MidiFile tempo change						*/
 #define typeSMPTEOffset	145		/* MidiFile smpte offset						*/
 
 #define typeTimeSign	146		/* MidiFile time signature						*/
-#define typeKeySign		147		/* MidiFile key signature						*/
+#define typeKeySign	147		/* MidiFile key signature						*/
 #define typeSpecific	148		/* MidiFile sepcific meta event					*/
+#define typePortPrefix	149		/* MidiFile Midi Port Prefix					*/
 
-#define typeRcvAlarm    149     /* RcvAlarm         							*/
-#define typeApplAlarm   150     /* ApplAlarm       								*/
+#define typeRcvAlarm    150     	/* RcvAlarm         							*/
+#define typeApplAlarm   151     	/* ApplAlarm       								*/
 
 
-#define typeReserved     151    /*151..254 reserved for future extensions 		*/
-#define typeLastReserved 254	/*151..254 reserved for future extensions		*/
+#define typeReserved     152    	/*152..254 reserved for future extensions 		*/
+#define typeLastReserved 254		/*152..254 reserved for future extensions		*/
 		
-#define typeDead		255		/* dead Task or DTask							*/
+#define typeDead	255		/* dead Task or DTask							*/
 		
 #define true 1
 #define false 0
