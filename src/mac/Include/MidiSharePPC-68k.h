@@ -33,6 +33,8 @@ typedef UniversalProcPtr UPPApplAlarmPtr;
 typedef UniversalProcPtr UPPApplyProcPtr;
 typedef UniversalProcPtr UPPWakeupProcPtr;
 typedef UniversalProcPtr UPPSleepProcPtr;
+typedef UniversalProcPtr UPPDriverPtr;
+
 
 enum {
 	
@@ -63,6 +65,10 @@ enum {
 		 
 	uppSleepProcPtrProcInfo = kThinkCStackBased
 		 | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(short)))
+,
+	uppDriverPtrProcInfo = kThinkCStackBased 
+		| STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(short)))
+
 };
 
 #define NewTaskPtr(userRoutine)		\
@@ -82,6 +88,9 @@ enum {
 
 #define NewSleepProcPtr(userRoutine)		\
 		(UPPSleepProcPtr) NewRoutineDescriptor((ProcPtr)(userRoutine), uppSleepProcPtrProcInfo, GetCurrentISA())
+
+#define NewDriverPtr(userRoutine)		\
+		(UPPDriverPtr) NewRoutineDescriptor((ProcPtr)(userRoutine), uppDriverPtrProcInfo, GetCurrentISA())
 
 /* use:
 
