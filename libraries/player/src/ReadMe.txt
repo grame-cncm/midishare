@@ -35,6 +35,10 @@ before recording new events.
 09/07/99 : Version  2.01 : Some improvements in the source code structure
 to improve cross-platform compatibility
 
+23/10/99 : Version  2.02 : Bug correction in kExternalSync synchronisation mode.
+Bug correction in chase management for KeyOn with velocity of 0.
+Bug correction in the TickTask class destructor.
+
 =================================================================================
 The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
 1996-1999, and is distributed as Open Source software under a slightly modified 
