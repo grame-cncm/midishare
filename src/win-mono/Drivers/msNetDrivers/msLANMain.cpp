@@ -26,12 +26,14 @@
 #include "MidiShare.h"
 #include "msNetDriver.h"
 #include "INetAlert.h"
+#include "NetTools.h"
 
 char * profileName 		= "msLANDriver.ini";
 char * NetSectionName	= "Net Params";
 char * UDPPort			= "UDP port";
 char * GroupTime		= "Grouping time";
 char * MaxLat			= "Maximum latency allowed";
+char * fullProfileName = 0;
 
 State gParams; 
 
@@ -69,6 +71,7 @@ static BOOL Start()
 	strPtr msg;
 	gParams.driverMode = TRUE;
 	gParams.autoQuit = TRUE;
+	fullProfileName = GetProfileFullName (profileName);
 	GetNetConfig (&gParams.net);
 	msg = SetUpDriver (&gParams);
 	if (msg) {

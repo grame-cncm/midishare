@@ -29,6 +29,7 @@
 static char * profileName 		 = "msMMSystem.ini";
 static char * outSlotSectionName = "Output Slots";
 static char * inSlotSectionName  = "Input Slots";
+static char * fullProfileName = 0;
 
 #define kMaxEntryLen	1024
 #define PortMaxEntry	10
@@ -36,6 +37,35 @@ static char * inSlotSectionName  = "Input Slots";
 
 static unsigned short CountCnx (char * cnxString);
 static short GetCnx (char * cnxString, short index);
+
+//________________________________________________________________________
+static BOOL GlobalInitExist (char *fileName)
+{
+	char dir[512], buff[600];
+	if (!GetWindowsDirectory(dir, 512))
+		return FALSE;
+	wsprintf (buff, "%s\\%s", dir, fileName);
+	return GetFileAttributes(buff) != -1;
+}
+
+//________________________________________________________________________
+static char * GetProfileFullName ()
+{
+	static char buff [1024];
+	char dir[512];
+	if (!GetCurrentDirectory(512, dir))
+		return profileName;
+
+	wsprintf (buff, "%s\\%s", dir, profileName);
+	// uses local init file when it exists
+	if (GetFileAttributes(buff) != -1)
+		return buff;
+	// uses local init file when global init file don't exist
+	if (!GlobalInitExist (profileName))
+		return buff;
+	// no local init file and global init is present: use it
+	return profileName;
+}
 
 //________________________________________________________________________
 static void SaveSlot (SlotPtr slot, char * section)
@@ -51,7 +81,7 @@ static void SaveSlot (SlotPtr slot, char * section)
 				lstrcat (buff, numStr);
 			}
 		}
-		WritePrivateProfileString (section, infos.name, buff, profileName);
+		WritePrivateProfileString (section, infos.name, buff, fullProfileName);
 	}
 }
 
@@ -75,7 +105,7 @@ static void LoadSlot (SlotPtr slot, char * section)
 	if (MidiGetSlotInfos (slot->refNum, &infos)) {
 		char buff[kMaxEntryLen];
 		unsigned long desiredSpace=0, n;
-		n= GetPrivateProfileString (section, infos.name, "", buff, kMaxEntryLen, profileName);
+		n= GetPrivateProfileString (section, infos.name, "", buff, kMaxEntryLen, fullProfileName);
 		if (n) {
 			unsigned short i, c = CountCnx (buff);
 			for (i=0; i<c; i++) {
@@ -93,6 +123,7 @@ static void LoadSlot (SlotPtr slot, char * section)
 //________________________________________________________________________
 void LoadState (SlotPtr in, SlotPtr out)
 {
+	fullProfileName = GetProfileFullName ();
 	while (out) {
 		LoadSlot (out, outSlotSectionName);
 		out = out->next;

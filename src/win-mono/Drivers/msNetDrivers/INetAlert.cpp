@@ -51,7 +51,7 @@ char *dateString ()
 static char * ErrFilePath ()
 {
 	static char buff[MAX_PATH ];
-	UINT len = GetWindowsDirectory (buff, MAX_PATH);
+	UINT len = GetCurrentDirectory (MAX_PATH, buff);
 	if (len && (len + strlen(ErrFile) < MAX_PATH)) {
 		lstrcat (buff, ErrFile);
 		return buff;

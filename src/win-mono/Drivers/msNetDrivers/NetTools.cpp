@@ -24,6 +24,34 @@
 
 #include "MidiShare.h"
 #include "NetTools.h"
+//________________________________________________________________________
+static BOOL GlobalInitExist (char *fileName)
+{
+	char dir[512], buff[600];
+	if (!GetWindowsDirectory(dir, 512))
+		return FALSE;
+	wsprintf (buff, "%s\\%s", dir, fileName);
+	return GetFileAttributes(buff) != -1;
+}
+
+//________________________________________________________________________
+char * GetProfileFullName (char * file)
+{
+	static char buff [1024];
+	char dir[512];
+	if (!GetCurrentDirectory(512, dir))
+		return file;
+
+	wsprintf (buff, "%s\\%s", dir, file);
+	// uses local init file when it exists
+	if (GetFileAttributes(buff) != -1)
+		return buff;
+	// uses local init file when global init file don't exist
+	if (!GlobalInitExist (file))
+		return buff;
+	// no local init file and global init is present: use it
+	return file;
+}
 
 /* ----------------------------------------------------------------------*/
 char * TCPOpen ()

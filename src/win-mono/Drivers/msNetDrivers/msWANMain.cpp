@@ -26,6 +26,7 @@
 #include "MidiShare.h"
 #include "msNetDriver.h"
 #include "INetAlert.h"
+#include "NetTools.h"
 
 char * profileName 		= "msWANDriver.ini";
 char * NetSectionName	= "Net Params";
@@ -34,6 +35,7 @@ char * GroupTime		= "Grouping time";
 char * MaxLat			= "Maximum latency allowed";
 char * MaxHost			= "Maximum input connections count";
 char * Targets			= "Hosts target";
+char * fullProfileName	= 0;
 
 State gParams; 
 
@@ -91,6 +93,7 @@ static void LaunchTargets()
 static BOOL Start()
 {
 	strPtr msg;
+	fullProfileName = GetProfileFullName (profileName);
 	gParams.driverMode = TRUE;
 	gParams.autoQuit = TRUE;
 	GetNetConfig (&gParams.net);

@@ -28,7 +28,7 @@
 #include "StatesManager.h"
 #include "TInetAddress.h"
 
-extern char * profileName;
+extern char * fullProfileName;
 char * HostsIn = "Hosts input connections";
 char * HostsOut = "Hosts output connections";
 #define kMaxEntryLen	1024
@@ -63,10 +63,10 @@ void StatesManager::SaveState (IPNum ip)
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
 		buff[0] = 0;
 		GetPorts (buff, infos++);
-		WritePrivateProfileString (HostsIn, addr.IP2String(), buff, profileName);
+		WritePrivateProfileString (HostsIn, addr.IP2String(), buff, fullProfileName);
 		buff[0] = 0;
 		GetPorts (buff, infos);
-		WritePrivateProfileString (HostsOut, addr.IP2String(), buff, profileName);
+		WritePrivateProfileString (HostsOut, addr.IP2String(), buff, fullProfileName);
 	}
 }
 
@@ -106,10 +106,10 @@ void StatesManager::LoadState (IPNum ip)
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
 		memset (infos, 0, GetHandleSize(h));
 		n = GetPrivateProfileString (HostsIn, addr.IP2String(), "", buff, 
-								kMaxEntryLen, profileName);	
+								kMaxEntryLen, fullProfileName);	
 		if (n) SetPorts (buff, infos);
 		m = GetPrivateProfileString (HostsOut, addr.IP2String(), "", buff, 
-								kMaxEntryLen, profileName);	
+								kMaxEntryLen, fullProfileName);	
 		if (m) SetPorts (buff, ++infos);
 		if ((n + m) && fState) {
 			fState->SetState (h);

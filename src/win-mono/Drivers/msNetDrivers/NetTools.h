@@ -35,6 +35,7 @@ extern "C" {
 char * TCPOpen ();
 MidiName InetDriverName (MidiName baseName, short port, short defaultPort);
 char * CheckName (MidiName name);
+char * GetProfileFullName (char * file);
 
 #ifdef __cplusplus
 }
