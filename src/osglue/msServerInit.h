@@ -24,13 +24,6 @@
 #ifndef __msServerInit__
 #define __msServerInit__
 
-
-#ifdef WIN32
-#	define kShMemId		"msPublicMem"
-#else
-#	define kShMemId		0x6d73506d  /* 'msPm' */
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif

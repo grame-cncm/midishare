@@ -24,6 +24,12 @@
 #ifndef __msCommInit__
 #define __msCommInit__
 
+#ifdef WIN32
+#	define kShMemId		"msPublicMem"
+#else
+#	define kShMemId		0x6d73506d  /* 'msPm' */
+#endif
+
 typedef void * CInitHandler;
 typedef void * PipesPair;
 
