@@ -71,10 +71,12 @@ typedef struct AppleEventRecord {
 
 /* Application name	*/
 #define ApplName 		"\pmsSpace"
+enum { kWinPosRsrc = 'wipo', kWinposID = 128 };
 
 /* global variables	*/
 WindowPtr	myWindow;
 Boolean		doneFlag;
+short		resFile;
 
 SysEnvRec	gMac;
 Boolean		hasWNE;
@@ -146,6 +148,56 @@ static void CloseAllWinds (WindowPtr wind)
 	if (wind) {
 		CloseAllWinds( (WindowPtr) (((WindowPeek)wind)->nextWindow) );
 		CloseWind(wind);
+	}
+}
+
+//_______________________________________________________________________________
+static OSErr WriteRsrc	(Handle rsrc, ResType type, short ID)
+{
+	OSErr err; Handle h;
+	short saved;
+	
+	saved = CurResFile();
+	UseResFile( resFile);
+	if ((err= ResError())!=noErr)	return err;
+	
+	h= GetResource (type, ID);
+	if (h) RemoveResource (h);
+	HLock (rsrc);
+	AddResource( rsrc, type, ID, "\p");
+	err= ResError();
+	if( err== noErr) {
+		UpdateResFile( resFile);
+		err= ResError();
+	}
+	HUnlock( rsrc);
+	UseResFile( saved);
+	return err;
+}
+
+//_______________________________________________________________________________
+static Boolean ReadPos (Point *p)
+{
+	Handle h = GetResource (kWinPosRsrc, kWinposID);
+	if (h) {
+		*p = *((Point *)*h);
+		ReleaseResource (h);
+		return true;
+	}
+	return false;
+}
+
+//_______________________________________________________________________________
+static void WritePos ()
+{
+	Handle h = NewHandle (sizeof(Point));
+	if (h) {
+		Point *p = (Point *)*h;
+  		SetPort(myWindow);
+		p->h = myWindow->portRect.left;
+		p->v = myWindow->portRect.top;
+		LocalToGlobal(p);
+		WriteRsrc (h, kWinPosRsrc, kWinposID);
 	}
 }
 
@@ -272,8 +324,23 @@ static Boolean DragClose (void)
 }
 
 /* -----------------------------------------------------------------------------*/
+static void AdjustLocation (WindowPtr win)
+{
+	Point pt;
+	
+	pt.h = win->portRect.left + 6;	// 6 is enough to grab
+	pt.v = win->portRect.top + 6;	// 6 is enough to grab
+	LocalToGlobal(&pt);
+	
+	if (!PtInRgn( pt, GetGrayRgn())) {
+		MoveWindow (win, qd.screenBits.bounds.left + 50,	qd.screenBits.bounds.top  + 50, false);
+	}
+}
+
+/* -----------------------------------------------------------------------------*/
 static void SetUpWindows()
 {
+	Point p;
 	SetRect (&dragRect, qd.screenBits.bounds.left, qd.screenBits.bounds.top, 
 						qd.screenBits.bounds.right,qd.screenBits.bounds.bottom);
 	InsetRect (&dragRect, 4, 4);
@@ -288,6 +355,9 @@ static void SetUpWindows()
 	TextFont (kFontIDGeneva);
 	TextSize (9);
 	PenPat (&qd.black);
+	if (ReadPos (&p))
+		MoveWindow (myWindow, p.h, p.v, false);
+	AdjustLocation (myWindow);
 	ShowWindow(myWindow);
 }
 		
@@ -427,6 +497,7 @@ static void Initialize()
 
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
 	foreGround = true;
+	resFile = CurResFile();
 	SetUpMenus();
 	SetUpWindows();
 }
@@ -483,6 +554,7 @@ void main()
 				break;
 		}
 	}
+	WritePos ();
 	CloseAllWinds( FrontWindow() );
 }
 
