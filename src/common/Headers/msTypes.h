@@ -34,7 +34,6 @@ typedef unsigned char uchar;
 #define FarPtr(type)  type FAR *
 
 #if defined(macintosh) && !defined(__MacOSX__)
-#	include <mactypes.h> 
 #	define MSFunctionType(type)   pascal type
 #else 
 #	define MSFunctionType(type)   type
@@ -60,6 +59,9 @@ typedef unsigned char uchar;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
 	enum { false = 0, true };
+
+#elif defined(macintosh)
+#	include <mactypes.h> 
 
 #else
 #	error "msTypes.h : target os undefined"

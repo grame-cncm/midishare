@@ -205,7 +205,7 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
-		setName(appname(g, ref), name);
+		setName(pub(g->appls[ref], name), name);
 		CallAlarm (ref, MIDIChgName, g);
 	}
 }

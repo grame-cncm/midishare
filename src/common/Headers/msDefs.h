@@ -35,10 +35,10 @@
 #	define  MSALARMAPI	CALLBACK
 #elif defined(macintosh) && !defined(__MacOSX__)
 #   define  ALARMTYPE pascal
+#	define  MSALARMAPI
 #else
 #   define  ALARMTYPE
 #	define  MSALARMAPI
-#	define  FAR
 #endif
 
 /*******************************************************************************

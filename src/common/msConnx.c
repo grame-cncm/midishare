@@ -35,7 +35,7 @@
 MSFunctionType(Boolean) MSIsConnected (short src, short dest, TClientsPtr g)
 {
 	if( CheckRefNum(g,src) && CheckRefNum(g,dest) ) {
-		TApplPtr appl = &pub(g, appls[src]);
+		TApplPtr appl = GetApplPtr(g, src);
 		TConnectionsPtr srcCnx = &pub(appl, cnx);		
 		return IsAcceptedBit(srcCnx->dst, dest);
 	}
