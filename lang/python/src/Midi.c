@@ -965,5 +965,5 @@ static PyMethodDef Midi_methods[] = {
 void
 initMidi(void)
 {
-	Py_InitModule("MidiShare", Midi_methods);
+	Py_InitModule("Midi", Midi_methods);
 }
