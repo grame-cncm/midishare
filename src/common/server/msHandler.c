@@ -29,7 +29,7 @@
 #include "msKernel.h"
 #include "msSorter.h"
 #include "msExtern.h"
-
+#include "msFCallHandler.h"
 
 /*===========================================================================
   Internal functions prototypes
@@ -172,8 +172,10 @@ static void ProcessCall( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 		fifoput (&appl->rcv, (cell *)ev);
 		if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 	}
-	else
+	else {
 		CallTaskCode (appl->context, ev);
+        MSFreeEv (ev, FreeList(Memory(g)));
+    }
 }
 
 /*__________________________________________________________________________________*/
@@ -234,7 +236,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 	do {
 		type= EvType(ev);
 		next= Link(ev);
-		if( type >= typeReserved) {			/* typeReserved : event is ignored  */
+		if( type >= typeMidiOpen) {			/* typeMidiOpen and typeReserved : event is ignored  */
 			MSFreeEv( ev, FreeList(mem));	/* free the event  					*/
 			ev= next;						/* next event						*/
 			continue;						/* and loop							*/
@@ -244,7 +246,23 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 		if( CheckRefNum(Clients(g), refNum)) {  /* check if refnum is valid     */
 			TApplPtr appl = Appls(g)[refNum];   /* get the corresponding client */
 
-			if( (type >= typeQuarterFrame) || (type < typePrivate)) {
+			if( type >= typeMidiConnect) {
+                switch (type) {
+                    case typeMidiConnect:
+                        FCMidiConnect (ev);
+                        break;
+                    case typeMidiSetName:
+                        FCMidiSetName (ev);
+                        break;
+                    case typeMidiSetInfo:
+                        FCMidiSetInfo (ev);
+                        break;
+                    case typeMidiSetFilter:
+                        FCMidiSetFilter (ev);
+                        break;
+              }
+            }
+			else if( (type >= typeQuarterFrame) || (type < typePrivate)) {
 				if( RefNum(ev) & 0x80)	{	        /* refnum is marked			*/
 					RefNum(ev) = (Byte)refNum;
 					Accept( g, appl, ev);		    /* event is for appl itself */
@@ -256,9 +274,6 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
 				ProcessCall( g, appl, ev);		    /* execute the task				*/
-//#ifndef __linux__
-//				MSFreeEv( ev, FreeList(mem));
-//#endif
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
 				AcceptTask(g, appl, ev);    		/* store in the appl dtasks fifo*/
