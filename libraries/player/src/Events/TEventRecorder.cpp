@@ -6,6 +6,9 @@
 // Grame : Computer Music Research Laboratory
 // Web : http://www.grame.fr/Research
 // E-mail : MidiShare@rd.grame.fr
+//
+// modifications history:
+//   [11-12-99] SL - Use of global filter access functions 
 // ===========================================================================
 
 
@@ -42,16 +45,16 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 		}
 		
 		// Configuration of the record filter 
-				
-		RejectBit(fRecFilter->evType,typeActiveSens);
-		RejectBit(fRecFilter->evType,typeQuarterFrame);
-		RejectBit(fRecFilter->evType,typeTempo);
-		RejectBit(fRecFilter->evType,typeTimeSign);
-		RejectBit(fRecFilter->evType,typeClock); 
-		RejectBit(fRecFilter->evType,typeStart); 
-		RejectBit(fRecFilter->evType,typeStop); 
-		RejectBit(fRecFilter->evType,typeContinue); 
-		RejectBit(fRecFilter->evType,typeSongPos); 
+		
+		MidiAcceptType(fRecFilter,typeActiveSens,false);
+		MidiAcceptType(fRecFilter,typeQuarterFrame,false);
+		MidiAcceptType(fRecFilter,typeTempo,false);
+		MidiAcceptType(fRecFilter,typeTimeSign,false);
+		MidiAcceptType(fRecFilter,typeClock,false);
+		MidiAcceptType(fRecFilter,typeStart,false);
+		MidiAcceptType(fRecFilter,typeStop,false);
+		MidiAcceptType(fRecFilter,typeContinue,false);
+		MidiAcceptType(fRecFilter,typeSongPos,false);
 	}
 	
 	fSynchroniser = synchro;
@@ -72,19 +75,7 @@ TEventRecorder::~TEventRecorder()
 
 /*--------------------------------------------------------------------------*/
 
-void TEventRecorder::SetRecordFilter(FilterPtr filter) 
-{ 
-	short i;
-	
-	for (i =  0; i<32; i++ ) {
-		fRecFilter->evType[i] = filter->evType[i];
-		fRecFilter->port[i] = filter->port[i];
-	}
-
-	for (i =  0; i<2; i++ ) {
-		fRecFilter->channel[i] = filter->channel[i];
-	}
-}
+void TEventRecorder::SetRecordFilter(MidiFilterPtr filter) { *fRecFilter = *filter; }
 
 /*----------------------------------------------------------------------------*/
 
