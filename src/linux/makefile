@@ -6,7 +6,6 @@ INIT = $(RC)/init.d
 
 midishare: common
 	make -C kernel
-	make -f appls
 
 midishare-alsa: common
 	make -C kernel -f make-alsa
