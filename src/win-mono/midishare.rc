@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "MidiShare Kernel - Mono Application Release\0"
             VALUE "FileVersion", "1, 8, 4, 1\0"
             VALUE "InternalName", "Mono Client MidiShare\0"
-            VALUE "LegalCopyright", "Copyright © 2001\0"
+            VALUE "LegalCopyright", "Copyright Grame, Sony CSL Paris © 2001\0"
             VALUE "OriginalFilename", "mshare32.dll\0"
             VALUE "ProductName", "MidiShare\0"
             VALUE "ProductVersion", "1, 8, 4, 1\0"
