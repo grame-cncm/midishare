@@ -45,8 +45,10 @@
 /* MacOSX specific resources          											*/
 
 #define SAMPLE_RATE 44100
-#define BUFFER_SIZE 45
-#define AUDIO_MS 	45
+#define BUFFER_SIZE 64
+
+#define BUFFER_SIZE_INT (BUFFER_SIZE*10)
+#define AUDIO_MS_INT (SAMPLE_RATE/100)
 
 #define AUDIO_DEVICE "Built-in audio controller"
 
@@ -63,6 +65,7 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
         return true;
 }
 
+static long gFrames = 0;
 
 /*------------------------------------------------------------------------------*/
 /*                      Drivers loading                     					*/
@@ -129,7 +132,7 @@ void SpecialWakeUp (TMSGlobalPtr g)
        char str[256];
        for (i=0; i<n; i++) {
            if (GetDriver (i, str, 256))  LoadDriver (str);
-        }
+       }
 }
 
 
@@ -207,16 +210,13 @@ static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
                              PaTimestamp outTime, void *userData )
 {
   	int i;
-  	//printf ("AudioClockHandler \n");
-	//for (i = 0 ; i<BUFFER_SIZE/AUDIO_MS; i++) ClockHandler((TMSGlobalPtr)userData);
 	
-	if(gClockCount++ == 49) {
-		gClockCount = 0;
-		ClockHandler((TMSGlobalPtr)userData);
-		ClockHandler((TMSGlobalPtr)userData);
-	}else {
+	gFrames += BUFFER_SIZE_INT;
+	for (i = 0 ; i < gFrames/AUDIO_MS_INT ; i++) {
 		ClockHandler((TMSGlobalPtr)userData);
 	}
+	gFrames %= AUDIO_MS_INT;
+	
  	return 0; 
 }
 
@@ -235,7 +235,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
   		info = Pa_GetDeviceInfo(device);
   		if (strcmp (AUDIO_DEVICE,info->name) == 0) break;
   	}
-
+  
 	// Open Audio stream
     err = Pa_OpenStream(
 				&gStream,
@@ -283,7 +283,7 @@ Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
     		return true;
 	}
 	return false; 
-//	return CompareAndSwap (taskPtr, content, 0);
+	// return CompareAndSwap (taskPtr, content, 0);
 }
 
 
