@@ -41,9 +41,22 @@ static MidiEvPtr rcvSysExBeg    ( StreamFifoPtr f, char c);
 static MidiEvPtr rcvSysExNext   ( StreamFifoPtr f, char c);
 static MidiEvPtr rcvSysExEnd    ( StreamFifoPtr f, char c);
 
+// MIDI Time Piece support
+static MidiEvPtr rcvMTPchange   ( StreamFifoPtr f, char c);
+static MidiEvPtr rcvMTPport     ( StreamFifoPtr f, char c);
+
+
 /*===========================================================================
 	external initialization functions
   =========================================================================== */
+void MidiParseError(StreamFifoPtr f)
+{
+	if (f->ptrCur) MidiFreeEv (f->ptrCur);
+	f->ptrCur = 0;
+	f->parse = rcvStatus;
+}
+
+//_____________________________________________________________________________
 void MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl)
 {
 	f->parse     = rcvStatus;
@@ -90,8 +103,9 @@ void MidiParseInitMthTbl (ParseMethodTbl tbl)
 
 	*tbl++= rcvSysExBeg;       // 17 - typeSysEx
 	*tbl++= rcvQFrame;         // 18 - typeQuarterFrame (en fait 130)
+	
+	*tbl++= rcvMTPchange;      // 19 - MTP port change
 }
-
 
 /*__________________________________________________________________________________*/
 void MidiParseInitTypeTbl (Status2TypeTbl table)
@@ -230,6 +244,7 @@ static MidiEvPtr rcvChan1 (StreamFifoPtr f, char c)
 static MidiEvPtr rcvDataU (StreamFifoPtr f, char c)
 {
 	if( c < 0) return rcvStatus( f, c);
+	f->date = MidiGetTime();
 	f->infos.data[0]= c;
 	return rcvStore( f);
 }
@@ -266,6 +281,7 @@ static MidiEvPtr rcvCommon0 (StreamFifoPtr f, char c)
 	if (e) {
 		Date(e) = MidiGetTime();
 		Chan(e) = 0;
+		Port(e) = f->common.field.port;
 		return e;
 	}
 	return 0;
@@ -302,6 +318,8 @@ static MidiEvPtr rcvSysExBeg (StreamFifoPtr f, char c)
 	e= MidiNewEv (typeSysEx);
 	if( e) {
 		Date(e) = MidiGetTime();
+		Chan(e) = 0;
+		Port(e) = f->common.field.port;
 		f->ptrCur= e;
 		f->parse= rcvSysExNext;
 	}
@@ -329,6 +347,7 @@ static MidiEvPtr rcvSysExNext (StreamFifoPtr f, char c)
 static MidiEvPtr rcvSysExEnd (StreamFifoPtr f, char c)
 {
 	MidiEvPtr e;
+		
 	if( (unsigned char)c >= (unsigned char)MClock)
 		return rcvStatus (f, c);
 	if( c!= (char)EndSysX)
@@ -340,3 +359,26 @@ static MidiEvPtr rcvSysExEnd (StreamFifoPtr f, char c)
 	f->parse= rcvStatus;
 	return e;
 }
+
+//_____________________________________________________________________________
+// MIDITimePiece port change
+static MidiEvPtr rcvMTPchange (StreamFifoPtr f, char c)
+{
+	f->parse= rcvMTPport;
+	return 0;
+}
+
+//_____________________________________________________________________________
+// MIDITimePiece port number
+static MidiEvPtr rcvMTPport (StreamFifoPtr f, char c)
+{
+	if( c < 0) 
+		return rcvStatus( f, c);
+	else if( c > 16)
+		c = 0;
+	else
+		c--;
+	f->common.field.port= c;
+	return 0;
+}
+
