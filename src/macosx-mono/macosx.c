@@ -96,8 +96,8 @@ void *  LoadLibrary(const char *filename, const char *symbol)
         }else {
             Report("MidiShare", "can't start driver", filename);
             if (handle) dlclose(handle);
-            return 0;
 	}
+	return 0;
 }
 
 /*------------------------------------------------------------------------------*/
@@ -241,7 +241,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
   	// Look for the internal built-in sound device
   	for (device = 0; device<Pa_CountDevices(); device++) {
   		info = Pa_GetDeviceInfo(device);
-  		if (strcmp (AUDIO_DEVICE,info->name) == 0) break;
+  		if ((strcmp (AUDIO_DEVICE,info->name) == 0) && (info->maxOutputChannels)) break;
   	}
    
 	// Open Audio stream
