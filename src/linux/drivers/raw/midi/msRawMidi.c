@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <signal.h> 
 #include <pthread.h> 
+#include <unistd.h> 
 
 #include "MidiShare.h"
 #include "EventToMidiStream.h"
@@ -33,6 +34,7 @@ typedef struct {
 } DrvMem, * DrvMemPtr;
 
 DrvMem gMem = { 0 };
+Boolean gDaemonMode = false;
 static inline DrvMemPtr GetData()	{ return &gMem; }
 
 //_______________________________________________________________________
@@ -63,9 +65,9 @@ static void FatalError (const char *msg)
 //_______________________________________________________________________
 static void usage (const char *name) 
 {
-	char str[256];
-	sprintf (str, "usage : %s <device name>\n", name);
-	FatalError (str);
+	fprintf (stderr, "usage : %s [options] <device name>\n", name);
+	fprintf (stderr, "        options: -d run in daemon mode\n", name);
+	exit (1);
 }
 
 
@@ -82,9 +84,9 @@ static int openDev (const char *name)
 {
 	int dev = open (name, O_RDWR);
 	if (dev == -1) {
-		char str[256];
-		sprintf (str, "can't open device \"%s\" (errno=%d)", name, errno);
-		FatalError (str);
+		fprintf (stderr, "can't open device \"%s\": ", name);
+		perror("");
+		exit (1);
 	}
 	return dev;
 }
@@ -162,6 +164,18 @@ static void SetupMidi (char *name, DrvMemPtr mem)
 }
 
 //_______________________________________________________________________
+static int getOpts (int argc, char *argv[])
+{
+	int dev = (argc == 3) ? 2 : 1;
+	if (argv[dev][0] == '-') usage (argv[0]);
+	if (argc == 3) {
+		if (strcmp (argv[1], "-d")) usage (argv[0]);
+		gDaemonMode = true;
+	}
+	return dev;
+}
+
+//_______________________________________________________________________
 static int checkQuit ()
 {
 	char c = getc(stdin);
@@ -212,25 +226,38 @@ static void ThreadCreate (DrvMemPtr mem)
 static void run (DrvMemPtr mem, char * dev)
 {
 	void *threadRet;
-	printf ("Midi driver anchored on \"%s\" is running\n", dev);
-	printf ("type 'q' to quit\n");
-	while (!mem->done)
-		mem->done = checkQuit();
-	pthread_kill (mem->inThread, SIGDRVQUIT);
-	pthread_join (mem->inThread, &threadRet);
+	if (!gDaemonMode) {
+		printf ("Midi driver anchored on \"%s\" is running\n", dev);
+		printf ("type 'q' to quit\n");
+		while (!mem->done)
+			mem->done = checkQuit();
+		pthread_kill (mem->inThread, SIGDRVQUIT);
+		pthread_join (mem->inThread, &threadRet);
+	}
+	else {
+		if (daemon (0, 0) == -1) {
+			perror ("can't run in daemon mode");
+		}
+		else while (!mem->done) {
+			sleep (10);
+		}
+	}
 }
 
 //_______________________________________________________________________
 int main (int argc, char *argv[])
 {
+	short i;
 	DrvMemPtr mem = GetData();
 	
-	if (argc != 2) usage (argv[0]);
+	if ((argc > 3) || (argc < 2)) usage (argv[0]);
+	i = getOpts (argc, argv);
 	CheckMidiShare();
-	mem->devId = openDev (argv[1]);
-	SetupMidi (argv[1], mem);
+	mem->devId = openDev (argv[i]);
+	SetupMidi (argv[i], mem);
 	ThreadCreate (mem);
-	run (mem, argv[1]);
+	run (mem, argv[i]);
 	closeDriver (mem);
+MidiSendIm (0, MidiNewEv(typeEndTrack));
 	return 0;        
 }
