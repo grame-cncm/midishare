@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] removing synchronization and memory allocation functions
 
 */
 
@@ -32,47 +35,10 @@
 */
 
 /*------------------------------------------------------------------------------*/
-/*                               memory management                              */
-/*------------------------------------------------------------------------------*/
-/* defines a memory block maximum size: when a client application requests 
-   for a larger block, the allocated memory is splitted in smaller blocks */
-#define kMaxEventsPerBlock	4096
-
-typedef enum {	
-        kStdMemory,        /* no constraints on the allocated memory  */
-                           /* it should only be accessed and owned by the calling process */
-
-        kSharedMemory,     /* the allocated memory should be shared by the kernel and     */
-                           /* all the client applications.                                */
-
-        kernelSharedMemory /* the allocated memory should be shared by the kernel and     */
-                           /* the calling process                                         */
-} MemoryType;
-
-FarPtr(void) AllocateMemory (MemoryType type, long size);
-void         DisposeMemory  (FarPtr(void) memPtr);
-
-
-/*------------------------------------------------------------------------------*/
 /*                                synchronization                               */
 /*------------------------------------------------------------------------------*/
-typedef FarPtr(void) * msListPtr;
-
-/* functions which should provide secure ways to modify linked lists */
-/* should be preferably implemented using lock free shared objects   */
-void FAR *  PopSync  (msListPtr adr);
-void 	    PushSync (msListPtr adr, msListPtr link);
-void 	    PushSyncList (msListPtr adr, msListPtr head, msListPtr tail);
-
-Boolean     CompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith);
-
 /* forgetting a realtime task */
 Boolean     ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
-
-/* fifos management */
-MidiEvPtr ClearFifo  (TFifoPtr fifo);
-MidiEvPtr PopFifoEv  (TFifoPtr fifo);
-void      PushFifoEv (TFifoPtr fifo, MidiEvPtr ev);
 
 /* mutex definitions */
 enum { kMemoryMutex = 1, kWakeUpMutex };
