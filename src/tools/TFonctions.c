@@ -29,9 +29,9 @@
  * 		    English version 11/11/99 SL
  */
  
-#ifdef __Windows__
+#ifdef WIN32
 #	include <stdio.h>
-#	include <MidiShare.h>
+#	include "MidiShare.h"
 #	define CNAME
 #	define CTASKS
 #	define nil 0
@@ -129,6 +129,13 @@ void MSALARMAPI ApplAlarm( short unused1, long unused2)
 }
 
 /*____________________________________________________________________*/
+static void wait( unsigned long v)
+{
+	unsigned long time = MidiGetTime();
+	while( (MidiGetTime() - time) < v);
+}
+
+/*____________________________________________________________________*/
 short Environment()
 {
 	int version, count; short n;
@@ -190,8 +197,9 @@ void OpenClose()
 	print ("\nMidiOpen and MidiClose :\n");flush;
 	for( i=0; i<256; i++)
 	{
-		if( (r[i]= MidiOpen( TestName)) < 0)
+		if( (r[i]= MidiOpen( TestName)) < 0) {
 			break;
+		}
 	}
 	print ("    max number of opened applications : %d\n", i+2);
 	n= MidiCountAppls();
@@ -290,10 +298,12 @@ void ApplConfiguration()
 	print ("    MidiSetInfo : ");flush;
 	MidiSetInfo( refNum, (void* )s);
 	print ("%s\n", OK);
+	wait(1);
 	if( (info= MidiGetInfo( refNum))!= s)
 		print ("Warning : incorrect info zone  : contains %lx instead of %lx\n"
 						, info, s);
 	MidiSetInfo( refNum, (void* )nil);
+	wait(1);
 	if( info= MidiGetInfo( refNum))
 		print ("Warning : incorrect info zone : contains %lx instead of nil\n"
 						, info);
@@ -367,6 +377,7 @@ void Connections( short isFreeMem)
 	MidiConnect( 0, refNum, true);
 	MidiConnect( refNum, 0, true);
 	print ("%s\n", OK);
+	wait(1);
 	
 	print ("    MidiIsConnected : ");flush;
 	in= MidiIsConnected( 0, refNum);
@@ -379,6 +390,7 @@ void Connections( short isFreeMem)
 
 	MidiConnect( 0, refNum, false);
 	MidiConnect( refNum, 0, false);
+	wait(1);
 	in= MidiIsConnected( 0, refNum);
 	out= MidiIsConnected( refNum, 0);
 	if( in || out)
@@ -620,6 +632,7 @@ void Sending()
 	unsigned long free, time, n, count;
 
 	print ("\nSending and receiving events :\n");
+	MidiFlushEvs(refNum);
 	free= MidiFreeSpace();
 	if( (r= MidiOpen( NewName)) < 0)
 	{
@@ -629,6 +642,8 @@ void Sending()
 	}
 //	MidiConnect( refNum, 0, true);
 	MidiConnect( refNum, r, true);
+	wait(1);
+	MidiFlushEvs(r);
 	if( e= MidiNewEv( typeKeyOn))
 	{
 
