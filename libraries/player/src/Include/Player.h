@@ -23,11 +23,18 @@
 /*
 /*------------------------------------------------------------------*/
 
-#if GENERATINGCFM
-	#include <midisharePPC.h>
-#else
-	#include <midishare.h>
+#ifdef __Macintosh__
+	#if GENERATINGCFM
+		#include <midisharePPC.h>
+	#else
+		#include <midishare.h>
+	#endif
 #endif
+
+#ifdef __Linux__
+	#include "MidiShare.h"
+#endif
+
 
 /*--------------------------------------------------------------------------*/
 /* Player state  */
