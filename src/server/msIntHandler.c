@@ -35,13 +35,11 @@
 
 #include "msExtern.h"
 #include "msKernel.h"
-#include "msKernelPrefs.h"
+#include "msServerContext.h"
 #include "msMem.h"
 #include "msLog.h"
 #include "msTasks.h"
 #include "msPortAudio.h"
-
-extern msKernelPrefs * gPrefs;
 
 #if defined(linux)
 #include "msThreads.h"
@@ -227,10 +225,12 @@ void CloseMMTimeInterrupts(TMSGlobalPtr g)
 /*__________________________________________________________________________*/
 void OpenTimeInterrupts(TMSGlobalPtr g)
 {
+	msServerContextPtr c = (msServerContextPtr)g->context;
+	msKernelPrefs * prefs = c->prefs;
 	THorlogePtr clock = &g->clock;
 	
-    clock->timeMode = gPrefs->timeMode;
-    clock->timeRes = gPrefs->timeRes;
+    clock->timeMode = prefs->timeMode;
+    clock->timeRes = prefs->timeRes;
 	switch (clock->timeMode) {
 #ifdef linux
 		case kTimeModeRTC:
@@ -244,7 +244,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 #endif
 #ifndef WIN32
 		case kTimeModeAudio:
-            OpenPortAudio (g, gPrefs ? gPrefs->audioDev : 0);
+            OpenPortAudio (g, prefs ? prefs->audioDev : 0);
 			break;
 #else
 		case kTimeModeMMSystem:

@@ -449,6 +449,7 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 	appl->rcvAlarm = 0;
 	appl->applAlarm = 0;
 	appl->driver = 0;
+	appl->netFlag = 0;
 	appl->context = CreateApplContext();
 
 	/* set next public information */

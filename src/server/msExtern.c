@@ -33,10 +33,8 @@
 #include "msMem.h"
 #include "msTasks.h"
 
-//#include "dlfcn.h"
-//#include "msPrefs.h"
-//#include "portaudio.h"
-
+#include "msServerContext.h"
+#include "msRTListenProc.h"
 
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
 MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
@@ -58,12 +56,16 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp (TMSGlobalPtr g) 
 {
+	msServerContextPtr c = (msServerContextPtr)g->context;
+	c->RTThread = msThreadCreate (RTListenProc, g, kServerRTPriority-1);
 }
 
 
 /*------------------------------------------------------------------------------*/
 void SpecialSleep  (TMSGlobalPtr g)
 {
+	msServerContextPtr c = (msServerContextPtr)g->context;
+	if (c->RTThread) msThreadDelete (c->RTThread);
 }
 
 /*------------------------------------------------------------------------------*/

@@ -59,6 +59,7 @@ extern "C" {
 TApplContextPtr CreateApplContext ();
 void			DisposeApplContext (TApplContextPtr context);
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
+void CallNetSend  (TMSGlobalPtr g, TApplPtr appl);
 void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
 void CallTaskCode  (TApplContextPtr context, MidiEvPtr ev);
 void CallDTaskCode (TApplContextPtr context, MidiEvPtr ev);

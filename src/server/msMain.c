@@ -23,20 +23,36 @@
 
 #include "msFunctions.h"
 #include "msKernel.h"
-#include "msKernelPrefs.h"
+//#include "msKernelPrefs.h"
 #include "msInit.h"
 #include "msServerInit.h"
+#include "msServerContext.h"
 #include "msLog.h"
 #include "msCommHandler.h"
 
-extern TMSGlobalPtr gMem;
-msKernelPrefs * gPrefs = 0;
+//extern TMSGlobalPtr gMem;
+//msKernelPrefs * gPrefs = 0;
+static msServerContext gContext;
 
 /*____________________________________________________________________________*/
 static void MainClientServerProc (CommunicationChan cc)
 {
     if (!gMem->running) MidiShareWakeup (gMem);
 	NewClientChannel (cc);
+}
+
+/*____________________________________________________________________________*/
+static void contextInit (msServerContextPtr c)
+{
+	c->sharedmem = 0;
+	c->RTThread = 0;
+	c->meetingPointThread = 0;
+	c->meetingPoint = 0;
+	c->prefs = 0;
+	msStreamParseInitMthTbl (c->parseMthTable);
+	msStreamInitMthTbl (c->streamMthTable);
+	msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.buff, kCommBuffSize);
+	msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.buff, kCommBuffSize);
 }
 
 /*____________________________________________________________________________*/
@@ -56,22 +72,23 @@ static msKernelPrefs * init (int argc, char *argv[])
 /*____________________________________________________________________________*/
 int main (int argc, char *argv[])
 {
-	TMSGlobalPublic * pubMem;
-	
-	gPrefs = init (argc, argv);
-	LogPrefs (gPrefs);
+	contextInit (&gContext);
+	gContext.prefs = init (argc, argv);
+	LogPrefs (gContext.prefs);
 	InitSignal (); 
-	pubMem = InitShMem (sizeof(TMSGlobalPublic));
-	if (pubMem) {
-		int version;
-
+	gContext.sharedmem = InitShMem (sizeof(TMSGlobalPublic));
+	if (gContext.sharedmem) {
 		/* never call any MidiShare function before MidiShareSpecialInit */
-		MidiShareSpecialInit (40000, pubMem);
+		MidiShareSpecialInit (40000, gContext.sharedmem);
+
+		/* don't publish the server context before MidiShareSpecialInit: */
+		/* the initialization proc set this context to nil */
+        gMem->context = &gContext;
 
 		/* the main communication server proc needs an initialized kernel */
         InitCommHandlers ();
-        if (InitMeetingPoint (MainClientServerProc)) {
-			version = MidiGetVersion();
+        if (InitMeetingPoint (gMem, MainClientServerProc)) {
+			int version = MidiGetVersion();
 			LogWrite ("MidiShare Server v.%d.%02d is running", version/100, version%100);
 			printf ("press return to quit\n");
 			getc(stdin);

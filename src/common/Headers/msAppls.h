@@ -111,6 +111,7 @@ typedef struct TAppl{
     ApplAlarmPtr    applAlarm;   /* the client application alarm (used only internaly) */
     TApplContextPtr context;     /* system dependent context     */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
+    uchar           netFlag;     /* <> 0 to denote remote clients*/
     TDriverPtr		driver;      /* driver specific information  */
 } TAppl;
 

@@ -58,6 +58,7 @@ MSFunctionType(void) MSSpecialInit( unsigned long defaultSpace, TMSGlobalPtr g, 
 #ifndef __mono__
     OpenMemory (Memory(g));
 #endif
+    g->context = 0;
     g->running = false;
 }
 

@@ -166,15 +166,23 @@ static void DriverAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 }
 
 /*__________________________________________________________________________________*/
-static void ProcessCall( TApplPtr appl, MidiEvPtr ev)
+static void ProcessCall( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	CallTaskCode (appl->context, ev);
+	if (appl->netFlag) {
+		fifoput (&appl->rcv, (cell *)ev);
+		if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
+	}
+	else
+		CallTaskCode (appl->context, ev);
 }
 
 /*__________________________________________________________________________________*/
 static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
 {
-	fifoput (&appl->dTasks, (cell *)ev);
+	if (appl->netFlag)
+		fifoput (&appl->rcv, (cell *)ev);
+	else
+		fifoput (&appl->dTasks, (cell *)ev);
 }
 
 /*__________________________________________________________________________________*/
@@ -245,10 +253,10 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 				}
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
-				ProcessCall( appl, ev);		    /* execute the task				*/
-#ifndef __linux__
-				MSFreeEv( ev, FreeList(mem));
-#endif
+				ProcessCall( g, appl, ev);		    /* execute the task				*/
+//#ifndef __linux__
+//				MSFreeEv( ev, FreeList(mem));
+//#endif
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
 				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
@@ -281,6 +289,8 @@ static void RcvAlarmLoop( TMSGlobalPtr g)
 		if( alarm) {                        /* when the alarm exists     */
 			CallRcvAlarm (appl->context, alarm, pub(appl, refNum));
 		}
+		else if (appl->netFlag) {	/* remote applications can't set an alarm in kernel space */
+			CallNetSend (g, appl);
+		}
 	}
-
 }

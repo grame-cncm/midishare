@@ -294,6 +294,11 @@ long CCRTRead (CommunicationChan cc, void *buff, long len)
 	return PP(cc->rtcc)->Read (buff, len);
 }
 
+PipeHandler CCRTReadHandler (CommunicationChan cc)
+{
+	return PP(cc->rtcc)->GetReadPipe()->GetHandler();
+}
+
 int		CCInc 		(CommunicationChan cc)		{ return ++cc->refcount; }
 int		CCDec 		(CommunicationChan cc)		{ return --cc->refcount; }
 int		CCRefCount 	(CommunicationChan cc)		{ return cc->refcount; }

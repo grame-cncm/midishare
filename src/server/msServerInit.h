@@ -24,7 +24,7 @@
 #ifndef __msServerInit__
 #define __msServerInit__
 
-#include "msCommChans.h"
+#include "msServerContext.h"
 
 typedef void (* NewClientProcPtr) (CommunicationChan cc);
 
@@ -35,7 +35,7 @@ extern "C" {
 	/* global initialization */
 	void 	InitSignal		();
 	void * 	InitShMem 		(int shmemSize);
-	int 	InitMeetingPoint(NewClientProcPtr proc);
+	int 	InitMeetingPoint(TMSGlobalPtr g, NewClientProcPtr proc);
 	void 	msServerClose	();
 
 #ifdef __cplusplus

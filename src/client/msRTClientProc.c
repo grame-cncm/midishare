@@ -86,7 +86,9 @@ failed:
 Boolean RTSend (MidiEvPtr e, TMSGlobalPtr g)
 {
 	msLibContextPtr c = (msLibContextPtr)g->context;
-	fifoput (&c->RTSnd, (cell *)e);
+	if (e) {
+		fifoput (&c->RTSnd, (cell *)e);
+	}
 	return true;
 }
 
@@ -116,12 +118,16 @@ static void DispatchEvent (TMSGlobalPtr g, MidiEvPtr e)
 	switch (type) {
 		case typeProcess:
 			ProcessCall (g, e);
+			MidiFreeEv (e);
 			break;
 		case typeDProcess:
 			fifoput (&appl->dTasks, (cell *)e);
 			break;
 		case typeApplAlarm:
-			if (appl->applAlarm) appl->applAlarm (appl->refNum, e->info.longField);
+			if (appl->applAlarm) {
+				appl->applAlarm (appl->refNum, e->info.longField);
+				MidiFreeEv (e);
+			}
 			else RawAccept(g, appl, &appl->rcv, e);
 			break;
 		default:
@@ -149,10 +155,7 @@ ThreadProc(RTClientProc, arg)
 			if (e) {
 				DispatchEvent (g, e);
 			}
-			else if (ret != kStreamNoMoreData) {
-				/* makes the best to maintain the communication */
-				msStreamParseReset (parse);
-			}
+			else msStreamParseReset (parse);
 		} while (e);
 		RcvAlarmLoop (g);
 		RTSendFlush (c);

@@ -57,6 +57,7 @@ class TPipe
 		long	Read 	(void *buff, long len);
 		
 		const char *	GetName () { return fName; }
+		PipeHandler		GetHandler() { return fPipe; }
 
 		// BuffSize represents the internal pipe buffer size for unix
 		// and a value fixed by the implementation for windows

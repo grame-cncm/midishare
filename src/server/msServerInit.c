@@ -26,15 +26,16 @@
 #include <stdio.h>
 
 #include "osglue.h"
-#include "msCommChans.h"
+//#include "msCommChans.h"
 #include "msServerInit.h"
-#include "msSharedMem.h"
-#include "msThreads.h"
+#include "msServerContext.h"
+//#include "msSharedMem.h"
+//#include "msThreads.h"
 #include "msLog.h"
 
-static void * gShmem = 0;
-static msThreadPtr gMPThread = 0;
-static MeetingPointChan gMeetingPoint = 0;
+//static void * gShmem = 0;
+//static msThreadPtr gMPThread = 0;
+//static MeetingPointChan gMeetingPoint = 0;
 static int gRun = 1;
 
 //___________________________________________________________________
@@ -65,13 +66,14 @@ static cdeclAPI(void) sigActions (int sig)
 
 static cdeclAPI(void) msExit ()
 {
+	msServerContextPtr c = ServerContext;
 	gRun = 0;
-	if (gMeetingPoint) msThreadDelete (gMPThread);
-	gMPThread = 0;
-	if (gMeetingPoint) CloseMeetingPoint (gMeetingPoint);
-	gMeetingPoint = 0;
-	if (gShmem) msSharedMemDelete (gShmem);
-	gShmem = 0;
+	if (c->meetingPointThread) msThreadDelete (c->meetingPointThread);
+	c->meetingPointThread = 0;
+	if (c->meetingPoint) CloseMeetingPoint (c->meetingPoint);
+	c->meetingPoint = 0;
+	if (c->sharedmem) msSharedMemDelete (c->sharedmem);
+	c->sharedmem = 0;
 }
 
 void InitSignal ()
@@ -91,13 +93,13 @@ void InitSignal ()
 
 void * InitShMem (int shmemSize)
 {
-	gShmem = msSharedMemCreate(kShMemId, shmemSize);
-	if (!gShmem) {
+	void * shmem = msSharedMemCreate(kShMemId, shmemSize);
+	if (!shmem) {
 		LogWriteErr ("Can't initialize the shared memory segment");
 		return 0;
 	}
 	atexit (msExit);
-	return gShmem;
+	return shmem;
 }
 
 //___________________________________________________________________
@@ -105,16 +107,18 @@ void * InitShMem (int shmemSize)
 //___________________________________________________________________
 static ThreadProc(mainServerCom, ptr)
 {
+	msServerContextPtr c = ServerContext;
 	int tolerate = 3;
 	NewClientProcPtr newclientproc = (NewClientProcPtr)ptr;
-	gMeetingPoint = CreateMeetingPoint ();
-	if (!gMeetingPoint) {
+
+	c->meetingPoint = CreateMeetingPoint ();
+	if (!c->meetingPoint) {
 		LogWriteErr ("MeetingPoint thread: can't create the meeting point");
 		goto err;
 	}
 
 	while (gRun) {
-		CommunicationChan cc = HandleCommunicationChannelRequest(gMeetingPoint);
+		CommunicationChan cc = HandleCommunicationChannelRequest(c->meetingPoint);
 		if (cc) {
 			newclientproc(cc);
 		}
@@ -127,12 +131,13 @@ err:
 	exit (1);
 }
 
-int InitMeetingPoint (NewClientProcPtr proc)
+int InitMeetingPoint (TMSGlobalPtr g, NewClientProcPtr proc)
 {
+	msServerContextPtr c = (msServerContextPtr)g->context;
 	if (!proc) return 0;
 
-	gMPThread = msThreadCreate (mainServerCom, proc, kServerHighPriority);
-	if (!gMPThread) {
+	c->meetingPointThread = msThreadCreate (mainServerCom, proc, kServerHighPriority);
+	if (!c->meetingPointThread) {
 		LogWriteErr ("InitMeetingPoint: can't create a new thread");
 		return 0;
 	}

@@ -40,7 +40,7 @@ static MidiEvPtr ReadFromServer (TMSGlobalPtr g)
         if (n > 0) {
             int ret;
             e = msStreamGetEvent (&c->std.parse, &ret);
-            if (e) break;
+			if (e) msStreamParseReset (&c->std.parse);
             else if (ret != kStreamNoMoreData) {
                 fprintf (stderr, "ReadFromServer read error (%d)\n", ret);
                 break;

@@ -90,7 +90,7 @@ static void SetFilter (short ref, MidiEvPtr e)
 /*____________________________________________________________________________*/
 static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 {
-    char name[256]; short ref=0; msApplContextPtr context;
+    char name[256]; short ref=0; msApplContextPtr context=0;
 	
 	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
 	if (!reply) { 
@@ -111,6 +111,12 @@ static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 			LogWrite ("NetMidiOpen: unconsistent application state");
 			goto err;
 		}
+		appl->netFlag = 1;	/* this flag indicates that this is a remote application */
+							/* set to 0 by default, the application state is non-consistent */
+							/* between the MidiOpen call and this step. It's however considered */
+							/* that we can support this unconsistency as it only affects the way */
+							/* tasks and alarms are handled by the kernel and none of them */
+							/* can be scheduled before the call returned */
 		context->chan = cc;
 		context->filterh = 0;
 		CCInc (cc);
@@ -161,21 +167,27 @@ static MidiEvPtr EventHandlerProc (MidiEvPtr e, CommunicationChan cc)
 
         case typeMidiOpen:
 			res = NetMidiOpen (e, cc);
+			MidiFreeEv(e);
 			break;
         case typeMidiClose:
 			res = NetMidiClose (e, cc);
+			MidiFreeEv(e);
 			break;
         case typeMidiConnect:
             MidiConnect (e->info.cnx.src, e->info.cnx.dst, CnxState(e));
+			MidiFreeEv(e);
            break;
         case typeMidiSetName:
             MidiSetName (RefNum(e), Event2Text (e, name, 256));
+			MidiFreeEv(e);
             break;
         case typeMidiSetInfo:
             MidiSetInfo (RefNum(e), (void *)e->info.longField);
+			MidiFreeEv(e);
             break;
         case typeMidiSetFilter:
             SetFilter (RefNum(e), e);
+			MidiFreeEv(e);
             break;
         default:
             MidiSend (RefNum(e), e);
@@ -224,9 +236,9 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
         if (n > 0) {
             int ret;
             MidiEvPtr reply, e = msStreamGetEvent (&pl->parse, &ret);
+			msStreamParseReset (&pl->parse);
             if (e) {
 				reply = EventHandlerProc(e, pl->comm);
-				MidiFreeEv (e);
 				if (reply && !SendEvent (reply, pl))
 					break;
             }

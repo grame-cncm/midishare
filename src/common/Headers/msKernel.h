@@ -85,7 +85,8 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 		TSorter       sorter;        /* sorter specific storage             */
 		fifo          toSched;       /* events to be scheduled              */
 		THost         local;         /* for implementation specific purpose */
-        short		 running;
+		void *        context;
+        short		  running;
 	} TMSGlobal;
 
 /*--------------------------------------------------------------------------*/
