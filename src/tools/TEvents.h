@@ -33,6 +33,7 @@ void Private();
 void Process();
 void QFToMidiFile();
 void MidiFile();
+void Internals();
 void Reserved();
 void Close ();
 
