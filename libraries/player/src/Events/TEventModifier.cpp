@@ -87,6 +87,17 @@ TSchedulerInterfacePtr	scheduler, TRunningStatePtr state, TEventDispatcherPtr su
 
 /*----------------------------------------------------------------------------*/
 
+TEventModifier::~TEventModifier()
+{
+	delete(fIterator1);
+	delete(fIterator);
+	delete(fScore);
+	delete(fPlayTask);
+	delete(fChaser);
+}
+	
+/*----------------------------------------------------------------------------*/
+
 void TEventModifier::ReceiveEvents(MidiEvPtr e)
 {
 	MidiEvPtr e1;
