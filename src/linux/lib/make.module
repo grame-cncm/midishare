@@ -1,6 +1,6 @@
 
 TARGET = ../linux/lib/mskUtilities.o
-OPTIONS = -D__Linux__ -D__Pentium__ -DMODULE
+OPTIONS = -D__Linux__ -D__Pentium__ -DMODULE -D_LOOSE_KERNEL_NAMES -DCONFIG_KERNELD 
 INC = -I../linux/Include -I../common/Headers
 CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
 CC = gcc
