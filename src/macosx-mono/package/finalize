@@ -3,6 +3,11 @@
 
 h=$(pwd)
 
+echo save distribution tree
+[ -d Distribution.save ] && rm -rf Distribution.save
+mv Distribution Distribution.save
+cp -R Distribution.save Distribution
+
 echo "creation des liens symboliques (dylib)"
 ./linklibs
 
