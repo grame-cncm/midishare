@@ -153,13 +153,6 @@ static void SetUpMenus()
 /* -----------------------------------------------------------------------------*/
 static void ShowAbout()
 {										
-	DialogPtr	dlog;					
-	short		Hit; 							
- 	dlog = GetNewDialog (dialogID, nil, (WindowPtr) -1);
-	if (dlog) {
-		ModalDialog(nil, &Hit);
-		DisposeDialog(dlog);
-	}
 }
 			
 /* -----------------------------------------------------------------------------*/
@@ -262,7 +255,7 @@ static void Initialize()
 	if (!SetUpMidi()) 			AlertUser ("\pMidiShare initialization failed");
 	foreGround = true;
 	SetUpMenus();
-//	SetUpWindows();
+	SetUpWindows();
 }
 
 /*======================================== main loop =======================================*/
