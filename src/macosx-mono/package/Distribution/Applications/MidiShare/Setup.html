@@ -99,6 +99,18 @@ ALIGN="MIDDLE" BORDER="0"></FONT></H3>
   should first return in editing mode.</FONT></P>
   <P><CENTER><FONT FACE="Arial"><IMG SRC="Images/msPS4.gif" ALIGN="BOTTOM"
   BORDER="0"></FONT></CENTER></P></BLOCKQUOTE>
+  
+<H4><FONT FACE="Arial">WARNING, WARNING !! : limitations and special considerations for mono-application release </FONT></H4>
+
+<BLOCKQUOTE>
+  <P><FONT FACE="Arial">With a mono-application release : 
+<UL>
+<LI> different MidiShare clients won't be able to communicate unless they run in the same address space (ie they belong to the same process) but <B>will be able to share the MIDI drivers and thus access the input output devices at the same time. </B> 
+<LI> since there is no global state shared by all MidiShare clients, a change done in port/slot connections with the Drivers Manager <B> willl not be reflected immediately </B> for other running MidiShare clients. The driver manager has to be closed so that the it's new state is saved in the .ini file, and clients will have to be<B> quitted and relaunched to see the new state.</B>
+
+</FONT></P>
+</P></BLOCKQUOTE>
+
 
 <P><FONT FACE="Arial">To get more information about MidiShare
 please go to the <A HREF="http://www.grame.fr/MidiShare">MidiShare
