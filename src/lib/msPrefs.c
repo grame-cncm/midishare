@@ -22,7 +22,6 @@
 
 
 #include "msPrefs.h"
-#include "msPrefs.h"
 #include "profport.h"
 
 #include <stdio.h>
@@ -34,31 +33,42 @@ char * MidiShareDirectory = "MidiShare";
 static char * profileName 		= "midishare.ini";
 static char * memorySectionName = "Events memory";
 static char * driverSectionName = "Drivers";
+static char * audioSectionName  = "Audio";
+static char * bufferSize  		= "size";
 static char * memDefault  		= "default";
 static char * active  			= "active";
 static char * disable  			= "disable";
 
 
 #define kDefaultSpace	40000
-//________________________________________________________________________
+#define kDefaultSize	64
 
+//________________________________________________________________________
 static char * GetProfileFullName ()
 {
 	static char  buff [1024];
+	int res;
 	const char* home = getenv("HOME");
 	if (home) {
-		sprintf (buff, "%s/%s/%s", home,MidiShareDirectory, profileName);
+		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, profileName);
 		return buff;
 	}
+	res = system("mkdir");
 	return profileName;
 }
 
 //________________________________________________________________________
 unsigned long LoadSpace()
 {
-	unsigned long n;
-	n= get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, GetProfileFullName());
+	unsigned long n = get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, GetProfileFullName());
 	return  n ? n : kDefaultSpace;
+}
+
+//________________________________________________________________________
+unsigned long LoadBufferSize()
+{
+	unsigned long n = get_private_profile_int (audioSectionName, bufferSize, kDefaultSize, GetProfileFullName());
+	return  n ? n : kDefaultSize;
 }
 
 static __inline Boolean DrvSeparator (c) { return ((c)==' ') || ((c)=='	'); }
