@@ -1,15 +1,15 @@
 
-TARGET = libPlayer.so.1.0
-TARGETJAVA = libJPlayer.so
+TARGET = libPlayer2.so.1.0
+TARGETJAVA = libJPlayer2.so
 
-LIB = /usr/lib/libPlayer.so
+LIB = /usr/lib/libPlayer2.so
 INC=../src/Include 
 INC1=./
 
 # SET THE PATHNAME  for ../JDKxx/include HERE
 
-INC2=/home/letz/jdk117/include
-INC3=/home/letz/jdk117/include/genunix
+INC2=/home/letz/jdk1.2.2/include
+INC3=/home/letz/jdk1.2.2/include/linux
 
 SRC =../src
 OPTIONS=-D__Linux__ -D_REENTRANT
@@ -31,7 +31,7 @@ TTimeConverter.o TTimeManager.o
 OBJJAVA = $(OBJ) MidiPlayer.o
  
 $(TARGET) :   $(OBJ)
-	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
+	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer2.so.1 -o $(TARGET)
 
 install: $(LIB).1.0
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
