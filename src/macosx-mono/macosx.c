@@ -35,6 +35,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <pthread.h>
 
 #ifdef __msBench__
 #include "benchs.h"
@@ -49,11 +50,37 @@ struct MacOSXDriver {
 	void*		handle;
 };
 
+typedef struct {
+    pthread_mutex_t mutex;
+    int             initialized;
+} TMutex;
+
+static TMutex gMutex[kMutexCount] = { 0 };
 static MacOSXDriverPtr gMacOSXDriver = { 0 };
 static unsigned long   gTimeMode = 0;
 
-MutexResCode msOpenMutex  (MutexRef ref) {return kSuccess;}
-MutexResCode msCloseMutex (MutexRef ref) {return kSuccess;}
+/*------------------------------------------------------------------------------*/
+void msOpenMutex  (unsigned int mutex)
+{
+    if (mutex < kMutexCount) {
+        if (!gMutex[mutex].initialized) {
+            pthread_mutex_init (&gMutex[mutex].mutex, 0);
+            gMutex[mutex].initialized = 1;
+        }
+        pthread_mutex_lock (&gMutex[mutex].mutex);
+    }
+}
+
+/*------------------------------------------------------------------------------*/
+void msCloseMutex (unsigned int mutex)
+{
+    if (mutex < kMutexCount) {
+        if (gMutex[mutex].initialized)
+            pthread_mutex_unlock (&gMutex[mutex].mutex);
+	}
+}
+
+
 /*------------------------------------------------------------------------------*/
 Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {
