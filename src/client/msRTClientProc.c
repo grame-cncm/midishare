@@ -80,7 +80,6 @@ static int RTSendFlush (msLibContextPtr c)
 failed:
     if ((EvType(e)!=typeProcess) && (EvType(e)!=typeDProcess))
         MidiFreeEv (e);
-    fprintf (stderr, "CCRTWrite failed (%ld)\n", n);
     return false;
 }
 
