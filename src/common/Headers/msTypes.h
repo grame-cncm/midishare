@@ -28,15 +28,13 @@
 #define __msTypes__
 
 #ifdef __Macintosh__
-#ifdef __MacOS9__
-	#include <mactypes.h> 
-#else
-	//#include <CoreServices/CoreServices.h>
+#ifdef __MacOSX__
 	typedef unsigned char Boolean;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	enum { false, true };
-
+#else
+	#include <mactypes.h> 
 #endif 
                                    
 # ifdef __POWERPC__

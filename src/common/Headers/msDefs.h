@@ -32,10 +32,10 @@
 #	define  MSALARMAPI
 #	define  FAR
 #	define	MIDISHAREAPI
-#ifdef __MacOS9__
-#   define  ALARMTYPE   pascal
+#ifdef __MacOSX__
+#   define  ALARMTYPE   
 #else
-#   define  ALARMTYPE
+#   define  ALARMTYPE pascal
 #endif
 #endif
 
