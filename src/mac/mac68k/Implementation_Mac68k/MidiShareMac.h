@@ -82,6 +82,25 @@ pascal	ApplAlarmPtr MidiGetApplAlarm (short refNum) 					={0x700E, 0x2078, 0x00B
 pascal	void 		MidiSetApplAlarm (short refNum, ApplAlarmPtr alarm) ={0x700F, 0x2078, 0x00B8, 0x4E90};
 
 
+/*------------------------------- Drivers management --------------------------*/
+
+pascal	short 	MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op) 	={0x7044, 0x2078, 0x00B8, 0x4E90};
+pascal	void 	MidiUnregisterDriver (short refnum)									={0x7045, 0x2078, 0x00B8, 0x4E90};
+pascal	short	MidiCountDrivers	()												={0x7046, 0x2078, 0x00B8, 0x4E90};
+pascal	short	MidiGetIndDriver	(short index)									={0x7047, 0x2078, 0x00B8, 0x4E90};
+pascal	Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos)			={0x7048, 0x2078, 0x00B8, 0x4E90};
+
+
+/*-------------------------------- Slots management ---------------------------*/
+
+pascal	SlotRefNum	MidiAddSlot 		(short refnum)								={0x7049, 0x2078, 0x00B8, 0x4E90};
+pascal	SlotRefNum	MidiGetIndSlot		(short refnum, short index)					={0x704A, 0x2078, 0x00B8, 0x4E90};
+pascal	void		MidiRemoveSlot 		(SlotRefNum slot)							={0x704B, 0x2078, 0x00B8, 0x4E90};
+pascal	Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos)		={0x704C, 0x2078, 0x00B8, 0x4E90};
+pascal	void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state)={0x704D, 0x2078, 0x00B8, 0x4E90};
+pascal	Boolean		MidiIsSlotConnected	(short port, SlotRefNum slot)				={0x704E, 0x2078, 0x00B8, 0x4E90};
+
+
 /*------------------------- Inter-Application Connections ---------------------*/
 
 pascal	void 	MidiConnect 	(short src, short dest , Boolean state) ={0x7010, 0x2078, 0x00B8, 0x4E90};
