@@ -40,6 +40,7 @@ class TTickConsumer : public TTickPlayerInterface{
 		TEventProducerInterfacePtr	fEventProducer;
 		
 		void PlaySlice (ULONG date_ms);
+		void ScheduleTickTask (ULONG date_ticks) ;
 		
 	public :
  

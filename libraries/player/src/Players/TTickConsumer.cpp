@@ -63,8 +63,8 @@ void TTickConsumer::PlaySlice (ULONG date_ms)
 		fEventUser->UseEvent(cur,date_ms);
 	}
 		
-	// Schedule the PlayTask for the date of the next events in ticks
-	fScheduler->ScheduleTickTask(fPlayTask, fEventProducer->GetPosTicks());
+	// Schedule the PlayTask for the date of the next events in ticks, only when date < MAXLONG
+	ScheduleTickTask(fEventProducer->GetPosTicks()); 
 }
 
 /*--------------------------------------------------------------------------*/
@@ -73,7 +73,7 @@ void TTickConsumer::Init () {fEventProducer->Init(0);}
 
 /*--------------------------------------------------------------------------*/
 
-void TTickConsumer::Start (){ fScheduler->ScheduleTickTask(fPlayTask, fEventProducer->GetPosTicks());}
+void TTickConsumer::Start (){ ScheduleTickTask(fEventProducer->GetPosTicks());}
 
 /*--------------------------------------------------------------------------*/
 
@@ -84,7 +84,7 @@ void TTickConsumer::Stop (){ fPlayTask->Forget(); }
 void TTickConsumer::Cont (ULONG date_ticks) 
 { 
 	fEventProducer->SetPosTicks(date_ticks);
-	fScheduler->ScheduleTickTask(fPlayTask,  fEventProducer->GetPosTicks()); 
+	ScheduleTickTask(fEventProducer->GetPosTicks()); 
 }
 
 /*--------------------------------------------------------------------------*/
@@ -95,3 +95,10 @@ void TTickConsumer::SetPosTicks (ULONG date_ticks) { fEventProducer->SetPosTicks
 
 ULONG TTickConsumer::GetPosTicks (){ return fEventProducer->GetPosTicks(); }
 
+/*--------------------------------------------------------------------------*/
+/* Don't Schedule a task with an infinite date */
+
+void TTickConsumer::ScheduleTickTask (ULONG date_ticks)  
+{
+	if (date_ticks < MAXLONG) fScheduler->ScheduleTickTask(fPlayTask, date_ticks);
+}
