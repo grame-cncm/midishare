@@ -55,6 +55,7 @@ typedef struct msStreamBuffer {
 	unsigned short  read;         	/* currently read bytes count  */
 	unsigned short  varLen;         /* current varlen event length */
 	MidiEvPtr		curEv;			/* currently parsed event      */
+	unsigned long	serial;			/* next expected serial number */
 } msStreamBuffer;
 
 /*------------------------------------------------------------------------*/

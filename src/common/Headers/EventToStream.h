@@ -41,7 +41,8 @@ typedef struct Ev2StreamRec {
 	void *  		loc;         	/* the current write location   */
 	msStreamMthPtr 	cont;         	/* linearization continuation   */
     MidiEvPtr     	nextCell;     	/* current continuation part	*/
-	long			nextCount; /* nextCell remaining count to write */
+	long			nextCount; 		/* nextCell remaining count to write */
+	unsigned long	serial; 		/* current buffer serial number */
 } Ev2StreamRec;
 
 /*___________________________________*/
@@ -51,11 +52,11 @@ extern "C" {
 #endif
 
 void msStreamInitMthTbl (msStreamMthTbl lin);
-void msStreamInit 		(Ev2StreamPtr f, msStreamMthTbl lin, void *buffer, unsigned short size);
+void msStreamInit 		(Ev2StreamPtr f, msStreamMthTbl lin);
 void msStreamReset 		(Ev2StreamPtr f);
 
 /* msStreamStart starts to write a new buffer: write header informations */
-void msStreamStart     (Ev2StreamPtr f);
+void msStreamStart     (Ev2StreamPtr f, void *buffer, unsigned short size);
 
 /*
    msStreamPutEvent writes the event e into the buffer, 

@@ -56,7 +56,7 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 	
 	for (i=typeClock;i<=typeReset;i++)          lin[i]= Data4LinearizeMth;
 	for (i=typePrivate;i<typeProcess;i++)       lin[i]= Ext1LinearizeMth;
-	for (i=typeProcess;i<=typeDProcess;i++)     lin[i]= TaskLinearizeMth;
+	for (i=typeProcess;i<=typeDProcess;i++)     lin[i]= Ext1LinearizeMth;
 	for (i=typeQuarterFrame;i<=typeSeqNum;i++)  lin[i]= Data4LinearizeMth;
 	for (i=typeTextual;i<=typeCuePoint ;i++)    lin[i]= VarLenLinearizeMth;
 	for (i=typeChanPrefix;i<=typeKeySign;i++)   lin[i]= Data4LinearizeMth;
@@ -79,11 +79,12 @@ void msStreamInitMthTbl (msStreamMthTbl lin)
 #endif
 }
 
-void msStreamInit (Ev2StreamPtr f, msStreamMthTbl lin, void *buffer, unsigned short size)
+void msStreamInit (Ev2StreamPtr f, msStreamMthTbl lin)
 {
-   	f->buff     = buffer;         	/* the linearization buffer ptr	*/
-	f->size     = size;         	/* the buffer size	            */
+   	f->buff     = 0;         	/* the linearization buffer ptr	*/
+	f->size     = 0;         	/* the buffer size	            */
 	f->lin      = lin;
+	f->serial   = 0;
 	msStreamReset (f);
 }
 
@@ -98,13 +99,16 @@ void msStreamReset (Ev2StreamPtr f)
 /*===========================================================================
 		 external functions implementation
   =========================================================================== */
-void msStreamStart (Ev2StreamPtr f)
+void msStreamStart (Ev2StreamPtr f, void *buffer, unsigned short size)
 {
-	msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
+	msStreamHeaderPtr h = (msStreamHeaderPtr)buffer;
+   	f->buff     = buffer;         	/* the linearization buffer ptr	*/
+	f->size     = size;         	/* the buffer size	            */	
 	f->loc       = f->buff;         /* the current write location   */
 	h->magic = kStreamMagic;
 	h->cont  = 0;
 	h->len   = 0;
+	h->serial = f->serial++;
 	StreamAdjust(f, ++h, sizeof(msStreamHeader));
 }
 
@@ -131,7 +135,7 @@ Boolean	msStreamContEvent (Ev2StreamPtr f)
 	msStreamMthPtr cont = f->cont;
 	long c = f->nextCount;
 	
-	msStreamStart (f);
+	msStreamStart (f, f->buff, f->size);
 	if (!e) return true;
 	else if (cont) {
 		msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;

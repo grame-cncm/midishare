@@ -31,13 +31,15 @@
 
 #define kRTReadBuffSize		2048
 #define kRTWriteBuffSize	2048
+#define kMaxWBuffers		4
 
 typedef struct {
 	msThreadPtr 	RTThread;		/* real time communication thread   */
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
     char 			rbuff[kRTReadBuffSize];
-    char 			wbuff[kRTWriteBuffSize];
+    char 			wbuff[kMaxWBuffers][kRTWriteBuffSize];
+	int				index;         /* current index in wbuff array */
 } RTComm, * RTCommPtr;
 
 #ifdef __cplusplus

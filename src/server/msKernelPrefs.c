@@ -50,8 +50,9 @@
 #endif
 
 #define kArgs "\
-[-c initfile -l logfile -m memSize -t timeMode -r timeRes]\n\
+[-c initfile -d -l logfile -m memSize -t timeMode -r timeRes]\n\
           -c initfile: read preferences from 'initfile'\n\
+          -d         : run in daemon mode'\n\
           -l logfile : log messages into 'logfile'\n\
                        uses stderr if 'logfile' is 'nolog'\n\
           -m memSize : use 'memSize' for kernel memory size\n\
@@ -121,6 +122,7 @@ msKernelPrefs * ReadPrefs (const char * conffile, msCmdLinePrefs *cmdLine)
 	
 	char * confName = conffile ? (char *)conffile : profileName;
 
+	gPrefs.daemonMode= cmdLine->daemonMode;
 	gPrefs.memory   = (cmdLine->memory == -1) ? GetMemSize(confName) : cmdLine->memory;
 
 	gPrefs.timeMode = (cmdLine->timeMode < 0) ? GetTimeMode(confName) : cmdLine->timeMode;
@@ -211,12 +213,16 @@ void ReadArgs (msCmdLinePrefs * prefs, int argc, char *argv[])
 
 		if (*ptr++ == '-') {
 			char c = *ptr;
-			ptr = argv[++i];
+			if (c != 'd')
+				ptr = argv[++i];
 			if (i == argc) usage (argv[0]);
 
 			switch (c) {
 
 				case 'c': 	prefs->conffile = ptr;
+					break;
+
+				case 'd': 	prefs->daemonMode = 1;
 					break;
 
 				case 'l': 	

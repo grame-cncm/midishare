@@ -30,8 +30,13 @@
 #include "msLog.h"
 #include "msCommHandler.h"
 
-//extern TMSGlobalPtr gMem;
-//msKernelPrefs * gPrefs = 0;
+#ifdef WIN32
+# include <windows.h>
+# define sleep(n)  Sleep(n*1000)
+#else
+# include <unistd.h>
+#endif
+
 static msServerContext gContext;
 
 /*____________________________________________________________________________*/
@@ -84,7 +89,8 @@ int main (int argc, char *argv[])
 	msThreadSigInit (sigActions);
 	CleanState ();
 	gContext.sharedmem = InitShMem (sizeof(TMSGlobalPublic));
-	if (gContext.sharedmem) {
+	gContext.OCMutex = msMutexCreate ();
+	if (gContext.sharedmem && gContext.OCMutex) {
 		/* never call any MidiShare function before MidiShareSpecialInit */
 		MidiShareSpecialInit (40000, gContext.sharedmem);
 
@@ -97,8 +103,16 @@ int main (int argc, char *argv[])
         if (InitMeetingPoint (gMem, MainClientServerProc)) {
 			int version = MidiGetVersion();
 			LogWrite ("MidiShare Server v.%d.%02d is running", version/100, version%100);
-			printf ("press return to quit\n");
-			getc(stdin);
+			if (gContext.prefs->daemonMode) {
+				if (daemon(1, 1) == -1)
+					LogWriteErr ("Cannot run in daemon mode");
+				else while (1)
+					sleep (1);
+			}
+			else {
+				printf ("press return to quit\n");
+				getc(stdin);
+			}
 		}
 		msServerClose ();
 	}

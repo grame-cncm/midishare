@@ -80,6 +80,7 @@ void msStreamParseInit  (msStreamBufferPtr f, msStreamParseMethodTbl methTbl,
 	f->parse= methTbl;
 	f->varLen= 0;
 	f->curEv = 0;
+	f->serial = 0;
 	msStreamParseRewind(f);
 }
 
@@ -114,7 +115,7 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 	
 	for (i=typeClock;i<=typeReset;i++)          tbl[i]= Data4ParseMth;
 	for (i=typePrivate;i<typeProcess;i++)       tbl[i]= Ext1ParseMth;
-	for (i=typeProcess;i<=typeDProcess;i++)     tbl[i]= TaskParseMth;
+	for (i=typeProcess;i<=typeDProcess;i++)     tbl[i]= Ext1ParseMth;
 	for (i=typeQuarterFrame;i<=typeSeqNum;i++)  tbl[i]= Data4ParseMth;
 	for (i=typeTextual;i<=typeCuePoint ;i++)    tbl[i]= VarLenParseMth;
 	for (i=typeChanPrefix;i<=typeKeySign;i++)   tbl[i]= Data4ParseMth;
@@ -142,6 +143,11 @@ static int CheckConsistency (msStreamBufferPtr f, msStreamHeaderPtr h)
 	/* check for continuation and params consistency */
 	if ((h->cont && !f->curEv) || (!h->cont && f->curEv)) 
         return kStreamInvalidParameter;
+	if (h->serial != f->serial)
+		fprintf (stderr, "StreamToEvent: CheckConsistency: wrong serial number: %ld expected, got %ld [%lx %lx %d %d]\n",
+			f->serial, h->serial, (long)f, (long)h, ((msStreamHeaderPtr)(f->buff))->len, f->slen);
+	if (h->serial >= f->serial)
+		f->serial = h->serial + 1;
 
     StreamAdjust(f, ++h, sizeof(msStreamHeader));
 	return kStreamNoError;

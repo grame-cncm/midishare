@@ -48,6 +48,24 @@ MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r,
 }
 
 /*__________________________________________________________________________________*/
+#ifndef MSKernel
+static MidiEvPtr SendNetTask (MidiEvPtr task, short r, TMSGlobalPtr g)
+{
+	MidiEvPtr ev = MSNewEv (typeProcess, &g->memory.freeList);
+	if( ev) {
+		TTaskExtPtr ext = (TTaskExtPtr)LinkST(ev);
+		ext->fun  = (TaskPtr)task;
+		RefNum(ev) = RefNum(task) = (uchar)r;
+		if (SendToServer (ev, g))
+			return task;
+		MSFreeEv (ev,  &g->memory.freeList);
+	}
+	MSFreeEv (task,  &g->memory.freeList);
+	return 0;
+}
+#endif
+
+/*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r, 
                              long a1,long a2,long a3, TMSGlobalPtr g)
 {
@@ -62,8 +80,7 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 #ifdef MSKernel
         MSSend (r, ev, g);
 #else
-		RefNum(ev)= (uchar)r;
-		return SendToServer (ev, g) ? ev : 0;
+		ev = SendNetTask(ev, r, g);
 #endif
 	}
 	return ev;
@@ -84,8 +101,7 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 #ifdef MSKernel
         MSSend (r, ev, g);
 #else
-		RefNum(ev)= (uchar)r;
-		return SendToServer (ev, g) ? ev : 0;
+		ev = SendNetTask(ev, r, g);
 #endif
 	}
 	return ev;

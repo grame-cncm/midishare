@@ -32,6 +32,7 @@
 #include "msCommChans.h"
 #include "msKernelPrefs.h"
 #include "msSharedMem.h"
+#include "msMutex.h"
 #include "msThreads.h"
 
 typedef struct {
@@ -39,6 +40,7 @@ typedef struct {
 	msThreadPtr 		meetingPointThread;		/* meeting point management thread  */
 	MeetingPointChan 	meetingPoint;			/* meeting point handler			*/
 	msKernelPrefs *		prefs;					/* the server preferences			*/
+	msMutex				OCMutex;
 
 	/* methods tables for the streams - shared between all the streams */
     msStreamParseMethodTbl 	parseMthTable;

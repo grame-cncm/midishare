@@ -41,6 +41,7 @@ typedef struct {
 	int           timeMode;
 	short         timeRes;    // time resolution in ms
 	short         drvCount;
+	short         daemonMode;
 	char *        drivers[MaxDrivers];
 	char          logfile[MaxLogName];
 	char          audioDev[MaxAudioDevName];
@@ -52,6 +53,7 @@ typedef struct {
 	int           timeRes;    // time resolution in ms
 	char *        conffile;
 	char *        logfile;
+	short         daemonMode;
 } msCmdLinePrefs;
 
 

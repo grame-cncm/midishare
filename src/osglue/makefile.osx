@@ -1,8 +1,10 @@
 
 LSRC = $(wildcard *.cpp)
 USRC = $(wildcard unix/*.cpp)
-SRC  = $(LSRC) $(USRC)
-OBJ  = $(patsubst %.cpp, %.o, $(SRC))
+SRCCPP  = $(LSRC) $(USRC)
+OBJCPP  = $(patsubst %.cpp, %.o, $(SRCCPP))
+SRC  = $(SRCCPP) dlopen.c
+OBJ  = $(OBJCPP) dlopen.o
 
 CFLAGS = -O3 -Iinclude -Wall
 CXXFLAGS = $(CFLAGS)

@@ -32,6 +32,7 @@
 #include "msLog.h"
 #include "msServerInit.h"
 #include "msSharedMem.h"
+#include "msMutex.h"
 #include "msThreads.h"
 #include "osglue.h"
 
@@ -103,7 +104,10 @@ static void SetFilter (short ref, MidiEvPtr e)
 static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 {
     char name[256]; short ref=0; msApplContextPtr context=0;
+	msServerContext * sc = ServerContext;
 	
+	msMutexLock (sc->OCMutex);
+printf ("NetMidiOpen start...");
 	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
 	if (!reply) { 
 		LogWrite ("NetMidiOpen: MidiShare memory allocation failed");
@@ -134,9 +138,12 @@ static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 		CCInc (cc);
 		appl->context = context;
 	}
+printf ("opened %d\n", ref);
+	msMutexUnlock (sc->OCMutex);
 	return reply;
 
 err:
+	msMutexUnlock (sc->OCMutex);
 	if (context) FreeApplContext(context);
 	if (reply) MidiFreeEv(reply);
 	if (ref > 0) MidiClose (ref);
@@ -149,7 +156,10 @@ static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
 	MidiEvPtr reply = 0;
 	short ref = RefNum(e);
 	msApplContextPtr context = ApplContext(ref);
+	msServerContext * sc = ServerContext;
 
+	msMutexLock (sc->OCMutex);
+printf ("NetMidiClose start %d ... ", ref);
 	if (context && (context->chan == cc)) {
 		if (context->filterh) msSharedMemClose(context->filterh);
 		MidiClose (ref);
@@ -160,6 +170,8 @@ static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
 	if (!reply) {
 		LogWrite ("NetMidiClose: MidiShare memory allocation failed");
 	}
+printf ("closed %d\n", ref);
+	msMutexUnlock (sc->OCMutex);
 	return reply;
 }
 
@@ -217,7 +229,7 @@ static Boolean SendEvent (MidiEvPtr e, CommChansPtr pl)
     Ev2StreamPtr stream = &pl->stream;
     long n; short len;
 
-    msStreamStart (stream);
+    msStreamStart (stream, pl->wbuff, kWriteBuffSize);
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
@@ -260,8 +272,9 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
 				break;
 			}
         }
-        else if (n < 0) {
-            LogWriteErr ("CommHandlerProc read error (%ld)", n);
+//        else if (n < 0) {
+        else {
+            LogWriteErr ("CommHandlerProc CCRead error (%ld)", n);
             break;
         }
     } while (CCRefCount(pl->comm));
@@ -314,7 +327,7 @@ void NewClientChannel (CommunicationChan cc)
         return;
     }
     msStreamParseInit (&cl->parse, gParseMthTable, cl->rbuff, kReadBuffSize);
-    msStreamInit (&cl->stream, gStreamMthTable, cl->wbuff, kWriteBuffSize);
+    msStreamInit (&cl->stream, gStreamMthTable);
     cl->next = gCCList;
     cl->comm = cc;
     /* init RT communication before creating the main appl thread */

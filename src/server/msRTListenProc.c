@@ -30,6 +30,7 @@
 #include "msApplContext.h"
 #include "msLog.h"
 
+#include <mach/mach_time.h>
 //*____________________________________________________________________________*/
 static void DropClients  (CommunicationChan cc)
 {
@@ -41,7 +42,7 @@ static void DropClients  (CommunicationChan cc)
 		if (appl && appl->netFlag) {
 			msApplContextPtr  ac = (msApplContextPtr)appl->context;
 			if (cc == ac->chan) {
-				LogWrite ("Client application \"%s\" (%d) dropped", pub(appl, name), pub(appl, refNum));
+				LogWrite ("Client application \"%s\" (%d) dropped at time %lld", pub(appl, name), pub(appl, refNum), mach_absolute_time());
 				if (ac->filterh) msSharedMemClose(ac->filterh);
 				MidiClose (pub(appl, refNum));
 				CCDec (cc);
@@ -58,16 +59,18 @@ void CallNetSendAlarm  (TApplPtr appl, MidiEvPtr alarm)
 	CommunicationChan cc = ac->chan;
 	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
 	Ev2StreamPtr stream = &rt->stream;
-    long n; short len;
+    long n; short len; void *buff;
 
-	msStreamStart (stream);
+	buff=rt->wbuff[rt->index++];
+	if (rt->index >= kMaxWBuffers) rt->index = 0;
+	msStreamStart (stream, buff, kRTWriteBuffSize);
 	RefNum(alarm) = (uchar)pub(appl, refNum);
     if (!msStreamPutEvent (stream, alarm)) {
         LogWriteErr ("CallNetSendAlarm failed for client %s (%d)", pub(appl, name), pub(appl, refNum));
     }
     else {
         len = msStreamSize(stream);
-        n = CCRTWrite (cc, rt->wbuff, len);
+        n = CCRTWrite (cc, buff, len);
         if (n != len) goto failed;
     }
     MidiFreeEv (alarm);
@@ -84,18 +87,21 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	CommunicationChan cc = ac->chan;
 	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
 	Ev2StreamPtr stream = &rt->stream;
-    long n; short len;
+    long n; short len; void *buff;
+
+	buff=rt->wbuff[rt->index++];
+	if (rt->index >= kMaxWBuffers) rt->index = 0;
 
 	fifo * f = &appl->rcv;
 	MidiEvPtr e = (MidiEvPtr)fifoget(f);
 
-	msStreamStart (stream);
+	msStreamStart (stream, buff, kRTWriteBuffSize);
 	while (e) {
 		RefNum(e) = (uchar)pub(appl, refNum);
 		if (!msStreamPutEvent (stream, e)) {
 			do {
 				len = msStreamSize(stream);
-				n = CCRTWrite (cc, rt->wbuff, len);
+				n = CCRTWrite (cc, buff, len);
 				if (n != len) {
 					MidiFreeEv (e);
 					return;
@@ -106,7 +112,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 		e = (MidiEvPtr)fifoget(f);
 	}
 	len = msStreamSize(stream);
-	n = CCRTWrite (cc, rt->wbuff, len);
+	n = CCRTWrite (cc, buff, len);
 //    if (n != len) goto failed;
 }
 
@@ -137,7 +143,10 @@ static ThreadProc(RTListenProc, arg)
 			if (ret != kStreamNoMoreData)
 				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
 		}
-		else break;
+		else {
+			LogWriteErr ("RTListenProc: CCRTRead read error (%ld)", n);
+			break;
+		}
 	} while (CCRefCount(cc));
 	DropClients (cc);
 	return 0;
@@ -158,7 +167,8 @@ int RTCommInit (msServerContextPtr c, CommunicationChan cc)
 	RTCommPtr rt = (RTCommPtr)AllocateMemory (sizeof(RTComm));
 	if (rt) {
 		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTReadBuffSize);
-		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTWriteBuffSize);
+		msStreamInit 	  (&rt->stream, c->streamMthTable);
+		rt->index = 0;
 		CCSetInfos (cc, rt);
 		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerLRTPriority);
 		if (rt->RTThread) return true;

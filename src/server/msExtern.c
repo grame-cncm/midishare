@@ -44,13 +44,11 @@ typedef Boolean (* Start) ();
 typedef void (* Stop) ();
 #endif
 
-MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
-MutexResCode msCloseMutex (MutexRef ref) { return kSuccess; }
 /*------------------------------------------------------------------------------*/
 Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {
-        *adr = swapWith;
-        return true;
+	*adr = swapWith;
+	return true;
 }
 
 static void * gDrvRefs[MaxDrivers] = { 0 };

@@ -62,7 +62,6 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
 
-printf ("MSRegisterDriver %s\n", infos->name);
 	if (CheckClientsCount(clients) && CheckDriversCount(clients)) {
 		TApplPtr appl  = NewAppl(sizeof(TAppl));
 		TDriverPtr drv = NewDriver(sizeof(TDriver));

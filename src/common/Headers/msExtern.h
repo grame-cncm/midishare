@@ -41,19 +41,8 @@
 enum { kMemoryMutex = 1, kWakeUpMutex };
 enum { kSuccess, kTimeOut, kUnknownMutex, kFailed };
 
-typedef short 	MutexResCode;
-typedef long 	MutexRef;
-
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifdef WIN32
-	MutexResCode msOpenMutex  (MutexRef ref);
-	MutexResCode msCloseMutex (MutexRef ref);
-#else
-	MutexResCode OpenMutex  (MutexRef ref);
-	MutexResCode CloseMutex (MutexRef ref);
 #endif
 
 TApplContextPtr CreateApplContext ();

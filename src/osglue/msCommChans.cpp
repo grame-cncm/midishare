@@ -39,6 +39,7 @@
 #include "msCommDefs.h"
 #include "msCommChans.h"
 #include "TPipesPair.h"
+#include "msLog.h"
 
 #define PP(p)	((TPipesPair *)(p))
 #define	kMaxPipeIndex	256
