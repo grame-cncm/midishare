@@ -34,7 +34,7 @@ make
 
 This compile the Player shared library (a libPlayer.1.0 file) 
 
-To install the Player library kernel, you must have SU privilege:
+To install the Player library, you must have SU privilege:
 
 make install
 
