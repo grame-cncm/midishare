@@ -1,6 +1,7 @@
 IIWU Synth
 
-IIWU Synth is a software, real-time synthesizer based on the Soundfont 2 specifications.
+IIWU Synth is a software, real-time synthesizer based on the Soundfont 2 specifications developed by Peter Hanappe 
+and others hackers.
 
 The IIWU Synth package provides two applications: iiwusynth and iiwuplay. iiwusynth 
 reads and handles incoming MIDI events from a MIDI device. iiwuplay takes a MIDI file as input.
@@ -18,7 +19,7 @@ The IIWU Synth  home page is :
 http://www.hanappe.org/iiwusynth.html
 
 The IIWU Synth can be used with MidiShare. Follow the INSTALL and README files included in the 
-IIWU Synth to see how to compile it to be used with MidiShare.
+IIWU Synth package to see how to compile it to be used with MidiShare.
  
 Launch IIWU Synth in midishare mode using :
 
