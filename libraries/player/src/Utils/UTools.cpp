@@ -59,15 +59,15 @@ void UTools::MidiPrintText ( char  * s)
 	#ifdef __Macintosh__
 	
 		#if GENERATINGCFM
-			if (e = MidiNewEv(typeText)) {
+			if (e = MidiNewEv(typeTextual)) {
 		#else
-			if (e = MidiNewEv(typeText)) {
+			if (e = MidiNewEv(typeTextual)) {
 		#endif
 		
 	#endif
 	
 	#ifdef __Linux__
-		if (e = MidiNewEv(typeText)){
+		if (e = MidiNewEv(typeTextual)){
 	#endif
 	
 
