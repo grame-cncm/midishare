@@ -9,7 +9,7 @@ CC = gcc
 
 SRC = *.c 
 
-OBJ = msLoader.o MidiShareLinux.o MidiShare.o  ../msCommon.o
+OBJ = msLoader.o MidiShareLinux.o MidiShare.o msConf.o ../msCommon.o
 
 
 $(TARGET) : $(OBJ)
@@ -60,6 +60,7 @@ msLoader.o: ../../common/Headers/msFields.h ../../common/Headers/msFilter.h
 msLoader.o: ../../common/Headers/msMail.h ../../common/Headers/msSeq.h
 msLoader.o: ../../common/Headers/msSmpte.h ../../common/Headers/msTasks.h
 msLoader.o: ../../common/Headers/msTime.h ../../common/Headers/msXmtRcv.h
+msConf.o: msConf.h
 nodriver/msDriver.o: ../../common/Headers/msDriver.h
 nodriver/msDriver.o: ../../common/Headers/msDefs.h
 nodriver/msDriver.o: ../../common/Headers/msTypes.h
