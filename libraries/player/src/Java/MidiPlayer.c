@@ -27,10 +27,25 @@
 /*          28/11/97  version 1.09  JNI compatible
 /*****************************************************************************/
 
+#ifdef __Macintosh__
+		#include <midisharePPC.h>
+		/* New type definition */
+		typedef struct TFilter * MidiFilterPtr;
+#endif
 
-#include "MidiShare.h"
+#ifdef __Linux__
+        #include "MidiShare.h"
+#endif
+
 #include "Player.h"
 #include "MidiPlayer.h"
+
+
+/*--------------------------------------------------------------------------*/
+
+ void pTocCopy(  char *dest,  unsigned char * src);
+ void cTocCopy(  char *dest,  char * src);
+ void cTopCopy(  unsigned char *dest,  char * src);
 
 /*--------------------------------------------------------------------------*/
  void pTocCopy(  char *dest,  unsigned char * src)  // chaine pascal dans chaine c
@@ -56,7 +71,6 @@
 }
 
 /*--------------------------------------------------------------------------*/
-
  void cTopCopy(  unsigned char *dest,  char * src) // chaine c dans chaine p
 {
 	register short i = 0;
@@ -72,13 +86,16 @@
 
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
   (JNIEnv * inEnv, jclass cl, jint midiname){
-
-	char buffer [128];
-	short ref;
-	
-	cTocCopy (buffer, (char*)midiname);
-	ref =  OpenPlayer(buffer);
-	return ref;
+  
+  	#ifdef PascalNames
+    	unsigned char buffer [128];
+    	cTopCopy (buffer, (char*)midiname);
+		return  OpenPlayer(buffer);
+	#else
+    	char buffer [128];
+    	cTopCopy (buffer, (char*)midiname);
+		return  OpenPlayer(buffer);
+	#endif
 }
 
 /*--------------------------------------------------------------------------*/
