@@ -150,6 +150,6 @@ void logmsg (char *msg)
 void Report (const char* what, const char* obj, const char* reason)
 {
 	char msg[512];
-	sprintf (msg, "%s: %s: %s %s %s\n", dateString(), what, obj, reason);
+	sprintf (msg, "%s: %s: %s %s\n", dateString(), what, obj, reason);
 	logmsg (msg);
 }
