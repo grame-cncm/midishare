@@ -5,6 +5,34 @@
 	};
 	objectVersion = 38;
 	objects = {
+		D3E146D105063CDD00053103 = {
+			isa = PBXFrameworkReference;
+			name = MidiShare.framework;
+			path = ../../MidiShare.framework;
+			refType = 2;
+		};
+		D3E146D205063CDD00053103 = {
+			fileRef = D3E146D105063CDD00053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3E146D305063CDD00053103 = {
+			fileRef = D3E146D105063CDD00053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
+//F70
+//F71
+//F72
+//F73
+//F74
 		F7219673020EB73001053118 = {
 			children = (
 				F7219674020EB73001053118,
@@ -312,6 +340,7 @@
 				F727EA380209391401053118,
 				F727EB2902094E0A01053118,
 				F727EA2B0209389101053118,
+				D3E146D105063CDD00053103,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -345,12 +374,12 @@
 		};
 		F727EA2C0209389101053118 = {
 			isa = PBXLibraryReference;
-			path = msLANDriver.1.0.0.so;
+			path = ../msLANDriver.1.0.1.so;
 			refType = 3;
 		};
 		F727EA2D0209389101053118 = {
 			isa = PBXLibraryReference;
-			path = msWANDriver.1.0.0.so;
+			path = ../msWANDriver.1.0.1.so;
 			refType = 3;
 		};
 		F727EA2E0209389101053118 = {
@@ -365,15 +394,16 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_LDFLAGS = "-flat_namespace -framework MidiShare ";
+				OTHER_LDFLAGS = "-flat_namespace";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msLANDriver.1.0.0.so;
+				PRODUCT_NAME = ../msLANDriver.1.0.1.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -491,6 +521,7 @@
 		F727EA310209389101053118 = {
 			buildActionMask = 2147483647;
 			files = (
+				D3E146D205063CDD00053103,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -514,16 +545,17 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = ../../;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DWANDriver";
-				OTHER_LDFLAGS = "-flat_namespace -framework MidiShare ";
+				OTHER_LDFLAGS = "-flat_namespace";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msWANDriver.1.0.0.so;
+				PRODUCT_NAME = ../msWANDriver.1.0.1.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -641,6 +673,7 @@
 		F727EA360209389101053118 = {
 			buildActionMask = 2147483647;
 			files = (
+				D3E146D305063CDD00053103,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
