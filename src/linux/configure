@@ -12,7 +12,7 @@ function move ()
 	src=$1
 	dst=$2
 	echo Creating $dst
-	cp $M/$src  > $dst
+	cp $M/$src  $dst
 }
 
 function conf_I386 ()
