@@ -244,6 +244,7 @@ static void InitNewEvMth( NewEvMethodPtr *table)
   table[typeSpecific]     = NewSexEv;
   table[typeRcvAlarm]     = NewSmallEv;
   table[typeApplAlarm]    = NewSmallEv;
+  table[typePortPrefix]   = NewSmallEv;
   
   table[typeProcess] 	= NewProcessEv;
   table[typeDProcess] 	= NewProcessEv;
@@ -266,6 +267,7 @@ static void InitFreeEvMth( FreeEvMethodPtr *table)
   table[typeSpecific]     = FreeSexEv;
   table[typeRcvAlarm]     = FreeSmallEv;
   table[typeApplAlarm]    = FreeSmallEv;
+  table[typePortPrefix]   = FreeSmallEv;
   
   table[typeProcess] 	= FreeProcessEv;
   table[typeDProcess] 	= FreeProcessEv;
@@ -288,6 +290,7 @@ static void InitCopyEvMth( CopyEvMethodPtr *table)
   table[typeSpecific]     = CopySexEv;
   table[typeRcvAlarm]     = CopySmallEv;
   table[typeApplAlarm]    = CopySmallEv;
+  table[typePortPrefix]   = CopySmallEv;
   
   table[typeProcess] 	= CopyProcessEv;
   table[typeDProcess] 	= CopyProcessEv;
@@ -320,6 +323,7 @@ static void InitCountFieldsMth( CountFieldsMethodPtr *table)
   table[typeSpecific]    = CountFSexEv;
   table[typeRcvAlarm]    = CountFUndefEv;
   table[typeApplAlarm]   = Count1Field;
+  table[typePortPrefix]  = Count1Field;
   
   table[typeProcess] 	= CountFProcessEv;
   table[typeDProcess] 	= CountFProcessEv;
@@ -346,6 +350,7 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
   table[typeSpecific]     = SetFSexEv;
   table[typeRcvAlarm]     = SetFUndefEv;
   table[typeApplAlarm]    = SetFTempo;
+  table[typePortPrefix]   = SetFSmallEv;
   
   table[typeProcess] 	= SetFProcessEv;
   table[typeDProcess] 	= SetFProcessEv;
@@ -372,6 +377,7 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
   table[typeSpecific]     = GetFSexEv;
   table[typeRcvAlarm]     = GetFUndefEv;
   table[typeApplAlarm]    = GetFTempo;
+  table[typePortPrefix]   = GetFSmallEv;
   
   table[typeProcess] 	= GetFProcessEv;
   table[typeDProcess] 	= GetFProcessEv;
@@ -392,6 +398,7 @@ static void InitAddFieldMth (AddFieldMethodPtr *table)
   table[typeSpecific] = AddFSexEv;
   table[typeRcvAlarm] = AddNoField;
   table[typeApplAlarm]= AddNoField;
+  table[typePortPrefix]= AddNoField;
   table[typeDead]     = AddNoField;
   
   table[typeProcess] = AddNoField;
