@@ -24,13 +24,17 @@
 #define __alsaDriver__
 
 #include "include/driver.h"
-#include "include/midi.h"
 #include "include/seq_kernel.h"
-#include "include/seq_midi.h"
+#include "include/rawmidi.h"
 #include "include/seq_device.h"
+#include "include/seq_midi_event.h"
+
 
 #include "msDefs.h"
 #include "msDriver.h"
+#include "msFrcv.h"
+#include "msFxmt.h"
+#include "lffifo.h"
 
 #define SYSEX_LEN 512  	/* length  of the SysEx buffer for sending */
 #define MIDI_PORT  0    /* Midi port coded in received events */
@@ -43,6 +47,9 @@ typedef struct {
 	snd_rawmidi_t *output_rmidi;
 	int seq_client;
 	int seq_port;
+	RFifo p2e;
+	XFifo e2p;
+	fifo infifo;
 	unsigned long jiffies;
 	unsigned char running_state;	/* for keeping the last status byte */	
 } TAlsaDriver;
