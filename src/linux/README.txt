@@ -2,9 +2,9 @@
 MidiShare for Linux
 
 
-===============
+=============
 Description
-===============
+=============
 
 MidiShare on Linux is separated in a kernel module and a shared library.
 The kernel module contains the code used with kernel privilege : scheduler, Midi drivers,IAC...
@@ -18,91 +18,83 @@ Installation guide
 The MidiShare source package contains:
 
 - ../common : common MidiShare code for all platforms.
-- Include  : the MidiShare.h file
+- ../lib : common MidiShare library code for all platforms.
+
+- Include  : headers files.
 - kernel : the platform specific kernel code.
 - library : the MidiShare shared library code.
-- tests : two test applications, usefull to test the MidiShare API. 
-- tools : various MidiShare tools. 
+- lib : common MidiShare library object code
+- scripts : usefull scripts to manage the MidiShare environement.
+- tests : test applications, usefull to check the MidiShare API. 
+- tools : several MidiShare tools. 
+- applications : several GTK based MidiShare applications.
+- drivers : MidiShare drivers.
 
-=============
-Quick install
-=============
 
-There are two possible compilation targets :
-
-- one without drivers which allows to test MidiShare applications, Inter Application Communication..
-- one with Midi drivers buit using ALSA (http://www.alsa-project.org)
-
-==========================================
-Compilation of MidiShare WITHOUT drivers
-==========================================
+==========================
+Compilation of MidiShare 
+==========================
 
 In the linux folder type:
   ./configure
 then 
-  make (or make midishare)
+  make 
 
-This compile the MidiShare kernel (the MidiShareKernel.o kernel module) 
+This compile the MidiShare kernel (the MidiShare.o kernel module) 
 and the shared MidiShare library (libMidiShare.so)
 
-To install the MidiShare kernel, library and tools, you must have SU privilege:
+To install the MidiShare kernel and library, you must have SU privilege:
 
 make install
 
-
-Compilation of MidiShare WITH drivers
-=======================================
-
-In the linux folder type :
-  ./configure
-then 
-  make midishare-alsa
+This install in /etc/rc.d/init.d a script named "MidiShare" that load the MidiShare 
+module at boot time. An alias on this script is created in rc startup folders level 3 and 5.
 
 
-This compile the MidiShare kernel with ALSA drivers (the MidiShareKernel.o kernel module) 
-and the shared MidiShare library (libMidiShare.so)
+========================
+Compilation of Drivers 
+========================
 
-You will have to download, compile and install Alsa drivers corresponding to your machine setup.
- 
-WARNING: To work properly with MidiShare, Alsa drivers have to be compiled with the OSS emulation ON,
-this option must be setup using the Alsa "configure" tool.
+Drivers are currently defined as regular MidiShare applications that other applications 
+can use to access Midi input/output. To compile drivers:
 
-Look at http://www.alsa-project.org for more information on ALSA drivers compilation and installation.
+make driver (or the global "make clients" command that compile applications, tools and drivers)
 
-To install the MidiShare kernel and library and tools, you must have SU privilege:
+The "msRawMidi" driver access the standard /dev/midi device. To use it:
 
-make install
+msRawMidi /dev/midi
+
+This will open a MidiShare application named "dev/midi". Other applications must connect to this application
+to send and receive Midi events.
 
 ================================
 Checking MidiShare installation
 ================================
 
-cat proc/modules should show a "MidiShareKernel" module installed.
+cat /proc/modules (or lsmod) should show a "MidiShare" module installed.
 
-Some basic MidiShare functions are accessible directly in the shell. (They are defined on the tools folder) 
-To compile and install the tools:
+======================================
+Compilation of tools and applications
+======================================
 
-make tools
+Several basic MidiShare functions are accessible directly in the shell. (They are defined on the tools folder).
+Several GTK based applications are available in the applications folder. Drivers are available in the driver folder.
 
-Tools are installed in the /home/bin folder. To display the current MidiShare version number:
+To compile the tools, applications and drivers:
+
+make clients
+
+To install tools,applications,drivers and scripts in /usr/local/bin (with SU privilege):
+
+make clientsinstall
+
+To display the current MidiShare version number:
 
 MidiGetVersion
 
 To display the current MidiShare state (currently opened applications)
 
 MidiGetStat
-
-=========================
-Running MidiShare tests
-=========================
-
-Two test applications are available : test of MidiShare functions, and test of MidiShare event management. 
-They allow to check that MidiShare API correctly works. You must have SU privilege to run the test.
-
-cd test
-
-./TestFunctions
-./TestEvents
 
 
 ===============================
