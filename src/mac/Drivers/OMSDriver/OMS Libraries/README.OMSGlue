@@ -1,0 +1,15 @@
+The various flavors of OMS Glue are as follows:
+
+--- Full OMS Glue ---
+OMSGlue.o - for use with MPW or Symantec/THINK C 68K (mixed-case)
+OMSGlueUC.o - for MPW (all-caps)
+OMSGlueCW.o - for Code Warrior 68K
+OMSGluePPC.lib - for CodeWarrior PowerPC
+OMSLibPPC.slb - shared library for other PowerPC development environments
+
+--- Partial OMS Glue ---
+[only basic OMS routines - this is useful mostly for developing the
+Name or Time Manager itself]
+OMSOnlyGlue.o - mixed case MPW .o file, for use with MPW or THINK C 68K
+OMSOnlyGlueCW.o - for Code Warrior 68K (C routines mixed case, Pascal routines
+									all caps)
