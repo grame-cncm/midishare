@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include "dlfcn.h"
 
-
 #include "portaudio.h"
 
 /*------------------------------------------------------------------------------*/
@@ -52,8 +51,16 @@
 
 #define AUDIO_DEVICE "Built-in audio controller"
 
-static long gClockCount = 0;
+typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
+
+struct MacOSXDriver {
+	MacOSXDriverPtr	next;
+	void*		handle;
+};
+
+static MacOSXDriverPtr gMacOSXDriver = { 0 };
 static PortAudioStream * gStream;
+static long gFrames = 0;
 
 
 MutexResCode msOpenMutex  (MutexRef ref) { return kSuccess; }
@@ -65,23 +72,9 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
         return true;
 }
 
-static long gFrames = 0;
-
 /*------------------------------------------------------------------------------*/
 /*                      Drivers loading                     					*/
 /*------------------------------------------------------------------------------*/
-
-/*------------------------------------------------------------------------------*/
-/* MacOSX specific resources		                                            */
-
-typedef struct MacOSXDriver MacOSXDriver, * MacOSXDriverPtr;
-
-struct MacOSXDriver {
-	MacOSXDriverPtr	next;
-	void*		handle;
-};
-
-MacOSXDriverPtr gMacOSXDriver = { 0 };
 
 typedef void (* Start) ();
 
