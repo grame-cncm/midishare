@@ -144,7 +144,7 @@ static inline MidiEvPtr parseComplete (UDPStreamPtr f)
 	return e;
 }
 
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 static inline short * LowWord (unsigned long *v) {
 	short * ptr = (short *)v;
 	return ++ptr;
@@ -196,7 +196,7 @@ static MidiEvPtr rcvIgnore (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvShortHigh (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[0] = c;
 #else
 	f->data[1] = c;
@@ -209,7 +209,7 @@ static MidiEvPtr rcvShortLow (UDPStreamPtr f, Byte c)
 {
 	short * sptr = (short *)f->data;
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[1] = c;
 #else
 	f->data[0] = c;
@@ -226,7 +226,7 @@ static MidiEvPtr rcvShortLow (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongHH (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[0] = c;
 #else
 	f->data[3] = c;
@@ -238,7 +238,7 @@ static MidiEvPtr rcvLongHH (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongHL (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[1] = c;
 #else
 	f->data[2] = c;
@@ -250,7 +250,7 @@ static MidiEvPtr rcvLongHL (UDPStreamPtr f, Byte c)
 static MidiEvPtr rcvLongLH (UDPStreamPtr f, Byte c)
 {
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[2] = c;
 #else
 	f->data[1] = c;
@@ -263,7 +263,7 @@ static MidiEvPtr rcvLongLL (UDPStreamPtr f, Byte c)
 {
 	long * lptr = (long *)f->data;
 	f->length--;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[3] = c;
 #else
 	f->data[0] = c;
@@ -288,8 +288,8 @@ static MidiEvPtr rcvPort (UDPStreamPtr f, Byte c)
 //_____________________________________________________________________________
 static MidiEvPtr rcvChan (UDPStreamPtr f, Byte c)
 {
-	UDPParseMethodPtr next = f->rcv[EvType(f->ptrCur)];
-	MidiEvPtr e = 0;
+//	UDPParseMethodPtr next = f->rcv[EvType(f->ptrCur)];
+//	MidiEvPtr e = 0;
 	f->length--;
 	Chan(f->ptrCur) = c;
 	if (!f->length)

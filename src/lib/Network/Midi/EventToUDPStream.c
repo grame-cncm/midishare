@@ -184,7 +184,7 @@ static void VarLenContinuation (Ev2UDPStreamPtr f)
 static inline void LinearizeLong (short i, long v, Ev2UDPStreamPtr f)
 {
 	char *ptr = (char *)&v;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[i--] = *ptr++;
 	f->data[i--] = *ptr++;
 	f->data[i--] = *ptr++;
@@ -201,7 +201,7 @@ static inline void LinearizeLong (short i, long v, Ev2UDPStreamPtr f)
 static inline void LinearizeShort (short i, short v, Ev2UDPStreamPtr f)
 {
 	char *ptr = (char *)&v;
-#if macintosh
+#if defined(macintosh) || defined(__MacOSX__)
 	f->data[i--] = *ptr++;
 	f->data[i] = *ptr;
 #else
