@@ -30,7 +30,9 @@
 
 typedef unsigned char uchar;
 
+#ifndef WIN32
 #define FAR
+#endif
 #define FarPtr(type)  type FAR *
 
 #if defined(macintosh) && !defined(__MacOSX__)
