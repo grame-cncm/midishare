@@ -55,11 +55,11 @@ long ApplState::ID ()
 }
 
 //____________________________________________________________
-Handle ApplState::GetState ()
+INetHandle ApplState::GetState ()
 {
-	if (fMemory) DisposeHandle (fMemory);
+	if (fMemory) INetDisposeHandle (fMemory);
 	long len = MemSize (fIn) + MemSize (fOut);
-	fMemory = NewHandle (len);
+	fMemory = INetNewHandle (len);
 	if (fMemory) {
 		char * ptr = (char *)HandlePtr(fMemory);
 		WriteCnx (fMemory, fIn);
@@ -70,7 +70,7 @@ Handle ApplState::GetState ()
 }
 
 //____________________________________________________________
-void ApplState::SetState (Handle h)
+void ApplState::SetState (INetHandle h)
 {
 	ClearCnxList (fIn);
 	ClearCnxList (fOut);
@@ -196,13 +196,13 @@ void ApplState::RestoreState (short refNum)
 }
 
 //____________________________________________________________
-void ApplState::ReadCnx (Handle h, CnxDescPtr *dst)
+void ApplState::ReadCnx (INetHandle h, CnxDescPtr *dst)
 {
 	short *sptr = (short *)HandlePtr(h);
 	short n = *sptr++;
 	char * ptr = (char *)sptr;
 	while (n--) {
-		CnxDescPtr cnx = NewCnx ((Handle)&ptr);
+		CnxDescPtr cnx = NewCnx ((INetHandle)&ptr);
 		if (cnx) {
 			cnx->next = *dst;
 			*dst = cnx;
@@ -213,7 +213,7 @@ void ApplState::ReadCnx (Handle h, CnxDescPtr *dst)
 }
 
 //____________________________________________________________
-void ApplState::WriteCnx (Handle h, CnxDescPtr cnx)
+void ApplState::WriteCnx (INetHandle h, CnxDescPtr cnx)
 {
 	short *sptr = (short *)HandlePtr(h);
 	*sptr++ = Count (cnx);
@@ -244,7 +244,7 @@ void ApplState::SetName (CnxDescPtr cnx, MidiName name)
 }
 
 //____________________________________________________________
-CnxDescPtr ApplState::NewCnx (Handle with)
+CnxDescPtr ApplState::NewCnx (INetHandle with)
 {
 	CnxDescPtr cnx = NewCnx();
 	if (cnx) {
@@ -327,7 +327,7 @@ void ApplState::ClearCnxList (CnxDescPtr cnx)
 //____________________________________________________________
 void ApplState::Reset ()
 {
-	if (fMemory) DisposeHandle (fMemory);
+	if (fMemory) INetDisposeHandle (fMemory);
 	fMemory = 0;
 	ClearCnxList (fIn);
 	ClearCnxList (fOut);
