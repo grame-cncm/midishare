@@ -37,8 +37,8 @@
 
 #include "msRTListenProc.h"
 
-#define kCommBuffSize	2048
-#define kParseBuffSize	2048
+#define kReadBuffSize	2048
+#define kWriteBuffSize	2048
 
 typedef struct CommChans * CommChansPtr;
 typedef struct CommChans{
@@ -47,7 +47,8 @@ typedef struct CommChans{
     msThreadPtr 	thread;
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
-    char 			buff[kParseBuffSize];
+    char 			rbuff[kReadBuffSize];
+    char 			wbuff[kWriteBuffSize];
 }CommChans;
 
 CommChansPtr gCCList = 0;
@@ -219,13 +220,13 @@ static Boolean SendEvent (MidiEvPtr e, CommChansPtr pl)
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
-            n = CCWrite (pl->comm, pl->buff, len);
+            n = CCWrite (pl->comm, pl->wbuff, len);
             if (n != len) goto failed;
         } while (!msStreamContEvent (stream));
     }
     else {
         len = msStreamSize(stream);
-        n = CCWrite (pl->comm, pl->buff, len);
+        n = CCWrite (pl->comm, pl->wbuff, len);
         if (n != len) goto failed;
     }
     return true;
@@ -239,23 +240,36 @@ failed:
 static ThreadProc(CommHandlerProc, p)
 {
 	CommChansPtr pl = (CommChansPtr)p;
+	msStreamBufferPtr parse = &pl->parse;
 
 fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
     do {
-        long n = CCRead (pl->comm, pl->buff, kCommBuffSize);
+        long n = CCRead (pl->comm, pl->rbuff, kReadBuffSize);
         if (n > 0) {
-            int ret;
-            MidiEvPtr reply, e = msStreamGetEvent (&pl->parse, &ret);
-			msStreamParseReset (&pl->parse);
-            if (e) {
-				reply = EventHandlerProc(e, pl->comm);
-				if (reply && !SendEvent (reply, pl))
+            int ret, remain, read=0;  MidiEvPtr reply, e;
+			parse->buff = pl->rbuff;
+			msStreamParseRewind (parse);
+            do {
+				read += msStreamGetSize(parse);
+				remain = n - read;
+				e = msStreamGetEvent (parse, &ret);
+if (ret <= 0) printf ("msStreamGetEvent %ld %d %d\n", n, read, ret);
+				if (e) {
+					reply = EventHandlerProc(e, pl->comm);
+					if (reply && !SendEvent (reply, pl))
+						break;
+				}
+				else if (ret != kStreamNoMoreData) {
+					msStreamParseReset (parse); /* only one event expected on the commands channel */
+					LogWrite ("CommHandlerProc: msStreamGetEvent read error (%d)", ret);
 					break;
-            }
-            else if (ret != kStreamNoMoreData) {
-                LogWrite ("msStreamGetEvent read error (%d)", ret);
-                break;
-            }
+				}
+				else if (remain) { 	/* several commands might be queued */
+					parse->buff = &pl->rbuff[read];
+printf ("CommHandlerProc remain %d\n", remain);
+					msStreamParseRewind (parse);
+				}
+			} while (remain > 0);
         }
         else if (n < 0) {
             LogWriteErr ("CommHandlerProc read error (%ld)", n);
@@ -310,8 +324,8 @@ void NewClientChannel (CommunicationChan cc)
         LogWrite ("NewClientChannel: CommChans memory allocation failed");
         return;
     }
-    msStreamParseInit (&cl->parse, gParseMthTable, cl->buff, kParseBuffSize);
-    msStreamInit (&cl->stream, gStreamMthTable, cl->buff, kParseBuffSize);
+    msStreamParseInit (&cl->parse, gParseMthTable, cl->rbuff, kReadBuffSize);
+    msStreamInit (&cl->stream, gStreamMthTable, cl->wbuff, kWriteBuffSize);
     cl->next = gCCList;
     cl->comm = cc;
     thread = msThreadCreate (CommHandlerProc, cl, kServerHighPriority);

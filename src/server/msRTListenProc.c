@@ -90,7 +90,7 @@ static ThreadProc(RTListenProc, arg)
 	RTCommPtr rt = (RTCommPtr)CCGetInfos (cc);
 	msStreamBufferPtr parse = &rt->parse;
 
-	while (CCRTRead (cc, rt->rbuff, kRTCommBuffSize) > 0) {
+	while (CCRTRead (cc, rt->rbuff, kRTReadBuffSize) > 0) {
 		do {
 			int ret;
 			MidiEvPtr e = msStreamGetEvent (parse, &ret);
@@ -98,8 +98,9 @@ static ThreadProc(RTListenProc, arg)
 				EventHandlerProc(e);
 				if (!msStreamGetSize(parse)) break;
 			}
-			else if (ret != kStreamNoMoreData) {
-				LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
+			else {
+				if (ret != kStreamNoMoreData)
+					LogWrite ("RTListenProc: msStreamGetEvent read error (%d)", ret);
 				break;
 			}
 		} while (true);
@@ -122,8 +123,8 @@ int RTCommInit (msServerContextPtr c, CommunicationChan cc)
 {
 	RTCommPtr rt = (RTCommPtr)AllocateMemory (sizeof(RTComm));
 	if (rt) {
-		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTCommBuffSize);
-		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTCommBuffSize);
+		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTReadBuffSize);
+		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTWriteBuffSize);
 		CCSetInfos (cc, rt);
 		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerRTPriority - 1);
 		if (rt->RTThread) return true;

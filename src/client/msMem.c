@@ -39,7 +39,7 @@
 #else
 #define allocate(size) (void*)malloc(size)
 #define free(ptr) 		free(ptr)
-#define kBaseFKey			0x0e1e10000
+#define kBaseFKey			0xe1e10001
 #endif
 
 /*_________________________________________________________________________*/

@@ -130,7 +130,7 @@ int InitMeetingPoint (TMSGlobalPtr g, NewClientProcPtr proc)
 	msServerContextPtr c = (msServerContextPtr)g->context;
 	if (!proc) return 0;
 
-	c->meetingPointThread = msThreadCreate (mainServerCom, proc, kServerHighPriority);
+	c->meetingPointThread = msThreadCreate (mainServerCom, proc, kNormalPriority);
 	if (!c->meetingPointThread) {
 		LogWriteErr ("InitMeetingPoint: can't create a new thread");
 		return 0;

@@ -33,13 +33,15 @@
 #include "msSharedMem.h"
 #include "msThreads.h"
 
-#define kCommBuffSize	2048
+#define kReadBuffSize	2048
+#define kWriteBuffSize	2048
 
 typedef struct StreamDesc * StreamDescPtr;
 typedef struct StreamDesc {
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
-    char 			buff[kCommBuffSize];
+    char 			rbuff[kReadBuffSize];
+    char 			wbuff[kWriteBuffSize];
 }StreamDesc;
 
 typedef Boolean (* SendToServerPtr) (MidiEvPtr e, TMSGlobalPtr g);

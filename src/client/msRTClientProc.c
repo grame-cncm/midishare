@@ -65,7 +65,7 @@ static int RTSendFlush (msLibContextPtr c)
 		if (!msStreamPutEvent (stream, e)) {
 			do {
 				len = msStreamSize(stream);
-				n = CCRTWrite (c->cchan, c->RT.buff, len);
+				n = CCRTWrite (c->cchan, c->RT.wbuff, len);
 				if (n != len) goto failed;
 			} while (!msStreamContEvent (stream));
 		}
@@ -73,7 +73,7 @@ static int RTSendFlush (msLibContextPtr c)
 		e = (MidiEvPtr)fifoget(f);
 	}
 	len = msStreamSize(stream);
-	n = CCRTWrite (c->cchan, c->RT.buff, len);
+	n = CCRTWrite (c->cchan, c->RT.wbuff, len);
     return (n == len);
 
 failed:
@@ -144,19 +144,25 @@ ThreadProc(RTClientProc, arg)
 	TMSGlobalPtr g = (TMSGlobalPtr)arg;
 	msLibContextPtr c = (msLibContextPtr)g->context;
 	msStreamBuffer * parse = &c->RT.parse;
-    MidiEvPtr e; long n; int ret;
+    MidiEvPtr e; long n; int ret, remain, read=0;
 
 	while (true) {
-        n = CCRTRead (c->cchan, c->RT.buff, kCommBuffSize);
+        n = CCRTRead (c->cchan, c->RT.rbuff, kReadBuffSize);
         if (n <= 0) break; /* corrupted communication channel: exit the RT thread */
+		parse->buff = c->RT.rbuff;
+		remain = n;
+		read = 0;
 		NextActiveAppl(g) = ActiveAppl(g);
 		do {
+			read += msStreamGetSize(parse);
+			remain = n - read;
 			e = msStreamGetEvent (parse, &ret);
-			if (e) {
-				DispatchEvent (g, e);
+			if (e) DispatchEvent (g, e);
+			else if (remain) { 	/* several commands might be queued */
+				parse->buff = &c->RT.rbuff[read];
+				msStreamParseRewind (parse);
 			}
-			else msStreamParseReset (parse);
-		} while (e);
+		} while (e || (remain > 0));
 		RcvAlarmLoop (g);
 		RTSendFlush (c);
 	}

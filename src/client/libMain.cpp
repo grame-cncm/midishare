@@ -88,10 +88,10 @@ static void  MSContextInitialize (TMSGlobalPtr g)
 		
         msStreamParseInitMthTbl (c->parseMthTable);
         msStreamInitMthTbl (c->streamMthTable);
-		msStreamParseInit (&c->std.parse, c->parseMthTable, c->std.buff, kCommBuffSize);
-		msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.buff, kCommBuffSize);
-        msStreamInit 	  (&c->std.stream, c->streamMthTable, c->std.buff, kCommBuffSize);
-        msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.buff, kCommBuffSize);
+		msStreamParseInit (&c->std.parse, c->parseMthTable, c->std.rbuff, kReadBuffSize);
+		msStreamParseInit (&c->RT.parse, c->parseMthTable, c->RT.rbuff, kReadBuffSize);
+        msStreamInit 	  (&c->std.stream, c->streamMthTable, c->std.wbuff, kWriteBuffSize);
+        msStreamInit 	  (&c->RT.stream, c->streamMthTable, c->RT.wbuff, kWriteBuffSize);
 	}
 	g->context = c;
 }

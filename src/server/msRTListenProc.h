@@ -29,14 +29,15 @@
 #include "EventToStream.h"
 #include "StreamToEvent.h"
 
-#define kRTCommBuffSize	2048
+#define kRTReadBuffSize		2048
+#define kRTWriteBuffSize	2048
 
 typedef struct {
 	msThreadPtr 	RTThread;		/* real time communication thread   */
     msStreamBuffer 	parse;
     Ev2StreamRec	stream;
-    char 			rbuff[kRTCommBuffSize];
-    char 			wbuff[kRTCommBuffSize];
+    char 			rbuff[kRTReadBuffSize];
+    char 			wbuff[kRTWriteBuffSize];
 } RTComm, * RTCommPtr;
 
 #ifdef __cplusplus

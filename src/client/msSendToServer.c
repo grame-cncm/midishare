@@ -36,7 +36,7 @@ static MidiEvPtr ReadFromServer (TMSGlobalPtr g)
     msLibContextPtr c = (msLibContextPtr)g->context;
     MidiEvPtr e = 0;
     while (!e) {
-        long n = CCRead (c->cchan, c->std.buff, kCommBuffSize);
+        long n = CCRead (c->cchan, c->std.rbuff, kReadBuffSize);
         if (n > 0) {
             int ret;
             e = msStreamGetEvent (&c->std.parse, &ret);
@@ -61,15 +61,14 @@ Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
     if (!msStreamPutEvent (stream, e)) {
         do {
             len = msStreamSize(stream);
-            n = CCWrite (c->cchan, c->std.buff, len);
+            n = CCWrite (c->cchan, stream->buff, len);
+//printf ("\nStdSend CCWrite loop %ld", n);
             if (n != len) goto failed;
         } while (!msStreamContEvent (stream));
     }
-    else {
-        len = msStreamSize(stream);
-        n = CCWrite (c->cchan, c->std.buff, len);
-        if (n != len) goto failed;
-    }
+	len = msStreamSize(stream);
+	n = CCWrite (c->cchan, stream->buff, len);
+	if (n != len) goto failed;
     MidiFreeEv (e);
     return true;
 failed:
