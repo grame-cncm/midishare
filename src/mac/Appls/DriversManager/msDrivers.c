@@ -133,13 +133,6 @@ static void RefreshPortProc (SlotRefNum sref, TSlotInfos * slotInfo, long refcon
 }
 
 /* -----------------------------------------------------------------------------*/
-static void RefreshPortMap ()
-{
-	ResetPortMap ();
-	ApplySlots (RefreshPortProc, 0);
-}
-
-/* -----------------------------------------------------------------------------*/
 static SlotRefNum Cell2Slot (ListHandle list, Cell * c)
 {
 	short i, ref;
@@ -184,6 +177,7 @@ static pascal void ApplAlarm (short refnum, long code)
         case MIDIAddSlot:
         case MIDIRemoveSlot:
 			chgDriver = true;
+			portSelected = -1;
         	break;
         	
         case MIDIChgSlotConnect:
@@ -465,4 +459,12 @@ short PointToPort (WindowPtr win, Point p)
 		}
 	}
 	return -1;
+}
+
+/* -----------------------------------------------------------------------------*/
+void RefreshPortMap ()
+{
+	ResetPortMap ();
+	ApplySlots (RefreshPortProc, 0);
+	InvalPortArea ();
 }
