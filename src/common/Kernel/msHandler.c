@@ -20,6 +20,7 @@
   
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
+   [13-09-99] DF - removing direct fifo access in ClockHandler
 
 */
 
@@ -55,8 +56,7 @@ void ClockHandler (TMSGlobalPtr g)
 
 	 do {
 		 h->time++;
-		 e = (TDatedEvPtr)g->toSched.head;
-		 fifoinit (SorterList(g));
+		 e = (TDatedEvPtr)fifoclear (SorterList(g));
 		 ready = (MidiEvPtr)SorterClock(Sorter(g), e);
 		 if( ready) {
 		 	NextActiveAppl(g) = ActiveAppl(g);
