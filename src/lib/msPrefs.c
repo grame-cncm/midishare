@@ -27,6 +27,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+char * MidiShareDirectory = "MidiShare";
 
 static char * profileName 		= "midishare.ini";
 static char * memorySectionName = "Events memory";
@@ -35,26 +38,18 @@ static char * memDefault  		= "default";
 static char * active  			= "active";
 static char * disable  			= "disable";
 
+
 #define kDefaultSpace	40000
 //________________________________________________________________________
 
-/*
 static char * GetProfileFullName ()
 {
-	static char buff [1024];
-	char dir[512];
-	if (GetCurrentDirectory(512, dir)) {
-		sprintf (buff, "%s\\%s", dir, profileName);
-		// test if the file exist
-		if (GetFileAttributes(buff) != -1)
-			return buff;
+	static char  buff [1024];
+	const char* home = getenv("HOME");
+	if (home) {
+		sprintf (buff, "%s\/%s\/%s", home,MidiShareDirectory, profileName);
+		return buff;
 	}
-	return profileName;
-}
-*/
-
-static char * GetProfileFullName ()
-{
 	return profileName;
 }
 
@@ -62,9 +57,7 @@ static char * GetProfileFullName ()
 unsigned long LoadSpace()
 {
 	unsigned long n;
-	n= get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, 
-		GetProfileFullName());
-
+	n= get_private_profile_int (memorySectionName, memDefault, kDefaultSpace, GetProfileFullName());
 	return  n ? n : kDefaultSpace;
 }
 
@@ -87,7 +80,6 @@ unsigned short CountDrivers()
 {
 	char * defaultEntry= "", buff[DriverMaxEntry];
 	unsigned long n; unsigned short count = 0;
-
 	n= get_private_profile_string (driverSectionName, active, defaultEntry, buff,
 										DriverMaxEntry, GetProfileFullName());
 	if (n) {
