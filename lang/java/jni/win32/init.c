@@ -23,7 +23,7 @@
 #include <windows.h>
 
 //________________________________________________________________________
-main (void) { return 1; }
+//main (void) { return 1; }
 
 //_________________________________________________________
 BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
