@@ -111,7 +111,6 @@ static Boolean	pEquals (unsigned char *a,  unsigned char *b);
 static void 	cTopCopy(unsigned char *dest,  char * src);
 static void		PStrCpy (unsigned char *src, unsigned char * dst, short max);
 
-static void 	SendEvents 		(short slot, OMSMIDIPacket255 *pkt, DriverDataPtr data);
 static Boolean	EvToOMSPacket 	(E2PInfos *i, OMSMIDIPacket255 *p, DriverDataPtr data);
 static void 	SendDatas		( short refnum, short port, short flag, long date, DriverDataPtr data);
 static short 	GetSlotFromRef	( DriverDataPtr data, short refNum);
@@ -327,15 +326,21 @@ static pascal void ReceiveEvents (short r)
 
 	p = OMSPacket(data);
 
-	while (e = MidiGetEv (r)) {
+	e = MidiGetEv (r);
+	while (e) {
 		i.cont = 0;
 		i.evToSend = e;
 		RefNum(e)= r;
 		do {
 			contFlag = EvToOMSPacket (&i, p, data);
-			if (p->len) SendEvents(Port(e), p, data);
+			if (p->len) {
+				short ioRefNum = slot2OMSOut(data)[Port(e)];
+				if (ioRefNum >= 0)
+					OMSWritePacket255 (p, ioRefNum, OutputPortRefNum(data));
+			}
 		} while( contFlag);
 		MidiFreeEv(e);
+		e = MidiGetEv (r);
 	}		
 }
 
@@ -547,15 +552,6 @@ static Boolean EvToOMSPacket (E2PInfos *i, OMSMIDIPacket255 *p, DriverDataPtr da
 	else
 		p->flags= oldCont ? omsEndCont : omsNoCont;
 	return p->len ? i->cont != 0 : false;
-}
-
-/* -----------------------------------------------------------------------------*/
-static void SendEvents (short slot, OMSMIDIPacket255 *pkt, DriverDataPtr data)
-{
-	if (slot > (*OMSOutputNodes(data))->numNodes) {
-	} else {
-		OMSWritePacket255 (pkt, slot2OMSOut(data)[slot], OutputPortRefNum(data));
-	}
 }
 
 /* -----------------------------------------------------------------------------*/
