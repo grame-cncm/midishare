@@ -1,6 +1,6 @@
 //Microsoft Developer Studio generated resource script.
 //
-
+#include "mshare32.rh"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -28,8 +28,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,5,0
- PRODUCTVERSION 1,0,5,0
+ FILEVERSION 1,1,1,0
+ PRODUCTVERSION 1,1,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -44,15 +44,18 @@ BEGIN
     BEGIN
         BLOCK "040c04b0"
         BEGIN
-            VALUE "Comments", "32 bits JPlayer JNI Library 1.05\0"
+            VALUE "Comments", "32 bits JPlayer JNI Library 1.11\0"
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", " JPlayer\0"
-            VALUE "FileVersion", "1, 0, 5, 0\0"
-            VALUE "InternalName", " JPlayer JNI 32 bits 1.05\0"
-            VALUE "LegalCopyright", "Copyright © GRAME 1996,2001\0"
+            VALUE "FileVersion", "1, 1, 1, 0\0"
+            VALUE "InternalName", " JPlayer JNI 32 bits 1.11\0"
+            VALUE "LegalCopyright", "Copyright © GRAME 1996,2005\0"
+            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", " JPlayer.dll\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", " JPlayer  Shared Library\0"
-            VALUE "ProductVersion", "1, 0, 5, 0\0"
+            VALUE "ProductVersion", "1, 1, 1, 0\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
