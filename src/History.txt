@@ -4,6 +4,7 @@ Versions:
 v 1.72      : new MidiShare kernel first release
 v 1.80      : kernel with drivers management
 v 1.81      : bug in MSClearSeq corrected
+		      internal changes in drivers management
 v 1.82      : bug in MSSend corrected
 			  internal change in slot infos management
 			  Macintosh release : obsolete function MidiGetPortState returns true
