@@ -27,6 +27,7 @@
 #include "EventToStream.h"
 #include "StreamToEvent.h"
 
+#include "msApplContext.h"
 #include "msCommHandler.h"
 #include "msLog.h"
 #include "msServerInit.h"
@@ -52,15 +53,17 @@ msStreamParseMethodTbl 	gParseMthTable;
 msStreamMthTbl			gStreamMthTable;
 
 /*____________________________________________________________________________*/
-static void Event2Text (MidiEvPtr e, char *buff, short len)
+static char * Event2Text (MidiEvPtr e, char *buff, short len)
 {
+	char * ptr = buff;
     long i, n = MidiCountFields (e);
     len -= 1;
     n = (n > len) ? len : n;
     for (i=0; i<n; i++) {
-        *buff++ = (char)MidiGetField (e, i);
+        *ptr++ = (char)MidiGetField (e, i);
     }
-    *buff = 0;
+    *ptr = 0;
+	return buff;
 }
 
 /*____________________________________________________________________________*/
@@ -68,8 +71,8 @@ static void SetFilter (short ref, MidiEvPtr e)
 {
     ShMemID id; SharedMemHandler memh; void *ptr;
 #ifdef WIN32
-    char fid[20];
-    Event2Text (e, fid, 20);
+    char fid[keyMaxSize+1];
+    Event2Text (e, fid, keyMaxSize+1);
     id = *fid ? fid : 0;
 #else
     id = e->info.longField;
@@ -79,17 +82,73 @@ static void SetFilter (short ref, MidiEvPtr e)
         if (memh) {
             MidiSetFilter (ref, (MidiFilterPtr)ptr);
         }
-        else  printf ("msSharedMemOpen failed\n");
+        else LogWriteErr ("SetFilter: msSharedMemOpen failed");
     }
     else  MidiSetFilter (ref, 0);
 }
 
 /*____________________________________________________________________________*/
-static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
+static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 {
-    MidiEvPtr res = 0;
-    char name[256]; short ref;
-    static char refmap[32];
+    char name[256]; short ref=0;
+	
+	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
+	if (!reply) { 
+		LogWrite ("NetMidiOpen: MidiShare memory allocation failed");
+		goto err;
+	}
+	msApplContextPtr context = NewApplContext();
+	if (!context) { 
+		LogWrite ("NetMidiOpen: memory allocation failed\n");
+		goto err;
+	}
+	Event2Text (e, name, 256);
+	ref = MidiOpen (name);
+	RefNum(reply) = (unsigned char)ref;
+	if (ref > 0) {
+		TApplPtr appl = GetAppl(ref);
+		if (!appl) {
+			LogWrite ("NetMidiOpen: unconsistent application state");
+			goto err;
+		}
+		context->chan = cc;
+		context->filterh = 0;
+		CCInc (cc);
+		appl->context = context;
+	}
+	return reply;
+
+err:
+	if (context) FreeApplContext(context);
+	if (reply) MidiFreeEv(reply);
+	if (ref > 0) MidiClose (ref);
+	return 0;
+}
+
+/*____________________________________________________________________________*/
+static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
+{
+	MidiEvPtr reply = 0;
+	short ref = RefNum(e);
+	msApplContextPtr context = ApplContext(ref);
+
+	if (context && (context->chan == cc)) {
+		if (context->filterh) msSharedMemClose(context->filterh);
+		FreeApplContext(context);
+		MidiClose (ref);
+		CCDec (cc);
+	}
+	reply = MidiNewEv (typeMidiCommSync);
+	if (!reply) {
+		LogWrite ("NetMidiClose: MidiShare memory allocation failed");
+	}
+	return reply;
+}
+
+/*____________________________________________________________________________*/
+static MidiEvPtr EventHandlerProc (MidiEvPtr e, CommunicationChan cc)
+{
+    MidiEvPtr res = 0; char name[256]; 
 
     if (EvType(e) >= typeReserved)
         goto unexpected;
@@ -101,66 +160,30 @@ static MidiEvPtr EventHandlerProc (MidiEvPtr e, int *count)
             goto unexpected;
 
         case typeMidiOpen:
-            Event2Text (e, name, 256);
-            ref = MidiOpen (name);
-//    printf ("typeMidiOpen received: %s (ref:%d)\n", name, ref);
-            if (ref > 0) {
-                *count += 1;
-                refmap[ref>>3] |= (1<<(ref&7));
-            }
-            MidiFreeEv (e);
-            res = MidiNewEv (typeMidiOpenRes);
-            if (res) RefNum(res) = (unsigned char)ref;
-            else goto memfail;
-            break;
+			res = NetMidiOpen (e, cc);
+			break;
         case typeMidiClose:
-            ref = RefNum(e);
-            MidiFreeEv (e);
-            if (refmap[ref>>3] & (1<<(ref&7))) {
-                MidiClose (ref);
-                *count -= 1;
-                refmap[ref>>3] &= ~(1<<(ref&7));
-            }
-//    printf ("typeMidiClose received (ref:%d)\n", ref);
-            res = MidiNewEv (typeMidiCommSync);
-            if (!res) goto memfail;
-            break;
+			res = NetMidiClose (e, cc);
+			break;
         case typeMidiConnect:
             MidiConnect (e->info.cnx.src, e->info.cnx.dst, CnxState(e));
-            MidiFreeEv (e);
-            res = MidiNewEv (typeMidiCommSync);
-            if (!res) goto memfail;
            break;
         case typeMidiSetName:
-            Event2Text (e, name, 256);
-            MidiSetName (RefNum(e), name);
-            MidiFreeEv (e);
-            res = MidiNewEv (typeMidiCommSync);
-            if (!res) goto memfail;
+            MidiSetName (RefNum(e), Event2Text (e, name, 256));
             break;
         case typeMidiSetInfo:
             MidiSetInfo (RefNum(e), (void *)e->info.longField);
-            MidiFreeEv (e);
-            res = MidiNewEv (typeMidiCommSync);
-            if (!res) goto memfail;
             break;
         case typeMidiSetFilter:
             SetFilter (RefNum(e), e);
-            MidiFreeEv (e);
-            res = MidiNewEv (typeMidiCommSync);
-            if (!res) goto memfail;
             break;
         default:
             MidiSend (RefNum(e), e);
     }
     return res;
 
-memfail:
-    LogWrite ("EventHandlerProc: MidiShare memory allocation failed\n");
-    return 0;
 unexpected:
-    LogWrite ("EventHandlerProc: unexpected event type %d\n", EvType(e));
-    MidiFreeEv (e);
+    LogWrite ("EventHandlerProc: unexpected event type %d", EvType(e));
     return 0;
 }
 
@@ -186,7 +209,7 @@ static Boolean SendEvent (MidiEvPtr e, PipesListPtr pl)
     return true;
     
 failed:
-	LogWriteErr ("CCWrite failed (%ld)\n", n);
+	LogWriteErr ("CCWrite failed (%ld)", n);
     return false;
 }
 
@@ -194,22 +217,21 @@ failed:
 static ThreadProc(CommHandlerProc, p)
 {
 	PipesListPtr pl = (PipesListPtr)p;
-    int refcount = 0;
 
 fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
-
     do {
         long n = CCRead (pl->comm, pl->buff, kCommBuffSize);
         if (n > 0) {
             int ret;
-            MidiEvPtr e = msStreamGetEvent (&pl->parse, &ret);
+            MidiEvPtr reply, e = msStreamGetEvent (&pl->parse, &ret);
             if (e) {
-                e = EventHandlerProc(e, &refcount);
-                if (e && !SendEvent (e, pl))
-                    break;
+				reply = EventHandlerProc(e, pl->comm);
+				MidiFreeEv (e);
+				if (reply && !SendEvent (reply, pl))
+					break;
             }
             else if (ret != kStreamNoMoreData) {
-                LogWrite ("msStreamGetEvent read error (%d)\n", ret);
+                LogWrite ("msStreamGetEvent read error (%d)", ret);
                 break;
             }
         }
@@ -217,8 +239,9 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
             LogWriteErr ("CommHandlerProc read error (%ld)", n);
             break;
         }
-    } while (refcount);
-fprintf (stderr, "CommHandlerProc exit: CloseCommunicationChannel (refcount %d)\n", refcount);
+    } while (CCRefCount(pl->comm));
+//	if (CCRefCount(pl->comm))
+		LogWrite ("CommHandlerProc exit: CloseCommunicationChannel (refcount %d)", CCRefCount(pl->comm));
     CloseCommunicationChannel (pl->comm);
     pl->comm = 0;
     pl->thread = 0;
@@ -262,7 +285,7 @@ void NewClientChannel (CommunicationChan cc)
     pl = (PipesListPtr)malloc (sizeof(PipesList));
     if (!pl) {
         CloseCommunicationChannel (cc);
-        LogWrite ("NewClientChannel: PipesList memory allocation failed\n");
+        LogWrite ("NewClientChannel: PipesList memory allocation failed");
         return;
     }
     msStreamParseInit (&pl->parse, gParseMthTable, pl->buff, kParseBuffSize);
@@ -273,7 +296,7 @@ void NewClientChannel (CommunicationChan cc)
 	if (!thread) {
         CloseCommunicationChannel (cc);
         free (pl);
-        LogWrite ("NewClientChannel: msThreadCreate failed\n");
+        LogWrite ("NewClientChannel: msThreadCreate failed");
         return;
     }
     pl->thread = thread;
