@@ -70,7 +70,7 @@
 		};
 		F547CC8201FC5DCC01053105 = {
 			isa = PBXLibraryReference;
-			path = msSynthDriver.1.0.0.dylib;
+			path = msSynthDriver.1.0.0.so;
 			refType = 3;
 		};
 		F547CC8301FC5DCC01053105 = {
@@ -90,7 +90,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msSynthDriver.1.0.0.dylib;
+				PRODUCT_NAME = msSynthDriver.1.0.0.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";

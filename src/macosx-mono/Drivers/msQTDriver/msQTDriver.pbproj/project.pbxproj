@@ -96,7 +96,7 @@
 		};
 		F5EFF91701FDA40901053105 = {
 			isa = PBXLibraryReference;
-			path = msQTDriver.1.0.0.dylib;
+			path = msQTDriver.1.0.0.so;
 			refType = 3;
 		};
 		F5EFF91801FDA40901053105 = {
@@ -117,7 +117,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.0.dylib;
+				PRODUCT_NAME = msQTDriver.1.0.0.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";

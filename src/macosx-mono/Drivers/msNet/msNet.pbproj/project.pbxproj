@@ -329,12 +329,12 @@
 		};
 		F727EA2C0209389101053118 = {
 			isa = PBXLibraryReference;
-			path = msLANDriver.1.0.0.dylib;
+			path = msLANDriver.1.0.0.so;
 			refType = 3;
 		};
 		F727EA2D0209389101053118 = {
 			isa = PBXLibraryReference;
-			path = msWANDriver.1.0.0.dylib;
+			path = msWANDriver.1.0.0.so;
 			refType = 3;
 		};
 		F727EA2E0209389101053118 = {
@@ -357,7 +357,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = implicit.h;
-				PRODUCT_NAME = msLANDriver.1.0.0.dylib;
+				PRODUCT_NAME = msLANDriver.1.0.0.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -508,7 +508,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRECOMPILED_IMPLICITLY_INCLUDED_HEADERS = implicit.h;
-				PRODUCT_NAME = msWANDriver.1.0.0.dylib;
+				PRODUCT_NAME = msWANDriver.1.0.0.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";

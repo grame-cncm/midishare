@@ -94,7 +94,7 @@
 		};
 		F5EFF92D01FDE09501053105 = {
 			isa = PBXLibraryReference;
-			path = msPTDriver.1.0.0.dylib;
+			path = msPTDriver.1.0.0.so;
 			refType = 3;
 		};
 		F5EFF92E01FDE09501053105 = {
@@ -114,7 +114,7 @@
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = msPTDriver.1.0.0.dylib;
+				PRODUCT_NAME = msPTDriver.1.0.0.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
