@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "../../Include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "../../Include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
@@ -88,18 +88,15 @@ LINK32=link.exe
 # Name "msControl32 - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\icon.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\Msctrl.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\msCtrl32.rc
-
-!IF  "$(CFG)" == "msControl32 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "msControl32 - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
