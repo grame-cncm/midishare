@@ -23,10 +23,8 @@
 #ifndef __LFLIFO__
 #define __LFLIFO__
 
-#include "msTypes.h"
-#include "msSync.h"
 
-
+//
 /*****************************************************************
  *****************************************************************
                        LOCK FREE LIFO STACK 
@@ -63,6 +61,14 @@
 /*****************************************************************
                            DATA STRUCTURES
  *****************************************************************/
+ 
+typedef struct cell {
+	struct cell* link;		/*+ next cell in the list 	+*/
+							/*+ any data here			+*/
+} cell;
+
+ 
+ 
 #ifdef __Pentium__
 # define vtype volatile
 #else
