@@ -31,7 +31,7 @@
 #include <pthread.h>
 #include <CoreFoundation/CFRunLoop.h>
 
-static char * profileName = "msMidiDriver.ini";
+#define profileName "msMidiDriver.ini"
 static char * fullProfileName = 0;
 
 Boolean Start();

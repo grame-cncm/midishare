@@ -23,34 +23,14 @@
 #include "MidiShare.h"
 #include "FilterUtils.h"
 #include "msMidiState.h"
+#include "msDriverState.h"
 #include "profport.h"
 
-static char * outSlotSectionName = "Output Slots";
-static char * inSlotSectionName  = "Input Slots";
-static char * MidiShareDirectory = "MidiShare";
-
-#define kMaxEntryLen	1024
-#define PortMaxEntry	10
-#define CnxError	-1
-
-static unsigned short CountCnx (char * cnxString);
-static short GetCnx (char * cnxString, short index);
-static __inline Boolean CnxSeparator(c) { return ((c)==' ') || ((c)=='	'); }
+#define outSlotSectionName  "Output Slots"
+#define inSlotSectionName   "Input Slots"
 
 //________________________________________________________________________
-char * GetProfileFullName (char * name)
-{
-	static char  buff [1024];
-	const char* home = getenv("HOME");
-	if (home) {
-		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, name);
-		return buff;
-	}
-	return name;
-}
-
-//________________________________________________________________________
-static void SaveSlot (SlotPtr slot, char * section, char* fullname)
+static void SaveSlots (SlotPtr slot, char * section, char* fullname)
 {
 	TSlotInfos infos;
         
@@ -73,18 +53,18 @@ static void SaveSlot (SlotPtr slot, char * section, char* fullname)
 void SaveState (SlotPtr in, SlotPtr out, char* fullname)
 {
 	while (in) {
- 		SaveSlot (in, inSlotSectionName,fullname);
+ 		SaveSlots (in, inSlotSectionName,fullname);
 		in = in->next;
 	}
         
 	while (out) {
- 		SaveSlot (out, outSlotSectionName,fullname);
+ 		SaveSlots (out, outSlotSectionName,fullname);
 		out = out->next;
 	}
 }
 
 //________________________________________________________________________
-static void LoadSlot (SlotPtr slot, char * section, char* fullname)
+static void LoadSlots (SlotPtr slot, char * section, char* fullname)
 {
 	TSlotInfos infos;
 	if (MidiGetSlotInfos (slot->refNum, &infos)) {
@@ -109,63 +89,12 @@ static void LoadSlot (SlotPtr slot, char * section, char* fullname)
 void LoadState (SlotPtr in, SlotPtr out, char* fullname)
 {
 	while (out) {
-		LoadSlot (out, outSlotSectionName,fullname);
+		LoadSlots (out, outSlotSectionName,fullname);
 		out = out->next;
 	}
 	while (in) {
-		LoadSlot (in, inSlotSectionName,fullname);
+		LoadSlots (in, inSlotSectionName,fullname);
 		in = in->next;
 	}
-}
-
-//________________________________________________________________________
-static char * NextCnx (char *ptr, Boolean first)
-{
-	Boolean skipped = first;
-	while (*ptr) {
-		if (CnxSeparator(*ptr))	skipped = true;
-		else if (skipped) return ptr;
-		ptr++;
-	}
-	return 0;
-}
-
-//________________________________________________________________________
-static unsigned short CountCnx (char * cnxString)
-{
-	unsigned short count = 0;
-	char * ptr = NextCnx (cnxString, true);
-	while (ptr) {
-		count++;
-		ptr = NextCnx (ptr, false);
-	}
-	return count;
-}
-
-//________________________________________________________________________
-static Boolean NullString (char * ptr)
-{
-	while (*ptr)
-		if (*ptr++ != '0') return false;
-	return true;
-}
-
-//________________________________________________________________________
-static short GetCnx (char * cnxString, short index)
-{
-	short cnx, bufsize=PortMaxEntry; char buff[PortMaxEntry];
-	char * dst = buff;
-	char * ptr = NextCnx (cnxString, true);
-	while (index-- && ptr)
-		ptr = NextCnx (ptr, false);
-	if (!ptr) return CnxError;
-	
-	while (*ptr && !CnxSeparator(*ptr) && --bufsize)
-		*dst++ = *ptr++;
-	if (!bufsize) return CnxError;
-	*dst = 0;
-	cnx = (short)atol (buff);
-	if (!cnx && !NullString (buff)) return CnxError;
-	return cnx;
 }
 

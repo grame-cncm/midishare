@@ -5,6 +5,42 @@
 	};
 	objectVersion = 34;
 	objects = {
+		F58CAEF0020ADFE701053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEF1020ADFE701053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEF2020ADFE701053105 = {
+			fileRef = F58CAEF1020ADFE701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEF3020ADFE701053105 = {
+			fileRef = F58CAEF0020ADFE701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEF4020AE0C701053105 = {
+			isa = PBXFileReference;
+			name = profport.c;
+			path = ../../../lib/profport.c;
+			refType = 2;
+		};
+		F58CAEF5020AE0C701053105 = {
+			fileRef = F58CAEF4020AE0C701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5EFF92801FDE04F01053105 = {
 			buildStyles = (
 				F5EFF92A01FDE04F01053105,
@@ -22,7 +58,10 @@
 			children = (
 				F5EFF93401FDE0FF01053105,
 				F5EFF93301FDE0DA01053105,
+				F58CAEF0020ADFE701053105,
+				F58CAEF1020ADFE701053105,
 				F5EFF92C01FDE09501053105,
+				F58CAEF4020AE0C701053105,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -93,6 +132,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5EFF93501FDE0FF01053105,
+				F58CAEF2020ADFE701053105,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -101,6 +141,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5EFF93601FDE0FF01053105,
+				F58CAEF3020ADFE701053105,
+				F58CAEF5020AE0C701053105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;

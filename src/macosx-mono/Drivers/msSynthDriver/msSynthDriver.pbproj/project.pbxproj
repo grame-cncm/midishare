@@ -34,6 +34,8 @@
 			children = (
 				F54A7D7001FC5E5201053105,
 				F5240F2202080A2301053105,
+				F58CAEEC020ADFC101053105,
+				F58CAEED020ADFC101053105,
 				F547CC8101FC5DCC01053105,
 			);
 			isa = PBXGroup;
@@ -105,6 +107,7 @@
 		F547CC8401FC5DCC01053105 = {
 			buildActionMask = 2147483647;
 			files = (
+				F58CAEEE020ADFC101053105,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -114,6 +117,7 @@
 			files = (
 				F54A7D7101FC5E5201053105,
 				F5240F2302080A2301053105,
+				F58CAEEF020ADFC101053105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -148,6 +152,30 @@
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;
 			refType = 0;
+		};
+		F58CAEEC020ADFC101053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEED020ADFC101053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEEE020ADFC101053105 = {
+			fileRef = F58CAEED020ADFC101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEEF020ADFC101053105 = {
+			fileRef = F58CAEEC020ADFC101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = F54622F401FC5D7801053105;

@@ -34,10 +34,12 @@
 			children = (
 				F5EFF92601FDA77301053105,
 				F5EFF91D01FDA41501053105,
+				F5240F1A0208005601053105,
+				F58CAEE8020ADF9B01053105,
+				F58CAEE9020ADF9B01053105,
 				F5EFF92301FDA4CC01053105,
 				F5EFF91601FDA40901053105,
 				F5EFF91F01FDA46601053105,
-				F5240F1A0208005601053105,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -59,6 +61,30 @@
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
+		};
+		F58CAEE8020ADF9B01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.c;
+			path = ../lib/msDriverState.c;
+			refType = 2;
+		};
+		F58CAEE9020ADF9B01053105 = {
+			isa = PBXFileReference;
+			name = msDriverState.h;
+			path = ../lib/msDriverState.h;
+			refType = 2;
+		};
+		F58CAEEA020ADF9B01053105 = {
+			fileRef = F58CAEE9020ADF9B01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F58CAEEB020ADF9B01053105 = {
+			fileRef = F58CAEE8020ADF9B01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5EFF91601FDA40901053105 = {
 			children = (
@@ -83,7 +109,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = ../../../lib;
+				HEADER_SEARCH_PATHS = "../../../common/Headers ../../../lib";
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
@@ -109,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5EFF92701FDA77301053105,
+				F58CAEEA020ADF9B01053105,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -118,6 +145,7 @@
 			files = (
 				F5EFF91E01FDA41501053105,
 				F5240F1B0208005601053105,
+				F58CAEEB020ADF9B01053105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
