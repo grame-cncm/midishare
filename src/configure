@@ -30,7 +30,7 @@ then
 elif [ $arch == "i386" ]
 then
 	echo Calling conf i386
-	makemake osx
+	makemake linux
 else
 	echo error: architecture undefined
 	exit 0
