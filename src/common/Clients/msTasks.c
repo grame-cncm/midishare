@@ -22,6 +22,7 @@
    [08-09-99] DF - adaptation to the new memory management
                    includes now ForgetTaskSync
    [13-09-99] DF - removing direct fifo access
+   [16-01-01] SL - ForgetTaskSync moved to platform dependent code
 
 */
 
@@ -145,22 +146,4 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
 		}
 	}	
 }
-
-
-/*===========================================================================
-  Internal functions implementation
-  =========================================================================== */
-
-
-#if defined(__Linux__) || defined(__Windows__)
-static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
-{
-	if (*taskPtr == content) {
-      		EvType(content) = typeDead;
-    		*taskPtr = 0;
-    		return true;
-	}
-	return false;
-}
-#endif /* __Linux__ */
 
