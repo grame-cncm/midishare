@@ -203,7 +203,7 @@
 				0249A669FF388E3911CA2CEA,
 				0640BAA4FFF0323A11CA0E50,
 				0640BAA5FFF0323A11CA0E50,
-				D3E1467005063A9F00053103,
+				4B5F86D1050CCE3000053105,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -226,7 +226,7 @@
 			);
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "/Users/fober/src/midishare/current/src/macosx-mono/build";
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "../macosx-mono ../../../lib";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
@@ -307,7 +307,7 @@
 			files = (
 				20286C3CFDCF999611CA2CEA,
 				0249A66AFF388E3911CA2CEA,
-				D3E1467105063A9F00053103,
+				4B5F86D2050CCE3000053105,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -323,23 +323,33 @@
 //202
 //203
 //204
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4B5F86D1050CCE3000053105 = {
+			isa = PBXFrameworkReference;
+			name = MidiShare.framework;
+			path = /System/Library/Frameworks/MidiShare.framework;
+			refType = 0;
+		};
+		4B5F86D2050CCE3000053105 = {
+			fileRef = 4B5F86D1050CCE3000053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //D30
 //D31
 //D32
 //D33
 //D34
-		D3E1467005063A9F00053103 = {
-			isa = PBXFrameworkReference;
-			name = MidiShare.framework;
-			path = ../../build/MidiShare.framework;
-			refType = 2;
-		};
-		D3E1467105063A9F00053103 = {
-			fileRef = D3E1467005063A9F00053103;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		D3F5817D0507321600053103 = {
 			isa = PBXFileReference;
 			path = msControler.icns;

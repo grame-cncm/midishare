@@ -5,23 +5,23 @@
 	};
 	objectVersion = 38;
 	objects = {
-		D3E146CE05063C7700053103 = {
+		4B97CB9E050CC7E600053105 = {
 			isa = PBXFrameworkReference;
 			name = MidiShare.framework;
-			path = ../../MidiShare.framework;
-			refType = 2;
+			path = /System/Library/Frameworks/MidiShare.framework;
+			refType = 0;
 		};
-		D3E146CF05063C7700053103 = {
-			fileRef = D3E146CE05063C7700053103;
+		4B97CB9F050CC7E600053105 = {
+			fileRef = 4B97CB9E050CC7E600053105;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-//D30
-//D31
-//D32
-//D33
-//D34
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //F50
 //F51
 //F52
@@ -91,7 +91,7 @@
 				F76B9CAA02086C0B01053118,
 				F54A7D7A01FC781301053105,
 				F76B9CAD02086E8001053118,
-				D3E146CE05063C7700053103,
+				4B97CB9E050CC7E600053105,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -139,7 +139,7 @@
 		};
 		F54A7D7B01FC781301053105 = {
 			isa = PBXLibraryReference;
-			path = ../msMidiDriver.1.0.3.so;
+			path = msMidiDriver.1.0.3.so;
 			refType = 3;
 		};
 		F54A7D7C01FC781301053105 = {
@@ -152,7 +152,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = ../../;
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = ../../../common/Headers;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O2";
@@ -163,7 +163,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = ../msMidiDriver.1.0.3.so;
+				PRODUCT_NAME = msMidiDriver.1.0.3.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -223,7 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F76B9CAE02086E8001053118,
-				D3E146CF05063C7700053103,
+				4B97CB9F050CC7E600053105,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
