@@ -25,7 +25,6 @@ $(TARGET) :   $(OBJ)
 	$(CC)  $(OBJ) -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
 
 install: $(LIB).1.0
-	./checksu
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
 	if [ ! -f $(LIB).1 ]; then ln -s $(LIB).1.0 $(LIB).1; fi
 
