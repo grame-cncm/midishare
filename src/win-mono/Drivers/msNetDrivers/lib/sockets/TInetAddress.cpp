@@ -21,7 +21,7 @@
 */
 
 
-#include <string.h>
+//#include <string.h>
 #include <windows.h>
 #include <winsock.h>
 
