@@ -154,7 +154,7 @@ class TTicksTask {
 			fStatus = kTaskIdle;
 		}
 		// A REVOIR (risque de conflit avec les taches temps rŽel)
-		virtual ~TTicksTask() {MidiForgetTask(&fTask); if (fScheduler) fScheduler->RemoveTask(this);}
+		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget () { if (IsRunning ()) fStatus = kTaskForget;}
 		
 		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
