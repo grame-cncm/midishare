@@ -45,17 +45,8 @@
 
 #include "oldMSSupport.h"
 
-//_________________________________________________________
-// DECLARATION DES VARIABLES GLOBALES
-TMSGlobal   	gMSMem = {0};
-TMSGlobalPtr	gMem = &gMSMem;
-
 
 /*--------------------------- Global MidiShare environment --------------------*/
-MSFunctionType(void) MidiShareSpecialInit(unsigned long defaultSpace) {
-  MSSpecialInit (defaultSpace, gMem);
-}
-
 MSFunctionType(short) MGetIndAppl(short index, TMSGlobalPtr g) {
   return MSGetIndAppl (index, Clients(g));
 }
