@@ -30,13 +30,18 @@
 
  */
 
-#include <StdLib.h>
-#include <String.h>
 
-#include "MidiFile.h"
+#include "Midifile.h"
 
 #ifdef __Macintosh__
-#include <Errno.h>
+        #include <Errno.h>
+        #include <StdLib.h>
+        #include <String.h>
+#endif
+
+#ifdef __Windows__
+        #include <StdLib.h>
+        #include <String.h>
 #endif
 
 
