@@ -98,9 +98,15 @@ typedef unsigned char Boolean;
 #define typeTimeSign       146   /* time signature                         */
 #define typeKeySign        147   /* signature tonale                       */
 #define typeSpecific       148   /* sequencer specific meta event          */
+#define typePortPrefix	   149	 /* MidiFile Midi Port Prefix			   */
 
-#define typeReserved       149   /*149..254 reserved for future extensions */
-#define typeDead           255   /* dead Task or DTask                     */
+#define typeRcvAlarm    150  	/* RcvAlarm         						*/
+#define typeApplAlarm   151  	/* ApplAlarm       						*/
+
+#define typeReserved     152    /*152..254 reserved for future extensions */
+#define typeLastReserved 254	/*152..254 reserved for future extensions */
+
+#define typeDead         255   	/* dead Task or DTask                     */
 
 
 
@@ -421,6 +427,8 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
     #define Tempo(e)      ( (e)->info.tempo )
     #define SeqNum(e)     ( (e)->info.seqNum.number )
     #define ChanPrefix(e) ( (e)->info.data[0] )
+    #define PortPrefix(e) ( (e)->info.data[0] )
+
 
     #define First(e)      ( (e)->first )
     #define Last(e)       ( (e)->last )
