@@ -848,7 +848,7 @@ main( int argc, char *argv[])
 	{
 		version= MidiGetVersion();
 		fprintf( stdout, "                MidiShare version %d.%d\n", (int)version/100, (int)version%100);
-		fprintf( stdout, "\Warning : MidiShare must have at least 10000 events !\n");
+		fprintf( stdout, "\nWarning : MidiShare must have at least 10000 events !\n");
 
 		if( OpenAppls())
 		{
@@ -871,6 +871,6 @@ main( int argc, char *argv[])
 
 	}
 	else fprintf( stdout, "MidiShare is not installed !\n");
-	fprintf( stdout, "\nEnd of allocation test emission and reception of events.\n");
+	fprintf( stdout, "\nEnd of allocation emission and reception test of events.\n");
 	return 0;
 }

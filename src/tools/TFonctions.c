@@ -946,6 +946,6 @@ main()
 		MidiClose( refNum);
 	}
 	else fprintf( stdout, "MidiShare is not installed !\n");
-	fprintf( stdout, "\End of function test.\n");
+	fprintf( stdout, "\nEnd of functions test.\n");
 	return 0;
 }
