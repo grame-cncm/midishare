@@ -37,7 +37,7 @@ MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, fifo* schedlist,
 	if( e) {
 		RefNum(e) = (uchar)refNum;
 		Date(e)   = curdate;
-		fifoput (schedlist, (cell*)e);
+		fifoput (schedlist, (fifocell*)e);
 	}
 }
 
@@ -46,7 +46,7 @@ MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, fifo* schedlist)
 {
 	if( e) {
 		RefNum(e)= (uchar)refNum;
-		fifoput (schedlist, (cell*)e);
+		fifoput (schedlist, (fifocell*)e);
 	}
 }
 
@@ -57,7 +57,7 @@ MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d,
 	if( e) {
 		RefNum(e)= (uchar)refNum;
 		Date(e)= d;
-		fifoput (schedlist, (cell*)e);
+		fifoput (schedlist, (fifocell*)e);
 	}
 }
 
@@ -99,7 +99,7 @@ MSFunctionType(void) MSFlushEvs (short refNum, TClientsPtr g)
 
 	if( CheckRefNum( g, refNum)) {
 		appl = g->appls[refNum]; 
-		ev = (MidiEvPtr)fifoclear (&appl->rcv);
+		ev = (MidiEvPtr)fifoflush (&appl->rcv);
 		while( ev) {
 			next= Link(ev);
 			MSFreeEv (ev, FreeList(g->memory));

@@ -1,15 +1,18 @@
 
+#OPTIONS = -Dmacintosh -D__Types__
+#INC = -I../macosx-mono
+#LIB = -framework MidiShare
 LIB = -lMidiShare
-CFLAGS := -O3 $(OPTIONS)
-CC    = gcc
-TESTS = TDrivers TEvents TFilters TFonctions TOutEvents
+CFLAGS := -O3 $(OPTIONS) $(INC)
+CC    = cc
+TESTS = TFonctions TEvents TFilters TDrivers TOutEvents
 RES   = results
 
-all : makefile $(TESTS)
+all : $(TESTS)
 
 TDrivers : TDrivers.c TDrivers.h
 	$(CC) $(CFLAGS) $(LIB) TDrivers.c -o TDrivers
-	
+
 TEvents : TEvents.c TEvents.h
 	$(CC) $(CFLAGS) $(LIB) TEvents.c -o TEvents
 
@@ -21,13 +24,13 @@ TFonctions : TFonctions.c TFonctions.h
 
 TOutEvents : TOutEvents.c TOutEvents.h
 	$(CC) $(CFLAGS) $(LIB) TOutEvents.c -o TOutEvents
-	
+
 run :
 	[ -d $(RES) ] || mkdir $(RES)
-	./TFonctions > $(RES)/TFonctions.txt
+	./TFonctions > $(RES)/Tfonctions.txt
 	./TEvents    > $(RES)/TEvents.txt
 	./TFilters   > $(RES)/TFilters.txt
 	./TDrivers   > $(RES)/TDrivers.txt
-	
+
 clean :
 	rm $(TESTS)

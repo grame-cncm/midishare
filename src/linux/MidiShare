@@ -10,7 +10,7 @@
 . /etc/rc.d/init.d/functions
 
 result() {
-	if [ $? ]; then 
+	if [ $1 != 0 ]; then 
 		echo_failure
 	else 
 		echo_success
@@ -24,24 +24,24 @@ result() {
 case "$1" in
   start)
 	# Check if MidiShare is already installed
-	lsmod | grep MidiShare >/dev/null
-	if [ ! $? ]; then 
-		echo MidiShare module is still installed
+	lsmod | grep midishare >/dev/null
+	if [ $? == 0 ]; then 
+		echo MidiShare module is already installed
 	else
 		echo -n Loading MidiShare module
-		modprobe MidiShare 2>/dev/null
-		result
+		modprobe midishare 2>/dev/null
+		result $?
 	fi
 	;;
   stop)
 	# Check if MidiShare is already installed
-	lsmod | grep MidiShare >/dev/null
-	if [ $? ]; then 
+	lsmod | grep midishare >/dev/null
+	if [ $? != 0 ]; then 
 		echo MidiShare module is not installed
 	else
 		echo -n Removing MidiShare module
-		rmmod MidiShare 2>/dev/null
-		result
+		rmmod midishare 2>/dev/null
+		result $?
 	fi
 	;;
   reload|restart)

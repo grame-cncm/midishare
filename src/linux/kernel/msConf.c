@@ -22,7 +22,7 @@
 
 #ifdef MODULE
 #ifdef MODVERSIONS
-# include <linux/modversions.h>
+# include <config/modversions.h>
 #endif
 #define malloc(size)	kmalloc(size, GFP_KERNEL)
 #define free			kfree
@@ -32,6 +32,7 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <asm/current.h>
+#include <linux/sched.h>
 #include <asm/string.h>
 
 #include "msConf.h"
@@ -193,17 +194,17 @@ static void skip_line (fileptr fd)
 static char read_char (fileptr fd)
 {
 	long l; ssize_t n; char *c = (char *)&l;
-	long savedLimit = get_current()->addr_limit.seg;
-	get_current()->addr_limit.seg = 0xffffffff;
+	long savedLimit = current_thread_info()->addr_limit.seg;
+	current_thread_info()->addr_limit.seg = 0xffffffff;
 
 	do {
 		n = generic_file_read (fd, c, 1, &(fd->f_pos));
 		if (n <= 0) {
-			get_current()->addr_limit.seg = savedLimit;
+			current_thread_info()->addr_limit.seg = savedLimit;
 			return EOF;
 		}
 	} while ((*c == ' ') || (*c == '\t'));
-	get_current()->addr_limit.seg = savedLimit;
+	current_thread_info()->addr_limit.seg = savedLimit;
 	return *c;
 }
 

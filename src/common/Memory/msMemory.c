@@ -131,10 +131,10 @@ static ulong NewBlock (MSMemoryPtr g, ulong nbev)
 		unsigned long size = nbev * sizeof(TMidiEv) + sizeof(void*);
 		blk = (void **)AllocateMemory (kSharedMemory, size);
 		if (!blk) return 0;
-		lfpush ( BlockList(g), (cell*)blk);
+		lfpush ( BlockList(g), (lifocell*)blk);
 		cl = (MidiEvPtr)(blk+1);
 		for (i=0; i<nbev; i++) {
-			lfpush(FreeList(g), (cell*)(cl++));
+			lfpush(FreeList(g), (lifocell*)(cl++));
 		}
 		g->totalSpace += nbev; /* A REVOIR POUR UN SYSTEME LOCK FREE */
 	}

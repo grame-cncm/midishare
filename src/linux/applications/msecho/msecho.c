@@ -1,13 +1,18 @@
 /****************************************************************************
 *****************************************************************************
-*																	*
-*                     		msEcho, GTK version 							*
-*																	*
+																	
+                     		msEcho, GTK version 							
+																	
+  
+  modifications history:
+   [06-01-2005] YO - corrected confusion between el and e1
+
 *****************************************************************************
 *****************************************************************************/
 
 
 #include <stdio.h>
+#include <assert.h>
 #include <gtk/gtk.h>
 #include "MidiShare.h"
 
@@ -28,7 +33,7 @@ static short  gVelocity = 0;
 static short  gChannel = 0;
 
 
-static void EchoTask( long d,short ref,long el,long a2, long a3);
+static void EchoTask( long d,short ref,long e1,long a2, long a3);
 
 /****************************************************************************
 						Callbacks definition
@@ -91,13 +96,12 @@ static void EchoAlarm ( short r)
   
   while ((e = MidiGetEv(r))) {
          d = Date(e) + gDelay;
-         if ( (gChannel!=0) && (gChannel!=Chan(e)+1) )
+         if ( (gChannel!=0) && (gChannel!=Chan(e)+1) ) {
                 MidiFreeEv(e);
-         else if ( EvType(e) == typeNote ) {
+         } else if ( EvType(e) == typeNote ) {
                 if( !MidiTask(EchoTask,d,r,(long)e,0,0))
                         MidiFreeEv(e);
-         }
-         else if ( Vel(e) > 0 )  {
+         } else if ( Vel(e) > 0 )  {
 	        EvType(e) = typeNote;
                 Dur(e) = 100;
                 if( !MidiTask(EchoTask,d,r,(long)e,0,0))
@@ -111,12 +115,13 @@ static void EchoAlarm ( short r)
 				Real time echo management task
 *****************************************************************************/
 
-static void EchoTask( long d,short ref,long el,long a2, long a3)
+static void EchoTask( long d,short ref,long e1,long a2, long a3)
 {
   MidiEvPtr e;
   short v,p;
 
-  e= (MidiEvPtr)el;
+	assert(e1);
+  e = (MidiEvPtr)e1;
   v = Vel(e)+gVelocity;
   p = Pitch(e)+gPitch;
   if (d+1000 < MidiGetTime()) {
@@ -127,8 +132,9 @@ static void EchoTask( long d,short ref,long el,long a2, long a3)
 		Vel(e) = v;
 		Pitch(e) = p;
 		MidiSendAt(ref, MidiCopyEv(e), d);
-		if( !MidiTask(EchoTask, d+gDelay, ref, el, 0, 0) ) {
-			printf("out of mem!\n");
+		if( !MidiTask(EchoTask, d+gDelay, ref, e1, 0, 0) ) {
+			printf("ERROR : msEcho is unable to create MidiTask!\n");
+			printf("-> MidiFreeSpace() = %ld\n", MidiFreeSpace());
 			MidiFreeEv(e);
 		}
   } else {
@@ -193,7 +199,7 @@ int main(int argc, char *argv[] )
 
 	vbox = gtk_vbox_new (FALSE, 10);
 	
-	// Add controllers
+	// Add controllers 
 	add_control(vbox, "Pitch", pitch);
 	add_control(vbox, "Vel", velocity);
 	add_control(vbox, "Delay", delay);
@@ -217,7 +223,7 @@ int main(int argc, char *argv[] )
 	);
 	
 	gtk_main ();
-	printf("MidiFreeSpace = %d\n", MidiFreeSpace());
+	printf("MidiFreeSpace = %ld\n", MidiFreeSpace());
 	return(0);
 }
 

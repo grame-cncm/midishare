@@ -134,7 +134,7 @@ void display_1_event(MidiEvPtr e)
 
 // GTK periodical function 
 
-gint display_events( gpointer data )
+gint old_display_events( gpointer data )
 {
 	MidiEvPtr e;
 	long c = MidiCountEvs(gRefNum);
@@ -155,6 +155,21 @@ gint display_events( gpointer data )
 	return TRUE;
 }
 
+gint new_display_events( gpointer data )
+{
+	MidiEvPtr e;
+	
+	while ((e=MidiGetEv(gRefNum))) {
+		display_1_event(e);
+		MidiFreeEv(e);
+	}
+
+	gtk_clist_moveto(GTK_CLIST(gEventList), (gCount>MAXEV) ? MAXEV-1 : gCount-1, 0, 0.0, 1.0);
+	
+	return TRUE;
+}
+
+#define display_events old_display_events
 										
 /****************************************************************************
 						Callbacks definition

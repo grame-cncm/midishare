@@ -184,9 +184,9 @@ static void VarLenContinuation (Ev2UDPStreamPtr f)
 //___________________________________________________________________________
 //	linearization methods					
 //___________________________________________________________________________
-#define LinearizeDate(i, e, f)		LinearizeShort (i, Date(e), f)
+#define LinearizeDate(i, e, f)		LinearizeShort (i, (short)Date(e), f)
 
-static inline void LinearizeLong (short i, long v, Ev2UDPStreamPtr f)
+static inline void LinearizeLong (int i, long v, Ev2UDPStreamPtr f)
 {
 	char *ptr = (char *)&v;
 #if defined(bigendian)
@@ -203,7 +203,7 @@ static inline void LinearizeLong (short i, long v, Ev2UDPStreamPtr f)
 #endif
 }
 
-static inline void LinearizeShort (short i, short v, Ev2UDPStreamPtr f)
+static inline void LinearizeShort (int i, short v, Ev2UDPStreamPtr f)
 {
 	char *ptr = (char *)&v;
 #if defined(bigendian)
@@ -215,7 +215,7 @@ static inline void LinearizeShort (short i, short v, Ev2UDPStreamPtr f)
 #endif
 }
 
-static inline void LinearizeCommon (short i, MidiEvPtr e, Ev2UDPStreamPtr f)
+static inline void LinearizeCommon (int i, MidiEvPtr e, Ev2UDPStreamPtr f)
 {
 	f->data[i--] = EvType(e);
 	LinearizeDate (i, e, f);
@@ -224,15 +224,15 @@ static inline void LinearizeCommon (short i, MidiEvPtr e, Ev2UDPStreamPtr f)
 	f->data[i] = Chan(e);
 }
 
-static inline void LinearizeVarLenCommon (short i, short len, MidiEvPtr e, Ev2UDPStreamPtr f)
+static inline void LinearizeVarLenCommon (int i, short len, MidiEvPtr e, Ev2UDPStreamPtr f)
 {
 	LinearizeShort (i, len, f);
 	LinearizeCommon (i-2, e, f);
 }
 
-static inline void LinearizeFixedCommon (short i, MidiEvPtr e, Ev2UDPStreamPtr f)
+static inline void LinearizeFixedCommon (int i, MidiEvPtr e, Ev2UDPStreamPtr f)
 {
-	LinearizeShort (i, i-kLenSize, f);
+	LinearizeShort (i, (short)(i-kLenSize), f);
 	LinearizeCommon (i-2, e, f);
 }
 
@@ -322,12 +322,12 @@ static void LinearizeVarLen (MidiEvPtr e, Ev2UDPStreamPtr f)
 	if (first == last) {
 		int i = 0, j = first->data[11];
 		f->count = kCommonSize + j;
-		LinearizeVarLenCommon (f->count, len, e, f);
+		LinearizeVarLenCommon (f->count, (short)len, e, f);
 		while(j>0) f->data[j--] = first->data[i++];
 	} else {
 		int i = 0, j = 12;
 		f->count = kCommonSize + 12;
-		LinearizeVarLenCommon (f->count, len, e, f);
+		LinearizeVarLenCommon (f->count, (short)len, e, f);
 		while(j>0) f->data[j--] = first->data[i++];
 		f->nextCell = first->link;
 		f->cont = VarLenContinuation;

@@ -1,6 +1,8 @@
 
 Versions:
 ------------------------
+v 1.89  : new fifo management 
+		  linux kernel 2.6 support
 v 1.88  : mutex support in MSOpen and MSClose
 v 1.87  : MacOSX release: framework version
 		  extends time management to timer mode
@@ -25,6 +27,7 @@ v 1.72  : new MidiShare kernel first release
 
 Tags :
 ------------------------
+09/03/2005  V188	: version 1.88
 23/02/2004  V187M	: Macintosh release 1.87
 26/06/2001  dev		: Created a 'dev' tag for all platforms
 26/06/2001  V185	: Release 1.85 for all platforms

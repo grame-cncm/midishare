@@ -68,6 +68,7 @@ void ClockHandler (TMSGlobalPtr g)
 	}
 #endif
 
+#if 0
 	 h= &g->currTime;
 	 if( ++h->reenterCount) {
 		 return;
@@ -75,7 +76,7 @@ void ClockHandler (TMSGlobalPtr g)
 
 	 do {
 		 h->time++;
-		 e = (TDatedEvPtr)fifoclear (SorterList(g));
+		 e = (TDatedEvPtr)fifoflush (SorterList(g));
 		 ready = (MidiEvPtr)SorterClock(Sorter(g), e);
 		 if( ready) {
 		 	NextActiveAppl(g) = ActiveAppl(g);
@@ -84,6 +85,20 @@ void ClockHandler (TMSGlobalPtr g)
 		 }
 
 	} while( h->reenterCount--);
+#endif
+
+	/* YO : removed reentrance control */
+	h= &g->currTime;
+	h->time++;
+	e = (TDatedEvPtr)fifoflush (SorterList(g));
+	ready = (MidiEvPtr)SorterClock(Sorter(g), e);
+	if( ready) {
+		NextActiveAppl(g) = ActiveAppl(g);
+		DispatchEvents(g, ready);
+		RcvAlarmLoop(g);
+	}
+	
+	
 }
 
 
@@ -92,7 +107,7 @@ void ClockHandler (TMSGlobalPtr g)
   ===========================================================================*/ 
 static inline void RawAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	fifoput (&appl->rcv, (cell *)ev);
+	fifoput (&appl->rcv, (fifocell *)ev);
 	if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 }
 
@@ -131,7 +146,7 @@ static void Port2SlotAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 					MidiEvPtr copy= MSCopyEv( ev, FreeList(Memory(g)));
 					if( copy) {
 						Port(copy) = j + (i * 8);
-						fifoput (&appl->rcv, (cell *)copy);
+						fifoput (&appl->rcv, (fifocell *)copy);
 						if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 					}
 				}
@@ -191,7 +206,7 @@ static void ProcessCall( TApplPtr appl, MidiEvPtr ev)
 /*__________________________________________________________________________________*/
 static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
 {
-	fifoput (&appl->dTasks, (cell *)ev);
+	fifoput (&appl->dTasks, (fifocell *)ev);
 }
 
 /*__________________________________________________________________________________*/

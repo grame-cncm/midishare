@@ -31,6 +31,8 @@
 
 /* functions prototypes */
 
+struct file;
+
 int mskGetVersion(unsigned long userptr,struct file *);
 int mskCountAppls(unsigned long userptr,struct file *);
 int mskGetIndAppl(unsigned long userptr,struct file *);

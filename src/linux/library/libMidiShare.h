@@ -54,7 +54,7 @@ typedef struct TTaskExt
 } TTaskExt;
 
 /*__________________________________________________________________________________*/
-/* Verification and Initialisation of the library          							*/
+/* Verification and Initialisation of the library          			    */
 
 #define CHECK_DEVICE if (Device(gClients) == 0) MidiInstall()
 
@@ -74,7 +74,7 @@ extern TClients   	gLClients ;
 extern TClients*	gClients ;
 
 /*__________________________________________________________________________________*/
-/*  Function prototypes                                                   			*/
+/*  Function prototypes                                                   	    */
 
 void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n);
 void MidiInstall();

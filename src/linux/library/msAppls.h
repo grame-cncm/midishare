@@ -30,20 +30,24 @@
 #include "msDefs.h"  
 #include "msMemory.h"  
 
-#define MaxAppls         128		/* maximum allowed applications    */
-#define MaxApplNameLen   32            /* maximum application name length */
+#define MaxAppls         128			/* maximum allowed applications    */
+#define MaxApplNameLen   32            	/* maximum application name length */
+
+
 
 typedef  char MSName[MaxApplNameLen];  /* A REVOIR */
 
 
 /* MidiShare application internal data structures                    	*/
 typedef struct TAppl{
-   	FarPtr(void)    info;        /* user field                   	*/
-    	uchar           refNum;      /* reference number             	*/
- 	RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            	*/
-    	ApplAlarmPtr    applAlarm;   /* application alarm pointer    	*/
-	pthread_t       rcvThread;   /* real time rcv thread 		*/    
+   	FarPtr(void)    	info;        /* user field                   	*/
+    uchar           	refNum;      /* reference number             	*/
+ 	RcvAlarmPtr     	rcvAlarm;    /* rcv alarm pointer            	*/
+    ApplAlarmPtr    	applAlarm;   /* application alarm pointer    	*/
+	pthread_t       	rcvThread;   /* real time rcv thread 		*/    
 } TAppl;
+
+
 
 typedef struct FarPtr(TAppl) 		TApplPtr;
 
@@ -51,15 +55,15 @@ typedef struct FarPtr(TAppl) 		TApplPtr;
 typedef struct TClients {
 	short         	nbAppls;                /* current running clients count   */
 	TApplPtr      	appls[MaxAppls];        /* client applications list        */
-	TMSMemory     	memory;			/* shared event memory */
-	MSName		nameTable[MaxAppls];    /* array of string (for application name management)*/
-	pthread_mutex_t mutex;			/* open/close sychronisation mutex */
-	int             msfd;			/* the MidiShare Device file number */
+	TMSMemory     	memory;					/* shared event memory */
+	MSName			nameTable[MaxAppls];    /* array of string (for application name management)*/
+	pthread_mutex_t mutex;					/* open/close sychronisation mutex */
+	int             msfd;					/* the MidiShare Device file number */
 } TClients;
 
 
 
-typedef struct FarPtr(TClients) 		TClientsPtr;
+typedef struct FarPtr(TClients) 	TClientsPtr;
 
 
 /*--------------------------------------------------------------------------*/

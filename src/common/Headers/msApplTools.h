@@ -28,10 +28,13 @@
 #include "msDefs.h"
 #include "msDriver.h"
 #include "msKernel.h"
+#include "lflifo.h"
 
 #define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
 
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
+void makeClientFifos (TClientsPtr g, TApplPtr ap);
+void clearClientFifos (lifo * freelist, TApplPtr ap);
 void closeClient (short ref, TMSGlobalPtr g);
 void makeDriver (TClientsPtr g, TApplPtr appl, short ref, TDriverInfos * infos, TDriverOperation *op);
 void setName 	(MidiName dst, MidiName name);

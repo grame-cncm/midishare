@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU General Public License as published by the 
@@ -21,30 +21,36 @@
   [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
   [22-06-01] SL - The device close function calls mskCloseAll to close all
    		  remaining application associated with a file descriptor
-
-
+  [06-01-05] YO - Kernel 2.6 module, dynamic major, sysfs support, module_get/put
 */
 
-/*
- * --------------------------------------------------------------------------
- *	Includes for kernel code
- * --------------------------------------------------------------------------
-*/
+
+
+
+
+
+
+/*===================================================================================
+						
+							INCLUDES AND DECLARATIONS
+
+====================================================================================*/
+
+
 
 
 
 #ifdef MODULE
 # ifdef MODVERSIONS
-# include <linux/modversions.h>
+# include <config/modversions.h>
 # endif
 #define EXPORT_SYMTAB
 #include <linux/module.h>
 #endif
 
 #include <linux/kernel.h>
-#include <linux/fs.h>		/* for devices	*/
-#include <linux/sched.h>	/* for current 	*/
-#include <linux/tty.h>		/* for tty_struct */
+#include <linux/fs.h>		
+#include <linux/device.h>	
 
 #include "msAppFun.h"
 #include "msLoader.h" 
@@ -67,220 +73,201 @@ MODULE_SUPPORTED_DEVICE("midishare");
 
 typedef int (*KernelMth) (unsigned long userptr, struct file* f);
 
-static KernelMth KernelMthTable[kMaxMth];
+static struct class_simple*	gMidiShareClass;			/* for sysfs support*/
+static int					gMidiShareMajor;			/* dynamically assigned major number */
+static msConf 				gConf;						/* default configuration	*/
+
+
+static KernelMth 			gKernelMthTable[kMaxMth];
+
+
+
+
 
 void MidiShareSpecialInit(unsigned long defaultSpace);  /* A REVOIR */
 
-/*__________________________________________________________________________________*/
-/* -- display functions */
 
-void prnt (char* s)
-{
-	struct tty_struct * dst  = current->tty;
-	int	n = 0; 
 
-	while (s[n]) n++;	/* longueur de s */
-	if (dst != NULL) {
-		(* dst->driver.write)(dst, 0, s, n);
-		(* dst->driver.write)(dst, 0, "\015\012", 2);
-	}
-}
 
-/*__________________________________________________________________________________*/
 
-char* append (char dst[], char src[])
-{
-	int i = 0, j = 0;
-	while (dst[i]) i++;
-	while (src[j]) { dst[i++] = src[j++]; }
-	dst[i] = 0;
-	return dst;	
-}
 
-/*__________________________________________________________________________________*/
+/*===================================================================================
+						
+							MIDISHARE METHOD TABLE
+		
+				dispatch table to every midishare function
 
-char* itoa (long n, char s[])
-{
-	int ii, jj, c, i=0, signe=n;
-	if (signe < 0) n = -n;
-	
-	/* -- production de la chaine à l'envers */
-	do {
-		s[i++] = n%10 + '0';
-	} while ((n /= 10) > 0);
-	if (signe < 0) s[i++] = '-';
-	s[i]=0;
-	
-	/* -- inversion de la chaine */
-	for (ii=0, jj=i-1; ii<jj; ii++, jj--) {
-		c = s[ii];
-		s[ii] = s[jj];
-		s[jj] = c;
-	}
-	return s;
-}
+====================================================================================*/
 
-/*__________________________________________________________________________________*/
 
 int MidiReset (unsigned long userptr, struct file * f) 
 {
 	int n = MSCountAppls(Clients(gMem));
 	
 	while (n){
-	 	MOD_DEC_USE_COUNT;
 	 	MSClose( MSGetIndAppl(n--,Clients(gMem)),gMem);
 	}
 	
 	return 0;
 }
 
-/*__________________________________________________________________________________*/
-
-static int myopen(struct inode *inode, struct file * f)
-{
-	MOD_INC_USE_COUNT;
-	return 0; 		/* 0 = OK, tout va bien */
-}
-
-/*__________________________________________________________________________________*/
-
-static int myclose(struct inode *inode, struct file * f)
-{
-	mskCloseAll(f);
-	MOD_DEC_USE_COUNT;
-	return 0;
-}
-
-/*__________________________________________________________________________________*/
-
-static ssize_t myread(struct file * f, char * s, size_t n, loff_t * i){ return -EINVAL; }
-
-/*__________________________________________________________________________________*/
-
-static ssize_t mywrite(struct file * f, const char * s, size_t n, loff_t * i){ return -EINVAL; }
-
-
-/*__________________________________________________________________________________*/
-/* kernel implementation */
 
 static int mskNullMth(unsigned long userptr,struct file * f){ return 0; }
 
-/*__________________________________________________________________________________*/
-/* Init the ioctl method table */ 
 
 static void initMthTable() {
 
 	int i;
-	for (i = 0; i< kMaxMth; i++) { KernelMthTable[i] = mskNullMth; }
+	for (i = 0; i< kMaxMth; i++) { gKernelMthTable[i] = mskNullMth; }
 	
-	KernelMthTable[kMidiGetVersion] = mskGetVersion;
+	gKernelMthTable[kMidiGetVersion] = mskGetVersion;
 	
-	KernelMthTable[kMidiCountAppls] = mskCountAppls;
-	KernelMthTable[kMidiGetIndAppl] = mskGetIndAppl;
-	KernelMthTable[kMidiGetNamedAppl] = mskGetNamedAppl;
+	gKernelMthTable[kMidiCountAppls] = mskCountAppls;
+	gKernelMthTable[kMidiGetIndAppl] = mskGetIndAppl;
+	gKernelMthTable[kMidiGetNamedAppl] = mskGetNamedAppl;
 	
-	KernelMthTable[kMidiGetSyncInfo] = mskGetSyncInfo;
-	KernelMthTable[kMidiGetExtTime] = mskGetExtTime;
-	KernelMthTable[kMidiInt2ExtTime] = mskInt2ExtTime;
-	KernelMthTable[kMidiExt2IntTime] = mskExt2IntTime;
-	KernelMthTable[kMidiTime2Smpte] = mskTime2Smpte;
-	KernelMthTable[kMidiSmpte2Time] = mskSmpte2Time;
+	gKernelMthTable[kMidiGetSyncInfo] = mskGetSyncInfo;
+	gKernelMthTable[kMidiGetExtTime] = mskGetExtTime;
+	gKernelMthTable[kMidiInt2ExtTime] = mskInt2ExtTime;
+	gKernelMthTable[kMidiExt2IntTime] = mskExt2IntTime;
+	gKernelMthTable[kMidiTime2Smpte] = mskTime2Smpte;
+	gKernelMthTable[kMidiSmpte2Time] = mskSmpte2Time;
 	
-	KernelMthTable[kMidiGetTimeAddr] = mskGetTimeAddr;
+	gKernelMthTable[kMidiGetTimeAddr] = mskGetTimeAddr;
 	
-	KernelMthTable[kMidiOpen] = mskOpen;
-	KernelMthTable[kMidiClose] = mskClose;
+	gKernelMthTable[kMidiOpen] = mskOpen;
+	gKernelMthTable[kMidiClose] = mskClose;
 	
-	KernelMthTable[kMidiGetName] = mskGetName;
-	KernelMthTable[kMidiSetName] = mskSetName;
-	KernelMthTable[kMidiGetInfo] = mskGetInfo;
-	KernelMthTable[kMidiSetInfo] = mskSetInfo;
-	KernelMthTable[kMidiGetFilter] = mskGetFilter;
-	KernelMthTable[kMidiSetFilter] = mskSetFilter;
-	
-	/*
-	KernelMthTable[kMidiGetRcvAlarm] = mskGetRcvAlarm;
-	*/
-	
-	KernelMthTable[kMidiSetRcvAlarm] = mskSetRcvAlarm;
+	gKernelMthTable[kMidiGetName] = mskGetName;
+	gKernelMthTable[kMidiSetName] = mskSetName;
+	gKernelMthTable[kMidiGetInfo] = mskGetInfo;
+	gKernelMthTable[kMidiSetInfo] = mskSetInfo;
+	gKernelMthTable[kMidiGetFilter] = mskGetFilter;
+	gKernelMthTable[kMidiSetFilter] = mskSetFilter;
 	
 	/*
-	KernelMthTable[kMidiGetApplAlarm] = mskGetApplAlarm;
+	gKernelMthTable[kMidiGetRcvAlarm] = mskGetRcvAlarm;
 	*/
 	
-	KernelMthTable[kMidiSetApplAlarm] = mskSetApplAlarm;
-	
-	KernelMthTable[kMidiConnect] = mskConnect;
-	KernelMthTable[kMidiIsConnected] = mskIsConnected;
-	
-	KernelMthTable[kMidiGetPortState] = mskGetPortState;
-	KernelMthTable[kMidiSetPortState] = mskSetPortState;
-	
-	KernelMthTable[kMidiGetTime] = mskGetTime;
-	
-	KernelMthTable[kMidiSendIm] = mskSendIm;
-	KernelMthTable[kMidiSend] = mskSend;
-	KernelMthTable[kMidiSendAt] = mskSendAt;
-	
-	KernelMthTable[kMidiCountEvs] = mskCountEvs;
-	KernelMthTable[kMidiGetEv] = mskGetEv;
-	KernelMthTable[kMidiAvailEv] = mskAvailEv;
-	KernelMthTable[kMidiFlushEvs ] = mskFlushEvs;
-	
-	KernelMthTable[kMidiReadSync] = mskReadSync;
-	KernelMthTable[kMidiWriteSync ] = mskWriteSync;
-	
-	KernelMthTable[kMidiCall] = mskCall;
-	KernelMthTable[kMidiTask] = mskTask;
-	KernelMthTable[kMidiDTask] = mskDTask;
-	KernelMthTable[kMidiForgetTask] = mskForgetTask;
-	
-	KernelMthTable[kMidiCountDTasks ] = mskCountDTasks;
-	KernelMthTable[kMidiFlushDTasks ] = mskFlushDTasks;
+	gKernelMthTable[kMidiSetRcvAlarm] = mskSetRcvAlarm;
 	
 	/*
-	KernelMthTable[kMidiExec1DTask ] = mskExec1DTask;
+	gKernelMthTable[kMidiGetApplAlarm] = mskGetApplAlarm;
 	*/
 	
-	KernelMthTable[kMidiGetCommand ] = mskGetCommand;
-	KernelMthTable[kMidiGetDTask ] = mskGetDTask;
+	gKernelMthTable[kMidiSetApplAlarm] = mskSetApplAlarm;
 	
-	KernelMthTable[kMidiNewFilter ] = mskNewFilter;
-	KernelMthTable[kMidiFreeFilter ] = mskFreeFilter;
+	gKernelMthTable[kMidiConnect] = mskConnect;
+	gKernelMthTable[kMidiIsConnected] = mskIsConnected;
 	
-	KernelMthTable[kMidiAcceptChan ] = mskAcceptChan;
-	KernelMthTable[kMidiAcceptPort ] = mskAcceptPort;
-	KernelMthTable[kMidiAcceptType ] = mskAcceptType;
+	gKernelMthTable[kMidiGetPortState] = mskGetPortState;
+	gKernelMthTable[kMidiSetPortState] = mskSetPortState;
 	
-	KernelMthTable[kMidiIsAcceptedChan ] = mskIsAcceptedChan;
-	KernelMthTable[kMidiIsAcceptedPort ] = mskIsAcceptedPort;
-	KernelMthTable[kMidiIsAcceptedType ] = mskIsAcceptedType;
+	gKernelMthTable[kMidiGetTime] = mskGetTime;
 	
-	KernelMthTable[kMidiReset ] = MidiReset;
+	gKernelMthTable[kMidiSendIm] = mskSendIm;
+	gKernelMthTable[kMidiSend] = mskSend;
+	gKernelMthTable[kMidiSendAt] = mskSendAt;
+	
+	gKernelMthTable[kMidiCountEvs] = mskCountEvs;
+	gKernelMthTable[kMidiGetEv] = mskGetEv;
+	gKernelMthTable[kMidiAvailEv] = mskAvailEv;
+	gKernelMthTable[kMidiFlushEvs ] = mskFlushEvs;
+	
+	gKernelMthTable[kMidiReadSync] = mskReadSync;
+	gKernelMthTable[kMidiWriteSync ] = mskWriteSync;
+	
+	gKernelMthTable[kMidiCall] = mskCall;
+	gKernelMthTable[kMidiTask] = mskTask;
+	gKernelMthTable[kMidiDTask] = mskDTask;
+	gKernelMthTable[kMidiForgetTask] = mskForgetTask;
+	
+	gKernelMthTable[kMidiCountDTasks ] = mskCountDTasks;
+	gKernelMthTable[kMidiFlushDTasks ] = mskFlushDTasks;
+	
+	/*
+	gKernelMthTable[kMidiExec1DTask ] = mskExec1DTask;
+	*/
+	
+	gKernelMthTable[kMidiGetCommand ] = mskGetCommand;
+	gKernelMthTable[kMidiGetDTask ] = mskGetDTask;
+	
+	gKernelMthTable[kMidiNewFilter ] = mskNewFilter;
+	gKernelMthTable[kMidiFreeFilter ] = mskFreeFilter;
+	
+	gKernelMthTable[kMidiAcceptChan ] = mskAcceptChan;
+	gKernelMthTable[kMidiAcceptPort ] = mskAcceptPort;
+	gKernelMthTable[kMidiAcceptType ] = mskAcceptType;
+	
+	gKernelMthTable[kMidiIsAcceptedChan ] = mskIsAcceptedChan;
+	gKernelMthTable[kMidiIsAcceptedPort ] = mskIsAcceptedPort;
+	gKernelMthTable[kMidiIsAcceptedType ] = mskIsAcceptedType;
+	
+	gKernelMthTable[kMidiReset ] = MidiReset;
 	
 	/* release 1.80 additionnal methods */
-	KernelMthTable[kMidiRegisterDriver ] = mskRegisterDriver;
-	KernelMthTable[kMidiUnregisterDriver ] = mskUnregisterDriver;
-	KernelMthTable[kMidiCountDrivers ] = mskCountDrivers;
-	KernelMthTable[kMidiGetIndDriver ] = mskGetIndDriver;
-	KernelMthTable[kMidiGetDriverInfos ] = mskGetDriverInfos;
-	KernelMthTable[kMidiAddSlot ] = mskAddSlot;
-	KernelMthTable[kMidiGetIndSlot ] = mskGetIndSlot;
-	KernelMthTable[kMidiRemoveSlot ] = mskRemoveSlot;
-	KernelMthTable[kMidiGetSlotInfos ] = mskGetSlotInfos;
-	KernelMthTable[kMidiConnectSlot ] = mskConnectSlot;
-	KernelMthTable[kMidiIsSlotConnected ] = mskIsSlotConnected;
+	gKernelMthTable[kMidiRegisterDriver ] = mskRegisterDriver;
+	gKernelMthTable[kMidiUnregisterDriver ] = mskUnregisterDriver;
+	gKernelMthTable[kMidiCountDrivers ] = mskCountDrivers;
+	gKernelMthTable[kMidiGetIndDriver ] = mskGetIndDriver;
+	gKernelMthTable[kMidiGetDriverInfos ] = mskGetDriverInfos;
+	gKernelMthTable[kMidiAddSlot ] = mskAddSlot;
+	gKernelMthTable[kMidiGetIndSlot ] = mskGetIndSlot;
+	gKernelMthTable[kMidiRemoveSlot ] = mskRemoveSlot;
+	gKernelMthTable[kMidiGetSlotInfos ] = mskGetSlotInfos;
+	gKernelMthTable[kMidiConnectSlot ] = mskConnectSlot;
+	gKernelMthTable[kMidiIsSlotConnected ] = mskIsSlotConnected;
 
 }
 
 
-/*__________________________________________________________________________________*/
-/* ioctl dispatch */ 
+
+
+/*===================================================================================
+						
+							FILE EMULATION OPERATIONS
+		
+		ioctl is used to access midishare functions. write and read are not used
+
+====================================================================================*/
+
+
+static int myopen(struct inode *inode, struct file * f)
+{
+	try_module_get(THIS_MODULE);
+	return 0; 		
+}
+
+
+
+static int myclose(struct inode *inode, struct file * f)
+{
+	mskCloseAll(f);
+	module_put(THIS_MODULE);
+	return 0;
+}
+
+
+
+static ssize_t myread(struct file * f, char * s, size_t n, loff_t * i) 
+{ 
+	return -EINVAL; 
+}
+
+
+
+static ssize_t mywrite(struct file * f, const char * s, size_t n, loff_t * i)
+{ 
+	return -EINVAL; 
+}
+
+
 
 static int myioctl(struct inode *inode, struct file *f, unsigned int msg, unsigned long param)
 { 
-  return (* KernelMthTable[msg]) (param,f); 
+	return (* gKernelMthTable[msg]) (param,f); 
 }
+
 
 
 struct file_operations myops = {
@@ -291,18 +278,32 @@ struct file_operations myops = {
 	release : myclose,
 };
 
-/*__________________________________________________________________________________*/
+
+/*===================================================================================
+						
+								MODULE INIT AND CLEANUP 
+
+====================================================================================*/
+
+#if 0
 
 int init_module()
 {
 	/* initialisations */
 	msConf conf;
-	
-	int r = register_chrdev(kMidiShareMajor, kMidiShareName, &myops);
-	if (r < 0) {
-		prnt("Error when opening MidiShare module");
-		return r; 
+
+	/* register a chrdev with a dynamically allocated major number */
+	gMidiShareMajor = register_chrdev(0, kMidiShareName, &myops);
+	if (gMidiShareMajor < 0) {
+		printk("Error registering chrdev when opening MidiShare module");
+		return gMidiShareMajor; 
 	}
+
+	/* sysfs support (is it correct ?)*/
+	gMidiShareClass = class_simple_create(THIS_MODULE, kMidiShareName);
+	class_simple_device_add(gMidiShareClass, MKDEV(gMidiShareMajor, 0), NULL, kMidiShareName);
+	devfs_mk_cdev(MKDEV(gMidiShareMajor, 0), S_IFCHR | S_IRUGO | S_IWUGO, kMidiShareName);
+
 	
 	initMthTable();
 	read_conf (MIDISHARE_CONF, &conf);
@@ -311,12 +312,61 @@ int init_module()
 	return 0;
 }
 
-/*__________________________________________________________________________________*/
 
 void cleanup_module()
 {
-	if (unregister_chrdev(kMidiShareMajor, kMidiShareName) < 0) prnt("Error when closing MidiShare module");
+	if (unregister_chrdev(gMidiShareMajor, kMidiShareName) < 0) printk("Error when closing MidiShare module");
+	
+	/* YO : added sysfs support (is it correct ?)*/
+	devfs_remove(kMidiShareName);
+	class_simple_device_remove(MKDEV(gMidiShareMajor, 0));
+	class_simple_destroy(gMidiShareClass);
+	/*----*/
+
 }
+
+#else
+
+
+/* nouvelle version simplifiée */
+
+
+int init_module()
+{
+	/* register character device and get a dynamically allocated major number */
+	gMidiShareMajor = register_chrdev(0, kMidiShareName, &myops);
+	if (gMidiShareMajor < 0) {
+		printk("Error %d registering chrdev when opening MidiShare module", gMidiShareMajor);
+		return gMidiShareMajor; 
+	}
+
+	/* add sysfs support with class and device*/
+	gMidiShareClass = class_simple_create(THIS_MODULE, kMidiShareName);
+	class_simple_device_add(gMidiShareClass, MKDEV(gMidiShareMajor, 0), NULL, kMidiShareName);
+	
+	/* init the midishare methode table and configuration*/
+	initMthTable();
+	read_conf (MIDISHARE_CONF, &gConf);
+	MidiShareSpecialInit ((gConf.kmem > 0) ? gConf.kmem : DEFAULT_MEM);
+	
+	return 0;
+}
+
+
+void cleanup_module()
+{
+	
+	/* destroy sysfs device and class*/
+	class_simple_device_remove(MKDEV(gMidiShareMajor, 0));
+	class_simple_destroy(gMidiShareClass);
+	
+	/* unregister character device */
+	if (unregister_chrdev(gMidiShareMajor, kMidiShareName) < 0) printk("Error closing MidiShare module");
+
+}
+
+#endif
+
 
 #include "msExports.h"
 

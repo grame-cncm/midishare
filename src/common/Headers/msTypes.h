@@ -34,7 +34,7 @@
 	typedef char * Ptr;
 	enum { false, true };
 #else
-	#include <mactypes.h> 
+# include <mactypes.h> 
 #endif 
                                    
 # ifdef __POWERPC__

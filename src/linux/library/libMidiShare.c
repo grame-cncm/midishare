@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,14 +16,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
    modifications history:
    
  	 [19-02-01] SL - CallQuitAction removed, use of pthread_cancel in the library
 	 [22-06-01] SL - Remove signal handling code, now done in the kernel module
 	 [03-07-01] SL - Add field access functions
-	 
 
 */
 
@@ -31,7 +30,6 @@
 #include <signal.h>
 
 #include "libMidiShare.h"
-
 
 /*________________________________________________________ */
 /*	Globals variables                                  */
@@ -141,7 +139,7 @@ void* CmdHandler(void* arg)
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
 	
 	while ((ev = MidiGetCommand(refNum))) {         		
-			
+
 			switch (ev->evType) {
 			
 				case typeRcvAlarm: 		
@@ -163,7 +161,6 @@ void* CmdHandler(void* arg)
 			}
 			MSFreeEv(ev, FreeList(Memory(gClients)));
 	}
-
 	pthread_exit(0);
 }
 
@@ -330,7 +327,6 @@ long* MidiGetTimeAddr ()
   	CALL(kMidiOpen,&args);
 	 
 	if (ApplsCount(gClients) == 0) OpenMemory (Memory(gClients));
-	
 	if (ApplsCount(gClients) < MaxAppls) {
 	
 		appl = NewAppl (sizeof(TAppl));
@@ -341,13 +337,11 @@ long* MidiGetTimeAddr ()
 			
 			param.sched_priority = 99; /* 0 to 99  */
 			pthread_create(&appl->rcvThread,NULL,CmdHandler,(void*)appl);
-						
 			setuid (name_to_uid ("root")); 
    			err = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
 			setuid (uid);
 		}
 	}
-	
 	pthread_mutex_unlock(Mutex(gClients));
 	return args.refnum;
 }
@@ -1050,7 +1044,7 @@ Boolean MidiShare ()
 }
 
 /*******************/
-/* MidiReset  */
+/* MidiReset  */>
 /*******************/
 
 void MidiReset () 

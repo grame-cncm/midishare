@@ -27,7 +27,7 @@
 */
 
 #ifdef MODVERSIONS
-#include <linux/modversions.h>
+#include <config/modversions.h>
 #endif
 
 #include <linux/kernel.h>
