@@ -1,0 +1,20 @@
+
+DIRS = applications tools drivers
+
+all :
+	make -C ../lib 
+	for a in $(DIRS); do make -C $$a; done
+
+install:
+	for a in $(DIRS); do make -C $$a install; done
+	make -C scripts install
+
+uninstall:
+	for a in $(DIRS); do make -i -C $$a uninstall; done
+
+tests:
+	make -C tests all
+
+clean:
+	make -i -C ../lib clean
+	for a in $(DIRS); do make -i -C $$a clean; done
