@@ -185,6 +185,7 @@
 			children = (
 				F72817510206AC2D01053118,
 				0867D6AAFE840B52C02AAC07,
+				D3F581810507341900053103,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -197,6 +198,7 @@
 				0249A669FF388E3911CA2CEA,
 				0640BAA4FFF0323A11CA0E50,
 				0640BAA5FFF0323A11CA0E50,
+				D3E146C805063B6400053103,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -219,13 +221,12 @@
 			);
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "/Users/fober/src/midishare/current/src/macosx-mono/build";
 				HEADER_SEARCH_PATHS = ../../../lib;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-framework MidiShare";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msDrivers;
@@ -249,7 +250,9 @@
 	<key>CFBundleExecutable</key>
 	<string>msDrivers</string>
 	<key>CFBundleGetInfoString</key>
-	<string>v.1.2 © Grame 2003</string>
+	<string>v.1.3 © Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msDrivers.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -257,11 +260,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>v. 1.2</string>
+	<string>v. 1.3</string>
 	<key>CFBundleSignature</key>
 	<string>SlCt</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 </dict>
@@ -279,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0867D6ACFE840B52C02AAC07,
+				D3F581820507341900053103,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20286C3CFDCF999611CA2CEA,
+				D3E146C905063B6400053103,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +318,39 @@
 //202
 //203
 //204
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3E146C805063B6400053103 = {
+			isa = PBXFrameworkReference;
+			name = MidiShare.framework;
+			path = ../../build/MidiShare.framework;
+			refType = 2;
+		};
+		D3E146C905063B6400053103 = {
+			fileRef = D3E146C805063B6400053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3F581810507341900053103 = {
+			isa = PBXFileReference;
+			path = msDrivers.icns;
+			refType = 2;
+		};
+		D3F581820507341900053103 = {
+			fileRef = D3F581810507341900053103;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F70
 //F71
 //F72
