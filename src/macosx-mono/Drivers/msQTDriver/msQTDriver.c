@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2000
+  Copyright © Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -24,7 +24,8 @@
 #include <QuickTimeMusic.h>
 #include "MidiShare.h"
 #include "msQTDriver.h"
-//#include "SavingState.h"
+#include "profport.h"
+#include "FilterUtils.h"
 
 /* ----------------------------------*/
 /* constants definitions             */
@@ -34,8 +35,15 @@
 #define kDefaultSound 		1		 /* default sound (Piano) */
 
 #define QTSlotName	"QuickTime GM Synth"
-#define StateFile	"msQuicktime Driver State"	
-enum { StateCreator = 'MsQT', StateType = 'stQT' };	
+#define StateFile	"msQuicktime Driver State"
+#define MidiShareDirectory "MidiShare"
+
+#define kMaxEntryLen	1024
+#define PortMaxEntry	10
+#define CnxError	-1
+	
+
+static char * kProfileName = "msQTDriver.ini";
 
 /* ----------------------------------*/
 /* data structures                   */
@@ -82,6 +90,117 @@ static void FlushReceivedEvents (short r);
 
 DriverData gData;
 static inline DriverDataPtr GetData ()	{ return &gData; }
+
+static unsigned short CountCnx (char * cnxString);
+static short GetCnx (char * cnxString, short index);
+static __inline Boolean CnxSeparator(c) { return ((c)==' ') || ((c)=='	'); }
+
+
+//________________________________________________________________________
+static char * GetProfileFullName (char * name)
+{
+	static char  buff [1024];
+	const char* home = getenv("HOME");
+	if (home) {
+		sprintf (buff, "%s/%s/%s", home, MidiShareDirectory, name);
+		return buff;
+	}
+	return name;
+}
+
+//________________________________________________________________________
+static void LoadSlot (char * section, char* fullname)
+{
+        SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(QTDriverName),1);
+        TSlotInfos infos;
+        
+  	if (MidiGetSlotInfos (refNum, &infos)) {
+		char buff[kMaxEntryLen];
+		unsigned long n;
+		n= get_private_profile_string (section, infos.name, "", buff, kMaxEntryLen, fullname);
+          	if (n) {
+			unsigned short i, c = CountCnx (buff);
+			for (i=0; i<c; i++) {
+				short port = GetCnx (buff, i);
+				if (port != CnxError) {
+					Boolean input = infos.direction & MidiInputSlot;
+					MidiConnectSlot (port, refNum, true);
+				}
+			}
+		}
+	}
+}
+//________________________________________________________________________
+static void SaveSlot (char * section, char* fullname)
+{
+        SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(QTDriverName),1);
+        TSlotInfos infos;
+        
+        if (MidiGetSlotInfos (refNum, &infos)) {
+		char buff[kMaxEntryLen]; int i;
+		buff[0] = 0;
+                
+		for (i=0; i<256; i++) {
+			if (IsAcceptedBit (infos.cnx, i)) {
+				char numStr[10];
+				sprintf (numStr, "%d ", i);
+				strcat (buff, numStr);
+			}
+		}
+		write_private_profile_string (section, infos.name, buff, fullname);
+	}
+}
+
+//________________________________________________________________________
+static char * NextCnx (char *ptr, Boolean first)
+{
+	Boolean skipped = first;
+	while (*ptr) {
+		if (CnxSeparator(*ptr))	skipped = true;
+		else if (skipped) return ptr;
+		ptr++;
+	}
+	return 0;
+}
+
+//________________________________________________________________________
+static unsigned short CountCnx (char * cnxString)
+{
+	unsigned short count = 0;
+	char * ptr = NextCnx (cnxString, true);
+	while (ptr) {
+		count++;
+		ptr = NextCnx (ptr, false);
+	}
+	return count;
+}
+
+//________________________________________________________________________
+static Boolean NullString (char * ptr)
+{
+	while (*ptr)
+		if (*ptr++ != '0') return false;
+	return true;
+}
+
+//________________________________________________________________________
+static short GetCnx (char * cnxString, short index)
+{
+	short cnx, bufsize=PortMaxEntry; char buff[PortMaxEntry];
+	char * dst = buff;
+	char * ptr = NextCnx (cnxString, true);
+	while (index-- && ptr)
+		ptr = NextCnx (ptr, false);
+	if (!ptr) return CnxError;
+	
+	while (*ptr && !CnxSeparator(*ptr) && --bufsize)
+		*dst++ = *ptr++;
+	if (!bufsize) return CnxError;
+	*dst = 0;
+	cnx = (short)atol (buff);
+	if (!cnx && !NullString (buff)) return CnxError;
+	return cnx;
+}
 
 
 /* -----------------------------------------------------------------------------*/
@@ -190,8 +309,7 @@ Boolean SetUpMidi ()
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);
         
-	//RestoreDriverState (refNum, StateFile);
-        
+        LoadSlot ("Output Slots", GetProfileFullName(kProfileName));
 	return true;
 }
 
@@ -202,7 +320,7 @@ void CloseMidi ()
 	short ref = data->refNum;
 	data->refNum = 0;
 	if (ref > 0) {
-		//SaveDriverState (ref, StateFile, StateCreator, StateType);
+		SaveSlot ("Output Slots", GetProfileFullName(kProfileName));
 		MidiUnregisterDriver (ref);
 	}
 	QuickTimeDispose (QTE(data));
