@@ -83,12 +83,13 @@ static inline cell* fifoavail (fifo * ff)
 	
 	v1 = lfavail(out);
 	
-	if (v1){
-		return v1;
-	}else {
-		while ((v2 = lfpop(in))) { lfpush(out, v2); }
-		return lfavail(out);
+	if (!v1){
+		while ((v2 = lfpop(in))) { 
+			v1 = v2;
+			lfpush(out, v1); 
+		}
 	}
+	return v1;
 }
 
 
