@@ -29,13 +29,16 @@
 #include <string.h>
 #include <time.h> 
 
-#define MidiShareDirectory  ".MidiShare"
+#define MidiShareDirectory  "Library/Preferences/MidiShare"
 #define ErrFile  "midishare.log"
 
 #define profileName "midishare.ini"
 #define memorySectionName "Events memory"
 #define driverSectionName "Drivers"
 #define audioSectionName  "Audio"
+#define timeSectionName  "Time"
+#define timeMode  "mode"
+#define timeRes  "resolution"
 #define bufferSize  "size"
 #define driverName  "audiodev"
 #define memDefault  "default"
@@ -45,7 +48,9 @@
 
 #define kDefaultSpace	40000
 #define kDefaultSize	64
-#define kDefaultName	"Built-in audio controller"
+#define kDefaultName	"Built-in Audio"
+#define kDefaultResolution	1
+#define kDefaultTimeMode	"timer"
 
 #define DriverMaxEntry	512
 
@@ -59,6 +64,22 @@ static char * GetProfileFullName (char* filename)
 		return buff;
 	}
 	return filename;
+}
+
+//________________________________________________________________________
+unsigned long LoadTimeMode()
+{
+	char buff[128];
+	get_private_profile_string (timeSectionName, timeMode, kDefaultTimeMode, buff, 128, GetProfileFullName(profileName));
+	if (!strcmp(buff, "audio")) return kAudioTime;
+	return kTimerTime;
+}
+
+//________________________________________________________________________
+unsigned long LoadTimeRes()
+{
+	unsigned long n = get_private_profile_int (timeSectionName, timeRes, kDefaultResolution, GetProfileFullName(profileName));
+	return  n ? n : kDefaultResolution;
 }
 
 //________________________________________________________________________
@@ -78,7 +99,7 @@ unsigned long LoadBufferSize()
 //________________________________________________________________________
 void LoadDriverName(char* name, unsigned long size)
 {
-   	unsigned long n = get_private_profile_string (audioSectionName, driverName, kDefaultName, name,
+   	get_private_profile_string (audioSectionName, driverName, kDefaultName, name,
   												 size, GetProfileFullName(profileName));
 }
 
@@ -159,6 +180,14 @@ void logmsg (char *msg)
 void Report (const char* what, const char* obj, const char* reason)
 {
 	char msg[512];
-	sprintf (msg, "%s: %s: %s %s\n", dateString(), what, obj, reason);
+	sprintf (msg, "%s: %s: %s %s", dateString(), what, obj, reason);
+	logmsg (msg);
+}
+
+//_________________________________________________________________________________
+void ReportN (const char* what, const char* obj, long num)
+{
+	char msg[512];
+	sprintf (msg, "%s: %s: %s %ld", dateString(), what, obj, num);
 	logmsg (msg);
 }
