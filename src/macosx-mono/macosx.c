@@ -71,7 +71,8 @@ Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void
 /*                      Drivers loading                     					*/
 /*------------------------------------------------------------------------------*/
 
-typedef void (* DriverFun) ();
+typedef Boolean (* Start) ();
+typedef void (* Stop) ();
 
 /*------------------------------------------------------------------------------*/
 /*
@@ -86,10 +87,10 @@ void CheckInstall()
 void *  LoadLibrary( const char *filename, const char *symbol)
 {
 	void * handle = dlopen(filename,RTLD_LAZY);
-	DriverFun fun ;
+	Start fun ;
+	Boolean res;
 	
-	if (handle &&(fun = (DriverFun) dlsym(handle,symbol))) {
-		(*fun)(); 
+	if (handle && (fun = (Start) dlsym(handle,symbol)) && (res = (*fun)())) {
 		return handle;
 	}else {
 		if (handle) dlclose(handle);
@@ -101,8 +102,8 @@ void *  LoadLibrary( const char *filename, const char *symbol)
 
 void FreeLibrary(void * handle, const char *symbol)
 { 
-	DriverFun fun;
-	if (fun = (DriverFun) dlsym(handle,symbol)) (*fun)(); 
+	Stop fun;
+	if (fun = (Stop) dlsym(handle,symbol)) (*fun)(); 
 	dlclose(handle);
 }
 

@@ -34,7 +34,7 @@
 static char * profileName = "msMidiDriver.ini";
 static char * fullProfileName = 0;
 
-void Start();
+Boolean Start();
 void Stop();
 
 static void msWakeup (short refnum);
@@ -152,9 +152,10 @@ static void * MidiThread (void * ptr)
 }
 
 //_________________________________________________________
-void Start()
+Boolean Start()
 {
 	gRefNum = MidiRegisterDriver (&drvInfos, &drvOps);
+        return (gRefNum > 0);
 }
 
 //_________________________________________________________

@@ -448,5 +448,5 @@ static void PlayPitchWheel (QuickTimeEnvPtr qt, MidiEvPtr e)
 }
 
 /* -----------------------------------------------------------------------------*/
-void Start(){SetUpMidi();}
+Boolean Start(){return SetUpMidi();}
 void Stop(){CloseMidi();}

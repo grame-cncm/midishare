@@ -51,7 +51,8 @@ typedef struct {
 	iiwu_synth_t*		synth ;
 	iiwu_midi_handler_t* 	midi;
         char*  			soundfont;
-} DriverData, * DriverDataPtr;
+        int  			buffersize;
+ } DriverData, * DriverDataPtr;
 
 /* ----------------------------------*/
 /* some macros                       */
@@ -185,21 +186,19 @@ static short GetCnx (char * cnxString, short index)
 	return cnx;
 }
 
-
-
+/* -----------------------------------------------------------------------------*/
 void my_log_function(int level, char* message) {}
 
 /* -----------------------------------------------------------------------------*/
-static Boolean open_iiwusynth (char* soundfont) 
+static Boolean open_iiwusynth () 
 {
 	DriverDataPtr data = GetData ();
     	
 	iiwu_synth_settings_t settings = {IIWU_SETTINGS_VERSION, 64 , IIWU_AUDIO | IIWU_REVERB, 
                                         "portaudio", "midishare",  64, 2048, 44100, IIWU_FLOAT_FORMAT  };
 									 
-	
-        /* use MidiShare audio buffer size*/                                                                 			settings.bufsize = LoadBufferSize();	
-
+        settings.bufsize = data->buffersize;	
+     
 	/* allocates the synth */
 	data->synth = new_iiwu_synth(&settings);
         if (data->synth == NULL) goto error;
@@ -211,8 +210,8 @@ static Boolean open_iiwusynth (char* soundfont)
   	iiwu_set_log_function(DBG, my_log_function);
          
         /* load the soundfound */
-        if (iiwu_synth_sfload(data->synth, soundfont) != 0) goto error;
-        
+        if (iiwu_synth_sfload(data->synth, GetProfileFullName(data->soundfont)) != 0) goto error;
+         
     	/* start the midi handler and link it to the synth */
 	data->midi = new_iiwu_midi_handler(data->synth, midi_driver, midi_device,midi_id);
 	if (data->midi == NULL) goto error;
@@ -243,15 +242,26 @@ static void close_iiwusynth ()
 Boolean OpenSynth() 
 {
         DriverDataPtr data = GetData ();
-        
+   
+        /* use MidiShare audio buffer size*/ 
+        data->buffersize = LoadBufferSize();
         data->soundfont = LoadConfig("Configuration", "SoundFont", GetProfileFullName(kProfileName));
+        
+        /* if the soundfont name is not found in the .ini file, use default soundfont*/
         if (data->soundfont == NULL) data->soundfont = kDefaultSoundFont;
        
-	if (open_iiwusynth(GetProfileFullName(data->soundfont))) {
+	if (open_iiwusynth()) {
              LoadSlot ("Output Slots", GetProfileFullName(kProfileName));
              return true;
         }else {
-             return false;
+             /* tries to use default soundfont */
+            data->soundfont = kDefaultSoundFont;
+            if (open_iiwusynth()) {
+                LoadSlot ("Output Slots", GetProfileFullName(kProfileName));
+                return true;
+            }else{
+                return false;
+            }
 	}
 }
 
@@ -266,6 +276,6 @@ void CloseSynth ()
 }
 
 /* -----------------------------------------------------------------------------*/
-void Start() { OpenSynth();}
+Boolean Start() {return OpenSynth();}
 void Stop() { CloseSynth ();}
 
