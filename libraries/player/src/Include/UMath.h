@@ -14,7 +14,9 @@
 
 
 #ifdef __Macintosh__
+	#ifndef LONG_MAX
 	#define LONG_MAX  0xffffffff
+	#endif 
 #endif
 
 
@@ -22,39 +24,41 @@ class UMath {
 
 	public :
 		
-	static long Min (long a, long b) { if (a < b) return a; else return b;}
-	static long Max (long a, long b) { if (a > b) return a; else return b;}
-	static long Abs (long a) { if (a < 0) return -a; else return a;}
-	
-	#ifdef __Macintosh__
-	
-		#include <ToolUtils.h>
-		#include <FixMath.h>
+		static long Min (long a, long b) { if (a < b) return a; else return b;}
+		static long Max (long a, long b) { if (a >= b) return a; else return b;}
+		static unsigned long Min (unsigned long a, unsigned long b) { if (a < b) return a; else return b;}
+		static unsigned long Max (unsigned long a, unsigned long b) { if (a > b) return a; else return b;}
 
-		#if GENERATINGCFM
-			
-			static long CalcLong (long a, long b, long c) {
-				wide res;
-				long remainder;
-			
-				WideMultiply(a, b, &res);
-				return WideDivide(&res,c,&remainder);
-			}
+		static long Abs (long a) { if (a < 0) return -a; else return a;}
 		
-		#else
-			static long CalcLong (long a, long b, long c) {
-				long temp;
-				Int64Bit res;
-			
-				LongMul(a, b, &res);
-				temp = res.hiLong*(LONG_MAX%c);
+		#ifdef __Macintosh__ 
+		
+			#ifdef  __MacOS9__
+				#include <ToolUtils.h>
+				#include <FixMath.h>
 
-				return res.hiLong * (LONG_MAX/c) + temp/c  + res.loLong/c + ((temp%c + res.loLong%c)>(c>>2) ? 1 : 0) ;
-			}
-		
-		
+				#ifdef __MacOS9__
+					static long CalcLong (long a, long b, long c) 
+					{
+						wide res;
+						long remainder;
+						WideMultiply(a, b, &res);
+						return WideDivide(&res,c,&remainder);
+					}
+				
+				#else
+					static long CalcLong (long a, long b, long c) 
+					{
+						long temp;
+						Int64Bit res;
+						LongMul(a, b, &res);
+						temp = res.hiLong*(LONG_MAX%c);
+						return res.hiLong * (LONG_MAX/c) + temp/c  + res.loLong/c + ((temp%c + res.loLong%c)>(c>>2) ? 1 : 0) ;
+					}
+			#endif
+			
+			#endif
 		#endif
-	#endif
 };
 
 
