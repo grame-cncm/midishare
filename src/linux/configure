@@ -88,4 +88,11 @@ echo Calling lib/configure
 cd lib
 ./configure $arch
 
+cat <<!
+===============================================
+  Linux kernel source code MUST be installed 
+    prior to compile the midishare module
+===============================================
+!
 echo end of configure
+
