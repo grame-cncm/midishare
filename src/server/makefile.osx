@@ -10,10 +10,8 @@ TARGET = midishared
 LIBS = ../msServerCommonLib.o ../msOSGlueLib.o portaudio/src/lib/libportaudio.a
 
 COMSRC := $(wildcard ../common/*.c ../common/server/*.c)
-#COMOBJ := $(patsubst ../common/%.c, ../common/sobj/%.o, $(COMSRC))
 COMINC := $(wildcard ../common/Headers/*.h)
 GLUESRC := $(wildcard ../osglue/*.cpp ../osglue/glue/*.cpp ../osglue/unix/*.cpp)
-#GLUEOBJ := $(patsubst %.cpp, %.o, $(GLUESRC))
 GLUEINC := $(wildcard ../osglue/*.h ../osglue/glue/*.h ../osglue/include/*.h)
 
 CFLAGS   := -O3 -Wall -D__MacOSX__ -DMSKernel -I../common/Headers -I../osglue
@@ -40,11 +38,13 @@ uninstall:
 	rm -rf $(DEST)/$(TARGET)
 	rm -rf /etc/$(CONF)
 
-dep: makefile
+dep:
 	cat makefile.readme makefile.osx > makefile
 	mkdep -a -f makefile $(CFLAGS) -Iportaudio/src/pa_common $(SRC)
 
-clean: makefile
+clean:
+	make -C ../common sclean
+	make -C ../osglue clean
 	rm -f $(OBJ) $(TARGET)
 
 ../msServerCommonLib.o: makefile $(COMSRC) $(COMINC)
