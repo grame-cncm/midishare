@@ -29,7 +29,7 @@
 MSFunctionType(short)  MSGetVersion  (TMSGlobalPtr g);
 
 /* initialization function */
-MSFunctionType(void)   MSSpecialInit ( unsigned long defaultSpace, TMSGlobalPtr g);
+MSFunctionType(void)   MSSpecialInit ( unsigned long defaultSpace, TMSGlobalPtr g, TMSGlobalPublic *pub);
 
 void MidiShareWakeup (TMSGlobalPtr g);
 void MidiShareSleep  (TMSGlobalPtr g);

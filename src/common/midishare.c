@@ -53,8 +53,8 @@ TMSGlobalPtr    gMem = &GlobalMem;
 
 /*--------------------------- Global MidiShare environment --------------------*/
 #ifdef MSKernel
-	void   MidiShareSpecialInit(unsigned long defaultSpace) {
-	  	MSSpecialInit( defaultSpace, gMem);
+	void   MidiShareSpecialInit(unsigned long defaultSpace, void *publicMemory) {
+	  	MSSpecialInit( defaultSpace, gMem, (TMSGlobalPublic *)publicMemory);
 	}
 #endif
 

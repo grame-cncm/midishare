@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 #ifdef MSKernel
-  void           MidiShareSpecialInit (unsigned long defaultSpace);
+  void           MidiShareSpecialInit (unsigned long defaultSpace, void *publicMemory);
 #endif
 
 /*--------------------------- Global MidiShare environment --------------------*/

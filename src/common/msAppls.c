@@ -263,6 +263,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 	TApplPtr appl; TDriverPtr drv;
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
+
 	if (nbAppls(clients) == 0) {
 		clients->lastRef = 0;
 		clients->lastDrvRef = MidiShareDriverRef;
@@ -405,7 +406,6 @@ void InitAppls (TClientsPtr g, MSMemoryPtr mem)
 void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short folder)
 {
 	/* set first kernel private information */
-	folder(appl) = (uchar)folder;
 	appl->rcvFlag = (uchar)kNoRcvFlag;
 	fifoinit (&appl->rcv);
 	fifoinit (&appl->dTasks);
@@ -417,6 +417,7 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 
 	/* set next public information */
 	appl->pub = &g->pub->appls[ref];
+	appl->pub->folder = (uchar)folder;
 	setName(pub(appl,name), name);	
 	pub(appl, info) = 0;
 	pub(appl, refNum) = (uchar)ref;
