@@ -173,7 +173,6 @@ static void SetupFilter (MidiFilterPtr filter)
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi ()
 {
-      
 	TDriverInfos infos = { QTDriverName, kQTDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
@@ -181,20 +180,24 @@ Boolean SetUpMidi ()
   	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
    	refNum = MidiRegisterDriver(&infos, &op);
       
-        if (refNum == MIDIerrSpace) return false;
+	if (refNum == MIDIerrSpace) return false;
      
 	data->refNum = refNum;
 	data->slotRef = MidiAddSlot (refNum, QTSlotName, MidiOutputSlot);
         
-        MidiSetRcvAlarm (refNum, FlushReceivedEvents);	
+	MidiSetRcvAlarm (refNum, FlushReceivedEvents);	
         	
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);
-        LoadSlot ("Output Slots", GetProfileFullName(kProfileName),QTDriverName);
+	LoadSlot ("Output Slots", GetProfileFullName(kProfileName),QTDriverName);
         
-        // Init QuickTime
-        QuickTimeInit (QTE(data));
-  	return QuickTimeWakeup (QTE(data));
+	// Init QuickTime
+	QuickTimeInit (QTE(data));
+	if (!QuickTimeWakeup (QTE(data))) {
+		MidiUnregisterDriver(refNum);
+		return false;
+	}else
+		return true;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -208,7 +211,7 @@ void CloseMidi ()
 		MidiUnregisterDriver (ref);
 	}
         
-        // Dispose QuickTime
+	// Dispose QuickTime
 	QuickTimeDispose (QTE(data));
 }
 
@@ -230,21 +233,21 @@ static Boolean QuickTimeWakeup (QuickTimeEnvPtr qt)
 {
 	short i;
  
-        qt->allocator = OpenDefaultComponent (kNoteAllocatorComponentType, 0);
+	qt->allocator = OpenDefaultComponent (kNoteAllocatorComponentType, 0);
 	if (!qt->allocator)
  		goto err;
        
 
 	for (i = 0; i < kChansCount; i++) {
-            if (!SndChanInit (qt, i, SndNum(qt, i)))
-                    goto err;
+		if (!SndChanInit (qt, i, SndNum(qt, i)))
+			goto err;
 	}
 	qt->running = true;
 	return true;
 	
 err:
 	QuickTimeDispose (qt);
-        qt->running = false;
+	qt->running = false;
 	return false;	
 }
 
@@ -253,13 +256,13 @@ static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound)
 {
 	ComponentResult err; NoteRequest nr;
         
-    	nr.info.flags = 0;
+	nr.info.flags = 0;
 	nr.info.polyphony = 8;
 	nr.info.typicalPolyphony = 0x00010000;
-        err = NAStuffToneDescription (qt->allocator, sound, &nr.tone);
+	err = NAStuffToneDescription (qt->allocator, sound, &nr.tone);
     
-        if (err == noErr) {
-                err = NANewNoteChannel (qt->allocator, &nr, &Note(qt, chan));
+	if (err == noErr) {
+		err = NANewNoteChannel (qt->allocator, &nr, &Note(qt, chan));
    	}
 	return (err == noErr) && Note(qt, chan);
 }
@@ -316,7 +319,7 @@ static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e)
 		short sndNum = MidiGetField (e, 0) + 1; // MidiShare ProgChange go from 0 to 127, QuikTime from 1 to 128
 		NASetInstrumentNumberInterruptSafe (qt->allocator, Note(qt, Chan(e)), sndNum);
 		qt->chan[Chan(e)].sndNum = sndNum;
-                MidiTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
+		MidiTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
 	}
 }
 
