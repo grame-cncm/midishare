@@ -17,13 +17,13 @@ mv Distribution Distribution.save
 cp -R Distribution.save Distribution
 
 echo suppression des dossiers CVS
-find Distribution -type d -name CVS -exec rm -rf {} \;
+find Distribution -depth -type d -name CVS -exec rm -rf {} \;
 
 echo remove the .DS_Store files
 find Distribution -name ".DS_Store" -exec rm -rf {} \;
 
 echo generates install.log
-./makeLog > install.log
+./scripts/makeLog > install.log
 mv install.log Distribution/Applications/MidiShare
 
 echo verification des droits des fichiers et des dossiers
