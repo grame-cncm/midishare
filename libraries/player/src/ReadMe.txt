@@ -39,6 +39,9 @@ to improve cross-platform compatibility
 Bug correction in chase management for KeyOn with velocity of 0.
 Bug correction in the TickTask class destructor.
 
+01/07/00 : Version  2.03 : Merge of the new scheduler branch : simplification of the scheduler class
+to correct a synchronization problem on Linux.
+
 =================================================================================
 The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
 1996-1999, and is distributed as Open Source software under a slightly modified 
