@@ -282,5 +282,5 @@ MSFunctionType(void) MFlushDTasks(short refNum, TMSGlobalPtr g) {
 }
 
 MSFunctionType(void) MExec1DTask(short refNum, TMSGlobalPtr g) {
-  MSExec1DTask (refNum, Clients(g), CurrTime(g) );
+  MSExec1DTask (refNum, Clients(g));
 } 
