@@ -36,7 +36,7 @@
 //________________________________________________________________________
 // TMidiServer
 //________________________________________________________________________
-TMidiServer::TMidiServer (short port, InetSvcRef ref)
+TMidiServer::TMidiServer (short port, InetServiceRef ref)
 	: TTCPServer (port)
 {
 	fRefNum = ref;
