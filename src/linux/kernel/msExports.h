@@ -121,5 +121,8 @@ EXPORT_SYMBOL(MSGetSlotInfos);
 EXPORT_SYMBOL(MSConnectSlot);
 EXPORT_SYMBOL(MSIsSlotConnected);
 
+/* release 1.82 additionnal exports */
+EXPORT_SYMBOL(MSSetSlotName);
+
 #endif
 
