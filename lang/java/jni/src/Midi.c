@@ -36,6 +36,7 @@
 /*           9/01/97  version 1.05 correction bug ReadSysEx (buffer vide apres creation d'une cellule)
 /*           28/11/97 version 1.06 compatible JNI
 /*           14/02/01 version 1.07 fonctions pour la gestion des drivers
+/*           19/03/02 version 1.08 fonctions MidiGetInfo et MidiSetInfo nécessaires pour le thread bloquant sur MacOS9
 /*
 /*****************************************************************************/
 
@@ -340,9 +341,9 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndAppl
 
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetInfo
-  (JNIEnv * env, jclass cl, jint a0){
-	/* not implemented */
-	return 0;
+  (JNIEnv * env, jclass cl, jint refnum){
+  
+	return (jint)MidiGetInfo(refnum);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -584,9 +585,9 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetFilter
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetInfo
-  (JNIEnv * env, jclass cl, jint a0, jint a1){
+  (JNIEnv * env, jclass cl, jint refnum, jint info){
 
-	/* not implemented */
+	MidiSetInfo(refnum,info);
 }
 
 /*--------------------------------------------------------------------------*/
