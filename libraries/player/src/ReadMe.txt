@@ -1,6 +1,7 @@
+================
 Player Library
+================
 
-=================================================================================
 This library allows to develop multi-tracks synchronisable MidiShare sequencers.
 
 
@@ -42,11 +43,20 @@ Bug correction in the TickTask class destructor.
 01/07/00 : Version  2.03 : Merge of the new scheduler branch : simplification of the scheduler class
 to correct a synchronization problem on Linux.
 
+==================
+General Remarks
+==================
+
+The library entry points are not multi-thread safe. Synchronization in a multi-thread environment 
+has to be done by the user of the library.
+
+
 =================================================================================
 The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-1996-1999, and is distributed as Open Source software under a slightly modified 
-version of the Artistic License; see the file "Artistic" that is included in the distribution for details.
+1996-2000, and is distributed as Open Source software under a slightly modified 
+version of the Artistic License; see the file "Artistic" that is included in 
+the distribution for details.
 Grame : Computer Music Research Laboratory
 Web : http://www.grame.fr/Research
-E-mail : MidiShare@rd.grame.fr
+E-mail : MidiShare@grame.fr
 =================================================================================
