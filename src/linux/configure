@@ -18,4 +18,8 @@ fi
 
 chmod +x checksu
 
+echo calling lib/configure
+cd lib
+./configure
+
 echo end of configure
