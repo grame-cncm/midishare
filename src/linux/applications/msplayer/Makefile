@@ -6,7 +6,7 @@ DEST=/usr/local/bin
 all : $(cappl)
  
   
-$(cappl) : % : %.c
+$(cappl) : msplayer.c Player.h
 	gcc $(options) $< -o $@
 
 clean :
