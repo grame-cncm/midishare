@@ -448,7 +448,7 @@ main( int argc, char *argv[])
 {
 	print("\nAllocation, emission and reception of MidiShare events.\n");
 	print("========================================================\n");
-    version = MidiGetLibVersion ();
+    version = MidiGetVersion(); // MidiGetLibVersion ();
     print("               MidiShare Library version %d.%02d\n", (int)version/100, (int)version%100);
     print("\nWarning : client must have at least 10000 events !\n");
 

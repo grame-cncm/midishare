@@ -1,0 +1,15 @@
+
+OPTIONS = -D__MacOSX__  -I../common/Headers
+LIB = -lMidiShare
+CFLAGS := -O3 $(OPTIONS)
+CC    = cc
+
+STREAMOBJ = TStream.o ../common/StreamToEvent.o ../common/EventToStream.o
+
+all : TStream
+
+TStream : TStream.o ../common/StreamToEvent.o ../common/EventToStream.o
+	$(CC) $(STREAMOBJ) $(LIB) -o TStream
+	
+clean :
+	rm $(TESTS) $(STREAMOBJ)

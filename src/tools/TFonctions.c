@@ -45,7 +45,7 @@
 #	include <stdio.h>
 #	include "MidiShare.h"
 # if defined(__ppc__) && defined(__GNUC__)
-#	define __POWERPC__
+//#	define __POWERPC__
 #	define CNAME
 #	define CTASKS
 #	define nil 0
@@ -1102,8 +1102,11 @@ void Close()
 /*____________________________________________________________________*/
 main()
 {
-	print ("\nMidiShare functions test.\n");
+	int version;
+	print ("MidiShare functions test.\n");
 	print ("================================\n");
+    version = MidiGetVersion(); // MidiGetLibVersion ();
+    print("MidiShare Library version %d.%02d\n\n", (int)version/100, (int)version%100);
 	
 	if( MidiShare()) {
 		if( !Environment()) return 1;

@@ -3,10 +3,13 @@ OPTIONS = -Dmacintosh -D__Types__
 LIB = -lMidiShare
 CFLAGS := -O3 $(OPTIONS)
 CC    = cc
-TESTS = TEvents TEventsLib TFilters TFonctions TOutEvents TDrivers 
+TESTS = clientTest TEvents TEventsLib TFilters TFonctions TOutEvents  #TDrivers 
 RES   = results
 
 all : makefile $(TESTS)
+
+clientTest : clientTest.c
+	$(CC) $(CFLAGS) $(LIB) clientTest.c -o clientTest
 
 TDrivers : TDrivers.c TDrivers.h
 	$(CC) $(CFLAGS) $(LIB) TDrivers.c -o TDrivers
