@@ -13,7 +13,7 @@ CFLAGS = -O3 -Iinclude -Iglue -Wall
 CXXFLAGS = $(CFLAGS)
 CXX = c++
 
-OUT = ../msComGlue.o
+OUT = ../msOSGlueLib.o
 
 all: makefile $(OUT)
 
