@@ -168,8 +168,6 @@ static void SetUpWindows()
 	if (ReadPos (profileName, &p))
 		MoveWindow (myWindow, p.h, p.v, false);
 	AdjustLocation (myWindow);
-	ShowWindow(myWindow);
-	DrawDialog ( myDlog );
 }
 		
 /* -----------------------------------------------------------------------------*/
@@ -314,6 +312,7 @@ static void Initialize()
 	if (!gFeedback) FatalError ("\pMemory allocation failed");
 	msg = SetUpDriver(&gState, gFeedback);
 	if (msg) FatalError (C2PStr(msg, buf));
+	else ShowWindow(myWindow);
 	foreGround = true;
 }
 
@@ -322,8 +321,8 @@ int main(int argc, char *argv[])
 {
 	Boolean b; char c;
 	
-	Initialize();
 	doneFlag = false;											
+	Initialize();
 	while (!doneFlag) {										/* Main Loop			*/
 		b = WaitNextEvent(everyEvent, &myEvent, 5, nil);	/* no sleep, no mouseRg */
 		AdjustCursor();											
