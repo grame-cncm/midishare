@@ -64,6 +64,7 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 		TMSGlobalPublic * pub;
 		TMSMemory     memory;          /* kernel memory management        */
 		TApplPtr      appls[MaxAppls]; /* clients applications management */
+		short         nbAppls;         /* current local clients count     */
     	TApplContextPtr context;       /* system dependent context        */
 	} TMSGlobal;
 

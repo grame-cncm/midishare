@@ -135,19 +135,19 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPublicPtr g)
 /*____________________________________________________________________________*/
 MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 {
-	MidiEvPtr e; char ref;
+	MidiEvPtr e; char ref; TApplPtr appl;
 	
 	if (!InitComm(g)) return MIDIerrComm;
 	
 	e = MSNewEv (typeMidiOpen, &g->memory.freeList);
-	if (e) {
+	appl = NewAppl (sizeof(TAppl));
+	if (e && appl) {
 		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
 		e = MSSendSync (0, e, g);
 		if (!e) return MIDIerrComm;
 
         if (EvType(e) == typeMidiOpenRes) {
-            TApplPtr appl = NewAppl (sizeof(TAppl));
 			ref = RefNum(e);
             fifoinit (&appl->rcv);
             fifoinit (&appl->dTasks);
@@ -155,6 +155,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
             appl->rcvAlarm = 0;
             appl->applAlarm = 0;
             g->appls[ref] = appl;
+			g->nbAppls++;
         }
 		else ref = MIDIerrComm;
 		MSFreeEv (e, &g->memory.freeList);
@@ -174,6 +175,7 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
             MSSendSync (ref, e, g);
             FreeAppl (g->appls[ref]);
             g->appls[ref] = 0;
+			g->nbAppls--;
         }
         CloseComm(g);
     }
