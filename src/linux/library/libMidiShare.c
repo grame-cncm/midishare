@@ -20,6 +20,8 @@
 
 */
 
+#include <pwd.h>
+
 #include "libMidiShare.h"
 
 
@@ -94,6 +96,14 @@ MidiEvPtr MidiGetEvAux(short ref, int command)
 
  	FreeList1(arg.l);
 	return arg.e;
+}
+
+/*--------------------------------------------------------------------*/
+uid_t name_to_uid (char * name)
+{
+	struct passwd *p;
+	p = getpwnam (name);
+	return p ? p->pw_uid : -1;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -334,7 +344,8 @@ long* MidiGetTimeAddr ()
 	TMidiOpenArgs 		args;
   	int           		err;
    	struct sched_param 	param;  // type defined in  /usr/include/bits/sched.h 
-	
+	uid_t uid = getuid ();
+
 	pthread_mutex_lock(&gClients->mutex);
 	
  	args.name = name;
@@ -354,14 +365,11 @@ long* MidiGetTimeAddr ()
 			
 			param.sched_priority = 99; /* 0 to 99  */
 			pthread_create(&appl->rcvThread,NULL,event_handler,(void*)appl);
-			
+						
+			setuid (name_to_uid ("root")); 
    			err = pthread_setschedparam(appl->rcvThread, SCHED_RR,  &param); 
-	
-   			if (err) {
-   				printf("The real-time receive thread priority can not be set\n");
-				printf("You must be SU \n");
-   			}
- 		}
+ 			setuid (uid);
+		}
 	}
 	
 	pthread_mutex_unlock(&gClients->mutex);
