@@ -662,7 +662,6 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
 									  "set-loop-start-ms-player!", 2, 2), env);
   scheme_add_global("set-loop-end-ms-player!", scheme_make_prim_w_arity(sch_setLoopEndMsPlayer, 
 									"set-loop-end-ms-player!", 2, 2), env);
-
  
   scheme_add_global("set-synchro-in-player!", scheme_make_prim_w_arity(sch_setSynchroInPlayer, 
 								       "set-synchro-in-player!", 2, 2), env);
@@ -674,6 +673,8 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
   scheme_add_global("set-tempo-player!", scheme_make_prim_w_arity(sch_setTempoPlayer, "set-tempo-player!", 2, 2), env);
   ;                                                                                    
   scheme_add_global("get-state-player", scheme_make_prim_w_arity(sch_getStatePlayer, "get-state-player", 1, 2), env);
+  scheme_add_global("get-state-player!", scheme_make_prim_w_arity(sch_getStatePlayer, "get-state-player!", 1, 2), env);
+ 
   scheme_add_global("get-end-score-player", scheme_make_prim_w_arity(sch_getEndScorePlayer, 
 								     "get-end-score-player", 1, 2), env);
 
@@ -700,7 +701,6 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
 								    "insert-track-player", 3, 3), env);
   scheme_add_global("make-midi-file-infos", scheme_make_prim_w_arity(sch_makeMidiFileInfos, 
 								  "make-midi-file-infos", 4,4), env);
-
 
   scheme_add_global("midi-file-save", scheme_make_prim_w_arity(sch_midiFileSave, "midi-file-save", 3, 3), env);
   scheme_add_global("midi-file-load", scheme_make_prim_w_arity(sch_midiFileLoad, "midi-file-load", 3, 3), env);
