@@ -17,153 +17,197 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - using lifo for memory management
+                   including methods tables in the module
 
 */
 
 #include "msEvents.h"
-#include "msSync.h"
-
 
 #define Debug(s)
-#define defaultTime(g)		0
+#define defaultTime			0
 
 /*__________________________________________________________________________*/
 #define kCountFieldsError	0
 #define kGetFieldError		0
 
+#define typeLastReserved    typeDead-1    /* last reserved event type      */
+#define kLenEvent           16            /* len of a MidiShare event      */
+#define kLenDatas           kLenEvent-4   /* len of a sysex extension data */
 
-/*--------------------------------------------------------------------------*/
-/*                   Structure to optimize event fields access              */
-typedef union TMidiFastEv
-{
-    MidiEvPtr          std;        /* standard way to access an event */
-    struct {                       /* fast way to access an event     */
-        MidiEvPtr     link;        /* link to next event           */
-        unsigned long date;        /* event date (in ms)           */
-        union {                    /* common datas                 */
-            Byte      byteC[4];
-            short     shortC[2];
-            long      longC;
-        }             common;
-        union {                    /* info depending of event type */
-            Byte      byteF[4];
-            short     shortF[2];
-            long      longF;
-        }             specific;
-    } FAR *           fast;
-    long FAR *        tab;         /* an event seen as a long table */
-} TMidiFastEv;
+// -- Method prototypes
+typedef MidiEvPtr (*NewEvMethodPtr)      (lifo* freelist, short typeNum);
+typedef MidiEvPtr (*CopyEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
+typedef void      (*FreeEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
+typedef void      (*SetFieldMethodPtr)   (MidiEvPtr ev, unsigned long f, long v);
+typedef long      (*GetFieldMethodPtr)   (MidiEvPtr ev, unsigned long f);
+typedef long      (*CountFieldsMethodPtr)(MidiEvPtr ev);
+typedef void      (*AddFieldMethodPtr)   (lifo* freelist, MidiEvPtr ev, long v);
 
-#define Common(e)        (e).fast->common
-#define Specific(e)      (e).fast->specific
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static void 	InitSmpteEvents		( TSmpteDatasPtr smpte);
-static void 	InitNewEvMth		( NewEvMethodPtr FAR *table);
-static void 	InitFreeEvMth		( FreeEvMethodPtr FAR *table);
-static void 	InitCopyEvMth		( CopyEvMethodPtr FAR *table);
-static void 	InitCountFieldsMth	( CountFieldsMethodPtr FAR *table);
-static void 	InitSetFieldMth		( SetFieldMethodPtr FAR *table);
-static void 	InitGetFieldMth		( GetFieldMethodPtr FAR *table);
-static void 	InitAddFieldMth		( AddFieldsMethodPtr FAR *table);
+static void 	InitNewEvMth		( NewEvMethodPtr * table);
+static void 	InitFreeEvMth		( FreeEvMethodPtr * table);
+static void 	InitCopyEvMth		( CopyEvMethodPtr * table);
+static void 	InitCountFieldsMth	( CountFieldsMethodPtr * table);
+static void 	InitSetFieldMth		( SetFieldMethodPtr * table);
+static void 	InitGetFieldMth		( GetFieldMethodPtr * table);
+static void 	InitAddFieldMth		( AddFieldMethodPtr * table);
 
-static MidiEvPtr NEAR NewUndefEv	( MSMemoryPtr g, short typeNum);
-static MidiEvPtr NEAR NewSmallEv	( MSMemoryPtr g, short typeNum);
-static MidiEvPtr NEAR NewSexEv		( MSMemoryPtr g, short typeNum);
-static MidiEvPtr NEAR NewPrivateEv	( MSMemoryPtr g, short typeNum);
+static MidiEvPtr NewUndefEv		( lifo* freelist, short typeNum);
+static MidiEvPtr NewSmallEv		( lifo* freelist, short typeNum);
+static MidiEvPtr NewSexEv		( lifo* freelist, short typeNum);
+static MidiEvPtr NewPrivateEv	( lifo* freelist, short typeNum);
 
-static void 	NEAR FreeUndefEv	( MSMemoryPtr g, MidiEvPtr e);
-static void 	NEAR FreeSmallEv	( MSMemoryPtr g, MidiEvPtr e);
-static void 	NEAR FreeSexEv		( MSMemoryPtr g, MidiEvPtr e);
-static void 	NEAR FreePrivateEv	( MSMemoryPtr g, MidiEvPtr e);
+static void 	FreeUndefEv	    ( lifo* freelist, MidiEvPtr e);
+static void 	FreeSmallEv		( lifo* freelist, MidiEvPtr e);
+static void 	FreeSexEv		( lifo* freelist, MidiEvPtr e);
+static void 	FreePrivateEv	( lifo* freelist, MidiEvPtr e);
 
-static MidiEvPtr NEAR CopyUndefEv	( MSMemoryPtr g, MidiEvPtr ev);
-static MidiEvPtr NEAR CopySmallEv	( MSMemoryPtr g, MidiEvPtr ev);
-static MidiEvPtr NEAR CopyPrivateEv	( MSMemoryPtr g, MidiEvPtr ev);
-static MidiEvPtr NEAR CopySexEv		( MSMemoryPtr g, MidiEvPtr ev);
+static MidiEvPtr CopyUndefEv	( lifo* freelist, MidiEvPtr ev);
+static MidiEvPtr CopySmallEv	( lifo* freelist, MidiEvPtr ev);
+static MidiEvPtr CopyPrivateEv	( lifo* freelist, MidiEvPtr ev);
+static MidiEvPtr CopySexEv		( lifo* freelist, MidiEvPtr ev);
 
-static void	NEAR SetFUndefEv	( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFSmallEv	( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetF2_16Ev		( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFTempo		( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFSMPTEOffset( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFTimeSign	( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFKeySign	( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFSexEv		( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
-static void	NEAR SetFPrivateEv	( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v);
+static void	SetFUndefEv		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSmallEv		( MidiEvPtr e, unsigned long f, long v);
+static void	SetF2_16Ev		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFTempo		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSMPTEOffset	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFTimeSign	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFKeySign		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSexEv		( MidiEvPtr e, unsigned long f, long v);
+static void	SetFPrivateEv	( MidiEvPtr e, unsigned long f, long v);
 
-static long	NEAR GetFUndefEv	( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFSmallEv	( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFSexEv		( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFPrivateEv	( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetF2_16Ev		( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFTempo		( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFSMPTEOffset( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFTimeSign	( MSMemoryPtr g, MidiEvPtr e, long f);
-static long	NEAR GetFKeySign	( MSMemoryPtr g, MidiEvPtr e, long f);
+static long	GetFUndefEv		( MidiEvPtr e, unsigned long f);
+static long	GetFSmallEv		( MidiEvPtr e, unsigned long f);
+static long	GetFSexEv		( MidiEvPtr e, unsigned long f);
+static long	GetFPrivateEv	( MidiEvPtr e, unsigned long f);
+static long	GetF2_16Ev		( MidiEvPtr e, unsigned long f);
+static long	GetFTempo		( MidiEvPtr e, unsigned long f);
+static long	GetFSMPTEOffset	( MidiEvPtr e, unsigned long f);
+static long	GetFTimeSign	( MidiEvPtr e, unsigned long f);
+static long	GetFKeySign		( MidiEvPtr e, unsigned long f);
 
-static long	NEAR CountFUndefEv	( MidiEvPtr e);
-static long	NEAR Count0Field	( MidiEvPtr e);
-static long	NEAR Count1Field	( MidiEvPtr e);
-static long	NEAR Count2Fields	( MidiEvPtr e);
-static long	NEAR Count3Fields	( MidiEvPtr e);
-static long	NEAR Count4Fields	( MidiEvPtr e);
-static long	NEAR Count6Fields	( MidiEvPtr e);
-static long	NEAR CountFSexEv	( MidiEvPtr e);
+static long	CountFUndefEv	( MidiEvPtr e);
+static long	Count0Field		( MidiEvPtr e);
+static long	Count1Field		( MidiEvPtr e);
+static long	Count2Fields	( MidiEvPtr e);
+static long	Count3Fields	( MidiEvPtr e);
+static long	Count4Fields	( MidiEvPtr e);
+static long	Count6Fields	( MidiEvPtr e);
+static long	CountFSexEv		( MidiEvPtr e);
 
-static long	NEAR AddFUndefEv	( MSMemoryPtr g, MidiEvPtr e, long v);
-static long	NEAR AddNoField		( MSMemoryPtr g, MidiEvPtr e, long v);
-static long	NEAR AddFSexEv		( MSMemoryPtr g, MidiEvPtr e, long v);
+static void	AddFUndefEv		( lifo* freelist, MidiEvPtr e, long v);
+static void	AddNoField		( lifo* freelist, MidiEvPtr e, long v);
+static void	AddFSexEv		( lifo* freelist, MidiEvPtr e, long v);
+
+
+/* data storage */
+
+#ifdef __Macintosh__
+# ifdef __POWERPC__
+# else
+static asm void NewEvMeth()       { ds.l 256 }
+static asm void CopyEvMeth()      { ds.l 256 }
+static asm void FreeEvMeth()      { ds.l 256 }
+static asm void SetFieldMeth()    { ds.l 256 }
+static asm void GetFieldMeth()    { ds.l 256 }
+static asm void CountFieldsMeth() { ds.l 256 }
+static asm void AddFieldMeth()    { ds.l 256 }
+
+
+#define NewEvMethodTbl	     ((NewEvMethodPtr *)NewEvMeth)
+#define CopyEvMethodTbl      ((CopyEvMethodPtr *)CopyEvMeth)
+#define FreeEvMethodTbl      ((FreeEvMethodPtr *)FreeEvMeth)
+#define SetFieldMethodTbl    ((SetFieldMethodPtr *)SetFieldMeth)
+#define GetFieldMethodTbl    ((GetFieldMethodPtr *)GetFieldMeth)
+#define CountFieldsMethodTbl ((CountFieldsMethodPtr *)CountFieldsMeth)
+#define AddFieldMethodTbl    ((AddFieldMethodPtr *)AddFieldMeth)
+
+static asm void smpteMask() { 
+	dc.l 0x06000000,0x1F000000,0x00FC0000
+	dc.l 0x0003F000,0x00000F80,0x0000007F
+}
+static asm void smpteShft() { 
+	dc.b 29,24,18,12,7,0 
+}
+
+#define smpteMaskTbl	  (const unsigned long *)smpteMask
+#define smpteShftTbl      (const char *)smpteShft
+
+# endif
+
+#else
+
+static NewEvMethodPtr       NewEvMeth[256];        /* Allocation methods table */
+static CopyEvMethodPtr      CopyEvMeth[256];       /* Copy methods table       */
+static FreeEvMethodPtr      FreeEvMeth[256];       /* Free methods table       */
+static SetFieldMethodPtr    SetFieldMeth[256];     /* SetField methods table   */
+static GetFieldMethodPtr    GetFieldMeth[256];     /* GetField methods table   */
+static CountFieldsMethodPtr CountFieldsMeth[256];  /* CountField methods table */
+static AddFieldMethodPtr    AddFieldMeth[256];     /* AddField methods table   */
+
+#define NewEvMethodTbl	     NewEvMeth
+#define CopyEvMethodTbl      CopyEvMeth
+#define FreeEvMethodTbl      FreeEvMeth
+#define SetFieldMethodTbl    SetFieldMeth
+#define GetFieldMethodTbl    GetFieldMeth
+#define CountFieldsMethodTbl CountFieldsMeth
+#define AddFieldMethodTbl    AddFieldMeth
+
+const unsigned long smpteMask[]= { 0x06000000,0x1F000000,0x00FC0000,
+							       0x0003F000,0x00000F80,0x0000007F };
+const char 		    smpteShft[]= { 29,24,18,12,7,0 };
+
+#define smpteMaskTbl	  smpteMask
+#define smpteShftTbl      smpteShft
+
+#endif
 
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(MidiEvPtr) MSNewCell (MSMemoryPtr g)
-{
-	return PopMidiEv (FreeList(g));
-}
 
-/*__________________________________________________________________________________*/
-MSFunctionType(void) MSFreeCell (MidiEvPtr e, MSMemoryPtr g)
-{
-	if (e) {
-		PushMidiEv (FreeList(g), e);
-	}
-}
+MSFunctionType(MidiEvPtr) MSNewEv (short typeNum, lifo* freelist)
+                                  { return NewEvMethodTbl[typeNum](freelist, typeNum); }
 
-/*__________________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSNewEv (short typeNum, MSMemoryPtr g)
-                                  { return NewEvMeth(g)[typeNum]( g, typeNum); }
-MSFunctionType(void)      MSFreeEv (MidiEvPtr e, MSMemoryPtr g)
-                                  { if( e) FreeEvMeth(g)[EvType(e)]( g, e); }
-MSFunctionType(MidiEvPtr) MSCopyEv (MidiEvPtr e, MSMemoryPtr g)
-                                  { return e ? CopyEvMeth(g)[EvType(e)]( g, e) : e; }
-MSFunctionType(void)      MSSetField (MidiEvPtr e, unsigned long f, long v, MSMemoryPtr g)
-                                  { if( e) SetFieldMeth(g)[EvType(e)]( g, e, f, v); }
-MSFunctionType(long)      MSGetField (MidiEvPtr e, long f, MSMemoryPtr g)
-                                  { return e ? GetFieldMeth(g)[EvType(e)]( g, e, f) : kGetFieldError; }
-MSFunctionType(long)      MSCountFields (MidiEvPtr e, MSMemoryPtr g)
-                                  { return e ? CountFieldsMeth(g)[EvType(e)](e) : kCountFieldsError; }
-MSFunctionType(long)      MSAddField (MidiEvPtr e, long v, MSMemoryPtr g)
-                                  { return e ? AddFieldMeth(g)[EvType(e)](g, e, v) : MIDIerrEv; }
+MSFunctionType(void)      MSFreeEv (MidiEvPtr e, lifo* freelist)
+                                  { if( e) FreeEvMethodTbl[EvType(e)]( freelist, e); }
+
+MSFunctionType(MidiEvPtr) MSCopyEv (MidiEvPtr e, lifo* freelist)
+                                  { return e ? CopyEvMethodTbl[EvType(e)]( freelist, e) : e; }
+
+MSFunctionType(void)      MSSetField (MidiEvPtr e, unsigned long f, long v)
+                                  { if( e) SetFieldMethodTbl[EvType(e)]( e, f, v); }
+
+MSFunctionType(long)      MSGetField (MidiEvPtr e, long f)
+                                  { return e ? GetFieldMethodTbl[EvType(e)]( e, f) : kGetFieldError; }
+
+MSFunctionType(long)      MSCountFields (MidiEvPtr e)
+                                  { return e ? CountFieldsMethodTbl[EvType(e)](e) : kCountFieldsError; }
+
+MSFunctionType(void)      MSAddField (MidiEvPtr e, long v, lifo* freelist)
+                                  { if ( e) AddFieldMethodTbl[EvType(e)](freelist, e, v); }
 
 
 /*===========================================================================
   External initialization functions
   =========================================================================== */
-void InitEvents (MSMemoryPtr g)
+void InitEvents ()
 {
-	InitSmpteEvents		( &Smpte(g));
-	InitNewEvMth		( NewEvMeth(g));
-	InitFreeEvMth		( FreeEvMeth(g));
-	InitCopyEvMth		( CopyEvMeth(g));
-	InitSetFieldMth		( SetFieldMeth(g));
-	InitGetFieldMth		( GetFieldMeth(g));
-	InitCountFieldsMth	( CountFieldsMeth(g));
-	InitAddFieldMth		( AddFieldMeth(g));
+	InitNewEvMth		( NewEvMethodTbl );
+	InitFreeEvMth		( FreeEvMethodTbl );
+	InitCopyEvMth		( CopyEvMethodTbl );
+	InitSetFieldMth		( SetFieldMethodTbl );
+	InitGetFieldMth		( GetFieldMethodTbl );
+	InitCountFieldsMth	( CountFieldsMethodTbl );
+	InitAddFieldMth		( AddFieldMethodTbl );
 }
 
 
@@ -173,26 +217,7 @@ void InitEvents (MSMemoryPtr g)
   =========================================================================== 
   Methods tables initialization
   __________________________________________________________________________*/
-static void InitSmpteEvents( TSmpteDatasPtr smpte) {
-
-  smpte->bfMask[0]= 0x06000000;
-  smpte->bfMask[1]= 0x1F000000;
-  smpte->bfMask[2]= 0x00FC0000;
-  smpte->bfMask[3]= 0x0003F000;
-  smpte->bfMask[4]= 0x00000F80;
-  smpte->bfMask[5]= 0x0000007F;
-
-  smpte->bfShft[0]= 29;
-  smpte->bfShft[1]= 24;
-  smpte->bfShft[2]= 18;
-  smpte->bfShft[3]= 12;
-  smpte->bfShft[4]= 7;
-  smpte->bfShft[5]= 0;
-
-}
-
-/*__________________________________________________________________________________*/
-static void InitNewEvMth( NewEvMethodPtr FAR *table)
+static void InitNewEvMth( NewEvMethodPtr *table)
 {
   int i;
 
@@ -209,7 +234,7 @@ static void InitNewEvMth( NewEvMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitFreeEvMth( FreeEvMethodPtr FAR *table)
+static void InitFreeEvMth( FreeEvMethodPtr *table)
 {
   int i;
 
@@ -227,7 +252,7 @@ static void InitFreeEvMth( FreeEvMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitCopyEvMth( CopyEvMethodPtr FAR *table)
+static void InitCopyEvMth( CopyEvMethodPtr *table)
 {
   int i;
 
@@ -245,7 +270,7 @@ static void InitCopyEvMth( CopyEvMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitCountFieldsMth( CountFieldsMethodPtr FAR *table)
+static void InitCountFieldsMth( CountFieldsMethodPtr *table)
 {
   int i;
 
@@ -273,7 +298,7 @@ static void InitCountFieldsMth( CountFieldsMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitSetFieldMth( SetFieldMethodPtr FAR *table)
+static void InitSetFieldMth (SetFieldMethodPtr *table)
 {
   int i;
 
@@ -295,7 +320,7 @@ static void InitSetFieldMth( SetFieldMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitGetFieldMth( GetFieldMethodPtr FAR *table)
+static void InitGetFieldMth (GetFieldMethodPtr *table)
 {
   int i;
 
@@ -317,7 +342,7 @@ static void InitGetFieldMth( GetFieldMethodPtr FAR *table)
 }
 
 /*__________________________________________________________________________________*/
-static void InitAddFieldMth( AddFieldsMethodPtr FAR *table)
+static void InitAddFieldMth (AddFieldMethodPtr *table)
 {
   int i;
 	
@@ -331,177 +356,162 @@ static void InitAddFieldMth( AddFieldsMethodPtr FAR *table)
   table[typeDead]     = AddNoField;
 }
 
-
 /*__________________________________________________________________________________
   NEW EVENT METHODS			
   __________________________________________________________________________________*/
-static MidiEvPtr NEAR NewUndefEv( MSMemoryPtr unused1, short unused2)
+static MidiEvPtr NewUndefEv( lifo* unused1, short unused2)
 {
 	Debug( "NewEv : WRONG EVENT TYPE !!");
 	return 0;
 }
 	
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR NewSmallEv( MSMemoryPtr g, short typeNum)
+static MidiEvPtr NewSmallEv( lifo* fl, short typeNum)
 {
-	TMidiFastEv ev;
-
-	ev.std= MSNewCell( g);
-	if( ev.std) {
-		Link(ev.std)= 0;
-		Date(ev.std)= defaultTime(g);
-		EvType(ev.std)= (uchar)typeNum;
-		RefNum(ev.std)= 0xff;
-		Common(ev).shortC[1]= 0;
-		Specific(ev).longF= 0;
+	MidiEvPtr ev = MSNewCell( fl);
+	if( ev) {
+		Link(ev)= 0;
+		Date(ev)= defaultTime;
+		EvType(ev)= (uchar)typeNum;
+		RefNum(ev)= 0xff;
+		Chan(ev) = Port(ev) = 0;
+		ev->info.longField = 0;
 	}
-	return ev.std;
+	return ev;
 }
 
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR NewSexEv( MSMemoryPtr g, short typeNum)
+static MidiEvPtr NewSexEv( lifo* fl, short typeNum)
 {
-	TMidiFastEv ev; TMidiFastEv ext;
-
-	ev.std= MSNewCell( g);
-	if( ev.std) {
-		ext.std= MSNewCell( g);
-		if( ext.std) {
-			Link(ext.std)= ext.std;				/* creates a clear extension block */
-			Date(ext.std)		= 0;
-			Common(ext).longC	= 0;
-			Specific(ext).longF	= 0;
-
-			Link(ev.std)= 0;					/* initialize the header           */
-			Date(ev.std)= defaultTime(g);
-			EvType(ev.std)= (uchar)typeNum;
-			RefNum(ev.std)= 0xff;
-			Common(ev).shortC[1]= 0;
-			LinkSE(ev.std)= (MidiSEXPtr)ext.std;/* link the extension block        */
-		}
-		else {
-			MSFreeCell( ev.std, g);
+	MidiEvPtr ev = MSNewCell( fl);
+	if( ev) {
+		MidiSTPtr ext= (MidiSTPtr)MSNewCell( fl);
+		if (!ext) {
+			MSFreeCell (ev, fl);
 			return 0;
 		}
+		ext->val[0]= (long)ext;			/* creates a clear extension block */
+		ext->val[1]= ext->val[2]= ext->val[3]= 0;
+		
+		Link(ev)= 0;					/* initialize the header           */
+		Date(ev)= defaultTime;
+		EvType(ev)= (uchar)typeNum;
+		RefNum(ev)= 0xff;
+		Chan(ev) = Port(ev) = 0;
+		LinkSE(ev)= (MidiSEXPtr)ext;    /* link the extension block        */
 	}
-	return ev.std;
+	return ev;
 }
 
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR NewPrivateEv( MSMemoryPtr g, short typeNum)
+static MidiEvPtr NewPrivateEv( lifo* fl, short typeNum)
 {
-	TMidiFastEv ev; MidiSTPtr ext;
-	
-	ev.std= MSNewCell( g);
-	if( ev.std) {
-		ext= (MidiSTPtr)MSNewCell( g);
-		if( ext) {
-											    /* creates a clear extension block */
-			ext->ptr1= ext->ptr2= ext->ptr3= ext->ptr4= 0;
-			Link(ev.std)= 0;					/* initialize the header           */
-			Date(ev.std)= defaultTime(g);
-			EvType(ev.std)= (uchar)typeNum;
-			RefNum(ev.std)= 0xff;
-			Common(ev).shortC[1]= 0;
-			LinkST(ev.std)= ext;				/* link the extension block        */
-		}
-		else {
-			MSFreeCell( ev.std, g);
+	MidiEvPtr ev = MSNewCell( fl);
+	if( ev) {
+		MidiSTPtr ext= (MidiSTPtr)MSNewCell(fl);
+		if ( !ext) {
+			MSFreeCell (ev, fl);
 			return 0;
-		}
+		}								   
+		/* creates a clear extension block */
+		ext->val[0]= ext->val[1]= ext->val[2]= ext->val[3]= 0;
+		Link(ev)= 0;					/* initialize the header           */
+		Date(ev)= defaultTime;
+		EvType(ev)= (uchar)typeNum;
+		RefNum(ev)= 0xff;
+		Chan(ev) = Port(ev) = 0;
+		LinkST(ev)= ext;				/* link the extension block        */
 	}
-	return ev.std;
+	return ev;
 }
 
 /*__________________________________________________________________________________
   FREE EVENT METHODS
   __________________________________________________________________________________*/
-static void NEAR FreeUndefEv( MSMemoryPtr unused1, MidiEvPtr unused2)
+static void FreeUndefEv( lifo* unused1, MidiEvPtr unused2)
 {
 	Debug( "FreeEv : WRONG EVENT TYPE !!");
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR FreeSmallEv( MSMemoryPtr g, MidiEvPtr e)
+static void FreeSmallEv( lifo* fl, MidiEvPtr e)
 {
-	MSFreeCell( e, g);
+	MSFreeCell (e, fl);
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR FreeSexEv( MSMemoryPtr g, MidiEvPtr e)
+static void FreeSexEv( lifo* fl, MidiEvPtr e)
 {
-	if (e) {
-		MidiEvPtr extension = (MidiEvPtr)LinkSE(e);
-		e->link= extension->link;
-		PushMidiList (FreeList(g), e, extension);
-	}
+	register MidiEvPtr f, c, n;
+
+	f = c = (MidiEvPtr)LinkSE(e);
+	MSFreeCell (e, fl);
+	do {
+		n = c->link;
+		MSFreeCell (c, fl);
+		c = n;
+	} while (c != f);
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR FreePrivateEv( MSMemoryPtr g, MidiEvPtr e)
+static void FreePrivateEv( lifo* fl, MidiEvPtr e)
 {
-	if (e) {
-		MidiEvPtr extension = (MidiEvPtr)LinkST(e);
-		e->link= extension;
-		PushMidiList (FreeList(g), e, extension);
-	}
+	MSFreeCell (LinkST(e), fl);
+	MSFreeCell (e, fl);
 }
 
 /*__________________________________________________________________________________
   COPY EVENT METHODS					
   __________________________________________________________________________________*/
-static MidiEvPtr NEAR CopyUndefEv( MSMemoryPtr unused1, MidiEvPtr unused2)
+static MidiEvPtr CopyUndefEv( lifo* unused1, MidiEvPtr unused2)
 {
 	Debug( "CopyEv : WRONG EVENT TYPE !!");
 	return 0;
 }
 
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR CopySmallEv( MSMemoryPtr g, MidiEvPtr ev)
+static MidiEvPtr CopySmallEv( lifo* fl, MidiEvPtr ev)
 {
-	MidiEvPtr copy = MSNewCell( g);
-	if (copy) {
-		*copy = *ev;
-	}
+	MidiEvPtr copy = MSNewCell( fl);
+	if (copy) *copy = *ev;
 	return copy;
 }
 
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR CopyPrivateEv( MSMemoryPtr g, MidiEvPtr ev)
+static MidiEvPtr CopyPrivateEv( lifo* fl, MidiEvPtr ev)
 {
-	MidiEvPtr copy; MidiSTPtr ext;
-
-	copy= CopySmallEv( g, ev);
-	if( copy) {
-		ext= (MidiSTPtr)CopySmallEv( g, (MidiEvPtr)LinkST(ev));
-		if( ext)
-			LinkST( copy)= ext;
-		else {
-			MSFreeCell( copy, g);
+	MidiEvPtr copy = MSNewCell( fl);
+	if (copy) {
+		MidiSTPtr ext = (MidiSTPtr)MSNewCell( fl);
+		if (!ext) {
+			MSFreeCell (copy, fl);
 			return 0;
 		}
+		*copy = *ev;
+		*ext = *LinkST(ev);
+		LinkST(copy) = ext;
 	}
 	return copy;
 }
 
 /*__________________________________________________________________________________*/
-static MidiEvPtr NEAR CopySexEv( MSMemoryPtr g, MidiEvPtr ev)
+static MidiEvPtr CopySexEv( lifo* fl, MidiEvPtr ev)
 {
 	MidiEvPtr copy; MidiSEXPtr ext, extCopy, previous;
 	
-	copy= CopyPrivateEv( g, ev);			/* copy the event like a private event */
+	copy= CopyPrivateEv( fl, ev);			/* copy the event like a private event */
 	if( copy) {
 		extCopy= previous= LinkSE(copy);	/* get the last extension cell      */
 		ext= Link(LinkSE(ev));				/* get the first cell to be copied	*/
 		while( ext!= LinkSE(ev)) {			/* is it the last ?                 */
-			extCopy= (MidiSEXPtr)CopySmallEv( g, (MidiEvPtr)ext);
+			extCopy= (MidiSEXPtr)CopySmallEv( fl, (MidiEvPtr)ext);
 			if( extCopy) {					/* cell copy succes                 */
 				Link(previous)= extCopy;	/* link to the previous             */
 				previous= extCopy;			/* previous cell is the copy        */
 			}
 			else {							/* copy failed                      */
 				Link(previous)=LinkSE(copy);/* restore the event consistency    */
-				FreeSexEv( g, copy);		/* and free the event               */
+				FreeSexEv( fl, copy);		/* and free the event               */
 				return 0;					/* returns nil                      */
 			}
 			ext= Link(ext);					/* next extension cell to be copied */
@@ -512,17 +522,16 @@ static MidiEvPtr NEAR CopySexEv( MSMemoryPtr g, MidiEvPtr ev)
 }
 
 
-
 /*__________________________________________________________________________________
   SET FIELD METHODS				
   __________________________________________________________________________________*/
-static void NEAR SetFUndefEv( MSMemoryPtr unused1, MidiEvPtr unused2, unsigned long unused3, long unused4)
+static void SetFUndefEv( MidiEvPtr unused2, unsigned long unused3, long unused4)
 {
 	Debug( "SetFEv : WRONG EVENT TYPE !!");
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetFSmallEv( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFSmallEv( MidiEvPtr e, unsigned long f, long v)
 {
 	if( f< 2)
 		Data(e)[f]= (Byte)v;
@@ -531,163 +540,144 @@ static void NEAR SetFSmallEv( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f,
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetF2_16Ev( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetF2_16Ev( MidiEvPtr e, unsigned long f, long v)
 {
 	if( f < 2) {
-		TMidiFastEv fast;
-
-		fast.std= e;
-		Specific(fast).shortF[f]=(short)v;
+		e->info.shortFields[f]=(short)v;
 	}
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetFTempo( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFTempo( MidiEvPtr e, unsigned long f, long v)
 {
 	if( !f) Tempo(e)= v;
 }
 
 /*__________________________________________________________________________________*/
-
-static void NEAR SetFSMPTEOffset( MSMemoryPtr g, MidiEvPtr e, unsigned long f, long v)
+static void SetFSMPTEOffset( MidiEvPtr e, unsigned long f, long v)
 {
 	if( f < 6) {
-		TMidiFastEv fast;
-
-		fast.std= e;
-		v <<= Smpte(g).bfShft[f];
-		v &= Smpte(g).bfMask[f];
-		Specific(fast).longF |= v;
+		const unsigned long * mask  = smpteMaskTbl;
+		const char * shift = smpteShftTbl;
+		v <<= shift[f];
+		v &= mask[f];
+		e->info.longField |= v;
 	}
 }
 
-
 /*__________________________________________________________________________________*/
-static void NEAR SetFTimeSign( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFTimeSign( MidiEvPtr e, unsigned long f, long v)
 {
 	if( f < 4) Data(e)[f]=(Byte)v;
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetFKeySign( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFKeySign( MidiEvPtr e, unsigned long f, long v)
 {
 	if( f < 2) Data(e)[f]=(Byte)v;
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetFSexEv( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFSexEv( MidiEvPtr e, unsigned long f, long v)
 {
-	TSexEv ext;
+	MidiSEXPtr ext;
 
-	ext.std= Link(LinkSE(e));           /* first event extension cell           */
+	ext = Link(LinkSE(e));              /* first event extension cell           */
 	while( true) {
-		if( ext.std== LinkSE(e)) {      /* if it's the last extension cell      */
-			if( f < ext.last->num)		/* if the index is free                 */
-				ext.last->data[f]=(Byte)v;	/* store the value                  */
+		if( ext == LinkSE(e)) {         /* if it's the last extension cell      */
+			if( f < ext->data[11])		/* if the index is free                 */
+				ext->data[f]=(Byte)v;	/* store the value                  */
 			break;
 		}
 		if( f < kLenDatas) {			/* if the field is located in this cell */
-			ext.std->data[f]=(Byte)v;	/* store the value                      */
+			ext->data[f] = (Byte)v;     /* store the value                      */
 			break;
 		}
 		f-= kLenDatas;					/* substract lenData to the field index */
-		ext.std= ext.last->link;		/* get the next extension cell and loop */
+		ext = ext->link;		        /* get the next extension cell and loop */
 	}
 }
 
 /*__________________________________________________________________________________*/
-static void NEAR SetFPrivateEv( MSMemoryPtr unused1, MidiEvPtr e, unsigned long f, long v)
+static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
 {
-	if( f < 4) {
-		TMidiFastEv fast;
-
-		fast.std= (MidiEvPtr)LinkST(e);
-		fast.tab[f]= v;
-	}
+	if( f < 4) LinkST(e)->val[f] = v;
 }
 
 
 /*__________________________________________________________________________________
   GET FIELD METHODS					
   __________________________________________________________________________________*/
-static long NEAR GetFUndefEv( MSMemoryPtr unused1, MidiEvPtr unused2, long unused3)
+static long GetFUndefEv( MidiEvPtr unused2, unsigned long unused3)
 {
 	Debug( "GetField : WRONG EVENT TYPE !!");
 	return kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFSmallEv( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetFSmallEv( MidiEvPtr e, unsigned long f)
 {
-	if( f < 2)
-		return Data(e)[f];
-	return Dur(e);
+	return (f < 2) ? Data(e)[f] : Dur(e);
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFSexEv( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetFSexEv( MidiEvPtr e, unsigned long f)
 {
-	TSexEv ext;
+	MidiSEXPtr ext;
 
-	ext.std= Link(LinkSE(e));           /* first event extension cell           */
-	while( ext.std!= LinkSE(e)) {       /* while it'snt the last cell           */
+	ext = Link(LinkSE(e));              /* first event extension cell           */
+	while( ext != LinkSE(e)) {          /* while not the last cell              */
 		if( f < kLenDatas)              /* if the field is located in this cell */
-			return ext.std->data[f];    /* returns the value                    */
+			return ext->data[f];        /* returns the value                    */
 		f-= kLenDatas;                  /* substract lenData to the field index */
-		ext.std= ext.last->link;        /* get the next extension cell          */
+		ext = ext->link;                /* get the next extension cell          */
 	}
                                         /* last extension cell                  */
-	if( f < ext.last->num)              /* if the field is located in this cell */
-		return ext.last->data[f];       /* returns the value                    */
+	if( f < ext->data[11])              /* if the field is located in this cell */
+		return ext->data[f];            /* returns the value                    */
                                         /* otherwise returns the last value     */
-	return ext.last->data[ext.last->num-1];
+	return kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFPrivateEv( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetFPrivateEv( MidiEvPtr e, unsigned long f)
 {
-	TMidiFastEv fast;
-
-	fast.std= (MidiEvPtr)LinkST(e);
-	return fast.tab[ (f > 3) ? 3 :f];
+	return (f < 4) ?  LinkST(e)->val[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetF2_16Ev( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetF2_16Ev( MidiEvPtr e, unsigned long f)
 {
-	TMidiFastEv fast;
-
-	fast.std= e;
-	return Specific(fast).shortF[ (f>1) ? 1 : f];
+	return (f < 2) ?  e->info.shortFields[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFTempo( MSMemoryPtr unused1, MidiEvPtr e, long unused2)
+static long GetFTempo( MidiEvPtr e, unsigned long unused2)
 {
 	return Tempo(e);
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFSMPTEOffset( MSMemoryPtr g, MidiEvPtr e, long f)
+static long GetFSMPTEOffset( MidiEvPtr e, unsigned long f)
 {
-	long val; TMidiFastEv fast;
-
-	fast.std= e;
-	if( f > 5) f= 5;
-	val= Specific(fast).longF & Smpte(g).bfMask[f];
-	return val >> Smpte(g).bfShft[f];
+	if ( f < 6) {
+		const unsigned long * mask  = smpteMaskTbl;
+		const char * shift = smpteShftTbl;
+		return (e->info.tempo & mask[f]) >> shift[f];
+	}
+	return kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFTimeSign( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetFTimeSign( MidiEvPtr e, unsigned long f)
 {
-	return Data(e)[ (f > 3) ? 3 : f];
+	return (f < 4) ? Data(e)[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR GetFKeySign( MSMemoryPtr unused1, MidiEvPtr e, long f)
+static long GetFKeySign( MidiEvPtr e, unsigned long f)
 {
-	return Data(e)[ (f > 1) ? 1 : f];
+	return (f < 2) ? Data(e)[f] : kGetFieldError;
 }
 
 
@@ -695,31 +685,30 @@ static long NEAR GetFKeySign( MSMemoryPtr unused1, MidiEvPtr e, long f)
 /*__________________________________________________________________________________
   COUNT FIELDS METHODS
   __________________________________________________________________________________*/
-static long NEAR CountFUndefEv ( MidiEvPtr unused1)
+static long CountFUndefEv ( MidiEvPtr unused1)
 {
 	Debug( "CountField : WRONG EVENT TYPE !!");
 	return kCountFieldsError;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR Count0Field	( MidiEvPtr unused1)	{ return 0;}
-static long NEAR Count1Field	( MidiEvPtr unused1)	{ return 1;}
-static long NEAR Count2Fields	( MidiEvPtr unused1)	{ return 2;}
-static long NEAR Count3Fields	( MidiEvPtr unused1)	{ return 3;}
-static long NEAR Count4Fields	( MidiEvPtr unused1)	{ return 4;}
-static long NEAR Count6Fields	( MidiEvPtr unused1)	{ return 6;}
+static long Count0Field	    ( MidiEvPtr unused1)	{ return 0;}
+static long Count1Field	    ( MidiEvPtr unused1)	{ return 1;}
+static long Count2Fields	( MidiEvPtr unused1)	{ return 2;}
+static long Count3Fields	( MidiEvPtr unused1)	{ return 3;}
+static long Count4Fields	( MidiEvPtr unused1)	{ return 4;}
+static long Count6Fields	( MidiEvPtr unused1)	{ return 6;}
 
 /*__________________________________________________________________________________*/
-static long NEAR CountFSexEv( MidiEvPtr e)
+static long CountFSexEv( MidiEvPtr e)
 {
-	TSexEv ext; long count= 0;
-
-	ext.std= Link(LinkSE(e));			/* first event extension              */
-	while( ext.std!= LinkSE(e)) {		/* while it'snt the last cell         */
+	long count= 0;
+	MidiSEXPtr ext = Link(LinkSE(e));	/* first event extension              */
+	while( ext != LinkSE(e)) {		    /* while not the last cell            */
 		count+= kLenDatas;				/* add the data len to the count      */
-		ext.std= ext.last->link;		/* next extension cell                */
+		ext= ext->link;		            /* next extension cell                */
 	}
-	return count + ext.last->num;		/* return count + the data len of the */
+	return count + ext->data[11];		/* return count + the data len of the */
 										/* the last cell                      */
 }
 
@@ -727,38 +716,34 @@ static long NEAR CountFSexEv( MidiEvPtr e)
 /*__________________________________________________________________________________
   ADD FIELD METHODS
   __________________________________________________________________________________*/
-static long NEAR AddFUndefEv( MSMemoryPtr unused1, MidiEvPtr unused2, long unused3)
+static void AddFUndefEv( lifo* unused1, MidiEvPtr unused2, long unused3)
 {
 	Debug( "AddField : WRONG EVENT TYPE !!");
-	return MIDIerrUndef;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR AddNoField( MSMemoryPtr unused1, MidiEvPtr unused2, long unused3)
+static void AddNoField( lifo* unused1, MidiEvPtr unused2, long unused3)
 {
-	return MIDIerrIndex;
 }
 
 /*__________________________________________________________________________________*/
-static long NEAR AddFSexEv( MSMemoryPtr g, MidiEvPtr e, long v)
+static void AddFSexEv( lifo* fl, MidiEvPtr e, long v)
 {
-	TSexEv ext, nouv;
+	MidiSEXPtr nouv;
+	MidiSEXPtr ext = LinkSE(e);
+	int i = ext->data[11];
 
-	ext.std= LinkSE(e);							/* event last extension         */
-	if( ext.last->num < kLenDatas-1) {			/* If there remains place       */
-		ext.last->data[ext.last->num]=(Byte)v;	/* store the value              */
-		ext.last->num++;						/* update the busy space count  */
-	}
-	else { 
-		nouv.std= (MidiSEXPtr)MSNewCell( g);	/* add a new cell               */
-		if( nouv.std) {
-			ext.last->data[kLenDatas-1]=(Byte)v;/* store the value              */
-			nouv.last->num= 0;					/* busy space count             */
-			nouv.std->link= ext.std->link;		/* link the new cell            */
-			ext.std->link= nouv.std;
-			LinkSE(e)= nouv.std;				/* link header to the last cell */
+	if( i < 11) {			              /* If there remains place       */
+		ext->data[i] = (Byte)v;	          /* store the value              */
+		ext->data[11]++;				  /* update the busy space count  */
+	} else { 
+		nouv = (MidiSEXPtr)MSNewCell(fl); /* add a new cell               */
+		if( nouv) {
+			ext->data[11] = (Byte)v;      /* store the value              */
+			nouv->data[11] = 0;			  /* busy space count             */
+			nouv->link= ext->link;		  /* link the new cell            */
+			ext->link= nouv;
+			LinkSE(e)= nouv;			  /* link header to the last cell */
 		}
-		else return MIDIerrSpace;				/* allocation failed            */
 	}
-	return true;
 }
