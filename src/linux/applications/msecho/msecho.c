@@ -11,6 +11,8 @@
 #include <gtk/gtk.h>
 #include "MidiShare.h"
 
+#include "msApplsTools.h"
+
 /****************************************************************************
 						Global variables for msEcho
 *****************************************************************************/
@@ -34,7 +36,8 @@ static void EchoTask( long d,short ref,long el,long a2, long a3);
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
 {
-	MidiFreeFilter(gFilter);
+	if (gFilter)
+		MidiFreeFilter(gFilter);
 	MidiClose(gRefNum);
 	gtk_main_quit();
 	return FALSE;
@@ -72,13 +75,9 @@ static void add_control(GtkWidget* mbox, gchar* name, GtkObject* adjustment)
 /****************************************************************************
 					Callbacks
 *****************************************************************************/
-	
-static void param_action (GtkAdjustment* adj, GtkWidget* data)
+static void param_action (GtkAdjustment* adj, short *val)
 {
-	gDelay = GTK_ADJUSTMENT(delay)->value + 0.5;
-	gPitch = GTK_ADJUSTMENT(pitch)->value + 0.5;
-	gVelocity = GTK_ADJUSTMENT(velocity)->value + 0.5;
-	gChannel = GTK_ADJUSTMENT(channel)->value + 0.5;	
+	*val = GTK_ADJUSTMENT(adj)->value;
 }
 
 /****************************************************************************
@@ -154,19 +153,20 @@ static void InstallFilter(void) {
   }
 }
 
-
 /****************************************************************************
 								Main
 *****************************************************************************/
-
 int main(int argc, char *argv[] )
 {
 	GtkWidget *window, *vbox;
+	char applName[256];
 
 	// Initialisations
 	gtk_init (&argc, &argv);
-
-	gRefNum = MidiOpen(argv[0]);
+	StripPath (argv[0], applName);
+	
+	CheckMidiShare (applName);
+	gRefNum = MidiOpen(applName);
 	MidiSetRcvAlarm(gRefNum, EchoAlarm);
 	InstallFilter();
   	MidiConnect (gRefNum, 0, true);
@@ -181,7 +181,7 @@ int main(int argc, char *argv[] )
 
 	// Window definition
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), "msEcho");
+	gtk_window_set_title(GTK_WINDOW(window), applName);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
 	vbox = gtk_vbox_new (FALSE, 10);
@@ -199,17 +199,11 @@ int main(int argc, char *argv[] )
 	gtk_widget_show_all (window);
 	
 	// Connexion of signals for value adjustement
-	gtk_signal_connect( pitch, "value_changed", GTK_SIGNAL_FUNC(param_action), NULL);
-	gtk_signal_connect( velocity, "value_changed", GTK_SIGNAL_FUNC(param_action), NULL);
-	gtk_signal_connect( delay, "value_changed", GTK_SIGNAL_FUNC(param_action), NULL);
-	gtk_signal_connect( channel, "value_changed", GTK_SIGNAL_FUNC(param_action), NULL);
-	
+	gtk_signal_connect( pitch, "value_changed", GTK_SIGNAL_FUNC(param_action), &gPitch);
+	gtk_signal_connect( velocity, "value_changed", GTK_SIGNAL_FUNC(param_action), &gVelocity);
+	gtk_signal_connect( delay, "value_changed", GTK_SIGNAL_FUNC(param_action), &gDelay);
+	gtk_signal_connect( channel, "value_changed", GTK_SIGNAL_FUNC(param_action), &gChannel);
 	// Connexion of signals
-	gtk_signal_connect(
-			GTK_OBJECT(window), "delete_event", 
-			GTK_SIGNAL_FUNC(my_delete_action), NULL
-	);
-	
 	gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
