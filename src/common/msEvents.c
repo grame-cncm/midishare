@@ -83,6 +83,11 @@ static void	SetFKeySign	( MidiEvPtr e, unsigned long f, long v);
 static void	SetFSexEv	( MidiEvPtr e, unsigned long f, long v);
 static void	SetFPrivateEv	( MidiEvPtr e, unsigned long f, long v);
 
+static void	SetFOpenRes	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFClose	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFConnect	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFSetInfo	( MidiEvPtr e, unsigned long f, long v);
+
 static long	GetFUndefEv	( MidiEvPtr e, unsigned long f);
 static long	GetFSmallEv	( MidiEvPtr e, unsigned long f);
 static long	GetFSexEv	( MidiEvPtr e, unsigned long f);
@@ -92,6 +97,12 @@ static long	GetFTempo	( MidiEvPtr e, unsigned long f);
 static long	GetFSMPTEOffset	( MidiEvPtr e, unsigned long f);
 static long	GetFTimeSign	( MidiEvPtr e, unsigned long f);
 static long	GetFKeySign	( MidiEvPtr e, unsigned long f);
+
+static long	GetFOpenRes ( MidiEvPtr e, unsigned long f);
+static long	GetFClose   ( MidiEvPtr e, unsigned long f);
+static long	GetFConnect ( MidiEvPtr e, unsigned long f);
+static long	GetFSetInfo ( MidiEvPtr e, unsigned long f);
+
 
 static long	CountFUndefEv	( MidiEvPtr e);
 static long	Count0Field	( MidiEvPtr e);
@@ -237,9 +248,17 @@ static void InitNewEvMth( NewEvMethodPtr *table)
   for (i=typeReserved;i<=typeLastReserved;i++) table[i]= NewUndefEv;
   table[typeQuarterFrame] = NewSmallEv;
   table[typeSpecific]     = NewSexEv;
+  table[typePortPrefix]   = NewSmallEv;
   table[typeRcvAlarm]     = NewSmallEv;
   table[typeApplAlarm]    = NewSmallEv;
-  table[typePortPrefix]   = NewSmallEv;
+
+  table[typeMidiOpen]      = NewSexEv;
+  table[typeMidiOpenRes]   = NewSmallEv;
+  table[typeMidiClose]     = NewSmallEv;
+  table[typeMidiConnect]   = NewSmallEv;
+  table[typeMidiSetName]   = NewSexEv;
+  table[typeMidiSetInfo]   = NewSmallEv;
+  table[typeMidiSetFilter] = NewSexEv;
   
   table[typeProcess] 	= NewProcessEv;
   table[typeDProcess] 	= NewProcessEv;
@@ -263,6 +282,14 @@ static void InitFreeEvMth( FreeEvMethodPtr *table)
   table[typeRcvAlarm]     = FreeSmallEv;
   table[typeApplAlarm]    = FreeSmallEv;
   table[typePortPrefix]   = FreeSmallEv;
+
+  table[typeMidiOpen]      = FreeSexEv;
+  table[typeMidiOpenRes]   = FreeSmallEv;
+  table[typeMidiClose]     = FreeSmallEv;
+  table[typeMidiConnect]   = FreeSmallEv;
+  table[typeMidiSetName]   = FreeSexEv;
+  table[typeMidiSetInfo]   = FreeSmallEv;
+  table[typeMidiSetFilter] = FreeSexEv;
   
   table[typeProcess] 	= FreeProcessEv;
   table[typeDProcess] 	= FreeProcessEv;
@@ -286,6 +313,14 @@ static void InitCopyEvMth( CopyEvMethodPtr *table)
   table[typeRcvAlarm]     = CopySmallEv;
   table[typeApplAlarm]    = CopySmallEv;
   table[typePortPrefix]   = CopySmallEv;
+
+  table[typeMidiOpen]      = CopySexEv;
+  table[typeMidiOpenRes]   = CopySmallEv;
+  table[typeMidiClose]     = CopySmallEv;
+  table[typeMidiConnect]   = CopySmallEv;
+  table[typeMidiSetName]   = CopySexEv;
+  table[typeMidiSetInfo]   = CopySmallEv;
+  table[typeMidiSetFilter] = CopySexEv;
   
   table[typeProcess] 	= CopyProcessEv;
   table[typeDProcess] 	= CopyProcessEv;
@@ -319,6 +354,14 @@ static void InitCountFieldsMth( CountFieldsMethodPtr *table)
   table[typeRcvAlarm]    = CountFUndefEv;
   table[typeApplAlarm]   = Count1Field;
   table[typePortPrefix]  = Count1Field;
+
+  table[typeMidiOpen]      = CountFSexEv;
+  table[typeMidiOpenRes]   = Count1Field;
+  table[typeMidiClose]     = Count1Field;
+  table[typeMidiConnect]   = Count2Fields;
+  table[typeMidiSetName]   = CountFSexEv;
+  table[typeMidiSetInfo]   = Count1Field;
+  table[typeMidiSetFilter] = CountFSexEv;
   
   table[typeProcess] 	= CountFProcessEv;
   table[typeDProcess] 	= CountFProcessEv;
@@ -346,6 +389,14 @@ static void InitSetFieldMth (SetFieldMethodPtr *table)
   table[typeRcvAlarm]     = SetFUndefEv;
   table[typeApplAlarm]    = SetFTempo;
   table[typePortPrefix]   = SetFSmallEv;
+
+  table[typeMidiOpen]      = SetFSexEv;
+  table[typeMidiOpenRes]   = SetFOpenRes;
+  table[typeMidiClose]     = SetFClose;
+  table[typeMidiConnect]   = SetFConnect;
+  table[typeMidiSetName]   = SetFSexEv;
+  table[typeMidiSetInfo]   = SetFSetInfo;
+  table[typeMidiSetFilter] = SetFSexEv;
   
   table[typeProcess] 	= SetFProcessEv;
   table[typeDProcess] 	= SetFProcessEv;
@@ -373,6 +424,14 @@ static void InitGetFieldMth (GetFieldMethodPtr *table)
   table[typeRcvAlarm]     = GetFUndefEv;
   table[typeApplAlarm]    = GetFTempo;
   table[typePortPrefix]   = GetFSmallEv;
+
+  table[typeMidiOpen]      = GetFSexEv;
+  table[typeMidiOpenRes]   = GetFOpenRes;
+  table[typeMidiClose]     = GetFClose;
+  table[typeMidiConnect]   = GetFConnect;
+  table[typeMidiSetName]   = GetFSexEv;
+  table[typeMidiSetInfo]   = GetFSetInfo;
+  table[typeMidiSetFilter] = GetFSexEv;
   
   table[typeProcess] 	= GetFProcessEv;
   table[typeDProcess] 	= GetFProcessEv;
@@ -395,6 +454,14 @@ static void InitAddFieldMth (AddFieldMethodPtr *table)
   table[typeApplAlarm]= AddNoField;
   table[typePortPrefix]= AddNoField;
   table[typeDead]     = AddNoField;
+
+  table[typeMidiOpen]      = AddFSexEv;
+  table[typeMidiOpenRes]   = AddNoField;
+  table[typeMidiClose]     = AddNoField;
+  table[typeMidiConnect]   = AddNoField;
+  table[typeMidiSetName]   = AddFSexEv;
+  table[typeMidiSetInfo]   = AddNoField;
+  table[typeMidiSetFilter] = AddFSexEv;
   
   table[typeProcess] = AddNoField;
   table[typeDProcess] = AddNoField;
@@ -648,6 +715,29 @@ static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
 	if( f < 4) LinkST(e)->val[f] = v;
 }
 
+/*__________________________________________________________________________________*/
+static void	SetFOpenRes	( MidiEvPtr e, unsigned long f, long v)
+{
+	if( f < 1) e->info.seqNum.number = v;
+}
+
+/*__________________________________________________________________________________*/
+static void	SetFClose	( MidiEvPtr e, unsigned long f, long v)
+{
+	if( f < 1) e->info.seqNum.number = v;
+}
+
+/*__________________________________________________________________________________*/
+static void	SetFConnect	( MidiEvPtr e, unsigned long f, long v)
+{
+	if( f < 2) e->info.shortFields[f] = v;
+}
+
+/*__________________________________________________________________________________*/
+static void	SetFSetInfo	( MidiEvPtr e, unsigned long f, long v)
+{
+	if( f < 1) e->info.longField = v;
+}
 
 /*__________________________________________________________________________________
   GET FIELD METHODS					
@@ -722,6 +812,30 @@ static long GetFTimeSign( MidiEvPtr e, unsigned long f)
 static long GetFKeySign( MidiEvPtr e, unsigned long f)
 {
 	return (f < 2) ? Data(e)[f] : kGetFieldError;
+}
+
+/*__________________________________________________________________________________*/
+static long	GetFOpenRes ( MidiEvPtr e, unsigned long f)
+{
+	return (f < 1) ? e->info.seqNum.number : kGetFieldError;
+}
+
+/*__________________________________________________________________________________*/
+static long	GetFClose   ( MidiEvPtr e, unsigned long f)
+{
+	return (f < 1) ? e->info.seqNum.number : kGetFieldError;
+}
+
+/*__________________________________________________________________________________*/
+static long	GetFConnect ( MidiEvPtr e, unsigned long f)
+{
+	return (f < 2) ? e->info.shortFields[f] : kGetFieldError;
+}
+
+/*__________________________________________________________________________________*/
+static long	GetFSetInfo ( MidiEvPtr e, unsigned long f)
+{
+	return (f < 1) ? e->info.longField : kGetFieldError;
 }
 
 
