@@ -178,9 +178,7 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 /*____________________________________________________________________________*/
 MidiEvPtr msStreamGetEvent (msStreamBufferPtr f, int * retcode)
 {
-	if (!retcode) {
-		return 0;
-	}
+	if (!retcode) return 0;
 	if (!f->read)
 		return StartReadBuffer (f, retcode);
 	else 
