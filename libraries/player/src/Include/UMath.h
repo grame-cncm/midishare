@@ -14,7 +14,9 @@
 
 
 #ifdef __Macintosh__
+	#ifndef LONG_MAX
 	#define LONG_MAX  0xffffffff
+	#endif 
 #endif
 
 
@@ -28,6 +30,7 @@ class UMath {
 	
 	#ifdef __Macintosh__
 	
+		#ifdef __MacOS9__
 		#include <ToolUtils.h>
 		#include <FixMath.h>
 
@@ -51,7 +54,7 @@ class UMath {
 
 				return res.hiLong * (LONG_MAX/c) + temp/c  + res.loLong/c + ((temp%c + res.loLong%c)>(c>>2) ? 1 : 0) ;
 			}
-		
+		#endif
 		
 		#endif
 	#endif
