@@ -26,6 +26,7 @@
 
 #include "MidiShare.h"
 #include "msQTDriver.h"
+#include "SavingState.h"
 
 /* ----------------------------------*/
 /* constants definitions             */
@@ -33,6 +34,9 @@
 #define kChansCount 		16
 #define kDrumKit 			16385
 #define kDefaultSound 		1		 /* default sound (Piano) */
+
+#define StateFile	"\pmsQuicktime Driver State"	
+enum { StateCreator = 'MsQT', StateType = 'stQT' };	
 
 /* ----------------------------------*/
 /* data structures                   */
@@ -76,30 +80,8 @@ static void QuickTimeDispose (QuickTimeEnvPtr qt);
 static Boolean QuickTimeWakeup (QuickTimeEnvPtr qt);
 static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound);
 
-#ifdef __CodeRsrc__
-void __Startup__();
-/* -----------------------------------------------------------------------------*/
-void __Startup__()
-{
-	if (CheckQuickTime())
-		SetUpMidi ();
-}
-
-static asm void storage () {   /* total 200 bytes */
-	dc.l	0,0,0,0,0,0,0,0,0,0
-	dc.l	0,0,0,0,0,0,0,0,0,0
-	dc.l	0,0,0,0,0,0,0,0,0,0
-	dc.l	0,0,0,0,0,0,0,0,0,0
-	dc.l	0,0,0,0,0,0,0,0,0,0
-}
-static inline DriverDataPtr GetData ()	{ return (DriverDataPtr)storage; }
-
-#else
-
 DriverData gData;
 static inline DriverDataPtr GetData ()	{ return &gData; }
-
-#endif
 
 
 /* -----------------------------------------------------------------------------*/
@@ -118,8 +100,13 @@ static void WakeUp (short r)
 /* -----------------------------------------------------------------------------*/
 static void Sleep (short r)
 {
+#ifdef __BackgroundOnly__
+	CloseMidi ();
+	doneFlag = true;
+#else
 	DriverDataPtr data = GetData ();
 	QuickTimeDispose (QTE(data));
+#endif
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -209,8 +196,7 @@ static void SetupFilter (MidiFilterPtr filter)
 Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { QTDriverName, 100, 0};
-	SlotRefNum sref; short refNum;
-	TDriverOperation op; 
+	short refNum; TDriverOperation op; 
 	DriverDataPtr data = GetData ();
 	
 	op.wakeup = WakeUp;
@@ -223,16 +209,13 @@ Boolean SetUpMidi ()
 	refNum = MidiRegisterDriver(&infos, &op);
 	if (refNum == MIDIerrSpace)
 		return false;
-
-	sref = MidiAddSlot (refNum);
-	if (sref < 0)
-		return false;
 	
 	data->refNum = refNum;
-	data->slotRef = sref;
+	data->slotRef = MidiAddSlot (refNum);
 	MidiSetRcvAlarm (refNum, ReceiveEvents);		
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);
+	RestoreDriverState (refNum, StateFile);
 	return true;
 }
 
@@ -240,7 +223,23 @@ Boolean SetUpMidi ()
 void CloseMidi ()
 {
 	DriverDataPtr data = GetData ();
-	MidiUnregisterDriver (data->refNum);
+	short ref = data->refNum;
+	data->refNum = 0;
+	if (ref > 0) {
+		SaveDriverState (ref, StateFile, StateCreator, StateType);
+		MidiUnregisterDriver (ref);
+	}
+	QuickTimeDispose (QTE(data));
+}
+
+/* -----------------------------------------------------------------------------*/
+void DoIdle()
+{
+	short ref = GetData()->refNum;
+	short n = MidiCountDTasks (ref);
+	while (n--) {
+		MidiExec1DTask (ref);
+	}
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -334,12 +333,19 @@ static void PlayReset (QuickTimeEnvPtr qt)
 }
 
 /* -----------------------------------------------------------------------------*/
+static pascal void QTTask (long date, short refNum, long a1,long a2,long a3)
+{
+	NATask ((NoteAllocator)a1);
+}
+
+/* -----------------------------------------------------------------------------*/
 static void PlayProgChange (QuickTimeEnvPtr qt, MidiEvPtr e)
 {
 	if (Chan(e) != 9) {
 		short sndNum = MidiGetField (e, 0);
 		NASetInstrumentNumberInterruptSafe (qt->allocator, Note(qt, Chan(e)), sndNum);
 		qt->chan[Chan(e)].sndNum = sndNum;
+		MidiDTask (QTTask, MidiGetTime(), GetData()->refNum, (long)qt->allocator, 0, 0);
 	}
 }
 
