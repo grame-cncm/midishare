@@ -54,7 +54,7 @@ class TScoreState : public TScoreObjFollower {
 			
 			state->bar = (short)pos.GetBar() + 1; 
 			state->beat = (short)pos.GetBeat() + 1;
-			state->unit = (short)pos.GetUnit() + 1;
+			state->unit = (short)pos.GetUnit();
 			
 			state->tsnum = GetVisitor().GetNum();
 			state->tsdenom = GetVisitor().GetDenom();
