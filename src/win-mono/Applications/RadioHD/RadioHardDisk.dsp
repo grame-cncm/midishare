@@ -98,10 +98,6 @@ SOURCE=.\CheckPort0.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\Handle.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\icon.ico
 # End Source File
 # Begin Source File

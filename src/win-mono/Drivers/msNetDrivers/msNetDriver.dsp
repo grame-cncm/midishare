@@ -84,10 +84,6 @@ LINK32=link.exe
 # Name "msNetDriver - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\Handle.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\INetAlert.cpp
 # End Source File
 # Begin Source File
