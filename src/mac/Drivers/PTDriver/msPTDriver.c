@@ -67,8 +67,8 @@ typedef struct {
 	long*				fftsize;
 	long*				dynamic;
 	long 				old_bendlength;
-	long				old_vol;  // valeur du dernier volume envoyŽ
-	long				old_bend; // valeur du dernier bend envoyŽ
+	long				old_vol;  // valeur du dernier volume envoyÚ
+	long				old_bend; // valeur du dernier bend envoyÚ
 	long				numInput;
 	long				numOutput;
 	short	   		 	monoTable [BUFFER_SIZE];
@@ -324,8 +324,8 @@ Boolean SetUpMidi (StatePtr state)
 	data->upp_wakeup_ptr = NewDriverPtr(WakeUp);
 	data->upp_sleep_ptr = NewDriverPtr(Sleep);
 		
-	op.wakeup = (DriverAlarmPtr)data->upp_wakeup_ptr;
-	op.sleep = (DriverAlarmPtr)data->upp_sleep_ptr;
+	op.wakeup = (WakeupPtr)data->upp_wakeup_ptr;
+	op.sleep = (SleepPtr)data->upp_sleep_ptr;
 	
 	if (MidiGetNamedAppl (PTDriverName) > 0) {
 		doneFlag = true;
