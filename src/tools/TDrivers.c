@@ -379,7 +379,7 @@ void Slots()
 	print ("    MidiGetSlotInfos : \n");flush;
 	for (i=1; i<=2; i++) {
 		sr = MidiGetIndSlot (r1, i);
-		if (sr.slotRef > 0) {
+		if (sr.slotRef >= 0) {
 			if (MidiGetSlotInfos (sr, &islot)) {
 #ifdef PASCALNAME
 				s = (char *)&islot.name[1];
@@ -394,7 +394,7 @@ void Slots()
 		else print ("Warning : MidiGetIndSlot invalid slot refnum (%lx)\n", sr);
 	}
 	sr = MidiGetIndSlot (r1, 50);
-	if (sr.slotRef > 0) {
+	if (sr.slotRef >= 0) {
 		print ("Warning : MidiGetIndSlot returned refnum %lx for slot 50\n", sr);
 	}
 
