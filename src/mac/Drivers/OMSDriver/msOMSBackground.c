@@ -127,11 +127,6 @@ static OSErr AEQuitHandler (const AppleEvent *aevt, AppleEvent *reply, UInt32 re
 }
 
 /* -----------------------------------------------------------------------------*/
-static void DoIdle()
-{
-}
-
-/* -----------------------------------------------------------------------------*/
 static void Initialize()
 {
 	OSErr	err;
