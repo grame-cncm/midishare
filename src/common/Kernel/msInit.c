@@ -17,6 +17,10 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - adaptation to the new memory management
+                   version number increased
 
 */
 
@@ -33,15 +37,15 @@
 
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
+	InitEvents ();
 	InitMemory(Memory(g), defaultSpace);
-	InitEvents(Memory(g));
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
 }
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 170;
+	return 171;
 }
 
 
@@ -51,6 +55,7 @@ MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 void MidiShareWakeup (TMSGlobalPtr g) 
 {
     SpecialWakeUp (g);
+    fifoinit (SorterList(g));
     OpenMemory (Memory(g));
     OpenTime (g);
     OpenTimeInterrupts (g);
