@@ -231,7 +231,7 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 	*@return The result is true if the event has been successfully removed false otherwise.
 	*/
 	
-	public boolean RemoveEv( int seq, int e)
+	public static boolean RemoveEv( int seq, int e)
 	{
 		int cur = Midi.GetFirstEv(seq);
 		int prev = 0;
