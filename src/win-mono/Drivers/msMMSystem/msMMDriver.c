@@ -37,29 +37,12 @@ static void CloseSlot (SlotPtr slot, Boolean inputSlot);
 static SlotPtr NewSlot ()
 {
 	return LocalAlloc (LMEM_FIXED, sizeof(Slot));
-/*	HLOCAL h = LocalAlloc (LMEM_FIXED, sizeof(Slot) + sizeof(HLOCAL));
-	if (h) {
-		HLOCAL * ptr = (HLOCAL *)LocalLock (h);
-		if (ptr) {
-			*ptr++ = h;
-			return (SlotPtr)ptr;
-		}
-	}
-	return 0;*/
 }
 
 //_________________________________________________________
 static void FreeSlot (SlotPtr slot)
 {
 	LocalFree ((HLOCAL)slot);
-/*	HLOCAL * ptr = (HLOCAL *)slot;
-	if (ptr) {
-		HLOCAL h = *--ptr;
-		if (h) {
-			LocalUnlock (h);
-			LocalFree (h);
-		}
-	}*/
 }
 
 //_________________________________________________________
@@ -191,11 +174,7 @@ static Boolean InitHeaders (SlotPtr slot)
 	slot->header->dwUser = 0;
 	slot->header->lpNext = 0;
 	slot->header->dwBytesRecorded = 0;
-/*	slot->header.lpData = slot->buff;
-	slot->header.dwBufferLength = kBuffSize;
-	slot->header.dwFlags = 0;
-	slot->header.dwUser = 0;
-*/	return true;
+	return true;
 }
 
 void MMTrace (char *s, long value);
@@ -214,7 +193,8 @@ static void OpenInputSlot (SlotPtr slot)
 		}
 		ret= midiInPrepareHeader (h, slot->header, sizeof(MIDIHDR));
 		if (ret == MMSYSERR_NOERROR) {
-//			ret= midiInAddBuffer (h, slot->header, sizeof(MIDIHDR));
+			slot->header->dwUser = 1;
+			ret= midiInAddBuffer (h, slot->header, sizeof(MIDIHDR));
 			if (ret == MMSYSERR_NOERROR) {
 				ret= midiInStart (h);
 				if (ret == MMSYSERR_NOERROR) return;
@@ -267,6 +247,7 @@ static void CloseSlot (SlotPtr slot, Boolean inputSlot)
 	if (!slot->mmHandle) return;
 	if (inputSlot) {
 		HMIDIIN h = (HMIDIIN)slot->mmHandle;
+		slot->header->dwUser = 0;
 		res = midiInStop (h);
 		CheckErr(res, "midiInStop", true);
 		res = midiInReset(h);

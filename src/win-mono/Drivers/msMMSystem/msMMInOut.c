@@ -74,7 +74,8 @@ void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg,
 		case MIM_LONGERROR:
 		case MIM_LONGDATA:
 			LMM2MS (slot, (LPMIDIHDR)dwParam1);
-			midiInAddBuffer (slot->mmHandle, slot->header, sizeof(MIDIHDR));
+			if (slot->header->dwUser)
+				midiInAddBuffer (slot->mmHandle, slot->header, sizeof(MIDIHDR));
 			break;
 	}
 }
