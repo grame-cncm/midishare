@@ -52,7 +52,9 @@ Cleanup.
 20/11/03 : Version 2.05 : Correct the position setting bug introduced in 2.04. Correct ChaseOff bug for PitchBend :
 default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseOff for PitchBend does not send anything.
 
-21/01/04 : Vesrion 2.06 : New SetPosTicks and Version functions, ticks field in PlayerState.
+21/01/04 : Version 2.06 : New SetPosTicks and Version functions, ticks field in PlayerState.
+
+??/??/?? : Next version : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa)
 
 ==================
 General Remarks
