@@ -1,5 +1,5 @@
 
-OPTIONS = -D__Macintosh__ -D__POWERPC__
+OPTIONS = -D__Macintosh__ -D__POWERPC__ -D__MacOSX__
 INC = -I../common/Headers -I../lib -IPortAudio/pa_common
 CFLAGS := -O3 $(OPTIONS) $(INC)
 
