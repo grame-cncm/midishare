@@ -93,12 +93,36 @@ void prog_action (GtkAdjustment* adj, GtkWidget* data)
 	MidiSendIm(gRefNum, e);
 }
 	
-void ctrl_action (GtkAdjustment* adj, long ctrlnumber)
+void ctrlVol_action (GtkAdjustment* adj, long ctrlnumber)
 {
 	MidiEvPtr e = MidiNewEv(typeCtrlChange);
 	
 	Pitch(e) = ctrlnumber; 
 	Vel(e) = GTK_ADJUSTMENT(gVol)->value + 0.5; 
+	Chan(e) = GTK_ADJUSTMENT(gChannel)->value + 0.5; 
+	Port(e) = GTK_ADJUSTMENT(gPort)->value + 0.5; 
+	
+	MidiSendIm(gRefNum, e);
+}
+
+void ctrlMod_action (GtkAdjustment* adj, long ctrlnumber)
+{
+	MidiEvPtr e = MidiNewEv(typeCtrlChange);
+	
+	Pitch(e) = ctrlnumber; 
+	Vel(e) = GTK_ADJUSTMENT(gMod)->value + 0.5; 
+	Chan(e) = GTK_ADJUSTMENT(gChannel)->value + 0.5; 
+	Port(e) = GTK_ADJUSTMENT(gPort)->value + 0.5; 
+	
+	MidiSendIm(gRefNum, e);
+}
+
+void ctrlPan_action (GtkAdjustment* adj, long ctrlnumber)
+{
+	MidiEvPtr e = MidiNewEv(typeCtrlChange);
+	
+	Pitch(e) = ctrlnumber; 
+	Vel(e) = GTK_ADJUSTMENT(gPan)->value + 0.5; 
 	Chan(e) = GTK_ADJUSTMENT(gChannel)->value + 0.5; 
 	Port(e) = GTK_ADJUSTMENT(gPort)->value + 0.5; 
 	
@@ -172,9 +196,9 @@ int main(int argc, char *argv[] )
 	gtk_signal_connect( gPort, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
 
 	gtk_signal_connect( gProg, "value_changed", GTK_SIGNAL_FUNC(prog_action), NULL);
-	gtk_signal_connect( gVol, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)7L);
-	gtk_signal_connect( gMod, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)1L);
-	gtk_signal_connect( gPan, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)10L);
+	gtk_signal_connect( gVol, "value_changed", GTK_SIGNAL_FUNC(ctrlVol_action), (void*)7L);
+	gtk_signal_connect( gMod, "value_changed", GTK_SIGNAL_FUNC(ctrlMod_action), (void*)1L);
+	gtk_signal_connect( gPan, "value_changed", GTK_SIGNAL_FUNC(ctrlPan_action), (void*)10L);
 
 	// Connexion of signals
 	
