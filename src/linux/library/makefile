@@ -1,6 +1,6 @@
 
 CC = gcc
-FLAGS := -O0 -Wall -g -D_REENTRANT -D__Linux__ -D__Pentium__
+FLAGS := -O0 -Wall -g -D_REENTRANT -D__Pentium__
 CFLAGS := $(FLAGS) -fPIC -I../../common/Headers
 
 LMS = libMidiShare

@@ -1,6 +1,6 @@
 
 TARGET = ../linux/lib/msUtilities.o
-OPTIONS = -D__Linux__ -D__Pentium__
+OPTIONS = -D__Pentium__
 INC = -I../linux/Include
 CFLAGS := -O6 -Wall $(OPTIONS) $(INC)
 CC = gcc
