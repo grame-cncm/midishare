@@ -28,18 +28,18 @@
 
 
 #include <linux/kernel.h>
-#include <linux/module.h>
 
-#if CONFIG_MODVERSIONS==1
-#define MODVERSIONS
-#include <linux/modversions.h>
+#ifdef MODULE
+# ifdef MODVERSIONS
+# include <linux/modversions.h>
+# endif
+#include <linux/module.h>
 #endif
 
 #include <linux/fs.h>		/* for devices	*/
 #include <asm/uaccess.h>	/* for put_user	*/
 #include <linux/sched.h>	/* for current 	*/
 #include <linux/tty.h>		/* for tty_struct */
-#include <linux/slab.h>
 
 #include "msAppFun.h"
 #include "msLoader.h" 
