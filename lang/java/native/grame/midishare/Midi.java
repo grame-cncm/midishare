@@ -38,6 +38,7 @@
 /* event management.
 /* 128: Linux version 
 /* 129: Add IsAcceptedPort, IsAcceptedChan, IsAcceptedType functions
+/* 130: Functions for drivers management
 /*****************************************************************************/
 
 
@@ -56,7 +57,7 @@ An introduction on MidiShare can be found <A HREF = "MSH_intro.html">here</A>.
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  129;
+	public   static  int  Version =  130;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
@@ -665,15 +666,24 @@ public final class Midi {
 	public static final int ChgName			= 3;
 	/** Midi change code:  a connection has changed. */
 	public static final int ChgConnect		= 4;
-	/** Midi change code: the modem port (port 0) was opened.
+	/** 
+	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
  	*/
 	public static final int OpenModem		= 5;
-	/** Midi change code: the modem port (port 0) was closed.
+	/** 
+	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
  	*/
 	public static final int CloseModem		= 6;
-	/** Midi change code: the printer port (port 1) was opened. */
-		public static final int OpenPrinter		= 7;
-	/** Midi change code: the printer port (port 1) was closed.
+	/**  
+	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
+	*/
+	public static final int OpenPrinter		= 7;
+	/** 
+	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
  	*/	
  	public static final int ClosePrinter	= 8;
 	/** Midi change code: MidiShare is now locked to SMPTE sync.
@@ -685,7 +695,25 @@ public final class Midi {
 	/** Midi change code: the synchronisation mode has changed.
  	*/
 	public static final int ChangeSync	   	= 11;
-
+	/** Midi change code: a drivers was opened
+ 	*/
+	public static final int OpenDriver	   	= 12;
+	/** Midi change code: a drivers was closed
+ 	*/
+	public static final int CloseDriver		= 13;
+	/** Midi change code: a slot is added to the system
+ 	*/
+    public static final int AddSlot			= 14;
+    /** Midi change code: a slot is removed from the system 
+ 	*/
+    public static final int RemoveSlot		= 15;
+    /** Midi change code: the slots connections changed
+ 	*/
+    public static final int ChgSlotConnect	= 16;
+    /** Midi change code: a slot name has changed
+ 	*/
+    public static final int ChgSlotName		= 17;
+	
 
 	/**
   	Adds a field at the tail of an event of variable length (for
@@ -993,14 +1021,8 @@ public final class Midi {
 	}
 		
 	/**
-  	Gives the Midi port state. The switching on or off of Midi ports
-    is controlled by the SetPortState and GetPortState
-    routines. These must be used with care since they affect all the
-    applications.  
-     
-                    
-    *@param port a port number from 0 to 255    
-    *@return The result is 1 (= True) if the port is open or 0 (= false) if the port is closed.   
+  	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
     */
 
 	
@@ -1232,16 +1254,8 @@ public final class Midi {
 	}
 	
 	/**
-  	For opening and closing of a Midi port. The implementation of
-    Midi ports is controlled by the SetPortState and
-    GetPortState routines. These must be used with care since
-    they affect all the applications. A closed port is available for
-    other uses (printing,etc.). The Midi applications
-    holding a "context alarm" will be informed of this change in the
-    ports state.   
-             
-    *@param port is the port number to control.                
-    *@param state :  1 open a port, 0 to close a port.  
+	*@deprecated see new drivers management functions.
+	*@see grame.midishare.Midi#CountDrivers
     */
 
 	public  static native final void SetPortState(int port,int state);
@@ -1542,7 +1556,7 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param port  is a port number to be accessed in the filter (0 to  255).
-    *@param val :  if set to 1, the event on this port will be rejected,
+    *@param val  if set to 1, the event on this port will be rejected,
     	if set to 0, the event on this port will be accepted.
   	*/
 
@@ -1554,7 +1568,7 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param chan  is a channel number to be accessed in the filter (0 to 15).
-    *@param val :  if set to 1, the event on this channel will be rejected,
+    *@param val   if set to 1, the event on this channel will be rejected,
     	if set to 0, the event on this channel will be accepted.
   	*/
 
@@ -1565,7 +1579,7 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param type  is a type number to be accessed in the filter (0 to  255).
-    *@param val :  if set to 1, the event of this type will be rejected,
+    *@param val   if set to 1, the event of this type will be rejected,
     	if set to 0, the event of this type will be accepted.
   	*/
   
@@ -1600,6 +1614,171 @@ public final class Midi {
   
   
 	public  static native final int IsAcceptedType(int filter, int type);
+	
+	
+	/** Slot direction code: input slot
+ 	*/
+	public static final int InputSlot		= 1;
+	/** Slot direction code: output slot
+ 	*/
+	public static final int OutputSlot		= 2;
+	/** Slot direction code: input/output slot
+ 	*/
+	public static final int InputOutputSlot	= 3;
+
+	
+	/**
+  	Gives the number of MidiShare drivers currently registered. 
+    *@return The result is a 16-bit integer, the number of currently registered drivers
+   	*/
+	
+	
+	public  static native final int CountDrivers();
+	
+	/**
+  	Gives the reference of number of a driver from its order number. The GetIndDriver function
+     allows to know the reference number of any driver by giving its order number (a number between
+    1 and CountDrivers()). 
+	*@return The result is a 16-bit integer, the index number of a driver between 1 and CountDrivers(). 
+   	*/
+   	
+	public  static native final int	GetIndDriver(int index);
+	
+	/**
+  	Gives information about a driver: it includes the driver name, its version number and its slots
+    count.
+   	*@param  ref a 16-bit integer, it is the reference number of the driver. 
+    *@param  infos a DriverInfos structure to be filled with the driver characteristics. 
+    *@return  The result is a Boolean value which indicates whether MidiShare has been able to get information
+              about the driver or not.
+
+   	*/
+	public  static final int GetDriverInfos (int refnum, DriverInfos infos){
+		int res = 0 ;
+		try {
+			res = GetDriverInfosAux (refnum,infos); // Get the infos
+			if (res > 0) infos.name = ConvertCString (infos.nameAux); // If OK, converts the name in C string to Java string
+			infos.nameAux = 0;
+		}catch (OutOfMemoryError e) {
+			System.out.println (e);
+		}
+		return res;
+	}
+	
+	
+	private static native final int GetDriverInfosAux (int refnum, DriverInfos infos);
+	
+	/**
+  	Add a new slot to a driver. MidiShare applications owning a "context alarm" will be informed
+    of the new slot with the AddSlot alarm code.
+   	*@param drvRefNum the MidiShare reference number of the owner driver. 
+   	*@param  name the slot name. 
+    *@param  direction the slot direction which may be in InputSlot, OutputSlot or InputOutputSlot 
+    *@return The result is a 32-bit integer, a MidiShare unique slot reference number.
+   	*/
+		
+	public  static  final int AddSlot (int refnum, String slotname, int direction){
+		int slotrefnum = 0;
+		try {
+			int cstr = ConvertJavaString(slotname);
+			slotrefnum =  AddSlotAux(refnum,cstr,direction);
+			FreeString(cstr);
+		}catch (OutOfMemoryError e) {
+			System.out.println (e);
+		}
+		return slotrefnum;
+	}
+	
+	private  static native final int	AddSlotAux (int refnum, int name, int direction);
+	
+	/**
+  	Gives the reference of number of a driver slot from its order number. The GetIndSlot
+    function allows to know the reference number of all the slots declared by a driver by giving its
+    order number. 
+    *@param ref a 16-bits integer, it is a driver reference number. 
+    *@param index a 16-bits integer, it is the index number of the slot, between 1 and the DriverInfos.slots field. 
+    *@return  The result is a 32-bit integer, the slot reference number, or errRefNum if the reference
+              number is incorrect, or errIndex if the index is out of range. 
+   	*/
+   	
+	public  static native final int	GetIndSlot(int refnum, int index);
+	
+		
+	/**
+  	Removes a slot from the system. MidiShare applications owning a "context alarm" will be
+    informed of the change using the RemoveSlot alarm code. 
+    *@param ref, a slot reference number. 
+   	*/
+		
+	public  static native final	void RemoveSlot (int slot);
+		
+	/**
+  	Gives information about a slot: it includes the slot name, the slot direction and its connection set to
+    the MidiShare ports
+    *@param  ref a 32-bit integer, the slot reference number. 
+    *@param  infos  a SlotInfos structure to be filled with the slot characteristics. 
+    *@return The result is a Boolean value which indicates whether MidiShare has been able to get information
+              about the slot or not.
+   	*/
+ 
+	public  static final int  GetSlotInfos (int slot, SlotInfos  infos){
+		int res = 0 ;
+		try {
+			res = GetSlotInfosAux (slot,infos); // Get the infos
+			if (res > 0) {
+				infos.name = ConvertCString (infos.nameAux); // If OK, converts the name in C string to Java string
+				for (int i = 0 ; i<32; i++) infos.cnx[i] = ReadChar(infos.cnxAux,i); // Get the connection array
+				FreeString(infos.cnxAux);
+			}
+			infos.nameAux = 0;
+			infos.cnxAux = 0;
+			
+		}catch (OutOfMemoryError e) {
+			System.out.println (e);
+		}
+		return res;
+	}
+	
+	private  static native final	int GetSlotInfosAux (int slot, SlotInfos  infos);
+
+	/**
+ 	 Make or remove a connection between a slot and a MidiShare logical port. MidiShare
+     applications owning a "context alarm" will be informed of the connection change using the
+     ChgSlotConnect alarm code.
+     
+     *@param port a 16-bit integer, it is a MidiShare port number. 
+     *@param slot a 32-bit integer, it is the slot reference number. 
+     *@param state a Boolean value to specify whether the connection should be done (true) or removed (false). 
+   	*/
+   	
+   	
+	public  static native final	void ConnectSlot (int port, int slot, int state);
+	
+	/**
+  	Gives the state of a connection between a MidiShare port and a driver slot. 
+  	*@param port  a 16-bits integer, it is a MidiShare port number 
+    *@param ref the slot reference number 
+    *@return The result is true when a connection exist between the port and the slot and false otherwise.  
+   	*/
+	public  static native final	int	IsSlotConnected	(int port, int slot);
+	
+	/**
+  	Changes the name of a slot.  
+          
+    *@param slot the slot reference number .                  
+    *@param slotname the new slot name.     
+    */
+	public  static  final	void SetSlotName (int slot, String slotname){
+		try {
+			int cstr = ConvertJavaString(slotname);
+			SetSlotNameAux(slot,cstr);
+			FreeString(cstr);
+		}catch (OutOfMemoryError e) {
+			System.out.println (e);
+		}
+	}
+	
+	private  static native final	void SetSlotNameAux (int slot, int name);
 	
 	
 	/* linearisation functions */
