@@ -26,9 +26,9 @@
 #include "Handle.h"
 
 //________________________________________________________________
-Handle NewHandle (long size)
+INetHandle INetNewHandle (long size)
 {
-	Handle h = malloc (size + sizeof(HandleRec));
+	INetHandle h = malloc (size + sizeof(INetHandleRec));
 	if (h) {
 		h->len = size;
 		h->ptr = &h[1];
@@ -37,7 +37,7 @@ Handle NewHandle (long size)
 }
 
 //________________________________________________________________
-void DisposeHandle (Handle h)
+void INetDisposeHandle (INetHandle h)
 {
 	free (h);
 }
