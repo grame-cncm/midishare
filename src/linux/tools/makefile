@@ -8,28 +8,28 @@ ManDir     = /usr/local/man/man1
 all : $(ToolSet) 
 
 MidiGetVersion : MidiGetVersion.c
-	gcc MidiGetVersion.c  -g -I$(INC) -o MidiGetVersion -lMidiShare -lpthread
+	gcc MidiGetVersion.c  -g -I$(INC) -o MidiGetVersion -lMidiShare 
 
 MidiCountAppls : MidiCountAppls.c
-	gcc MidiCountAppls.c  -g -I$(INC) -o MidiCountAppls -lMidiShare -lpthread
+	gcc MidiCountAppls.c  -g -I$(INC) -o MidiCountAppls -lMidiShare 
 
 MidiGetIndAppl : MidiGetIndAppl.c
-	gcc MidiGetIndAppl.c  -g -I$(INC) -o MidiGetIndAppl -lMidiShare -lpthread
+	gcc MidiGetIndAppl.c  -g -I$(INC) -o MidiGetIndAppl -lMidiShare 
 
 MidiGetName : MidiGetName.c
-	gcc MidiGetName.c  -g -I$(INC) -o MidiGetName -lMidiShare -lpthread
+	gcc MidiGetName.c  -g -I$(INC) -o MidiGetName -lMidiShare 
 
 MidiGetNamedAppl : MidiGetNamedAppl.c
-	gcc MidiGetNamedAppl.c  -g -I$(INC) -o MidiGetNamedAppl -lMidiShare -lpthread
+	gcc MidiGetNamedAppl.c  -g -I$(INC) -o MidiGetNamedAppl -lMidiShare 
 
 MidiConnect : MidiConnect.c
-	gcc MidiConnect.c  -g -I$(INC) -o MidiConnect -lMidiShare -lpthread
+	gcc MidiConnect.c  -g -I$(INC) -o MidiConnect -lMidiShare 
 
 MidiIsConnected : MidiIsConnected.c
-	gcc MidiIsConnected.c  -g -I$(INC) -o MidiIsConnected -lMidiShare -lpthread
+	gcc MidiIsConnected.c  -g -I$(INC) -o MidiIsConnected -lMidiShare 
 
 MidiGetTime: MidiGetTime.c
-	gcc MidiGetTime.c  -g -I$(INC) -o MidiGetTime -lMidiShare -lpthread
+	gcc MidiGetTime.c  -g -I$(INC) -o MidiGetTime -lMidiShare 
 
 
 install : $(ToolSet)
