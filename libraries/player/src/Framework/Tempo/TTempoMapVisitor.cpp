@@ -12,9 +12,6 @@
 // ===========================================================================
 //	TTempoMapVisitor.cpp		    
 // ===========================================================================
-//
-// TTempoMapVisitor: an object used to maintain the current Tempo and TimeSign state
-// and give conversion functions 
 
 
 #include "TTempoMapVisitor.h"
@@ -24,9 +21,9 @@
 void TTempoMapVisitor::Visite (TTempoPtr ev,Boolean forward)
 {
 	if (forward) {
-		fTempoConverter->Update(ev->GetDate(),ev->GetTempoForward()); 
+		fTempoConverter.Update(ev->GetDate(),ev->GetTempoForward()); 
 	}else {
-		fTempoConverter->Update(ev->GetDate(),ev->GetTempoBackward());
+		fTempoConverter.Update(ev->GetDate(),ev->GetTempoBackward());
 	}
 }
 
@@ -35,9 +32,9 @@ void TTempoMapVisitor::Visite (TTempoPtr ev,Boolean forward)
 void TTempoMapVisitor::Visite (TTimeSignPtr ev,Boolean forward) 
 {
 	if (forward) {
-		fTimeConverter->Update(ev->GetDate(),ev->GetFNum(),ev->GetFDenom(),ev->GetFnClocks(),ev->GetFn32nd());
+		fTimeConverter.Update(ev->GetDate(),ev->GetFNum(),ev->GetFDenom(),ev->GetFnClocks(),ev->GetFn32nd());
 	}else {
-		fTimeConverter->Update(ev->GetDate(),ev->GetBNum(),ev->GetBDenom(),ev->GetBnClocks(),ev->GetBn32nd());
+		fTimeConverter.Update(ev->GetDate(),ev->GetBNum(),ev->GetBDenom(),ev->GetBnClocks(),ev->GetBn32nd());
 	}
 }
 
