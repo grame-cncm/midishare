@@ -87,15 +87,17 @@
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
   (JNIEnv * inEnv, jclass cl, jint midiname){
   
-  	#ifdef PascalNames
-    	unsigned char buffer [128];
-    	cTopCopy (buffer, (char*)midiname);
+  	
+	#ifdef __Macintosh__
+    		unsigned char buffer [128];
+    		cTopCopy (buffer, (char*)midiname);
 		return  OpenPlayer(buffer);
 	#else
-    	char buffer [128];
-    	cTopCopy (buffer, (char*)midiname);
+    		char buffer [128];
+    		cTocCopy (buffer, (char*)midiname);
 		return  OpenPlayer(buffer);
 	#endif
+}
 }
 
 /*--------------------------------------------------------------------------*/
