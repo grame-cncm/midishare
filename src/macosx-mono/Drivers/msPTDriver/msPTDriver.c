@@ -27,7 +27,7 @@
 #include "pitchtracker.h"
 #include "msPTDriver.h"
 #include "msDriverState.h"
-
+#include <stdlib.h>
 
 /* ----------------------------------*/
 /* constants definitions             */
@@ -55,8 +55,8 @@ typedef struct {
 	Boolean 		sflag;
 	long			tune;
 	long 			buffers;
-	long 			noisein;
-	long 			noiseout;
+	long 			levelin;
+	long 			levelout;
 	long 			bendlength;
 	long 			vol;
 	long 			bend;
@@ -156,12 +156,19 @@ static int inputCallback(void *inputBuffer, void *outputBuffer,
 	DriverData* data = GetData ();
 	SAMPLE* in = ((SAMPLE*)inputBuffer);
         int i;	
-		
-	if (data->refNum > 0 && data->connected) { 
+        /*
+        printf("in %lx\n",in);
+        printf("in %lx\n",inputBuffer);
+        printf("data->numInput %ld\n",data->numInput);
+        printf("framesPerBuffer %ld\n",framesPerBuffer);
+	*/
+        	
+	if (in && data->refNum > 0 && data->connected) { 
       
-                if (in == NULL) return 0;
-                // Transform in a mono buffer : keep the left input
-		for ( i = 0; i< framesPerBuffer; i++) data->monoTable[i] = in[data->numInput*i];
+               // Transform in a mono buffer : keep the left input
+		for ( i = 0; i< framesPerBuffer; i++) {
+                    data->monoTable[i] = in[data->numInput*i];
+                }
                 
                 res = loadPitch_float(data->pitchTracker, data->monoTable);
 		
@@ -283,13 +290,30 @@ void LoadState()
         data->fftsize = LoadConfigNum("Configuration", "FFT", GetProfileFullName(kProfileName),512);
         data->tune = LoadConfigNum("Configuration", "Tune", GetProfileFullName(kProfileName),440);
         data->buffers = LoadConfigNum("Configuration", "Buffers", GetProfileFullName(kProfileName),5);
-        data->noisein = LoadConfigNum("Configuration", "LevelIn", GetProfileFullName(kProfileName),30);
-        data->noiseout = LoadConfigNum("Configuration", "LevelOut", GetProfileFullName(kProfileName),20);
+        data->levelin = LoadConfigNum("Configuration", "LevelIn", GetProfileFullName(kProfileName),50);
+        data->levelout = LoadConfigNum("Configuration", "LevelOut", GetProfileFullName(kProfileName),40);
         data->vol = LoadConfigNum("Configuration", "Vol", GetProfileFullName(kProfileName),1);
         data->bend = LoadConfigNum("Configuration", "Bend", GetProfileFullName(kProfileName),1);
         data->bendlength = LoadConfigNum("Configuration", "BendLength", GetProfileFullName(kProfileName),0);
         data->dynamic = LoadConfigNum("Configuration", "Dynamic", GetProfileFullName(kProfileName),50);
 }
+
+/* -----------------------------------------------------------------------------*/
+void SaveState()
+{
+        DriverDataPtr data = GetData ();
+        
+        SaveConfigNum("Configuration", "FFT", data->fftsize , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "Tune",  data->tune , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "Buffers",  data->buffers , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "LevelIn",  data->levelin , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "LevelOut",  data->levelout , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "Vol",  data->vol , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "Bend",  data->bend , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "BendLength",  data->bendlength , GetProfileFullName(kProfileName));
+        SaveConfigNum("Configuration", "Dynamic",  data->dynamic , GetProfileFullName(kProfileName));
+}
+
 
 /* -----------------------------------------------------------------------------*/
 Boolean SetUpMidi ()
@@ -317,8 +341,8 @@ Boolean SetUpMidi ()
             
         setFieldPitch(data->pitchTracker,NB_NOTE,data->buffers);
         setFieldPitch(data->pitchTracker,TUNE,data->tune);
-        setFieldPitch(data->pitchTracker,TRESH_IN,data->noisein);
-        setFieldPitch(data->pitchTracker,TRESH_OUT,data->noiseout);
+        setFieldPitch(data->pitchTracker,TRESH_IN,data->levelin);
+        setFieldPitch(data->pitchTracker,TRESH_OUT,data->levelout);
         setFieldPitch(data->pitchTracker,LENGTH_BEND,data->bendlength);
         setFieldPitch(data->pitchTracker,VOLUME,data->dynamic);
  
@@ -338,6 +362,7 @@ void CloseMidi ()
 	data->refNum = 0;
 	if (ref > 0) {
                 SaveSlot ("Input Slots", GetProfileFullName(kProfileName),PTDriverName);
+                SaveState();
                 MidiUnregisterDriver (ref);
         }
 }
@@ -345,9 +370,10 @@ void CloseMidi ()
 /* -----------------------------------------------------------------------------*/
 Boolean Start() 
 {
+    
     int buffersize = LoadBufferSize();
     LoadState();
-   
+    
     if (!AudioWakeUp(buffersize)) {
         printf("PitchTracker AudioWakeUp failed\n");
         return false;
@@ -357,7 +383,6 @@ Boolean Start()
         printf("PitchTracker MidiSetup failed\n");
         return false;
     }
-    
     return true;
 }
 
