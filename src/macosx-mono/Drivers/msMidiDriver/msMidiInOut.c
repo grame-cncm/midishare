@@ -22,7 +22,6 @@
 
 
 #include "msMidiInOut.h"
-#include "lffifo.h"
 #include <mach/mach_time.h>
 
 #define PRINT(x) { printf x; fflush(stdout); }
