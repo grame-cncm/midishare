@@ -420,12 +420,12 @@ public final class MidiPlayer {
 	
 	// Tracks management
 	
-		/**
-		Returns all the tracks contained in a Player as a MidiShare sequence. All tracks 
-		are mixed in a unique MidiShare sequence but are distinguish by the reference 
-		number of their events. The returned sequence is a COPY of the internal score. 
-		*@param refnum is the Player reference number. 
-		*@return The result is a MidiShare sequence where all tracks are mixed.
+	/**
+	Returns all the tracks contained in a Player as a MidiShare sequence. All tracks 
+	are mixed in a unique MidiShare sequence but are distinguish by the reference 
+	number of their events. The returned sequence is a COPY of the internal score. 
+	*@param refnum is the Player reference number. 
+	*@return The result is a MidiShare sequence where all tracks are mixed.
 	*/
 
 	public  static final native  int   GetAllTrack  (int refnum);
@@ -492,11 +492,16 @@ public final class MidiPlayer {
 	public  static final native int  GetParam  (int refnum, int tracknum, int  param);
 	
 	/**
+	This function is provided as a way to insert in real-time new events 
+	to be played while the Player is running. <BR>
 	Insert a score "slice" in the Player. All tracks in the slice are 
 	mixed in a unique MidiShare sequence and should be distinguish by the value 
 	of the refnum field of the Midi events.
 	The MidiShare sequence given as parameter will be internally used. It means 
-	that one must copy it before using  InsertAllTrack if one wants to keep it.
+	that one must copy it before using InsertAllTrack if one wants to keep it. 
+	The event date in the inserted slice should be expressed relatively 
+	from the beginning of the total sequence. 
+	
 	*@param refnum is the Player reference number. 
 	*@param seq is a pointer on a sequence to be inserted in the Player.
 	*@return The result is an error code. This error is returned if the score "slice" can not be inserted.
@@ -506,13 +511,18 @@ public final class MidiPlayer {
 	public  static final native int  InsertAllTrack  (int refnum,  int seq);
 
 	/**
+	This function is provided as a way to insert in real-time new events 
+	to be played while the Player is running. <BR>
 	Insert a track "slice" in the Player.
 	The MidiShare sequence given as parameter will be internally used. It means 
-	that one must copy it before using  InsertTrack if one wants to keep it.
+	that one must copy it before using InsertTrack if one wants to keep it.
+	The event date in the inserted slice should be expressed relatively 
+	from the beginning of the total sequence. 
 	*@param refnum is the Player reference number. 
 	*@param tracknum is the  track number.
 	*@param seq is a pointer on a sequence to be inserted in the Player.
 	*@return The result is an error code. This error is returned if the track "slice" can not be inserted.
+	
 	*/
 
 	public  static final native int  InsertTrack  (int refnum, int tracknum, int seq);
