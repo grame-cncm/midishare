@@ -56,6 +56,7 @@ static MidiEvPtr SendNetTask (MidiEvPtr task, short r, TMSGlobalPtr g)
 		TTaskExtPtr ext = (TTaskExtPtr)LinkST(ev);
 		ext->fun  = (TaskPtr)task;
 		RefNum(ev) = RefNum(task) = (uchar)r;
+		Date(ev) = Date(task);
 		if (SendToServer (ev, g))
 			return task;
 		MSFreeEv (ev,  &g->memory.freeList);

@@ -128,6 +128,23 @@ static void TimeTask (long date, short refNum, long a1,long a2,long a3)
 }
 
 /* -----------------------------------------------------------------------------*/
+static void NoteTask (long date, short refNum, long a1,long a2,long a3)
+{
+	MidiEvPtr e  = MidiNewEv(typeNote);
+	if (e) {
+		Pitch(e) = 64;
+		Dur(e) = 100;
+		Vel(e) = 127;
+		MidiSendIm (refNum, e);
+		gTask = MidiTask (NoteTask, date+500, refNum, 0, 0, 0);
+		if (!gTask)
+			fprintf (stderr, "NoteTask %d: MidiTask failed\n", refNum);
+	}
+	else
+		fprintf (stderr, "TimeTask %d: MidiTask failed\n", refNum);
+}
+
+/* -----------------------------------------------------------------------------*/
 static void FlushReceivedEvents (short r)
 {
 	MidiFlushEvs (r);
@@ -155,7 +172,12 @@ int main (int argc, char *argv[])
 	}
 
 	MidiSetRcvAlarm (gRef, FlushReceivedEvents);
-	gTask = MidiTask (InitTask, MidiGetTime()+1, gRef, 0, 0, 0);
+//	MidiConnect (gRef, 0, 1);
+//	NoteTask (MidiGetTime(), gRef, 0, 0, 0);
+//	gTask = MidiTask (InitTask, MidiGetTime()+1, gRef, 0, 0, 0);
+	gTask = MidiTask (InitTask, 1500, gRef, 0, 0, 0);
+
+	sleep (1500);
 	while (!bench_done()) {
 		sleep (100);
 		t = MidiGetTime();
@@ -164,8 +186,12 @@ int main (int argc, char *argv[])
 			break;
 		}
 	}
+/*
+	fprintf (stdout, "press return to quit");
+	getc(stdin);
+*/
 	MidiForgetTask (&gTask);
 	MidiClose (gRef);
-	print_result (stdout, stderr);
+	print_result (stdout, stdout);
 	return 0;
 }

@@ -35,6 +35,7 @@
 #define kStreamMemoryError		-3	/* unable to allocate a new MidiShare event */
 #define kStreamInvalidParameter -4	/* invalid parameter */
 #define kStreamUnknowParseMeth  -5	/* unknow event encountered */
+#define kStreamUnexpectedSerial -6	/* unexpected serial number */
 
 /*------------------------------------------------------------------------*/
 typedef struct msStreamBuffer  * msStreamBufferPtr;

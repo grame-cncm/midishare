@@ -89,6 +89,12 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	Ev2StreamPtr stream = &rt->stream;
     long n; short len; void *buff;
 
+static int reenter=0;
+
+if (reenter)
+	fprintf (stderr, "CallNetSend reenter = %d\n", reenter);
+reenter++;
+
 	buff=rt->wbuff[rt->index++];
 	if (rt->index >= kMaxWBuffers) rt->index = 0;
 
@@ -113,6 +119,7 @@ void CallNetSend  (TMSGlobalPtr g, TApplPtr appl)
 	}
 	len = msStreamSize(stream);
 	n = CCRTWrite (cc, buff, len);
+reenter--;
 //    if (n != len) goto failed;
 }
 

@@ -64,6 +64,8 @@ const char * msStreamGetErrorText (int errcode)
 			return "invalid parameter";
 		case kStreamUnknowParseMeth:
 			return "unknow event encountered";
+		case kStreamUnexpectedSerial:
+			return "unexpected serial number";
 	}
 	return "unknown error code";
 }
@@ -138,16 +140,24 @@ void msStreamParseInitMthTbl (msStreamParseMethodTbl tbl)
 /*____________________________________________________________________________*/
 static int CheckConsistency (msStreamBufferPtr f, msStreamHeaderPtr h)
 {
+	unsigned long serial = f->serial;
+	
 	/* check for header magic value */
 	if (h->magic != kStreamMagic) return kStreamInvalidHeader;
+
 	/* check for continuation and params consistency */
 	if ((h->cont && !f->curEv) || (!h->cont && f->curEv)) 
         return kStreamInvalidParameter;
-	if (h->serial != f->serial)
-		fprintf (stderr, "StreamToEvent: CheckConsistency: wrong serial number: %ld expected, got %ld [%lx %lx %d %d]\n",
-			f->serial, h->serial, (long)f, (long)h, ((msStreamHeaderPtr)(f->buff))->len, f->slen);
-	if (h->serial >= f->serial)
-		f->serial = h->serial + 1;
+
+	/* check for the buffer serial number */
+	if (h->serial >= serial) f->serial = h->serial + 1;
+	if (h->serial != serial) {
+		fprintf (stderr, "%ld - StreamToEvent: CheckConsistency: wrong serial number: %ld expected, got %ld [%lx %lx %d %d]\n",
+			MidiGetTime(), serial, h->serial, (long)f, (long)h, ((msStreamHeaderPtr)(f->buff))->len, f->slen);
+		fflush (stderr);
+		StreamAdjust(f, ++h, sizeof(msStreamHeader));
+		return kStreamUnexpectedSerial;
+	}
 
     StreamAdjust(f, ++h, sizeof(msStreamHeader));
 	return kStreamNoError;
@@ -160,9 +170,9 @@ static int CheckMultipleStreams (msStreamBufferPtr f, int * retcode)
         int nextLen;
         msStreamHeaderPtr h = (msStreamHeaderPtr)f->loc;
         *retcode = CheckConsistency(f, h);
-        if (*retcode != kStreamNoError) return false;
+        if ((*retcode != kStreamNoError) && (*retcode != kStreamUnexpectedSerial)) return false;
         
-        nextLen = StreamLength(h);
+		nextLen = StreamLength(h);
         f->slen += nextLen;
         if (f->slen > f->len) {
             f->expected = f->slen - f->len;
@@ -178,8 +188,9 @@ static MidiEvPtr ContReadEvent (msStreamBufferPtr f, int * retcode)
 {
 	MidiEvPtr e = f->curEv;
 	if (e) {
-		*retcode = f->parse[EvType(e)](f, e);
-		switch (*retcode) {
+		int ret = f->parse[EvType(e)](f, e);
+//		*retcode = f->parse[EvType(e)](f, e);
+		switch (ret) {
 			case kStreamNoError:
 				f->curEv = 0;
 				return e;
@@ -188,10 +199,12 @@ static MidiEvPtr ContReadEvent (msStreamBufferPtr f, int * retcode)
                 if (CheckMultipleStreams (f, retcode))
                     return ContReadEvent (f, retcode);
                 else msStreamParseRewind(f);
+				*retcode = ret;
 				break;
 			default:
 				MidiFreeEv(e);
-		}
+				*retcode = ret;
+			}
 	}
     else *retcode = kStreamParseError;
     return 0;
@@ -203,9 +216,9 @@ static MidiEvPtr StartReadBuffer (msStreamBufferPtr f, int * retcode)
 	msStreamHeaderPtr h = (msStreamHeaderPtr)f->buff;
 
 	*retcode = CheckConsistency(f, h);
-	if (*retcode != kStreamNoError) return 0;
+	if ((*retcode != kStreamNoError) && (*retcode != kStreamUnexpectedSerial)) return false;
+
 	f->slen = StreamLength(f->buff);
-//    StreamAdjust(f, ++h, sizeof(msStreamHeader));
 	if (f->curEv)
         return ContReadEvent (f, retcode);
 	else return ReadNewEvent (f, retcode);
@@ -222,12 +235,13 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
 			return 0;
 		}
 		else {
-			EvCommonPartPtr ec = EventCommonPart(e);
+			EvCommonPartPtr ec = EventCommonPart(e); int ret;
 			Link(e) = 0;
 			*ec = *common++;
 			StreamAdjust(f, common, sizeof(EvCommonPart));
-			*retcode = f->parse[EvType(e)](f, e);
-			switch (*retcode) {
+			ret = f->parse[EvType(e)](f, e);
+//			*retcode = f->parse[EvType(e)](f, e);
+			switch (ret) {
 				case kStreamNoError: 
 					f->curEv = 0;
 					return e;
@@ -236,9 +250,11 @@ static MidiEvPtr ReadNewEvent (msStreamBufferPtr f, int * retcode)
                     if (CheckMultipleStreams (f, retcode))
                         return ContReadEvent (f, retcode);
 					else msStreamParseRewind(f);
+					*retcode = ret;
                     break;
 				default:
 					MidiFreeEv(e);
+					*retcode = ret;
 			}
 		}
 	}

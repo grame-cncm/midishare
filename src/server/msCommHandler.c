@@ -107,7 +107,7 @@ static MidiEvPtr NetMidiOpen (MidiEvPtr e, CommunicationChan cc)
 	msServerContext * sc = ServerContext;
 	
 	msMutexLock (sc->OCMutex);
-printf ("NetMidiOpen start...");
+printf ("%ld NetMidiOpen start...", MidiGetTime());
 	MidiEvPtr reply = MidiNewEv (typeMidiOpenRes);
 	if (!reply) { 
 		LogWrite ("NetMidiOpen: MidiShare memory allocation failed");
@@ -159,7 +159,7 @@ static MidiEvPtr NetMidiClose (MidiEvPtr e, CommunicationChan cc)
 	msServerContext * sc = ServerContext;
 
 	msMutexLock (sc->OCMutex);
-printf ("NetMidiClose start %d ... ", ref);
+printf ("%ld NetMidiClose start %d ... ", MidiGetTime(), ref);
 	if (context && (context->chan == cc)) {
 		if (context->filterh) msSharedMemClose(context->filterh);
 		MidiClose (ref);
@@ -255,7 +255,7 @@ static ThreadProc(CommHandlerProc, p)
 	CommChansPtr pl = (CommChansPtr)p;
 	msStreamBufferPtr parse = &pl->parse;
 
-fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
+//fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm, (int)CCGetID(pl->comm));
     do {
         long n = CCRead (pl->comm, pl->rbuff, kReadBuffSize);
         if (n > 0) {
@@ -278,7 +278,7 @@ fprintf (stderr, "New CommHandlerProc: pipes pair %lx id = %d\n", (long)pl->comm
             break;
         }
     } while (CCRefCount(pl->comm));
-//	if (CCRefCount(pl->comm))
+	if (CCRefCount(pl->comm))
 		LogWrite ("CommHandlerProc exit: CloseCommunicationChannel (refcount %d)", CCRefCount(pl->comm));
     CCClose (pl->comm);
     pl->comm = 0;
@@ -323,7 +323,7 @@ void NewClientChannel (CommunicationChan cc)
     cl = (CommChansPtr)malloc (sizeof(CommChans));
     if (!cl) {
         CCClose (cc);
-        LogWrite ("NewClientChannel: CommChans memory allocation failed");
+        LogWrite ("NewClientChannel: memory allocation failed");
         return;
     }
     msStreamParseInit (&cl->parse, gParseMthTable, cl->rbuff, kReadBuffSize);
@@ -338,7 +338,6 @@ void NewClientChannel (CommunicationChan cc)
         goto err;
     }
     cl->thread = thread;
-//	if (!RTCommInit (ServerContext, cc)) goto err;
     gCCList = cl;
 	return;
 
