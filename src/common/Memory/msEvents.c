@@ -215,9 +215,9 @@ void InitEvents ()
 	InitAddFieldMth		( AddFieldMethodTbl );
 	
 	/* will be implemented as method table later */
-	#ifdef __Linux__
+#if defined __Linux__  && defined MODULE
 	InitStructTbl();
-	#endif
+#endif
 }
 
 #define NewProcessEv	NewPrivateEv

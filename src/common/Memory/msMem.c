@@ -25,11 +25,21 @@
 #endif
 
 #ifdef __Linux__
+
 # ifdef MODVERSIONS
 # include <linux/modversions.h>
 # endif
-#include <linux/slab.h>
+
+
+#ifdef MODULE
+# include <linux/malloc.h>
+# define malloc(size)	kmalloc(size, GFP_KERNEL)
+# define free(mem)	kfree(mem)
+#else
+# include <malloc.h>
 #endif
+
+#endif /* __Linux__ */
 
 #include "msMem.h"
 
@@ -43,7 +53,7 @@ FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
 #endif
 
 #ifdef __Linux__
-	return (void*)kmalloc(size, GFP_KERNEL);
+	return (void*)malloc(size);
 #endif
 }
 
@@ -55,7 +65,7 @@ void DisposeMemory  (FarPtr(void) memPtr)
 #endif
 
 #ifdef __Linux__
-	kfree(memPtr);
+	if (memPtr) free(memPtr);
 #endif
 }
 
