@@ -14,11 +14,11 @@ History :
 #include <unistd.h>
 #include <errno.h>
 
-/* #include <ctype.h> */
+#include <ctype.h> 
 #include "profport.h"   /* function prototypes in here */
 
 static char* TmpDirectory = "/tmp";
-
+/*
 static int isdigit (char c) 
 {
 	static char digits[10]={'0','1','2','3','4','5','6','7','8','9'};
@@ -26,7 +26,7 @@ static int isdigit (char c)
 	for (i = 0 ; i < 10; i++) if (digits[i]==c) return 1;
 	return 0;
 }
-
+*/
 static int read_line(FILE *fp, char *bp);
 
 /*****************************************************************
