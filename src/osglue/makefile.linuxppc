@@ -1,13 +1,6 @@
 
-USRC = unix/TLog.cpp unix/TShMem.cpp unix/TPipe.cpp unix/TThreads.cpp \
-	unix/TLocalSocket.cpp unix/TMutex.cpp
-UOBJ = unix/TLog.o unix/TShMem.o unix/TPipe.o unix/TThreads.o \
-	unix/TLocalSocket.o unix/TMutex.o
-GSRC = glue/TClientInit.cpp glue/TServerInit.cpp glue/TInitComGlue.cpp
-GOBJ = glue/TClientInit.o glue/TServerInit.o glue/TInitComGlue.o
-
-SRC = msCommInit.cpp msServerInit.cpp $(USRC) $(GSRC)
-OBJ = msCommInit.o msServerInit.o $(UOBJ) $(GOBJ)
+SRC = $(wildcard unix/*.cpp glue/*.cpp *.cpp)
+OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
 CFLAGS = -O3 -Iinclude -Iglue -Wall
 CXXFLAGS = $(CFLAGS)
