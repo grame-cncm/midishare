@@ -24,15 +24,18 @@
 
 */
 
+#include <Errors.h>
 #include <Gestalt.h>
 #include <MacMemory.h>
 #include <OSUtils.h>
+#include <Script.h>
 #include <Timer.h>
 
+#include "DriverLoader.h" 
+#include "msDriver.h" 
 #include "msExtern.h"
 #include "msLoader.h" 
 #include "msSync.h" 
-#include "msDriver.h" 
 
 /*_________________________________________________________________________*/
 /* mac 68k desc structure                                                  */
@@ -42,6 +45,7 @@ typedef struct TMachine {
     Boolean    virtualMemory;      /* virtual memory is active    */
     SysEnvRec  env;
     TMTask     tm;                 /* Time Manager task record    */
+	DriverListPtr	drivers;
 } TMac, * TMacPtr;
 
 typedef struct {
@@ -50,6 +54,10 @@ typedef struct {
 
 #define GetContext(c)	(((Mac68kContextPtr)c)->a5Reg)
 #define TimeTask(g)		(((TMacPtr)g->local)->tm)
+#define Drivers(g)		(((TMacPtr)g->local)->drivers)
+
+#define stateFile  "\pMidiShare state"
+enum { kStateCreator = 'Mshr', kStateType = 'msst' };
 
 
 /*_________________________________________________________________________*/
@@ -83,6 +91,44 @@ TApplContextPtr CreateApplContext ()
 void DisposeApplContext (TApplContextPtr context)
 {
 	if (context) DisposePtr ((Ptr)context);
+}
+
+/*_________________________________________________________________________*/
+void DriverWakeUp (TApplPtr appl)
+{
+	TApplContextPtr context = appl->context;
+	if (Wakeup(appl)) {
+		WakeupPtr wakeup = Wakeup(appl);
+		long oldA5 = SetA5Register (GetContext(context));
+    	wakeup (appl->refNum);
+		SetA5Register (oldA5);
+	}
+}
+
+/*_________________________________________________________________________*/
+void DriverSleep (TApplPtr appl)
+{
+	TApplContextPtr context = appl->context;
+	if (Sleep(appl)) {
+		SleepPtr sleep = Sleep(appl);
+		long oldA5 = SetA5Register (GetContext(context));
+ 		sleep (appl->refNum);
+		SetA5Register (oldA5);
+	}
+}
+
+/*_________________________________________________________________________*/
+Boolean DriverSlotInfos (TApplPtr appl, SlotRefNum slot, TSlotInfos * infos)
+{
+	Boolean ret = false;
+	TApplContextPtr context = appl->context;
+	if (SlotInfo(appl)) {
+		SlotInfoPtr slotInf = SlotInfo(appl);
+		long oldA5 = SetA5Register (GetContext(context));
+   		ret = slotInf (slot, infos);
+		SetA5Register (oldA5);
+	}
+	return ret;
 }
 
 /*_________________________________________________________________________*/
@@ -175,17 +221,23 @@ static pascal void timeManagerTask(void)
 void SpecialWakeUp (TMSGlobalPtr g)
 {
 	g->local = NewPtrSys (sizeof(TMac));
-	if (g->local) InitMachine (g->local);
-	
+	if (g->local) {
+		InitMachine (g->local);
+		Drivers(g) = LoadDrivers ();
+	}
 }
 
 void SpecialSleep  (TMSGlobalPtr g)
 {
-	if (g->local) DisposePtr (g->local);
+	if (g->local) {
+		UnloadDrivers (g, Drivers(g));
+		DisposePtr (g->local);
+	}
 	g->local = 0;
 }
 
-
+/*__________________________________________________________________________*/
+/* time interrrupt management                                               */
 /*__________________________________________________________________________*/
 void OpenTimeInterrupts (TMSGlobalPtr g)
 {
@@ -196,7 +248,6 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 	PrimeTime((QElemPtr)&TimeTask(g), -1000);
 }
 
-/*__________________________________________________________________________*/
 void CloseTimeInterrupts (TMSGlobalPtr g)
 {
 	QElemPtr task = (QElemPtr)&TimeTask(g);
@@ -204,11 +255,4 @@ void CloseTimeInterrupts (TMSGlobalPtr g)
 	RmvTime(task);
 	INT_ON();
 }
-
-/*__________________________________________________________________________*/
-/* drivers management */
-/*__________________________________________________________________________*/
-int 		SendToDriver		(TDriverPtr driver, MidiEvPtr ev) { return 0; }
-TDriverPtr	OpenDriverManager	() { return 0; }
-void		CloseDriverManager	(TDriverPtr driver) {}
 
