@@ -59,6 +59,13 @@ int TLocalSocket::Create (char *name)
 }
 
 //_____________________________________________________________________
+void TLocalSocket::Delete (char *name) 
+{
+	if (access (name, F_OK) == 0)
+		unlink( name);
+}
+
+//_____________________________________________________________________
 int TLocalSocket::Open (char *path)
 {
 	if (SockOpen()) {

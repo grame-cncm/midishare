@@ -70,6 +70,11 @@ void TPipe::Close ()
 }
 
 //_____________________________________________________________________
+void TPipe::Delete (const char * name)
+{
+}
+
+//_____________________________________________________________________
 int TPipe::Open (const char *name, int perm)
 {
 	switch (perm) {

@@ -62,6 +62,7 @@ extern "C" {
 MeetingPointChan	CreateMeetingPoint();
 MeetingPointChan	OpenMeetingPoint  ();
 void 				CloseMeetingPoint (MeetingPointChan mp);
+void 				DeleteMeetingPoint ();
 
 long	MPWrite 	(MeetingPointChan mp, MPMsgPtr msg);
 long	MPRead 		(MeetingPointChan mp, MPMsgPtr msg);
@@ -70,6 +71,7 @@ long	MPRead 		(MeetingPointChan mp, MPMsgPtr msg);
 CommunicationChan 	RequestCommunicationChannel (MeetingPointChan mp);
 CommunicationChan 	HandleCommunicationChannelRequest (MeetingPointChan mp);
 void 				CloseCommunicationChannel   (CommunicationChan cc);
+void 				CleanCommunicationChannels  ();
 
 long	CCWrite 	(CommunicationChan cc, void *buff, long len);
 long	CCRead 		(CommunicationChan cc, void *buff, long len);

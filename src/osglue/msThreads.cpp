@@ -26,6 +26,21 @@
 #include "TThreads.h"
 #include "msThreads.h"
 
+static int siglist [] = {
+	SIGABRT,
+	SIGFPE,
+	SIGILL,
+	SIGINT,
+	SIGSEGV,
+	SIGTERM,
+#ifndef WIN32
+	SIGHUP,
+	SIGQUIT,
+	SIGBUS,
+#endif
+	0
+};
+
 //___________________________________________________________________
 msThreadPtr msThreadCreate (ThreadProcPtr proc, void * arg, int priority)
 {
@@ -48,4 +63,24 @@ msThreadPtr msThreadCreate (ThreadProcPtr proc, void * arg, int priority)
 void msThreadDelete (msThreadPtr thread)
 {
 	delete (TThreads *)thread;
+}
+
+//___________________________________________________________________
+void msThreadSigInit (SigProcPtr proc)
+{
+#ifndef WIN32
+	int * sigs = siglist;
+	struct sigaction sa;
+
+	while (*sigs) {
+		sa.sa_handler = proc;
+		sigemptyset (&sa.sa_mask);
+		sa.sa_flags = 0; 			//SA_RESETHAND;
+		sigaction (*sigs++, &sa, 0);
+	}
+	sa.sa_handler = SIG_IGN;
+	sigemptyset (&sa.sa_mask);
+	sa.sa_flags = 0; 			//SA_RESETHAND;
+	sigaction (SIGPIPE, &sa, 0);
+#endif
 }

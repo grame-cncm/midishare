@@ -102,6 +102,15 @@ void * msSharedMemGetID (void * memPtr)
     return ret;
 }
 
+void msSharedMemForceDelete (SharedMemHandler shmh)
+{
+    if (shmh) {
+        TShMem * shm = (TShMem *)shmh;
+        shm->Delete();
+        delete shm;
+    }
+}
+
 SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr)
 {
     TShMem * shm = new TShMem();

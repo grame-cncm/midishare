@@ -53,6 +53,7 @@ class TShMem
 		void *	Create 	(MemID id, unsigned long size);
 		void *	Open 	(MemID id);
 		void	Close 	();
+		void	Delete 	(); // force removal of a shared memory segment
 				
 	protected:
 		int 	Get 	(MemID id, unsigned long size, int flags);

@@ -105,6 +105,12 @@ void TShMem::Detach () {
 }
 
 //__________________________________________________________________________
+void TShMem::Delete () {
+		fCreated = true;
+		Close ();
+}
+
+//__________________________________________________________________________
 void TShMem::Close () {
 	Detach ();
 	if (fCreated && (fHandler != SHMErr)) {

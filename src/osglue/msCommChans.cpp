@@ -63,6 +63,13 @@ MeetingPointChan CreateMeetingPoint()
     return 0;
 }
 
+void DeleteMeetingPoint ()
+{
+	MPChan mp;
+	mp.Delete (kServerContactName);
+}
+
+
 MeetingPointChan OpenMeetingPoint  ()
 {
     MPChan * mp = new MPChan();
@@ -271,6 +278,22 @@ void CloseCommunicationChannel (CommunicationChan cc)
 		delete (TPipesPair *)cc->cc;
 		delete (TPipesPair *)cc->rtcc;
 		free (cc);
+	}
+}
+
+void CleanCommunicationChannels ()
+{
+	TPipe pipe; int i;
+    char name[kMaxPipeName];
+	for (i=1; i<kMaxPipeIndex; i++) {
+		snprintf (name, kMaxPipeName, "%s%d", kClientSndBaseName, i);
+		pipe.Delete (name);
+		snprintf (name, kMaxPipeName, "%s%d", kClientRcvBaseName, i);
+		pipe.Delete (name);
+		snprintf (name, kMaxPipeName, "%s%d", kClientRTSndBaseName, i);
+		pipe.Delete (name);
+		snprintf (name, kMaxPipeName, "%s%d", kClientRTRcvBaseName, i);
+		pipe.Delete (name);
 	}
 }
 

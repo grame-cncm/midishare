@@ -53,6 +53,8 @@ class TPipe
 		int		Open 	(int perm=kReadPerm) { return Open (fName, perm); }
 		void	Close 	();
 
+		void	Delete 	(const char * name); // for cleaning purpose only
+
 		long	Write 	(void *buff, long len);
 		long	Read 	(void *buff, long len);
 		

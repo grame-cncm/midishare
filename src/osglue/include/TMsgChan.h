@@ -41,6 +41,9 @@ class TMsgChan
 		// typically called by the server:  
 		// warning: this method MUST be called by the reader thread
 		int 	Create 	(char *name);
+		// force deletion of a existing msg channel
+		// do nothing as the channel is linked to an existing process
+		void 	Delete 	(char *name) {} 
 		// typically called by the client 
 		int 	Open 	(char *basename);
 		void 	Close 	();

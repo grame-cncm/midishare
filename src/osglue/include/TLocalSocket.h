@@ -41,6 +41,7 @@ class TLocalSocket
 		// typically called by the server: creates the socket and 
 		// bind it to its name
 		int 	Create 	(char *name);
+		void 	Delete 	(char *name); // force deletion of a existing socket
 		// typically called by the client: creates the socket and 
 		// bind it to the first indexed free name based on basename
 		int 	Open 	(char *basename);

@@ -24,6 +24,8 @@
 #ifndef __msThreads__
 #define __msThreads__
 
+#include "osglue.h"
+
 #ifdef WIN32
 #include <windows.h>
 	typedef LPTHREAD_START_ROUTINE ThreadProcPtr;
@@ -34,6 +36,7 @@
 #endif
 
 typedef void * msThreadPtr;
+typedef cdeclAPI(void) (* SigProcPtr)(int sig);
 
 
 enum { 
@@ -51,6 +54,7 @@ extern "C" {
 
 msThreadPtr msThreadCreate (ThreadProcPtr proc, void * arg, int priority);
 void        msThreadDelete (msThreadPtr thread);
+void        msThreadSigInit(SigProcPtr proc);  // only to be called in server context
 
 #ifdef __cplusplus
 }

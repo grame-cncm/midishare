@@ -51,6 +51,7 @@ extern "C" {
     void * msSharedMemGetID 		  (void *memPtr);
     SharedMemHandler msSharedMemOpen  (ShMemID id, void ** memPtr);
     void   			 msSharedMemClose (SharedMemHandler shm);
+    void   			 msSharedMemForceDelete (SharedMemHandler shm);
     
 #ifdef __cplusplus
 }

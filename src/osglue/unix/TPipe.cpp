@@ -92,6 +92,13 @@ void TPipe::Close ()
 }
 
 //_____________________________________________________________________
+void TPipe::Delete (const char * name)
+{
+	if (access (name, F_OK) == 0)
+		unlink( name);
+}
+
+//_____________________________________________________________________
 long TPipe::Write (void *buff, long len)
 {
 	return write (fPipe, buff, len);
