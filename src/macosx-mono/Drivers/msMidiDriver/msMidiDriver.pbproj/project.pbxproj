@@ -139,7 +139,7 @@
 		};
 		F54A7D7B01FC781301053105 = {
 			isa = PBXLibraryReference;
-			path = msMidiDriver.1.0.3.so;
+			path = msMidiDriver.1.0.4.so;
 			refType = 3;
 		};
 		F54A7D7C01FC781301053105 = {
@@ -163,7 +163,7 @@
 				PREBINDING = NO;
 				PRECOMPILE_PREFIX_HEADER = YES;
 				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.3.so;
+				PRODUCT_NAME = msMidiDriver.1.0.4.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
