@@ -52,25 +52,6 @@ void TTempoConverter::Init ()
 
 /*--------------------------------------------------------------------------*/
 /*!
- \brief Updates internal state with a tempo event using it's date and tempo value.
- \param  ev is the tempo event.
-*/
-
-void TTempoConverter::Update (MidiEvPtr ev)
-{
-	ULONG newtempo = Tempo(ev)/10; 
-
-	if ((newtempo > 0) && (fTempo != newtempo)) { // Update values only if the Tempo has changed
- 		fLast_tempo_ten_micro = ConvertTickToMicroSec (Date(ev));
-		fLast_tempo = Date(ev);
-		fTempo = newtempo;
-		fTen_micro_sec_per_tick = fTempo/fTicks_per_quarter;
-		fTen_micro_sec_per_tick_remain = fTempo % fTicks_per_quarter;
-	}
-}	
-
-/*--------------------------------------------------------------------------*/
-/*!
  \brief Updates internal state with a tempo and a date.
  \param date_ticks is the date in ticks.
  \param tempo is the tempo in micro-sec per quarter note.

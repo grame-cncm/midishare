@@ -18,7 +18,6 @@
 #define __TTempoConverter__
 
 #include "TPlayerConstants.h"
-#include "GenericMidiShare.h"
 
 //-----------------------
 // Class TTempoConverter
@@ -66,7 +65,6 @@ class TTempoConverter {
 		ULONG ConvertTickToMs(ULONG date_ticks); 		
 		ULONG ConvertMsToTick(ULONG date_ms);			
 	
-		void Update(MidiEvPtr tempo);
 		void Update(ULONG date_ticks, ULONG tempo);
 		
 		/*! Returns current tempo 
