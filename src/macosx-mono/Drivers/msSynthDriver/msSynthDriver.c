@@ -195,9 +195,11 @@ static Boolean open_iiwusynth (char* soundfont)
 	DriverDataPtr data = GetData ();
     	
 	iiwu_synth_settings_t settings = {IIWU_SETTINGS_VERSION, 64 , IIWU_AUDIO | IIWU_REVERB, 
-                                        "portaudio", "midishare",  64, 1024, 44100, IIWU_FLOAT_FORMAT  };
+                                        "portaudio", "midishare",  64, 2048, 44100, IIWU_FLOAT_FORMAT  };
 									 
-									 
+	
+        /* use MidiShare audio buffer size*/                                                                 			settings.bufsize = LoadBufferSize();	
+
 	/* allocates the synth */
 	data->synth = new_iiwu_synth(&settings);
         if (data->synth == NULL) goto error;
