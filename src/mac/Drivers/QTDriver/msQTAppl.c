@@ -260,7 +260,7 @@ static void Initialize()
 
 	if (!CheckQuickTime()) 		AlertUser ("\pQuickTime is required");
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
-	if (MidiGetVersion() < 180) AlertUser ("\prequire MidiShare version 1.80 or later");
+	if (MidiGetVersion() < 182) AlertUser ("\prequire MidiShare version 1.82 or later");
 	if (MidiGetNamedAppl (QTDriverName) > 0) AlertUser ("\pQuickTime driver is still running");
 	if (!SetUpMidi()) 			AlertUser ("\pMidiShare initialization failed");
 	foreGround = true;

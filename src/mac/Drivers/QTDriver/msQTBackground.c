@@ -136,8 +136,8 @@ static void Initialize()
 							NewAEEventHandlerProc(AEQuitHandler), 0, false);
 	if (!CheckQuickTime()) 	{ AlertUser ("\pQuickTime is required"); return; }
 	if (!MidiShare()) 		{ AlertUser ("\pMidiShare is required"); return; }
-	if (MidiGetVersion() < 180) { 
-		AlertUser ("\prequire MidiShare version 1.80 or later");
+	if (MidiGetVersion() < 182) { 
+		AlertUser ("\prequire MidiShare version 1.82 or later");
 		return;
 	}
 	if (!SetUpMidi()) 		AlertUser ("\pMidiShare initialization failed");

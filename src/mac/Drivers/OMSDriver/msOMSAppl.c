@@ -250,7 +250,7 @@ static void Initialize()
 
 	if (!CheckOMS()) 			AlertUser ("\pOMS 2.00 or later is required");
 	if (!MidiShare()) 			AlertUser ("\pMidiShare is required");
-	if (MidiGetVersion() < 180) AlertUser ("\prequire MidiShare version 1.80 or later");
+	if (MidiGetVersion() < 182) AlertUser ("\prequire MidiShare version 1.82 or later");
 	if (MidiGetNamedAppl (OMSDriverName) > 0) AlertUser ("\pOMS driver is still running");
 	if (!SetUpMidi()) 			AlertUser ("\pMidiShare initialization failed");
 	foreGround = true;
