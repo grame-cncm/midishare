@@ -105,9 +105,15 @@ unsigned long LoadConfigNum (char * section, char* key, char* fullname, int def)
 }
 
 //________________________________________________________________________
-void SaveConfig (char * section, char* key, char* name, char* fullname)
+int SaveConfig (char * section, char* key, char* name, char* fullname)
 {
-        write_private_profile_string (section, key, name, fullname);
+        return write_private_profile_string (section, key, name, fullname);
+}
+
+//________________________________________________________________________
+int SaveConfigNum (char * section, char* key, int val, char* fullname)
+{
+       return write_private_profile_int (section, key, val, fullname);
 }
 
 //________________________________________________________________________

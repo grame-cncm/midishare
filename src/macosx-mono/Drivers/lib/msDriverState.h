@@ -34,6 +34,7 @@ short GetCnx (char * cnxString, short index);
 char * GetProfileFullName (char * name);
 char* LoadConfig (char * section, char* key, char* fullname, char* def);
 unsigned long LoadConfigNum (char * section, char* key, char* fullname, int def);
-void SaveConfig (char * section, char* key, char* name, char* fullname);
+int SaveConfig (char * section, char* key, char* name, char* fullname);
+int SaveConfigNum (char * section, char* key, int val, char* fullname);
 void LoadSlot (char * section, char* fullname, char* drivername);
 void SaveSlot (char * section, char* fullname,char* drivername);
