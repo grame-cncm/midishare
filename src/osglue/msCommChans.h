@@ -83,10 +83,8 @@ int		CCDec 		(CommunicationChan cc);
 int		CCRefCount 	(CommunicationChan cc);
 short	CCGetID 	(CommunicationChan cc);
 
-/*
 void	CCSetInfos 	(CommunicationChan cc, void * infos);
 void *	CCGetInfos 	(CommunicationChan cc);
-*/
 
 #ifdef __cplusplus
 }

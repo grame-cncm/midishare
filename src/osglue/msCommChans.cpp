@@ -304,14 +304,6 @@ int		CCDec 		(CommunicationChan cc)		{ return --cc->refcount; }
 int		CCRefCount 	(CommunicationChan cc)		{ return cc->refcount; }
 short	CCGetID 	(CommunicationChan cc)		{ return cc->id; }
 
-/*
-void CCSetInfos (CommunicationChan cc, void * infos)
-{
-	PP(cc->cc)->SetInfos (infos);
-}
+void 	CCSetInfos (CommunicationChan cc, void * infos)	{ PP(cc->cc)->SetInfos (infos); }
+void * 	CCGetInfos (CommunicationChan cc)				{ return PP(cc->cc)->GetInfos (); }
 
-void * CCGetInfos (CommunicationChan cc)
-{
-	return PP(cc->cc)->GetInfos ();
-}
-*/
