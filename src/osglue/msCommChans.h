@@ -76,7 +76,6 @@ long	CCRead 		(CommunicationChan cc, void *buff, long len);
 
 long	CCRTWrite 	(CommunicationChan cc, void *buff, long len);
 long	CCRTRead 	(CommunicationChan cc, void *buff, long len);
-int	CCRTReadHandler (CommunicationChan cc);
 
 int		CCInc 		(CommunicationChan cc);
 int		CCDec 		(CommunicationChan cc);
