@@ -89,16 +89,6 @@ void SpecialSleep  (TMSGlobalPtr g)
 		if (gDrvRefs[i]) UnloadDriver(gDrvRefs[i]);
 		gDrvRefs[i] = 0;
 	}
-
-/*	WinDriverPtr next, drv = gWinRsrc.drivers;
-	gWinRsrc.drivers = 0;
-	while (drv) {
-		next = drv->next;
-		FreeLibrary (drv->libRef);
-		DisposeMemory (drv);
-		drv = next;
-	}
-*/
 }
 
 /*------------------------------------------------------------------------------*/
