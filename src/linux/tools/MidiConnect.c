@@ -83,11 +83,11 @@ int GetState (char * state)
 
 	if ( !strcmp (state, "true") ||
 		 !strcmp (state, "TRUE") ||
-		 !strcmp (state, "True"));	return 1;
+		 !strcmp (state, "True"))	return 1;
 
 	if ( !strcmp (state, "false") ||
 		 !strcmp (state, "FALSE") ||
-		 !strcmp (state, "False"));	return 0;
+		 !strcmp (state, "False"))	return 0;
 	return -1;
 }
 
@@ -96,10 +96,7 @@ int main (int argc, char *argv[])
 {
 	int src, dst, state;
 
-
-	fprintf (stdout, "MidiConnect : %d args\n", argc);
 	if (argc != 4) usage (argv[0]);
-	
 	CheckMidiShare (argv[0]);
 	
 	src= GetAppl (argv[1]);
@@ -111,7 +108,6 @@ int main (int argc, char *argv[])
 	state = GetState (argv[3]);
 	if (!CheckState (state)) ErrState (argv[0], argv[3]);
 
-	fprintf (stdout, "MidiConnect %d %d %d\n", src, dst, state);
 	MidiConnect(src, dst, state);
 	return 0;        
 }
