@@ -1,5 +1,7 @@
 
 INC = ../Include
+LIB = -Wl,-L../library -lMidiShare
+
 ToolSet = MidiGetVersion MidiCountAppls MidiGetIndAppl MidiGetName MidiGetNamedAppl MidiConnect MidiIsConnected MidiGetTime
 InstallDir = $(HOME)/bin
 PublicDir  = /usr/local/bin
@@ -8,28 +10,28 @@ ManDir     = /usr/local/man/man1
 all : $(ToolSet) 
 
 MidiGetVersion : MidiGetVersion.c
-	gcc MidiGetVersion.c  -g -I$(INC) -o MidiGetVersion -lMidiShare 
+	gcc MidiGetVersion.c  -g -I$(INC) -o MidiGetVersion $(LIB) 
 
 MidiCountAppls : MidiCountAppls.c
-	gcc MidiCountAppls.c  -g -I$(INC) -o MidiCountAppls -lMidiShare 
+	gcc MidiCountAppls.c  -g -I$(INC) -o MidiCountAppls $(LIB) 
 
 MidiGetIndAppl : MidiGetIndAppl.c
-	gcc MidiGetIndAppl.c  -g -I$(INC) -o MidiGetIndAppl -lMidiShare 
+	gcc MidiGetIndAppl.c  -g -I$(INC) -o MidiGetIndAppl $(LIB) 
 
 MidiGetName : MidiGetName.c
-	gcc MidiGetName.c  -g -I$(INC) -o MidiGetName -lMidiShare 
+	gcc MidiGetName.c  -g -I$(INC) -o MidiGetName $(LIB) 
 
 MidiGetNamedAppl : MidiGetNamedAppl.c
-	gcc MidiGetNamedAppl.c  -g -I$(INC) -o MidiGetNamedAppl -lMidiShare 
+	gcc MidiGetNamedAppl.c  -g -I$(INC) -o MidiGetNamedAppl $(LIB) 
 
 MidiConnect : MidiConnect.c
-	gcc MidiConnect.c  -g -I$(INC) -o MidiConnect -lMidiShare 
+	gcc MidiConnect.c  -g -I$(INC) -o MidiConnect $(LIB) 
 
 MidiIsConnected : MidiIsConnected.c
-	gcc MidiIsConnected.c  -g -I$(INC) -o MidiIsConnected -lMidiShare 
+	gcc MidiIsConnected.c  -g -I$(INC) -o MidiIsConnected $(LIB) 
 
 MidiGetTime: MidiGetTime.c
-	gcc MidiGetTime.c  -g -I$(INC) -o MidiGetTime -lMidiShare 
+	gcc MidiGetTime.c  -g -I$(INC) -o MidiGetTime $(LIB) 
 
 
 install : $(ToolSet)
