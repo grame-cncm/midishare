@@ -17,8 +17,7 @@ OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
       $(C)/msFilter.o $(C)/msMail.o $(C)/msTasks.o $(C)/msXmtRcv.o \
       $(K)/msHandler.o $(K)/msInit.o $(K)/msSmpte.o $(K)/msTime.o \
       $(M)/msEvents.o $(M)/msFields.o $(M)/msMem.o $(M)/msMemory.o $(M)/msSeq.o \
-      $(S)/msSorter.o \
-      $(D)/msFrcv.o  $(D)/msFxmt.o
+      $(S)/msSorter.o $(D)/msDriver.o
 
 $(TARGET) : $(OBJ)
 	ld -m elf_i386 -r -o $(TARGET) $(OBJ)
@@ -87,13 +86,3 @@ Memory/msMemory.o: Headers/lflifo.h Headers/msSync.h Headers/msMem.h
 Memory/msSeq.o: Headers/msSeq.h Headers/msDefs.h Headers/msTypes.h
 Memory/msSeq.o: Headers/lflifo.h Headers/msSync.h Headers/msEvents.h
 Sorter/msSorter.o: Headers/msSorter.h
-Drivers/msFrcv.o: Headers/msFrcv.h Headers/msDefs.h Headers/msTypes.h
-Drivers/msFrcv.o: Headers/msKernel.h Headers/lffifo.h Headers/msSync.h
-Drivers/msFrcv.o: Headers/lflifo.h Headers/msAppls.h Headers/msMemory.h
-Drivers/msFrcv.o: Headers/msSorter.h Headers/msDriver.h Headers/msEvents.h
-Drivers/msFrcv.o: Headers/msXmtRcv.h
-Drivers/msFxmt.o: Headers/msFxmt.h Headers/msDefs.h Headers/msTypes.h
-Drivers/msFxmt.o: Headers/msKernel.h Headers/lffifo.h Headers/msSync.h
-Drivers/msFxmt.o: Headers/lflifo.h Headers/msAppls.h Headers/msMemory.h
-Drivers/msFxmt.o: Headers/msSorter.h Headers/msDriver.h Headers/msEvents.h
-Drivers/msFxmt.o: Headers/msXmtRcv.h
