@@ -26,10 +26,14 @@
 #include "msTime.h"
 
 /*===========================================================================
-  Internal functions prototypes
+  Internal functions implementation
   =========================================================================== */
-static void InitHorloge (TMSGlobalPtr g);
-
+static void InitHorloge( TMSGlobalPtr g)
+{
+	THorlogePtr h = &g->currTime;
+    h->time        = 0; 
+    h->reenterCount = -1; 
+}
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -71,15 +75,4 @@ void OpenTime( TMSGlobalPtr g)
 {
 	InitHorloge( g);
 	SorterInit( Sorter(g), 10);
-}
-
-
-/*===========================================================================
-  Internal functions implementation
-  =========================================================================== */
-static void InitHorloge( TMSGlobalPtr g)
-{
-	THorlogePtr h = &g->currTime;
-    h->time        = 0; 
-    h->reenterCount = -1; 
 }
