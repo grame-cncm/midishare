@@ -47,6 +47,7 @@ static void * sok_accept (void * ptr)
 	pthread_setcancelstate (PTHREAD_CANCEL_ENABLE, &old);
 	pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, &old);
 	sok->AcceptLoop ();
+	return 0;
 }
 
 static void * sok_listen (void * ptr)
@@ -56,6 +57,7 @@ static void * sok_listen (void * ptr)
 	pthread_setcancelstate (PTHREAD_CANCEL_ENABLE, &old);
 	pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, &old);
 	sok->ListenLoop ();
+	return 0;
 }
 
 

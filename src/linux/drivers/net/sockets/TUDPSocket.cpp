@@ -78,6 +78,7 @@ static void * sok_listen (void * ptr)
 	pthread_setcancelstate (PTHREAD_CANCEL_ENABLE, &old);
 	pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, &old);
 	sok->ThreadLoop ();
+	return 0;
 }
 
 //____________________________________________________________

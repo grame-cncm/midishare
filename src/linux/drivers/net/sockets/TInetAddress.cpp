@@ -55,7 +55,7 @@ Boolean TInetAddress::SetAddress (IPNum ip)
 	struct in_addr ipa;
 	ipa.s_addr = ip;
 	Initialize();
-	SetAddress (inet_ntoa (ipa));
+	return SetAddress (inet_ntoa (ipa));
 }
 
 //____________________________________________________________

@@ -44,8 +44,8 @@ typedef struct {
 	unsigned long missing;
 } CnxReport, *CnxReportPtr;
 
-enum { kDefaultLANPort=4950, kDefaultLANLatency = 10, kDefaultLANGroupTime = 10 };
-enum { kDefaultWANPort=4951, kDefaultWANLatency = 1500, kDefaultWANGroupTime = 200 };
+enum {  kDefaultLANPort=4950, kDefaultLANLatency = 10, kDefaultLANGroupTime = 10,
+	kDefaultWANPort=4951, kDefaultWANLatency = 1500, kDefaultWANGroupTime = 200 };
 
 #define kWANVersion		100
 

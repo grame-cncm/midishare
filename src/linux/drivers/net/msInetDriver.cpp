@@ -25,6 +25,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <signal.h> 
 #include <time.h> 
 #include <pthread.h> 
@@ -275,12 +277,15 @@ static int checkopt (int argc, char *argv[], char opt)
 //_______________________________________________________________________
 static void checkNetParams (NetConfig *net, Boolean serverMode)
 {
-	if (net->port == -1) 
+	if (net->port == -1) {
 		net->port = serverMode ? kDefaultWANPort : kDefaultLANPort;
-	if (net->maxlat == -1) 
+	}
+	if (net->maxlat == -1) {
 		net->maxlat = serverMode ? kDefaultWANLatency : kDefaultLANLatency;
-	if (net->groupTime == -1) 
+	}
+	if (net->groupTime == -1) {
 		net->groupTime = serverMode ? kDefaultWANGroupTime : kDefaultLANGroupTime;
+	}
 }
 
 //_______________________________________________________________________
