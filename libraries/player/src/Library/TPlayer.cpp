@@ -344,7 +344,7 @@ void TPlayer::GetEndScore (PlayerStatePtr ps)
 // Loop management
 /*--------------------------------------------------------------------------*/
 
-void TPlayer::SetLoop (short state) {fLoopManager->SetLoop(state);}
+void TPlayer::SetLoop (Boolean state) {fLoopManager->SetLoop(state);}
 
 /*--------------------------------------------------------------------------*/
 

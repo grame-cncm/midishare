@@ -83,7 +83,7 @@ class TPlayer :public  TMidiAppl{
 		 void SetPosMs (long date_ms);
 		
 		 // Loop management
-		 void SetLoop (short state) ;
+		 void SetLoop (Boolean state) ;
 		 long SetLoopStartBBU (PosPtr pos);
 		 long SetLoopEndBBU (PosPtr pos);
 		 long SetLoopStartMs(long date_ms);

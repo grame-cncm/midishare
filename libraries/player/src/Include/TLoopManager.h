@@ -38,15 +38,15 @@ class TLoopManager {
 		TScoreFollowerPtr	fFollower;
 		TScoreMarkerPtr		fLoopEndMarker;
 		ULONG            	fLoopStart;
-		short 				fLoopState;
+		Boolean 			fLoopState;
 		
 	public :
 		
 		TLoopManager(TPlayerScorePtr score, ULONG tpq);
 		~TLoopManager ();
 		
-		void SetLoop (short state) {fLoopState = state;}
-		short GetLoop () {return fLoopState;}
+		void SetLoop (Boolean state) {fLoopState = state;}
+		Boolean GetLoop () {return fLoopState;}
 		Boolean IsLoopOn(){ return fLoopState == kLoopOn; }
 		Boolean IsLoopPlaced(){ return fLoopEndMarker->IsInserted(); }
 		

@@ -142,8 +142,8 @@ class TTicksTask {
 	
 		MidiEvPtr 	fTask;
 		ULONG 		fDate_ticks;
+		ULONG		fIndex;
 		Boolean		fStatus;
-		short		fIndex;
 	
 		void SetIdle() 		{fStatus = kTaskIdle;}
 		void SetRunning() 	{fStatus = kTaskRunning;}
@@ -153,8 +153,8 @@ class TTicksTask {
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
-		short GetIndex() {return fIndex;}
-		void  SetIndex(short index) {fIndex = index;}
+		ULONG GetIndex() {return fIndex;}
+		void  SetIndex(ULONG index) {fIndex = index;}
 			
 	public:
 	
