@@ -1,7 +1,7 @@
 /****************************************************************************
 *****************************************************************************
 *																			*
-*                     		msControl, version GTK							*
+*                     		msControl, GTK version 							*
 *																			*
 *****************************************************************************
 *****************************************************************************/
@@ -12,10 +12,10 @@
 #include "MidiShare.h"
 
 /****************************************************************************
-						Les variables globales de msControl 
+						Global variables for msControl  
 *****************************************************************************/
 
-static short 		gRefNum = -1;		// numéro de référence de msControl
+static short 		gRefNum = -1;		// msControl MidiShare reference number
 
 GtkObject 	*pitch, *velocity, *duration, 
 			*channel, *port, 
@@ -23,7 +23,7 @@ GtkObject 	*pitch, *velocity, *duration,
 
 
 /****************************************************************************
-						Definition des callbacks 
+						Callbacks definition
 *****************************************************************************/
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[] )
 	gtk_init (&argc, &argv);
 	gRefNum = MidiOpen("msControl");
 	
-	// Description des Adjustments
+	// Adjustments description  
 	pitch 	= gtk_adjustment_new (60.0, 1.0, 128.0, 1.0, 8.0, 1.0);
 	velocity= gtk_adjustment_new (64.0, 1.0, 128.0, 1.0, 8.0, 1.0);
 	duration= gtk_adjustment_new (250.0, 50.0, 2000.0, 1.0, 50.0, 1.0);
@@ -131,16 +131,14 @@ int main(int argc, char *argv[] )
 	pan		= gtk_adjustment_new (64.0, 0.0, 128.0, 1.0, 8.0, 1.0);
 
 
-	// Définition de la fenetre
+	// Window definition
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "msControl");
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
 
 	vbox = gtk_vbox_new (FALSE, 10);
-	//add(vbox, makeEventList(&gEventList));
 	
-	
-	// ajout des controleurs
+	// Add controllers
 	add_control(vbox, "Pitch", pitch);
 	add_control(vbox, "Vel", velocity);
 	add_control(vbox, "Dur", duration);
@@ -161,7 +159,7 @@ int main(int argc, char *argv[] )
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
 	
-	// connexion des signaux d'ajustement des valeurs
+	// Connexion of signals for value adjustement
 	gtk_signal_connect( pitch, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
 	gtk_signal_connect( velocity, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
 	gtk_signal_connect( duration, "value_changed", GTK_SIGNAL_FUNC(note_action), NULL);
@@ -173,7 +171,7 @@ int main(int argc, char *argv[] )
 	gtk_signal_connect( mod, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)1L);
 	gtk_signal_connect( pan, "value_changed", GTK_SIGNAL_FUNC(ctrl_action), (void*)10L);
 
-	// connexion des signaux
+	// Connexion of signals
 	gtk_signal_connect(
 			GTK_OBJECT(window), "delete_event", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
@@ -184,10 +182,6 @@ int main(int argc, char *argv[] )
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
 	
-	// installation de la fonction periodique d'affichage 
-	// des événements reçus
-	//gtk_timeout_add( 100, display_events, NULL);
-
 	gtk_main ();
 
 	return(0);

@@ -1,7 +1,7 @@
 /****************************************************************************
 *****************************************************************************
 *																			*
-*                     		msDisplay, version GTK							*
+*                     		msDisplay, GTK version							*
 *																			*
 *****************************************************************************
 *****************************************************************************/
@@ -12,16 +12,16 @@
 #include "MidiShare.h"
 
 /****************************************************************************
-						Les variables globales de msDisplay 
+						Global variables for msDisplay  
 *****************************************************************************/
 
-static short 		gRefNum = -1;		// numéro de référence MidiShare de msDisplay
-static GtkWidget*	gEventList = 0;		// liste des événements reçus
-static long			gCount = 0;			// compte des événements reçus
+static short 		gRefNum = -1;		// msDisplay MidiShare reference number
+static GtkWidget*	gEventList = 0;		// received events list
+static long			gCount = 0;			// received events number
 
 
 /****************************************************************************
-						Construction de la liste d'affichage
+						Build the display list
 *****************************************************************************/
 static GtkWidget* makeEventList(GtkWidget** plist)
 {
@@ -46,7 +46,7 @@ static GtkWidget* makeEventList(GtkWidget** plist)
 
 
 /****************************************************************************
-				Affichage des événements recus
+				Display received events
 *****************************************************************************/
 static char* gEvNames_0_19[] = {
 		"Note","KeyOn","KeyOff","KeyPress","CtrlChange","ProgChange",
@@ -115,7 +115,7 @@ void display_1_event(MidiEvPtr e)
 		if (gCount>MAXEV) gtk_clist_remove(GTK_CLIST(gEventList),0);
 }
 
-// Fonction periodique GTK
+// GTK periodical function 
 gint display_events( gpointer data )
 {
 	MidiEvPtr e;
@@ -123,7 +123,7 @@ gint display_events( gpointer data )
 	
 	c = MidiCountEvs(gRefNum);
 	
-	// si on prend du retard on élimine des événements
+	// if we are too late, remove some events
 	while (c > 3*MAXEV) { MidiFreeEv(MidiGetEv(gRefNum)); c--; }
 	
 	if (c>0) {
@@ -140,7 +140,7 @@ gint display_events( gpointer data )
 
 										
 /****************************************************************************
-						Definition des callbacks 
+						Callbacks definition
 *****************************************************************************/
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
@@ -167,7 +167,7 @@ int main(int argc, char *argv[] )
 	gtk_init (&argc, &argv);
 	gRefNum = MidiOpen("msDisplay");
 
-	// Construction de l'interface utilisateur
+	// User interface construction
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "msDisplay");
 	gtk_container_set_border_width(GTK_CONTAINER(window), 10);
@@ -178,7 +178,7 @@ int main(int argc, char *argv[] )
 	gtk_container_add(GTK_CONTAINER(window), vbox);	
 	gtk_widget_show_all (window);
 	
-	// connexion des signaux
+	// Connexion of signal
 	gtk_signal_connect(
 			GTK_OBJECT(window), "delete_event", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
@@ -189,8 +189,7 @@ int main(int argc, char *argv[] )
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
 	
-	// installation de la fonction periodique d'affichage 
-	// des événements reçus
+	// Install the periodical function which displays received events
 	gtk_timeout_add( 100, display_events, NULL);
 
 	gtk_main ();
