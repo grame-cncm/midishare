@@ -33,4 +33,6 @@ MSFunctionType(short) OldMSCountFields( MidiEvPtr e, TMSGlobalPtr g);
 MSFunctionType(Boolean) MSGetPortState (short port, TMSGlobalPtr g);
 MSFunctionType(void) 	MSSetPortState (short port, Boolean state, TMSGlobalPtr g);
 
+MSFunctionType(SlotRefNum)  OldAddSlot (short refnum, TMSGlobalPtr g);
+
 #endif
