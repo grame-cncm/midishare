@@ -32,6 +32,9 @@
 /* constants definitions             */
 #define MidiShareDrvRef		127
 
+#define ModemSlot	"\pModem"	
+#define PrinterSlot	"\pPrinter"	
+
 #define StateFile	"\pmsSerial Driver State"	
 enum { StateCreator = 'MsSr', StateType = 'stSr' };	
 
@@ -72,35 +75,6 @@ static void Sleep (short r)
 	CloseMidi ();
 	doneFlag = true;
 #endif
-}
-
-/* -----------------------------------------------------------------------------*/
-static void PStrCpy (unsigned char *src, unsigned char * dst)
-{
-	short i = src[0] + 1;
-	while (i--)
-		*dst++ = *src++;
-}
-
-/* -----------------------------------------------------------------------------*/
-static Boolean SlotInfo (SlotRefNum slot, TSlotInfos * infos)
-{
-	Str32 modem = "\pModem";
-	Str32 printer = "\pPrinter";
-	unsigned char * name = 0;
-	SerialDrvPtr data = GetData ();
-	if (infos) {
-		if (slot.slotRef == data->slot[kModem].slotRef)
-			name = modem;
-		else if (slot.slotRef == data->slot[kPrinter].slotRef)
-			name = printer;
-	 	if (name) {
-			PStrCpy (name, infos->name);
-			infos->direction = MidiInputOutputSlot;
-			return true;
-		}
-	}
-	return false;
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -208,7 +182,7 @@ Boolean SetUpMidi ()
 {
 	TDriverInfos infos = { SerialDriverName, 100, 0};
 	SlotRefNum sref; short refNum;
-	TDriverOperation op = { WakeUp, Sleep, SlotInfo, 0, 0 }; 
+	TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	SerialDrvPtr data = GetData ();
 	
 	DataInit (data);
@@ -222,12 +196,12 @@ Boolean SetUpMidi ()
 		return false;
 
 	data->refNum = refNum;
-	sref = MidiAddSlot (refNum);
+	sref = MidiAddSlot (refNum, ModemSlot, MidiInputOutputSlot);
 	if (sref.slotRef >= 0) {
 		data->slot[kModem] = sref;
 		data->slotIndex[Slot(sref)] = kModem;
 	}
-	sref = MidiAddSlot (refNum);
+	sref = MidiAddSlot (refNum, PrinterSlot, MidiInputOutputSlot);
 	if (sref.slotRef >= 0) {
 		data->slot[kPrinter] = sref;
 		data->slotIndex[Slot(sref)] = kPrinter;
