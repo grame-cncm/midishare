@@ -109,13 +109,14 @@
 #define typeRcvAlarm       150   /* RcvAlam         		*/
 #define typeApplAlarm      151   /* ApplAlam        		*/
 
-#define typeMidiOpen       152
-#define typeMidiOpenRes    153   /* server reply to MidiOpen */
-#define typeMidiClose      154
-#define typeMidiConnect    155
-#define typeMidiSetName    156
-#define typeMidiSetInfo    157
-#define typeMidiSetFilter  158
+#define typeMidiConnect    152
+#define typeMidiSetName    153
+#define typeMidiSetInfo    154
+#define typeMidiSetFilter  155
+
+#define typeMidiOpen       156
+#define typeMidiOpenRes    157   /* server reply to MidiOpen */
+#define typeMidiClose      158
 
 #define typeReserved       159   /*159..254 reserved for future extensions */
 
