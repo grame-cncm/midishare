@@ -17,6 +17,9 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
+  
+  modifications history:
+   [08-09-99] DF - adaptation to new data structures
 
 */
 
@@ -24,17 +27,16 @@
 
 #include "msTypes.h"
 
-#include "msKernel.h"
-#include "msDispatch.h"
 #include "msAlarms.h"
 #include "msAppFun.h"
 #include "msConnx.h"
+#include "msDispatch.h"
 #include "msEvents.h"
-#include "msExtern.h"
 #include "msFields.h"
 #include "msFilter.h"
 #include "msInit.h"
 #include "msKernel.h"
+#include "msMail.h"
 #include "msSeq.h"
 #include "msSync.h"
 #include "msTasks.h"
@@ -135,11 +137,11 @@ MSFunctionType(unsigned long) MDesiredSpace(TMSGlobalPtr g) {
 }
 
 MSFunctionType(MidiEvPtr) MNewCell(TMSGlobalPtr g) {
-  return MSNewCell (Memory(g));
+  return MSNewCell (FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MFreeCell(MidiEvPtr e, TMSGlobalPtr g) {
-  MSFreeCell (e, Memory(g));
+  if (e) MSFreeCell (e, FreeList(Memory(g)));
 }
 
 MSFunctionType(unsigned long) MGrowSpace(long n, TMSGlobalPtr g) {
@@ -147,45 +149,45 @@ MSFunctionType(unsigned long) MGrowSpace(long n, TMSGlobalPtr g) {
 }
 
 MSFunctionType(MidiEvPtr) MNewEv(short typeNum, TMSGlobalPtr g) {
-  return MSNewEv (typeNum, Memory(g));
+  return MSNewEv (typeNum, FreeList(Memory(g)));
 }
 
 MSFunctionType(MidiEvPtr) MCopyEv(MidiEvPtr e, TMSGlobalPtr g) {
-  return MSCopyEv (e, Memory(g));
+  return MSCopyEv (e, FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MFreeEv(MidiEvPtr e, TMSGlobalPtr g) {
-  MSFreeEv (e, Memory(g));
+  MSFreeEv (e, FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MSetField(MidiEvPtr e, long f, long v, TMSGlobalPtr g) {
-  MSSetField (e,f,v, Memory(g));
+  MSSetField (e,f,v);
 }
 
 MSFunctionType(long) MGetField(MidiEvPtr e, long f, TMSGlobalPtr g) {
-  return MSGetField (e,f, Memory(g));
+  return MSGetField (e,f);
 }
 
 MSFunctionType(void) MAddField(MidiEvPtr e, long v, TMSGlobalPtr g) {
-  MSAddField (e,v, Memory(g));
+  MSAddField (e,v, FreeList(Memory(g)));
 }
 
 MSFunctionType(long) MCountFields(MidiEvPtr e, TMSGlobalPtr g) {
-  return MSCountFields (e, Memory(g));
+  return MSCountFields (e);
 }
 
 /*------------------------- compatibility support ----------------------------*/
 #ifdef __Macintosh__
 MSFunctionType(void) OldMSSetField (MidiEvPtr e, short f, long v, TMSGlobalPtr g) {
-  MSSetField (e, (long)f, v, Memory(g));
+  MSSetField (e, (long)f, v);
 }
 
 MSFunctionType(long) OldMSGetField (MidiEvPtr e, short f, TMSGlobalPtr g) {
-  return MSGetField (e, (long)f, Memory(g));
+  return MSGetField (e, (long)f);
 }
 
 MSFunctionType(short) OldMSCountFields( MidiEvPtr e, TMSGlobalPtr g) {
-  return (short)MSCountFields (e, Memory(g));
+  return (short)MSCountFields (e);
 }
 
 MSFunctionType(Boolean) MSGetPortState(short port, TMSGlobalPtr g) {
@@ -200,7 +202,7 @@ MSFunctionType(void) MSSetPortState(short port, Boolean state, TMSGlobalPtr g) {
 
 /*------------------------------- Sequence managing ---------------------------*/
 MSFunctionType(MidiSeqPtr) MNewSeq(TMSGlobalPtr g) {
-  return MSNewSeq (Memory(g));
+  return MSNewSeq (FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MAddSeq(MidiSeqPtr s, MidiEvPtr e, TMSGlobalPtr g) {
@@ -208,29 +210,29 @@ MSFunctionType(void) MAddSeq(MidiSeqPtr s, MidiEvPtr e, TMSGlobalPtr g) {
 }
 
 MSFunctionType(void) MFreeSeq(MidiSeqPtr s, TMSGlobalPtr g) {
-  MSFreeSeq (s, Memory(g));
+  MSFreeSeq (s, FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MClearSeq(MidiSeqPtr s, TMSGlobalPtr g) {
-  MSClearSeq (s, Memory(g));
+  MSClearSeq (s, FreeList(Memory(g)));
 }
 
 MSFunctionType(void) MApplySeq(MidiSeqPtr s, ApplyProcPtr proc, TMSGlobalPtr g) {
-  MSApplySeq (s, proc, Memory(g));
+  MSApplySeq (s, proc);
 }
 
 
 /*------------------------------------ Sending --------------------------------*/
 MSFunctionType(void) MSendIm(short refNum, MidiEvPtr e, TMSGlobalPtr g) {
-  MSSendIm (refNum,e, Sorter(g));
+  MSSendAt (refNum,e, CurrTime(g), SorterList(g));
 }
 
 MSFunctionType(void) MSend(short refNum, MidiEvPtr e, TMSGlobalPtr g) {
-  MSSend (refNum,e, Sorter(g));
+  MSSend (refNum,e, SorterList(g));
 }
 
 MSFunctionType(void) MSendAt(short refNum, MidiEvPtr e, unsigned long d, TMSGlobalPtr g) {
-  MSSendAt (refNum,e,d, Sorter(g));
+  MSSendAt (refNum,e,d, SorterList(g));
 }
 
 
@@ -252,18 +254,28 @@ MSFunctionType(void) MFlushEvs(short refNum, TMSGlobalPtr g) {
 }
 
 
+/*----------------------------------- Mail boxes ------------------------------*/
+MSFunctionType(FarPtr(void)) MReadSync(FarPtr(void) FAR * adrMem, TMSGlobalPtr g) {
+  return MSReadSync (adrMem);
+}
+
+MSFunctionType(FarPtr(void)) MWriteSync(FarPtr(void) FAR * adrMem, FarPtr(void) val, TMSGlobalPtr g) {
+  return MSWriteSync (adrMem, val);
+}
+
+
 /*---------------------------------- Task Managing ----------------------------*/
 
 MSFunctionType(void) MCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3, TMSGlobalPtr g) {
-  MSCall (routine,date,refNum,a1,a2,a3, Memory(g), Sorter(g));
+  MSCall (routine,date,refNum,a1,a2,a3, FreeList(Memory(g)), SorterList(g));
 }
 
 MSFunctionType(MidiEvPtr) MTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3, TMSGlobalPtr g) {
-  return MSTask (routine,date,refNum,a1,a2,a3, Memory(g), Sorter(g));
+  return MSTask (routine,date,refNum,a1,a2,a3, FreeList(Memory(g)), SorterList(g));
 }
 
 MSFunctionType(MidiEvPtr) MDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3, TMSGlobalPtr g) {
-  return MSDTask (routine,date,refNum,a1,a2,a3, Memory(g), Sorter(g));
+  return MSDTask (routine,date,refNum,a1,a2,a3, FreeList(Memory(g)), SorterList(g));
 }
 
 MSFunctionType(void) MForgetTask(MidiEvPtr FAR *e, TMSGlobalPtr g) {
