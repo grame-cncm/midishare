@@ -76,10 +76,11 @@
 /*_______________________________________________________________________*/
 
 typedef struct TMachine {
-	struct tq_struct 	timerTask;  	/* timer task */
+	struct tq_struct 	timerTask;  /* timer task 						*/
 	NEW_WAIT_QUEUE		stopQueue;	/* stop queue (for cleanup_module ) */
-	struct timeval		time;		/* for timer management */
-	Boolean 		status;    	/* running mode  */
+	struct timeval		time;		/* for timer management 			*/
+	long				phase;	/* used to count ClockHandler calls	*/
+	Boolean 			status;    	/* running mode  					*/
 } TLinux, * TLinuxPtr;
 
 typedef struct {
@@ -323,36 +324,30 @@ static void InitMachine (TLinuxPtr machine)
 	machine->timerTask.routine = TimerTask;   	/* The function to run */
 	machine->timerTask.data = gMem;        		/* the arg parameter to the interrupt routine : the MidiShare global data */
 	INIT_WAIT_QUEUE(machine->stopQueue);
+	machine->phase = 0;
 	machine->status = true;
 }
 
 /*__________________________________________________________________________*/
 
+
+/* 	The timer resolution is defined by constant HZ. In order
+	to call ClockHandler() 1000 times per second, we have to 
+	call ClockHandler() 1000/HZ times per TimerTask. We have also
+	to take into account that HZ may not be a divider of 1000 or
+	can even be greater than 1000 hz.	
+*/	
 static void TimerTask(void * arg)
 {
 	TMSGlobalPtr g  = (TMSGlobalPtr) arg;
 	TLinuxPtr machine = (TLinuxPtr) g->local;
-	int i;
 	
-	/*
-	long sec = machine->time.tv_sec;
-	long micro = machine->time.tv_usec;
-	int n;
-	
-	do_gettimeofday(&machine->time);
-	if (sec == machine->time.tv_sec){
-		n = (machine->time.tv_usec - micro)/1000;
-	}else {
-		n = (machine->time.tv_usec + 1000000 - micro)/1000;
-	}
-	*/
-	
-	/* As the timer resolution is 100 HZ, does 10 ClockHandler per interrupt */ 
-		
-	if (!machine->status) {
+	if (machine->status == 0) {
 		wake_up_interruptible(&machine->stopQueue);   
-  	}else {
-		for (i = 0; i<10; i++) ClockHandler(g);
+  	} else {
+		long i = machine->phase;
+		while (i<1000) { ClockHandler(g); i+=HZ; }
+		machine->phase = i-1000;
 		queue_task(&machine->timerTask, &tq_timer);  
   	}
 }
