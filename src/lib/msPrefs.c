@@ -47,7 +47,7 @@ static char * GetProfileFullName ()
 	static char  buff [1024];
 	const char* home = getenv("HOME");
 	if (home) {
-		sprintf (buff, "%s\/%s\/%s", home,MidiShareDirectory, profileName);
+		sprintf (buff, "%s/%s/%s", home,MidiShareDirectory, profileName);
 		return buff;
 	}
 	return profileName;
