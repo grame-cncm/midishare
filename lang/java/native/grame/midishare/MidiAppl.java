@@ -204,12 +204,11 @@ public class MidiAppl{
 			}
 				
 			if (refnum > 0){
+				if (appl != null) appl.Close();
 				ApplClose(refnum);
 				Midi.Close(refnum);
 				refnum = -1; 
 			}
-			
-		 	if (appl != null) appl.Close();
 		}
 		
 		
@@ -249,7 +248,7 @@ This class allows a simpler manipulation of MidiShare applications in Java.
 A MidiNativeAppl instance is associated to a MidiShare application. Java code for
 Alarms and Tasks is <b> directly called from the native side</b>. 
 Use this class with caution  : since Java code is called from a native real-time thread, 
-it has to be fast otherwise the application may ruin real-time preformances of the machine.
+it has to be fast otherwise the application may ruin real-time performances of the machine.
 */
 public class MidiNativeAppl extends MidiAppl{
 
