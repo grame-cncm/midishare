@@ -2,6 +2,8 @@
 MidiShare changes history
 =========================
 
+v 1.84 : filters functions entry points added
+
 v 1.82 : bug in MSSend corrected
 		 internal change in slot infos management
 		 obsolete function MidiGetPortState returns true

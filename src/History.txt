@@ -9,6 +9,7 @@ v 1.82      : bug in MSSend corrected
 			  internal change in slot infos management
 			  Macintosh release : obsolete function MidiGetPortState returns true
 v 1.83      : Linux release : bug in differed task management corrected
+v 1.84      : Macintosh release : filters functions entry points added
 
 Tags :
 ------------------------
