@@ -23,20 +23,12 @@
 
 */
 
-
-#include <linux/kernel.h>
-#include <linux/module.h>
-
-#if CONFIG_MODVERSIONS==1
-#define MODVERSIONS
+#ifdef MODVERSIONS
 #include <linux/modversions.h>
 #endif
 
-#include <linux/fs.h>		/* for devices	*/
-#include <asm/uaccess.h>	/* for put_user	*/
-#include <linux/sched.h>	/* for current 	*/
-#include <linux/tty.h>		/* for tty_struct 	*/
-#include <linux/slab.h>
+#include <linux/kernel.h>
+#include <asm/uaccess.h>
 
 #include "msKernel.h"
 #include "msInit.h"
