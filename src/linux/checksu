@@ -1,0 +1,12 @@
+#!/bin/bash
+# 
+#
+
+if [ $(whoami) == root ]
+then
+	exit 0
+fi
+
+echo you must be root to run this script
+exit 1
+

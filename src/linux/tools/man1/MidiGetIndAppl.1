@@ -1,0 +1,23 @@
+.\" Copyright (c) 1999
+.\"	Grame - Computer Music Research Laboratory
+.\"
+.\"     @(#)MidiGetIndAppl.1	1.0 (Grame) 23/09/99
+.\"
+.TH MIDICONNECT 1 "23 September 1999" "" "MidiShare User's Manual"
+.SH NAME
+.B MidiGetIndAppl 
+- gives the reference of number of a MidiShare client from is order number.
+.SH SYNOPSIS
+.BI MidiGetIndAppl " index 
+.SH DESCRIPTION
+.B MidiGetIndAppl
+returns the reference of number of a MidiShare client application from is 
+order number. The " index " argument should be a number between 1 and the 
+total number of running clients. Uses 
+.B MidiCountAppls 
+to fetch this total number.
+.PP
+.SH "SEE ALSO"
+.BR MidiCountAppls (1),
+.BR MidiGetNamedAppl (1),
+
