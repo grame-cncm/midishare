@@ -40,6 +40,7 @@
 /* 			
 /* 13/02/98 : Correction of a bug with format 1 in FlushKeyOff
 /* 10/02/99 : Correction of a bug in writeEv
+/* 16/07/02 : Correction of a bug in write_sysex and read_sysex functions, new functions for typeStream
 /*****************************************************************************/
   
  
@@ -128,7 +129,7 @@
         new undef(),             /* $f4                         */
         new undef(),             /* $f5                         */
         new Data0Ev(),           /* $f6 :  14 typeTune          */
-        new sysEx(),             /* $f7 :  18 typeStream        */
+        new stream(),            /* $f7 :  18 typeStream        */
         new Data0Ev(),           /* $f8 :  10 typeClock         */
         new undef(),             /* $f9                         */
         new Data0Ev(),           /* $fa :  11 typeStart         */
@@ -181,7 +182,7 @@
  			new Data0Ev(),		/* 15 typeActiveSens	*/
  			new dont_write(),	/* 16 typeReset			*/
  			new sysEx(),		/* 17 typeSysEx			*/
- 			new sysEx(),		/* 18 typeStream		*/
+ 			new stream(),		/* 18 typeStream		*/
  		};
  
  
@@ -623,13 +624,36 @@
    	/*------------------------------------------------------------------*/
  
  	final int ReadVarLen() throws Exception{
-      	long val;
+      	int val;
       	short c;
  
-        if (((val = (long)input.read()) & 0x80) != 0){
+        if (((val = input.read()) & 0x80) != 0){
             val &= 0x7F;
             do {
                 val = (val<< 7) + ((c =  (short)input.read()) & 0x7F);
+                _cnt--;
+           } while ((c & 0x80) != 0);
+        }
+        _cnt--;       
+        return (int)val;
+ 	}
+ 	
+ 	/*------------------------------------------------------------------*/
+   	// read  var length
+   	/*------------------------------------------------------------------*/
+ 
+ 	final int ReadVarLen1(int ev) throws Exception{
+      	int val;
+      	short c;
+      	
+      	val = input.read();
+      	Midi.AddField(ev,val);
+ 
+        if ((val & 0x80) != 0){
+            val &= 0x7F;
+            do {
+                val = (val<< 7) + ((c =  (short)input.read()) & 0x7F);
+                Midi.AddField(ev,c);
                 _cnt--;
            } while ((c & 0x80) != 0);
         }
@@ -1663,15 +1687,69 @@ final class TrkHeader{
  
  final class  sysEx extends MfEvent {
  
- 	 final int read (MidiFileStream  mfile, short status)throws Exception{
+ 	final int read (MidiFileStream  mfile, short status)throws Exception{
+    	int ev1,ev2;
+    	int len;
+    	int c = 0;
+    	
+    	ev1 = Midi.NewEv(Midi.typeSysEx);			
+		ev2 = Midi.NewEv(Midi.typeStream);
+
+    	if ((ev1 != 0) && (ev2 != 0)){
+    		Midi.AddField( ev2, status);			/* store the first byte in the stream event */
+	    	len = mfile.ReadVarLen1(ev2);           /* message length bytes are put in the Stream event	*/
+	    	
+          	while(len-- > 0){
+                c = mfile.input.read();         /* read the datas       */
+                mfile._cnt--;
+                Midi.AddField(ev2, c);          /* and store them to the Stream event */
+                if (c != 0xF7)
+					Midi.AddField( ev1, c);		/* and store them to the SysEx event */
+          	}
+          	
+          	if (c == 0xF7) {					/* Complete SysEx */
+				Midi.FreeEv(ev2);
+				return ev1;
+			}else {								/* Stream */
+		 		Midi.FreeEv(ev1);
+				return ev2;
+			}	
+			
+	    } else throw new MidiException ("No more MidiShare event");
+  	 }
+ 	 
+    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+   		
+   		int i,count;
+ 	
+		count= Midi.CountFields( ev);
+		mfile.output.write( 0xF0);						/* sysex header			*/
+		mfile.WriteVarLen( count+1);					/* message length = bytes to be written + last 0xF7	*/
+		
+		for (i = 0; i< count; i++) {
+			mfile.output.write(Midi.GetField(ev,i));		
+		}
+		
+		mfile.output.write( 0xF7);						/* sysex end			*/
+ 	}
+ 
+  }
+ 
+ /*--------------------------------------------------------------------------*/
+ /* class stream                                                              */
+ /*--------------------------------------------------------------------------*/
+ 
+ final class stream extends MfEvent {
+ 
+ 	 final int read (MidiFileStream  mfile, short status) throws Exception{
     	int ev;
     	int len;
     	int c;
-    	
     
-    	if ((ev = Midi.NewEv( status == 0xF0 ? Midi.typeSysEx : Midi.typeStream)) != 0){
-          len = mfile.ReadVarLen();                     /* message length       */
-          while(len-- > 0){
+    	if ((ev = Midi.NewEv(Midi.typeStream)) != 0){
+    		Midi.AddField(ev, status);                  /* store the first byte in the stream event */
+          	len = mfile.ReadVarLen1(ev);                /* message length       */
+          	while(len-- > 0){
                 c = mfile.input.read();                 /* read the datas       */
                 mfile._cnt--;
                 Midi.AddField(ev, c);                   /* and store them to the event */
@@ -1682,22 +1760,16 @@ final class TrkHeader{
  	 
     final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
    		
-   		int i,e,count;
+   		int i,count;
  	
- 			count= Midi.CountFields( ev);
- 			if( Midi.GetType( ev)== Midi.typeSysEx)							/* sysex message		*/
- 				mfile.output.write( 0xF0);									/* sysex header			*/
- 			else															/* stream message		*/
- 				mfile.output.write( 0xF7);									/* header sysex	next 	*/
- 			mfile.WriteVarLen( count);										/* message length		*/
- 			
- 			for (i = 0; i< count; i++) {
- 				mfile.output.write(Midi.GetField(ev,i));		
- 			}
+ 		count= Midi.CountFields( ev);
+ 		for (i = 0; i< count; i++) {
+ 			mfile.output.write(Midi.GetField(ev,i));		
+ 		}
  	}
  
   }
- 
+
  
  /*--------------------------------------------------------------------------*/
  /* class Note                                                                                   
@@ -2182,7 +2254,7 @@ final  class keySign extends MfEvent{
         return ev;
     }
      
-      final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
      
      		int l;
  
