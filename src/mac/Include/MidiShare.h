@@ -24,7 +24,11 @@
 #define __MidiShare__
 
 #ifdef __POWERPC__
-# include "MidiSharePPC.h"
+# ifdef	MidiSharePPC_68k
+#	include "MidiSharePPC-68k.h"
+# else
+#	include "MidiSharePPC.h"
+# endif
 #else
 # include "MidiShare68k.h"
 #endif
