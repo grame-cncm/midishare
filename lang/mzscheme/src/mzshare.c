@@ -5,26 +5,36 @@
 /*            France */
 /*  	Grame  MidiPlayer for schemers. */
 /*  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" */
+/*   02-01-02 : Compilation for Macintosh : SL
+*/
+
+
+#ifdef __Macintosh__
+	#include "MidiShare.h"
+	#include "player.h"
+	#include "escheme.h"
+	#include "mstype.h"
+	#include "msUtils.h"
+	typedef Boolean BOOLEAN ;
+#endif
+
 
 #ifdef WIN32
-#include <sys/unistd.h>
-#include "include/MidiShare.h"
-#include "include/player.h"
-#include "include/escheme.h"
-#include "include/mstype.h"
+	#include <sys/unistd.h>
+	#include "include/MidiShare.h"
+	#include "include/player.h"
+	#include "include/escheme.h"
+	#include "include/mstype.h"
 #endif
 
 #ifdef __Linux__
-#include <MidiShare.h>
-#include <Player.h>
-#include <escheme.h>
-#include "mstype.h"
-#define MSALARMAPI
-
-typedef short BOOLEAN;
-
+	#include <MidiShare.h>
+	#include <Player.h>
+	#include <escheme.h>
+	#include "mstype.h"
+	#define MSALARMAPI
+	typedef short BOOLEAN;
 #endif
-
 
 
 #ifndef __UseMSThunking__
@@ -174,11 +184,22 @@ static Scheme_Object *sch_getIndAppl(int argc, Scheme_Object **argv)
 
 
 static Scheme_Object *sch_getNamedAppl(int argc, Scheme_Object **argv)
-{   MidiName v;
- if (!SCHEME_STRINGP(argv[0]))
+{  
+  #if defined(__Macintosh__) && defined(__MacOS9__)
+    unsigned char buffer [128];
+    char* v;
+  if (!SCHEME_STRINGP(argv[0]))
    scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
- v = SCHEME_STR_VAL(argv[0]);
- return scheme_make_integer(MidiGetNamedAppl(v));
+ 	 v = SCHEME_STR_VAL(argv[0]);
+	 cTopCopy (buffer, v);
+ 	 return scheme_make_integer(MidiGetNamedAppl(buffer));
+ #else
+ 	MidiName v;
+ 	if (!SCHEME_STRINGP(argv[0]))
+   scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
+ 	v = SCHEME_STR_VAL(argv[0]);
+	return scheme_make_integer(MidiGetNamedAppl(v));
+ #endif
 }
 
 /*----------------------------- SMPTE synchronization -------------------------*/
@@ -323,12 +344,24 @@ if (!SCHEME_INTP(argv[5]))
 
 
 static Scheme_Object *sch_open(int argc, Scheme_Object **argv)
-{   MidiName v;
- if (!SCHEME_STRINGP(argv[0]))
-   scheme_wrong_type("midi-open", "string", 0, argc, argv);
- v = SCHEME_STR_VAL(argv[0]);
- return scheme_make_integer(MidiOpen(v));
+{  
+ #if defined(__Macintosh__) && defined(__MacOS9__)
+	unsigned char buffer [128];
+ 	char* v;
+ 	if (!SCHEME_STRINGP(argv[0]))
+   		scheme_wrong_type("midi-open", "string", 0, argc, argv);
+	 v = SCHEME_STR_VAL(argv[0]);
+	 cTopCopy (buffer, v);
+	 return scheme_make_integer(MidiOpen(buffer));
+ #else
+ 	MidiName v;
+ 	if (!SCHEME_STRINGP(argv[0]))
+   		scheme_wrong_type("midi-open", "string", 0, argc, argv);
+ 	v = SCHEME_STR_VAL(argv[0]);
+	return scheme_make_integer(MidiOpen(v));
+ #endif
 }
+ 
 
 static Scheme_Object *sch_close(int argc, Scheme_Object **argv)
 {   
@@ -341,14 +374,28 @@ static Scheme_Object *sch_close(int argc, Scheme_Object **argv)
 
 static Scheme_Object *sch_getName(int argc, Scheme_Object **argv)
 {   
- MidiName v;
- short nEnter = (short) SCHEME_INT_VAL(argv[0]);
- if (!SCHEME_INTP(argv[0]))
-   scheme_wrong_type("midi-get-name", "integer", 0, argc, argv);
- if ((nEnter < 0) || (nEnter >= MidiCountAppls())) /* test valide nAppl */
-   scheme_wrong_type("midi-get-name", "     positif and < MidiCountAppls        ", 0, argc, argv);
- v= MidiGetName(nEnter);
- return scheme_make_string(v);
+  #if defined(__Macintosh__) && defined(__MacOS9__)
+	 MidiName v;
+	 char buffer [128];
+	 
+	 short nEnter = (short) SCHEME_INT_VAL(argv[0]);
+	 if (!SCHEME_INTP(argv[0]))
+	   scheme_wrong_type("midi-get-name", "integer", 0, argc, argv);
+	 if ((nEnter < 0) || (nEnter >= MidiCountAppls())) /* test valide nAppl */
+	   scheme_wrong_type("midi-get-name", "     positif and < MidiCountAppls        ", 0, argc, argv);
+	 v= MidiGetName(nEnter);
+	pTocCopy (buffer, v);
+	return scheme_make_string(buffer);
+ #else
+ 	 MidiName v;
+	  short nEnter = (short) SCHEME_INT_VAL(argv[0]);
+	 if (!SCHEME_INTP(argv[0]))
+	   scheme_wrong_type("midi-get-name", "integer", 0, argc, argv);
+	 if ((nEnter < 0) || (nEnter >= MidiCountAppls())) /* test valide nAppl */
+	   scheme_wrong_type("midi-get-name", "     positif and < MidiCountAppls        ", 0, argc, argv);
+	 v= MidiGetName(nEnter);
+	 return scheme_make_string(v);
+ #endif
 }
 
 
@@ -1269,3 +1316,6 @@ Scheme_Object *scheme_initialize(Scheme_Env *env)
 
  return scheme_reload(env);
 }
+
+
+int main () {return 0;}

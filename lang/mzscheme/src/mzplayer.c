@@ -6,21 +6,29 @@
 /*  	Grame  MidiPlayer for schemers. */
 /*  "Welcome to Grame MidiShare(c)extension player, version 1.6.22 Copyright(c)2001 Jacques Herry" */
 
+
+#ifdef __Macintosh__
+	#include "MidiShare.h"
+	#include "player.h"
+	#include "escheme.h"
+	#include "mstype.h"
+	#include "msUtils.h"
+	typedef Boolean BOOLEAN ;
+#endif
+
 #ifdef WIN32
-#include "include/escheme.h"
-#include "include/player.h"
-#include "include/mstype.h"
-#include <stdlib.h>
+	#include "include/escheme.h"
+	#include "include/player.h"
+	#include "include/mstype.h"
+	#include <stdlib.h>
 #endif
 
 #ifdef __Linux__
-#include <Player.h>
-#include <escheme.h>
-#include "mstype.h"
-#define MSALARMAPI
-
-typedef short BOOLEAN;
-
+	#include <Player.h>
+	#include <escheme.h>
+	#include "mstype.h"
+	#define MSALARMAPI
+	typedef short BOOLEAN;
 #endif
 
 /* adapted from forum PLT on struct implement in C */ 
@@ -56,11 +64,21 @@ num_fields, char** field_names,int flags)
 
 static Scheme_Object *sch_openPlayer(int argc, Scheme_Object **argv)
 {   
- MidiName v;
- if (!SCHEME_STRINGP(argv[0]))
-   scheme_wrong_type("open-player", "string", 0, argc, argv);
- v = SCHEME_STR_VAL(argv[0]);
- return scheme_make_integer(OpenPlayer(v));
+ #if defined(__Macintosh__) && defined(__MacOS9__)
+	unsigned char buffer [128];
+ 	char* v;
+ 	 if (!SCHEME_STRINGP(argv[0]))
+   		scheme_wrong_type("open-player", "string", 0, argc, argv);
+ 		v = SCHEME_STR_VAL(argv[0]);
+ 		 cTopCopy (buffer, v);
+ 	 return scheme_make_integer(OpenPlayer(buffer));
+  #else	
+	 MidiName v;
+	 if (!SCHEME_STRINGP(argv[0]))
+	   scheme_wrong_type("open-player", "string", 0, argc, argv);
+	 v = SCHEME_STR_VAL(argv[0]);
+	 return scheme_make_integer(OpenPlayer(v));
+#endif
 }
 
 static Scheme_Object *sch_closePlayer(int argc, Scheme_Object **argv)
@@ -737,7 +755,9 @@ Scheme_Object *scheme_initialize(Scheme_Env *env)
   
   seq_type = SCHEME_INT_VAL(scheme_lookup_global(scheme_intern_symbol("*<midi-seq>*"),env));
   filter_type = SCHEME_INT_VAL(scheme_lookup_global(scheme_intern_symbol("*<midi-filter>*"),env));
-  smpte_loc_type= scheme_lookup_global(scheme_intern_symbol("#%struct:smpte-loc"),env);
+  #ifndef __Macintosh__
+  	smpte_loc_type= scheme_lookup_global(scheme_intern_symbol("#%struct:smpte-loc"),env);
+  #endif
   pos_type = scheme_make_type("<player-pos>"); 
  
   midi_file_infos_type = scheme_make_type("<midi-file-info>");
