@@ -4,11 +4,10 @@
 ;;
 ;; 			MIDISHARE MINI TUTORIAL
 ;;
-;; 	 This file is a small guided tour for using MidiShare with MCL3.9.
+;; 	 This file is a small guided tour for using MidiShare with MCL3.9 and later.
 ;;
 ;; INSTRUCTIONS :
-;; If MidiShare is not installed, you need to copy the "MidiShareª 1.68§" file
-;; into your system folder (actually the control panel folder) and reboot.
+;; If MidiShare is not installed, you need to install it (http://www.grame.fr/MidiShare/)
 ;;
 ;; Then you need to load the "MidiShare.lisp" file (Load cmd in the Eval menu). 
 ;; It contains the lisp interface to MidiShare.
@@ -154,9 +153,10 @@
 ;; to some source and destination applications. The MidiConnect function is used to 
 ;; connect or disconnect a source and a destination. The function takes 3 arguments :
 ;; the reference number of the source, the reference number of the destination and a
-;; boolean (T to connect and NIL to disconnect).
+;; state expressed as an integer value :
+;; -1 for "true" to connect and 0 for "false" to disconnect.
 
- (MidiConnect *refnum* 0 t)				; <== EVALUATE THIS EXPRESSION.
+ (MidiConnect *refnum* 0 -1)				; <== EVALUATE THIS EXPRESSION.
 
 ;; Now MCL will be able to send events to the pseudo application "MidiShare", i.e. the
 ;; Midi drivers.
@@ -168,12 +168,12 @@
 
  (MidiIsConnected *refnum* 0)				; <== EVALUATE THIS EXPRESSION.
 
-;; The result is T meaning that MCL sends to MidiShare
+;; The result is 1 meaning that MCL sends to MidiShare
 
 
  (MidiIsConnected 0 *refnum*)				; <== EVALUATE THIS EXPRESSION.
 
-;; The result is NIL meaning that MidiShare does not send to MCL
+;; The result is 0 meaning that MidiShare does not send to MCL
 
 
 ;;===================================================================================
@@ -188,7 +188,7 @@
            (MidiGetName ref1) ref1)
    (dotimes (i (MidiCountAppls))
      (let ((ref2 (MidiGetIndAppl (1+ i))))
-       (if (MidiIsConnected ref1 ref2)
+       (if (= (MidiIsConnected ref1 ref2) 1)
          (format t " --> '~a' (ref num = ~d) ~%"
                  (MidiGetName ref2)  
                  ref2)))))				; <== EVALUATE THIS DEFINITION
@@ -213,7 +213,7 @@
            (MidiGetName ref1) ref1)
    (dotimes (i (MidiCountAppls))
      (let ((ref2 (MidiGetIndAppl (1+ i))))
-       (if (MidiIsConnected ref2 ref1)
+       (if (= (MidiIsConnected ref2 ref1) 1)
          (format t " <-- '~a' (ref num = ~d) ~%"
                  (MidiGetName ref2)  
                  ref2)))))				; <== EVALUATE THIS DEFINITION
@@ -235,13 +235,13 @@
  (defun send-note (pitch)
    (let ((event (MidiNewEv typeNote)))	; ask for a new note event
      (unless (%null-ptr-p event)	; if the allocation was succesfull
-       (chan event 0)			; set the midi channel to 0 (means channel 1)
-       (port event 0)			; set the destination port to Modem
+       (chan event 0)			    ; set the midi channel to 0 (means channel 1)
+       (port event 0)			    ; set the destination port to Modem
        (field event 0 pitch)		; set the pitch field
-       (field event 1 64)		; set the velocity field
-       (field event 2 1000)		; set the duration field to 1 second
+       (field event 1 64)		    ; set the velocity field
+       (field event 2 1000)		    ; set the duration field to 1 second
        (MidiSendIm *refnum* event))	; send the note immediatly
-     ))							; <== EVALUATE THIS DEFINITION
+     ))							    ; <== EVALUATE THIS DEFINITION
 
  (send-note 60)						; <== EVALUATE THIS EXPRESSION.
 
@@ -264,13 +264,13 @@
    (let ((event (MidiNewEv typeNote))	; ask for a new note event
          (date (MidiGetTime)))		; remember the current time
      (unless (%null-ptr-p event)	; if the allocation was succesful
-       (chan event 0)			; set the midi channel to 0 (means channel 1)
-       (port event 0)			; set the destination port to Modem
+       (chan event 0)			    ; set the midi channel to 0 (means channel 1)
+       (port event 0)			    ; set the destination port to Modem
        (field event 0 pitch)		; set the pitch field
-       (field event 1 64)		; set the velocity field
+       (field event 1 64)		    ; set the velocity field
        (field event 2 (- delay 1))	; set the duration field
 
-       (dotimes (i n)			; loop for the requested number of events
+       (dotimes (i n)			    ; loop for the requested number of events
          (MidiSendAt *refnum* 		; send a copy of the original note
                      (MidiCopyEv event)	 
                      (+ date (* i delay))))
@@ -295,7 +295,7 @@
 ;; (in the 'MidiShare suite' folder) 
 
 ;; Then we connect MCL to msDisplay
- (MidiConnect *refnum* (MidiGetNamedAppl "msDisplay") t) ; <== EVALUATE THIS EXPRESSION.
+ (MidiConnect *refnum* (MidiGetNamedAppl "msDisplay") -1) ; <== EVALUATE THIS EXPRESSION.
 
 (defun send-lyric (aString)
   (let ((event (MidiNewEv typeLyric)))
@@ -303,7 +303,7 @@
       (chan event 0)
        (port event 0)
        (text event aString)		
-       (MidiSendIm *refnum* event)) ))			; <== EVALUATE THIS DEFINITION
+       (MidiSendIm *refnum* event)) ))	; <== EVALUATE THIS DEFINITION
 
  (send-lyric "Hello")					; <== EVALUATE THIS EXPRESSION.
  
@@ -323,7 +323,7 @@
       (MidiSendIm *refnum* event)) ))			; <== EVALUATE THIS DEFINITION
 
 (progn
-  (send-text typeText "Hello")
+  (send-text typeTextual "Hello")
   (send-text typeCopyright "Mozart")
   (send-text typeSeqName "Concerto")
   (send-text typeInstrName "Piano")
@@ -341,14 +341,12 @@
     (unless (%null-ptr-p event)
       (chan event 0)
       (port event 0)
-
       (field event 0 format)		
       (field event 1 hours)		
       (field event 2 minutes)		
       (field event 3 seconds)		
       (field event 4 frames)		
       (field event 5 subframes)	
-	
       (MidiSendIm *refnum* event)) ))			; <== EVALUATE THIS DEFINITION
 
 (send-smpte-offset Smpte25Fr 10 24 59 12 00)		; <== EVALUATE THIS EXPRESSION.
@@ -366,8 +364,8 @@
 ;; Be sure to have a Midi keyboard connected to the modem port.
 
 (defun transform (transpose delay)
-  (MidiConnect *refnum* 0 t)			; connect MCL to MidiShare
-  (MidiConnect 0 *refnum* t)			; connect MidiShare to MCL
+  (MidiConnect *refnum* 0 -1)			; connect MCL to MidiShare
+  (MidiConnect 0 *refnum* -1)			; connect MidiShare to MCL
   (MidiFlushEvs *refnum*)			; flush old events in the rcv fifo
   (loop (if (mouse-down-p) (return))		; loop until mouse clicked
         (do ((event (MidiGetEv *refnum*) (MidiGetEv *refnum*)))	;read all the events
@@ -378,8 +376,8 @@
               (date event (+ delay (date event)))	;   delayed
               (MidiSend *refnum* event))		;   and sent.
             (MidiFreeEv event))))			; other events are deleted
-  (MidiConnect 0 *refnum* nil)			; break the connection from MidiShare to MCL 	
-  )							; <== EVALUATE THIS DEFINITION
+  (MidiConnect 0 *refnum* 0)			; break the connection from MidiShare to MCL 	
+  )							        ; <== EVALUATE THIS DEFINITION
 
 (transform 12 1000)					; <== EVALUATE THIS EXPRESSION.
 
@@ -498,7 +496,7 @@
 (defun multi-print (n delay msg)
   (let ((d (MidiGetTime)))
     (dotimes (i n)
-      (at (+ d (* i delay)) (print msg)))))			; <== EVALUATE THIS DEFINITION
+      (at (+ d (* i delay)) (print msg)))))		; <== EVALUATE THIS DEFINITION
 
 (multi-print 10 1000 "hello")					; <== EVALUATE THIS EXPRESSION
 
@@ -547,14 +545,11 @@
 ;; Now we can try these receive alarms
  
 (set-rcv-alarm *midishare-process* 
-               (transpodelay 12 2000))				; <== EVALUATE THIS EXPRESSION
+               (transpodelay 12 2000))			; <== EVALUATE THIS EXPRESSION
 
  
 (set-rcv-alarm *midishare-process* 
                (echo 250 5))					; <== EVALUATE THIS EXPRESSION
-
-
-
 
 
 ;;===================================================================================
@@ -564,14 +559,6 @@
 (progn
   (process-kill *midishare-process*)
   (MidiClose *refnum*))						; <== EVALUATE THIS EXPRESSION
-
-
-
-
-
-
-
-
 
 
 (defmacro for-every-event (event refnum &body action)
