@@ -443,10 +443,10 @@ static void DoMouseDown()
 				SelectWindow(whichWindow);
 			else if (whichWindow == myWindow) {
 				TrackDialog (myWindow);
-				Wait (50);
+				Wait (250);
 				while (StillDown()) {
 					TrackDialog (myWindow);
-					Wait (10);
+					Wait (50);
 				}
 			}
 			break;

@@ -111,12 +111,17 @@ static char * GetProfileFullName (char * name)
 //________________________________________________________________________
 static void LoadSlot (char * section, char* fullname)
 {
+//char trace[512];
         SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(QTDriverName),1);
         TSlotInfos infos;
         
+//system ("echo Load >> /tmp/trace");
   	if (MidiGetSlotInfos (refNum, &infos)) {
 		char buff[kMaxEntryLen];
 		unsigned long n;
+//sprintf (trace, "echo QT read: %s %s %s to %s >> /tmp/trace", section, infos.name, buff, fullname);
+//system (trace);
+//printf ("QT read: %s %s %s to %s\n", section, infos.name, buff, fullname);
 		n= get_private_profile_string (section, infos.name, "", buff, kMaxEntryLen, fullname);
           	if (n) {
 			unsigned short i, c = CountCnx (buff);
@@ -132,10 +137,12 @@ static void LoadSlot (char * section, char* fullname)
 //________________________________________________________________________
 static void SaveSlot (char * section, char* fullname)
 {
+//char trace[512];
         SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(QTDriverName),1);
         TSlotInfos infos;
         
-        if (MidiGetSlotInfos (refNum, &infos)) {
+// system ("echo Save >> /tmp/trace");
+       if (MidiGetSlotInfos (refNum, &infos)) {
 		char buff[kMaxEntryLen]; int i;
 		buff[0] = 0;
                 
@@ -146,6 +153,9 @@ static void SaveSlot (char * section, char* fullname)
 				strcat (buff, numStr);
 			}
 		}
+//sprintf (trace, "echo QT write: %s %s %s to %s >> /tmp/trace", section, infos.name, buff, fullname);
+//system (trace);
+//printf ("QT write: %s %s %s to %s\n", section, infos.name, buff, fullname);
 		write_private_profile_string (section, infos.name, buff, fullname);
 	}
 }
@@ -307,8 +317,7 @@ Boolean SetUpMidi ()
 	MidiSetRcvAlarm (refNum, ReceiveEvents);		
 	SetupFilter (&data->filter);
 	MidiSetFilter (refNum, &data->filter);
-        
-        LoadSlot ("Output Slots", GetProfileFullName(kProfileName));
+	LoadSlot ("Output Slots", GetProfileFullName(kProfileName));
 	return true;
 }
 

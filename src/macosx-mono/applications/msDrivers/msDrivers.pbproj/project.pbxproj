@@ -160,7 +160,6 @@
 			children = (
 				20286C2AFDCF999611CA2CEA,
 				20286C2CFDCF999611CA2CEA,
-				F72817540206AC2D01053118,
 				20286C32FDCF999611CA2CEA,
 				195DF8C9FE9D4F0611CA2CBB,
 			);
@@ -250,8 +249,6 @@
 	<string>msDrivers</string>
 	<key>CFBundleGetInfoString</key>
 	<string>v.1.0 © Grame 2002</string>
-	<key>CFBundleIconFile</key>
-	<string>msDrivers.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -282,7 +279,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0867D6ACFE840B52C02AAC07,
-				F72817560206AC2D01053118,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -348,25 +344,6 @@
 			isa = PBXFileReference;
 			path = msDrvAppl.c;
 			refType = 2;
-		};
-		F72817540206AC2D01053118 = {
-			children = (
-				F72817550206AC2D01053118,
-			);
-			isa = PBXGroup;
-			name = Images;
-			refType = 4;
-		};
-		F72817550206AC2D01053118 = {
-			isa = PBXFileReference;
-			path = msDivers.icns;
-			refType = 2;
-		};
-		F72817560206AC2D01053118 = {
-			fileRef = F72817550206AC2D01053118;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F72817570206AC2D01053118 = {
 			fileRef = F72817500206AC2D01053118;
