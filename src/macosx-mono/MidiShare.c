@@ -154,12 +154,15 @@ Boolean MIDISHAREAPI MidiIsConnected(short src, short dest) {
 Boolean MIDISHAREAPI MidiGetPortState(short port) {
   	return true;
 }
-	void MIDISHAREAPI MidiSetPortState(short port, Boolean state) {
+void MIDISHAREAPI MidiSetPortState(short port, Boolean state) {
 }
 
 /*-------------------------- Events and memory managing -----------------------*/
 unsigned long MIDISHAREAPI MidiFreeSpace(void) {
   	return MSFreeSpace(Memory(gMem));
+}
+unsigned long MIDISHAREAPI MidiDesiredSpace(void) {
+  	return MSDesiredSpace(Memory(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiNewCell(void) {
   	return MSNewCell(FreeList(Memory(gMem)));
