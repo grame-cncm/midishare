@@ -160,7 +160,11 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		g->appls[appl->refNum] = appl;
 		g->nbAppls++;
 	}
-	else { ref = MIDIerrComm; goto err; }
+	else { 
+		fprintf(stderr, "MSOpen: unexpected result received %d\n", EvType(e));
+		ref = MIDIerrComm; 
+		goto err; 
+	}
 	MSFreeEv (e, &g->memory.freeList);
 	return ref;
 

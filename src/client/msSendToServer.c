@@ -42,10 +42,12 @@ static MidiEvPtr ReadFromServer (TMSGlobalPtr g)
             int ret;
             e = msStreamStartBuffer (&c->std.parse, n, &ret);
 			if (!e && (ret != kStreamNoMoreData)) {
-                fprintf (stderr, "ReadFromServer read error (%d)\n", ret);
+                fprintf (stderr, "%s line %d: msStream error %d: %s\n", __FILE__, __LINE__, 
+					ret, msStreamGetErrorText(ret));
                 break;
             }
         }
+		else fprintf (stderr, "ReadFromServer: CCRead returned %ld\n", n);
     }
     return e;
 }
@@ -74,7 +76,7 @@ Boolean StdSend (MidiEvPtr e, TMSGlobalPtr g)
 
 failed:
     MidiFreeEv (e);
-    fprintf (stderr, "CCWrite failed (%ld)\n", n);
+    fprintf (stderr, "%s line %d: CCWrite failed (%ld)\n", __FILE__, __LINE__, n);
     return false;
 }
 
