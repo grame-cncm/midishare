@@ -43,7 +43,6 @@ class TEvent {
 
 		void*	operator new (size_t)				{ return MidiNewCell(); }  
 		void 	operator delete(void* p, size_t) 	{ MidiFreeCell((MidiEvPtr)p); }
-		void 	operator delete(void* p) 			{ MidiFreeCell((MidiEvPtr)p); }
 			
 		TEvent	() 				{ fNext = fPrev = 0;fEvent = 0; }
 		TEvent	(MidiEvPtr e) 	{ fNext = fPrev = 0;fEvent = e; }
