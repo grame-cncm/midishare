@@ -25,6 +25,24 @@
 
 TEventFactoryPtr TEventFactory::fInstance = 0;
 
+
+/*--------------------------------------------------------------------------*/
+/* Event creation methods */
+static TEventPtr CreateEvent(MidiEvPtr e)	{ return new TEvent(e);}
+static TEventPtr CreateNote(MidiEvPtr e)	{ return new TNote(e);}
+static TEventPtr CreateKeyOn(MidiEvPtr e)	{ return new TKeyOn(e);}
+static TEventPtr CreateKeyOff(MidiEvPtr e)	{ return new TKeyOff(e);}
+static TEventPtr CreateKeyPress(MidiEvPtr e)	{ return new TKeyPress(e);}
+static TEventPtr CreateCtrlChange(MidiEvPtr e)	{ return new TCtrlChange(e);}
+static TEventPtr CreateProgChange(MidiEvPtr e)	{ return new TProgChange(e);}
+static TEventPtr CreateChanPress(MidiEvPtr e)	{ return new TChanPress(e);}
+static TEventPtr CreatePitchBend(MidiEvPtr e)	{ return new TPitchBend(e);}
+static TEventPtr CreateTune(MidiEvPtr e)	{ return new TTune(e);}
+static TEventPtr CreateTempo(MidiEvPtr e)	{ return new TTempo(e);}
+static TEventPtr CreateTimeSign(MidiEvPtr e)	{ return new TTimeSign(e);}
+static TEventPtr CreateSysEx(MidiEvPtr e)	{ return new TSysEx(e);}
+
+
 TEventFactory::TEventFactory ()
 {
 	// Default constructor
