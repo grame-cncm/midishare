@@ -12,52 +12,54 @@
 // ===========================================================================
 //	TClockConverter.h			    
 // ===========================================================================
-//
-//	Conversion functions: cloks <===> ticks
-// 
+/*!
+	\brief Conversion functions: clocks, songpos <===> ticks.
+*/
 
 
 #ifndef __TClockConverter__
 #define __TClockConverter__
 
 #include "TPlayerConstants.h"
+#include <math.h>
 
-
-//---------------------------
+//-----------------------
 // Class TClockConverter
-//---------------------------
+//-----------------------
 
 class TClockConverter {
 
 	private:
 	
-		ULONG   fTicks_per_quarter;
+		float   fTicks_per_quarter;
 	
 	public: 
 	
-		TClockConverter(ULONG tpq) { Init (tpq); }
+		TClockConverter(ULONG tpq) {Init (tpq);}
 		~TClockConverter(){}
 			
-		void Init (ULONG tpq) { fTicks_per_quarter = tpq; }
+		void Init (ULONG tpq) {fTicks_per_quarter = (float)tpq;}
+				
+		ULONG ConvertDeltaToTempo (ULONG delta_ms) {return delta_ms * 24000;}
 		
-		ULONG ConvertDeltaToTempo(ULONG delta_ms) {return delta_ms * 24000;}
+		float ConvertTickToClock (float date_ticks) {return round((24.0f * date_ticks)/fTicks_per_quarter);}
+		float ConvertClockToTick (float clocks) {return round((clocks * fTicks_per_quarter)/24.0f);}
 		
-		ULONG ConvertTickToClock (ULONG date_ticks) { return (24 * date_ticks)/fTicks_per_quarter;}
-		ULONG ConvertClockToTick (ULONG clocks) { return (clocks * fTicks_per_quarter)/24;}
+		float ConvertSongPosToTick (float pos) {return round((pos * fTicks_per_quarter)/4.0f);}
+		float ConvertTickToSongPos (float date_ticks) {return round((date_ticks * 4.0f)/fTicks_per_quarter);}
 		
-		ULONG ConvertSongPosToTick (ULONG pos) { return (pos * fTicks_per_quarter)/4;}
-		ULONG ConvertTickToSongPos (ULONG date_ticks) { return (date_ticks * 4)/fTicks_per_quarter;}
-		
-		ULONG ConvertTickToTickAtPrevSP (ULONG date_ticks) 
+		float ConvertTickToTickAtPrevSP (float date_ticks) 
 		{ 
 			return ConvertSongPosToTick(ConvertTickToSongPos(date_ticks));
 		}
 		
-		ULONG ConvertTickToTickAtPrevClock (ULONG date_ticks) 
+		float ConvertTickToTickAtPrevClock (float date_ticks) 
 		{ 
 			return ConvertClockToTick(ConvertTickToClock(date_ticks));
 		}
+		
 };
+
 
 typedef TClockConverter FAR * TClockConverterPtr;
 
