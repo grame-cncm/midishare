@@ -58,9 +58,9 @@ VS_VERSION_INFO VERSIONINFO
  PRODUCTVERSION 1,8,4,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
- FILEFLAGS 0x1L
+ FILEFLAGS 0x3L
 #else
- FILEFLAGS 0x0L
+ FILEFLAGS 0x2L
 #endif
  FILEOS 0x40004L
  FILETYPE 0x2L
@@ -75,7 +75,7 @@ BEGIN
             VALUE "FileVersion", "1, 8, 4, 0\0"
             VALUE "InternalName", "Mono Client MidiShare\0"
             VALUE "LegalCopyright", "Copyright © 2001\0"
-            VALUE "OriginalFilename", "midishare.dll\0"
+            VALUE "OriginalFilename", "mshare32.dll\0"
             VALUE "ProductName", "MidiShare\0"
             VALUE "ProductVersion", "1, 8, 4, 0\0"
         END
