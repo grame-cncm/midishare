@@ -76,6 +76,7 @@ void MidiParseReset (StreamFifoPtr f)
 	f->date      	= 0;
 	f->common.fast 	= 0;
 	f->infos.fast 	= 0;
+	f->parse     	= rcvStatus;
 }
 
 //_____________________________________________________________________________
