@@ -61,7 +61,7 @@ enum { ShowHideI = 1, QuitSetupI, PreferenceI=4 };
 enum { kOK = 1, kCancel, kDefault, kTune, kBuffers, kNoiseIn,kNoiseOut,kBendLength, kVol,kBend, kFFTSize, kDynamic };
 
 
-enum { 	kDefaultTune=440, kDefaultBuffers = 3, kDefaultNoiseIn=50, kDefaultNoiseOut=50, 
+enum { 	kDefaultTune=440, kDefaultBuffers = 5, kDefaultNoiseIn=60, kDefaultNoiseOut=57, 
 		kDefaultBendLength = kMinBendLength, kDefaultVol = kVolOn, kDefaultBend = kBendOn, kDefaultDynamic = 50};
 
 #define kMinBuffers 3
@@ -366,7 +366,7 @@ static void DoPrefer ()
 					gState.bend = ((bend >= kBendOff) && (bend <= kBendOn)) ? bend : kDefaultBend;
 					gState.fftsize = CheckFFTSize(fftsize);
 					gState.dynamic = dynamic;
-					
+					gState.sflag = true;
 				}
 			}
 			break;
@@ -484,6 +484,7 @@ static void InitState (StatePtr g)
 	g->bend = kDefaultBend;
 	g->fftsize = kMinFFTSize;
 	g->dynamic = kDefaultDynamic;
+	g->sflag = false;
 
 	h= GetResource( kStateResType, kBaseRsrcId);
 	if( h) {
@@ -557,6 +558,10 @@ static void Initialize()
 	if (MidiGetVersion() < 182) AlertUser ("\prequire MidiShare version 1.82 or later");
 	if (MidiGetNamedAppl (PTDriverName) > 0) AlertUser ("\pPitchTracker driver is still running");
 	if (!SetUpMidi(&gState)) AlertUser ("\pMidiShare initialization failed");
+	if (!AudioWakeUp()) {
+		CloseMidi();
+		AlertUser ("\pAudio initialization failed");
+	}
 	foreGround = true;
 	dlogFilterProcPtr = NewModalFilterProc (DlogFilterProc);
 	SetUpMenus();
