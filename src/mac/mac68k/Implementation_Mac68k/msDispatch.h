@@ -110,4 +110,14 @@ MSFunctionType(long) 		MCountDTasks(short refNum, TMSGlobalPtr g);
 MSFunctionType(void) 		MFlushDTasks(short refNum, TMSGlobalPtr g);
 MSFunctionType(void) 		MExec1DTask(short refNum, TMSGlobalPtr g);
 
+/*---------------------------------- Filters ---------------------------------*/
+MSFunctionType(MidiFilterPtr) 	MNewFilter  (TMSGlobalPtr g);
+MSFunctionType(void) 			MFreeFilter (MidiFilterPtr f, TMSGlobalPtr g);
+MSFunctionType(void) 	MAcceptPort(MidiFilterPtr f, short port, Boolean state, TMSGlobalPtr g);
+MSFunctionType(void) 	MAcceptChan(MidiFilterPtr f, short chan, Boolean state, TMSGlobalPtr g);
+MSFunctionType(void) 	MAcceptType(MidiFilterPtr f, short type, Boolean state, TMSGlobalPtr g);
+MSFunctionType(Boolean) MIsAcceptedPort(MidiFilterPtr f, short port, TMSGlobalPtr g);
+MSFunctionType(Boolean) MIsAcceptedChan(MidiFilterPtr f, short chan, TMSGlobalPtr g);
+MSFunctionType(Boolean) MIsAcceptedType(MidiFilterPtr f, short type, TMSGlobalPtr g);
+
 #endif
