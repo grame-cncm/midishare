@@ -50,8 +50,8 @@ typedef struct {
 	void * shmemPtr;
 } ServerEnv, *ServerEnvPtr;
 
-TLog 		gLog;
-ServerEnv 	gEnv = { 0 };
+TLog   gLog;
+static ServerEnv 	gEnv = { 0 };
 
 
 //___________________________________________________________________
