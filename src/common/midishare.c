@@ -58,209 +58,209 @@ TMSGlobalPtr    gMem = &GlobalMem;
 	}
 #endif
 
-short  MidiGetVersion(void) {
+MSAPI(short)  MidiGetVersion(void) {
     return MidiShare() ? MSGetVersion(gMem) : 0;
 }
-short  MidiCountAppls(void) {
+MSAPI(short)  MidiCountAppls(void) {
  	return MSCountAppls(ClientsPub(gMem));
 }
-short  MidiGetIndAppl(short index) {
+MSAPI(short)  MidiGetIndAppl(short index) {
   	return MSGetIndAppl( index, ClientsPub(gMem));
 }
-short  MidiGetNamedAppl(MidiName name) {
+MSAPI(short)  MidiGetNamedAppl(MidiName name) {
  	return MSGetNamedAppl( name, ClientsPub(gMem));
 }
  
 /*----------------------------- SMPTE synchronization -------------------------*/
-void  MidiGetSyncInfo(SyncInfoPtr p) {
+MSAPI(void)  MidiGetSyncInfo(SyncInfoPtr p) {
  	 MSGetSyncInfo( p, gMem);
 }
-void  MidiSetSyncMode(unsigned short mode) {
+MSAPI(void)  MidiSetSyncMode(unsigned short mode) {
   	MSSetSyncMode( mode, gMem);
 }
-long  MidiGetExtTime(void) {
+MSAPI(long)  MidiGetExtTime(void) {
   	return MSGetExtTime(gMem);
 }
-long  MidiInt2ExtTime(long  xl) {
+MSAPI(long)  MidiInt2ExtTime(long  xl) {
   	return MSInt2ExtTime( xl, gMem);
 }
-long  MidiExt2IntTime(long xl) {
+MSAPI(long)  MidiExt2IntTime(long xl) {
   	return MSExt2IntTime( xl, gMem);
 }
-void  MidiTime2Smpte(long time, short format, SmpteLocPtr loc) {
+MSAPI(void)  MidiTime2Smpte(long time, short format, SmpteLocPtr loc) {
   	MSTime2Smpte( time,format,loc, gMem);
 }
-long  MidiSmpte2Time(SmpteLocPtr loc) {
+MSAPI(long)  MidiSmpte2Time(SmpteLocPtr loc) {
   	return MSSmpte2Time( loc, gMem);
 }
 
 /*----------------------------- Open / close application ----------------------*/
-short  MidiOpen(MidiName applName) {
+MSAPI(short)  MidiOpen(MidiName applName) {
  	 return MSOpen( applName, gMem);
 }
-void  MidiClose(short refNum) {
+MSAPI(void)  MidiClose(short refNum) {
   	MSClose( refNum, gMem);
 }
 
 /*--------------------------- Application configuration -----------------------*/
-MidiName  MidiGetName(short refNum) {
+MSAPI(MidiName)  MidiGetName(short refNum) {
   	return MSGetName( refNum, ClientsPub(gMem));
 }
-void  MidiSetName(short refNum, MidiName applName) {
+MSAPI(void)  MidiSetName(short refNum, MidiName applName) {
   	MSSetName( refNum,applName, CSArg(gMem));
 }
-void*  MidiGetInfo(short refNum) {
+MSAPI(void*)  MidiGetInfo(short refNum) {
  	return MSGetInfo( refNum, ClientsPub(gMem));
 }
-void  MidiSetInfo(short refNum, void* InfoZone) {
+MSAPI(void)  MidiSetInfo(short refNum, void* InfoZone) {
   	MSSetInfo( refNum,InfoZone, CSArg(gMem));
 }
-MidiFilterPtr  MidiGetFilter(short refNum) {
+MSAPI(MidiFilterPtr)  MidiGetFilter(short refNum) {
   	return MSGetFilter( refNum, CSArg(gMem));
 }
-void  MidiSetFilter(short refNum, MidiFilterPtr f) {
+MSAPI(void)  MidiSetFilter(short refNum, MidiFilterPtr f) {
   	MSSetFilter( refNum,f, CSArg(gMem));
 }
-RcvAlarmPtr   MidiGetRcvAlarm(short refNum) {
+MSAPI(RcvAlarmPtr)   MidiGetRcvAlarm(short refNum) {
   	return MSGetRcvAlarm( refNum, CSArg(gMem));
 }
-void  MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm) {
+MSAPI(void)  MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm) {
   	MSSetRcvAlarm( refNum,alarm, CSArg(gMem));
 }
-ApplAlarmPtr  MidiGetApplAlarm(short refNum) {
+MSAPI(ApplAlarmPtr)  MidiGetApplAlarm(short refNum) {
  	return MSGetApplAlarm( refNum, CSArg(gMem));
 }
-void  MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm) {
+MSAPI(void)  MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm) {
   	MSSetApplAlarm( refNum,alarm, CSArg(gMem));
 }
-MidiFilterPtr  MidiNewFilter(void) {
+MSAPI(MidiFilterPtr)  MidiNewFilter(void) {
   	return MSNewFilter();
 }
-void  MidiFreeFilter(MidiFilterPtr filter) {
+MSAPI(void)  MidiFreeFilter(MidiFilterPtr filter) {
   	MSFreeFilter( filter);
 }
 
 /*------------------------- Inter-Application Connections ---------------------*/
-void  MidiConnect(short src, short dest , Boolean state) {
+MSAPI(void)  MidiConnect(short src, short dest , Boolean state) {
   	MSConnect( src,dest,state, gMem);
 }
-Boolean  MidiIsConnected(short src, short dest) {
+MSAPI(Boolean)  MidiIsConnected(short src, short dest) {
   	return MSIsConnected( src,dest, ClientsPub(gMem));
 }
 
 /*-------------------------- Events and memory managing -----------------------*/
-unsigned long  MidiFreeSpace(void) {
+MSAPI(unsigned long)  MidiFreeSpace(void) {
   	return MSFreeSpace(Memory(gMem));
 }
-unsigned long  MidiDesiredSpace(void) {
+MSAPI(unsigned long)  MidiDesiredSpace(void) {
   	return MSDesiredSpace(Memory(gMem));
 }
-unsigned long  MidiTotalSpace(void) {
+MSAPI(unsigned long)  MidiTotalSpace(void) {
   	return MSTotalSpace(Memory(gMem));
 }
-unsigned long  MidiGrowSpace(long n) {
+MSAPI(unsigned long)  MidiGrowSpace(long n) {
   	return MSGrowSpace( n, Memory(gMem));
 }
 
-MidiEvPtr  MidiNewCell(void) {
+MSAPI(MidiEvPtr)  MidiNewCell(void) {
   	return MSNewCell(FreeList(Memory(gMem)));
 }
-void  MidiFreeCell(MidiEvPtr e) { 
+MSAPI(void)  MidiFreeCell(MidiEvPtr e) { 
   	if (e) MSFreeCell( e, FreeList(Memory(gMem)));
 }
-MidiEvPtr  MidiNewEv(short typeNum) {
+MSAPI(MidiEvPtr)  MidiNewEv(short typeNum) {
   	return MSNewEv( typeNum, FreeList(Memory(gMem)));
 }
-MidiEvPtr  MidiCopyEv(MidiEvPtr e) {
+MSAPI(MidiEvPtr)  MidiCopyEv(MidiEvPtr e) {
   	return MSCopyEv( e, FreeList(Memory(gMem)));
 }
-void  MidiFreeEv(MidiEvPtr e) {
+MSAPI(void)  MidiFreeEv(MidiEvPtr e) {
   	MSFreeEv( e, FreeList(Memory(gMem)));
 }
-void  MidiSetField(MidiEvPtr e, long f, long v) {
+MSAPI(void)  MidiSetField(MidiEvPtr e, long f, long v) {
   	MSSetField( e,f,v);
 }
-long  MidiGetField(MidiEvPtr e, long f) {
+MSAPI(long)  MidiGetField(MidiEvPtr e, long f) {
   	return MSGetField( e,f);
 }
-void  MidiAddField(MidiEvPtr e, long v) {
+MSAPI(void)  MidiAddField(MidiEvPtr e, long v) {
   	MSAddField( e,v, FreeList(Memory(gMem)));
 }
-long  MidiCountFields(MidiEvPtr e) {
+MSAPI(long)  MidiCountFields(MidiEvPtr e) {
  	 return MSCountFields( e);
 }
 
-MidiEvPtr MidiGetLink   (MidiEvPtr e)          { return Link(e); }
-void      MidiSetLink   (MidiEvPtr e, MidiEvPtr next) { Link(e) = next; }
-long      MidiGetDate   (MidiEvPtr e)          { return Date(e); }
-void      MidiSetDate   (MidiEvPtr e, long d)  { Date(e) = d; }
-short     MidiGetRefNum (MidiEvPtr e)          { return RefNum(e); }
-void      MidiSetRefNum (MidiEvPtr e, short r) { RefNum(e) = (Byte)r; }
-short     MidiGetType   (MidiEvPtr e)          { return EvType(e); }
-void      MidiSetType   (MidiEvPtr e, short t) { EvType(e) = (Byte)t; }
-short     MidiGetChan   (MidiEvPtr e)          { return Chan(e); }
-void      MidiSetChan   (MidiEvPtr e, short c) { Chan(e) = (Byte)c; }
-short     MidiGetPort   (MidiEvPtr e)          { return Port(e); }
-void      MidiSetPort   (MidiEvPtr e, short p) { Port(e) = (Byte)p; }
+MSAPI(MidiEvPtr) MidiGetLink   (MidiEvPtr e)          { return Link(e); }
+MSAPI(void)      MidiSetLink   (MidiEvPtr e, MidiEvPtr next) { Link(e) = next; }
+MSAPI(long)      MidiGetDate   (MidiEvPtr e)          { return Date(e); }
+MSAPI(void)      MidiSetDate   (MidiEvPtr e, long d)  { Date(e) = d; }
+MSAPI(short)     MidiGetRefNum (MidiEvPtr e)          { return RefNum(e); }
+MSAPI(void)      MidiSetRefNum (MidiEvPtr e, short r) { RefNum(e) = (Byte)r; }
+MSAPI(short)     MidiGetType   (MidiEvPtr e)          { return EvType(e); }
+MSAPI(void)      MidiSetType   (MidiEvPtr e, short t) { EvType(e) = (Byte)t; }
+MSAPI(short)     MidiGetChan   (MidiEvPtr e)          { return Chan(e); }
+MSAPI(void)      MidiSetChan   (MidiEvPtr e, short c) { Chan(e) = (Byte)c; }
+MSAPI(short)     MidiGetPort   (MidiEvPtr e)          { return Port(e); }
+MSAPI(void)      MidiSetPort   (MidiEvPtr e, short p) { Port(e) = (Byte)p; }
 
-long      MidiGetData0  (MidiEvPtr e) { return Data(e)[0]; }
-long      MidiGetData1  (MidiEvPtr e) { return Data(e)[1]; }
-long      MidiGetData2  (MidiEvPtr e) { return Data(e)[2]; }
-long      MidiGetData3  (MidiEvPtr e) { return Data(e)[3]; }
-void      MidiSetData0  (MidiEvPtr e, long v) { Data(e)[0]=(Byte)v; }
-void      MidiSetData1  (MidiEvPtr e, long v) { Data(e)[1]=(Byte)v; }
-void      MidiSetData2  (MidiEvPtr e, long v) { Data(e)[2]=(Byte)v; }
-void      MidiSetData3  (MidiEvPtr e, long v) { Data(e)[3]=(Byte)v; }
+MSAPI(long)      MidiGetData0  (MidiEvPtr e) { return Data(e)[0]; }
+MSAPI(long)      MidiGetData1  (MidiEvPtr e) { return Data(e)[1]; }
+MSAPI(long)      MidiGetData2  (MidiEvPtr e) { return Data(e)[2]; }
+MSAPI(long)      MidiGetData3  (MidiEvPtr e) { return Data(e)[3]; }
+MSAPI(void)      MidiSetData0  (MidiEvPtr e, long v) { Data(e)[0]=(Byte)v; }
+MSAPI(void)      MidiSetData1  (MidiEvPtr e, long v) { Data(e)[1]=(Byte)v; }
+MSAPI(void)      MidiSetData2  (MidiEvPtr e, long v) { Data(e)[2]=(Byte)v; }
+MSAPI(void)      MidiSetData3  (MidiEvPtr e, long v) { Data(e)[3]=(Byte)v; }
 
 /*------------------------------- Sequence managing ---------------------------*/
-MidiSeqPtr  MidiNewSeq(void) {
+MSAPI(MidiSeqPtr)  MidiNewSeq(void) {
   	return MSNewSeq(FreeList(Memory(gMem)));
 }
-void  MidiAddSeq(MidiSeqPtr s, MidiEvPtr e) {
+MSAPI(void)  MidiAddSeq(MidiSeqPtr s, MidiEvPtr e) {
   	MSAddSeq( s,e);
 }
-void  MidiFreeSeq(MidiSeqPtr s) {
+MSAPI(void)  MidiFreeSeq(MidiSeqPtr s) {
   	MSFreeSeq( s, FreeList(Memory(gMem)));
 }
-void  MidiClearSeq(MidiSeqPtr s) {
+MSAPI(void)  MidiClearSeq(MidiSeqPtr s) {
   	MSClearSeq( s, FreeList(Memory(gMem)));
 }
-void  MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc) {
+MSAPI(void)  MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc) {
   	MSApplySeq( s,proc);
 }
 
-MidiEvPtr  MidiGetFirstEv(MidiSeqPtr s) { return s->first; }
-MidiEvPtr  MidiGetLastEv (MidiSeqPtr s)  { return s->last; }
-void       MidiSetFirstEv(MidiSeqPtr s, MidiEvPtr e) { s->first = e; }
-void       MidiSetLastEv (MidiSeqPtr s, MidiEvPtr e) { s->last = e; }
+MSAPI(MidiEvPtr)  MidiGetFirstEv(MidiSeqPtr s) { return s->first; }
+MSAPI(MidiEvPtr)  MidiGetLastEv (MidiSeqPtr s)  { return s->last; }
+MSAPI(void)       MidiSetFirstEv(MidiSeqPtr s, MidiEvPtr e) { s->first = e; }
+MSAPI(void)       MidiSetLastEv (MidiSeqPtr s, MidiEvPtr e) { s->last = e; }
 
 /*------------------------------------- Time ----------------------------------*/
-unsigned long  MidiGetTime() {
+MSAPI(unsigned long)  MidiGetTime() {
   	return gMem->pub->time;
 }
 
 /*------------------------------------ Sending --------------------------------*/
-void  MidiSendIm(short refNum, MidiEvPtr e) {
+MSAPI(void)  MidiSendIm(short refNum, MidiEvPtr e) {
   	MSSendIm (refNum, e, gMem);
 }
-void  MidiSend(short refNum, MidiEvPtr e) {
+MSAPI(void)  MidiSend(short refNum, MidiEvPtr e) {
   	MSSend (refNum, e, gMem);
 }
-void  MidiSendAt(short refNum, MidiEvPtr e, unsigned long d) {
+MSAPI(void)  MidiSendAt(short refNum, MidiEvPtr e, unsigned long d) {
   	MSSendAt (refNum, e, d, gMem);
 }
 
 /*------------------------------------ Receving -------------------------------*/
-unsigned long  MidiCountEvs(short refNum) {
+MSAPI(unsigned long)  MidiCountEvs(short refNum) {
   	return MSCountEvs( refNum, gMem);
 }
-MidiEvPtr  MidiGetEv(short refNum) {
+MSAPI(MidiEvPtr)  MidiGetEv(short refNum) {
   	return MSGetEv( refNum, gMem);
 }
-MidiEvPtr  MidiAvailEv(short refNum) {
+MSAPI(MidiEvPtr)  MidiAvailEv(short refNum) {
   	return MSAvailEv( refNum, gMem);
 }
-void  MidiFlushEvs(short refNum) {
+MSAPI(void)  MidiFlushEvs(short refNum) {
   	MSFlushEvs( refNum, gMem);
 }
 
@@ -274,13 +274,13 @@ void  MidiFlushEvs(short refNum) {
 	}
 #endif
 
-short  MidiCountDrivers () {
+MSAPI(short)  MidiCountDrivers () {
   	return MSCountDrivers (ClientsPub(gMem));
 }
-short  MidiGetIndDriver (short index) {
+MSAPI(short)  MidiGetIndDriver (short index) {
   	return MSGetIndDriver (index, ClientsPub(gMem));
 }
-Boolean  MidiGetDriverInfos (short refnum, TDriverInfos * infos) {
+MSAPI(Boolean)  MidiGetDriverInfos (short refnum, TDriverInfos * infos) {
   	return MSGetDriverInfos (refnum, infos, ClientsPub(gMem));
 }
 
@@ -297,74 +297,74 @@ Boolean  MidiGetDriverInfos (short refnum, TDriverInfos * infos) {
 	}
 #endif
 
-SlotRefNum  MidiGetIndSlot (short refnum, short index) {
+MSAPI(SlotRefNum)  MidiGetIndSlot (short refnum, short index) {
   	return MSGetIndSlot (refnum, index, ClientsPub(gMem));
 }
-Boolean  MidiGetSlotInfos (SlotRefNum slot, TSlotInfos * infos) {
+MSAPI(Boolean)  MidiGetSlotInfos (SlotRefNum slot, TSlotInfos * infos) {
   	return MSGetSlotInfos (slot, infos, ClientsPub(gMem));
 }	
-void  MidiConnectSlot (short port, SlotRefNum slot, Boolean state) {
+MSAPI(void)  MidiConnectSlot (short port, SlotRefNum slot, Boolean state) {
   	MSConnectSlot (port, slot, state, gMem);
 }
-Boolean  MidiIsSlotConnected (short port, SlotRefNum slot) {
+MSAPI(Boolean)  MidiIsSlotConnected (short port, SlotRefNum slot) {
   	return MSIsSlotConnected (port, slot, ClientsPub(gMem));
 }
 
 /*----------------------------------- Mail boxes ------------------------------*/
-void*  MidiReadSync(void** adrMem) {
+MSAPI(void*)  MidiReadSync(void** adrMem) {
   	return MSReadSync (adrMem);
 }
-void*  MidiWriteSync(void** adrMem,void* val) {
+MSAPI(void*)  MidiWriteSync(void** adrMem,void* val) {
   	return MSWriteSync (adrMem,val);
 }
 
 /*---------------------------------- Task Managing ----------------------------*/
-void  MidiCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MSAPI(void)  MidiCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
   	MSCall (routine, date, refNum, a1, a2, a3, gMem);
 }
-MidiEvPtr  MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MSAPI(MidiEvPtr)  MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
   	return MSTask (routine, date, refNum, a1, a2, a3, gMem);
 }
-MidiEvPtr  MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MSAPI(MidiEvPtr)  MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
   	return MSDTask (routine, date, refNum, a1, a2, a3, gMem);
 }
-void  MidiForgetTask(MidiEvPtr FAR *e) {
+MSAPI(void)  MidiForgetTask(MidiEvPtr FAR *e) {
   	MSForgetTask (e);
 }
-long  MidiCountDTasks(short refNum) {
+MSAPI(long)  MidiCountDTasks(short refNum) {
   	return MSCountDTasks (refNum, gMem);
 }
-void  MidiFlushDTasks(short refNum) {
+MSAPI(void)  MidiFlushDTasks(short refNum) {
   	MSFlushDTasks (refNum, gMem);
 }
-void  MidiExec1DTask(short refNum) {
+MSAPI(void)  MidiExec1DTask(short refNum) {
   	MSExec1DTask (refNum, gMem);
 } 
 
 /*---------------------------------- Filters --------------------------------*/
 
-void  MidiAcceptPort(MidiFilterPtr f, short port, Boolean state) {
+MSAPI(void)  MidiAcceptPort(MidiFilterPtr f, short port, Boolean state) {
         MSAcceptPort (f, port, state);
 }
-void  MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state) {
+MSAPI(void)  MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state) {
         MSAcceptChan (f, chan, state);
 }
-void  MidiAcceptType(MidiFilterPtr f, short type, Boolean state) {
+MSAPI(void)  MidiAcceptType(MidiFilterPtr f, short type, Boolean state) {
         MSAcceptType (f, type, state);
 }
-Boolean  MidiIsAcceptedPort(MidiFilterPtr f, short port) {
+MSAPI(Boolean)  MidiIsAcceptedPort(MidiFilterPtr f, short port) {
         return MSIsAcceptedPort (f, port);
 }
-Boolean  MidiIsAcceptedChan(MidiFilterPtr f, short chan) {
+MSAPI(Boolean)  MidiIsAcceptedChan(MidiFilterPtr f, short chan) {
         return MSIsAcceptedChan (f, chan);
 }
-Boolean  MidiIsAcceptedType(MidiFilterPtr f, short type) {
+MSAPI(Boolean)  MidiIsAcceptedType(MidiFilterPtr f, short type) {
         return MSIsAcceptedType (f, type);
 }
 
 #ifdef MSKernel
 	Boolean  MidiShare(void) { return true; }
 #else
-	Boolean  MidiShare(void) { return CheckMidiShare(gMem); }
+	MSAPI(Boolean)  MidiShare(void) { return CheckMidiShare(gMem); }
 #endif
 
