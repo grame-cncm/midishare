@@ -769,7 +769,7 @@ static void Tasks( Boolean isFreeMem)
 	fprintf( stdout, "    MidiTask : ");flush;
 	p1= 0;
 	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
-	time+= 4;
+	time+= 50;
 	while( MidiGetTime() <= time);
 	fprintf( stdout, "%lx %s\n", e, OK);
 	if( (p1!= 1) && isFreeMem)
@@ -781,7 +781,7 @@ static void Tasks( Boolean isFreeMem)
 	MidiForgetTask(&e);
 	fprintf( stdout, "%s\n",OK);
 	if(e) fprintf( stdout, "Warning : MidiForgetTask does not set task address to 0 !\n");
-	time+= 4;
+	time+= 50;
 	while( MidiGetTime() <= time);
 	if( (p1!= 0) && isFreeMem)
 		fprintf( stdout, "Warning : MidiForgetTask does not forget the task!\n");
@@ -816,7 +816,7 @@ static void Tasks( Boolean isFreeMem)
 	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
 	fprintf( stdout, "%s\n",OK);
 	
-	time= MidiGetTime()+4;
+	time= MidiGetTime()+50;
 	while( MidiGetTime() <= time);
 	
 	if( !gContext.res1 && isFreeMem)
@@ -874,7 +874,7 @@ static void Tasks( Boolean isFreeMem)
 		fprintf( stdout, "Warning : incorrect task number : %ld\n", p1);
 
 	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
-	time+= 4;
+	time+= 50;
 	while( MidiGetTime() <= time);
 	p1= MidiCountDTasks( refNum);
 	if( p1!= 1)
