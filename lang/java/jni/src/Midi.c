@@ -47,7 +47,7 @@
 #endif
 
 #ifdef __Linux__
-	#include "MidiShare.h"
+	#include <MidiShare.h>
 	#include <stdlib.h>
 		
 	#define NewPtr(v) malloc((v))
