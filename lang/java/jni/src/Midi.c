@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2000
+  Copyright © Grame 1999-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,6 +37,7 @@
 /*           28/11/97 version 1.06 compatible JNI
 /*           14/02/01 version 1.07 fonctions pour la gestion des drivers
 /*           19/03/02 version 1.08 fonctions MidiGetInfo et MidiSetInfo nécessaires pour le thread bloquant sur MacOS9
+/*           19/04/02 version 1.09 implementation de MidiForgetTask
 /*
 /*****************************************************************************/
 
@@ -252,9 +253,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_FlushEvs
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_ForgetTask
-  (JNIEnv * env, jclass cl, jint a0){
+  (JNIEnv * env, jclass cl, jint ev){
 
-	/* not implemented */
+     MidiEvPtr adr = (MidiEvPtr)ev;
+     MidiForgetTask(&adr);
 }
 
 /*--------------------------------------------------------------------------*/
