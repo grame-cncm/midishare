@@ -63,7 +63,7 @@ void MidiPrintl (long val)
 //____________________________________________________________________________________
 void MidiPrintH (long val)
 {
-	char str[9], n=8;
+	char str[9]; short n=8;
 	str[n--] = 0;
 	while (n >= 0) {
 		char c = val & 0x0f;
