@@ -146,23 +146,17 @@ TRemote * TRemoteList::Find (IPNum id)
 //____________________________________________________________
 void TRemoteList::Remove (IPNum id)
 {
-// this method is not completely safe: the final CAS call
+// this method is not completely safe: the final link exchange
 // don't check that r->next is still a valid pointer
 // however, it should not be a problem in the context of the
 // method invocation: only the application Idle thread should
 // remove remote clients
+// however, conflicts with new clients should be checked
 	RemotePtr prev, r, * adr;
-	do {
-		r = Find(id, &prev);
-		if (!r) break;
-		adr = prev ? &prev->next : (RemotePtr *)&fRemote.top;
-#ifndef __MacOSX__
-	} while (!CAS ((void **)adr, r, r->next));
-#else
-		*adr = r->next;
-	} while (false);
-#endif
+	r = Find(id, &prev);
 	if (r) {
+		adr = prev ? &prev->next : (RemotePtr *)&fRemote.top;
+		*adr = r->next;
 		Delete (r);
 	}
 }
