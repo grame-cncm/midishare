@@ -188,6 +188,8 @@ void  SetRecordFilterPlayer	(short refnum, MidiFilterPtr filter);
 
 void  SetPosBBUPlayer (short refnum, PosPtr pos);
 void  SetPosMsPlayer (short refnum, long date_ms);
+void  SetPosTicksPlayer (short refnum, long date_ticks);
+
 
 // Loop management
 
@@ -204,6 +206,7 @@ void  SetSynchroInPlayer (short refnum, short state);
 void  SetSynchroOutPlayer (short refnum,short state);
 void  SetSMPTEOffsetPlayer (short refnum, SmpteLocPtr smptepos) ;
 void  SetTempoPlayer (short refnum, long tempo) ;
+void  SetTempoFactorPlayer (short refnum,float factor);
 
 
 // State management
