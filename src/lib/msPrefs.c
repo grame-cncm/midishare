@@ -37,13 +37,15 @@
 #define driverSectionName "Drivers"
 #define audioSectionName  "Audio"
 #define bufferSize  "size"
+#define driverName  "driver"
 #define memDefault  "default"
-#define active  	"active"
-#define disable  	"disable"
+#define active  "active"
+#define disable "disable"
 
 
 #define kDefaultSpace	40000
 #define kDefaultSize	64
+#define kDefaultName	"Built-in audio controller"
 
 #define DriverMaxEntry	512
 
@@ -71,6 +73,13 @@ unsigned long LoadBufferSize()
 {
 	unsigned long n = get_private_profile_int (audioSectionName, bufferSize, kDefaultSize, GetProfileFullName(profileName));
 	return  n ? n : kDefaultSize;
+}
+
+//________________________________________________________________________
+void LoadDriverName(char* name, unsigned long size)
+{
+   	unsigned long n = get_private_profile_string (audioSectionName, driverName, kDefaultName, name,
+  												 size, GetProfileFullName(profileName));
 }
 
 static __inline Boolean DrvSeparator (c) { return ((c)==' ') || ((c)=='	'); }
