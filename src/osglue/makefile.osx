@@ -16,10 +16,13 @@ $(OUT) : $(OBJ)
 makefile: makefile.osx
 	cp -f makefile.osx makefile
 	rm -f $(OBJ) $(OUT)
+	make dep
 
 clean:
 	rm -f $(OBJ) $(OUT)
 
 dep:
-	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
+	mkdep -f __dep__ $(CFLAGS) $(SRC)
+	cat makefile.osx __dep__ > makefile
+	rm -f __dep__
 
