@@ -118,7 +118,8 @@ static DriverListPtr Load1Driver (CInfoPBRec * pb)
 	l.launchFileFlags = 0;
 	l.launchControlFlags = launchNoFileFlags 
 						 | launchContinue 
-						 | launchUseMinimum;
+						 | launchUseMinimum
+						 | launchDontSwitch;
 	l.launchAppSpec = &spec;
 	l.launchAppParameters = 0;
 	
