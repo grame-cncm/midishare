@@ -1,0 +1,8 @@
+; =========================================================
+
+LIBRARY mshare32
+
+DESCRIPTION	'32 bits mono-client MidiShare Kernel (c) GRAME, 2001'
+
+CODE		PRELOAD FIXED
+DATA		PRELOAD SINGLE READWRITE
