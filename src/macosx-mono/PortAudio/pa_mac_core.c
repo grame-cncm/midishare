@@ -1,5 +1,5 @@
 /*
- * $Id: pa_mac_core.c,v 1.1.2.4 2003/09/03 13:57:31 letz Exp $
+ * $Id: pa_mac_core.c,v 1.1.2.5 2003/09/15 15:11:02 letz Exp $
  * pa_mac_core.c
  * Implementation of PortAudio for Mac OS X Core Audio
  *
@@ -993,7 +993,7 @@ PaError PaHost_OpenStream( internalPortAudioStream   *past )
 
     {
         int msecLatency = (int) ((PaHost_GetTotalBufferFrames(past) * 1000) / past->past_SampleRate);
-        PRINT(("PortAudio on OS X - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
+        //PRINT(("PortAudio on OS X - Latency = %d frames, %d msec\n", PaHost_GetTotalBufferFrames(past), msecLatency ));
     }
     
     /* Setup constants for CPU load measurement. */
