@@ -222,13 +222,13 @@ BOOL Initialize (HWND hDlg)
 		gRefNums[i] = r = MidiGetIndDriver((short)(i+1));
 		AddSlots (hDlg, r);
 	}
-	gWhite = CreateSolidBrush(RGB (0xff,0xff,0xff));
-	gRed = CreateSolidBrush(RGB (0xff,0,0));
-	gBlue = CreateSolidBrush(RGB (0,0,0xff));
-	gGreen = CreateSolidBrush(RGB (0,0xff,0));
-	gGray = CreateSolidBrush(RGB (0xb0,0xb0,0xb0));
+	if (!gWhite) gWhite = CreateSolidBrush(RGB (0xff,0xff,0xff));
+	if (!gRed) gRed = CreateSolidBrush(RGB (0xff,0,0));
+	if (!gBlue) gBlue = CreateSolidBrush(RGB (0,0,0xff));
+	if (!gGreen) gGreen = CreateSolidBrush(RGB (0,0xff,0));
+	if (!gGray) gGray = CreateSolidBrush(RGB (0xb0,0xb0,0xb0));
 	SetDlgItemText (hDlg, IDC_INFOS, "");
-	InvalidateRect (hDlg, &rect, TRUE);
+	DrawPorts (hDlg);
 	return TRUE ;
 }
 
@@ -465,9 +465,10 @@ void TrackMouseDown (HWND hDlg, short x, short y)
 ------------------------------------------------------------------ */
 BOOL CALLBACKAPI msCnctDlg (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (ProcessPrivateMessage (hDlg, message, wParam, lParam))
+	if (ProcessPrivateMessage (hDlg, message, wParam, lParam)) {
+//		DrawPorts (hDlg);
 		return TRUE;
-
+	}
 	switch (message) {
 		case WM_INITDIALOG:
 			ghDlg = hDlg;
