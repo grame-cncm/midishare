@@ -14,11 +14,11 @@ connections and send Midi events.
 To compile the Tutorial part1 :
 
 javac AppletFrame.java   
-javac TutorialPartl.java
+javac TutorialPart1.java
 
 To launch the Tutorial part1 :
 
-java TutorialPartl
+java TutorialPart1
 
 
 MidiShare Java Tutorial: Part2
