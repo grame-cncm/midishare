@@ -17,7 +17,9 @@ v 1.86 	    : minor bug in MidiClose corrected (memory not released)
 			                  handled using device close function.
 			  Windows release : search midishare.ini file first in application 
 			                    directory then when not found, in windows directory
-			          
+v 1.87 	    : MacOSX release: framework version
+                              extends time management to timer mode
+							  comments supported in conf. files
 
 
 Tags :
