@@ -211,7 +211,8 @@ enum{   MIDIOpenAppl=1,
         MIDICloseDriver,
         MIDIAddSlot,
         MIDIRemoveSlot,
-        MIDIChgSlotConnect
+        MIDIChgSlotConnect,
+        MIDIChgSlotName
 };
 
 /******************************************************************************
@@ -344,6 +345,7 @@ typedef struct {
 } SlotRefNum;
 
 typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
+
 typedef struct TSlotInfos {
 	SlotName 		name;
 	SlotDirection 	direction;
@@ -353,12 +355,10 @@ typedef struct TSlotInfos {
 
 typedef void (* WakeupPtr) 	(short refnum);
 typedef void (* SleepPtr) 	(short refnum);
-typedef Boolean (* SlotInfoPtr)(SlotRefNum slot, TSlotInfos * infos);
 typedef struct TDriverOperation {
 	WakeupPtr   wakeup;
 	SleepPtr    sleep;
-	SlotInfoPtr slotInfo;
-	long		reserved[2];
+	long		reserved[3];
 } TDriverOperation;
 
 typedef struct TDriverInfos {
