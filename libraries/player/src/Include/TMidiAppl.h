@@ -25,7 +25,7 @@
 
 
 #ifdef __Macintosh__
-#include "filter.h"
+#include "MidiFilter.h"
 #endif
 
 
