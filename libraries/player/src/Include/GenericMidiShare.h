@@ -17,10 +17,12 @@
 	#define true 1
 	#define false 0
 	#define nil 0
-	#define errno 
+	#define errno
+	#define NEAR 
 	#define FAR
 	#define EXPORT
 	#define MSALARMAPI
+	#define MFAPI
 #endif
 
 #ifdef __Macintosh__
