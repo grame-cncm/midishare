@@ -1,25 +1,12 @@
-SRC = ../../tools
-CFLAGS = -D __Linux__ -I../Include
-CC  = gcc
-APPLS = TestFunctions TestEvents
 
-appls : $(APPLS)
-
-TestFunctions : $(SRC)/TFonctions.c  $(SRC)/TFonctions.h
-	$(CC) $(SRC)/TFonctions.c -g  $(CFLAGS) -o TestFunctions -lMidiShare -lpthread
-
-TestEvents : $(SRC)/TEvents.c $(SRC)/TEvents.h
-	$(CC) $(SRC)/TEvents.c -I$(INC) -g  $(CFLAGS) -o TestEvents -lMidiShare -lpthread
-
-fmodule :
-	make -f functions
-
-emodule :
-	make -f events
-
-modules :
-	make -f events
-	make -f functions
+all :
+	make -C ./Events
+	make -C ./Filters
+	make -C ./Functions
+	make -C ./Drivers
 	
 clean :
-	rm $(APPLS)
+	make -i -C ./Events clean
+	make -i -C ./Filters clean
+	make -i -C ./Functions clean
+	make -i -C ./Drivers clean
