@@ -37,7 +37,7 @@ TThreads::TThreads (ThreadProcPtr proc, void * arg, int priority)
 	fThread = 0;
 	Create (proc, arg, priority);
 }
-
+#include <stdio.h>
 //_____________________________________________________________________
 int	TThreads::MapPriority (int priority)
 {
@@ -51,10 +51,13 @@ int	TThreads::MapPriority (int priority)
 			if (!classSet) 
 				classSet=SetPriorityClass (GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
 			return THREAD_PRIORITY_HIGHEST;
+		case ServerLRTPriority:
+			if (!classSet) 
+				classSet=SetPriorityClass (GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+			return THREAD_PRIORITY_HIGHEST;
 		case ServerRTPriority:
 			if (!classSet) 
 				classSet=SetPriorityClass (GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-			SetPriorityClass (GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
 			return THREAD_PRIORITY_TIME_CRITICAL;
 		default:
 			return THREAD_PRIORITY_NORMAL;
@@ -67,7 +70,7 @@ int	TThreads::SetPriority (int priority)
 	priority = MapPriority(priority);
 	if (GetThreadPriority (fThread) == priority)
 		return TRUE;
-	if (!SetThreadPriority (fThread, MapPriority(priority)))
+	if (SetThreadPriority (fThread, priority))
 		return TRUE;
 	return FALSE;
 }

@@ -41,6 +41,7 @@ enum {
 	kClientHighPriority=49, 
 	kClientRTPriority=90, 
 	kServerHighPriority=50,
+	kServerLRTPriority=98,
 	kServerRTPriority=99 
 };
 

@@ -46,9 +46,10 @@ class TThreads
 	public:
 		// priorities are mapped to system priorities by the windows implementation
 		// they directly represents pthreads priorities for other implementations
-		enum { NormalPriority=0, 
-			ClientHighPriority=49, ClientRTPriority=90, 
-			ServerHighPriority=50, ServerRTPriority=99 };
+		enum { NormalPriority=kNormalPriority, 
+			ClientHighPriority=kClientHighPriority, ClientRTPriority=kClientRTPriority, 
+			ServerHighPriority=kServerHighPriority, 
+			ServerLRTPriority=kServerLRTPriority, ServerRTPriority=kServerRTPriority };
         enum { ThreadNoErr=0, MemAllocFailed=-1, CreateFailed=-2, SetPriorityFailed=-3 };
     
 		 	 TThreads ();

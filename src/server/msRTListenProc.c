@@ -181,13 +181,13 @@ int RTCommInit (msServerContextPtr c, CommunicationChan cc)
 		msStreamParseInit (&rt->parse, c->parseMthTable, rt->rbuff, kRTReadBuffSize);
 		msStreamInit 	  (&rt->stream, c->streamMthTable, rt->wbuff, kRTWriteBuffSize);
 		CCSetInfos (cc, rt);
-		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerRTPriority - 1);
+		rt->RTThread = msThreadCreate (RTListenProc, cc, kServerLRTPriority);
 		if (rt->RTThread) return true;
 
-		LogWrite ("RTCommInit: cannot create RTListenProc");
 		CCSetInfos (cc, 0);
 		DisposeMemory (rt);
 		rt = 0;
+		LogWrite ("RTCommInit: cannot create RTListenProc");
 	}
 	else LogWrite ("RTCommInit: memory allocation failed");
 	return false;
