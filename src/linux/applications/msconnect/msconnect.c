@@ -223,6 +223,7 @@ gint check_update( gpointer data )
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
 {
+	printf("toto \n");
 	MidiClose(gRefNum);
 	gtk_main_quit();
 	return FALSE;
@@ -265,10 +266,6 @@ int main(int argc, char *argv[] )
 	gtk_widget_show_all (window);
 	
 	// signal connexion
-	gtk_signal_connect(
-			GTK_OBJECT(window), "delete_event", 
-			GTK_SIGNAL_FUNC(my_delete_action), NULL
-	);
 	
 	gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
