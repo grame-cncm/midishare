@@ -20,6 +20,7 @@
 
 */
 
+#include <MacWindows.h>
 #include <Memory.h>
 #include <Resources.h>
 #include <Types.h>
