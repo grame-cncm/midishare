@@ -56,8 +56,6 @@
   Internal functions prototypes
   =========================================================================== */
 static Boolean  equalApplName   (TApplPublicPtr ap, MidiName name);
-static void     pstring2ev      (MidiEvPtr e, unsigned char * str, lifo * freelist);
-static void     string2ev       (MidiEvPtr e, char * str, lifo * freelist);
 
 /*===========================================================================
   External MidiShare functions implementation
@@ -121,6 +119,14 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
 }
 
 #ifndef MSKernel
+#ifdef PascalNames
+	static void     pstring2ev      (MidiEvPtr e, unsigned char * str, lifo * freelist);
+#	define str2ev	pstring2ev
+#else
+	static void     string2ev       (MidiEvPtr e, char * str, lifo * freelist);
+#	define str2ev	string2ev
+#endif
+
 /*____________________________________________________________________________*/
 /*                    functions handled in client  context                    */
 /*____________________________________________________________________________*/
@@ -132,11 +138,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 	
 	e = MSNewEv (typeMidiSetName, &g->memory.freeList);
 	if (e) {
-#ifdef PascalNames
-		pstring2ev (e, name, &g->memory.freeList);
-#else
-		string2ev (e, name, &g->memory.freeList);
-#endif
+		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
 		e = MSSendSync (0, e, g);
 		if (!e) return MIDIerrComm;
@@ -168,11 +170,7 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TMSGlobalPtr g)
 {
 	MidiEvPtr e = MSNewEv (typeMidiSetName, &g->memory.freeList);
 	if (e) {
-#ifdef PascalNames
-		pstring2ev (e, name, &g->memory.freeList);
-#else
-		string2ev (e, name, &g->memory.freeList);
-#endif
+		str2ev (e, name, &g->memory.freeList);
 		Date(e) = g->pub->time;
 		MSSend (ref, e, g);
 	}
@@ -242,6 +240,19 @@ MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TMSGlobalPtr g)
 	}
 	return 0;
 }
+
+#ifdef PascalNames
+static void pstring2ev (MidiEvPtr e, unsigned char * str, lifo * freelist)
+{
+	unsigned char n = *str++;
+	while (n--) MSAddField (e, *str++, freelist);
+}
+#else
+static void string2ev (MidiEvPtr e, char * str, lifo * freelist)
+{
+	while (*str) MSAddField (e, *str++, freelist);
+}
+#endif
 
 #else
 /*===========================================================================
@@ -470,15 +481,4 @@ static Boolean equalApplName (TApplPublicPtr ap, MidiName name)
 	while ((*apname != 0) && (*apname == *name) ) { apname++; name++; }
 	return (*apname == *name);
 #endif
-}
-
-static void pstring2ev (MidiEvPtr e, unsigned char * str, lifo * freelist)
-{
-	unsigned char n = *str++;
-	while (n--) MSAddField (e, *str++, freelist);
-}
-
-static void string2ev (MidiEvPtr e, char * str, lifo * freelist)
-{
-	while (*str) MSAddField (e, *str++, freelist);
 }
