@@ -253,13 +253,15 @@ void TInetControler::RcvPacket (IPAddrPtr from, GenericPacketPtr p, short len)
 			case kEchoReply:
 				break;
 			default:
+				fprintf (stderr, "unknown packet type %d\n",  p->header.type);
 				MidiTools::Print ("unknown packet", GetRefNum());
 				MidiTools::Print (p->header.type, GetRefNum());
 		}
 	}
 	else {
+		fprintf (stderr, "packet bad header: magic is %hd\n",  p->header.magic);
 		MidiTools::Print ("packet bad header", GetRefNum());
-		MidiTools::Print (p->header.type, GetRefNum());
+		MidiTools::Print (p->header.magic, GetRefNum());
 	}
 }
 
