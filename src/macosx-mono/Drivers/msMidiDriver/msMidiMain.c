@@ -33,11 +33,8 @@
 #include <pthread.h>
 #include <CoreFoundation/CFRunLoop.h>
 
-static void Start();
-static void Stop();
-
-void Load_MidiDriver() {Start();}
-void Dispose_MidiDriver() {Stop();}
+void Start();
+void Stop();
 
 static void MSALARMAPI msWakeup (short refnum);
 static void MSALARMAPI msSleep  (short refnum);
@@ -70,8 +67,9 @@ pthread_t create_thread (int priority, threadProcPtr proc)
 	int  ret = pthread_create(&thread, NULL, proc, 0);
 	if (!ret)
 		return thread;	
-	else 
-		printf ("pthread_create failed: (%s)\n");
+	else {
+		//printf ("pthread_create failed: (%s)\n");
+        }
 	return 0;	
 }
 
@@ -98,50 +96,16 @@ void stopThread (pthread_t thread)
 
 
 //________________________________________________________________________________________
-/*
-void MyNotifyProc(const MIDINotification *message, void *refCon)
-{
-	int res;
-	
-	printf ("MyNotifyProc \n");
-	
-	if (message->messageID == kMIDIMsgSetupChanged){
-		if (gRefNum > 0) {
-		
-			// Mutex for Slot list management : access by this thread and global thread
-			gReenter++;
-			res = pthread_mutex_trylock(&gMutex);
-			
-			// In case of reentrancy
-			if (res == EBUSY){
-				printf ("LOCK BUSY \n");
-				 return;
-			}
-			//do {
-				printf ("gReenter %ld\n",gReenter);
-				RemoveSlots(gRefNum);
-				AddSlots (gRefNum);
-			//}while(gReenter--);
-			
-			res =  pthread_mutex_unlock(&gMutex);
-		}
-	}
-}
-*/
 
 void MyNotifyProc(const MIDINotification *message, void *refCon)
 {
-	printf ("MyNotifyProc \n");
-	
-	if (message->messageID == kMIDIMsgSetupChanged) {
+        if (message->messageID == kMIDIMsgSetupChanged) {
 		if (gRefNum > 0 ) {
 		
 			// Mutex for Slot list management : access by this thread and global thread
 			gReenter++;
 			if (!gInit) {
 				gInit = true;
-				
-				printf ("gReenter %ld\n",gReenter);
 				do {
 					RemoveSlots(gRefNum);
 					AddSlots (gRefNum);
@@ -158,7 +122,7 @@ static Boolean InitMidiClient ()
 {
 	OSStatus err;
 	//set_cancel();
-
+	
 	err = MIDIClientCreate(CFSTR("MidiShare"), MyNotifyProc, NULL, &gClient);
 	//printf("MIDIClientCreate OK\n");
 	if (!gClient) {
@@ -194,21 +158,18 @@ error :
 //________________________________________________________________________________________
 static void * MidiThread (void * ptr)
 {
-	if (InitMidiClient()) 	
-		CFRunLoopRun();
+	if (InitMidiClient()) CFRunLoopRun();
 }
 
-
-
 //_________________________________________________________
-static void Start()
+void Start()
 {
 	//printf("Start DRIVER\n");
 	gRefNum = MidiRegisterDriver (&drvInfos, &drvOps);
 }
 
 //_________________________________________________________
-static void Stop()
+void Stop()
 {
 	//printf("Stop DRIVER\n");
 	if (gRefNum > 0) MidiUnregisterDriver (gRefNum);
@@ -241,7 +202,6 @@ static void msWakeup (short refnum)
 	
 	// Wait for the MIDI thread to open client and ports.
 	for (i = 0 ; i<TIME_OUT; i++) {
-	  	//printf("WAIT for MIDI Opening\n");
 		if (gOutPort) break;
 		sleep(1);
 	}
@@ -253,8 +213,8 @@ static void msWakeup (short refnum)
 	
 	MidiSetRcvAlarm (refnum, RcvAlarm);
 	MidiSetApplAlarm (refnum, ApplAlarm);
-    SetupFilter (&gFilter);
-    MidiSetFilter (refnum, &gFilter);	
+        SetupFilter (&gFilter);
+        MidiSetFilter (refnum, &gFilter);	
 	MidiConnect (MidiShareDrvRef, refnum, true);
 	MidiConnect (refnum, MidiShareDrvRef, true);
 	MidiStreamInitMthTbl (gLinMethods);
@@ -288,7 +248,6 @@ static void msSleep (short refnum)
 {
 	/*SaveState (gInSlots, gOutSlots);*/
 	
-	//printf("msSleep\n");
 	//stopThread(gThread); // NE MARCHE PAS : A VOIR
 	
 	if (gInPort) MIDIPortDispose(gInPort);
