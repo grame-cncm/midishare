@@ -307,107 +307,48 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 	}
 }
 
-/*--------------------------------------------------------------------------*/
-/* when events are at the same date, events from e1 will be before events from e2 */
-
-static MidiEvPtr AddSeqOrder( MidiEvPtr e1, MidiEvPtr e2, Boolean order)
-{
-	 MidiEvPtr next;
-	
-	while( next= Link(e1))					/* tant qu'une sequence n'est pas finie */
-	{
-		if (order) {						/* les evenements de e1 seront AVANT ceux de e2 */
-		
-			if( Date(next) <= Date(e2))		/* date inferieure dans la mme seq */
-				e1= next;					/* rien a faire : on continue		*/
-			else							/* sinon							*/
-			{
-				Link( e1)= e2;				/* on linke avec l'autre sequence	*/
-				e1= e2;						/* et on les inverse				*/
-				e2= next;
-				order = !order; 			
-			}
-			
-		}else{								/* les evenements de e1 seront APRES ceux de e2 */
-		
-			if( Date(next) < Date(e2))		/* date inferieure STRICTE dans la mme seq */
-				e1= next;					/* rien a faire : on continue		*/
-			else							/* sinon							*/
-			{
-				Link( e1)= e2;				/* on linke avec l'autre sequence	*/
-				e1= e2;						/* et on les inverse				*/
-				e2= next;
-				order = !order;
-			}
-		}
-	}
-	
-	if( Link(e1)= e2)			/* linke avec la fin de l'autre sequence 	*/
-		while( Link(e2))
-			e2= Link(e2);
-	return e2;					/* et renvoie le dernier evt de la sequence */
-}
-
-/*--------------------------------------------------------------------------*/
-/* when events are at the same date, events from src will be before events from dest */
-
-static void MixeSeqOrder( MidiSeqPtr src, MidiSeqPtr dest)
-{
-	 MidiEvPtr firstSrc, firstDest;
-	
-	if( dest && src)							/* dest et src existent		*/
-	{
-		if( firstSrc= src->first)				/* src non vide				*/
-		{
-			if( !(firstDest= dest->first))		/* si destination est vide	*/
-			{
-				dest->first= firstSrc;			/* recopie du premier et	*/
-				dest->last= src->last;			/* dernier evt de src		*/
-			}
-			else if( Date(firstSrc) <= Date(firstDest))
-												/* 1ier evt source precede	*/
-			{									/* le 1ier evt destination	*/
-				dest->first= firstSrc;			/* range dans destination	*/
-				dest->last= AddSeqOrder( firstSrc, firstDest, true);	/* et chainage	*/
-			}
-			else dest->last= AddSeqOrder( firstDest, firstSrc, false);	/* et chainage	*/
-		}
-	}
-}
-
-/*--------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
+ Replace typeNote event by  typeKeyOn and typeKeyOff events
+ Necessary to insert typePort event to prefix typekeyOff event.
+ On return, true if succes, false if MidiShare memory error.
+-----------------------------------------------------------------------------*/
 static Boolean TrsfNoteToKeyOn (MidiSeqPtr dest)
 {
-	MidiSeqPtr seq = MidiNewSeq();
-	MidiEvPtr e,e1;
+	MidiEvPtr e,e1,ei,n;
 
 	e = First (dest);
-	
-	if (seq){
-		while (e) {
+	while (e) {
 			if (EvType(e) == typeNote) {
+				// A typeKeyOff ev is build and add to seq
 				if (e1 = MidiCopyEv(e)){
 					EvType(e1) = typeKeyOff;	// Type change
-					Vel(e1) = 64;
-					Date(e1) = Date(e1) + Dur(e); 
-					MidiAddSeq(seq,e1);
+					Vel(e1) = 64;			// velocity
+					Date(e1) = Date(e1) + Dur(e); // Date + Duration
+					// insert in dest after  e
+					ei = e;
+					while (ei)
+					{
+						n = Link(ei);
+						if(!n || Date(e1) <= Date(n))
+						{
+							// Insert e1 after ei and before n
+							Link(ei) = e1;
+							Link(e1) = n;
+							break;
+						}
+						ei = n;
+					}
+					if (!n) Last (dest) = e1;
+
 				}else {
-					MidiFreeSeq(seq);
 					return false;
 				}
+				// typeNote is replaced by a typeKeyOn
 				EvType(e) = typeKeyOn;			// Type change
 			}	
 			e = Link(e);
-		}
-		
-		MixeSeqOrder (seq,dest); 			/* mixage avec ordre (seq < dest), pour que les KeyOff soient inseres au bon endroit */ 
-		seq->first= seq->last= nil;			/* sauvegarde des evts		*/
-		MidiFreeSeq( seq);
-		
-		return true;
-		
-	}else
-		return false;
+	}
+	return true;
 }
 
 

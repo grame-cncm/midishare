@@ -47,44 +47,45 @@ MidiEvPtr UMidi::CheckEvType (MidiSeqPtr src, short type)
 }
 
 /*--------------------------------------------------------------------------*/
+// Replace typeNote event by  typeKeyOn and typeKeyOff events
 
-MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr src)
+MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr dest)
 {
-	MidiSeqPtr tmp = MidiNewSeq();
-	MidiEvPtr e,e1;
+	MidiEvPtr e,e1,ei,n;
 
-	e = First (src);
-	if (tmp){
-		while (e) {
-			switch (EvType(e)) {
-			
-				case typeKeyOn:
-					if (Vel(e) == 0) {
-						EvType(e) = typeKeyOff;		// Type change
-						Vel(e) = 64;
+	e = First (dest);
+	while (e) {
+			if (EvType(e) == typeNote) {
+				// A typeKeyOff ev is build and add to seq
+				if (e1 = MidiCopyEv(e)){
+					EvType(e1) = typeKeyOff;	// Type change
+					Vel(e1) = 64;			// velocity
+					Date(e1) = Date(e1) + Dur(e); // Date + Duration
+					// insert in dest after  e
+					ei = e;
+					while (ei)
+					{
+						n = Link(ei);
+						if(!n || Date(e1) <= Date(n))
+						{
+							// Insert e1 after ei and before n
+							Link(ei) = e1;
+							Link(e1) = n;
+							break;
+						}
+						ei = n;
 					}
-					break;
-			
-				case typeNote:
-					if ((e1 = MidiCopyEv(e))){
-						EvType(e1) = typeKeyOff;	// Type change
-						Vel(e1) = 64;
-						Date(e1) += Dur(e);
-						MidiAddSeq(tmp,e1);
-					}else {
-						MidiFreeSeq(tmp);
-						return 0;
-					}
-					EvType(e) = typeKeyOn;			// Type change
-					break;
+					if (!n) Last (dest) = e1;
+
+				}else {
+					return 0;
+				}
+				// typeNote is replaced by a typeKeyOn
+				EvType(e) = typeKeyOn;			// Type change
 			}	
 			e = Link(e);
-		}
-		UMidi::MixeSeq (tmp,src); // The first cell of "temp" will be desallocated in MixeSeq
-		return src;
-   }else
-   		return 0;
-  
+	}
+	return dest;
 }
 
 /*--------------------------------------------------------------------------*/
