@@ -14,6 +14,7 @@
 #include "msAppls.h"
 #include "msConnx.h"
 #include "msDefs.h"
+#include "msDrvFun.h"
 #include "msEvents.h"
 #include "msFields.h"
 #include "msFilter.h"
@@ -81,31 +82,31 @@ static inline void 		MidiSetApplAlarm (short refNum, ApplAlarmPtr alarm)
 
 /*------------------------------- Drivers management --------------------------*/
 
-static inline short 	MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op)
+static inline short 	MidiRegisterDriver 	(TDriverInfos * infos, TDriverOperation *op)
 						{ return MSRegisterDriver (infos, op, gMem); }
-static inline void 		MidiUnregisterDriver (short refnum);
+static inline void 	MidiUnregisterDriver 	(short refnum)
 						{ MSUnregisterDriver (refnum, gMem); }
-static inline short		MidiCountDrivers	();
+static inline short	MidiCountDrivers 	()
 						{ return MSCountDrivers (Clients(gMem)); }
-static inline short		MidiGetIndDriver	(short index);
+static inline short	MidiGetIndDriver 	(short index)
 						{ return MSGetIndDriver (index, Clients(gMem)); }
-static inline Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos);
-						{ return MSGetDriverInfos (refnum, Clients(gMem)); }
+static inline Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos)
+						{ return MSGetDriverInfos (refnum, infos, Clients(gMem)); }
 
 
 /*-------------------------------- Slots management ---------------------------*/
 
-static inline SlotRefNum	MidiAddSlot 		(short refnum);
+static inline SlotRefNum	MidiAddSlot 		(short refnum)
 							{ return MSAddSlot (refnum, Clients(gMem)); }
-static inline SlotRefNum	MidiGetIndSlot		(short refnum, short index);
+static inline SlotRefNum	MidiGetIndSlot		(short refnum, short index)
 							{ return MSGetIndSlot (refnum, index, Clients(gMem)); }
-static inline void			MidiRemoveSlot 		(SlotRefNum slot);
+static inline void		MidiRemoveSlot 		(SlotRefNum slot)
 							{ MSRemoveSlot (slot, Clients(gMem)); }
-static inline Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
+static inline Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos)
 							{ return MSGetSlotInfos (slot, infos, Clients(gMem)); }
-static inline void			MidiConnectSlot		(short port, SlotRefNum slot, Boolean state);
+static inline void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state)
 							{ MSConnectSlot (port, slot, state, Clients(gMem)); }
-static inline Boolean		MidiIsSlotConnected	(short port, SlotRefNum slot);
+static inline Boolean		MidiIsSlotConnected 	(short port, SlotRefNum slot)
 							{ return MSIsSlotConnected (port, slot, Clients(gMem)); }
 
 
