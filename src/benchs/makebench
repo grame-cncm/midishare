@@ -1,9 +1,9 @@
 #!/bin/sh
 #
 
-n="1 2 3 4 5 6 7 8 9 10"
-n="6 7 8 9 10"
-outdirs=bench
+n="1 2 3 4 5 6 7 8 9 10 15 20"
+
+outdirs= bench
 outfile=bench
 outdrv=msBenchDriver
 
@@ -14,11 +14,15 @@ function bench() {
 	while [ $count -gt 0 ]
 	do
 		./msBenchAppl > $dir/$outfile-$count.out.txt 2>  $dir/$outfile-$count.sum.txt &
+#		./msBenchAppl > $dir/$outfile-$count.out.txt &
 		count=$(($count - 1))
 	done
-	sleep $(($1 + 1))
+#	sleep $(($1 + 1))
+	sleep 5
 	mv $outdrv.*.txt $dir
 }
+
+MidiShare || exit 1
 
 for a in $n
 do

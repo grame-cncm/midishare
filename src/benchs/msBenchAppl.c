@@ -21,6 +21,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <MidiShare.h>
 
 #include "results.h"
@@ -33,6 +34,21 @@
 # define sleep(n)  usleep(n*1000)
 #endif
 
+
+static int siglist [] = {
+	SIGABRT,
+	SIGFPE,
+	SIGILL,
+	SIGINT,
+	SIGSEGV,
+	SIGTERM,
+#ifndef WIN32
+	SIGHUP,
+	SIGQUIT,
+	SIGBUS,
+#endif
+	0
+};
 
 /* ----------------------------------*/
 /* constants definitions             */
@@ -53,22 +69,62 @@ static void TimeTask( long date, short refNum, long a1,long a2,long a3 );
 short gRef = 0;
 MidiEvPtr gTask = 0;
 TimeType  gLastCall;
+int gCount  = 1500;
+long gLastTime = 0;
+
+#include <mach/mach_time.h>
+static void TimeTask (long date, short refNum, long a1,long a2,long a3);
+
+//___________________________________________________________________
+static void benchSigHandler(int sig)
+{
+	long long int t = mach_absolute_time();
+	fprintf (stderr, "client %d: signal %d received [%lx, %lx] at time %lld\n",
+		(int)gRef, sig, (long)TimeTask, (long)InitTask, t);
+	exit (1);
+}
+
+//___________________________________________________________________
+static void sigInit ()
+{
+#ifndef WIN32
+	int * sigs = siglist;
+	struct sigaction sa;
+
+	while (*sigs) {
+		sa.sa_handler = benchSigHandler;
+		sigemptyset (&sa.sa_mask);
+		sa.sa_flags = 0; 			//SA_RESETHAND;
+		sigaction (*sigs++, &sa, 0);
+	}
+	sa.sa_handler = SIG_IGN;
+	sigemptyset (&sa.sa_mask);
+	sa.sa_flags = 0; 			//SA_RESETHAND;
+	sigaction (SIGPIPE, &sa, 0);
+#endif
+}
 
 /* -----------------------------------------------------------------------------*/
 static void InitTask (long date, short refNum, long a1,long a2,long a3 )
 {
 	getTime(gLastCall);
 	gTask = MidiTask (TimeTask, date+kTimeRes, refNum, 0, 0, 0);
+	if (!gTask)
+		fprintf (stderr, "InitTask: MidiTask failed\n");
 }
 
 /* -----------------------------------------------------------------------------*/
 static void TimeTask (long date, short refNum, long a1,long a2,long a3)
 {
 	TimeType t;
+	gTask = 0;
 	getTime(t);
 	storeTime (gLastCall, t);
 	gLastCall = t;
+	gLastTime = MidiGetTime();
 	gTask = MidiTask (TimeTask, date+kTimeRes, refNum, 0, 0, 0);
+	if (!gTask)
+		fprintf (stderr, "TimeTask %d: MidiTask failed\n", refNum);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -80,8 +136,8 @@ static void FlushReceivedEvents (short r)
 /* -----------------------------------------------------------------------------*/
 int main (int argc, char *argv[])
 {
-	short ref;
-	
+	long t;
+	sigInit ();
 	if (!bench_init(kBenchLen)) {
 		fprintf (stderr, "Can't launch msBenchAppl: initialization failed\n");
 		return 1;
@@ -92,18 +148,24 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 	
-	ref = MidiOpen (kApplName);
-	if (ref < 0) {
-		fprintf (stderr, "Can't launch msBenchAppl: can't open a MidiShare client (%d)\n", ref);
+	gRef = MidiOpen (kApplName);
+	if (gRef < 0) {
+		fprintf (stderr, "Can't launch msBenchAppl: can't open a MidiShare client (%d)\n", gRef);
 		return 1;
 	}
 
-	MidiSetRcvAlarm (ref, FlushReceivedEvents);
-	gTask = MidiTask (InitTask, MidiGetTime()+1, ref, 0, 0, 0);
-	while (!bench_done())
+	MidiSetRcvAlarm (gRef, FlushReceivedEvents);
+	gTask = MidiTask (InitTask, MidiGetTime()+1, gRef, 0, 0, 0);
+	while (!bench_done()) {
 		sleep (100);
+		t = MidiGetTime();
+		if ((t - gLastTime) > 1500) {
+			fprintf (stderr, "%d time out\n", gRef); 
+			break;
+		}
+	}
 	MidiForgetTask (&gTask);
-	MidiClose (ref);
+	MidiClose (gRef);
 	print_result (stdout, stderr);
 	return 0;
 }
