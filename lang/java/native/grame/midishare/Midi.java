@@ -40,6 +40,7 @@
 /* 129: Add IsAcceptedPort, IsAcceptedChan, IsAcceptedType functions
 /* 130: Functions for drivers management
 /* 131: New PortPrefix event type
+/* 132: New RemoveEv function
 /*****************************************************************************/
 
 
@@ -58,7 +59,7 @@ An introduction on MidiShare can be found <A HREF = "MSH_intro.html">here</A>.
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  131;
+	public   static  int  Version =  132;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}

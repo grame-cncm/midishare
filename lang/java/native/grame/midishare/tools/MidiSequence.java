@@ -35,9 +35,9 @@ final public class MidiSequence {
 
 	/*--------------------------------------------------------------------------*/
 	/**
-	Copy a MidiShare sequence
+	Copy a MidiShare sequence.
 	*@param src is a pointer to the sequence to be copied.
-	*@return The result is a pointer to the new sequence
+	*@return The result is a pointer to the new sequence.
 	*/
 
 	public static int Copy(int seq) {
@@ -166,7 +166,7 @@ Convert a sequence where the dates are in ticks into a sequence where the dates
 are in millisecond by using the tempo informations included in the sequence.
 This method is used to convert a sequence read from a MIDIfile with a "SMPTE" time
 definition.
-*@param seq is a pointer to the sources sequence.
+*@param seq is a pointer to the source sequence.
 *@param fps is the frame_per_second value.
 *@param tpf is the ticks_per_frame.
 *@see grame.midishare.midifile.MidiFileInfos
@@ -192,7 +192,7 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 	are in millisecond by using the tempo informations included in the sequence.
 	This method is used to convert a sequence read from a MIDIfile with a 
 	"TicksPerQuarterNote" time definition.
-	*@param seq is a pointer to the sources sequence.
+	*@param seq is a pointer to the source sequence.
 	*@param tick_per_quarter is read in the MIDIdile.
 	*@see grame.midishare.midifile.MidiFileInfos
 	*/
@@ -222,6 +222,39 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 			Midi.SetDate(e,(int) (t2 / 1000.0)) ;
 			e = Midi.GetLink(e);
 		}
+	}
+	
+	/**
+	Removes an event from a MidiShare sequence.
+	*@param seq is a pointer to the sequence.
+	*@param e is the event to be removed.
+	*@return The result is true if the event has been successfully removed false otherwise.
+	*/
+	
+	public boolean RemoveEv( int seq, int e)
+	{
+		int cur = Midi.GetFirstEv(seq);
+		int prev = 0;
+		
+		while(cur != 0)
+		{
+			if( cur == e) {			
+					
+				if (prev == 0)									
+					Midi.SetFirstEv(seq, Midi.GetLink(cur));			
+				else											
+					Midi.SetLink(prev, Midi.GetLink(cur));
+					
+				if (Midi.GetLink(cur) == 0)	Midi.SetLastEv(seq, prev);     
+				
+				return true;	
+					
+			}else {
+				prev = cur;
+				cur = Midi.GetLink(cur);
+			}
+		}
+		return false;
 	}
 	
 	
