@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 #include <gtk/gtk.h>
 
 #include "MidiShare.h"
@@ -7,11 +8,9 @@
 //---------------------------------------------------------
 void StripPath (char * name, char *dst)
 {
-	char sep = '/', *ptr;
-	ptr = name;
-	while (*ptr && (*ptr++ != sep))
-		;
-	if (!*ptr) ptr = name;
+	char *ptr = strrchr (name, '/');
+	if (!ptr) ptr = name;
+	else ptr++;
 	while (*ptr) *dst++ = *ptr++;
 	*dst = 0;
 }
