@@ -13,7 +13,7 @@
 #ifndef __TMTRACK__
 #define __TMTRACK__
 
-#include "MidiFile.h"
+#include "Midifile.h"
 
 /*********************************** fin ************************************/
 

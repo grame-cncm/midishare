@@ -56,17 +56,20 @@
  *
 /*----------------------------------------------------------------------------*/
 
-#include "TMTrack.h"
+#include "Tmtrack.h"
 
 
 #ifdef __Macintosh__
-#include <CType.h>
-#include <Files.h>
+	#include <CType.h>
+	#include <Files.h>
+	#include <StdLib.h>
+	#include <String.h>
 #endif
 
-#include <StdLib.h>
-#include <String.h>
-
+#ifdef __Windows__
+	#include <StdLib.h>
+	#include <String.h>
+#endif
 
 /*----------------------------------------------------------------------------*/
 
