@@ -274,8 +274,9 @@ static void Initialize( EGlobalPtr g)
 	OSErr err; short i;
 	
 	err = SysEnvirons(1, &gMac);
-	if (gMac.machineType < 0) AlertUser( ApplName, "\pneed at least 128K ROMs", true);
-	for (i=0; i<10; i++) {
+	if (gMac.machineType < 0) FatalErreur("\pneed at least 128K ROMs");
+	MaxApplZone();
+	for (i=0; i<5; i++) {
 		MoreMasters();
 	}	
 	foreGround = true;
@@ -287,14 +288,14 @@ static void Initialize( EGlobalPtr g)
 	InitMenus();				   					/* initialise le Menu Manager			*/
 	TEInit();									   	/* initialise le Text Edit Manager		*/
 	InitCursor(); 					   				/* initialise le curseur de la souris	*/
-
 	FlushEvents(everyEvent, 0);						/* efface ŽvŽnements Mac en attente		*/
+
+	if( MidiShare() && MidiCountAppls())
+		FatalErreur( "\pMidiShare applications are running !");
 
 	SetUpMenus();									/* mise en place menus					*/
 	SetUpWindows();
-	
-	if( MidiShare() && MidiCountAppls())
-		FatalErreur( "\pMidiShare applications are running !");
+
 	InitLoader( g);
 	LoadMidiShare();
 }
