@@ -45,5 +45,5 @@ applets/applications in Java:
 Publication of source code
 ===========================
 
-The "grame" folder contains all the Java classes needed to interface MidiShare with Java. 
-The JNI interface is not yet published.
+The "native" folder contains all the Java classes needed to produce natives classes. 
+The "jni" folder contains sources to produce the JNI interface.
