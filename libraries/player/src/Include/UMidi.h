@@ -1,6 +1,6 @@
 // ===========================================================================
 // The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
+// 1996-2001, and is distributed as Open Source software under the Artistic License;
 // see the file "Artistic" that is included in the distribution for details.
 //
 // Grame : Computer Music Research Laboratory
@@ -12,9 +12,9 @@
 // ===========================================================================
 //	Umidi.h			    
 // ===========================================================================
-//
-//	Midi utilities: various MidiShare sequence management functions
-// 
+/*!
+\brief	Midi utilities : various MidiShare sequence management functions.
+*/
 
 
 
@@ -36,27 +36,25 @@ class UMidi{
  
 	static MidiSeqPtr 	TrsfNoteToKeyOn (MidiSeqPtr src);
 	
- 	static void 		MixeSeq( MidiSeqPtr src, MidiSeqPtr dest);
-	static MidiEvPtr 	AddSeq( register MidiEvPtr e1, register MidiEvPtr e2);
+ 	static void 		MixeSeq(MidiSeqPtr src, MidiSeqPtr dest);
+	static MidiEvPtr 	AddSeq(MidiEvPtr e1, MidiEvPtr e2);
 	
-	static MidiEvPtr	CheckEvType (MidiSeqPtr src,short type);
+	static MidiEvPtr	CheckEvType(MidiSeqPtr src, short type);
 
-	static void 		FreeOneLine (MidiEvPtr cur);
- 	static MidiEvPtr 	CopyOneLine (MidiEvPtr cur);
+	static void 		FreeOneLine(MidiEvPtr cur);
  	
- 	static ULONG		LengthSeq (MidiSeqPtr s);
- 	static MidiSeqPtr 	CopySeq (MidiSeqPtr src);
- 	static void 		SetRefnum (MidiSeqPtr src,short refnum);
+ 	static ULONG		LengthSeq(MidiSeqPtr s);
+ 	static void 		SetRefnum(MidiSeqPtr src, short refnum);
  	
- 	static MidiEvPtr 	NoteToKeyOff (MidiEvPtr e1);
+ 	static MidiEvPtr 	NoteToKeyOff(MidiEvPtr e1);
  	
  	static MidiSeqPtr 	BuildTrack(MidiSeqPtr s);
 	static MidiSeqPtr 	BuildAllTrack(MidiSeqPtr s);
 	
 	static Boolean 		Copy_AddSeq(MidiSeqPtr s, MidiEvPtr e);
 	static Boolean 		IsEmpty(MidiSeqPtr s);
-	static void 		DelEndTrack( MidiSeqPtr seq);
-	static void 		RemoveEv( MidiSeqPtr seq,MidiEvPtr e);
+	static void 		DelEndTrack(MidiSeqPtr seq);
+	static void 		RemoveEv(MidiSeqPtr seq, MidiEvPtr e);
 
 };
 
