@@ -218,7 +218,7 @@ static int AudioClockHandler( void *inputBuffer, void *outputBuffer,
 {
  	gFrames += gAudioSize;
  	
-	while (gFrames>AUDIO_MS_INT) {
+	while (gFrames>=AUDIO_MS_INT) {
 		ClockHandler((TMSGlobalPtr)userData);
 		gFrames-=AUDIO_MS_INT;
 	}
