@@ -46,6 +46,7 @@
 #ifdef  __MSWindows__
 	#ifdef WIN32
 		#include <windows.h>
+		#define __SupportOldSTDef__ 
    		#include "MidiShare.h"
    		#define  EXPORT  __declspec(dllexport)
    		#define  MFAPI
