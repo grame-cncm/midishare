@@ -47,8 +47,6 @@
 
 pascal unsigned long main (short message, short item, short numItems, short CPanelID,
 					EventRecord *theEvent, unsigned long cdevValue, DialogPtr CPDialog);
-void MidiPrintf (char *string);
-void MidiPrintn (long n);
 
 /*_______________________________________________________________________*/
 /* constants definition */
@@ -182,39 +180,6 @@ pascal unsigned long main (short message, short item, short numItems, short CPan
 }
 
 /*_______________________________________________________________________*/
-void MidiPrintf (char *string)
-{
-	MidiEvPtr e = MidiNewEv (typeTextual);
-	if( e) {
-		 while( *string)
-			MidiAddField ( e, *string++);
-		MidiSendIm (0, e);
-	}
-}
-
-/*_______________________________________________________________________*/
-void MidiPrintn (long n)
-{
-	MidiEvPtr e = MidiNewEv (typeTempo);
-	if( e) {
-		Tempo(e) = n;
-		MidiSendIm (0, e);
-	}
-}
-
-/*_______________________________________________________________________*/
-void MidiPrintp (unsigned char * str)
-{
-	MidiEvPtr e = MidiNewEv (typeTextual);
-	if( e) {
-		short i, n = str[0];
-		for (i=1; i<=n; i++)
-			MidiAddField ( e, str[i]);
-		MidiSendIm (0, e);
-	}
-}
-
-/*_______________________________________________________________________*/
 /*	items management														  */
 static ControlHandle IGetCtlHand (StorageHdle ourHandle, short item, Rect * itemRect)
 {
@@ -275,8 +240,8 @@ void LoadDriverManager (StorageHdle ourStorage)
 		Boolean launched; OSErr err;
 		err = SignatureToApp (DriverManagerSign, 0, 0, &launched, 
 							Sig2App_LaunchApplication, launchContinue);
-		if ((err != noErr) || !launched) {
-			SetItemText (ourStorage, iMsg, "\pMidiShare Drivers Manager not found");
+		if (err != noErr) {
+			SetItemText (ourStorage, iMsg, "\pcannot launch Drivers Manager");
 			SysBeep (30);
 		}
 	}
