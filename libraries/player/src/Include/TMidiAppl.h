@@ -24,11 +24,6 @@
 #include "TPlayerConstants.h"
 
 
-#ifdef __Macintosh__
-#include "MidiFilter.h"
-#endif
-
-
 //-----------------------
 // Class TMidiTask 
 //-----------------------
