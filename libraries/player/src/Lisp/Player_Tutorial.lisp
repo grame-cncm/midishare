@@ -21,7 +21,6 @@
 ;; Allocate a new player
 ;;=======================
 
-
 ;; Open a new Player
 
 (defvar *player*) 
@@ -31,6 +30,12 @@
 ;; Open-player gives the refence number of the MidiShare
 ;; application. It means that some of the MidiShare functions
 ;; can be used for the Player like MidiConnect, MidiSetname....
+
+;; Connect the Player to MidiShare (input and ouput)
+
+(midiconnect 0  *player* -1) 
+(midiconnect *player* 0  -1) 
+
 
 ;;===================
 ;; Load a MidiFile
@@ -165,6 +170,7 @@
     (sleep 0.05)))
 
 (forward-step 10)
+
 
 ;;=====================
 ;; Loop management
@@ -312,8 +318,6 @@
            "Undefined") )))
 
 
-
-
 (defvar *seq1)
 (setq *seq1* (getalltrackplayer *player* ))
 
@@ -406,11 +410,13 @@
 (stopplayer *player*)
 (contplayer *player*)
 
+
 ;;==============================
 ;; Synchronisation  management
 ;;==============================
 
 ;; By default, the player is internally synchronized (it uses it's internal tempo map)
+
 
 ;;===========================
 ;; External synchronisation
@@ -446,7 +452,7 @@
 
 (setq *synchro* (midiopen "synchro"))
 
-(midiconnect *synchro* *player* 1)
+(midiconnect *synchro* *player* -1)
 
 
 ;; Send a Midi start message
@@ -486,6 +492,7 @@
 ;; A player can send Midi synchro messages (start, stop, clock, continue...) to be used as a master
 
 (setsynchrooutplayer  *player* kClockSyncOut)
+
 
 ;;=======================
 ;; SMPTE synchronisation 
