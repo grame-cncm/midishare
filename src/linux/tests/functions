@@ -1,0 +1,35 @@
+SRC = ../../tools
+INC = ../Include
+MODOPTS=-DMODVERSIONS -D__Linux__  -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
+MODINC=-I$(INC) -I../../common/Headers -I$(SRC)
+CC  = gcc
+
+OBJ = TFonctions.o TFunLoader.o
+
+all : module TestFClient
+
+module : TestFModule.o
+
+TestFModule.o : $(OBJ)
+	ld -m elf_i386 -r TFonctions.o TFunLoader.o -o TestFModule.o
+
+TFonctions.o : $(SRC)/TFonctions.c $(SRC)/TFonctions.h
+	$(CC) $(SRC)/TFonctions.c $(MODINC) -c  $(MODOPTS)  -D__NO_VERSION__ -o TFonctions.o
+
+TFunLoader.o : TFunLoader.c TFClient.h $(SRC)/TFonctions.h
+	$(CC) TFunLoader.c $(MODINC) -c  $(MODOPTS)
+
+TestFClient : TFunClient.c TFClient.h
+	$(CC) TFunClient.c -I$(INC) -lMidiShare -lpthread -o TestFClient
+
+
+install :
+	if [ ! -c /dev/TestFunctions ]; then mknod /dev/TestFunctions c 154 0; fi
+	insmod TestFModule.o
+
+uninstall : 
+	if [ -c /dev/TestFunctions ]; then rm /dev/TestFunctions; fi
+	rmmod TestFModule
+
+clean :
+	rm $(OBJ) TestFModule.o TestFClient 
