@@ -990,7 +990,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptType
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedPort
-	(JNIEnv * env, jclass, jint filter, jint port){
+	(JNIEnv * env, jclass cl, jint filter, jint port){
   
  	return MidiIsAcceptedPort((MidiFilterPtr)filter,port);
  }
@@ -1119,6 +1119,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
 	(JNIEnv * env , jclass cl, jint refnum, jint slotname, jint slotdirection){
 	
+	SlotRefNum ref;
 	#ifdef __Macintosh__
 		unsigned char buffer [128];
 		char * midiname = (char*)slotname;
@@ -1129,7 +1130,9 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
 		cTocCopy (buffer, midiname);
 	#endif	
 	
-	return (long) MidiAddSlot(refnum, buffer,slotdirection);
+	ref =  MidiAddSlot(refnum, buffer,slotdirection);
+	return *(long *)&ref;
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1137,7 +1140,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndSlot
 	(JNIEnv * env , jclass cl, jint refnum, jint index){
 	
-	return (long) MidiGetIndSlot(refnum, index);
+	SlotRefNum ref = MidiGetIndSlot(refnum, index);
+	return *(long *)&ref;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1145,7 +1149,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndSlot
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_RemoveSlot
 	(JNIEnv * env , jclass cl, jint slotrefnum){
 	
-	MidiRemoveSlot(slotrefnum);
+	MidiRemoveSlot(*(SlotRefNum *)&slotrefnum);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1164,7 +1168,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
  	direction = (*inEnv)->GetFieldID(inEnv, infosclass, "direction",  "I");
  	cnxAux = (*inEnv)->GetFieldID(inEnv, infosclass, "cnxAux",  "I"); 
  
-	MidiGetSlotInfos(slotrefnum,&infos);
+	MidiGetSlotInfos(*(SlotRefNum *)&slotrefnum,&infos);
 	
 	if (buffer1) {
 		#ifdef __Macintosh__
@@ -1189,7 +1193,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_ConnectSlot
 	(JNIEnv * env , jclass cl, jint port, jint slotrefnum, jint state){
 		
-	MidiConnectSlot(port, slotrefnum, state);
+	MidiConnectSlot(port, *(SlotRefNum *)&slotrefnum, state);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1197,7 +1201,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_ConnectSlot
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsSlotConnected
 	(JNIEnv * env , jclass cl, jint port, jint slotrefnum){
 	
-	return (long) MidiIsSlotConnected(port, slotrefnum);
+	return (long) MidiIsSlotConnected(port, *(SlotRefNum *)&slotrefnum);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1215,7 +1219,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotNameAux
 		cTocCopy (buffer, midiname);
 	#endif	
 	
-	MidiSetSlotName(slotrefnum, buffer);
+	MidiSetSlotName(*(SlotRefNum *)&slotrefnum, buffer);
 	
 }
 
