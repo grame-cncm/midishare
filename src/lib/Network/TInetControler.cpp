@@ -32,7 +32,7 @@
 extern Boolean doneFlag;
 //____________________________________________________________
 TInetControler::TInetControler (NetConfigPtr net, MidiName name, short mode) 
-	: fSocket (net->port), fNetInfos (net->port)
+	: fNetInfos (net->port), fSocket (net->port)
 {
 	fDrvName = name;
 	fState = kSleeping;
