@@ -344,11 +344,15 @@ static void DoIdle()
 {
 	if (chgDriver) {  	
 		chgDriver = false;
- 		FillLists();					
+ 		FillLists();
+ 		InvalRect (&myWindow->portRect);
+ 		DoRedraw (myWindow);					
 	}
 	if (chgCon) {
 		chgCon = false;
-		ShowSrcDest (portSelected);
+		RefreshPortMap ();
+		if (portSelected >= 0)
+			ShowSrcDest (portSelected);
 	}
 	TrackMouseMove (myWindow);
 }
