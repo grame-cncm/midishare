@@ -1,0 +1,14 @@
+#define __ver_snd_sb8dsp_new_device	191469f5
+#define snd_sb8dsp_new_device	_set_ver(snd_sb8dsp_new_device)
+#define __ver_snd_sb8dsp_interrupt	d6d76ec1
+#define snd_sb8dsp_interrupt	_set_ver(snd_sb8dsp_interrupt)
+#define __ver_snd_sb8mixer_read	f61cabb9
+#define snd_sb8mixer_read	_set_ver(snd_sb8mixer_read)
+#define __ver_snd_sb8mixer_write	4af6293d
+#define snd_sb8mixer_write	_set_ver(snd_sb8mixer_write)
+#define __ver_snd_sb8dsp_new_mixer	b2c11515
+#define snd_sb8dsp_new_mixer	_set_ver(snd_sb8dsp_new_mixer)
+#define __ver_snd_sb8dsp_midi_interrupt	631810ab
+#define snd_sb8dsp_midi_interrupt	_set_ver(snd_sb8dsp_midi_interrupt)
+#define __ver_snd_sb8dsp_midi_new_device	8d69d0b1
+#define snd_sb8dsp_midi_new_device	_set_ver(snd_sb8dsp_midi_new_device)

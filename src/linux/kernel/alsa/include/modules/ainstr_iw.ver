@@ -1,0 +1,4 @@
+#define __ver_snd_seq_iwffff_id	ee067ea0
+#define snd_seq_iwffff_id	_set_ver(snd_seq_iwffff_id)
+#define __ver_snd_seq_iwffff_init	2a8e618c
+#define snd_seq_iwffff_init	_set_ver(snd_seq_iwffff_init)

@@ -1,0 +1,4 @@
+#define __ver_snd_seq_gf1_id	8ccc3250
+#define snd_seq_gf1_id	_set_ver(snd_seq_gf1_id)
+#define __ver_snd_seq_gf1_init	7a9bdbc1
+#define snd_seq_gf1_init	_set_ver(snd_seq_gf1_init)

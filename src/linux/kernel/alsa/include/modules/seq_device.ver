@@ -1,0 +1,12 @@
+#define __ver_snd_seq_device_load_drivers	6339b6d0
+#define snd_seq_device_load_drivers	_set_ver(snd_seq_device_load_drivers)
+#define __ver_snd_seq_device_register	55d4dcbe
+#define snd_seq_device_register	_set_ver(snd_seq_device_register)
+#define __ver_snd_seq_device_find	3e5051b6
+#define snd_seq_device_find	_set_ver(snd_seq_device_find)
+#define __ver_snd_seq_device_unregister	612f90c1
+#define snd_seq_device_unregister	_set_ver(snd_seq_device_unregister)
+#define __ver_snd_seq_device_register_driver	d75cf11e
+#define snd_seq_device_register_driver	_set_ver(snd_seq_device_register_driver)
+#define __ver_snd_seq_device_unregister_driver	c622fb29
+#define snd_seq_device_unregister_driver	_set_ver(snd_seq_device_unregister_driver)

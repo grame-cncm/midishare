@@ -1,0 +1,8 @@
+#define __ver_snd_hwdep_new_device	7ef6e785
+#define snd_hwdep_new_device	_set_ver(snd_hwdep_new_device)
+#define __ver_snd_hwdep_free	381c1ae6
+#define snd_hwdep_free	_set_ver(snd_hwdep_free)
+#define __ver_snd_hwdep_register	89fd935a
+#define snd_hwdep_register	_set_ver(snd_hwdep_register)
+#define __ver_snd_hwdep_unregister	99a11d44
+#define snd_hwdep_unregister	_set_ver(snd_hwdep_unregister)

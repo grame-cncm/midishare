@@ -1,0 +1,10 @@
+#define __ver_snd_cs461x_create	6e4d49e1
+#define snd_cs461x_create	_set_ver(snd_cs461x_create)
+#define __ver_snd_cs461x_free	e9f17f5f
+#define snd_cs461x_free	_set_ver(snd_cs461x_free)
+#define __ver_snd_cs461x_interrupt	214f9401
+#define snd_cs461x_interrupt	_set_ver(snd_cs461x_interrupt)
+#define __ver_snd_cs461x_pcm	4dbde005
+#define snd_cs461x_pcm	_set_ver(snd_cs461x_pcm)
+#define __ver_snd_cs461x_mixer	7e1b666e
+#define snd_cs461x_mixer	_set_ver(snd_cs461x_mixer)

@@ -1,0 +1,10 @@
+#define __ver_snd_fm801_create	90738314
+#define snd_fm801_create	_set_ver(snd_fm801_create)
+#define __ver_snd_fm801_free	d78c9e78
+#define snd_fm801_free	_set_ver(snd_fm801_free)
+#define __ver_snd_fm801_interrupt	44748d33
+#define snd_fm801_interrupt	_set_ver(snd_fm801_interrupt)
+#define __ver_snd_fm801_pcm	c7244524
+#define snd_fm801_pcm	_set_ver(snd_fm801_pcm)
+#define __ver_snd_fm801_mixer	87c1ea0d
+#define snd_fm801_mixer	_set_ver(snd_fm801_mixer)

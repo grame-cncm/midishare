@@ -1,0 +1,16 @@
+#define __ver_snd_ad1848_out	9889946f
+#define snd_ad1848_out	_set_ver(snd_ad1848_out)
+#define __ver_snd_ad1848_interrupt	07d43322
+#define snd_ad1848_interrupt	_set_ver(snd_ad1848_interrupt)
+#define __ver_snd_ad1848_new_device	825e1656
+#define snd_ad1848_new_device	_set_ver(snd_ad1848_new_device)
+#define __ver_snd_ad1848_new_mixer	bf83df97
+#define snd_ad1848_new_mixer	_set_ver(snd_ad1848_new_mixer)
+#define __ver_snd_ad1848_mixer_stereo_volume	5834ea62
+#define snd_ad1848_mixer_stereo_volume	_set_ver(snd_ad1848_mixer_stereo_volume)
+#define __ver_snd_ad1848_mixer_mono_volume	28f9c28b
+#define snd_ad1848_mixer_mono_volume	_set_ver(snd_ad1848_mixer_mono_volume)
+#define __ver_snd_ad1848_mixer_stereo_switch	69725ce5
+#define snd_ad1848_mixer_stereo_switch	_set_ver(snd_ad1848_mixer_stereo_switch)
+#define __ver_snd_ad1848_mixer_mono_switch	91c17afd
+#define snd_ad1848_mixer_mono_switch	_set_ver(snd_ad1848_mixer_mono_switch)

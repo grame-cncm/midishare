@@ -1,0 +1,4 @@
+#define __ver_snd_cs4236_new_device	ef08d5a5
+#define snd_cs4236_new_device	_set_ver(snd_cs4236_new_device)
+#define __ver_snd_cs4236_new_mixer	69754364
+#define snd_cs4236_new_mixer	_set_ver(snd_cs4236_new_mixer)

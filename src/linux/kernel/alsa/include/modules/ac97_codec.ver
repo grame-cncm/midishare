@@ -1,0 +1,2 @@
+#define __ver_snd_ac97_mixer	e5d7206a
+#define snd_ac97_mixer	_set_ver(snd_ac97_mixer)

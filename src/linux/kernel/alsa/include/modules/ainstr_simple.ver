@@ -1,0 +1,4 @@
+#define __ver_snd_seq_simple_id	05d71a76
+#define snd_seq_simple_id	_set_ver(snd_seq_simple_id)
+#define __ver_snd_seq_simple_init	e245e934
+#define snd_seq_simple_init	_set_ver(snd_seq_simple_init)

@@ -1,0 +1,2 @@
+#define __ver_snd_sb_csp_new_device	5d2dd61a
+#define snd_sb_csp_new_device	_set_ver(snd_sb_csp_new_device)

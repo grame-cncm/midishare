@@ -1,0 +1,12 @@
+#define __ver_snd_es18xx_mixer_write	f99522b0
+#define snd_es18xx_mixer_write	_set_ver(snd_es18xx_mixer_write)
+#define __ver_snd_es18xx_mixer_read	753031b2
+#define snd_es18xx_mixer_read	_set_ver(snd_es18xx_mixer_read)
+#define __ver_snd_es18xx_interrupt	af330925
+#define snd_es18xx_interrupt	_set_ver(snd_es18xx_interrupt)
+#define __ver_snd_es18xx_new_device	a0616afa
+#define snd_es18xx_new_device	_set_ver(snd_es18xx_new_device)
+#define __ver_snd_es18xx_mixer	5e84e0ae
+#define snd_es18xx_mixer	_set_ver(snd_es18xx_mixer)
+#define __ver_snd_es18xx_pcm	a7e91146
+#define snd_es18xx_pcm	_set_ver(snd_es18xx_pcm)

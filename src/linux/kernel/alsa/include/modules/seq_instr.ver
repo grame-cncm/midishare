@@ -1,0 +1,12 @@
+#define __ver_snd_seq_instr_list_new	eea11c71
+#define snd_seq_instr_list_new	_set_ver(snd_seq_instr_list_new)
+#define __ver_snd_seq_instr_list_free	56f9fab6
+#define snd_seq_instr_list_free	_set_ver(snd_seq_instr_list_free)
+#define __ver_snd_seq_instr_list_free_cond	1175e93b
+#define snd_seq_instr_list_free_cond	_set_ver(snd_seq_instr_list_free_cond)
+#define __ver_snd_seq_instr_find	9f18d6f1
+#define snd_seq_instr_find	_set_ver(snd_seq_instr_find)
+#define __ver_snd_seq_instr_free_use	e301cd53
+#define snd_seq_instr_free_use	_set_ver(snd_seq_instr_free_use)
+#define __ver_snd_seq_instr_event	bfea73e2
+#define snd_seq_instr_event	_set_ver(snd_seq_instr_event)

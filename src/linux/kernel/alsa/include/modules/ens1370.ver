@@ -1,0 +1,14 @@
+#define __ver_snd_ensoniq_1370_create	3c1a73e7
+#define snd_ensoniq_1370_create	_set_ver(snd_ensoniq_1370_create)
+#define __ver_snd_ensoniq_1370_free	1f9fcabf
+#define snd_ensoniq_1370_free	_set_ver(snd_ensoniq_1370_free)
+#define __ver_snd_ensoniq_1370_interrupt	eafe4625
+#define snd_ensoniq_1370_interrupt	_set_ver(snd_ensoniq_1370_interrupt)
+#define __ver_snd_ensoniq_1370_pcm	17c30d96
+#define snd_ensoniq_1370_pcm	_set_ver(snd_ensoniq_1370_pcm)
+#define __ver_snd_ensoniq_1370_pcm2	12b031b4
+#define snd_ensoniq_1370_pcm2	_set_ver(snd_ensoniq_1370_pcm2)
+#define __ver_snd_ensoniq_1370_midi	35754e62
+#define snd_ensoniq_1370_midi	_set_ver(snd_ensoniq_1370_midi)
+#define __ver_snd_ensoniq_1370_mixer	31fb29d4
+#define snd_ensoniq_1370_mixer	_set_ver(snd_ensoniq_1370_mixer)

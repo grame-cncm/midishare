@@ -1,0 +1,10 @@
+#define __ver_snd_uart16550_new_device	919bcf21
+#define snd_uart16550_new_device	_set_ver(snd_uart16550_new_device)
+#define __ver_snd_uart16550_set_param	d2124892
+#define snd_uart16550_set_param	_set_ver(snd_uart16550_set_param)
+#define __ver_snd_uart16550_detect	12fac080
+#define snd_uart16550_detect	_set_ver(snd_uart16550_detect)
+#define __ver_snd_seq_uart16550_register_port	645da5db
+#define snd_seq_uart16550_register_port	_set_ver(snd_seq_uart16550_register_port)
+#define __ver_snd_seq_uart16550_unregister_port	3c0b8b38
+#define snd_seq_uart16550_unregister_port	_set_ver(snd_seq_uart16550_unregister_port)
