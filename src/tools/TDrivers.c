@@ -196,6 +196,7 @@ int Environment()
 			print ("Warning : incorrect drivers count (%d)\n", n);
 	}
 	else print ("MidiRegisterDriver failed\n");
+
 	return 1;
 }
 
@@ -408,6 +409,7 @@ void Slots()
 			if (MidiGetSlotInfos (sr, &islot)) {
 #ifdef PASCALNAME
 				s = (char *)&islot.name[1];
+				islot.name[islot.name[0]+1] = 0;
 #else
 				s = islot.name;
 #endif
@@ -429,6 +431,7 @@ void Slots()
 	if (MidiGetSlotInfos (sref1, &islot)) {
 #ifdef PASCALNAME
 				s = (char *)&islot.name[1];
+				islot.name[islot.name[0]+1] = 0;
 #else
 				s = islot.name;
 #endif
@@ -556,7 +559,6 @@ void SendingAndReceiving()
 			MidiConnectSlot (2, sref1, true);
 			print ("    Port 0 connected to %lx\n", sref2);
 			print ("    Port 2 connected to %lx\n", sref1);
-
 			free = MidiFreeSpace();
 			print ("    Client to driver :\n");			
 			print ("       send to port 0 :\n");
