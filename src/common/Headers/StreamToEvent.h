@@ -80,6 +80,7 @@ void	msStreamParseReset (msStreamBufferPtr f);
 MidiEvPtr msStreamStartBuffer(msStreamBufferPtr f, int buflen, int * retcode);
 MidiEvPtr msStreamGetEvent   (msStreamBufferPtr f, int * retcode);
 int 	  msStreamGetSize    (msStreamBufferPtr f);
+const char * msStreamGetErrorText    (int errcode);
 
 #ifdef __cplusplus
 }

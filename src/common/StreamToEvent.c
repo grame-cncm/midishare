@@ -45,8 +45,29 @@ static MidiEvPtr StartReadBuffer(msStreamBufferPtr f, int * retcode);
 static MidiEvPtr ReadNewEvent   (msStreamBufferPtr f, int * retcode);
 
 /*===========================================================================
-	external initialization functions
+	external functions
   =========================================================================== */
+const char * msStreamGetErrorText (int errcode)
+{
+	switch (errcode) {
+		case kStreamNoError:
+			return "no error";
+		case kStreamNoMoreData:
+			return "no more data";
+		case kStreamInvalidHeader:
+			return "invalid buffer header";
+		case kStreamParseError:
+			return "parsing error";
+		case kStreamMemoryError:
+			return "can't to allocate a new MidiShare event";
+		case kStreamInvalidParameter:
+			return "invalid parameter";
+		case kStreamUnknowParseMeth:
+			return "unknow event encountered";
+	}
+	return "unknown error code";
+}
+
 /*____________________________________________________________________________*/
 void msStreamParseInit  (msStreamBufferPtr f, msStreamParseMethodTbl methTbl,
 							void * buffer, unsigned short size)
