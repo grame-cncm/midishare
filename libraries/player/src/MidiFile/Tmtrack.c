@@ -455,9 +455,8 @@ void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
 int TryToReadTrack (  midiFILE *fd, MidiSeqPtr dest, int i)
 {
-	 MidiSeqPtr seq;
-	 int ret= 0;
-
+	MidiSeqPtr seq;
+	int ret= 0;
 
 	if( seq = MidiFileReadTrack(fd)){		/* lecture de la piste		*/
 		UseTrack (seq, dest, i);
@@ -469,14 +468,14 @@ int TryToReadTrack (  midiFILE *fd, MidiSeqPtr dest, int i)
 				seq =  MidiFileReadTrack(fd);
 		
 			}
-			if (seq) {
-				UseTrack (seq, dest, i);
-			}else 
-				if( MidiFile_errno!= MidiFileNoErr)
-					ret= MidiFile_errno;
-				else 
-					ret= ErrRead;
-		}
+			if (seq) {UseTrack (seq, dest, i);}
+		}	
+			
+	if (!seq)
+		if( MidiFile_errno!= MidiFileNoErr)
+			ret= MidiFile_errno;	// Erreur MidiShare
+		else		
+			ret= ErrRead;		// Erreur de lecture
 	}
 	return ret;
 }
