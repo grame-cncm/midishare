@@ -2,7 +2,8 @@
 TARGET = ../linux/msCommon.o
 OPTIONS = -D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Linux__ -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX  -D__NO_VERSION__ 
 INC = Headers
-CFLAGS := -O6 -Wall $(OPTIONS) -I$(INC)
+INC1 = /usr/src/linux/include/
+CFLAGS := -O6 -Wall $(OPTIONS) -I$(INC) -I$(INC1)
 CC = gcc
 
 C = Clients

@@ -279,16 +279,11 @@ static int myioctl(struct inode *inode, struct file *f, unsigned int msg, unsign
 
 
 struct file_operations myops = {
-	NULL,  		/* seek 	*/
-	myread,		/* read 	*/
-	mywrite,	/* write	*/
-	NULL,   	/* readdir 	*/
-  	NULL,   	/* select 	*/
-  	myioctl,   	/* ioctl	*/
-  	NULL,   	/* mmap 	*/
-	myopen,		/* open		*/
-	NULL,		/* flush 	*/
-	myclose		/* close	*/
+	read : myread,
+	write : mywrite,
+	ioctl : myioctl,
+	open : myopen,
+	release : myclose,
 };
 
 /*__________________________________________________________________________*/

@@ -30,6 +30,37 @@
 #include <linux/modversions.h>
 #endif
 
+/* centralizing compatibility issues between 2.0, 2.2, 2.4 */
+
+#ifndef LINUX_VERSION_CODE
+#  include <linux/version.h>
+#endif
+
+#ifndef VERSION_CODE
+#  define VERSION_CODE(vers,rel,seq) ( ((vers)<<16) | ((rel)<<8) | (seq) )
+#endif
+
+/* remember about the current version */
+
+#if LINUX_VERSION_CODE < VERSION_CODE(2,1,0)
+#  define LINUX_20
+#elif LINUX_VERSION_CODE < VERSION_CODE(2,3,0)
+#  define LINUX_22
+#else
+#  define LINUX_24
+# endif
+
+/* wait queue macros */
+
+#ifdef LINUX_24
+#define NEW_WAIT_QUEUE  wait_queue_head_t  
+#define INIT_WAIT_QUEUE(q) init_waitqueue_head(&q)
+#else 
+#define NEW_WAIT_QUEUE struct wait_queue* 
+#define INIT_WAIT_QUEUE(q) (q) = NULL
+#endif
+
+
 #include <linux/slab.h>
 #include <linux/poll.h>
 
@@ -45,13 +76,14 @@
 
 typedef struct TMachine {
 	struct tq_struct 	timerTask;  	/* timer task */
-	struct wait_queue*  	stopQueue;  	/* stop queue (for cleanup_module ) */
+	NEW_WAIT_QUEUE		stopQueue;	/* stop queue (for cleanup_module ) */
 	struct timeval		time;		/* for timer management */
+	Boolean 		status;    	/* running mode  */
 } TLinux, * TLinuxPtr;
 
 typedef struct {
 	fifo 			commands;	/* fifo of commands : task and alarms */
-	struct wait_queue*  	commandsQueue;	/* to be used by the user real-time thread */
+	NEW_WAIT_QUEUE		commandsQueue; 	/* to be used by the user real-time thread */
 	Boolean 		wakeFlag;	/* used for wake up of the real-time thread */
 	Boolean 		status;    	/* running mode : user or kernel */
 	
@@ -88,7 +120,7 @@ TApplContextPtr CreateApplContext ()
 {
 	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc (sizeof(LinuxContext), GFP_KERNEL);
 	fifoinit(&ptr->commands);
-	ptr->commandsQueue = 0;
+	INIT_WAIT_QUEUE(ptr->commandsQueue);
 	ptr->wakeFlag = false;
 	ptr->status = kKernelMode;
 	return ptr;
@@ -123,7 +155,7 @@ static void wakeUp (TApplContextPtr context)
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	
 	if (!linuxContext->wakeFlag){
-		wake_up(GetCommandQueue(context));
+		wake_up_interruptible(GetCommandQueue(context));
 		linuxContext->wakeFlag = true;	
 	}
 }
@@ -190,7 +222,6 @@ void CallRcvAlarm (TApplContextPtr c, RcvAlarmPtr alarm, short refNum)
 		ev = MSNewEv(typeRcvAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
 		if (ev) {
-			//prnt("CallRcvAlarm\n");
 			fifoput(GetCommand(context), (cell*)ev);
 			wakeUp(context);
 		}
@@ -248,11 +279,14 @@ MutexResCode CloseMutex (MutexRef ref)	{ return kSuccess; }
 
 static void InitMachine (TLinuxPtr machine)
 {
-	machine->timerTask.next = NULL; 				/* Next item in list - queue_task will do  this for us */
-	machine->timerTask.sync = 0;    				/* A flag meaning we haven't been inserted into a task queue yet */
+	#ifndef LINUX_24
+	machine->timerTask.next = NULL;			/* Next item in list - queue_task will do this for us */
+	#endif
+	machine->timerTask.sync = 0;    		/* A flag meaning we haven't been inserted into a task queue yet */
 	machine->timerTask.routine = intrpt_routine;   	/* The function to run */
-	machine->timerTask.data = gMem;        			/* the arg parameter to the interrupt routine : the MidiShare global data */
-	machine->stopQueue = NULL;
+	machine->timerTask.data = gMem;        		/* the arg parameter to the interrupt routine : the MidiShare global data */
+	INIT_WAIT_QUEUE(machine->stopQueue);
+	machine->status = true;
 }
 
 /*__________________________________________________________________________*/
@@ -282,8 +316,8 @@ static void intrpt_routine(void * arg)
 		ClockHandler(g);
 	}
 	
-	if (machine->stopQueue != NULL) 
-    		wake_up(&machine->stopQueue);   
+	if (!machine->status) 
+    		wake_up_interruptible(&machine->stopQueue);   
   	else {
     		queue_task(&machine->timerTask, &tq_timer);  
   	}
@@ -320,6 +354,7 @@ void OpenTimeInterrupts (TMSGlobalPtr g)
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
 	TLinuxPtr machine = (TLinuxPtr) g->local;
+	machine->status = false;
 	interruptible_sleep_on(&machine->stopQueue);
 }
 
