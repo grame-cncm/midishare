@@ -23,6 +23,10 @@
 		#define assert(b)
 	#endif
 	
+	#ifdef __Linux__
+		#include <assert.h>
+	#endif
+	
 #else
 	#define assert(b)
 #endif
