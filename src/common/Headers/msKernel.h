@@ -82,9 +82,8 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 
 	typedef struct THorloge{          /* time management (no public section) */
 		 long           reenterCount; /* count of clockHandler reenters      */
-		 TimeInfo		rtOffset;     /* offset to real time clock           */
-		 long			adjustCount;  /* clocks adjustment count             */
-		 long			offset;       /* current real-time clock offset      */
+		 short          timeMode;     /* indicates the time management mode  */		
+		 short          timeRes ;     /* define the time resolution (in ms)  */		
 	} THorloge;
 
 	typedef struct TMSGlobal {
@@ -102,12 +101,12 @@ typedef struct TMSGlobal FAR *  TMSGlobalPtr;
 /*--------------------------------------------------------------------------*/
 #	define SorterList(g)       (&g->toSched)
 #	define Sorter(g)           (&g->sorter)
-#	define TimeOffset(g)       (g->clock.rtOffset)
+//#	define TimeOffset(g)       (g->clock.rtOffset)
 #	define Appls(g)       	   (g->clients.appls)
 #	define ActiveAppl(g)       (g->clients.activesAppls)
 #	define NextActiveAppl(g)   (g->clients.nextActiveAppl)
 
-#	define kClockAdjustCount	1000
+//#	define kClockAdjustCount	1000
 
 /*--------------------------------------------------------------------------*/
 /* function declaration                                                     */

@@ -24,20 +24,18 @@
 #ifndef __TThreads__
 #define __TThreads__
 
+#include "../msThreads.h"
+
 #ifdef WIN32
 
 	#include <windows.h>
 	#define ThreadAPI(proc, arg)	DWORD  WINAPI proc (LPVOID arg)
-
-	typedef LPTHREAD_START_ROUTINE ThreadProcPtr;
 	typedef HANDLE	ThreadHandle;
 	
 #else
 
 	#include <pthread.h>
 	#define ThreadAPI(proc, arg)	void * proc (void * arg)
-	
-	typedef void * ( * ThreadProcPtr) (void * ptr);
 	typedef	pthread_t	ThreadHandle;
 
 #endif

@@ -82,7 +82,7 @@
 #define kMinSpace			10000
 #define kDefaultTimeRes		1
 #define kMinTimeRes			1
-#define kMaxTimeRes			2
+#define kMaxTimeRes			10
 #define kDefaultAudioDev	""
 
 #define DriverMaxEntry	2048
