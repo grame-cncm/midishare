@@ -135,6 +135,8 @@ enum playerOutput {kMidiShare = 0, kQuickTime, KMaxOutput};
 
 typedef unsigned long ULONG;
 
+#define MAXLONG 0x7fffffff  
+
 
 
 #endif
