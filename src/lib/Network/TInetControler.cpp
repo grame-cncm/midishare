@@ -21,6 +21,7 @@
 
 */
 
+#include <stdio.h>
 
 #include "TimeTools.h"
 #include "TInetControler.h"
@@ -161,7 +162,6 @@ Boolean TInetControler::UWakeup (Boolean udpMode)
 {
 	INetAlert alert;
 	if (!Sleeping()) return true;
-	
 	fState = kWakeup;
 	SocketStatus err = fSocket.Open (udpMode);
 	if (err != noErr) {
@@ -217,7 +217,7 @@ void TInetControler::RcvAlarm (short refnum)
 	else {
 		short prevSlot  = -1;
 		MidiEvPtr e = MidiGetEv (refnum);
-		TMidiRemote * remote;
+		TMidiRemote * remote = 0;
 		while (e) {
 			
 			if (Port(e) != prevSlot) {
