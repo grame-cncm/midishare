@@ -24,9 +24,12 @@
 
 #ifdef WIN32
 #	include <windows.h>
+#	include <stdio.h>
+#define windecl	__cdecl
 #else
 #	include <stdio.h>
 #	include <stdlib.h>
+#define windecl
 #endif
 
 #include "msCommInit.h"
@@ -55,7 +58,7 @@ CommDesc gComm = { 0 };
 
 
 /*____________________________________________________________________________*/
-void DoCloseComm ()
+void windecl DoCloseComm (void)
 {
     if (gComm.comm) ClosePipesPair (gComm.comm);
     gComm.comm = 0;
@@ -101,14 +104,6 @@ void CloseComm (TMSGlobalPtr g)
     if (!gComm.refCount)
         DoCloseComm ();
 //    else printf ("CloseComm: gComm.refCount %d\n", gComm.refCount);
-}
-
-/*____________________________________________________________________________*/
-static void Printbuff (char *buff, int len)
-{
-    while (len--)
-        printf ("%03d ", (int)*buff++);
-    printf ("\n");
 }
 
 /*____________________________________________________________________________*/
