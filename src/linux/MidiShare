@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+#	/etc/rc.d/init.d/MidiShare
+#
+# Install the MidiShare module
+#
+# description: 
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+result() {
+	if [ $? ]; then 
+		echo_failure
+	else 
+		echo_success
+	fi
+	echo
+}
+
+#
+#	See how we were called.
+#
+case "$1" in
+  start)
+	# Check if MidiShare is already installed
+	lsmod | grep MidiShare >/dev/null
+	if [ ! $? ]; then 
+		echo MidiShare module is still installed
+	else
+		echo -n Loading MidiShare module
+		modprobe MidiShare 2>/dev/null
+		result
+	fi
+	;;
+  stop)
+	# Check if MidiShare is already installed
+	lsmod | grep MidiShare >/dev/null
+	if [ $? ]; then 
+		echo MidiShare module is not installed
+	else
+		echo -n Removing MidiShare module
+		rmmod MidiShare 2>/dev/null
+		result
+	fi
+	;;
+  reload|restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|reload}"
+	exit 1
+esac
+
+exit 0
