@@ -21,7 +21,12 @@
 */
 
 
+#ifdef MODULE
+#include "MidiShareKernel.h"
+#else
 #include "MidiShare.h"
+#endif
+
 #include "msDrvUtils.h"
 
 /*===========================================================================

@@ -21,8 +21,11 @@
 */
 
 #include "MidiPrint.h"
+#ifdef MODULE
+#include "MidiShareKernel.h"
+#else
 #include "MidiShare.h"
-
+#endif
 
 //____________________________________________________________________________________
 void MidiPrintf (char *s)
