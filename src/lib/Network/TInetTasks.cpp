@@ -113,7 +113,12 @@ Boolean  InetCtrlDTask::_Schedule (long date, void * a1,long type)
 Boolean  InetCtrlDTask::_Schedule (void * a1,long type)
 {
 	fEndFlag = false;
+#if defined(macintosh) && defined(MidiSharePPC_68k)
 	return Schedule (MidiGetTime(), fRefNum, (long)a1, type);
+#else
+	Run (MidiGetTime(), fRefNum, (long)a1, type);
+	return true;
+#endif
 }
 
 //_______________________________________________________________________________
@@ -121,7 +126,12 @@ Boolean  InetCtrlDTask::FatalError (ErrString msg, long err)
 {
 	if (!fFatalPending) {
 		fFatalErrCode = err;
+#if defined(macintosh) && defined(MidiSharePPC_68k)
 		fFatalPending = _Schedule (MidiGetTime(), msg, kFatalErrorTask);
+#else
+		fFatalPending = true;
+		Run (MidiGetTime(), fRefNum, msg, kFatalErrorTask);
+#endif
 	}
 	return fFatalPending;
 }
