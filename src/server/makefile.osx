@@ -10,18 +10,18 @@
 #
 
 TARGET = midishared
-KLIB   = libMidiShare.so
+KLIB   = libMidiShare.dylib
+
 KOBJ   = ../msServerCommonLib.o
 OSOBJ  = ../msOSGlueLib.o
 
-INC = -I../common/Headers -I../osglue
+INC = -I../common/Headers -I../osglue -I../lib
 CFLAGS := -O3 -Wall -D__MacOSX__  -DMSKernel $(INC)
-CC = cc
+CC = gcc
 
-SRC := $(wildcard *.c) 
-OBJ := $(OSOBJ) $(patsubst %.c, %.o, $(SRC)) 
-DEST = /usr/lib
-
+SRC := $(wildcard *.c)
+OBJ := $(OSOBJ) $(KOBJ) $(patsubst %.c, %.o, $(SRC)) 
+DEST = /usr/local/bin
 
 all : $(TARGET)
 
@@ -30,10 +30,10 @@ lib : $(KLIB)
 $(TARGET) : makefile $(OBJ)
 	make -C ../common
 	make -C ../osglue
-	$(CC) $(OBJ) -lpthread -o $(TARGET)
+	$(CC) $(OBJ) -lpthread -lstdc++ -o $(TARGET)
 
 makefile: makefile.osx
-	cp makefile.linux makefile
+	cp makefile.osx makefile
 	rm -f $(OBJ) $(TARGET)
 	make dep
 
@@ -45,7 +45,7 @@ uninstall:
 	rm -rf $(DEST)/$(TARGET)
 	rm -rf /etc/$(CONF)
 
-dep: makefile
+dep:
 	mkdep -a -f makefile $(CFLAGS) $(SRC)
 
 clean:
