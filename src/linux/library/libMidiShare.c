@@ -64,8 +64,7 @@ void MidiInstall()
 	
   msfd = open("/dev/MidiShare", 0);
   if (msfd < 0) {
-	printf("Can't open /dev/MidiShare\n");
-	exit(-1);
+	return;
   }
   
   InitEvents ();
