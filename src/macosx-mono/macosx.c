@@ -77,7 +77,7 @@ typedef void (* DriverFun) ();
 /*
 	Launch the MidiShare install script.
 */
-Boolean CheckInstall()
+void CheckInstall()
 {
 	system("[ -x /Applications/MidiShare/.checkinstall ] && /Applications/MidiShare/.checkinstall");
 }
@@ -267,7 +267,6 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	 if( err != paNoError ) goto error_recovery;
 	 err = Pa_StartStream( gStream );
 	 if( err != paNoError ) goto error_recovery;
-	 printf ("OpenTimeInterrupts OK..\n");
 	 return;
 	 
 error_recovery:
@@ -278,8 +277,7 @@ error_recovery:
 /*_________________________________________________________________________*/
 void CloseTimeInterrupts(TMSGlobalPtr g)
 {
-	printf ("CloseTimeInterrupts ..\n");
- 	if(gStream) Pa_CloseStream(gStream);
+	if(gStream) Pa_CloseStream(gStream);
 	Pa_Terminate();
 }
 
