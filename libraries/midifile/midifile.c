@@ -30,6 +30,7 @@
  * v123 [Jun 01,01]    SL remove fgetpos and fsetpos use for easier cross platform code management
  * v124 [Mars 26,02]   JJC bug correction in MidiFileOpen function
  * v125 [Jul 16,02]    SL bug correction in write_sysex and read_sysex functions, new functions for typeStream
+ * v126 [May 03,04]    JJC bug correction in ReadEv function
  *
  */
  
@@ -50,7 +51,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	125				/* source code version 			*/
+#define SRC_VERSION	126				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -1320,7 +1321,7 @@ static MidiEvPtr ReadEv( MIDIFilePtr fd)
 	if( c== META)									/* meta evt			*/
 	{
 		ev= mdf_read_meta( fd);
-		c= status= 0;
+		c=0;
 	}
 	else if( c & 0x80)								/* status byte		*/
 		status= c;
