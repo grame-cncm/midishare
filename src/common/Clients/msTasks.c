@@ -162,7 +162,7 @@ static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr 
 {
 	Boolean ret = false;
 	INT_OFF();
-		if (*taskPtr == content) {
+	if (*taskPtr == content) {
       		EvType(content) = typeDead;
     		*taskPtr = 0;
     		ret = true;
@@ -177,6 +177,11 @@ static Boolean ForgetTaskSync (register MidiEvPtr * taskPtr, register MidiEvPtr 
 #ifdef __Linux__
 static Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 {
+	if (*taskPtr == content) {
+      		EvType(content) = typeDead;
+    		*taskPtr = 0;
+    		return true;
+	}
 	return false;
 }
 #endif /* __Linux__ */
