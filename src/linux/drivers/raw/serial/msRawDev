@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+saved=$(stty -g)
+msRawSerial /dev/$1
+stty $saved
+
