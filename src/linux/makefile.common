@@ -1,6 +1,6 @@
 
 TARGET = ../linux/msCommon.o
-OPTIONS = -D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Linux__ -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX  -D__NO_VERSION__ 
+OPTIONS = -D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX  -D__NO_VERSION__ 
 INC = Headers
 INC1 = /usr/src/linux/include/
 CFLAGS := -O6 -Wall $(OPTIONS) -I$(INC) -I$(INC1)
@@ -22,9 +22,6 @@ OBJ = $(C)/msAlarms.o $(C)/msAppls.o $(C)/msConnx.o \
 
 $(TARGET) : $(OBJ)
 	ld -m elf_i386 -r -o $(TARGET) $(OBJ)
-
-$(S)/msSorter.o:
-	$(CC) $(CFLAGS) -D__LittleEndian__ -c $(S)/msSorter.c -o $(S)/msSorter.o
 
 dep:
 	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
