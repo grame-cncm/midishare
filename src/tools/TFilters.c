@@ -82,7 +82,7 @@ MidiName ApplName = "\pFiltres";
 MidiName ApplName = "Filtres";
 #endif
 
-#define MaxPorts 32
+#define LastPort 32
 
 /* =========================== events names ===========================*/
 char *typeListe[] =
@@ -270,7 +270,7 @@ static void TestPort( int i)
 	MidiEvPtr e;
 	int n, result= true;
 	
-	for( n=0; n<MaxPorts; n++) {
+	for( n=0; n<LastPort; n++) {
 		e= MidiNewEv( typeKeyOn);
 		if( e) {
 			Port(e)= n;
@@ -305,7 +305,7 @@ void Ports( void)
 	print ("\nChecking ports\n");
 	print ("-----------------------------\n");
 	ResetFilter();
-	for(i=0; i<MaxPorts; i++) {
+	for(i=0; i<LastPort; i++) {
 		print ("  port %d : ", i);
 		RejectBit(myFilter.port,i);
 		TestPort( i);
