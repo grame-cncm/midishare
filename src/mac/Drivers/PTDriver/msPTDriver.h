@@ -57,15 +57,4 @@ enum { kMinBendLength=0, kMaxBendLength = 24};
 enum { kMinFFTSize=512, kMaxFFTSize=8192};
 
 
-typedef UniversalProcPtr UPPDriverPtr;
-
-enum {
-	uppDriverPtrProcInfo = kThinkCStackBased | STACK_ROUTINE_PARAMETER(1, SIZE_CODE(sizeof(short)))
-};
-
-
-#define NewDriverPtr(userRoutine)		\
-	(UPPDriverPtr) NewRoutineDescriptor((ProcPtr)(userRoutine), uppDriverPtrProcInfo, GetCurrentISA())
-
-
 #endif
