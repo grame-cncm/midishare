@@ -87,6 +87,7 @@
 
 #define typeSeqNum		134		/* MidiFile sequence number						*/
 #define typeText		135		/* MidiFile text event							*/
+#define typeTextual		typeText
 #define typeCopyright	136		/* MidiFile copyright message					*/
 #define typeSeqName		137		/* MidiFile sequence or track name				*/
 #define typeInstrName	138		/* MidiFile nom d'instrument					*/
@@ -244,48 +245,54 @@ enum{	MIDIOpenAppl=1,
 	typedef struct TMidiEv *MidiEvPtr;		
 	typedef struct TMidiEv
 	{
-		MidiEvPtr link;						/* link to next event				*/
-		unsigned long date;					/* event date (in ms)		 		*/
-		Byte evType;						/* event type		 				*/
-		Byte refNum;						/* sender reference number		 	*/
-		Byte port;							/* Midi port 						*/
-		Byte chan;							/* Midi channel					 	*/
-		union {								/* info depending of event type :	*/
-			struct {							/* for notes					*/
-				Byte pitch;							/* pitch  					*/
-				Byte vel;							/* velocity 				*/
-				unsigned short dur;					/* duration 				*/
+		MidiEvPtr link;			/* link to next event				*/
+		unsigned long date;		/* event date (in ms)		 		*/
+		Byte evType;			/* event type		 			*/
+		Byte refNum;			/* sender reference number		 	*/
+		Byte port;			/* Midi port 					*/
+		Byte chan;			/* Midi channel					*/
+		union {					/* info depending of event type :	*/
+			struct {			/* for notes				*/
+				Byte pitch;		/* pitch  				*/
+				Byte vel;		/* velocity 				*/
+				unsigned short dur;	/* duration 				*/
 			} note;
 
-			struct {							/* for MidiFile time signature  */
-				Byte numerator;						/* numerator				*/
-				Byte denominator;					/* denominator as neg power	*/
-													/* of 2. (2= quarter note)	*/
-				Byte nClocks;						/* number of Midi clocks in */
-													/* a metronome click		*/
-				Byte n32nd;							/* number of 32nd notes in	*/
-													/* a Midi quarter note		*/
+			struct {			/* for MidiFile time signature  */
+				Byte numerator;		/* numerator			*/
+				Byte denominator;	/* denominator as neg power	*/
+							/* of 2. (2= quarter note)	*/
+				Byte nClocks;		/* number of Midi clocks in */
+							/* a metronome click		*/
+				Byte n32nd;		/* number of 32nd notes in	*/
+							/* a Midi quarter note		*/
 			} timeSign;
 
-			struct {							/* for MidiFile key signature	*/
-				char ton;							/* 0: key of C, 1: 1 sharp	*/
-													/* -1: 1 flat etc...		*/
-				Byte mode;							/* 0: major 1: minor		*/
+			struct {		/* for MidiFile key signature	*/
+				char ton;	/* 0: key of C, 1: 1 sharp	*/
+						/* -1: 1 flat etc...		*/
+				Byte mode;	/* 0: major 1: minor		*/
 				Byte unused[2];
 			} keySign;
+            
+	    		struct {            	/* for paramchg & 14-bits ctrl  */
+            			short num;      /* param or ctrl num            */
+            			short val;      /* 14-bits value                */
+            		} param;
 
-			struct {							/* for MidiFile sequence number */
+
+			struct {			/* for MidiFile sequence number */
 				unsigned short number;
 				short unused;
 			} seqNum;
 			
-			short shortFields[2];				/* for 14-bits controlers		*/
+			short shortFields[2];		/* for 14-bits controlers	*/
 			
-			long tempo;							/* MidiFile tempo in			*/
-												/* microsec/Midi quarter note	*/
-			Byte data[4];						/* for other small events	 	*/
-			MidiSEXPtr linkSE;					/* link to last sysex extension	*/
-			MidiSTPtr linkST;					/* link to private extension	*/
+			long tempo;			/* MidiFile tempo in		*/
+							/* microsec/Midi quarter note	*/
+			Byte data[4];			/* for other small events	*/
+			MidiSEXPtr linkSE;		/* link to last sysex extension	*/
+			MidiSTPtr linkST;		/* link to private extension	*/
 		} info;
 	} TMidiEv;		
 
@@ -295,8 +302,8 @@ enum{	MIDIOpenAppl=1,
 	typedef struct TMidiSeq *MidiSeqPtr;	
 	typedef struct TMidiSeq
 	{
-		MidiEvPtr first;					/* first event pointer 				*/
-		MidiEvPtr last;						/* last event pointer 				*/
+		MidiEvPtr first;		/* first event pointer 	*/
+		MidiEvPtr last;			/* last event pointer 	*/
 		Ptr undef1;
 		Ptr undef2;
 	}	TMidiSeq;
@@ -307,10 +314,10 @@ enum{	MIDIOpenAppl=1,
 	typedef struct TFilter *MidiFilterPtr;
 	typedef struct TFilter
 	{
-		char port[32];						/* 256 bits	*/
-		char evType[32];					/* 256 bits */
-		char channel[2];					/*  16 bits	*/
-		char unused[2];						/*  16 bits */
+		char port[32];			/* 256 bits */
+		char evType[32];		/* 256 bits */
+		char channel[2];		/*  16 bits */
+		char unused[2];			/*  16 bits */
 	} TFilter; 
 	
 
