@@ -79,6 +79,7 @@ static void QuickTimeInit (QuickTimeEnvPtr qt);
 static void QuickTimeDispose (QuickTimeEnvPtr qt);
 static Boolean QuickTimeWakeup (QuickTimeEnvPtr qt);
 static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound);
+static pascal void FlushReceivedEvents (short r);
 
 DriverData gData;
 static inline DriverDataPtr GetData ()	{ return &gData; }
@@ -95,6 +96,7 @@ static void WakeUp (short r)
 		MidiConnect (MidiShareDrvRef, r, true);
 		MidiConnect (r, MidiShareDrvRef, true);
 	}
+	else MidiSetRcvAlarm (r, FlushReceivedEvents);
 }
 
 /* -----------------------------------------------------------------------------*/
@@ -140,21 +142,23 @@ static pascal void KeyOffTask (long date, short refNum, long a1,long a2,long a3)
 }
 
 /* -----------------------------------------------------------------------------*/
+static pascal void FlushReceivedEvents (short r)
+{
+	MidiFlushEvs (r);
+}
+
+/* -----------------------------------------------------------------------------*/
 static pascal void ReceiveEvents (short r)
 {
 	QuickTimeEnvPtr qt = QTE(GetData ());
-	MidiEvPtr copy,e;
+	MidiEvPtr e = MidiGetEv (r);
 
-	if (!qt->clean) {
-		MidiFlushEvs (r);
-	}
-	else while (e = MidiGetEv (r)) {
+	while (e) {
 		switch (EvType(e)) {
 			case typeNote:
-				copy = MidiCopyEv (e);
-				if (copy && MidiTask(KeyOffTask, MidiGetTime()+Dur(e), r, (long)copy, (long)qt,0))
-					PlayNote (qt, e, Vel(e));
-				break;
+				PlayNote (qt, e, Vel(e));
+				MidiTask(KeyOffTask, MidiGetTime()+Dur(e), r, (long)e, (long)qt,0);
+				goto loop;
 			case typeKeyOn:			PlayNote (qt, e, Vel(e));
 				break;
 			case typeKeyOff:		PlayNote (qt, e, 0);
@@ -169,6 +173,8 @@ static pascal void ReceiveEvents (short r)
 				break;
 		}
 		MidiFreeEv (e);
+loop:
+		e = MidiGetEv (r);
 	}
 }
 
