@@ -64,7 +64,8 @@ MSFunctionType(short)	MidiGetIndDriver	(short index);
 MSFunctionType(Boolean)	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos);
 
 /*-------------------------------- Slots management ---------------------------*/
-MSFunctionType(SlotRefNum)	MidiAddSlot 		(short refnum);
+MSFunctionType(SlotRefNum)	MidiAddSlot 		(short refnum, MidiName name, SlotDirection direction);
+MSFunctionType(void) 		MidiSetSlotName 	(SlotRefNum slot, MidiName name);
 MSFunctionType(SlotRefNum)	MidiGetIndSlot		(short refnum, short index);
 MSFunctionType(void)		MidiRemoveSlot 		(SlotRefNum slot);
 MSFunctionType(Boolean)		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
