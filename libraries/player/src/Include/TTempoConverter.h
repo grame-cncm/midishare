@@ -18,6 +18,7 @@
 #define __TTempoConverter__
 
 #include "TPlayerConstants.h"
+#include "GenericMidiShare.h"
 
 //-----------------------
 // Class TTempoConverter
