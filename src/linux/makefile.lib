@@ -1,6 +1,6 @@
 
 TARGET = ../../linux/libCommon.o
-FLAGS := -O0 -Wall -g -D_REENTRANT -D_LOOSE_KERNEL_NAMES -D__Linux__ -D__Pentium__
+FLAGS := -O0 -Wall -g -D_REENTRANT -D_LOOSE_KERNEL_NAMES -D__Pentium__
 LOBJ = lib
 CC = gcc
 LD = ld
