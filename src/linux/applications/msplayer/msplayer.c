@@ -19,7 +19,7 @@
 static short 	gRefNum = -1;		// msPlayer MidiShare reference number
 static MidiSeqPtr gSequence;		// Sequence filled with the MIDIFile
 
-GtkWidget *start,*stop,*cont, *pause1;
+GtkWidget *gStart,*gStop,*gCont, *gPause;
 GtkWidget *gInternalSync,*gClockSync,*gSMPTESync;
 GtkWidget *gBar,*gBeat,*gUnit;
 GtkWidget *gMin,*gSec,*gMilli;
@@ -48,14 +48,19 @@ static void add(GtkWidget *box, GtkWidget *obj)
 static void redrawButtons()
 {
 	PlayerState state;
-	Boolean st;
+	Boolean st1,st2;
 
 	GetStatePlayer (gRefNum, &state);
-	st = (state.state == kIdle)||(state.state == kPause);
+	st1 = (state.state == kIdle)||(state.state == kPause);
+	st2 = (state.state == kIdle);
 
-	gtk_widget_set_sensitive(cont, st);
-	gtk_widget_set_sensitive(stop, !st);
-	gtk_widget_set_sensitive(pause1, !st);
+	gtk_widget_set_sensitive(gCont, st1);
+	gtk_widget_set_sensitive(gStop, !st1);
+	gtk_widget_set_sensitive(gPause, !st1);
+	
+	gtk_widget_set_sensitive(gInternalSync, st2);
+	gtk_widget_set_sensitive(gClockSync, st2);
+	gtk_widget_set_sensitive(gSMPTESync, st2);
 }
 
 
@@ -131,33 +136,33 @@ void synchroPlayer( GtkWidget *button,char*  data )
          gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), spacing);
          gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);
 
-         start = gtk_button_new_with_label ("Start");
-         gtk_container_add (GTK_CONTAINER (bbox), start);
+         gStart = gtk_button_new_with_label ("Start");
+         gtk_container_add (GTK_CONTAINER (bbox), gStart);
 
-         cont = gtk_button_new_with_label ("Play");
-         gtk_container_add (GTK_CONTAINER (bbox), cont);
+         gCont = gtk_button_new_with_label ("Play");
+         gtk_container_add (GTK_CONTAINER (bbox), gCont);
 
-         pause1 = gtk_button_new_with_label ("Pause");
-         gtk_container_add (GTK_CONTAINER (bbox), pause1);
+         gPause = gtk_button_new_with_label ("Pause");
+         gtk_container_add (GTK_CONTAINER (bbox), gPause);
 
- 	 stop = gtk_button_new_with_label ("Stop");
-         gtk_container_add (GTK_CONTAINER (bbox), stop);
+ 	 gStop = gtk_button_new_with_label ("Stop");
+         gtk_container_add (GTK_CONTAINER (bbox), gStop);
 
 
 	 /* Connect the "clicked" signal of the button to our callback */
-        gtk_signal_connect (GTK_OBJECT (start), "clicked",
+        gtk_signal_connect (GTK_OBJECT (gStart), "clicked",
                                GTK_SIGNAL_FUNC (startPlayer), (gpointer) "cool button");
 
 	/* Connect the "clicked" signal of the button to our callback */
-        gtk_signal_connect (GTK_OBJECT (stop), "clicked",
+        gtk_signal_connect (GTK_OBJECT (gStop), "clicked",
                                GTK_SIGNAL_FUNC (stopPlayer), (gpointer) "cool button");
 
 	 /* Connect the "clicked" signal of the button to our callback */
-        gtk_signal_connect (GTK_OBJECT (cont), "clicked",
+        gtk_signal_connect (GTK_OBJECT (gCont), "clicked",
                                GTK_SIGNAL_FUNC (contPlayer), (gpointer) "cool button");
 
 	/* Connect the "clicked" signal of the button to our callback */
-        gtk_signal_connect (GTK_OBJECT (pause1), "clicked",
+        gtk_signal_connect (GTK_OBJECT (gPause), "clicked",
                                GTK_SIGNAL_FUNC (pausePlayer), (gpointer) "cool button");
 
 
@@ -242,16 +247,19 @@ void synchroPlayer( GtkWidget *button,char*  data )
          gtk_container_add (GTK_CONTAINER (frame), bbox);
 
          gBar = gtk_entry_new();
+	 gtk_widget_set_sensitive(gBar, FALSE);
 	 gtk_entry_set_max_length(GTK_ENTRY(gBar),4);
 	 gtk_entry_set_text(GTK_ENTRY(gBar),"1");
 	 gtk_widget_set_usize(gBar, 30 ,16);
          gtk_box_pack_start (GTK_BOX (bbox), gBar,FALSE,0,0);
  	 gBeat = gtk_entry_new();
+	 gtk_widget_set_sensitive(gBeat, FALSE);
 	 gtk_entry_set_text(GTK_ENTRY(gBeat),"1");
 	 gtk_entry_set_max_length(GTK_ENTRY(gBeat),4);
          gtk_widget_set_usize(gBeat, 30 ,16);
          gtk_box_pack_start (GTK_BOX (bbox), gBeat,FALSE,0,0);
 	 gUnit = gtk_entry_new();
+	 gtk_widget_set_sensitive(gUnit, FALSE);
 	 gtk_entry_set_max_length(GTK_ENTRY(gUnit),4);
 	 gtk_entry_set_text(GTK_ENTRY(gUnit),"1");
 	 gtk_widget_set_usize(gUnit, 30 ,16);
@@ -281,16 +289,19 @@ GtkWidget *createDateMSBox( gint  horizontal,
          gtk_container_add (GTK_CONTAINER (frame), bbox);
 
          gMin = gtk_entry_new();
+	 gtk_widget_set_sensitive(gMin, FALSE);
 	 gtk_entry_set_max_length(GTK_ENTRY(gMin),4);
 	 gtk_entry_set_text(GTK_ENTRY(gMin),"0");
 	 gtk_widget_set_usize(gMin, 30 ,16);
          gtk_box_pack_start (GTK_BOX (bbox), gMin,FALSE,0,0);
  	 gSec = gtk_entry_new();
+	 gtk_widget_set_sensitive(gSec, FALSE);
 	 gtk_entry_set_text(GTK_ENTRY(gSec),"0");
 	 gtk_entry_set_max_length(GTK_ENTRY(gSec),4);
          gtk_widget_set_usize(gSec, 30 ,16);
          gtk_box_pack_start (GTK_BOX (bbox), gSec,FALSE,0,0);
 	 gMilli = gtk_entry_new();
+	 gtk_widget_set_sensitive(gMilli, FALSE);
 	 gtk_entry_set_max_length(GTK_ENTRY(gMilli),4);
 	 gtk_entry_set_text(GTK_ENTRY(gMilli),"0");
 	 gtk_widget_set_usize(gMilli, 30 ,16);
