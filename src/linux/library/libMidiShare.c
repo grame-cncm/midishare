@@ -1063,7 +1063,7 @@ Boolean MidiIsAcceptedType (MidiFilterPtr filter, short type )
 Boolean MidiShare () 
 {
    CHECK_DEVICE;
-   return (gClients->msfd >0);
+   return (Device(gClients) >0);
 }
 
 /*******************/
@@ -1204,7 +1204,7 @@ static void panic ()
 			CALL(kMidiClose,&args);
 		}
 	}
-	if (gClients->msfd > 0) close (gClients->msfd);
+	if (Device(gClients) > 0) close (Device(gClients));
 }
 
 /*--------------------------------------------------------------------*/
