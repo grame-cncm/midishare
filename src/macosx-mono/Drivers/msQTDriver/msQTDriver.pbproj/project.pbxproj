@@ -5,14 +5,14 @@
 	};
 	objectVersion = 34;
 	objects = {
-		F5240F180207FEC001053105 = {
+		F5240F1A0208005601053105 = {
 			isa = PBXFileReference;
 			name = profport.c;
-			path = /Users/letz/tmp/src/lib/profport.c;
-			refType = 0;
+			path = ../../../lib/profport.c;
+			refType = 2;
 		};
-		F5240F190207FEC001053105 = {
-			fileRef = F5240F180207FEC001053105;
+		F5240F1B0208005601053105 = {
+			fileRef = F5240F1A0208005601053105;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -34,10 +34,10 @@
 			children = (
 				F5EFF92601FDA77301053105,
 				F5EFF91D01FDA41501053105,
-				F5240F180207FEC001053105,
 				F5EFF92301FDA4CC01053105,
 				F5EFF91601FDA40901053105,
 				F5EFF91F01FDA46601053105,
+				F5240F1A0208005601053105,
 			);
 			isa = PBXGroup;
 			refType = 4;
@@ -117,7 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5EFF91E01FDA41501053105,
-				F5240F190207FEC001053105,
+				F5240F1B0208005601053105,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
