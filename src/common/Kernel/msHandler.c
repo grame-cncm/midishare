@@ -29,6 +29,9 @@
 #include "msSorter.h"
 #include "msExtern.h"
 
+#ifdef __msBench__
+#include "benchs.h"
+#endif
 
 /*===========================================================================
   Internal functions prototypes
@@ -49,6 +52,21 @@ void ClockHandler (TMSGlobalPtr g)
 {
 	 THorlogePtr h; TDatedEvPtr e;
 	 MidiEvPtr ready;
+
+#ifdef __msBench__
+	static TimeVal t1; TimeVal t2;
+	static int firstTime = 1;
+	
+	if (firstTime) {
+		gettimeofday (t1, 0);
+		firstTime = 0;
+	}
+	else {
+		gettimeofday (t2, 0);
+		storeTime (t1, t2);
+		t1 = t2;
+	}
+#endif
 
 	 h= &g->currTime;
 	 if( ++h->reenterCount) {
