@@ -17,7 +17,7 @@ $(TARGET) : $(OBJ)
 dep:
 	makedepend -- $(CFLAGS) -- -Y -m $(SRC)
 
-MidiShare.o :
+MidiShare.o : MidiShare.c
 	$(CC) $(CFLAGS) -D__NO_VERSION__ -c MidiShare.c
 	
 clean:

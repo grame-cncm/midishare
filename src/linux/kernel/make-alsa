@@ -18,10 +18,10 @@ dep:
 	makedepend -- $(CFLAGS) -- -Y -f make-alsa -m $(SRC)
 
 
-$(DRIVER)/msDriver.o :
+$(DRIVER)/msDriver.o :$(DRIVER)/msDriver.c
 	$(CC) $(CFLAGS) -I$(INC) -DCONFIG_SND_OSSEMUL -c $(DRIVER)/msDriver.c -o $(DRIVER)/msDriver.o
 		
-MidiShare.o :
+MidiShare.o : MidiShare.c
 	$(CC) $(CFLAGS) -D__NO_VERSION__ -c MidiShare.c
 	
 clean:
