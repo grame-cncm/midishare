@@ -52,7 +52,9 @@ void TActiveSensing::Run (long date, short refNum, long a1, long a2)
 		if (a2) {
 			Schedule (date + 50, refNum, a1, a2-1);
 		}
-		else Schedule (date + fRate, refNum, a1, a2);
+		else {
+			Schedule (date + fRate, refNum, a1, a2);
+		}
 	}
 }
 
@@ -72,7 +74,6 @@ void TCPActiveSensing::ReSchedule (short refnum)
 {
 	Forget ();
 	fRate = kContDelay;
-//	Schedule (MidiGetTime()+kStartDelay, refnum, (long)&fDest, 0L);
 	Run (MidiGetTime(), refnum, (long)&fDest, 0L);
 }
 
