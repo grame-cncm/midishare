@@ -303,7 +303,6 @@ enum{   MIDIOpenAppl=1,
         Ptr undef2;
     }   TMidiSeq;
 
-
 /*-------------------------------- input Filter -------------------------------*/
 
     typedef struct TFilter FAR *MidiFilterPtr;
@@ -315,14 +314,13 @@ enum{   MIDIOpenAppl=1,
         char unused[2];        /*  16 bits */
     } TFilter;
 
-
-
 /*------------------------------------ names ----------------------------------*/
+	#define DrvNameLen     64
+	#define MaxSlotNameLen 64
 
-	#define DrvNameLen 32
-	typedef char FAR * MidiName;
+    typedef char FAR * MidiName;
 	typedef char	   DriverName[DrvNameLen];
-	typedef DriverName SlotName;
+	typedef char	   SlotName[MaxSlotNameLen];
 
 
 /*----------------------- drivers and slots information -----------------------*/

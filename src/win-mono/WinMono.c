@@ -136,7 +136,7 @@ void DriverWakeUp (TApplPtr appl)
 {
 	WakeupPtr wakeup = Wakeup(appl);
 	if (wakeup) {
-        wakeup (appl->refNum);
+        wakeup (pub(appl, refNum));
 	}
 }
 
@@ -145,7 +145,7 @@ void DriverSleep (TApplPtr appl)
 {
 	SleepPtr sleep = Sleep(appl);
 	if (sleep) {
-		sleep (appl->refNum);
+		sleep (pub(appl, refNum));
 	}
 }
 
