@@ -11,7 +11,7 @@
 
 #ifdef __Macintosh__
 	#include "MidiShare.h"
-	#include "player.h"
+	#include "Player.h"
 	#include "escheme.h"
 	#include "mstype.h"
 	#include "msUtils.h"
@@ -188,15 +188,15 @@ static Scheme_Object *sch_getNamedAppl(int argc, Scheme_Object **argv)
   #if defined(__Macintosh__) && defined(__MacOS9__)
     unsigned char buffer [128];
     char* v;
-  if (!SCHEME_STRINGP(argv[0]))
-   scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
+    if (!SCHEME_STRINGP(argv[0]))
+     scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
  	 v = SCHEME_STR_VAL(argv[0]);
 	 cTopCopy (buffer, v);
  	 return scheme_make_integer(MidiGetNamedAppl(buffer));
  #else
  	MidiName v;
  	if (!SCHEME_STRINGP(argv[0]))
-   scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
+      scheme_wrong_type("midi-get-named-appl", "string", 0, argc, argv);
  	v = SCHEME_STR_VAL(argv[0]);
 	return scheme_make_integer(MidiGetNamedAppl(v));
  #endif
@@ -401,14 +401,29 @@ static Scheme_Object *sch_getName(int argc, Scheme_Object **argv)
 
 static Scheme_Object *sch_setName(int argc, Scheme_Object **argv)
 {   
-  if (!SCHEME_INTP(argv[0]))
-    scheme_wrong_type("midi-set-name!", "integer", 0, argc, argv);
-    
-  if (!SCHEME_STRINGP(argv[1]))
-    scheme_wrong_type("midi-set-name!", "string", 1, argc, argv);
+  #if defined(__Macintosh__) && defined(__MacOS9__)
+  	  unsigned char buffer [128];
+	  
+	  if (!SCHEME_INTP(argv[0]))
+	    scheme_wrong_type("midi-set-name!", "integer", 0, argc, argv);
+	 
+	  if (!SCHEME_STRINGP(argv[1]))
+	    scheme_wrong_type("midi-set-name!", "string", 1, argc, argv);
+	 
+	  cTopCopy (buffer, SCHEME_STR_VAL(argv[1]));
+	  
+	  MidiSetName((short)SCHEME_INT_VAL(argv[0]), buffer);
+	  return scheme_void;
+   #else
+	  if (!SCHEME_INTP(argv[0]))
+	    scheme_wrong_type("midi-set-name!", "integer", 0, argc, argv);
+	    
+	  if (!SCHEME_STRINGP(argv[1]))
+	    scheme_wrong_type("midi-set-name!", "string", 1, argc, argv);
 
-  MidiSetName((short)SCHEME_INT_VAL(argv[0]), SCHEME_STR_VAL(argv[1]));
-  return scheme_void;
+	  MidiSetName((short)SCHEME_INT_VAL(argv[0]), SCHEME_STR_VAL(argv[1]));
+	  return scheme_void;
+    #endif
 }
 
 
@@ -712,10 +727,10 @@ static Scheme_Object *sch_addField(int argc, Scheme_Object **argv)
 {   
   shNewEv *sne;	
   if (SCHEME_TYPE(argv[0]) != ev_type)
-    scheme_wrong_type("midi-add-field", "midi-event", 0, argc, argv);
+    scheme_wrong_type("midi-add-field!", "midi-event", 0, argc, argv);
   sne = (shNewEv *) argv[0];
   if (!SCHEME_INTP(argv[1]))
-    scheme_wrong_type("midi-add-field", "integer  value of field", 1, argc, argv);
+    scheme_wrong_type("midi-add-field!", "integer  value of field", 1, argc, argv);
   MidiAddField(sne->midi_ev_ptr, SCHEME_INT_VAL(argv[1]));
   return scheme_void;
     
@@ -1226,13 +1241,13 @@ Scheme_Object *scheme_reload(Scheme_Env *env)
 
   scheme_add_global("midi-set-field!", scheme_make_prim_w_arity(sch_setField,"midi-set-field!", 3, 3), env);
   scheme_add_global("midi-get-field", scheme_make_prim_w_arity(sch_getField,"midi-get-field", 2, 2), env);
-  scheme_add_global("midi-add-field", scheme_make_prim_w_arity(sch_addField,"midi-add-field", 2, 2), env);
+  scheme_add_global("midi-add-field!", scheme_make_prim_w_arity(sch_addField,"midi-add-field!", 2, 2), env);
   scheme_add_global("midi-count-fields", scheme_make_prim_w_arity(sch_countFields,"midi-count-fields", 1, 1), env);
  
   scheme_add_global("midi-set-link!", scheme_make_prim_w_arity(sch_setLink,"midi-set-link!", 2, 2), env);
   scheme_add_global("midi-get-link", scheme_make_prim_w_arity(sch_getLink,"midi-get-link", 1, 1), env);
 
-  scheme_add_global("midi-set-date", scheme_make_prim_w_arity(sch_setDate,"midi-set-date", 2, 2), env);
+  scheme_add_global("midi-set-date!", scheme_make_prim_w_arity(sch_setDate,"midi-set-date!", 2, 2), env);
   scheme_add_global("midi-get-date", scheme_make_prim_w_arity(sch_getDate,"midi-get-date", 1, 1), env);
   scheme_add_global("midi-set-ref-num!", scheme_make_prim_w_arity(sch_setRefNum,"midi-set-ref-num", 2, 2), env);
   scheme_add_global("midi-get-ref-num", scheme_make_prim_w_arity(sch_getRefNum,"midi-get-ref-num", 1, 1), env);
