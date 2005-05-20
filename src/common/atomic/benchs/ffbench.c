@@ -55,13 +55,13 @@ typedef struct pont {
  */
 pile	gstack;
 fifocell	tbl[MAXCOUNT];
-fifocell	dummy;
+//fifocell	dummy;
 
 // init stack with cells
 void initstack (pile *f)
 {
 	int i;
-	fifoinit (f, &dummy);
+	fifoinit (f); //, &dummy);
 	for(i=0; i < MAXCOUNT; i++) {
 		PUSH (f, &tbl[i]);
 	}

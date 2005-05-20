@@ -46,32 +46,18 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
-	return 189;
+	return 190;
 }
 
 
 /*===========================================================================
   External initialization functions
   =========================================================================== */
-void MidiShareWakeup1 (TMSGlobalPtr g) 
-{
-    SpecialWakeUp (g);
-    OpenMemory (Memory(g));
-    fifoinit ( SorterList(g), (fifocell*)lfpop(FreeList(Memory(g))) );
-}
-
-void MidiShareWakeup2 (TMSGlobalPtr g) 
-{
-    OpenTime (g);
-    OpenTimeInterrupts (g);
-	OpenDrivers(g);
-}
-
 void MidiShareWakeup (TMSGlobalPtr g) 
 {
     SpecialWakeUp (g);
+    fifoinit (SorterList(g));
     OpenMemory (Memory(g));
-    fifoinit ( SorterList(g), (fifocell*)lfpop(FreeList(Memory(g))) );
     OpenTime (g);
     OpenTimeInterrupts (g);
 	OpenDrivers(g);
