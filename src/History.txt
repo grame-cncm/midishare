@@ -1,7 +1,8 @@
 
 Versions:
 ------------------------
-v 1.89  : new fifo management 
+v 1.90  : corrects bug due to tasks management conflict with fifo implementation
+v 1.89  : new fifo management - WARNING! don't use: broken version due to fifo changes
 		  linux kernel 2.6 support
 v 1.88  : mutex support in MSOpen and MSClose
 v 1.87  : MacOSX release: framework version
@@ -27,6 +28,7 @@ v 1.72  : new MidiShare kernel first release
 
 Tags :
 ------------------------
+09/03/2005  V189	: version 1.89 - don't use: broken version due to fifo changes
 09/03/2005  V188	: version 1.88
 23/02/2004  V187M	: Macintosh release 1.87
 26/06/2001  dev		: Created a 'dev' tag for all platforms
