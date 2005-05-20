@@ -120,7 +120,7 @@ void FlushCommandFifo(TApplContextPtr context)
 	
 	/* free command fifo */
 		
-	ev = (MidiEvPtr)fifoclear (&linuxContext->commands);
+	ev = (MidiEvPtr)fifoflush (&linuxContext->commands);
 	while(ev) {
 		next= Link(ev);
 		MSFreeEv(ev,FreeList(Memory(gMem))); 
@@ -133,10 +133,10 @@ void FlushCommandFifo(TApplContextPtr context)
 TApplContextPtr CreateApplContext ()
 {
 	LinuxContextPtr ptr = (LinuxContextPtr)kmalloc(sizeof(LinuxContext), GFP_KERNEL);
-	fifoinit(&ptr->commands, (fifocell*)MSNewEv(typeNote, FreeList(Memory(gMem))));
+	fifoinit(&ptr->commands);
 	INIT_WAIT_QUEUE(ptr->commandsQueue);
 	ptr->wakeFlag = false;
-	ptr->status = kKernelMode;
+	ptr->status = kUserMode;
 	ptr->file = 0;
 	return ptr;
 }
