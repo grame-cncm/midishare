@@ -613,8 +613,8 @@ void Sending()
 	short r;
 	unsigned long free, time, n, count;
 
-	print ("\nSending and receiving events :\n");
 	free= MidiFreeSpace();
+	print ("\nSending and receiving events :\n");
 	if( (r= MidiOpen( NewName)) < 0)
 	{
 		print ("Warning : impossible to open a new application !\n");
@@ -889,7 +889,7 @@ void Tasks( short isFreeMem)
 	if( !gContext.res1 && isFreeMem)
 		print ("Warning : task1 not completed !\n");
 	if( !gContext.res2 && isFreeMem)
-		print ("Warning : task2 not completed !\n");
+		print ("Warning : task2 not completed ! probably due to task event freed before task completion (see MyTask4)\n");
 	if( gContext.t1 && isFreeMem)
 		print ("Warning : task1 address not set to 0 !\n");
 	
