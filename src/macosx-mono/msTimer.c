@@ -174,7 +174,7 @@ void OpenTimer(TMSGlobalPtr g)
 	gInvRatio = ((double) gTBI.denom) / ((double) gTBI.numer);  // Takes the inverse to use a * instead of a / in the TimerTask
 	
 	if (pthread_create(&gThread, NULL, TimerTask, NULL) == 0) {
-		SetThreadToPriority(gThread, 96, true, gTimeRes * 1000000, gTimeRes * 1000000 * 0.5, gTimeRes * 1000000);
+		SetThreadToPriority(gThread, 96, true, gTimeRes * 1000000, 500 * 100, gTimeRes * 1000000); // Computation value is set to 500 us (like CoreMidi RT threads)
 		ReportN("MidiShare", "open time interrupt using a timer - time resolution is", gTimeRes);
 	} else {
 		Report("MidiShare", "cannot create real-time thread","");
