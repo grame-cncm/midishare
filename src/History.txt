@@ -2,6 +2,7 @@
 Versions:
 ------------------------
 v 1.90  : corrects bug due to tasks management conflict with fifo implementation
+		  Mac OS X: timer mode improved (uses now mach low level API)
 v 1.89  : new fifo management - WARNING! don't use: broken version due to fifo changes
 		  linux kernel 2.6 support
 v 1.88  : mutex support in MSOpen and MSClose

@@ -4,7 +4,7 @@ ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
 
-VERSION =1.89
+VERSION =1.90
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
