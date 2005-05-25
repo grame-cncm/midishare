@@ -62,7 +62,7 @@
 
 typedef struct fifocell {
 	struct fifocell* volatile link;	/* next cell in the list */
-    long 	value[3];				/* cell size is midishare specific */
+	long value[3];					/* any data here */
 } fifocell;
 
 typedef struct fifo {
@@ -71,6 +71,7 @@ typedef struct fifo {
     fifocell * volatile tail;	/* pointer to the tail cell */
 	ffCount(ic);
 	TAtomic	count;
+	fifocell dummy;
 } fifo;
 
 
@@ -78,13 +79,13 @@ typedef struct fifo {
 extern "C" {
 #endif
 
- void 	       	fifoinit(fifo* ff, fifocell * dummy);
+ void 	       	fifoinit(fifo* ff);
  unsigned long 	fifosize (fifo * ff);
  void 	       	fifoput (fifo * ff, fifocell * cl);
  fifocell * 	fifoget (fifo * ff);
  fifocell * 	fifoavail (fifo * ff); 
  fifocell * 	fifoflush (fifo * ff);
- fifocell * 	fifoclear (fifo * ff);
+// fifocell * 	fifoclear (fifo * ff);  => obsolete
 
 #ifdef __cplusplus
 }

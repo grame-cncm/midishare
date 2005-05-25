@@ -6,16 +6,16 @@
 
 ###########################################
 echo creating frameworks...
-process $FRMWKS
+process $FRMWKS || exit 1
 ###########################################
 echo creating applications...
-process $APPLS
+process $APPLS || exit 1
 ###########################################
 echo creating drivers...
-process $DRIVERS
+process $DRIVERS || exit 1
 ###########################################
 echo creating java native libraries...
-process $JAVA
+process $JAVA || exit 1
 
 ###########################################
 echo creating symbolic links...

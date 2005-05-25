@@ -68,7 +68,7 @@
 
 typedef struct lifocell {
 	struct lifocell* volatile link;	/* next cell in the list */
-									/* any data here		 */
+	long value[3];					/* any data here		 */
 } lifocell;
 
 typedef struct lifo {

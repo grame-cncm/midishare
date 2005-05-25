@@ -60,7 +60,6 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 
 	msOpenMutex (kOpenCloseMutex);
     if (clients->nbAppls == 0) {
-		MidiShareWakeup1(g);
 		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
 		if (drv) {
 			TDriverInfos infos;
@@ -69,11 +68,10 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
 			Clients(g)->nbDrivers++;
 		}
-		MidiShareWakeup2(g);
+		MidiShareWakeup(g);
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
 		    makeClient(clients, appl, MidiShareRef, kMidiShareName, kClientFolder);
-			makeClientFifos (clients, appl);
 			Clients(g)->nbAppls++;
 		}
 	}
@@ -83,7 +81,6 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			for (ref = 1; clients->appls[ref]; ref++)
 				;
 			makeClient(clients, appl, ref, name, kClientFolder);
-			makeClientFifos (clients, appl);
 			Clients(g)->nbAppls++;
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
@@ -261,35 +258,9 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 	appl->dstList = 0;
 	appl->filter = 0;
 	appl->driver = 0;
-	fifoinit (&appl->rcv, 0);
-	fifoinit (&appl->dTasks, 0);
+	fifoinit (&appl->rcv);
+	fifoinit (&appl->dTasks);
 	g->appls[ref] = appl;
-}
-
-/*____________________________________________________________________________*/
-void makeClientFifos (TClientsPtr g, TApplPtr appl)
-{
-	fifoinit (&appl->rcv, (fifocell*)lfpop(&g->memory->freeList));
-	fifoinit (&appl->dTasks, (fifocell*)lfpop(&g->memory->freeList));
-}
-
-/*____________________________________________________________________________*/
-static void pushlist (lifo * freelist, lifocell * cells)
-{
-	lifocell* next;
-	if (!freelist) return;
-	while (cells) {
-		next = cells->link;
-		lfpush (freelist, cells);
-		cells = next;
-	}
-}
-
-/*____________________________________________________________________________*/
-void clearClientFifos (lifo * freelist, TApplPtr appl)
-{
-	pushlist ( freelist, (lifocell*)fifoclear (&appl->rcv) );
-	pushlist ( freelist, (lifocell*)fifoclear (&appl->dTasks) );
 }
 
 /*____________________________________________________________________________*/
@@ -300,12 +271,8 @@ void closeClient (short ref, TMSGlobalPtr g)
 
 	RemAllSrcCon (appl, FreeList(Memory(g)));
 	RemAllDstCon (appl, FreeList(Memory(g)));
-
-	clearClientFifos (FreeList(Memory(g)), appl);
-/*
 	MSFlushEvs (ref, clients);
 	MSFlushDTasks (ref, clients);
-*/
 	DisposeApplContext (appl->context);
 	FreeAppl (appl);
 	clients->appls[ref] = 0;
