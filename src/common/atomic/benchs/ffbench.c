@@ -24,9 +24,17 @@
 #include <stdio.h>
 #include <time.h>
 #include "pthread.h"
-//#include <unistd.h> 
+#include <unistd.h> 
 
+#ifdef FFSEM
+#include "lffifo-sem.h"
+#define fifo_end(ff)	0
+#define LIMIT	50000
+#else
 #include "lffifo.h"
+#define fifo_end(ff)	(fifocell *)ff
+#define LIMIT	250000
+#endif
 
 #define MAXTHREADS	10
 #define MAXCOUNT 6*MAXTHREADS
@@ -46,22 +54,23 @@ typedef struct pont {
 #define PUSH fifoput
 #define LASTCELL(c)		((c) == fifo_end(&gstack))
 
-#define LIMIT	500000
-#define cell fifocell;
-#define fifo_end(ff)	(fifocell *)ff
+//#define cell fifocell;
 
 /*
  *	Global variables
  */
 pile	gstack;
 fifocell	tbl[MAXCOUNT];
-//fifocell	dummy;
+#ifdef FIFOV1
+fifocell	dummy;
+#define fifoinit(f)		fifoinit(f, &dummy);
+#endif
 
 // init stack with cells
 void initstack (pile *f)
 {
 	int i;
-	fifoinit (f); //, &dummy);
+	fifoinit (f);
 	for(i=0; i < MAXCOUNT; i++) {
 		PUSH (f, &tbl[i]);
 	}
@@ -97,7 +106,11 @@ static long count (pile * ff)
 {
 	long count = 0;
 	fifocell * cl;
+#ifdef FFSEM
+	cl = ff->head;
+#else
 	cl = ff->head->link;
+#endif
 	while (cl != fifo_end(ff)) {
 		count++;
 		cl = cl->link;
@@ -122,23 +135,34 @@ void bench (int max)
 	pthread_t	fils[MAXTHREADS];
 	pont		bridge[MAXTHREADS]; 
 	int			i, end, th;
-	float		perf;
+	double		perf=0; struct sched_param sp;
+
+	sp.sched_priority=63;
+	pthread_setschedparam(pthread_self(), SCHED_FIFO, &sp);
 	
 	for (th=1; th <= max; th++) {
 		initstack (&gstack);
-	  	printf("threads count:\t %d \t", th); fflush (stdout);
-	  	for (i=0; i<th; i++) {
+		printf("threads count:\t %d \t", th); fflush (stdout);
+		for (i=0; i<th; i++) {
 		  	bridge[i].limit = LIMIT;
 		  	bridge[i].stopped = 0; 
+		  	bridge[i].duration = 0; 
 		  	pthread_create(&fils[i], NULL, stacktestthread, &bridge[i]);
+			sp.sched_priority=62;
+			pthread_setschedparam(fils[i], SCHED_RR, &sp);
 	  	}
 	  	do {
-		  	end = 1; for (i=0; i<th; i++)  end &= bridge[i].stopped;
+			sleep(1);
+		  	end = 1; 
+			for (i=0; i<th; i++) end &= bridge[i].stopped;
 	  	} while ( end == 0 );
-		perf = 0;
+#ifdef PROCESSCLOCK
+		perf = bridge[0].duration; // 0;
+#else
 		for (i=0; i<th; i++) { perf += bridge[i].duration; }
-		perf = (perf * 1000000) / (6 * CLOCKS_PER_SEC);
-		perf /= (th * LIMIT);
+#endif		
+		perf /= th * LIMIT * 6;
+		perf *= 1000000 / CLOCKS_PER_SEC;
 		printf (" perf (in us per pop/push):\t %2f\n", perf); fflush (stdout);
 		checkstack(&gstack, MAXCOUNT);
   	}
