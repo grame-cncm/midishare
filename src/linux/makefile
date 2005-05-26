@@ -3,7 +3,7 @@ CONF = MidiShare.conf
 MODF = /lib/modules/`uname -r`/misc
 INCF = /usr/local/include
 RC   = /etc/rc.d
-UDEV = /etc/udev/permissions.d
+UDEV = /etc/udev/rules.d
 INIT = $(RC)/init.d
 
 # make, make install of the full MidiShare distribution
@@ -24,7 +24,7 @@ install: libinstall clientsinstall
 	install -m 644 kernel/midishare.ko $(MODF)
 	/sbin/depmod -a
 	install MidiShare $(RC)/init.d
-	install -m 644 midishare-udev.permissions $(UDEV)
+	install -m 644 midishare-udev.rules $(UDEV)
 	ln -sf $(INIT)/MidiShare $(RC)/rc5.d/S90MidiShare
 	ln -sf $(INIT)/MidiShare $(RC)/rc3.d/S90MidiShare
 	/sbin/modprobe midishare
@@ -33,7 +33,7 @@ uninstall: libuninstall clientsuninstall
 	rm -f /etc/$(CONF)
 	rm -f $(MODF)/midishare.ko
 	rm -f $(INIT)/MidiShare $(RC)/rc[35].d/*MidiShare
-	rm -f $(UDEV)/midishare-udev.permissions
+	rm -f $(UDEV)/midishare-udev.rules
 	/sbin/rmmod midishare
 
 clean:
