@@ -1,5 +1,4 @@
 
-#CVS = -d :pserver:anonymous@cvs.sourceforge.net:/cvsroot/midishare
 ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
@@ -61,34 +60,35 @@ devpack:
 	open msDevPackage.pmsp
 
 dev:
+	@ echo in case of trouble, make sure your CVSROOT is correctly set
 	cd $(DEVKIT)/C_C++ && \
-		cvs $(CVS) export -D tomorrow -d doc midishare/doc && \
-		cvs $(CVS) export -D tomorrow -d samples midishare/src/macosx-mono/applications/samples
+		cvs export -D tomorrow -d doc midishare/doc && \
+		cvs export -D tomorrow -d samples midishare/src/macosx-mono/applications/samples
 	cd $(DEVKIT)/C_C++/Libraries && \
-		cvs $(CVS) export -D tomorrow -d midifile midishare/libraries/midifile
+		cvs export -D tomorrow -d midifile midishare/libraries/midifile
 	cd $(DEVKIT)/C_C++/Libraries/player && \
-		cvs $(CVS) export -D tomorrow -d doc midishare/libraries/player/doc
+		cvs export -D tomorrow -d doc midishare/libraries/player/doc
 	cd $(DEVKIT)/Java && \
-		cvs $(CVS) export -D tomorrow -d tutorial midishare/lang/java/samples/tutorial
+		cvs export -D tomorrow -d tutorial midishare/lang/java/samples/tutorial
 	cd $(DEVKIT)/Lisp && \
-		cvs $(CVS) export -D tomorrow -d openmcl midishare/lang/lisp/openmcl && \
-		cvs $(CVS) export -D tomorrow -d openmcl midishare/lang/lisp/readme.text
+		cvs export -D tomorrow -d openmcl midishare/lang/lisp/openmcl && \
+		cvs export -D tomorrow -d openmcl midishare/lang/lisp/readme.text
 	cd $(DEVKIT)/Lisp/interface && \
-		cvs $(CVS) export -D tomorrow -d openmcl midishare/lang/lisp/interface/openmcl && \
+		cvs export -D tomorrow -d openmcl midishare/lang/lisp/interface/openmcl && \
 		cp -R openmcl MCL && flip -m MCL/*.lisp
 	cd $(DEVKIT)/Lisp/tutorials && \
-		cvs $(CVS) export -D tomorrow -d openmcl midishare/lang/lisp/tutorials/openmcl && \
+		cvs export -D tomorrow -d openmcl midishare/lang/lisp/tutorials/openmcl && \
 		cp -R openmcl MCL && flip -m MCL/*.lisp
 	cd $(DEVROOT)/usr/local && \
-		cvs $(CVS) export -D tomorrow -d include midishare/src/macosx-mono/include
+		cvs export -D tomorrow -d include midishare/src/macosx-mono/include
 	cd $(DEVROOT)/usr/local && \
-		cvs $(CVS) export -D tomorrow -d include midishare/libraries/player/src/Include/Player.h
+		cvs export -D tomorrow -d include midishare/libraries/player/src/Include/Player.h
 	javadoc -d $(DEVKIT)/Java/doc $(JAVADOC)
 	cd scripts &&  sudo ./finalize dev
 
 source:
 	[ -d $(SRC) ] && rm -rf $(SRC) || echo -n
-	cvs $(CVS) export -D tomorrow $(modules)
+	cvs export -D tomorrow $(modules)
 	mv midishare $(SRC)
 	[ -f $(SRC).tgz ] && rm -f $(SRC).tgz || echo -n
 	tar czf $(SRC).tgz $(SRC)
