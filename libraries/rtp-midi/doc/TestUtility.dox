@@ -1,0 +1,273 @@
+
+/**
+
+@page TestUtility The Test Utility
+
+An utility, called @a Test was built for the development of
+the library to facilitate the debugging and automate the tests. It can
+be used while looking for bugs or testing new chapters.
+
+It acts, at the time, like a client creating and a client analyzing a
+stream and uses informations contained in a text file and describing
+the details of the transmission between the sender and the receiver.
+
+Test has be invoked with a text file as only argument :
+
+@code
+./test <test file>
+@endcode
+
+This text file contains lines that describes the MIDI commands
+exchanged (what the sender is sending, what the receiver is
+receiving), events associated with the stream as well as commands that
+can query the sender or the receiver for specific informations.
+
+@section InputFile Input File
+
+Here is a simple example of a text file that can be used with Test :
+
+@verbatim
+# newStream
+
+# newPayload    1
+> 1 KeyOn       1       1       1
+< 1 KeyOn       1       1       1
+
+# newPayload    2
+> 1 KeyOn       1       2       2
+> 1 KeyOff      1       3       0
+! dropPacket
+
+# newPayload    3
+> 1 KeyOn       1       1       1
+< 1 KeyOn       1       1       1
+? 0 KeyOn       1       2       2
+? 0 KeyOff      1       3       0
+@endverbatim
+
+The first line starts the simulation of a new stream : it
+creates both a StreamWriter and a StreamReader object.
+
+The "#newPayload ..." line starts the transmission of a new payload and
+gives its number.
+
+The lines beginning with ">" corresponds to MIDI commands added by the
+sender (it corresponds to a call to
+StreamWriter::putCommand( MidiEvPtr command ))
+
+The lines beginning with "<" corresponds to usual MIDI commands read
+by the receiver (it corresponds to a call to
+StreamWriter::putCommand( MidiEvPtr command ))
+
+The special action "! dropPacket" simulates a packet loss. After a
+packet loss, recovery commands can be created. They corresponds to
+lines beginning with "?" Note that recovery command must be asked
+before usual commands.
+
+@section Execution Execution
+
+Test will treat the input file line by line by performing the
+corresponding actions of the StreamWriter or StreamReader objects.
+During execution, the Test utility produce an output quite similar to
+the input file.
+It will stop and display an error message if the outgoing commands
+(usual or recovery commands) do no match the commands added to the
+payload with ">" lines or if some outgoing or recovery commands are
+not written in the test file.
+It can also stop if the order of the commands doesn't make sense. For
+example if an incoming MIDI command (with a ">" line) is written after
+and outgoing MIDI command (with a "<" line).
+The test is successful if and only if the whole input file can be
+proceeded without error. The utility will then add, at the end of the output :
+
+@verbatim
+
+!!! TEST SUCCESSFUL !!!
+
+@endverbatim
+
+@section PayloadSuccession Payload Succession
+
+Two commands exist for payload succession :
+
+@subsection NewStream # newStream
+
+To start the simulation of a new stream.
+
+@subsection NewPayload # newPayload      <number>
+
+To start the transmission of a new payload.
+
+@a number correspond to the payload number of the payload.
+
+@section MidiCommands MIDI Commands
+
+Here is the general pattern for MIDI commands figuring in the input
+file :
+
+@subsection MidiCommand \<type\> \<delta time\> \<name\> [\<channel\>] [\<arguments\>]
+
+@a type can be :
+- ">" for incoming commands : commands added by the sender
+- "<" for usual outgoing commands : commands extracted by the receiver
+from the payload
+- "?" : recovery commands : commands created by the receiver to repair
+the stream
+
+@a delta @a time is the delta time value associated with the
+command. Recovery commands must always be entered with 0 as delta
+time value.
+
+@a name is the name of the MidiShare event type of the command.
+
+@a channel is the channel number of the command (in case of a channel
+command).
+
+@a arguments is a list of arguments of the command.
+
+Here a complete reference of the command formats that can be used :
+
+@verbatim
+<type>   <delta time>   KeyOff        <channel>        <pitch>        <velocity>
+<type>   <delta time>   KeyOn         <channel>        <pitch>        <velocity>
+<type>   <delta time>   KeyPress      <channel>        <pitch>        <velocity>
+<type>   <delta time>   CtrlChange    <channel>        <controller>   <value>
+<type>   <delta time>   Ctrl14b       <channel>        <controller>   <value>
+<type>   <delta time>   NonRegParam   <channel>        <parameter>    <value>
+<type>   <delta time>   RegParam      <channel>        <parameter>    <value>
+<type>   <delta time>   ProgChange    <channel>        <program>
+<type>   <delta time>   ChanPress     <channel>        <pressure>
+<type>   <delta time>   PitchWheel    <channel>        <lsb>          <msb>
+<type>   <delta time>   SongPos       <lsb>            <msb>
+<type>   <delta time>   SongSel       <song>
+<type>   <delta time>   Clock
+<type>   <delta time>   Start
+<type>   <delta time>   Continue
+<type>   <delta time>   Stop
+<type>   <delta time>   Tune
+<type>   <delta time>   ActiveSens
+<type>   <delta time>   Reset
+<type>   <delta time>   Stream        <byte>           <byte>         <byte>         ...
+@endverbatim
+
+@note All the numeric values of the input file must be written in
+hexadecimal format.
+
+@section SpecialCommands
+
+@subsection DropPacket ! dropPacket
+
+This command simulates a packet loss. The commands of the payload
+won't be received by the receiver and the next payload can leads to
+the creation of recovery commands.
+
+@subsection ChangeCheckpoint ! changeCheckpoint   <checkpoint>
+
+This changes the checkpoint for both the sender and the receiver. The
+number @a checkpoint should correspond to the number of a previous
+payload.
+
+@subsection PrintPayload ! printPayload
+
+This command prints the content of the payload. This will display the
+content of the MIDI Command section as well as the Journal section of
+the payload and the details of each chapters.
+
+@subsection ChapterTable ! chapterTable   <channel> <chapter> <chapter> <chapter> ...
+
+This command can be used to check the content of a part of the recovery
+journal of a payload.
+
+@a channel indicates which channel journal table will be
+considered, if it is set to "S", the system journal table will be considered.
+
+@a chapter arguments are capital letters indicating which chapters
+should figure in the recovery journal (they must also correspond to
+their order of appearance). Here is an example which won't cause any
+error :
+
+@verbatim
+# newStream
+
+# newPayload    1
+> 1 KeyOn       1       1       1
+> 1 CtrlChange  1       1       1
+< 1 KeyOn       1       1       1
+< 1 CtrlChange  1       1       1
+
+# newPayload    2
+! chapterTable	1	C N
+@endverbatim
+
+@subsection PrintChapterHistory ! printChapterHistory   <channel> <chapter>
+
+@a channel indicates which channel journal will be
+considered, if it is set to "S", the system journal will be
+considered.
+
+@a chapter is a capital letter indicating which chapter is concerned.
+
+This will call Chapter::printHistory( ) on the corresponding chapter
+that will print some informations about the internal history of the chapter.
+
+@subsection StopTest ! stopTest
+
+This command stops the test and exits the program.
+
+@subsection SetJournallingMethod ! setJournallingMethod   <method>
+
+This command changes the journalling method for the stream. With the
+current implementation, the possible values are :
+- @a none, and no recovery journal section will figure in the payloads
+- @a recj, and the default journalling method as described in the RTP
+MIDI standard will be used.
+
+@see @ref JournallingMethod
+
+@subsection SetChapterInclusion ! setChapterInclusion   <channel> <chapter> <inclusion rule>
+
+This command changes the inclusion rule for a recovery journal
+chapter.
+
+@a channel indicates which channel journal will be
+considered, if it is set to "S", the system journal will be
+considered.
+
+@a chapter indicates which chapter will be considered
+
+@a inclusion @a rule indicates which inclusion rule must be applied
+for the corresponding chapter. The possible values are :
+- @a unused
+- @a never
+- @a default
+- @a anchor
+- @a active
+- @a anchor_active
+
+@see @ref ChapterInclusion
+
+@subsection SetControllerLogTool ! setControllerLogTool   <channel> <controller> <tool(s)>
+
+This command changes the tool or tools used to log information about a
+specific controller number.
+
+@a channel indicates which channel journal will be
+considered.
+
+@a controller indicates which controller will be considered
+
+@a tool(s) indicates one several tools use to log the corresponding
+controller. The possible values are :
+- "V" for the VALUE tool
+- "T" for the TOGGLE tool
+- "C" for the COUNT tool
+- any combinaison of the previous tools ("TC", "VCT", etc.)
+
+@see @ref ControllerLogTools
+
+@section Comments Comments
+
+All line starting with "/" will be ignored by the Test utility and can
+be used to comment the file.
+
+*/

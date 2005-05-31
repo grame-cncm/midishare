@@ -1,0 +1,206 @@
+
+/ CHAPTER C
+
+# newStream
+
+/ 1. no loss + chapter appearance
+
+# newPayload	1
+/ chapter C is not figuring
+> 1 CtrlChange	1	17	21
+< 1 CtrlChange	1	17	21
+! chapterTable	1
+
+# newPayload	2
+/ chapter C is figuring
+! chapterTable	1	C
+
+/ 2. loss of a CtrlChange with value tool
+
+# newStream
+
+# newPayload	1
+> 1 CtrlChange	1	08	01
+! dropPacket
+
+# newPayload	2
+! chapterTable	1	C
+? 1 CtrlChange	1	08	01
+
+/ 3. loss of two CtrlChange with value tool
+
+# newPayload	3
+> 1 CtrlChange	1	01	23
+> 1 CtrlChange	1	01	37
+! dropPacket
+
+# newPayload	4
+! chapterTable	1	C
+? 1 CtrlChange	1	01	37
+
+# newPayload	5
+> 1 CtrlChange	1	01	01
+! dropPacket
+
+# newPayload	6
+> 1 CtrlChange	1	01	02
+! dropPacket
+
+# newPayload	7
+! chapterTable	1	C
+? 1 CtrlChange	1	01	02
+
+/ 4. loss of a CtrlChange with toggle tool
+
+# newPayload	8
+> 1 CtrlChange	1	41	45
+! dropPacket
+
+# newPayload	9
+? 1 CtrlChange	1	41	7f
+
+# newPayload	10
+> 1 CtrlChange	1	41	47
+! dropPacket
+
+# newPayload	11
+
+/ 5. loss of multiple CtrlChange with toggle tool
+
+# newPayload	12
+> 1 CtrlChange	1	43	56
+> 1 CtrlChange	1	43	00
+> 1 CtrlChange	1	43	56
+> 1 CtrlChange	1	43	00
+> 1 CtrlChange	1	43	56
+! dropPacket
+
+# newPayload	13
+? 1 CtrlChange	1	43	7f
+? 1 CtrlChange	1	43	00
+? 1 CtrlChange	1	43	7f
+? 1 CtrlChange	1	43	00
+? 1 CtrlChange	1	43	7f
+
+/ 6. loss of a CtrlChange with count tool
+
+# newPayload	14
+> 1 CtrlChange	1	7b	12
+! dropPacket
+
+# newPayload	15
+? 1 CtrlChange	1	7b	00
+
+/ 7. loss of multiple CtrlChange with count tool
+
+# newPayload	16
+> 1 CtrlChange	1	7b	00
+> 1 CtrlChange	1	7b	00
+> 1 CtrlChange	1	7b	00
+! dropPacket
+
+# newPayload	17
+? 1 CtrlChange	1	7b	00
+? 1 CtrlChange	1	7b	00
+? 1 CtrlChange	1	7b	00
+
+/ 8. change checkpoint
+
+# newPayload	18
+> 1 CtrlChange	1	43	56
+< 1 CtrlChange	1	43	56
+
+! printChapterHistory	1	C
+
+! changeCheckpoint	18
+
+! printChapterHistory	1	C
+
+# newPayload	19
+! printPayload
+! chapterTable	1	C
+
+! changeCheckpoint	19
+
+# newPayload	20
+! chapterTable	1
+
+/ 9. combined use of toggle and value
+
+# newStream
+
+! setControllerLogTool 1    26	TV
+
+# newPayload	1
+> 1 CtrlChange	1	26	3
+> 1 CtrlChange	1	26	7f
+> 1 CtrlChange	1	26	7
+! dropPacket
+
+# newPayload	2
+! printPayload
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	0
+? 1 CtrlChange	1	26	7
+
+/ 10. combined use of count and value
+
+# newStream
+
+! setControllerLogTool 1    26	CV
+
+# newPayload	1
+> 1 CtrlChange	1	26	7
+> 1 CtrlChange	1	26	3
+> 1 CtrlChange	1	26	7
+! dropPacket
+
+# newPayload	2
+? 1 CtrlChange	1	26	7
+? 1 CtrlChange	1	26	7
+? 1 CtrlChange	1	26	7
+
+/ 11. combined use of toggle and count
+
+# newStream
+
+! setControllerLogTool 1    26	TC
+
+# newPayload	1
+> 1 CtrlChange	1	26	7f
+> 1 CtrlChange	1	26	0
+> 1 CtrlChange	1	26	0
+> 1 CtrlChange	1	26	7f
+> 1 CtrlChange	1	26	7f
+! dropPacket
+
+# newPayload	2
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	0
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	7f
+
+/ 12. combined use of toggle, value and count
+
+# newStream
+
+! setControllerLogTool 1    26	TVC
+
+# newPayload	1
+> 1 CtrlChange	1	26	76
+> 1 CtrlChange	1	26	3
+> 1 CtrlChange	1	26	2
+> 1 CtrlChange	1	26	64
+> 1 CtrlChange	1	26	12
+! dropPacket
+
+# newPayload	2
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	0
+? 1 CtrlChange	1	26	7f
+? 1 CtrlChange	1	26	0
+? 1 CtrlChange	1	26	12
+
+/
+/ missing test for reset

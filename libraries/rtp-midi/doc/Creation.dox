@@ -1,0 +1,142 @@
+
+/**
+
+@page Creation Payload Creation
+
+@see StreamWriter for more details.
+
+@section CreationServices Services
+
+In this case, a transmitting client wants to create RTP MIDI payloads
+which can be later included in RTP packets. The library enables him to
+create RTP MIDI payloads as described in [1] Section 2.2, and is
+neither creating full RTP packets nor sending those packets through
+RTP.
+
+This type of client will mainly access the services of the library by
+providing MIDI commands. The client publishes command as he will do on
+a MIDI 1.0 DIN cable with the restriction that the library is not
+supporting the case of a System Real-Time command embedded in another
+"host" MIDI command. He publishes at the same time, delta time values,
+as timestamps to be associated with the incoming MIDI
+commands. Commands are provided as MidiShare events.
+
+From this incoming MIDI commands, the library will create RTP MIDI
+payloads in the buffers provided by the client. The creation a payload
+can be ended in two ways:
+
+- the payload buffer is full, i.e no other MIDI command can be
+accepted on the incoming MIDI stream and added to the current
+payload. The client is notified of this situation.
+
+- the client chooses to end the creation of the creation of the
+payload.
+
+In both cases, the client has to ask for the finalization of the
+payload (e.g adding the recovery journal, editing the headers,
+etc.). After that step only the payload is ready to be sent over RTP
+by the client.
+
+The library offers to deal with the commands delta time transparently :
+the delta times values are provided by the client in the @a date field of
+the MidiShare events and they will be directly encoded in the delta
+time fields of the payload. The semantics of this delta times will
+be let to the responsability of the client.
+
+Is case of a long SysEx command, the RTP MIDI format specifies a way
+to segment this kind of command across several RTP MIDI payloads if
+needed. This service will be provided by the library. See @ref
+SupportForSysEx.
+
+@section CreationSyntax General Syntax
+
+The StreamWriter class offers a unique interface to the services of
+the library for payload creation. Here are the 3 main methods of this
+class:
+
+- StreamWriter::newPayload( const uint32 payloadNumber, uint8 * buffer, const unsigned short size )
+
+This starts the creation of a new payload in @a buffer. The payload
+will be restrited to @a size bytes. The @a payloadNumber argument is
+used to keep historical data about the stream (it can simply be the
+extended sequence number of the corresponding RTP packet).
+
+- StreamWriter::putCommand( const MidiEvPtr command )
+
+This tries to add a MIDI command to the current payload. The command
+is provided as a MidiShare event. The delta time value to be
+associated to the command has to be provided in the @a date field of
+the event.
+If the command was inserted in the payload it returns the number of
+bytes inserted (apart from delta time value). If the command was not
+inserted because the payload was full, it returns 0. It returns -1 if
+the command was not accepted : because the corresponding chapter
+policy is set to UNUSED (See @ref StreamConfiguration) or -2 if the
+command type is not supported.
+
+- StreamWriter::finalizePayload( )
+
+This asks for the finalization of the current payload. The headers
+will be completed and the recovery journal section will be written at
+the end of the payload.
+
+Those 3 methods are meant to be used in the following order:
+
+@image html creation_syntax.png "General Creation Syntax"
+@image latex creation_syntax.png "General Creation Syntax"
+
+@section CreationConfiguration Stream Configuration
+
+The stream on the sender side can also be configured, in particular :
+- the journalling method
+- the chapter inclusion rules
+- the tools use to log the controllers
+
+See @ref StreamConfiguration for more details.
+
+@section CreationExample Example
+
+Here is a skeleton that can be used to do basic interactions with the
+library :
+
+@code
+
+StreamWriter * streamWriter;
+streamWriter = new StreamWriter;
+
+unsigned int size = 1400;
+uint8 payload[size];
+uint32 number = 0;
+
+while ( true ) {
+
+  usleep ( 100000 );
+  streamWriter->newPayload ( ++number, payload, size );
+
+  MidiEvPtr command = getNextCommand ( );
+  while ( command ) {
+
+    result = streamWriter->putCommand ( command );
+
+    if ( result > 0 ) {
+      command = getNextCommand ( );
+    }
+    else if ( result == 0 ) {
+      streamWriter->finalizePayload ( );
+      sendPayload ( );
+      streamWriter->newPayload ( ++number, payload, size );
+    }
+    else {
+      // other error cases
+    }
+
+  }
+
+  streamWriter->finalizePayload ( );
+  sendPayload ( );
+
+}
+
+@endcode
+
+*/

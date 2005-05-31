@@ -1,0 +1,110 @@
+
+/**
+
+@page Analyse Payload Analyse
+
+@see StreamReader for more details.
+
+@section AnalyseServices Services
+
+In this case, a receiving client wants to analyse RTP MIDI payloads
+which were received from RTP. The library enables him to reconstruct
+the MIDI commands embedded in those payloads but it is not receiving
+the corresponding packets through RTP.
+
+This type of client will provide the library with incoming RTP MIDI
+payloads and the library will create MIDI commands for him. MIDI
+commands will be provided to the client as MidiShare events associated
+with delta time values.
+
+Two kinds of commands are created for the client:
+
+- correctly transmitted commands (usual commands), which corresponds
+  to the commands listed in the MIDI Command section of the current
+  payload. Each command is associated with a delta time value provided
+  in the @date field of the MidiShare event. The semantics of this
+  delta time value is let to the responsability of the client.
+
+- recovery commands, which corresponds to the MIDI commands that the
+  library will create from the recovery journal in order to satisfy
+  the recovery journal mandate specified in [1] Section 4. The client
+  may or may not use those recovery commands. No delta time value is
+  associated with those recovery commands.
+
+In case of a segmented SysEx command in the current payload, the
+library will provide it segment by segment. See @ref SupportForSysEx.
+
+@section AnalyseSyntax General Syntax
+
+The StreamReader class offers a unique interface to the services of
+the library for payload analyse. Here are the 3 main methods of this
+class:
+
+- StreamWriter::newPayload( const uint32 payloadNumber, uint8 * buffer, const unsigned short size )
+
+This starts the analyse of a new payload. The library will use the
+payload in @a buffer and extract MIDI commands, delta time values and
+recovery commands from it. The @a payloadNumber argument is
+used to keep historical data about the stream (it can simply be the
+extended sequence number of the corresponding RTP packet).
+
+- MidiEvPtr StreamReader::getCommand( )
+
+This tries to retrieve the next usual command of the current
+payload. The command is returned as a MidiShare event. If no command
+can be extracted from the payload, the method returns @c NULL.
+The client has to ask for all usual commands of a payload otherwise,
+the history of the stream will be uncomplete.
+
+- MidiEvPtr StreamReader::getRecoveryCommand( )
+
+This tries to retrieve the next recovery command for the current
+payload. This makes sense only if the payload is arriving just after
+one or several packet loss. The recovery commands are associated with
+the payload and if the client ignores a packet loss and doesn't call
+StreamReader::getRecoveryCommand( ) the recovery commands will be
+lost. The client should ask for those recovery commands before asking
+for usual commands since they correspond to commands that were emitted
+before the usual commands of the payload.
+
+Those 3 methods are meant to be used in the following order:
+
+@image html analyse_syntax.png "General Analyse Syntax"
+@image latex analyse_syntax.png "General Analyse Syntax"
+
+@section AnalyseExample Example
+
+Here is a skeleton that can be used to do basic interactions with the
+library :
+
+@code
+
+StreamReader * streamReader;
+streamReader = new StreamReader;
+
+unsigned int size = 1400;
+uint8 payload[size];
+uint32 number;
+
+MidiEvPtr command;
+
+while ( true ) {
+
+  payload = receivePayload ( );
+  number = packetNumber ( payload );
+
+  streamReader->newPayload ( number, payload, size );
+
+  while ( ( command = streamReader->getRecoveryCommand ( ) ) ) {
+    playRecoveryCommand ( command );
+  }
+
+  while ( ( command = streamReader->getCommand ( ) ) ) {
+    playCommand ( command );
+  }
+
+}
+
+@endcode
+
+*/

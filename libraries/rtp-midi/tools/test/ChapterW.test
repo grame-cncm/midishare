@@ -1,0 +1,52 @@
+
+# newStream
+
+/ 1. no loss + chapter appearance
+
+# newPayload	1
+/ chapter W is not figuring
+> 1 PitchWheel	1	45	64
+< 1 PitchWheel	1	45	64
+! chapterTable	1
+
+# newPayload	2
+/ chapter W is figuring
+! chapterTable	1	W
+
+/ 2. loss of a PitchWheel
+
+# newPayload	3
+> 1 PitchWheel	1	12	23
+! dropPacket
+
+# newPayload	4
+/ repaired from payload 3
+? 1 PitchWheel	1	12	23
+
+/ 3. loss of two PitchWheel in the same payload
+
+# newPayload	5
+> 1 PitchWheel	1	21	15
+> 1 PitchWheel	1	5b	7f
+! dropPacket
+
+# newPayload	6
+? 1 PitchWheel	1	5b	7f
+
+/ 4. loss of a PitchWheel changing only LSB
+
+# newPayload	7
+> 1 PitchWheel	1	4b	7f
+! dropPacket
+
+# newPayload	8
+? 1 PitchWheel	1	4b	7f
+
+/ 5. loss of a PitchWheel changing only MSB
+
+# newPayload	9
+> 1 PitchWheel	1	4b	6f
+! dropPacket
+
+# newPayload	10
+? 1 PitchWheel	1	4b	6f

@@ -1,0 +1,66 @@
+
+# newStream
+
+! setJournallingMethod	none
+
+/ 1. sysex without segmentation
+
+! setPayloadSize	20
+
+# newPayload	1
+> 1 SysEx	00	01	02	03	04	05
+< 1 SysEx	00	01	02	03	04	05
+
+/ 2. sysex with segmentation
+
+! setPayloadSize	8
+
+# newPayload	2
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a	0b	0c	0d
+< 1 Stream	f0	00	01	02
+
+# newPayload	3
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a	0b	0c	0d
+< 1 Stream	03	04	05
+
+# newPayload	4
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a	0b	0c	0d
+< 1 Stream	06	07	08
+
+# newPayload	5
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a	0b	0c	0d
+< 1 Stream	09	0a	0b
+
+# newPayload	6
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a	0b	0c	0d
+< 1 Stream	0c	0d	f7
+
+/ 3. sysex with cancellation
+
+! setPayloadSize	10
+
+# newPayload	7
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a
+< 1 Stream	f0	00	01	02	03	04
+
+# newPayload	8
+> 1 ProgChange	1	1
+< 1 Stream	f4
+< 1 ProgChange	1	1
+
+/ 4. change in the sysex
+
+! setPayloadSize	10
+
+# newPayload	9
+> 1 SysEx	00	01	02	03	04	05	06	07	08	09	0a
+< 1 Stream	f0	00	01	02	03	04
+
+# newPayload	10
+> 1 SysEx	10	11	12	13	14	15
+< 1 Stream	f4
+< 1 Stream	f0	10	11
+
+# newPayload	11
+> 1 SysEx	10	11	12	13	14	15
+< 1 Stream	12	13	14	15	f7
