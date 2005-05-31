@@ -1,21 +1,21 @@
 
-ALL = sendmidifile
+TARGET = sendmidifile
 
 CXX = g++
-FLAGS = -Wall
-LIBS = -lrtpmidi -lPlayer -lMidiShare
+CXXFLAGS = -Wall -I../../src
+LIBS = -L../../src -lrtpmidi -lPlayer -lMidiShare
 
 # TARGETS
 
-first : $(ALL)
+first : $(TARGET)
 
 clean :
-	rm *.o *~
+	rm -f $(TARGET) *.o *~
 
 # SENDMIDIFILE
 
-sendmidifile.o : sendmidifile.cpp ../src/librtpmidi.so.1.0
-	$(CXX) $(FLAGS) -c sendmidifile.cpp -o sendmidifile.o
+sendmidifile.o : sendmidifile.cpp ../../src/librtpmidi.so
+	$(CXX) $(CXXFLAGS) -c sendmidifile.cpp -o sendmidifile.o
 
-sendmidifile : sendmidifile.o $(OBJ)
-	$(CXX) $(LIBS) sendmidifile.o $(OBJ) -o sendmidifile
+$(TARGET) : sendmidifile.o $(OBJ)
+	$(CXX) $(LIBS) sendmidifile.o $(OBJ) -o $(TARGET)

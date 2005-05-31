@@ -12,8 +12,8 @@
 
 #include <getopt.h>
 
-#include "../src/StreamWriter.h"
-#include "../src/printingUtils.h"
+#include "StreamWriter.h"
+#include "printingUtils.h"
 
 #include <iostream>
 

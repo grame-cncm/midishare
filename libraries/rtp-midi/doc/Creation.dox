@@ -101,6 +101,8 @@ library :
 
 @code
 
+#include <RtpMidi.h>
+
 StreamWriter * streamWriter;
 streamWriter = new StreamWriter;
 

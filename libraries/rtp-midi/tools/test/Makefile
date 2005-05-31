@@ -1,9 +1,9 @@
 
-TARGET = testrtpm
+TARGET = testrtpmidi
 
 CXX = g++
-FLAGS = -Wall -I../../src
-LIBS = -lrtpmidi -lMidiShare
+CXXFLAGS = -Wall -I../../src
+LIBS = -L../../src -lrtpmidi -lMidiShare
 
 # TARGETS
 
@@ -14,8 +14,8 @@ clean :
 
 # TEST
 
-test.o : test.cpp ../../src/librtpmidi.so.1.0
-	$(CXX) $(FLAGS) -c test.cpp -o test.o
+test.o : test.cpp ../../src/librtpmidi.so
+	$(CXX) $(CXXFLAGS) -c test.cpp -o test.o
 
- $(TARGET) : test.o $(OBJ)
-	$(CXX) $(LIBS) test.o $(OBJ) -o test
+$(TARGET) : test.o $(OBJ)
+	$(CXX) $(LIBS) test.o $(OBJ) -o $(TARGET)

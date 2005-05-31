@@ -79,6 +79,8 @@ library :
 
 @code
 
+#include <RtpMidi.h>
+
 StreamReader * streamReader;
 streamReader = new StreamReader;
 
