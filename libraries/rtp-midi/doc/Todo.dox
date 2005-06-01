@@ -17,10 +17,15 @@ from packet loss.
 
 Add support for the S bit to read the journal faster.
 
-Add a C interface to the library. 
+Add a C interface to the library.
 
-Filter, écrire un truc sur ce qu'il y a a faire sur les filtres.
-
-Implementer les chapitres qui manquent.
+Implement the missing chapters :
+	- chapter M
+	- chapter E
+	- chapter D
+	- chapter V
+	- chapter Q
+	- chapter F
+	- chapter X
 
 */

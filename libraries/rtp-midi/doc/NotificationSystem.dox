@@ -61,6 +61,6 @@ notified with specific Reset N-Active and Reset C-Active commands
 concerning this channel.
 
 @image html notification.png "The Notification System"
-@image latex notification.png "The Notification System"
+@image latex notification.png "The Notification System" width=15cm
 
 */

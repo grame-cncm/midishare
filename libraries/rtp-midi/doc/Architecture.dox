@@ -47,7 +47,7 @@ the chapter.
 @see ChapterWriter
 
 @image html architecture_creation.png "Payload Creation Architecture"
-@image latex architecture_creation.png "Payload Creation Architecture"
+@image latex architecture_creation.png "Payload Creation Architecture" width=9cm
 
 - StreamReader
   - Offers a unique interface to the services of the library for
@@ -88,6 +88,7 @@ the recovery commands.
 @see ChapterReader
 
 @image html architecture_analyse.png "Payload Analyse Architecture"
+@image latex architecture_analyse.png "Payload Analyse Architecture" width=9cm
 
 @section RecoveryJournalStructure Recovery Journal Structure
 
@@ -97,6 +98,7 @@ hierarchical structure. This section is composed of :
 - 16 channel journals further composed of channel chapters.
 
 @image html payload_complet_arbre.png "Recovery Journal Structure"
+@image latex payload_complet_arbre.png "Recovery Journal Structure" width=13cm
 
 The entities used to write and read this section are mapped onto this
 hierarchical structure.
@@ -124,6 +126,7 @@ is using in turn :
 chapter
 
 @image html architecture_recovery.png "Architecture Used For The Recovery Journal"
+@image latex architecture_recovery.png "Architecture Used For The Recovery Journal" width=14cm
 
 The design is thus modular and it's easy to add or remove a chapter,
 to try another implementation for a chapter, etc.

@@ -70,7 +70,7 @@ before the usual commands of the payload.
 Those 3 methods are meant to be used in the following order:
 
 @image html analyse_syntax.png "General Analyse Syntax"
-@image latex analyse_syntax.png "General Analyse Syntax"
+@image latex analyse_syntax.png "General Analyse Syntax" width=6cm
 
 @section AnalyseExample Example
 

@@ -14,6 +14,7 @@ still responsible for all network interactions, like sending or
 receiving RTP packet, SDP and RTCP data.
 
 @image html services_anglais.png "RTP MIDI library services"
+@image latex services_anglais.png "RTP MIDI library services" width=8cm
 
 @section UserManual User Manual
 

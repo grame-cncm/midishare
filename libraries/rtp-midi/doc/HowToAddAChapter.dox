@@ -46,7 +46,7 @@ the chapter reader will be notified of those commands (@ref
 ReaderNotifyCommand).
 
 @image html historique.png
-@image latex historique.png
+@image latex historique.png "" width=15cm
 
 @section AddingAChapterWriter Adding a Chapter Writer
 

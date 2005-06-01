@@ -83,7 +83,7 @@ the end of the payload.
 Those 3 methods are meant to be used in the following order:
 
 @image html creation_syntax.png "General Creation Syntax"
-@image latex creation_syntax.png "General Creation Syntax"
+@image latex creation_syntax.png "General Creation Syntax" width=6cm
 
 @section CreationConfiguration Stream Configuration
 
