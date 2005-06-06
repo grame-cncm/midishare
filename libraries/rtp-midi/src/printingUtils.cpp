@@ -687,18 +687,20 @@ unsigned short printChapterA ( uint8 * buffer, TPayloadStats * stats, ostream & 
 char * chapterTable ( uint8 * buffer, short journal )
 {
 
-  static char table[10];
+  static char table[13];
   table[0] = 0;
 
-  unsigned int len = ( buffer[0] & 0x0F ) * 0x0100 + buffer[1];
-  buffer += len + 2;
+  if ( getFlag ( buffer[0], 1 ) ) {
 
-  bool y = getFlag ( buffer[0], 1 );
-  bool a = getFlag ( buffer[0], 2 );
-  unsigned short totchan = buffer[0] & 0x0F;
-  buffer += 3;
+    unsigned int len = ( buffer[0] & 0x0F ) * 0x0100 + buffer[1];
+    buffer += len + 2;
 
-  if ( y ) {
+    bool y = getFlag ( buffer[0], 1 );
+    bool a = getFlag ( buffer[0], 2 );
+    unsigned short totchan = ( buffer[0] & 0x0F ) + 1;
+    buffer += 3;
+
+    if ( y ) {
 
     if ( journal == -1 ) {
       unsigned short position = 0;
@@ -732,65 +734,67 @@ char * chapterTable ( uint8 * buffer, short journal )
 	table[position] = 0;
       }
     }
-
+    
     buffer += ( buffer[0] & 0x03 ) * 256 + buffer[1];
 
-  }
-
-  if ( a ) {
-    for ( unsigned int i = 0 ; i < totchan ; i++ ) {
-      short chan = ( buffer[0] & 0x78 ) >> 3;
-      if ( journal == chan ) {
-	unsigned short position = 0;
-	if ( getFlag ( buffer[2], P ) ) {
-	  table[position] = 'P';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], C ) ) {
-	  table[position] = 'C';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], M ) ) {
-	  table[position] = 'M';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], W ) ) {
-	  table[position] = 'W';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], N ) ) {
-	  table[position] = 'N';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], E ) ) {
-	  table[position] = 'E';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], T ) ) {
-	  table[position] = 'T';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( getFlag ( buffer[2], A ) ) {
-	  table[position] = 'A';
-	  table[position+1] = ' ';
-	  position += 2;
-	}
-	if ( position > 0 ) {
-	  position -= 1;
-	  table[position] = 0;
-	}
-      }
-
-      buffer += ( buffer[0] & 0x03 ) * 256 + buffer[1];
-
     }
+
+    if ( a ) {
+      for ( unsigned int i = 0 ; i < totchan ; i++ ) {
+	short chan = ( buffer[0] & 0x78 ) >> 3;
+	if ( journal == chan ) {
+	  unsigned short position = 0;
+	  if ( getFlag ( buffer[2], P ) ) {
+	    table[position] = 'P';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], C ) ) {
+	    table[position] = 'C';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], M ) ) {
+	    table[position] = 'M';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], W ) ) {
+	    table[position] = 'W';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], N ) ) {
+	    table[position] = 'N';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], E ) ) {
+	    table[position] = 'E';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], T ) ) {
+	    table[position] = 'T';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( getFlag ( buffer[2], A ) ) {
+	    table[position] = 'A';
+	    table[position+1] = ' ';
+	    position += 2;
+	  }
+	  if ( position > 0 ) {
+	    position -= 1;
+	    table[position] = 0;
+	  }
+	}
+	
+	buffer += ( buffer[0] & 0x03 ) * 256 + buffer[1];
+	
+      }
+    }
+
   }
 
   return table;

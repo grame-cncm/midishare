@@ -80,8 +80,8 @@ int ChannelWriter::writeChannel ( uint8 * buffer )
       cerr << "channel journal is too large : " << channelChaptersLength << " !" << endl;
     }
     position[0] = ( _channelNumber << 3 ) ;
-    position[1] = ( channelChaptersLength + 2 ) / 256;
-    position[1] = ( channelChaptersLength + 2 ) % 256;
+    position[1] = ( channelChaptersLength + 3 ) / 256;
+    position[1] = ( channelChaptersLength + 3 ) % 256;
     position[2] = 0;
     position += 3;
 

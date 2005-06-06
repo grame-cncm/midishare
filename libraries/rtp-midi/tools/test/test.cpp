@@ -239,7 +239,7 @@ int main ( int argc, char * argv[] )
 	  input >> journalString;
 	}
 	else {
-	  input >> journal;
+	  input >> hex >> journal >> dec;
 	}
 	char line[255];
 	input.get ( );
