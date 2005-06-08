@@ -63,7 +63,7 @@ void ChapterTWriter::notifyResetCommand ( MidiEvPtr command, short resetType )
 void ChapterTWriter::calculateChapter ( )
 {
 
-  if ( _chanPress ) {
+  if ( _chanPress && _lastChanPressPayload >= checkpoint ( ) ) {
     _chapter[0] = _lastPressure;
     // S bit
     if ( _lastChanPressPayload == currentPayloadNumber ( ) - 1 ) {

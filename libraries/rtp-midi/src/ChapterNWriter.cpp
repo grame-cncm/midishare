@@ -108,6 +108,7 @@ void ChapterNWriter::calculateChapter ( )
 	// S
 	if ( ( * i ).payload == currentPayloadNumber ( ) - 1 ) {
 	  setFlag ( & position[0], 0, 0 );
+	  setFlag ( & _chapter[0], 0, 0 );
 	  unsetParentSBit ( );
 	}
 	// NOTENUM

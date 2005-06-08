@@ -9,7 +9,7 @@
 / chapter C is not figuring
 > 1 CtrlChange	1	17	21
 < 1 CtrlChange	1	17	21
-! chapterTable	1
+! chapterTable	1	
 
 # newPayload	2
 / chapter C is figuring
@@ -117,7 +117,7 @@
 ! printChapterHistory	1	C
 
 # newPayload	19
-! printPayload
+! printChapterHistory	1	C
 ! chapterTable	1	C
 
 ! changeCheckpoint	19
@@ -138,7 +138,6 @@
 ! dropPacket
 
 # newPayload	2
-! printPayload
 ? 1 CtrlChange	1	26	7f
 ? 1 CtrlChange	1	26	0
 ? 1 CtrlChange	1	26	7

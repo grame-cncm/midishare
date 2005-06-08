@@ -27,23 +27,25 @@
 
 # newPayload	5
 > 1 ChanPress	1	21
-> 1 ChanPress	1	5B
+> 1 ChanPress	1	5b
 ! chapterTable	1	T
 ! dropPacket
 
 # newPayload	6
 ! chapterTable	1	T
-? 1 ChanPress	1	5B
+? 1 ChanPress	1	5b
 
 / 4. change checkpoint
 
-# newPayload	7
 ! changeCheckpoint	5
+
+# newPayload	7
 ! chapterTable	1	T
 
-# newPayload	8
 ! changeCheckpoint	6
-! chapterTable	1
+
+# newPayload	8
+! chapterTable	1	
 
 / 5. reset n-active command
 
@@ -52,32 +54,32 @@
 ! dropPacket
 
 # newPayload	10
-> 1 CtrlChange	1	7E	0
+> 1 CtrlChange	1	7e	0
 ! chapterTable	1	T
 ! dropPacket
 
 # newPayload	11
 > 1 ChanPress	1	1
-! chapterTable	1	
+! chapterTable	1	C
 ! dropPacket
 
 / 6. reset c-active command
 
 # newPayload	12
 > 1 CtrlChange	1	79	0
-! chapterTable	1	T
+! chapterTable	1	C T
 ! dropPacket
 
 # newPayload	13
 > 1 ChanPress	1	1
-! chapterTable	1	T
+! chapterTable	1	C T
 ! dropPacket
 
 / 7. reset state
 
 # newPayload	14
-> 1 Stream	F0	7E	CC	0A	02	F7
-! chapterTable	1	T
+> 1 SysEx	7e	cc	0a	02
+! chapterTable	1	C T
 ! dropPacket
 
 # newPayload	15

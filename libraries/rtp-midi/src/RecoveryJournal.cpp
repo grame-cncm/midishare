@@ -48,12 +48,12 @@ void RecoveryJournal::notifyCommand ( const MidiEvPtr command )
 
   // for Reset State command
   if ( EvType ( command ) == typeReset ||
-       ( EvType ( command ) == typeStream && MidiGetField ( command, 0 ) == 0xF0 && MidiGetField ( command, 1 ) == 0x7E && MidiGetField ( command, 2 ) == 0xCC && MidiGetField ( command, 5 ) == 0xF7 &&
-	 ( ( MidiGetField ( command, 3 ) == 0x09 && MidiGetField ( command, 4 ) == 0x01 ) ||
-	   ( MidiGetField ( command, 3 ) == 0x09 && MidiGetField ( command, 4 ) == 0x03 ) ||
-	   ( MidiGetField ( command, 3 ) == 0x09 && MidiGetField ( command, 4 ) == 0x00 ) ||
-	   ( MidiGetField ( command, 3 ) == 0x0A && MidiGetField ( command, 4 ) == 0x01 ) ||
-	   ( MidiGetField ( command, 3 ) == 0x0A && MidiGetField ( command, 4 ) == 0x02 ) ) ) ) {
+       ( EvType ( command ) == typeSysEx && MidiGetField ( command, 0 ) == 0x7e && MidiGetField ( command, 1 ) == 0xcc &&
+	 ( ( MidiGetField ( command, 2 ) == 0x09 && MidiGetField ( command, 3 ) == 0x01 ) ||
+	   ( MidiGetField ( command, 2 ) == 0x09 && MidiGetField ( command, 3 ) == 0x03 ) ||
+	   ( MidiGetField ( command, 2 ) == 0x09 && MidiGetField ( command, 3 ) == 0x00 ) ||
+	   ( MidiGetField ( command, 2 ) == 0x0a && MidiGetField ( command, 3 ) == 0x01 ) ||
+	   ( MidiGetField ( command, 2 ) == 0x0a && MidiGetField ( command, 3 ) == 0x02 ) ) ) ) {
 
     notifyResetCommand ( command, RESET_STATE );
 

@@ -133,7 +133,7 @@ void ChapterCWriter::calculateChapter ( )
 	  exit ( EXIT_FAILURE );
 	}
 	position = _chapter + _chapterLength;
-	setFlag ( & position[0], 0, 1 );
+	position[0] = 0x80;
 	// S
 	if ( ( * i ).payload == currentPayloadNumber ( ) - 1 ) {
 	  setFlag ( & position[0], 0, 0 );
@@ -142,7 +142,7 @@ void ChapterCWriter::calculateChapter ( )
 	}
 	// NUMBER
 	position[0] |= ( * i ).number;
-	// A
+	// A + T
 	position[1] = 0xC0;
 	// VALUE
 	position[1] |= ( * i ).toggle;

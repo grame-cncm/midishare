@@ -92,6 +92,7 @@ void ChapterAWriter::calculateChapter ( )
     exit ( EXIT_FAILURE );
   }
   memset ( _chapter, 0, 2 );
+  setFlag ( & _chapter[0], 0, 1 );
   uint8 * position = _chapter + 1;
   unsigned short len = 0;
   for ( list<TNotePressInfo>::iterator i = _history.begin ( ) ; i != _history.end ( ) ; i++ ) {
@@ -105,15 +106,12 @@ void ChapterAWriter::calculateChapter ( )
       exit ( EXIT_FAILURE );
     }
     position = _chapter + _chapterLength;
+    position[0] = 0x80;
     // S
     if ( ( * i ).payload == currentPayloadNumber ( ) - 1 ) {
-      position[0] = 0x00;
-      _chapter[0] = 0x00;
+      setFlag ( & position[0], 0, 0 );
+      setFlag ( & _chapter[0], 0, 0 );
       unsetParentSBit ( );
-    }
-    else {
-      position[0] = 0x80;
-      _chapter[0] = 0x80;
     }
     // NOTENUM
     position[0] |= ( * i ).pitch;
