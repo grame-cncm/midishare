@@ -371,7 +371,7 @@ void printPayload ( uint8 * buffer, TPayloadStats * stats, ostream & out )
   out << "Z (" << getFlag ( buffer[0], 2 ) << ")\t";
   out << "P (" << getFlag ( buffer[0], 3 ) << ")" << endl;
   unsigned int len = ( buffer[0] & 0x0F ) * 0x0100 + buffer[1];
-  stats->commandSectionSize = len + 3;
+  stats->commandSectionSize = len + 2;
   out << "LEN\t" << len << endl;
 
   uint8 * end = buffer + len + 1;
