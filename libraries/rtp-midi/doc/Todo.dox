@@ -3,6 +3,10 @@
 
 @page Todo Todo List
 
+Add running status managment at writting and reading time.
+
+Add support for the S bit to read the journal faster.
+
 Add support to read X bit in
 ChapterAReader::readChapter (uint8 *buffer).
 
@@ -14,8 +18,6 @@ ChannelChapterReader::addRecoveryCommand and
 SystemChapterReader::addRecoveryCommand. It should be made possible
 for the client to get recovery commands for the stream independently
 from packet loss.
-
-Add support for the S bit to read the journal faster.
 
 Add a C interface to the library.
 
