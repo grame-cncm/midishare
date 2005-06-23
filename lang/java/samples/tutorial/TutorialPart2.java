@@ -1,29 +1,38 @@
-// ===========================================================================
-// Copyright (c) Grame, Computer Music Research Laboratory 2001, 
-// distribution as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 2001
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 import java.awt.*;
 import java.util.*;
 import java.applet.Applet;
-
 import grame.midishare.*;
-
 
 public class TutorialPart2 extends Applet
 {
-     	TextArea text;
+	TextArea text;
 	Button go;
 	int testnumber ;
 	   
-     	MidiTutorial appl;
-     	TutorialTask task;
+	MidiTutorial appl;
+	TutorialTask task;
 
 	 public void init() 
 	 {
@@ -53,14 +62,12 @@ public class TutorialPart2 extends Applet
 		text.appendText( "\nUse NEXT button to execute the next test\n");
 		testnumber = 0;
 	}
-	
-		
-	public void stop() 
+			
+	public void stop () 
 	{
-	 	if (appl!= null)appl.Close();
+	 	if (appl!= null) appl.Close();
 	  	appl = null;
-	}
-	 
+	}	 
 		 
 	void listOfAppl ()
 	{
@@ -80,7 +87,6 @@ public class TutorialPart2 extends Applet
 		}
 			text.appendText("-------------------------------------");
 	}
-
 
 	void listDest (int ref1)
 	{
@@ -105,14 +111,12 @@ public class TutorialPart2 extends Applet
 		}
 		text.appendText("-------------------------------------");
 	}
-		
-	
+			
 	void listSrc (int ref1)
 	{
 		short i;
-		int ref2,n = Midi.CountAppls();
-
-			
+		int ref2, n = Midi.CountAppls();
+		
 		text.appendText("\nList of the sources of ");
 		text.appendText(String.valueOf(ref1));
 		text.appendText("\n");
@@ -144,8 +148,6 @@ public class TutorialPart2 extends Applet
 			Midi.SendIm(refnum, event);  			// send the event immediatly
 		}
 	}
-	
-
 	 
 	void test1 ()
 	{
@@ -160,7 +162,7 @@ public class TutorialPart2 extends Applet
 	 	}
 	 }
 
-    	void test2 ()
+	void test2 ()
 	{
 		text.appendText("\n\n<TEST 2>Configure the Midi filter\n");
 		appl.configureFilter();
@@ -230,7 +232,6 @@ public class TutorialPart2 extends Applet
 		sendCtrlChange(10,120);
 		sendProgChange(2);
 	}
-
 		
 	void test5 ()
 	{		
@@ -243,8 +244,7 @@ public class TutorialPart2 extends Applet
 		if (ref2 > 0)  Midi.Connect (ref1,ref2, 1);
 	}
 
-
-    	void test6 ()
+	void test6 ()
 	{
 		text.appendText("\n\n<TEST 6> Install a Appl alarm \n");
 		int  ref = Midi.Open("foo");
@@ -259,7 +259,6 @@ public class TutorialPart2 extends Applet
 		text.appendText("\n");
 		task = new TutorialTask();
 		appl.ScheduleTask(task, Midi.GetTime());
-		
 	}
 		
 	void test8 ()
@@ -275,10 +274,9 @@ public class TutorialPart2 extends Applet
 		appl = null;
 		listOfAppl ();
 	}
-		
-			
-	 public boolean action( Event e , Object o ) 
-	 {
+					
+	public boolean action(Event e , Object o) 
+	{
 		if (e.target == go) {
 			testnumber++;
 			switch (testnumber){
@@ -294,11 +292,9 @@ public class TutorialPart2 extends Applet
 			}
 			return true;
 		}
-			
 		return true;
-	 }
-	 
-	 
+	}
+	 	 
 	public static void main(String args[])
 	{
 		java.util.Hashtable params = new java.util.Hashtable();
@@ -311,8 +307,6 @@ public class TutorialPart2 extends Applet
 	}
 }
 
-
-
 class MidiTutorial extends MidiAppl 
 {
 	TutorialPart2 myUser;
@@ -322,7 +316,7 @@ class MidiTutorial extends MidiAppl
 		myUser = user;
 	}
 	
-	public void configureFilter() 
+	public void configureFilter () 
  	{
 		int i;
 		
@@ -356,8 +350,7 @@ class MidiTutorial extends MidiAppl
 				break;
 		}
 	}
-	
-	
+		
 	public void ApplAlarm (int code) 
 	{
 		int param = code & 0x0000FFFF ;
@@ -382,7 +375,7 @@ class MidiTutorial extends MidiAppl
 	}
 }
 
-class TutorialTask extends MidiTask{
+class TutorialTask extends MidiTask {
 
 	public void Execute (MidiAppl obj, int date)
 	{
