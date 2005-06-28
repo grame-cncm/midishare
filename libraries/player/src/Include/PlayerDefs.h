@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,33 +20,44 @@
 
 */
 
-#ifndef __Filter__
-#define __Filter__
 
-#include "PlayerDefs.h"
-#include "MidiShare.h"
+#ifndef __PlayerDefs__
+#define __PlayerDefs__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define nil 0
 
-#ifdef __Macintosh__
-MidiFilterPtr MidiNewFilter();
-void MidiFreeFilter(MidiFilterPtr filter);
+#if defined(linux) || defined(__MACH__) // for linux and Mac OS X
+	#define true 1
+	#define false 0
+	#define errno 
+	#define FAR
+	#define NEAR
+	#define EXPORT
+	#define MSALARMAPI
+	#define MFAPI
 
-void MidiAcceptPort (MidiFilterPtr filter, short port, Boolean state);
-void MidiAcceptChan (MidiFilterPtr filter, short chan, Boolean state);
-void MidiAcceptType (MidiFilterPtr filter, short type, Boolean state);
+#elif defined(mac_classic)			 // Mac OS up to 9.x
+	#define MidiSharePPC_68k
+	#define __SupportOldSTDef__
 
-Boolean MidiIsAcceptedType (MidiFilterPtr filter, short type);
-Boolean MidiIsAcceptedPort (MidiFilterPtr filter, short port);
-Boolean MidiIsAcceptedChan (MidiFilterPtr filter, short chan);
+#elif defined(WIN32)				// windows 32 bits OS
+	#include <windows.h>
+	#define __SupportOldSTDef__ 
+	#define  EXPORT  __declspec(dllexport)
+	#define  MFAPI
+	#define __DEBUG__ 0
+	#define true 1
+	#define false 0
 
+#elif defined(WIN16)				// windows 16 bits OS
+	#include <windows.h>
+	#define true 1
+	#define false 0
+	#define EXPORT WINAPI _export
+	#define MFAPI WINAPI _export
 
-#endif
-
-#ifdef __cplusplus
-}
+#else
+#error "architecture undefined"
 #endif
 
 #endif

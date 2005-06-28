@@ -27,7 +27,8 @@
 #ifndef __TEventReceiverInterface__
 #define __TEventReceiverInterface__
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 
 //-------------------------------
 // Class TEventReceiverInterface 

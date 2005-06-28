@@ -1,6 +1,6 @@
 
 TARGET = libPlayer.so.1.0
-TARGETJAVA = libJPlayer.so
+TARGETJAVA = libJPlayer.so.1.0
 
 LIB = /usr/lib/libPlayer.so
 INC=../src/Include 
@@ -8,8 +8,8 @@ INC1=./
 
 # SET THE PATHNAME  for ../JDKxx/include HERE
 
-INC2=/home/letz/jdk117/include
-INC3=/home/letz/jdk117/include/genunix
+INC2=/home/letz/j2sdk1.3/include
+INC3=/home/letz/j2sdk1.3/include/linux
 
 INCF = /usr/local/include
 
@@ -25,7 +25,7 @@ TEventRecorder.o TExtEventReceiver.o TMidiPlayer.o TSMPTEEventReceiver.o TPlayer
 Player.o TPlayer.o TLoopManager.o TRunningPlayer.o TSMPTEPlayer.o TSyncInPlayer.o \
 TSyncOutPlayer.o TTickPlayer.o TPlayerScore.o TScoreInserter.o \
 TClockSender.o TPlayerSynchroniserClock.o TPlayerSynchroniserExt.o TPlayerSynchroniserInt.o \
-TTrackTable.o UMidi.o UTools.o Tmtrack.o Midifile.o \
+TTrackTable.o UMidi.o UTools.o Tmtrack.o midifile.o \
 TEventFactory.o  TMidiAppl.o TScheduler.o TScore.o TScoreFollower.o TScoreIterator.o\
 UScoreManager.o TTempoConverter.o TTempoMap.o TTempoMapVisitor.o TTime.o \
 TTimeConverter.o TTimeManager.o 
@@ -137,8 +137,8 @@ UTools.o : $(SRC)/Utils/UTools.cpp
 Tmtrack.o : $(SRC)/MidiFile/Tmtrack.c
 	$(CC) $(SRC)/MidiFile/Tmtrack.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 	
-Midifile.o : $(SRC)/MidiFile/Midifile.c
-	$(CC) $(SRC)/MidiFile/Midifile.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
+midifile.o : $(SRC)/MidiFile/midifile.c
+	$(CC) $(SRC)/MidiFile/midifile.c   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  
 
 TEventFactory.o : $(SRC)/Framework/Events/TEventFactory.cpp
 	$(CC) $(SRC)/Framework/Events/TEventFactory.cpp   -I$(INC) -I$(INC1)  $(OPTIONS)  $(FLAGS)  

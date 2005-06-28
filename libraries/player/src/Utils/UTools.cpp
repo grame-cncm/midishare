@@ -28,7 +28,8 @@
 // 
 
 #include "UTools.h"
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 
 /*----------------------------------------------------------------------------*/
 

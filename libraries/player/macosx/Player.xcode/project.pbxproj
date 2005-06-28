@@ -142,6 +142,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B4DB62104A32AEC00053105,
+				D3EA0D040871659F00AB8D8D,
+				D3EA0D050871659F00AB8D8D,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -185,7 +187,6 @@
 				4B9C4EBD048F3B0600A8728E,
 				4B9C4EBE048F3B0D00A8728E,
 				4B9C4EBF048F3B1400A8728E,
-				4B9C4EC0048F3B1400A8728E,
 				4B9C4EC1048F3B1500A8728E,
 				4B9C4EC2048F3B2100A8728E,
 				4B9C4EC3048F3B2200A8728E,
@@ -198,6 +199,7 @@
 				4B9C4ECA048F3B2800A8728E,
 				4B9C4ECB048F3B2800A8728E,
 				4B9C4ECC048F3B2900A8728E,
+				D3EA0D07087165C100AB8D8D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -459,12 +461,6 @@
 			settings = {
 			};
 		};
-		4B9C4EC0048F3B1400A8728E = {
-			fileRef = F66198DF038C2A120121BE68;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4B9C4EC1048F3B1500A8728E = {
 			fileRef = F66198E0038C2A120121BE68;
 			isa = PBXBuildFile;
@@ -574,6 +570,61 @@
 //4F2
 //4F3
 //4F4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3EA0D020871659F00AB8D8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = midifile.h;
+			path = ../src/Include/midifile.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EA0D030871659F00AB8D8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = PlayerDefs.h;
+			path = ../src/Include/PlayerDefs.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EA0D040871659F00AB8D8D = {
+			fileRef = D3EA0D020871659F00AB8D8D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3EA0D050871659F00AB8D8D = {
+			fileRef = D3EA0D030871659F00AB8D8D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3EA0D06087165C100AB8D8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = midifile.c;
+			path = ../src/MidiFile/midifile.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EA0D07087165C100AB8D8D = {
+			fileRef = D3EA0D06087165C100AB8D8D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F50
 //F51
 //F52
@@ -897,10 +948,10 @@
 		F6619891038C2A120121BE68 = {
 			children = (
 				F6619893038C2A120121BE68,
-				F6619894038C2A120121BE68,
-				F6619895038C2A120121BE68,
+				D3EA0D020871659F00AB8D8D,
 				F6619896038C2A120121BE68,
 				F6619897038C2A120121BE68,
+				D3EA0D030871659F00AB8D8D,
 				F6619898038C2A120121BE68,
 				F6619899038C2A120121BE68,
 				F661989A038C2A120121BE68,
@@ -970,22 +1021,6 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = CStruct.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F6619894038C2A120121BE68 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = GenericMidiShare.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F6619895038C2A120121BE68 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = Midifile.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1508,7 +1543,7 @@
 		};
 		F66198DE038C2A120121BE68 = {
 			children = (
-				F66198DF038C2A120121BE68,
+				D3EA0D06087165C100AB8D8D,
 				F66198E0038C2A120121BE68,
 			);
 			isa = PBXGroup;
@@ -1516,14 +1551,6 @@
 			path = ../src/MidiFile;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		F66198DF038C2A120121BE68 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = Midifile.c;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		F66198E0038C2A120121BE68 = {
 			fileEncoding = 30;

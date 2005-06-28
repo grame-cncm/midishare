@@ -27,7 +27,8 @@
 #ifndef __TMidiAppl__
 #define __TMidiAppl__
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 #include "TPlayerConstants.h"
 
 //-----------------
