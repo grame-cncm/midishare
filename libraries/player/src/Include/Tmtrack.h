@@ -24,6 +24,7 @@
 #define __TMTRACK__
 
 #include "midifile.h"
+#include "PlayerDefs.h"
 
 /*********************************** fin ************************************/
 
