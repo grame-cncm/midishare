@@ -419,4 +419,3 @@ void TPlayerScore::CheckAndAllocateMemory()
 	if (MidiFreeSpace() < l) MidiGrowSpace(l);
 }
 	
-	

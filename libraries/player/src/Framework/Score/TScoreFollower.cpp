@@ -190,6 +190,3 @@ void TScoreFollower::SetPosBBUForward(const TPos& pos)
 		GetIterator().NextEv();
 	}
 }
-	
-
-	
