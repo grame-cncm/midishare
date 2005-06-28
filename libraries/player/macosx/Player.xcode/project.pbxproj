@@ -199,7 +199,7 @@
 				4B9C4ECA048F3B2800A8728E,
 				4B9C4ECB048F3B2800A8728E,
 				4B9C4ECC048F3B2900A8728E,
-				D3EA0D32087179D300AB8D8D,
+				D3EA0D3708717BB700AB8D8D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -605,17 +605,17 @@
 			settings = {
 			};
 		};
-		D3EA0D31087179D300AB8D8D = {
+		D3EA0D3608717BB700AB8D8D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.c;
-			name = Midifile.c;
-			path = ../src/MidiFile/Midifile.c;
+			name = midifile.c;
+			path = ../src/MidiFile/midifile.c;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
-		D3EA0D32087179D300AB8D8D = {
-			fileRef = D3EA0D31087179D300AB8D8D;
+		D3EA0D3708717BB700AB8D8D = {
+			fileRef = D3EA0D3608717BB700AB8D8D;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1543,7 +1543,7 @@
 		};
 		F66198DE038C2A120121BE68 = {
 			children = (
-				D3EA0D31087179D300AB8D8D,
+				D3EA0D3608717BB700AB8D8D,
 				F66198E0038C2A120121BE68,
 			);
 			isa = PBXGroup;
