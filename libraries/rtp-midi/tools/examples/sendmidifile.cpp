@@ -117,7 +117,7 @@ int main ( int argc, char * argv[] )
   streamWriter->newPayload ( payloadNumber, buffer, bufferSize );
 
   command = First ( sequence );
-  if ( verbose > 0) printCommand ( command );
+  if ( verbose > 1 ) printCommand ( command );
 
   short result;
   while ( command ) {
@@ -125,14 +125,14 @@ int main ( int argc, char * argv[] )
     result = streamWriter->putCommand ( command );
 
     if ( result > 0 ) {
-      if ( verbose > 0 ) printCommand ( command );
+      if ( verbose > 1 ) printCommand ( command );
       command = getNextCommand ( );
     }
     else if ( result == 0 ) {
       createNextPayload ( );
     }
     else if ( result < 0 ) {
-      if ( verbose > 0 ) printCommand ( command );
+      if ( verbose > 1 ) printCommand ( command );
       command = getNextCommand ( );
     }
 
@@ -142,10 +142,11 @@ int main ( int argc, char * argv[] )
 
   if ( verbose > 2 ) printPayload ( buffer, & payloadStats );
   else getPayloadStats ( buffer, & payloadStats );
-  if ( verbose > 1 ) printStats ( & payloadStats );
-  if ( verbose > 1 ) cout << "$" << endl;
-  if ( verbose > 1 ) cout << "$ number of payloads\t\t" << payloadNumber << endl;
-  if ( verbose > 1 ) cout << "$ total duration\t\t" << ( ( double ) packetTime + ( double ) packetDuration ) / 1000.0 << endl;
+  if ( verbose > 2 ) printStats ( & payloadStats );
+  if ( verbose > 2 ) cout << "$" << endl;
+  if ( verbose > 0 ) cout << "$ number of payloads\t\t" << payloadNumber << endl;
+  float duration = ( ( double ) packetTime + ( double ) packetDuration ) / 1000.0;
+  if ( verbose > 0 ) cout << "$ total duration\t\t" << duration << "\t" << ( ( short ) duration ) / 60 << "'" << ( ( short ) duration ) % 60 << endl;
 
   MidiFreeSeq ( sequence );
   MidiClose ( myRefNum );
@@ -176,6 +177,7 @@ MidiEvPtr getNextCommand ( )
 
     if ( EvType ( command ) == typeTempo ) {
       lastTempo = MidiGetField ( command, 0 );
+      if ( verbose > 0 ) cout << "tempo changed to " << 60000000.0 / ( float ) lastTempo << endl;
     }
 
     lastCommandTime += milliseconds ( Date ( command ) - lastCommandTick );
@@ -204,8 +206,6 @@ MidiEvPtr getNextCommand ( )
 
 }
 
-#include "../src/printingUtils.h"
-
 void createNextPayload ( )
 {
 
@@ -218,29 +218,29 @@ void createNextPayload ( )
 
     if ( checkpointRefreshInterval != -1 && packetTime - lastCheckpointRefresh >= checkpointRefreshInterval ) {
       lastCheckpointRefresh = packetTime;
-      if ( verbose > 0 ) cout << "change checkpoint : " << payloadNumber << endl << endl;
+      if ( verbose > 1 ) cout << "change checkpoint : " << payloadNumber << endl << endl;
       streamWriter->changeCheckpoint ( payloadNumber );
     }
 
     memset ( buffer, 0, MAX_SIZE );
     streamWriter->newPayload ( payloadNumber, buffer, bufferSize );
-    if ( verbose > 0 ) cout << "# empty payload\t" << payloadNumber << "\t" << ( double ) ( packetTime / 1000.0 ) << endl;
+    //    if ( verbose > 1 ) cout << "# empty payload\t" << payloadNumber << "\t" << ( double ) ( packetTime / 1000.0 ) << endl;
 
     return;
 
   }
   else {
 
-    if ( verbose > 0 ) cout << "# payload\t" << payloadNumber << "\t" << ( double ) ( packetTime / 1000.0 ) << endl;
+    if ( verbose > 1 ) cout << "# payload\t" << payloadNumber << "\t" << ( double ) ( packetTime / 1000.0 ) << endl;
     if ( verbose > 2 ) printPayload ( buffer, & payloadStats );
-    if ( verbose > 1 ) printStats ( & payloadStats );
+    if ( verbose > 2 ) printStats ( & payloadStats );
     if ( verbose > 1 ) cout << endl;
 
     packetTime += packetDuration;
 
     if ( checkpointRefreshInterval != -1 && packetTime - lastCheckpointRefresh >= checkpointRefreshInterval ) {
       lastCheckpointRefresh = packetTime;
-      if ( verbose > 0 ) cout << "change checkpoint : " << payloadNumber << endl << endl;
+      if ( verbose > 1 ) cout << "change checkpoint : " << payloadNumber << endl << endl;
       streamWriter->changeCheckpoint ( payloadNumber );
     }
 
