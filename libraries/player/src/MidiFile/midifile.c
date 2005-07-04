@@ -47,18 +47,21 @@
  *
  */
  
-#include "midifile.h"
 
 #ifdef __Macintosh__
-        #include <Errno.h>
-        #include <StdLib.h>
-        #include <String.h>
+# include <Errno.h>
+# include <StdLib.h>
+# include <String.h>
 #endif
 
-#ifdef __Windows__
-        #include <StdLib.h>
-        #include <String.h>
+#ifdef WIN32
+# include <StdLib.h>
+# include <String.h>
+#define true 1
+#define false 0
 #endif
+
+#include "midifile.h"
 
 /*--------------------------------------------------------------------------*/
 /* constants																*/

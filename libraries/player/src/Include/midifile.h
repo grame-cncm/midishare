@@ -44,8 +44,10 @@
 #elif defined(WIN32)
 # ifdef __BuildLib__
 #	define MFAPI	__declspec(dllexport)
-# else
+# elif defined(__ImportLib__)
 #	define MFAPI	__declspec(dllimport)
+# else
+#	define MFAPI
 # endif
 
 #elif defined(WIN16)
