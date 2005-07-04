@@ -65,13 +65,13 @@ class TClockConverter {
 		
 		float ConvertTickToTickAtPrevSP (float date_ticks) 
 		{ 
-			float prev_songpos = floor((date_ticks * 4.0f)/fTicks_per_quarter);
+			float prev_songpos = (float)floor((date_ticks * 4.0f)/fTicks_per_quarter);
 			return ConvertSongPosToTick(prev_songpos);
 		}
 		
 		float ConvertTickToTickAtPrevClock (float date_ticks) 
 		{ 
-			float prev_clock = floor((24.0f * date_ticks)/fTicks_per_quarter);
+			float prev_clock = (float)floor((24.0f * date_ticks)/fTicks_per_quarter);
 			return 	ConvertClockToTick(prev_clock);
 		}
 };
