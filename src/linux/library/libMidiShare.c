@@ -125,7 +125,8 @@ void makeAppl(TClientsPtr g, TApplPtr appl, short ref, MidiName n)
 }
 
 /*--------------------------------------------------------------------------*/
-/* event handler : to be notified by the kernel module */
+/* event handler : to be notified by the kernel module                      */
+/*--------------------------------------------------------------------------*/
 
 MidiEvPtr MidiGetCommand(short ref );
 
@@ -136,13 +137,15 @@ void* CmdHandler(void* arg)
 	TTaskExtPtr task ;
 	MidiEvPtr ev;
 	
+	int	missing = 10;	// allows up to 10 spurious wakeups before quitting
+	
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
 	
-	while ((ev = MidiGetCommand(refNum))) {         		
-
+	while ( (ev = MidiGetCommand(refNum)) || (--missing) ) {         		
+		if (ev) {
 			switch (ev->evType) {
 			
-				case typeRcvAlarm: 		
+				case typeRcvAlarm: 	
 					// execute rcv alarm 
 					if (appl->rcvAlarm) (*appl->rcvAlarm) (refNum);  
 					break;
@@ -157,10 +160,19 @@ void* CmdHandler(void* arg)
 					// execute application alarm 
 					if (appl->applAlarm) (*appl->applAlarm) (refNum, MSGetField(ev,0)); 	
 					break;	
+				
+				default:
+					printf("unknow type %d\n", ev->evType);	
+					break;
+					
 							 
 			}
 			MSFreeEv(ev, FreeList(Memory(gClients)));
+		} else {
+			printf("missing\n");
+		}
 	}
+	printf("end of cmdhandler\n");
 	pthread_exit(0);
 }
 
