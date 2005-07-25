@@ -324,7 +324,7 @@ int mskGetTime(unsigned long userptr , struct file* f)
 /* -- Table of event structures */
 
 static char gEvStruct[256];			
-void InitStructTbl();
+void InitStructTbl(void);
 
 #define typeLastReserved    typeDead-1    /* last reserved event type      */
 
