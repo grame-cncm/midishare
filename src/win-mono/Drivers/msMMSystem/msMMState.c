@@ -108,11 +108,15 @@ static void LoadSlot (SlotPtr slot, char * section)
 		n= GetPrivateProfileString (section, infos.name, "", buff, kMaxEntryLen, fullProfileName);
 		if (n) {
 			unsigned short i, c = CountCnx (buff);
+			Boolean opened = false;
 			for (i=0; i<c; i++) {
 				short port = GetCnx (buff, i);
 				if (port != CnxError) {
 					Boolean input = infos.direction & MidiInputSlot;
-					OpenSlot (slot, input);
+					if (!opened) {
+						OpenSlot (slot, input);
+						opened = true;
+					}
 					MidiConnectSlot (port, slot->refNum, true);
 				}
 			}
