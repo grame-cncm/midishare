@@ -26,7 +26,6 @@
 #include <mmsystem.h>
 
 #include "msMMError.h"
-#include "msMMError.h"
 
 #define kGetErrorTextBuf	256
 
