@@ -164,6 +164,7 @@ static void* TimerTask(void* unused)
 		gDateNanos += gTimeRes * 1000000; // In nanoseconds
 		mach_wait_until(gDateNanos * gInvRatio);
 	}
+	return 0;
 }
 
 void OpenTimer(TMSGlobalPtr g)
