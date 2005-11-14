@@ -35,7 +35,6 @@ A MidiFileInfos object holds informations about a MIDIfile.
 
 public final class   MidiFileInfos
 {
-		
 	/**  MIDIfile format. */	
 	public static final int midifile0 			 = 0;
 	/**  MIDIfile format. */	

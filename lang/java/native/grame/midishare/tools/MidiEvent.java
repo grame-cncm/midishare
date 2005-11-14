@@ -20,8 +20,6 @@
 
 */
 
-
-
 package grame.midishare.tools;
 
 import grame.midishare.Midi;
@@ -89,8 +87,7 @@ public final class MidiEvent {
 	    typeTable.put("SMPTEOffset",new Integer(145)) ;
 	    typeTable.put("TimeSign",new Integer(146) );
 	    typeTable.put("KeySign",new Integer(147)) ;
-	    typeTable.put("Specific",new Integer(48) );
-	
+	    typeTable.put("Specific",new Integer(48) );	
 		
 		for ( int i = 149 ; i < 255 ; i++ ) {
 	     typeTable.put("Reserved" , new Integer(i));
@@ -241,9 +238,8 @@ public final class MidiEvent {
     	
     	return new String(sb);
 	}
-	
-		
-	public final String toString() { return event != 0 ? toString(event) : "";}
+			
+	public final String toString() {return event != 0 ? toString(event) : "";}
 	
 	/**
 	Creates a string representation of the event argument. The date, common
@@ -259,35 +255,30 @@ public final class MidiEvent {
 	     
 	  	sb.append(dateToString(Midi.GetDate(event)));
 	    
-	    
 	    while (sb.length() < 16) sb.append(' ');
-	   //	sb.setLength (16);
-	    
+	     
 	    sb.append(Midi.GetPort(event) );
 	    sb.append('/') ;
 	    sb.append(Midi.GetChan(event)+1) ;
 	    
-	   while (sb.length() < 21) sb.append(' ');
-	    //sb.setLength (21);
+	   	while (sb.length() < 21) sb.append(' ');
 	    
 	    int type = Midi.GetType(event);
 	    sb.append(eventType[type]) ;
 	   
 	    while (sb.length() < 34) sb.append(' ');
-	    //sb.setLength (32);
 	     
-	     if ( dataLength[type] == TEXT) {
+	    if ( dataLength[type] == TEXT) {
 	     	String str = Midi.GetText(event);
-	     	 sb.append( str.substring(0, 10)) ;
-	     }else {
+	     	sb.append(str.substring(0, Math.min(str.length(), 10))) ;
+	    } else {
 	        for (int i = 0 ; i < dataLength[type] ; i++) {
 	        	while (sb.length() < (34 +  i * 4)) sb.append(' ');
-	        	//if (i > 0) sb.setLength ((i - 1)*4 + 36);
-		     	 sb.append(Midi.GetField(event,i)) ;
+	        	 sb.append(Midi.GetField(event,i)) ;
 			  }
-	     }
-	  	 return new String(sb);
-}
+	    }
+	  	return new String(sb);
+	}
 
 
  	/**
@@ -320,7 +311,7 @@ public static final int valueOf(String s) {
   	
   		if (dataLength[type] == TEXT) {
   			Midi.SetText(event, st.nextToken());
-  		}else {
+  		} else {
   			while (st.hasMoreTokens()) {
   				Midi.SetField(event , i, Integer.parseInt(st.nextToken()));
   				i++;
@@ -337,7 +328,7 @@ public static final int valueOf(String s) {
        
    */
   
-  static int Note (int pitch, int vel, int dur,int chan,int port) {
+  public static int Note (int pitch, int vel, int dur,int chan,int port) {
   		int note = Midi.NewEv(Midi.typeNote);
   		
   		if (note != 0) {
@@ -347,7 +338,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(note,chan);
   			Midi.SetPort(note,port);
    		}
-   	 return note;
+		return note;
   }
   
    /**
@@ -357,7 +348,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyOn (int pitch, int vel, int chan,int port) {
+  public static int KeyOn (int pitch, int vel, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyOn);
   		
   		if (key != 0) {
@@ -366,7 +357,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
   
    /**
@@ -376,7 +367,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyOff (int pitch, int vel, int chan,int port) {
+  public static int KeyOff (int pitch, int vel, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyOff);
   		
   		if (key != 0) {
@@ -385,7 +376,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
   
    /**
@@ -395,7 +386,7 @@ public static final int valueOf(String s) {
        
    */
   
-   static int KeyPress (int ctrl, int val, int chan,int port) {
+  public static int KeyPress (int ctrl, int val, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeKeyPress);
   		
   		if (key != 0) {
@@ -404,7 +395,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
   
    /**
@@ -414,7 +405,7 @@ public static final int valueOf(String s) {
        
    */
   
-  static int CtrlChange (int ctrl, int val, int chan,int port) {
+	public static int CtrlChange (int ctrl, int val, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeCtrlChange);
   		
   		if (key != 0) {
@@ -423,7 +414,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
   
   /**
@@ -433,7 +424,7 @@ public static final int valueOf(String s) {
        
   */
   
-  static int ProgChange (int pgm, int chan,int port) {
+  public static int ProgChange (int pgm, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeProgChange);
   		
   		if (key != 0) {
@@ -441,7 +432,7 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
   
    /**
@@ -451,7 +442,7 @@ public static final int valueOf(String s) {
        
    */
    
-   static int ChanPress (int ch, int chan,int port) {
+   public static int ChanPress (int ch, int chan,int port) {
   		int key = Midi.NewEv(Midi.typeChanPress);
   		
   		if (key != 0) {
@@ -459,9 +450,8 @@ public static final int valueOf(String s) {
   			Midi.SetChan(key,chan);
   			Midi.SetPort(key,port);
    		}
-   	 return key;
+		return key;
   }
-  
   
  /**
   
@@ -470,7 +460,7 @@ public static final int valueOf(String s) {
        
    */
 
-    static int PitchWheel(int wheel, int chan, int port){
+    public static int PitchWheel(int wheel, int chan, int port){
            int offset = 8192;
            int min = -8192;
            int max = 8191;
@@ -494,7 +484,7 @@ public static final int valueOf(String s) {
     more memory space. 
 	*/
 	
-	static int SongPos( int pos, int port)
+	public static int SongPos( int pos, int port)
        {
            int e = Midi.NewEv( Midi.typeSongPos);
 
@@ -516,7 +506,7 @@ public static final int valueOf(String s) {
        
    	*/
    
-	static int SongSel (int song, int port)
+	public static int SongSel (int song, int port)
        {
            int e = Midi.NewEv( Midi.typeSongSel);
 
@@ -527,17 +517,15 @@ public static final int valueOf(String s) {
            }
            return e;
        }
-       
-       
+              
     /**
   
        Creates a Start event and returns a pointer to the event or 0 if there is no
        more memory space. 
        
    	*/
-   
-       
-       static int Start (int port)
+          
+       public static int Start (int port)
        {
            int e = Midi.NewEv( Midi.typeStart );
 
@@ -553,9 +541,9 @@ public static final int valueOf(String s) {
        Creates a Continue event and returns a pointer to the event or 0 if there is no
        more memory space. 
        
-   	*/
+		*/
        
-         static int Continue (int port)
+       public  static int Continue (int port)
        {
            int e = Midi.NewEv( Midi.typeContinue );
 
@@ -573,9 +561,8 @@ public static final int valueOf(String s) {
        
    		*/
        
-
-	  static int Stop (int port)
-       {
+		public  static int Stop (int port)
+		{
            int e = Midi.NewEv( Midi.typeStop );
 
            if ( e != 0)/* Allocate a new event. Check not NIL */ 
@@ -591,10 +578,9 @@ public static final int valueOf(String s) {
        more memory space. 
        
    		*/
-       
-
-	  static int Tune (int port)
-       {
+ 
+		public static int Tune (int port)
+		{
            int e = Midi.NewEv( Midi.typeTune);
 
            if ( e != 0)/* Allocate a new event. Check not NIL */ 
@@ -610,8 +596,8 @@ public static final int valueOf(String s) {
        more memory space. 
        
    		*/
-        static int ActiveSens (int port)
-       {
+		public  static int ActiveSens (int port)
+		{
            int e = Midi.NewEv( Midi.typeActiveSens);
 
            if ( e != 0)/* Allocate a new event. Check not NIL */ 
@@ -627,7 +613,7 @@ public static final int valueOf(String s) {
        more memory space. 
        
    		*/
-        static int Reset (int port)
+       public static int Reset (int port)
        {
            int e = Midi.NewEv( Midi.typeReset);
 
@@ -642,11 +628,9 @@ public static final int valueOf(String s) {
        Creates a SysEx event from an array of int and returns a pointer to the
        event or 0 if there is no more memory space. 
 		*/
-
-       
-       
-       static int SysEx (int[] p, int chan, int port)
-       {
+     
+		public static int SysEx (int[] p, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeSysEx );
            int c,len = p.length;
 
@@ -662,16 +646,14 @@ public static final int valueOf(String s) {
                }
            }
            return e;
-       }
+		}
 
 	  /**
        Creates a Stream event from an array of int and returns a pointer to the
        event or 0 if there is no more memory space. 
 		*/
-
-       
-       
-       static int Stream (int[] p, int chan, int port)
+    
+       public static int Stream (int[] p, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeStream );
            int c,len = p.length;
@@ -696,8 +678,7 @@ public static final int valueOf(String s) {
        there is no more memory space. 
 		*/
 
-
-       static int QuarterFrame( int type, int nibble, int port)
+       public static int QuarterFrame( int type, int nibble, int port)
        {
            int e = Midi.NewEv( Midi.typeQFrame );
 
@@ -716,8 +697,7 @@ public static final int valueOf(String s) {
        no more memory space. 
 		*/
 
-
-       static int CtrlChange14b(int ctrl, int val, int chan, int port)
+       public static int CtrlChange14b(int ctrl, int val, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeCtrl14b );
 
@@ -736,8 +716,7 @@ public static final int valueOf(String s) {
        or 0 if there is no more memory space. 
 		*/
 
-
-        static int NonRegParam(int param, int val, int chan, int port)
+       public static int NonRegParam(int param, int val, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeNonRegParam );
 
@@ -751,14 +730,13 @@ public static final int valueOf(String s) {
            return e;
        }
 
-	/**
+		/**
        Creates a  Registered Parameter event and returns a pointer to the event
        or 0 if there is no more memory space. 
 		*/
 
-
-        static int RegParam(int param, int val, int chan, int port)
-       {
+		public  static int RegParam(int param, int val, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeRegParam );
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */ 
@@ -769,16 +747,15 @@ public static final int valueOf(String s) {
                Midi.SetField(e,1,val);
            }
            return e;
-       }
+		}
 
-	/**
+		/**
 		Creates a Sequence Number event and returns a pointer to the event or 0
        if there is no more memory space. 
-	*/
-
-
-        static int  SeqNum(int num, int port)
-       {
+		*/
+	
+		public  static int  SeqNum(int num, int port)
+		{
            int e = Midi.NewEv( Midi.typeSeqNum );
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -787,17 +764,15 @@ public static final int valueOf(String s) {
               Midi.SetField(e,0,num);    /* the sequence number field */
            }
            return e;
-       }
-
+		}
 
 		/**
        Creates a Text event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int Text (String str, int chan, int port)
-       {
+		public static int Text (String str, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeText);
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -807,17 +782,17 @@ public static final int valueOf(String s) {
                Midi.SetText(e,str);
            }
            return e;
-       }
+		}
 
 
-	/**
+		/**
        Creates a Copyright event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
 
-       static int Copyright (String str, int chan, int port)
-       {
+		public  static int Copyright (String str, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeCopyright);
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -827,17 +802,15 @@ public static final int valueOf(String s) {
                Midi.SetText(e,str);
            }
            return e;
-       }
+		}
        
-       
-	/**
+		/**
        Creates a SeqName event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int SeqName (String str, int chan, int port)
-       {
+		public static int SeqName (String str, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeSeqName);
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -847,16 +820,15 @@ public static final int valueOf(String s) {
                Midi.SetText(e,str);
            }
            return e;
-       }
+		}
 
-	/**
+		/**
        Creates a InstrName event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int InstrName (String str, int chan, int port)
-       {
+		public static int InstrName (String str, int chan, int port)
+		{
            int e = Midi.NewEv( Midi.typeInstrName);
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -866,15 +838,14 @@ public static final int valueOf(String s) {
                Midi.SetText(e,str);
            }
            return e;
-       }
+		}
 
-	/**
+		/**
        Creates a Lyric event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int Lyric (String str, int chan, int port)
+       public static int Lyric (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeLyric);
 
@@ -887,14 +858,12 @@ public static final int valueOf(String s) {
            return e;
        }
 
-
-	/**
+		/**
        Creates a Marker event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int Marker (String str, int chan, int port)
+       public static int Marker (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeMarker);
 
@@ -907,13 +876,12 @@ public static final int valueOf(String s) {
            return e;
        }
 
-	/**
+		/**
        Creates a CuePoint event from a character string and returns a pointer to the
        event or 0 if there is not enough memory space. 
 		*/
 
-
-       static int CuePoint (String str, int chan, int port)
+       public static int CuePoint (String str, int chan, int port)
        {
            int e = Midi.NewEv( Midi.typeCuePoint);
 
@@ -931,9 +899,8 @@ public static final int valueOf(String s) {
        there is not enough memory space. 
 		*/
 
-
-        static int ChanPrefix (int prefix)
-       {
+		public  static int ChanPrefix (int prefix)
+		{
            int e = Midi.NewEv( Midi.typeChanPrefix);
 
            if ( e != 0 )/* Allocate a new event. Check not NIL */
@@ -943,27 +910,24 @@ public static final int valueOf(String s) {
            return e;
        }
 
-	/**
+		/**
        Creates a EndTrack event. Return a pointer to the event or 0 if
        there is not enough memory space. 
 		*/
 
-
-        static int EndTrack ()
-       {
+		public  static int EndTrack ()
+		{
     	   return Midi.NewEv( Midi.typeEndTrack);
-       }
+		}
 
-
-	/**
+		/**
        Creates a typeTempo event from a floating point tempo value in
        quarter-notes per minutes. Returns a pointer to the event or 0 if there is
        not enough memory space. 
-	*/
+		*/
 
-
-       static int Tempo(float tempo)
-       {
+		public static int Tempo(float tempo)
+		{
            int e =  Midi.NewEv(Midi.typeTempo);     
 
            if ( e != 0)    /* Allocate a new event. Check not NIL */ 
@@ -971,17 +935,16 @@ public static final int valueOf(String s) {
                Midi.SetField(e, 0, (int)(60000000.0 / tempo));    
            }
            return e;
-       }
+		}
 
 
-	/**
+		/**
 		Creates a SMPTE Offset event and returns a pointer to the event or NIL if
        there is no more memory space. 
-	*/
+		*/
 
-
-       static int  SMPTEOffset(int format, int hr, int mn, int sec, int frames, int subframes)
-       {
+		public  static int  SMPTEOffset(int format, int hr, int mn, int sec, int frames, int subframes)
+		{
            int e =  Midi.NewEv(Midi.typeSMPTEOffset);   
 
            if (e != 0)    /* Allocate a new event. Check not NIL */ 
@@ -994,17 +957,15 @@ public static final int valueOf(String s) {
                Midi.SetField(e, 5, subframes);
            }
            return e;
-       }
-
+		}
 	
 		/**
        Creates a Time Signature event and returns a pointer to the event or 0 if
        there is no more memory space. 
        */
 
-
-      static int   TimeSign (int date, int num, int denom, int click, int quarterDef)
-       {
+		public static int   TimeSign (int date, int num, int denom, int click, int quarterDef)
+		{
            int e =  Midi.NewEv(Midi.typeTimeSign);   
 
            if ( e != 0)    /* Allocate a new event. Check not NIL */ 
@@ -1015,16 +976,15 @@ public static final int valueOf(String s) {
                Midi.SetField(e, 3, quarterDef);
            }
            return e;
-       }
+		}
        
        	/**
        Creates a Key Signature event and returns a pointer to the event or NIL if
        there is no more memory space. 
 		*/
 
-
-      static int KeySign (int sharpflats, int minor)
-       {
+		public static int KeySign (int sharpflats, int minor)
+		{
           int e =  Midi.NewEv(Midi.typeKeySign);  
 
            if ( e != 0)    /* Allocate a new event. Check not NIL */ 
@@ -1033,17 +993,15 @@ public static final int valueOf(String s) {
                Midi.SetField(e, 1, minor);
            }
            return e;
-       }
+		}
 
-
-	/**
+		/**
 		Creates a typeSpecific event from an array of bytes. Returns a pointer to the
        event or 0 if there is no more memory space. 
-    */
+		*/
 
-
-       static int   Specific (byte[] p)
-       {
+		public  static int   Specific (byte[] p)
+		{
            int e =  Midi.NewEv( Midi.typeSpecific );
            int    c,len = p.length;
 
@@ -1052,11 +1010,11 @@ public static final int valueOf(String s) {
                for (c = 0; c <len;c++) Midi.AddField(e,p[c]);
                if (Midi.CountFields(e) < len ) /* if event smaller than len then*/
                {
-                   Midi.FreeEv(e);        /*     we run out of memory, free it */
+                   Midi.FreeEv(e);   /*     we run out of memory, free it */
                    e = 0;            /*     and return nil */
                }
            }
            return e;
-       }
+		}
 
 }

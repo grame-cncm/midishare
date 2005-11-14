@@ -48,26 +48,14 @@ Internally, a task can be in <B> kIdle </B> state or <B>kRunning </B> state:
 Real tasks must be defined by deriving the MidiTask class and overloading the Execute method.
 */
 
-
 public  class MidiTask {
 
-	static private final int kIdle = 0;
-	static private final int kRunning = 1;
+	private int taskptr = 0;
 	
-	private int line = 0;
-	private int state = kIdle;
-	private MidiAppl scheduler = null;
-	
-	final boolean isIdle() 		{return (state == kIdle);}
-	final boolean isRunning() 	{return (state == kRunning);}
-	
-	final void setRunning(MidiAppl sch, int num) {
-		state = kRunning; 
-		scheduler = sch;
-		line = num;
-	}
-	
-	final void setIdle() {state = kIdle; scheduler = null; line = 0;}
+	final boolean isIdle() 		{return (taskptr == 0);}
+	final boolean isRunning() 	{return (taskptr != 0);}
+		
+	void setRunning(int taskEv){this.taskptr = taskptr; }
 	
 	/**
     * Constructor.
@@ -89,15 +77,10 @@ public  class MidiTask {
 	The internal task state becomes <B> kIdle </B> and the task can be scheduled again.
 	*/
 	
-	final public void  Forget() {
-		if (scheduler != null) {
-			synchronized (scheduler) {
-			if (isRunning()) {
-				scheduler.tasktable.clearTask(line); // met null dans la ligne du tableau
-		 		setIdle();
-		 		}
-			}
-		}
+	public void  Forget() 
+	{
+		Midi.ForgetTask(taskptr);
+		taskptr = 0;
 	}
 	
 }

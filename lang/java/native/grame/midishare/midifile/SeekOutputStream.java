@@ -45,15 +45,13 @@ public class SeekOutputStream extends ByteArrayOutputStream {
 		}
 		
 		buf[offset] = (byte)b;
-	 }
-	 
+	}	 
 	 
 	public final void writeShort(int v, int offset) throws IOException {
 		buf[offset] = (byte) ((v >>> 8) & 0xFF);
 		buf[offset+1] = (byte)((v >>> 0) & 0xFF); 
 	}
-    
-    
+        
     public final void writeInt(int v,  int offset) throws IOException {
 		buf[offset] = (byte)((v >>> 24) & 0xFF);
 		buf[offset+1]= (byte)((v >>> 16) & 0xFF);

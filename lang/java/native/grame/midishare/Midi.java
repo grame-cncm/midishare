@@ -40,6 +40,10 @@
 /* 129: Add IsAcceptedPort, IsAcceptedChan, IsAcceptedType functions
 /* 130: Functions for drivers management
 /* 131: New PortPrefix event type
+/* 132: New RemoveEv function
+/* 133: Direct call of Java code for MacOSX
+/* 134: Correct Midi.Share semantic : now the JMidi interface is loaded in Midi.Share 
+/*      thus clients *must* use Midi.Share as the first call to the MidiShare API
 /*****************************************************************************/
 
 
@@ -48,17 +52,17 @@ package grame.midishare;
 import grame.midishare.*;
 import java.lang.*;
 import java.util.*;
+import java.io.*;
 
 /**
 The basic interface between MidiShare and Java. MidiShare entry points are implemented as static methods. 
 All functions are not available because of some compatibility problems between Java and C. 
 For perfomances reasons, MidiShare events, sequences and filters are manipulated at <b>int</b> type in Java. 
-An introduction on MidiShare can be found <A HREF = "MSH_intro.html">here</A>.
 */
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  131;
+	public   static  int  Version =  134;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
@@ -121,7 +125,6 @@ public final class Midi {
 	1 : Press, a key pressure from 0 to 127. (Field size : 1 byte)  
 	*/
 
-
 	public static final int typeKeyPress   		= 3;
 	
 	/**
@@ -136,7 +139,6 @@ public final class Midi {
 	1 : A control value from 0 to 127. (Field size : 1 byte) 
 	*/
 
-
 	public static final int typeCtrlChange  	= 4;
 	
 	/**
@@ -149,8 +151,6 @@ public final class Midi {
 	0 : A program number from 0 to 127. (Field size : 1 byte) 
 	*/
 
-	
-	
 	public static final int typeProgChange  	= 5;
 	
 	/**
@@ -216,8 +216,7 @@ public final class Midi {
 
   	Clock events have no field.    
 	*/
-	public static final int typeClock			= 10;
-	
+	public static final int typeClock			= 10;	
 	
 	/**
  	 A Real Time Start message.  
@@ -284,8 +283,6 @@ public final class Midi {
     messages.  
 	*/
 
-	
-
 	public static final int typeSysEx			= 17;
 	
 	/**
@@ -294,8 +291,6 @@ public final class Midi {
     <br><br>
 	Stream events have a variable number of fields. 
 	*/
-
-	
 	
 	public static final int typeStream			= 18;
 	
@@ -308,7 +303,6 @@ public final class Midi {
 
      Fields size : 4 bytes 
 	*/
-
 
 	public static final int typePrivate		 	= 19; /* 19 .... 127 */
 	
@@ -328,7 +322,6 @@ public final class Midi {
    	<br>
 	1 : A count nibble from 0 to 15. (Field size : 1 byte) 
 	*/
-
 
 	public static final int typeQFrame			= 130;
 	
@@ -404,7 +397,6 @@ public final class Midi {
     0: Sequence number form 0 to 65535 (2-bytes field)	
 	*/
 
-
 	public static final int typeSeqNum			= 134;
 	
 	/**
@@ -434,8 +426,7 @@ public final class Midi {
      <br><br>
 	
 	SeqName events have a variable number of character
-    fields. 	
-		
+    fields. 			
 	*/
 
 	public static final int typeSeqName			= 137;
@@ -446,8 +437,7 @@ public final class Midi {
     devices.      <br><br>
 	
 	InstrName events have a variable number of character
-    fields. 	
-		
+    fields. 			
 	*/
 
 	public static final int typeInstrName		= 138;
@@ -457,8 +447,7 @@ public final class Midi {
     cannot be sent to external Midi devices.    <br><br>
 	
 	Lyric events have a variable number of character
-    fields. 	
-		
+    fields. 			
 	*/
 
 	public static final int typeLyric			= 139;
@@ -470,7 +459,6 @@ public final class Midi {
 	Marker events have a variable number of character
     fields. 	
 	*/
-
 
 	public static final int typeMarker			= 140;
 	
@@ -538,8 +526,6 @@ public final class Midi {
   
   	5 : 100ths of a frame : 0..99.		
 	*/
-
-
 	
 	public static final int typeSMPTEOffset		= 145;
 	
@@ -565,8 +551,7 @@ public final class Midi {
 	KeySign events have 2 fields :<br><br>
 	0 : from -7 (7 flats) to 7 (7 sharps), (8-bits field)  <br><br>
   	1 : form 0 (major key) to 1 (minor key), (8-bits field)  
-	*/
-	
+	*/	
 	
 	public static final int typeKeySign			= 147;
 	
@@ -575,11 +560,9 @@ public final class Midi {
     specification). This event cannot be sent to external Midi
     devices. <br><br>
 	Specific events have a variable number of 8-bits fields.   
-
 	*/
 	
-	public static final int typeSpecific		= 148;
-	
+	public static final int typeSpecific		= 148;	
 	
 	/**
 	A port prefix event (from the Midi File 1.0 specification).
@@ -604,14 +587,12 @@ public final class Midi {
 	
 	public static final int typeApplAlarm		= 151;
 
-
 	/**
   	These events are reserved for future use.   
 	*/
 	
 	public static final int typeReserved		= 152; /* 152 .... 254 */
-	static final int typeDead					= 255;
-	
+	static final int typeDead					= 255;	
 	
 	/** 	Midi status code.	*/							
 	public static final int NoteOff		= 0x80;	
@@ -662,7 +643,6 @@ public final class Midi {
 	/** 	Midi status code.	*/
 	public static final int MReset		= 0xff;
 
-
 	/** Midi error code. */
 	public static final int errSpace		= -1;
 	/** Midi error code. */
@@ -670,15 +650,12 @@ public final class Midi {
 	/** Midi error code. */
 	public static final int errBadType		= -3;
 	/** Midi error code. */
-	public static final int errIndex	   	= -4;
-	
+	public static final int errIndex	   	= -4;	
 	
 	/** Synchronisation code : bit-15 for external synchronisation.*/							
 	public static final	int SyncExternal =	0x8000;		
 	/** Synchronisation code : bit-14 for synchronisation on any port. */	
 	public static final int SyncAnyPort	 =	0x4000;	
-
-
 
 	/** Midi change code: an application was opened.
  	*/
@@ -739,7 +716,6 @@ public final class Midi {
  	*/
     public static final int ChgSlotName		= 17;
 	
-
 	/**
   	Adds a field at the tail of an event of variable length (for
     example a System Exclusive or a Stream) and assigns to it the
@@ -754,7 +730,6 @@ public final class Midi {
     System Exclusive and between 0 and 255 for a Stream. 
 	*/
 	
-
 	public  static native final void AddField (int event, int val);
 	
 	/**
@@ -884,7 +859,6 @@ public final class Midi {
     *@param ref  is the reference number of the application. 		
 	*/
 
-
 	public  static native final void FlushEvs (int ref);
 			static native final void ForgetTask (int ref);
 			
@@ -1005,8 +979,7 @@ public final class Midi {
     *@param ref is the reference number of the application.       
     *@return The result is a string representing the application name.     
     */
-	
-	
+		
 	public  static  final  String GetName(int ref) {
 		String res = null;
 		try {
@@ -1016,11 +989,9 @@ public final class Midi {
 		}
 		return res;
 	}
-	
-	
+		
 	private  static native final int GetNamedApplAux(int midiname);
-	
-	
+		
 	/**
   	Returns the reference number of an application. Knowing an
     application name, it is possible to find its reference number
@@ -1031,7 +1002,6 @@ public final class Midi {
     *@param midiname the application name.      
     *@return The result is the reference number of the application.
     */
-
 	
 	public  static final  int GetNamedAppl(String midiname){
 		int res = 0;
@@ -1049,7 +1019,6 @@ public final class Midi {
   	*@deprecated see new drivers management functions.
 	*@see grame.midishare.Midi#CountDrivers
     */
-
 	
 	public  static native final int GetPortState(int port);
 			static native final int GetRcvAlarm(int ref);
@@ -1061,7 +1030,6 @@ public final class Midi {
                     
     *@param info  a SyncInfo object.     
     */
-
 
 	public  static native final void GetSyncInfo (SyncInfo info);
 	
@@ -1126,7 +1094,6 @@ public final class Midi {
     *@return The result is a pointer to a memory cell, or 0 when memory space is exhausted.         
     */
 
-
 	public  static native final int NewCell ();
 	
 	/**
@@ -1150,7 +1117,6 @@ public final class Midi {
 	
 	private static native final int OpenAux(int midiname);
 
-
 	/**
   	
     Opening of MidiShare. Open allows the recording of
@@ -1167,8 +1133,6 @@ public final class Midi {
     application.  
     */
     
-    
-  
 	public 	static  final  int Open(String midiname){
 		int res = 0;
 		try {
@@ -1181,8 +1145,7 @@ public final class Midi {
 		return res;
 	
 	}
-	
-	
+		
 			static native final int ReadSync (int adr);
 			
 	/**
@@ -1218,8 +1181,7 @@ public final class Midi {
      
     *@param ref is the reference number of the application.                       
     *@param  event  is a pointer to the event to send.     
-    */
-		
+    */		
 	
 	public  static native final void SendIm(int ref, int event);
 			static native final void SetApplAlarm(int ref, int alarm);
@@ -1235,12 +1197,10 @@ public final class Midi {
     *@param event is a pointer to the event to be modified.                       
     *@param field is a 32-bit integer, the index number of the field to modify (from 0 to CountFields(e) -1).    
     *@param val is 32-bit value to put in the field. This value will beconverted to the right size (8, 16 or 32-bit).  
-    */
-		
+    */		
 			
 	public  static native final void SetField(int event, int field, int val );
-	
-	
+		
 	/**
   	Associates a filter to an application. Each application can select
     the events to be received by using a filter. The filtering process
@@ -1252,15 +1212,12 @@ public final class Midi {
     *@param ref is the reference number of the application.                  
     *@param filter is a pointer to the application filter. 
     */
-
 	
-  public  static native final void SetFilter(int ref, int filter);
-		  static native final void SetInfo(int ref,int info);
-	
-	
+	public  static native final void SetFilter(int ref, int filter);
+			static native final void SetInfo(int ref,int info);
+		
 	private  static native final void SetNameAux(int ref,int midiname);
-	
-	
+		
 	/**
   	Changes the name of an application.  
           
@@ -1295,19 +1252,32 @@ public final class Midi {
     p, b7_b0 is the synchronisation port to be used when x=1 and a=0. 
     When a=1 the port number is ignored, the first port with incoming MTC is used.     
     */
-	
-		
+			
 	public  static native final int SetSyncMode (int mode);
 	
 	/**
-  	Test if MidiShare is available on the Machine. This is
-  	the first MidiShare function that an application should call.  
+  	Test if MidiShare is available on the Machine. The function actually tries to load the JMidi native library
+  	and return a result according to the loading process result. 
+  	Applications *must* call this function first, otherwise next calls to the MidiShare API will fail.
              
     *@return The result is true (= 1) if MidiShare is available, false (= 0) otherwise.
     */
- 
 	
-	public	static native final int Share ();
+	public	static final int Share ()
+	{
+		if (interfaceLoaded){
+			return 1;
+		}else{
+			try {
+			  	System.loadLibrary("JMidi");
+				interfaceLoaded = true;
+				return 1;
+	      	} catch (UnsatisfiedLinkError e) {
+				e.printStackTrace();
+				return 0;
+		  	}
+		}	
+	 }	
 			
 	/**
   	Convert an SMPTE location to a time in millisecond.  
@@ -1363,7 +1333,6 @@ public final class Midi {
 	*@param event is a pointer to the event.
     *@param link is a pointer to the new event.
   	*/
-
 
 	public   static native final void SetLink (int event,int link);
 
@@ -1448,7 +1417,6 @@ public final class Midi {
     *@return The result is the event port.
     */
 
-
 	public   static native final int GetPort (int event);
 	
 	/**
@@ -1458,8 +1426,7 @@ public final class Midi {
     *@param port is the new port.
  	*/
 
-	public   static native final void SetPort (int event,int port);
-	
+	public   static native final void SetPort (int event,int port);	
 	
 	public   static native final int GetData0(int event);
 	public   static native final int GetData1(int event);
@@ -1470,7 +1437,6 @@ public final class Midi {
 	public   static native final void SetData1(int event,int data);
 	public   static native final void SetData2(int event,int data);
 	public   static native final void SetData3(int event,int data);
-
 	
 	/* for event with text */
 
@@ -1493,8 +1459,7 @@ public final class Midi {
 		}
 		return res;
 	}
-	
-	
+		
 	private   static native final void SetTextAux(int event,int text);
 	
 	/**
@@ -1516,7 +1481,6 @@ public final class Midi {
 		}
 	}
 
-
 	/* for sequences */
 
 	/**
@@ -1533,7 +1497,7 @@ public final class Midi {
 		 
 	*@param seq is a pointer to the sequence.
     *@param event is the new event
-     */
+	*/
 
 	public   static native final void SetFirstEv (int seq,int event);
 
@@ -1565,7 +1529,6 @@ public final class Midi {
     *@return  The result is a pointer to the new filter.
     */
 
-
 	public  static native  final int NewFilter();
 	
 	/**
@@ -1584,7 +1547,6 @@ public final class Midi {
     *@param val  if set to 1, the event on this port will be rejected,
     	if set to 0, the event on this port will be accepted.
   	*/
-
 
 	public  static native final void AcceptPort(int filter, int port, int val);
 	
@@ -1607,8 +1569,7 @@ public final class Midi {
     *@param val   if set to 1, the event of this type will be rejected,
     	if set to 0, the event of this type will be accepted.
   	*/
-  
-  
+    
 	public  static native final void AcceptType(int filter, int type, int val);
 	
 	/**
@@ -1617,7 +1578,6 @@ public final class Midi {
     *@param filter is a pointer to the filter.
     *@param port  is a port number to be accessed in the filter (0 to  255).
    	*/
-
 
 	public  static native final int IsAcceptedPort(int filter, int port);
 	
@@ -1636,10 +1596,8 @@ public final class Midi {
     *@param filter is a pointer to the filter.
     *@param type  is a type number to be accessed in the filter (0 to  255).
    	*/
-  
-  
-	public  static native final int IsAcceptedType(int filter, int type);
-	
+    
+	public  static native final int IsAcceptedType(int filter, int type);	
 	
 	/** Slot direction code: input slot
  	*/
@@ -1650,14 +1608,12 @@ public final class Midi {
 	/** Slot direction code: input/output slot
  	*/
 	public static final int InputOutputSlot	= 3;
-
 	
 	/**
   	Gives the number of MidiShare drivers currently registered. 
     *@return The result is a 16-bit integer, the number of currently registered drivers
    	*/
-	
-	
+		
 	public  static native final int CountDrivers();
 	
 	/**
@@ -1674,7 +1630,7 @@ public final class Midi {
     count.
    	*@param  ref a 16-bit integer, it is the reference number of the driver. 
     *@param  infos a DriverInfos structure to be filled with the driver characteristics. 
-    *@return  The result is a Boolean value which indicates whether MidiShare has been able to get information
+    *@return The result is a Boolean value which indicates whether MidiShare has been able to get information
               about the driver or not.
 
    	*/
@@ -1689,8 +1645,7 @@ public final class Midi {
 		}
 		return res;
 	}
-	
-	
+		
 	private static native final int GetDriverInfosAux (int refnum, DriverInfos infos);
 	
 	/**
@@ -1727,8 +1682,7 @@ public final class Midi {
    	*/
    	
 	public  static native final int	GetIndSlot(int refnum, int index);
-	
-		
+			
 	/**
   	Removes a slot from the system. MidiShare applications owning a "context alarm" will be
     informed of the change using the RemoveSlot alarm code. 
@@ -1775,8 +1729,7 @@ public final class Midi {
      *@param slot a 32-bit integer, it is the slot reference number. 
      *@param state a Boolean value to specify whether the connection should be done (true) or removed (false). 
    	*/
-   	
-   	
+   	   	
 	public  static native final	void ConnectSlot (int port, int slot, int state);
 	
 	/**
@@ -1804,15 +1757,13 @@ public final class Midi {
 	}
 	
 	private  static native final	void SetSlotNameAux (int slot, int name);
-	
-	
+		
 	/* linearisation functions */
 	
 	/** For internal use only. */
 	public  static native final int WriteEv(WriteEvInfo info);
 	/** For internal use only. */
-	public  static native final int ReadEv (ReadEvInfo info);
-	
+	public  static native final int ReadEv (ReadEvInfo info);	
 
 	/* string manipulations functions */
 	
@@ -1851,17 +1802,4 @@ public final class Midi {
 		FreeString(src);
 		return new String(buffer,0,i);
 	}
-
-	
-
-  static {
-		if (!interfaceLoaded){
-			try {
-			  	System.loadLibrary("JMidi");
-				interfaceLoaded = true;
-        } catch (UnsatisfiedLinkError e) {
-				System.err.println("JMidi.library not found");
-		  }
-		}
-	 }
  }
