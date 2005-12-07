@@ -1,13 +1,24 @@
-// ===========================================================================
-// Copyright (c) Grame, Computer Music Research Laboratory 2001, 
-// distribution as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
 
+  Copyright © Grame 2001
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 import java.awt.*;
 import java.util.*;
@@ -15,12 +26,12 @@ import java.applet.Applet;
 import java.awt.event.*;
 import java.applet.*;
 
-import grame.midishare.Midi;
+import grame.midishare.*;
 
 
 public class TutorialPart1 extends Applet 
  {
-     	TextArea text;
+    TextArea text;
 	Button start, go;
 	int testnumber ;
 	int ourRefNum  = -1;
@@ -43,7 +54,7 @@ public class TutorialPart1 extends Applet
 
 		text = new  TextArea(1,1);
 		text.appendText( "Welcome to the MidiShare Java tutorial ! ");
-    		add("Center",text);
+		add("Center",text);
 
 		bottomPanel.setLayout(new GridLayout(1,2,5,5));
 		bottomPanel.add (go);
@@ -62,9 +73,9 @@ public class TutorialPart1 extends Applet
 	 	ourRefNum = -1;
 	}
 	
-	void test1 ()
+	void test1()
 	{
-		text.appendText("\n <TEST 1> : Check if MidiShare is installed");
+		text.appendText("\n <TEST 1> : Check if MidiShare is installed : calling the Midi.Share() function is REQUIRED to properly load the JMidi native library");
 		text.appendText("\n");
 		text.appendText("MidiShare installed : ");
 		text.appendText(String.valueOf(Midi.Share()));
@@ -73,21 +84,21 @@ public class TutorialPart1 extends Applet
 		text.appendText("0 means that MidiShare is not installed");
 	}
 
-	void test2 ()
+	void test2()
 	{
 		text.appendText("\n\n<TEST 2> Get MidiShare version\n");
 		text.appendText("MidiShare version :  ");
 		text.appendText (String.valueOf(Midi.GetVersion()));
 	}
 	
-	void test3 ()
+	void test3()
 	{
 		text.appendText("\n\n<TEST 3> Count MidiShare client applications\n");
 		text.appendText("Count of MidiShare client applications : ");
 		text.appendText( String.valueOf(Midi.CountAppls()));
 	}
 	
-	void test4 ()
+	void test4()
 	{
 		text.appendText("\n\n<TEST 4> Register a client application\n");
 		ourRefNum = Midi.Open("Tutorial");
@@ -100,17 +111,17 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test5 ()
+	void test5()
 	{
 		text.appendText("\n\n<TEST 5> Count again MidiShare client applications \n");
 		text.appendText("Count of MidiShare client applications : ");
-	    	text.appendText(String.valueOf(Midi.CountAppls()));
+		text.appendText(String.valueOf(Midi.CountAppls()));
 	}
 	
-	void listOfAppl ()
+	void listOfAppl()
 	{
 		short i;
-		int ref,	n = Midi.CountAppls();
+		int ref, n = Midi.CountAppls();
 	
 		text.appendText("List of MidiShare client applications\n");
 		text.appendText("-------------------------------------\n");
@@ -126,15 +137,13 @@ public class TutorialPart1 extends Applet
 		text.appendText("-------------------------------------");
 	}
 	
-	
-	void test6 ()
+	void test6()
 	{
 		text.appendText("\n\n<TEST 6> List every MidiShare client applications\n");
 		listOfAppl();
 	}
 	
-	
-	void test7 ()
+	void test7()
 	{
 		text.appendText("\n\n<TEST 7> search the reference number of: ");
 		text.appendText("Tutorial");
@@ -145,7 +154,7 @@ public class TutorialPart1 extends Applet
 		text.appendText(String.valueOf (Midi.GetNamedAppl("Tutorial")));
 	}
 	
-	void test8 ()
+	void test8()
 	{
 		text.appendText("\n\n<TEST 8> search the reference number of 'XYZ'\n");
 		text.appendText("Reference number of  XYZ: ");
@@ -154,21 +163,21 @@ public class TutorialPart1 extends Applet
 		text.appendText("A negative result means that the application was not found.");
 	}
 	
-	void test9 ()
+	void test9()
 	{
 		text.appendText("\n\n<TEST 9> Change the name of client application Tutorial to JavaTutorial\n");
 		Midi.SetName (Midi.GetNamedAppl ("Tutorial"), "JavaTutorial");
 		listOfAppl();
 	}
 	
-	void test10 ()
+	void test10()
 	{
 		text.appendText("\n\n<TEST 10> Connect JavaTutorial to MidiShare\n");
 		Midi.Connect (ourRefNum, 0, 1);
 		
 	}
 	
-	void test11 ()
+	void test11()
 	{
 		text.appendText("\n\n<TEST 11> Test if JavaTutorial is connected to MidiShare\n");
 		text.appendText("Connection to MidiShare : ");
@@ -178,10 +187,10 @@ public class TutorialPart1 extends Applet
 		text.appendText(String.valueOf(Midi.IsConnected (0,ourRefNum)));
 	}
 	
-	void listDest (int ref1)
+	void listDest(int ref1)
 	{
 		short i;
-		int ref2,	n = Midi.CountAppls();
+		int ref2, n = Midi.CountAppls();
 	
 		text.appendText("List of the destinations of ");
 		text.appendText(String.valueOf(ref1));
@@ -197,19 +206,18 @@ public class TutorialPart1 extends Applet
 				text.appendText(" refnum = " );
 				text.appendText(String.valueOf(ref2));
 				text.appendText("\n");
-				}
 			}
+		}
 		text.appendText("-------------------------------------");
 	}
 	
-	void test12 ()
+	void test12()
 	{
 		text.appendText("\n\n<TEST 12> List the destinations of an application\n");
 		listDest (ourRefNum);
 	}
 	
-	
-	void listSrc (int ref1)
+	void listSrc(int ref1)
 	{
 		short i;
 		int ref2,	n = Midi.CountAppls();
@@ -228,20 +236,18 @@ public class TutorialPart1 extends Applet
 				text.appendText(" refnum = " );
 				text.appendText(String.valueOf(ref2));
 				text.appendText("\n");
-				}
 			}
+		}
 		text.appendText("-------------------------------------");
 	}
 		
-	
-	void test13 ()
+	void test13()
 	{
 		text.appendText("\n\n<TEST 13> List the sources of an application\n");
 		listSrc (0);
 	}
-	
-	
-	void sendNote (int pitch) 
+		
+	void sendNote(int pitch) 
 	{
 		int event = Midi.NewEv(Midi.typeNote);  // ask for a new note event
 		
@@ -255,11 +261,11 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test14 ()
+	void test14()
 	{	int ref;
 		text.appendText("\n\n<TEST 14>Send a note with pitch, velocity and duration\n");
 		if ((ref = Midi.GetNamedAppl("msdisplay")) > 0)
-			Midi.Connect (ourRefNum,ref, 1);
+			Midi.Connect(ourRefNum,ref, 1);
 		sendNote (72); 
 	}
 	
@@ -282,13 +288,13 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test15 ()
+	void test15()
 	{
 		text.appendText("\n\n<TEST 15>Send multiple notes\n");
 		sendMultipleNotes (10, 72, 1000); 
 	}
 	
-	void sendLyric (String str) 
+	void sendLyric(String str) 
 	{
 		int event = Midi.NewEv(Midi.typeLyric); 	// ask for a new lyric event
 			
@@ -300,14 +306,13 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test16 ()
+	void test16()
 	{
 		text.appendText("\n\n<TEST 16>Send 'hello' lyric\n");
 		sendLyric("Hello"); 
 	}
-	
-	
-	void sendText (int type, String str) 
+		
+	void sendText(int type, String str) 
 	{
 		int event = Midi.NewEv(type);  			// ask for a event
 			
@@ -319,7 +324,7 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test17 ()
+	void test17()
 	{
 		text.appendText("\n\n<TEST 17>Send text events\n");
 		sendText (Midi.typeText, "Hello");
@@ -331,20 +336,126 @@ public class TutorialPart1 extends Applet
 		sendText (Midi.typeCuePoint, "Reverb here") ;
 	}
 	
-	void test18 ()
+	void listOfDrivers()
 	{
-		text.appendText("\n\n<TEST 18>Close the JavaTutorial application\n");
-		Midi.Close (ourRefNum);
-		listOfAppl ();
-		//System.Runtime.exit();
+		int ref, n = Midi.CountDrivers();
+
+		text.appendText("\n\nList of MidiShare drivers\n");
+		text.appendText("-------------------------------------\n");
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printDriverInfo(ref);
+			text.appendText("-------------------------------------\n");
+		}
 	}
 	
+	void printDriverInfo(int ref)
+	{
+		DriverInfos infos = new DriverInfos();
+		SlotInfos slot = new SlotInfos();
+		
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+		text.appendText("Reference number ");
+		text.appendText(String.valueOf(ref));
+		text.appendText("\nname : ");
+		text.appendText(infos.name);
+		text.appendText("\nslots : ");
+		text.appendText(String.valueOf(infos.slots));
+		text.appendText("\nversion : ");
+		text.appendText(String.valueOf(infos.version));
+		text.appendText("\n");
+		
+		for (int i = 0 ;i < infos.slots; i++) {
+			Midi.GetSlotInfos(Midi.GetIndSlot(ref,i+1), slot);
+			text.appendText("slot name : " );
+			text.appendText(slot.name);
+			text.appendText("\nslot direction : ");
+			text.appendText(String.valueOf(slot.direction));
+			text.appendText("\n");
+		}
+	}
+
+	void test18()
+	{
+		text.appendText( "\n\n<TEST 18>Display MidiShare drivers informations");
+	 	listOfDrivers();
+	}
 	
+	void printPortInfo(int ref, int port)
+	{
+		DriverInfos infos = new DriverInfos();
+		SlotInfos slot = new SlotInfos();
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+			
+		for (int i = 0 ;i < infos.slots; i++) {
+			int slotref = Midi.GetIndSlot(ref,i+1);
+			int res = Midi.IsSlotConnected(port, slotref);
+			if (res > 0) {  // if port is connected this this slot
+				text.appendText("\n-------------------------------------\n");
+				Midi.GetSlotInfos(slotref, slot);
+				text.appendText("port number : " );
+				text.appendText(String.valueOf(port));
+				text.appendText("\nslot name : " );
+				text.appendText(slot.name);
+				text.appendText("\nslot direction : ");
+				text.appendText(String.valueOf(slot.direction));
+				text.appendText("\n");
+			}
+		}
+	}
+	
+	void test19()
+	{
+		text.appendText( "\n\n<TEST 19>Display port to slot connection state");
+		int ref, n = Midi.CountDrivers();
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printPortInfo(ref,0);			// display connection state of port 0
+			printPortInfo(ref,1);			// display connection state of port 1
+		}	 	
+	}
+	
+	void connectPort(int ref, int port)
+	{
+		DriverInfos infos = new DriverInfos();
+		Midi.GetDriverInfos(ref,infos);	// get info for the driver
+			
+		for (int i = 0 ;i < infos.slots; i++) {
+			int slotref = Midi.GetIndSlot(ref,i+1);
+			Midi.ConnectSlot(port,slotref,1);
+		}
+	}
+	
+	void test20()
+	{
+		text.appendText( "\n\n<TEST 20>Connect port to slot and dsiplay new connection state");
+		int ref, n = Midi.CountDrivers();
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			connectPort (ref,10);		    // connect port 10 to all slots of all drivers
+		}
+		
+		for (int i = 1; i<= n; i++) {
+			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
+			printPortInfo(ref,10);			// display connection state of port 10
+		}
+	}
+	
+	void test21()
+	{
+		text.appendText("\n\n<TEST 21>Close the JavaTutorial application\n");
+		Midi.Close (ourRefNum);
+		listOfAppl ();
+	}
+
 	public boolean action( Event e , Object o) 
 	{
 		if (e.target == go) {
 			testnumber++;
-			switch (testnumber){
+			switch (testnumber) {
+				
 				case 1 : test1(); break;
 				case 2 : test2(); break;
 				case 3 : test3(); break;
@@ -363,9 +474,12 @@ public class TutorialPart1 extends Applet
 				case 16 : test16(); break;
 				case 17 : test17(); break;
 				case 18 : test18(); break;
-				}
+				case 19 : test19(); break;
+				case 20 : test20(); break;
+				case 21 : test21(); break;
+			}
 			return true;
-		  }
+		}
 		
 	 	return true;
 	}
