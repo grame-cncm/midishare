@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msTime.h         $
+ *     $Date: 2005/12/08 13:38:29 $
+ * $Revision: 1.2.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -31,10 +45,10 @@ void InitTime (TMSGlobalPtr g);
 void OpenTime (TMSGlobalPtr g);
 
 /*____________________________________________________________________________*/
-MSFunctionType(unsigned long) MSGetTime (TMSGlobalPtr g);
-MSFunctionType(FarPtr(unsigned long)) MSGetTimeAddr(TMSGlobalPtr g);
+DWORD  MSGetTime (TMSGlobalPtr g);
+DWORD* MSGetTimeAddr(TMSGlobalPtr g);
 
-MSFunctionType(void) MSTime2Smpte  (long time, short format, SmpteLocPtr loc, TMSGlobalPtr g);
-MSFunctionType(long) MSSmpte2Time  (SmpteLocPtr loc, TMSGlobalPtr g);
+void MSTime2Smpte  (long time, short format, SmpteLocPtr loc, TMSGlobalPtr g);
+long MSSmpte2Time  (SmpteLocPtr loc, TMSGlobalPtr g);
 
 #endif

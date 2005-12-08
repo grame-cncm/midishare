@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Memory/msEvents.c        $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.9.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - using lifo for memory management
@@ -33,16 +47,15 @@
 #define kCountFieldsError	0
 #define kGetFieldError		0
 
-#define typeLastReserved    typeDead-1    /* last reserved event type      */
 #define kLenEvent           16            /* len of a MidiShare event      */
 #define kLenDatas           kLenEvent-4   /* len of a sysex extension data */
 
-/* -- Method prototypes */
+// -- Method prototypes
 typedef MidiEvPtr (*NewEvMethodPtr)      (lifo* freelist, short typeNum);
 typedef MidiEvPtr (*CopyEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
 typedef void      (*FreeEvMethodPtr)     (lifo* freelist, MidiEvPtr ev);
-typedef void      (*SetFieldMethodPtr)   (MidiEvPtr ev, unsigned long f, long v);
-typedef long      (*GetFieldMethodPtr)   (MidiEvPtr ev, unsigned long f);
+typedef void      (*SetFieldMethodPtr)   (MidiEvPtr ev, DWORD f, long v);
+typedef long      (*GetFieldMethodPtr)   (MidiEvPtr ev, DWORD f);
 typedef long      (*CountFieldsMethodPtr)(MidiEvPtr ev);
 typedef void      (*AddFieldMethodPtr)   (lifo* freelist, MidiEvPtr ev, long v);
 
@@ -73,25 +86,25 @@ static MidiEvPtr CopySmallEv	( lifo* freelist, MidiEvPtr ev);
 static MidiEvPtr CopyPrivateEv	( lifo* freelist, MidiEvPtr ev);
 static MidiEvPtr CopySexEv	( lifo* freelist, MidiEvPtr ev);
 
-static void	SetFUndefEv	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFSmallEv	( MidiEvPtr e, unsigned long f, long v);
-static void	SetF2_16Ev	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFTempo	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFSMPTEOffset	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFTimeSign	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFKeySign	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFSexEv	( MidiEvPtr e, unsigned long f, long v);
-static void	SetFPrivateEv	( MidiEvPtr e, unsigned long f, long v);
+static void	SetFUndefEv	( MidiEvPtr e, DWORD f, long v);
+static void	SetFSmallEv	( MidiEvPtr e, DWORD f, long v);
+static void	SetF2_16Ev	( MidiEvPtr e, DWORD f, long v);
+static void	SetFTempo	( MidiEvPtr e, DWORD f, long v);
+static void	SetFSMPTEOffset	( MidiEvPtr e, DWORD f, long v);
+static void	SetFTimeSign	( MidiEvPtr e, DWORD f, long v);
+static void	SetFKeySign	( MidiEvPtr e, DWORD f, long v);
+static void	SetFSexEv	( MidiEvPtr e, DWORD f, long v);
+static void	SetFPrivateEv	( MidiEvPtr e, DWORD f, long v);
 
-static long	GetFUndefEv	( MidiEvPtr e, unsigned long f);
-static long	GetFSmallEv	( MidiEvPtr e, unsigned long f);
-static long	GetFSexEv	( MidiEvPtr e, unsigned long f);
-static long	GetFPrivateEv	( MidiEvPtr e, unsigned long f);
-static long	GetF2_16Ev	( MidiEvPtr e, unsigned long f);
-static long	GetFTempo	( MidiEvPtr e, unsigned long f);
-static long	GetFSMPTEOffset	( MidiEvPtr e, unsigned long f);
-static long	GetFTimeSign	( MidiEvPtr e, unsigned long f);
-static long	GetFKeySign	( MidiEvPtr e, unsigned long f);
+static long	GetFUndefEv	( MidiEvPtr e, DWORD f);
+static long	GetFSmallEv	( MidiEvPtr e, DWORD f);
+static long	GetFSexEv	( MidiEvPtr e, DWORD f);
+static long	GetFPrivateEv	( MidiEvPtr e, DWORD f);
+static long	GetF2_16Ev	( MidiEvPtr e, DWORD f);
+static long	GetFTempo	( MidiEvPtr e, DWORD f);
+static long	GetFSMPTEOffset	( MidiEvPtr e, DWORD f);
+static long	GetFTimeSign	( MidiEvPtr e, DWORD f);
+static long	GetFKeySign	( MidiEvPtr e, DWORD f);
 
 static long	CountFUndefEv	( MidiEvPtr e);
 static long	Count0Field	( MidiEvPtr e);
@@ -109,38 +122,6 @@ static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
 /* data storage */
 
-#if defined(__Macintosh__) && !defined(__POWERPC__)
-
-static asm void NewEvMeth()       { ds.l 256 }
-static asm void CopyEvMeth()      { ds.l 256 }
-static asm void FreeEvMeth()      { ds.l 256 }
-static asm void SetFieldMeth()    { ds.l 256 }
-static asm void GetFieldMeth()    { ds.l 256 }
-static asm void CountFieldsMeth() { ds.l 256 }
-static asm void AddFieldMeth()    { ds.l 256 }
-
-
-#define NewEvMethodTbl	     ((NewEvMethodPtr *)NewEvMeth)
-#define CopyEvMethodTbl      ((CopyEvMethodPtr *)CopyEvMeth)
-#define FreeEvMethodTbl      ((FreeEvMethodPtr *)FreeEvMeth)
-#define SetFieldMethodTbl    ((SetFieldMethodPtr *)SetFieldMeth)
-#define GetFieldMethodTbl    ((GetFieldMethodPtr *)GetFieldMeth)
-#define CountFieldsMethodTbl ((CountFieldsMethodPtr *)CountFieldsMeth)
-#define AddFieldMethodTbl    ((AddFieldMethodPtr *)AddFieldMeth)
-
-static asm void smpteMask() { 
-	dc.l 0x06000000,0x1F000000,0x00FC0000
-	dc.l 0x0003F000,0x00000F80,0x0000007F
-}
-static asm void smpteShft() { 
-	dc.b 29,24,18,12,7,0 
-}
-
-#define smpteMaskTbl	  (const unsigned long *)smpteMask
-#define smpteShftTbl      (const char *)smpteShft
-
-#else
-
 static NewEvMethodPtr       NewEvMeth[256];        /* Allocation methods table */
 static CopyEvMethodPtr      CopyEvMeth[256];       /* Copy methods table       */
 static FreeEvMethodPtr      FreeEvMeth[256];       /* Free methods table       */
@@ -157,54 +138,48 @@ static AddFieldMethodPtr    AddFieldMeth[256];     /* AddField methods table   *
 #define CountFieldsMethodTbl CountFieldsMeth
 #define AddFieldMethodTbl    AddFieldMeth
 
-const unsigned long smpteMask[]= { 0x06000000,0x1F000000,0x00FC0000,
+const DWORD smpteMask[]= { 0x06000000,0x1F000000,0x00FC0000,
 							       0x0003F000,0x00000F80,0x0000007F };
 const char 		    smpteShft[]= { 29,24,18,12,7,0 };
 
 #define smpteMaskTbl	  smpteMask
 #define smpteShftTbl      smpteShft
 
-#endif
-
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(MidiEvPtr) MSNewCellFunction (lifo* freelist)
+MidiEvPtr MSNewCellFunction (lifo* freelist)
                                   { return (MidiEvPtr)lfpop(freelist); }
 
-MSFunctionType(void)      MSFreeCellFunction (MidiEvPtr e, lifo* freelist)
-                                  { if( e) lfpush(freelist, (lifocell *)e); }
+void MSFreeCellFunction (MidiEvPtr e, lifo* freelist)
+                                  { if( e) lfpush(freelist, (cell *)e); }
 
-MSFunctionType(MidiEvPtr) MSNewEv (short typeNum, lifo* freelist)
+MidiEvPtr MSNewEv (short typeNum, lifo* freelist)
                                   { return NewEvMethodTbl[typeNum](freelist, typeNum); }
 
-MSFunctionType(void)      MSFreeEv (MidiEvPtr e, lifo* freelist)
+void      MSFreeEv (MidiEvPtr e, lifo* freelist)
                                   { if( e) FreeEvMethodTbl[EvType(e)]( freelist, e); }
 
-MSFunctionType(MidiEvPtr) MSCopyEv (MidiEvPtr e, lifo* freelist)
+MidiEvPtr MSCopyEv (MidiEvPtr e, lifo* freelist)
                                   { return e ? CopyEvMethodTbl[EvType(e)]( freelist, e) : e; }
 
-MSFunctionType(void)      MSSetField (MidiEvPtr e, unsigned long f, long v)
+void      MSSetField (MidiEvPtr e, DWORD f, long v)
                                   { if( e) SetFieldMethodTbl[EvType(e)]( e, f, v); }
 
-MSFunctionType(long)      MSGetField (MidiEvPtr e, long f)
+long      MSGetField (MidiEvPtr e, long f)
                                   { return e ? GetFieldMethodTbl[EvType(e)]( e, f) : kGetFieldError; }
 
-MSFunctionType(long)      MSCountFields (MidiEvPtr e)
+long      MSCountFields (MidiEvPtr e)
                                   { return e ? CountFieldsMethodTbl[EvType(e)](e) : kCountFieldsError; }
 
-MSFunctionType(void)      MSAddField (MidiEvPtr e, long v, lifo* freelist)
+void      MSAddField (MidiEvPtr e, long v, lifo* freelist)
                                   { if ( e) AddFieldMethodTbl[EvType(e)](freelist, e, v); }
 
 
 /*===========================================================================
   External initialization functions
   =========================================================================== */
-#if defined __linux__  && defined MODULE
-void InitStructTbl(void);
-#endif
-
 void InitEvents ()
 {
 	InitNewEvMth		( NewEvMethodTbl );
@@ -214,11 +189,6 @@ void InitEvents ()
 	InitGetFieldMth		( GetFieldMethodTbl );
 	InitCountFieldsMth	( CountFieldsMethodTbl );
 	InitAddFieldMth		( AddFieldMethodTbl );
-	
-	/* will be implemented as method table later */
-#if defined __linux__  && defined MODULE
-	InitStructTbl();
-#endif
 }
 
 #define NewProcessEv	NewPrivateEv
@@ -425,7 +395,7 @@ static MidiEvPtr NewSmallEv( lifo* fl, short typeNum)
 	if( ev) {
 		Link(ev)= 0;
 		Date(ev)= defaultTime;
-		EvType(ev)= (uchar)typeNum;
+		EvType(ev)= (BYTE)typeNum;
 		RefNum(ev)= 0xff;
 		Chan(ev) = Port(ev) = 0;
 		ev->info.longField = 0;
@@ -448,7 +418,7 @@ static MidiEvPtr NewSexEv( lifo* fl, short typeNum)
 		
 		Link(ev)= 0;					/* initialize the header           */
 		Date(ev)= defaultTime;
-		EvType(ev)= (uchar)typeNum;
+		EvType(ev)= (BYTE)typeNum;
 		RefNum(ev)= 0xff;
 		Chan(ev) = Port(ev) = 0;
 		LinkSE(ev)= (MidiSEXPtr)ext;    /* link the extension block        */
@@ -470,7 +440,7 @@ static MidiEvPtr NewPrivateEv( lifo* fl, short typeNum)
 		ext->val[0]= ext->val[1]= ext->val[2]= ext->val[3]= 0;
 		Link(ev)= 0;					/* initialize the header           */
 		Date(ev)= defaultTime;
-		EvType(ev)= (uchar)typeNum;
+		EvType(ev)= (BYTE)typeNum;
 		RefNum(ev)= 0xff;
 		Chan(ev) = Port(ev) = 0;
 		LinkST(ev)= ext;				/* link the extension block        */
@@ -565,7 +535,7 @@ static MidiEvPtr CopySexEv( lifo* fl, MidiEvPtr ev)
 			else {							/* copy failed                      */
 				Link(previous)=LinkSE(copy);/* restore the event consistency    */
 				FreeSexEv( fl, copy);		/* and free the event               */
-				return 0;					/* returns nil                      */
+				return NULL;				/* returns nil                      */
 			}
 			ext= Link(ext);					/* next extension cell to be copied */
 		}
@@ -578,22 +548,22 @@ static MidiEvPtr CopySexEv( lifo* fl, MidiEvPtr ev)
 /*__________________________________________________________________________________
   SET FIELD METHODS				
   __________________________________________________________________________________*/
-static void SetFUndefEv( MidiEvPtr unused2, unsigned long unused3, long unused4)
+static void SetFUndefEv( MidiEvPtr unused2, DWORD unused3, long unused4)
 {
 	Debug( "SetFEv : WRONG EVENT TYPE !!");
 }
 
 /*__________________________________________________________________________________*/
-static void SetFSmallEv( MidiEvPtr e, unsigned long f, long v)
+static void SetFSmallEv( MidiEvPtr e, DWORD f, long v)
 {
 	if( f< 2)
-		Data(e)[f]= (Byte)v;
+		Data(e)[f]= (BYTE) v;
 	else if( f== 2)
-		Dur(e)=(unsigned short)v;
+		Dur(e)=(WORD) v;
 }
 
 /*__________________________________________________________________________________*/
-static void SetF2_16Ev( MidiEvPtr e, unsigned long f, long v)
+static void SetF2_16Ev( MidiEvPtr e, DWORD f, long v)
 {
 	if( f < 2) {
 		e->info.shortFields[f]=(short)v;
@@ -601,16 +571,16 @@ static void SetF2_16Ev( MidiEvPtr e, unsigned long f, long v)
 }
 
 /*__________________________________________________________________________________*/
-static void SetFTempo( MidiEvPtr e, unsigned long f, long v)
+static void SetFTempo( MidiEvPtr e, DWORD f, long v)
 {
 	if( !f) Tempo(e)= v;
 }
 
 /*__________________________________________________________________________________*/
-static void SetFSMPTEOffset( MidiEvPtr e, unsigned long f, long v)
+static void SetFSMPTEOffset( MidiEvPtr e, DWORD f, long v)
 {
 	if( f < 6) {
-		const unsigned long * mask  = smpteMaskTbl;
+		const DWORD * mask  = smpteMaskTbl;
 		const char * shift = smpteShftTbl;
 		v <<= shift[f];
 		v &= mask[f];
@@ -619,31 +589,31 @@ static void SetFSMPTEOffset( MidiEvPtr e, unsigned long f, long v)
 }
 
 /*__________________________________________________________________________________*/
-static void SetFTimeSign( MidiEvPtr e, unsigned long f, long v)
+static void SetFTimeSign( MidiEvPtr e, DWORD f, long v)
 {
-	if( f < 4) Data(e)[f]=(Byte)v;
+	if( f < 4) Data(e)[f]=(BYTE)v;
 }
 
 /*__________________________________________________________________________________*/
-static void SetFKeySign( MidiEvPtr e, unsigned long f, long v)
+static void SetFKeySign( MidiEvPtr e, DWORD f, long v)
 {
-	if( f < 2) Data(e)[f]=(Byte)v;
+	if( f < 2) Data(e)[f]=(BYTE)v;
 }
 
 /*__________________________________________________________________________________*/
-static void SetFSexEv( MidiEvPtr e, unsigned long f, long v)
+static void SetFSexEv( MidiEvPtr e, DWORD f, long v)
 {
 	MidiSEXPtr ext;
 
 	ext = Link(LinkSE(e));              /* first event extension cell           */
-	while( true) {
+	while( TRUE) {
 		if( ext == LinkSE(e)) {         /* if it's the last extension cell      */
 			if( f < ext->data[11])		/* if the index is free                 */
-				ext->data[f]=(Byte)v;	/* store the value                  */
+				ext->data[f]=(BYTE)v;	/* store the value                  */
 			break;
 		}
 		if( f < kLenDatas) {			/* if the field is located in this cell */
-			ext->data[f] = (Byte)v;     /* store the value                      */
+			ext->data[f] = (BYTE)v;     /* store the value                      */
 			break;
 		}
 		f-= kLenDatas;					/* substract lenData to the field index */
@@ -652,7 +622,7 @@ static void SetFSexEv( MidiEvPtr e, unsigned long f, long v)
 }
 
 /*__________________________________________________________________________________*/
-static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
+static void SetFPrivateEv( MidiEvPtr e, DWORD f, long v)
 {
 	if( f < 4) LinkST(e)->val[f] = v;
 }
@@ -661,20 +631,20 @@ static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
 /*__________________________________________________________________________________
   GET FIELD METHODS					
   __________________________________________________________________________________*/
-static long GetFUndefEv( MidiEvPtr unused2, unsigned long unused3)
+static long GetFUndefEv( MidiEvPtr unused2, DWORD unused3)
 {
 	Debug( "GetField : WRONG EVENT TYPE !!");
 	return kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long GetFSmallEv( MidiEvPtr e, unsigned long f)
+static long GetFSmallEv( MidiEvPtr e, DWORD f)
 {
 	return (f < 2) ? Data(e)[f] : Dur(e);
 }
 
 /*__________________________________________________________________________________*/
-static long GetFSexEv( MidiEvPtr e, unsigned long f)
+static long GetFSexEv( MidiEvPtr e, DWORD f)
 {
 	MidiSEXPtr ext;
 
@@ -693,28 +663,28 @@ static long GetFSexEv( MidiEvPtr e, unsigned long f)
 }
 
 /*__________________________________________________________________________________*/
-static long GetFPrivateEv( MidiEvPtr e, unsigned long f)
+static long GetFPrivateEv( MidiEvPtr e, DWORD f)
 {
 	return (f < 4) ?  LinkST(e)->val[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long GetF2_16Ev( MidiEvPtr e, unsigned long f)
+static long GetF2_16Ev( MidiEvPtr e, DWORD f)
 {
 	return (f < 2) ?  e->info.shortFields[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long GetFTempo( MidiEvPtr e, unsigned long unused2)
+static long GetFTempo( MidiEvPtr e, DWORD unused2)
 {
 	return Tempo(e);
 }
 
 /*__________________________________________________________________________________*/
-static long GetFSMPTEOffset( MidiEvPtr e, unsigned long f)
+static long GetFSMPTEOffset( MidiEvPtr e, DWORD f)
 {
 	if ( f < 6) {
-		const unsigned long * mask  = smpteMaskTbl;
+		const DWORD * mask  = smpteMaskTbl;
 		const char * shift = smpteShftTbl;
 		return (e->info.tempo & mask[f]) >> shift[f];
 	}
@@ -722,13 +692,13 @@ static long GetFSMPTEOffset( MidiEvPtr e, unsigned long f)
 }
 
 /*__________________________________________________________________________________*/
-static long GetFTimeSign( MidiEvPtr e, unsigned long f)
+static long GetFTimeSign( MidiEvPtr e, DWORD f)
 {
 	return (f < 4) ? Data(e)[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
-static long GetFKeySign( MidiEvPtr e, unsigned long f)
+static long GetFKeySign( MidiEvPtr e, DWORD f)
 {
 	return (f < 2) ? Data(e)[f] : kGetFieldError;
 }
@@ -787,12 +757,12 @@ static void AddFSexEv( lifo* fl, MidiEvPtr e, long v)
 	int i = ext->data[11];
 
 	if( i < 11) {			              /* If there remains place       */
-		ext->data[i] = (Byte)v;	          /* store the value              */
+		ext->data[i] = (BYTE)v;	          /* store the value              */
 		ext->data[11]++;				  /* update the busy space count  */
 	} else { 
 		nouv = (MidiSEXPtr)MSNewCell(fl); /* add a new cell               */
 		if( nouv) {
-			ext->data[11] = (Byte)v;      /* store the value              */
+			ext->data[11] = (BYTE)v;      /* store the value              */
 			nouv->data[11] = 0;			  /* busy space count             */
 			nouv->link= ext->link;		  /* link the new cell            */
 			ext->link= nouv;

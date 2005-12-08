@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Memory/msMemory.c        $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.6.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - new memory management scheme
@@ -33,23 +47,23 @@
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static ulong GrowSpace (MSMemoryPtr g, ulong nbev);
-static ulong NewBlock  (MSMemoryPtr g, ulong nbev);
+static DWORD GrowSpace (MSMemoryPtr g, DWORD nbev);
+static DWORD NewBlock  (MSMemoryPtr g, DWORD nbev);
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(ulong) MSDesiredSpace (MSMemoryPtr g)
+DWORD MSDesiredSpace(MSMemoryPtr g)
 {
 	return g->desiredSpace;
 }
 
-MSFunctionType(ulong) MSTotalSpace (MSMemoryPtr g)
+DWORD MSTotalSpace(MSMemoryPtr g)
 {
 	return g->active ? g->totalSpace : g->desiredSpace;
 }
 
-MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
+DWORD MSGrowSpace(DWORD nbev, MSMemoryPtr g)
 {
 	if (g->active <= 0) {
 		g->desiredSpace += nbev;
@@ -58,7 +72,7 @@ MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
 	else return GrowSpace (g, nbev);
 }
 
-MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
+DWORD MSFreeSpace(MSMemoryPtr g)
 {
 	return g->active ? lfsize (FreeList(g)) : g->desiredSpace;
 }
@@ -66,7 +80,7 @@ MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
 /*===========================================================================
   External initialization functions
   =========================================================================== */
-void InitMemory (MSMemoryPtr g, ulong defaultSpace)
+void InitMemory(MSMemoryPtr g, DWORD defaultSpace)
 {
 	lfinit (BlockList(g));
 	lfinit (FreeList(g));	
@@ -75,16 +89,16 @@ void InitMemory (MSMemoryPtr g, ulong defaultSpace)
 	g->active = 0;
 }
 
-Boolean OpenMemory (MSMemoryPtr g) 
+BOOL OpenMemory(MSMemoryPtr g) 
 {
 	g->active++;
 	if (g->active == 1) {
 		return (GrowSpace(g, g->desiredSpace) != 0);
 	}
-	return true;
+	return TRUE;
 }
 
-void CloseMemory (MSMemoryPtr g)
+void CloseMemory(MSMemoryPtr g)
 {
 	void* blk, *next;
 	g->active--;
@@ -105,9 +119,9 @@ void CloseMemory (MSMemoryPtr g)
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
-static ulong GrowSpace (MSMemoryPtr g, ulong nbev)
+static DWORD GrowSpace(MSMemoryPtr g, DWORD nbev)
 {
-	ulong count = 0;
+	DWORD count = 0;
 
 	while ( nbev > kMaxEventsPerBlock ) {
 		long n = NewBlock(g, kMaxEventsPerBlock);
@@ -121,20 +135,20 @@ static ulong GrowSpace (MSMemoryPtr g, ulong nbev)
 	return count;
 }
 
-static ulong NewBlock (MSMemoryPtr g, ulong nbev)
+static DWORD NewBlock(MSMemoryPtr g, DWORD nbev)
 {
 	void** 		blk;
 	MidiEvPtr 	cl;
-	ulong 		i;
+	DWORD 		i;
 	
 	if (nbev > 0) {
-		unsigned long size = nbev * sizeof(TMidiEv) + sizeof(void*);
+		DWORD size = nbev * sizeof(TMidiEv) + sizeof(void*);
 		blk = (void **)AllocateMemory (kSharedMemory, size);
 		if (!blk) return 0;
-		lfpush ( BlockList(g), (lifocell*)blk);
+		lfpush ( BlockList(g), (cell*)blk);
 		cl = (MidiEvPtr)(blk+1);
 		for (i=0; i<nbev; i++) {
-			lfpush(FreeList(g), (lifocell*)(cl++));
+			lfpush(FreeList(g), (cell*)(cl++));
 		}
 		g->totalSpace += nbev; /* A REVOIR POUR UN SYSTEME LOCK FREE */
 	}

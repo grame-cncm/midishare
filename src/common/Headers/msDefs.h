@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Headers/msDefs.h         $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.9.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - improving TMidiST and TMidiEv 
@@ -27,30 +41,6 @@
 #define __msDefs__
 
 #include "msTypes.h"
-
-#ifdef __Macintosh__
-#	define  MSALARMAPI
-#	define  FAR
-#	define	MIDISHAREAPI
-#ifdef __MacOSX__
-#   define  ALARMTYPE   
-#else
-#   define  ALARMTYPE pascal
-#endif
-#endif
-
-#ifdef WIN32
-#   include  "windows.h"
-#   define  ALARMTYPE
-#	define	MIDISHAREAPI __declspec(dllexport)
-#	define  MSALARMAPI	CALLBACK
-#endif
-
-#ifdef __linux__
-#   define  ALARMTYPE
-#	define  MSALARMAPI
-#	define  FAR
-#endif
 
 /*******************************************************************************
  * MIDISHARE EVENTS
@@ -99,29 +89,29 @@
 #define typeNonRegParam    132
 #define typeRegParam       133
 
-#define typeSeqNum         134   /* sequence number           */
-#define typeTextual        135   /* text event                */
-#define typeCopyright      136   /* message copyright message */
-#define typeSeqName        137   /* sequence or track name    */
-#define typeInstrName      138   /* instrument name           */
-#define typeLyric          139   /* lyrics                    */
-#define typeMarker         140   /* marker                    */
-#define typeCuePoint       141   /* cue point                 */
-#define typeChanPrefix     142   /* Midi Channel Prefix       */
-#define typeEndTrack       143   /* end of a track            */
-#define typeTempo          144   /* changement de tempo       */
-#define typeSMPTEOffset    145   /* smpte offset              */
+#define typeSeqNum         134   /* MidiFile sequence number           */
+#define typeTextual        135   /* MidiFile text event                */
+#define typeCopyright      136   /* MidiFile copyright message */
+#define typeSeqName        137   /* MidiFile sequence or track name    */
+#define typeInstrName      138   /* MidiFile instrument name           */
+#define typeLyric          139   /* MidiFile lyrics                    */
+#define typeMarker         140   /* MidiFile marker                    */
+#define typeCuePoint       141   /* MidiFile cue point                 */
+#define typeChanPrefix     142   /* MidiFile Midi Channel Prefix       */
+#define typeEndTrack       143   /* MidiFile end of track            */
+#define typeTempo          144   /* MidiFile tempo change      */
+#define typeSMPTEOffset    145   /* MidiFile smpte offset              */
 
-#define typeTimeSign       146   /* time signature                 		*/
-#define typeKeySign        147   /* signature tonale                    */
-#define typeSpecific       148   /* sequencer specific meta event       */
-
-#define typePortPrefix     149   /* Midi Port  Prefix       */
+#define typeTimeSign       146   /* MidiFile time signature                         */
+#define typeKeySign        147   /* MidiFile key signature */
+#define typeSpecific       148   /* MidiFile specific meta event          */
+#define typePortPrefix     149   /* MidiFile Midi Port  Prefix       */
 #define typeRcvAlarm       150   /* RcvAlam         		*/
 #define typeApplAlarm      151   /* ApplAlam        		*/
 
 
 #define typeReserved       152   /*152..254 reserved for future extensions */
+#define typeLastReserved   254	 /*152..254 reserved for future extensions */
 
 #define typeDead           255   /* dead Task or DTask                     */
 
@@ -204,15 +194,15 @@ the context modification, the low 16-bits part describe the type of change as
 listed here.
 *******************************************************************************/
 
-enum{   MIDIOpenAppl=1,
-
-		MIDICloseAppl,
-		MIDIChgName,
-		MIDIChgConnect,
-		MIDIOpenModem,		/* now obsolete */
-		MIDICloseModem,		/* now obsolete */
-		MIDIOpenPrinter,	/* now obsolete */
-		MIDIClosePrinter,	/* now obsolete */
+enum{   
+        MIDIOpenAppl=1,
+	MIDICloseAppl,
+	MIDIChgName,
+	MIDIChgConnect,
+	MIDIOpenModem,		// now obsolete
+	MIDICloseModem,		// now obsolete
+	MIDIOpenPrinter,	// now obsolete
+	MIDIClosePrinter,	// now obsolete
         MIDISyncStart,
         MIDISyncStop,
         MIDIChangeSync,
@@ -230,61 +220,54 @@ enum{   MIDIOpenAppl=1,
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
-    typedef struct TMidiSEX FAR *MidiSEXPtr;
+    typedef struct TMidiSEX  *MidiSEXPtr;
     typedef struct TMidiSEX
     {
         MidiSEXPtr link;          /* link to next cell */
-        Byte data[12];            /* 12 data bytes     */
+        BYTE data[12];            /* 12 data bytes     */
     }   TMidiSEX;
 
 /*------------------------------ Private extension cell -------------------------*/
 
-    typedef struct TMidiST FAR *MidiSTPtr;
+    typedef struct TMidiST  *MidiSTPtr;
     typedef struct TMidiST
     {
-#ifdef __SupportOldSTDef__
-        Ptr ptr1;                  /* 4 32-bits fields */
-        Ptr ptr2;
-        Ptr ptr3;
-        Ptr ptr4;
-#endif
 		long val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/
 
-    typedef struct TMidiEv FAR *MidiEvPtr;
+    typedef struct TMidiEv  *MidiEvPtr;
     typedef struct TMidiEv
     {
         MidiEvPtr   link;           /* link to next event   */
-        unsigned long date;         /* event date (in ms)   */
-        Byte        evType;         /* event type           */
-        Byte        refNum;         /* sender reference number */
-        Byte        port;           /* Midi port            */
-        Byte        chan;           /* Midi channel         */
+        DWORD       date;           /* event date (in ms)   */
+        BYTE        evType;         /* event type           */
+        BYTE        refNum;         /* sender reference number */
+        BYTE        port;           /* Midi port            */
+        BYTE        chan;           /* Midi channel         */
         union {                     /* info depending of event type : */
             struct {                /* for notes            */
-                Byte pitch;         /* pitch                */
-                Byte vel;           /* velocity             */
-                unsigned short dur; /* duration             */
+                BYTE pitch;         /* pitch                */
+                BYTE vel;           /* velocity             */
+                WORD dur;			/* duration             */
             } note;
 
             struct {              /* for MidiFile time signature */
-                Byte numerator;   /* numerator                   */
-                Byte denominator; /* denominator as neg power    */
+                BYTE numerator;   /* numerator                   */
+                BYTE denominator; /* denominator as neg power    */
                                   /* of 2. (2= quarter note)     */
-                Byte nClocks;     /* number of Midi clocks in    */
+                BYTE nClocks;     /* number of Midi clocks in    */
                                   /* a metronome click           */
-                Byte n32nd;       /* number of 32nd notes in     */
+                BYTE n32nd;       /* number of 32nd notes in     */
                                   /* a Midi quarter note         */
             } timeSign;
 
             struct {            /* for MidiFile key signature  */
                 char ton;       /* 0: key of C, 1: 1 sharp     */
                                 /* -1: 1 flat etc...           */
-                Byte mode;      /* 0: major 1: minor           */
-                Byte unused[2];
-
+                BYTE mode;      /* 0: major 1: minor           */
+                BYTE unused[2];
             } keySign;
             
 	    struct {            /* for paramchg & 14-bits ctrl  */
@@ -294,7 +277,7 @@ enum{   MIDIOpenAppl=1,
 
 
             struct {            /* for MidiFile sequence number */
-                unsigned short number;
+                WORD  number;
                 short unused;
             } seqNum;
 
@@ -303,7 +286,7 @@ enum{   MIDIOpenAppl=1,
 
             long tempo;         /* MidiFile tempo in            */
                                 /* microsec/Midi quarter note   */
-            Byte data[4];       /* for other small events       */
+            BYTE data[4];       /* for other small events       */
             MidiSEXPtr linkSE;  /* link to last sysex extension */
             MidiSTPtr linkST;   /* link to private extension    */
         } info;
@@ -311,7 +294,7 @@ enum{   MIDIOpenAppl=1,
 
 /*------------------------------ sequence header ---------------------------*/
 
-    typedef struct TMidiSeq FAR *MidiSeqPtr;
+    typedef struct TMidiSeq  *MidiSeqPtr;
     typedef struct TMidiSeq
     {
         MidiEvPtr first;        /* first event pointer  */
@@ -323,7 +306,7 @@ enum{   MIDIOpenAppl=1,
 
 /*-------------------------------- input Filter -------------------------------*/
 
-    typedef struct TFilter FAR *MidiFilterPtr;
+    typedef struct TFilter  *MidiFilterPtr;
     typedef struct TFilter
     {
         char port[32];         /* 256 bits */
@@ -333,17 +316,12 @@ enum{   MIDIOpenAppl=1,
     } TFilter;
 
 
+/*------------------------ MidiShare names ------------------------*/
 
-/*------------------------------------ names ----------------------------------*/
 #define DrvNameLen 32
 
-#ifdef PascalNames
-    typedef unsigned char * MidiName;
-	typedef unsigned char	DriverName[DrvNameLen];
-#else
-    typedef char FAR * MidiName;
-	typedef char	   DriverName[DrvNameLen];
-#endif
+typedef char  * MidiName;
+typedef char   DriverName[DrvNameLen];
 typedef DriverName SlotName;
 
 /*----------------------- drivers and slots information -----------------------*/
@@ -352,6 +330,8 @@ typedef struct {
 	short	drvRef;
 	short 	slotRef;
 } SlotRefNum;
+
+#define Slot(ref) 	((ref).slotRef)
 
 typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 
@@ -378,17 +358,16 @@ typedef struct TDriverInfos {
 } TDriverInfos;
 
 
-
 /*------------------------ Synchronisation informations -----------------------*/
 
-    typedef struct TSyncInfo FAR *SyncInfoPtr;
+    typedef struct TSyncInfo  *SyncInfoPtr;
     typedef struct TSyncInfo
     {
         long        time;
         long        reenter;
-        unsigned short syncMode;
-        Byte        syncLocked; 
-        Byte        syncPort;
+        WORD		syncMode;
+        BYTE        syncLocked; 
+        BYTE        syncPort;
         long        syncStart;
         long        syncStop;
         long        syncOffset;
@@ -397,7 +376,7 @@ typedef struct TDriverInfos {
         short       syncFormat;
     } TSyncInfo;
 
-    typedef struct TSmpteLocation FAR *SmpteLocPtr;
+    typedef struct TSmpteLocation  *SmpteLocPtr;
     typedef struct TSmpteLocation
     {
         short format;       /* (0:24f/s, 1:25f/s, 2:30DFf/s, 3:30f/s) */
@@ -412,10 +391,10 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 
 /*----------------------------- Alarms prototypes ----------------------------*/
 
-    typedef ALARMTYPE void (MSALARMAPI * TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
-    typedef ALARMTYPE void (MSALARMAPI * RcvAlarmPtr)     ( short refNum );
-    typedef ALARMTYPE void (MSALARMAPI * ApplAlarmPtr)    ( short refNum,long code );
-    typedef ALARMTYPE void (MSALARMAPI * ApplyProcPtr)    ( MidiEvPtr e );
+    typedef void (*TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
+    typedef void (*RcvAlarmPtr)     ( short refNum );
+    typedef void (*ApplAlarmPtr)    ( short refNum,long code );
+    typedef void (*ApplyProcPtr)    ( MidiEvPtr e );
 
 
 /******************************************************************************
@@ -424,36 +403,37 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 * Somes macros to read and write event's fields 
 *******************************************************************************/
 
-#define Link(e)       ( (e)->link )
-#define Date(e)       ( (e)->date )
-#define EvType(e)     ( (e)->evType )
-#define RefNum(e)     ( (e)->refNum )
-#define Port(e)       ( (e)->port )
-#define Canal(e)      ( (e)->chan )
-#define Chan(e)       ( (e)->chan )
-#define Pitch(e)      ( (e)->info.note.pitch )
-#define Vel(e)        ( (e)->info.note.vel )
-#define Dur(e)        ( (e)->info.note.dur )
-#define Data(e)       ( (e)->info.data )
-#define LinkSE(e)     ( (e)->info.linkSE )
-#define LinkST(e)     ( (e)->info.linkST )
+    #define Link(e)       ( (e)->link )
+    #define Date(e)       ( (e)->date )
+    #define EvType(e)     ( (e)->evType )
+    #define RefNum(e)     ( (e)->refNum )
+    #define Port(e)       ( (e)->port )
+    #define Canal(e)      ( (e)->chan )
+    #define Chan(e)       ( (e)->chan )
+    #define Pitch(e)      ( (e)->info.note.pitch )
+    #define Vel(e)        ( (e)->info.note.vel )
+    #define Dur(e)        ( (e)->info.note.dur )
+    #define Data(e)       ( (e)->info.data )
+    #define LinkSE(e)     ( (e)->info.linkSE )
+    #define LinkST(e)     ( (e)->info.linkST )
 
-#define TSNum(e)      ( (e)->info.timeSign.numerator )
-#define TSDenom(e)    ( (e)->info.timeSign.denominator )
-#define TSClocks(e)   ( (e)->info.timeSign.nClocks )
-#define TS32nd(e)     ( (e)->info.timeSign.n32nd )
+    #define TSNum(e)      ( (e)->info.timeSign.numerator )
+    #define TSDenom(e)    ( (e)->info.timeSign.denominator )
+    #define TSClocks(e)   ( (e)->info.timeSign.nClocks )
+    #define TS32nd(e)     ( (e)->info.timeSign.n32nd )
 
-#define KSTon(e)      ( (e)->info.keySign.ton )
-#define KSMode(e)     ( (e)->info.keySign.mode )
+    #define KSTon(e)      ( (e)->info.keySign.ton )
+    #define KSMode(e)     ( (e)->info.keySign.mode )
 
-#define Tempo(e)      ( (e)->info.tempo )
-#define SeqNum(e)     ( (e)->info.seqNum.number )
-#define ChanPrefix(e) ( (e)->info.data[0] )
+    #define Tempo(e)      ( (e)->info.tempo )
+    #define SeqNum(e)     ( (e)->info.seqNum.number )
+    #define ChanPrefix(e) ( (e)->info.data[0] )
+    #define PortPrefix(e) ( (e)->info.data[0] )
 
-#define First(e)      ( (e)->first )
-#define Last(e)       ( (e)->last )
-#define FirstEv(e)    ( (e)->first )
-#define LastEv(e)     ( (e)->last )
+    #define First(e)      ( (e)->first )
+    #define Last(e)       ( (e)->last )
+    #define FirstEv(e)    ( (e)->first )
+    #define LastEv(e)     ( (e)->last )
 
 /******************************************************************************
 *                               FILTER MACROS
@@ -462,19 +442,19 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 *******************************************************************************/
 
 #ifdef __cplusplus
-    inline void AcceptBit( char FAR *a, Byte n)   { (a)[(n)>>3] |=  (1<<((n)&7)); }
-    inline void RejectBit( char FAR *a, Byte n)   { (a)[(n)>>3] &= ~(1<<((n)&7)); }
-    inline void InvertBit( char FAR *a, Byte n)   { (a)[(n)>>3] ^=  (1<<((n)&7)); }
+    inline void AcceptBit( char  *a, BYTE n)   { (a)[(n)>>3] |=  (1<<((n)&7)); }
+    inline void RejectBit( char  *a, BYTE n)   { (a)[(n)>>3] &= ~(1<<((n)&7)); }
+    inline void InvertBit( char  *a, BYTE n)   { (a)[(n)>>3] ^=  (1<<((n)&7)); }
 
-    inline Boolean IsAcceptedBit( char FAR *a, Byte n) { return (a)[(n)>>3] & (1<<((n)&7)); }
+    inline BOOL IsAcceptedBit( char  *a, BYTE n) { return (a)[(n)>>3] & (1<<((n)&7)); }
 
 #else
 
-    #define AcceptBit(a,n)      ( ((char FAR*) (a))[(n)>>3] |=   (1<<((n)&7)) )
-    #define RejectBit(a,n)      ( ((char FAR*) (a))[(n)>>3] &=  ~(1<<((n)&7)) )
-    #define InvertBit(a,n)      ( ((char FAR*) (a))[(n)>>3] ^=   (1<<((n)&7)) )
+    #define AcceptBit(a,n)      ( ((char *) (a))[(n)>>3] |=   (1<<((n)&7)) )
+    #define RejectBit(a,n)      ( ((char *) (a))[(n)>>3] &=  ~(1<<((n)&7)) )
+    #define InvertBit(a,n)      ( ((char *) (a))[(n)>>3] ^=   (1<<((n)&7)) )
 
-    #define IsAcceptedBit(a,n)  ( ((char FAR*) (a))[(n)>>3]  &   (1<<((n)&7)) )
+    #define IsAcceptedBit(a,n)  ( ((char *) (a))[(n)>>3]  &   (1<<((n)&7)) )
 #endif
 
 #endif

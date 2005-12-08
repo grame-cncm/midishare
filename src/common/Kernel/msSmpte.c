@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Kernel/msSmpte.c         $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.1.1.1.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -25,7 +39,7 @@
 /*__________________________________________________________________________________*/
 /*		- MidiGetSyncInfo - Lit les information de synchronisation			*/
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSGetSyncInfo (SyncInfoPtr p, TMSGlobalPtr g)
+void MSGetSyncInfo(SyncInfoPtr p, TMSGlobalPtr g)
 {
 	/* not yet implemented */
 }
@@ -33,7 +47,7 @@ MSFunctionType(void) MSGetSyncInfo (SyncInfoPtr p, TMSGlobalPtr g)
 /*__________________________________________________________________________________*/
 /*		- MidiSetSyncMode - Change le mode de synchro				*/
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSSetSyncMode (unsigned short mode, TMSGlobalPtr g)
+void MSSetSyncMode(WORD mode, TMSGlobalPtr g)
 {
 	/* not yet implemented */
 }
@@ -41,7 +55,7 @@ MSFunctionType(void) MSSetSyncMode (unsigned short mode, TMSGlobalPtr g)
 /*__________________________________________________________________________________*/
 /*		- MidiGetExtTime - Donne le temps externe (en ms)			*/
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSGetExtTime (TMSGlobalPtr g)
+long MSGetExtTime(TMSGlobalPtr g)
 {
 	/* not yet implemented */
 	return 0;
@@ -50,7 +64,7 @@ MSFunctionType(long) MSGetExtTime (TMSGlobalPtr g)
 /*__________________________________________________________________________________*/
 /*		- MidiInt2ExtTime - Convertit le temps interne en temps externe (en ms)		*/
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSInt2ExtTime (long time, TMSGlobalPtr g)
+long MSInt2ExtTime(long time, TMSGlobalPtr g)
 {
 	/* not yet implemented */
 	return 0;
@@ -59,7 +73,7 @@ MSFunctionType(long) MSInt2ExtTime (long time, TMSGlobalPtr g)
 /*__________________________________________________________________________________*/
 /*		- MidiExt2IntTime - Convertit le temps externe en temps interne (en ms)		*/
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSExt2IntTime (long time, TMSGlobalPtr g)
+long MSExt2IntTime(long time, TMSGlobalPtr g)
 {
 	/* not yet implemented */
 	return 0;

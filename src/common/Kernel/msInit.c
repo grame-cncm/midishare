@@ -1,6 +1,20 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Kernel/msInit.c          $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.11.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright © Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -36,7 +50,7 @@
   External MidiShare functions implementation
   =========================================================================== */		
 
-MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
+void MSSpecialInit( DWORD defaultSpace, TMSGlobalPtr g)
 {
 	InitEvents ();
 	InitMemory(Memory(g), defaultSpace);
@@ -44,29 +58,29 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 	InitTime( g);
 }
 
-MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
+short MSGetVersion (TMSGlobalPtr g)
 {
-	return 190;
+	return 186;
 }
 
 
 /*===========================================================================
   External initialization functions
   =========================================================================== */
-void MidiShareWakeup (TMSGlobalPtr g) 
+void MidiShareWakeup(TMSGlobalPtr g) 
 {
-    SpecialWakeUp (g);
     fifoinit (SorterList(g));
     OpenMemory (Memory(g));
+    SpecialWakeUp (g);
     OpenTime (g);
     OpenTimeInterrupts (g);
 	OpenDrivers(g);
 }
 
-void MidiShareSleep (TMSGlobalPtr g) 
+void MidiShareSleep(TMSGlobalPtr g) 
 {
     CloseTimeInterrupts (g);
 	CloseDrivers(g);
-    CloseMemory (Memory(g));
     SpecialSleep (g);
+    CloseMemory (Memory(g));
 }

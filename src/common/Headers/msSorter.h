@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msSorter.h       $
+ *     $Date: 2005/12/08 13:38:29 $
+ * $Revision: 1.2.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,13 +30,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
 #ifndef __msSorter__
 #define __msSorter__
 
+#include "msTypes.h"
 
 /*______________________________________________________________*/
 /*                   data structures  		     	  			*/
@@ -33,7 +48,7 @@
 typedef struct TDatedEv * TDatedEvPtr;
 typedef struct TDatedEv {
   TDatedEvPtr  	link;		/* next event pointer (keep first) */
-  unsigned long	date;		/* 32 bits time stamping           */
+  DWORD			date;		/* 32 bits time stamping           */
 } TDatedEv;
 
 
@@ -63,8 +78,8 @@ typedef struct TLevel {
   TBufferPtr		pri;		/* pointer to the primary buffer   	*/
   TBufferPtr		alt;		/* pointer to the alternate buffer 	*/
   TBuffer			buf[2];		/* the actual buffers				*/
-  unsigned char 	lev;		/* corresponding level             	*/
-  unsigned char 	pos;		/* resort position                 	*/
+  BYTE 				lev;		/* corresponding level             	*/
+  BYTE 				pos;		/* resort position                 	*/
 } TLevel;
 
 
@@ -72,7 +87,7 @@ typedef struct TLevel {
 
 typedef struct TSorter * TSorterPtr;
 typedef struct TSorter {	
-  unsigned long sysDate;	/* current date of the system    */
+  DWORD			sysDate;	/* current date of the system    */
   long			rSize;		/* amount of events to resort    */
   TLevel		level[4];	/* 0: date MSB .. 3: date LSB 	 */
   TSFifo		late;

@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msFrcv.h         $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.1.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
 */
@@ -37,7 +51,7 @@
 #define kLineOn		3		/* fifo initialisé et actif			*/
 
 
-typedef struct RFifo     FAR * RFifoPtr;
+typedef struct RFifo     * RFifoPtr;
 typedef void   (*RcvMethodPtr)  (RFifoPtr f, char c);
 
 /*__________________________________________________________________________*/
@@ -48,19 +62,19 @@ typedef union TMidiFastEv
     MidiEvPtr          std;
     struct {
         MidiEvPtr     link;        /* link to next event           */
-        unsigned long date;        /* event date (in ms)           */
+        DWORD         date;        /* event date (in ms)           */
         union {                    /* common datas                 */
-            Byte      byteC[4];
+            BYTE      byteC[4];
             short     shortC[2];
             long      longC;
         }             common;
         union {                    /* info depending of event type */
-            Byte      byteF[4];
+            BYTE      byteF[4];
             short     shortF[2];
             long      longF;
         }             specific;
-    } FAR *           fast;
-    long FAR *        tab;
+    } *			      fast;
+    long *			  tab;
 } TMidiFastEv;
 
 #define Common(e)        (e).fast->common
@@ -79,14 +93,14 @@ typedef struct RFifo{
 	 char         reserved;  /* Reserve                            */
 	 RcvMethodPtr parse;     /* Etat de l'analyse (adr. routine)   */
 	 MidiEvPtr    ptrCur;    /* Pointeur SysEx en cours            */
-	 ulong        errCount;  /* Nombre d'erreurs en reception      */
-	 ulong        date;      /* Date de l'evt sur 24 bits de pFort */
+	 DWORD        errCount;  /* Nombre d'erreurs en reception      */
+	 DWORD        date;      /* Date de l'evt sur 24 bits de pFort */
 	 union {
 		struct {
-			 uchar  type;      /* Type de l'evenement                */
-			 uchar  refNum;    /* numero application de destination  */
-			 uchar  port;      /* Port de sortie                     */
-			 uchar  canal;     /* Canal Midi de destination          */
+			 BYTE  type;      /* Type de l'evenement                */
+			 BYTE  refNum;    /* numero application de destination  */
+			 BYTE  port;      /* Port de sortie                     */
+			 BYTE  canal;     /* Canal Midi de destination          */
 		}std;
 		long       fast;
 	}common;
@@ -102,10 +116,10 @@ typedef struct RFifo{
 void RFInit( RFifoPtr f,TMSGlobalPtr global, short ref);
 void RFInitMthTbl();
 void InitTypeTbl();
-void RFPutByte( register RFifoPtr f, Byte code);
-void SwitchRcvQFrameMethod (Boolean syncOn);
+void RFPutByte( register RFifoPtr f, BYTE code);
+void SwitchRcvQFrameMethod (BOOL syncOn);
 
 extern  RcvMethodPtr  	RcvTbl[];
-extern  Byte  		TypeTbl[];
+extern  BYTE  		TypeTbl[];
 
 #endif /* __MSFRCV__ */

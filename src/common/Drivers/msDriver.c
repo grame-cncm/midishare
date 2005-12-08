@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Drivers/msDriver.c       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.6.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 2000
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -47,7 +61,18 @@ static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g);
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *op, TMSGlobalPtr g)
+BOOL MSGetPortState(short port)
+{
+	return GetPortState(port);
+}
+
+void MSSetPortState(short port, BOOL state)
+{
+	SetPortState(port, state);
+}
+
+/*------------------------------------------------------------------------------*/
+short MSRegisterDriver(TDriverInfos * infos, TDriverOperation *op, TMSGlobalPtr g)
 {
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
@@ -68,7 +93,7 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
+void MSUnregisterDriver(short ref, TMSGlobalPtr g)
 {
 	TDriverPtr drv; TAppl saved;
 	TClientsPtr clients = Clients(g);	
@@ -86,28 +111,28 @@ MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSCountDrivers (TClientsPtr g)
+short MSCountDrivers(TClientsPtr g)
 {
 	return g->nbDrivers;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClientsPtr g)
+BOOL MSGetDriverInfos (short ref, TDriverInfos * infos, TClientsPtr g)
 {
 	TApplPtr appl;
 	if (!CheckDriverRefNum(g, ref))
-		return false;
+		return FALSE;
 
 	appl = g->appls[ref];
 	setName (infos->name, appl->name);
 	infos->version = appl->driver->version;
 	infos->slots   = appl->driver->slotsCount;
 	infos->reserved[0] = infos->reserved[1] = 0;
-	return true;
+	return TRUE;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
+short MSGetIndDriver(short index, TClientsPtr g)
 {
 	short ref = MaxAppls;
 	
@@ -124,7 +149,7 @@ MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, SlotName name, SlotDirection direction, TClientsPtr g)
+SlotRefNum MSAddSlot(short drvRef, SlotName name, SlotDirection direction, TClientsPtr g)
 {
 	TDriverPtr drv; SlotRefNum slot;
 	
@@ -160,7 +185,7 @@ MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, SlotName name, SlotDirection
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetSlotName (SlotRefNum slot, SlotName name, TClientsPtr g)
+void MSSetSlotName(SlotRefNum slot, SlotName name, TClientsPtr g)
 {
 	TDriverPtr drv; SInfosPtr iPtr;
 	if (!CheckDriverRefNum(g, slot.drvRef))
@@ -175,7 +200,7 @@ MSFunctionType(void) MSSetSlotName (SlotRefNum slot, SlotName name, TClientsPtr 
 }	
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
+void MSRemoveSlot(SlotRefNum slot, TClientsPtr g)
 {
 	TDriverPtr drv; short i, slotRef;
 	if (!CheckDriverRefNum(g, slot.drvRef))
@@ -200,11 +225,11 @@ MSFunctionType(void) MSRemoveSlot (SlotRefNum slot, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g)
+BOOL MSGetSlotInfos(SlotRefNum slot, TSlotInfos * infos, TClientsPtr g)
 {
 	TDriverPtr drv;
 	if (!CheckDriverRefNum(g, slot.drvRef))
-		return false;
+		return FALSE;
 
 	drv = Driver(g->appls[slot.drvRef]);
 	if (CheckSlotRef(drv, slot.slotRef)) {
@@ -216,13 +241,13 @@ MSFunctionType(Boolean) MSGetSlotInfos (SlotRefNum slot, TSlotInfos * infos, TCl
 		infos->reserved[1] = 0;
 		setName (infos->name, inf->name);
 		infos->direction = inf->direction;
-		return true;
+		return TRUE;
 	}
-	return false;
+	return FALSE;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPtr g)
+SlotRefNum MSGetIndSlot(short refnum, short index, TClientsPtr g)
 {
 	TDriverPtr drv; SlotRefNum slot;
 	short n = -1;
@@ -246,10 +271,10 @@ MSFunctionType(SlotRefNum) MSGetIndSlot (short refnum, short index, TClientsPtr 
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, TClientsPtr g)
+void MSConnectSlot(short port, SlotRefNum slot, BOOL state, TClientsPtr g)
 {
 	TDriverPtr drv;
-	short slotRef; Boolean change = false;
+	short slotRef; BOOL change = FALSE;
 	slotRef = slot.slotRef;
 	if (!CheckDriverRefNum(g, slot.drvRef))
 		return;
@@ -260,12 +285,12 @@ MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, 
 			if (!IsAcceptedBit(drv->port[port], slotRef)) {
 				AcceptBit(drv->port[port], slotRef);
 				AcceptBit(drv->map[slotRef], port);
-				change = true;
+				change = TRUE;
 			}
 		} else if (IsAcceptedBit(drv->port[port], slotRef)){
 			RejectBit(drv->port[port], slotRef);
 			RejectBit(drv->map[slotRef], port);
-			change = true;
+			change = TRUE;
 		}
 		if (change && g->nbAppls)
 			CallAlarm (slot.drvRef, MIDIChgSlotConnect, g);
@@ -273,23 +298,23 @@ MSFunctionType(void) MSConnectSlot (short port, SlotRefNum slot, Boolean state, 
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(Boolean) MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g)
+BOOL MSIsSlotConnected(short port, SlotRefNum slot, TClientsPtr g)
 {
 	TDriverPtr drv;
 	if (!CheckDriverRefNum(g, slot.drvRef))
-		return false;
+		return FALSE;
 
 	drv = Driver(g->appls[slot.drvRef]);
 	return CheckSlotRef(drv, slot.slotRef) ?
 		   IsAcceptedBit (drv->port[port], slot.slotRef) && 
 		   IsAcceptedBit (drv->map[slot.slotRef], port)
-		   : false;
+		   : FALSE;
 }
 
 /*===========================================================================
   External functions
   =========================================================================== */
-void OpenDrivers (TMSGlobalPtr g) 
+void OpenDrivers(TMSGlobalPtr g) 
 {
 	TClientsPtr clients = Clients(g);
 	short ref, n = MSCountDrivers (clients) - 1;
@@ -303,7 +328,7 @@ void OpenDrivers (TMSGlobalPtr g)
 }
 
 /*____________________________________________________________________________*/
-void CloseDrivers (TMSGlobalPtr g)
+void CloseDrivers(TMSGlobalPtr g)
 {
 	TClientsPtr clients = Clients(g);
 	short ref, n = MSCountDrivers (clients) - 1;
@@ -318,7 +343,7 @@ void CloseDrivers (TMSGlobalPtr g)
 }
 
 /*____________________________________________________________________________*/
-void makeDriver (TClientsPtr g, TApplPtr appl, short ref,
+void makeDriver(TClientsPtr g, TApplPtr appl, short ref,
 				TDriverInfos * infos, TDriverOperation *op)
 {
 	short i; TDriverPtr drv;
@@ -343,7 +368,7 @@ void makeDriver (TClientsPtr g, TApplPtr appl, short ref,
 /*===========================================================================
   Internal functions
   =========================================================================== */
-static void clearSlot2PortMap (char * map)
+static void clearSlot2PortMap(char * map)
 {
 	short i;
 	for (i=0; i<PortMapSize; i++) {
@@ -351,7 +376,7 @@ static void clearSlot2PortMap (char * map)
 	}
 }
 
-static void clearPort2SlotMap (char * map)
+static void clearPort2SlotMap(char * map)
 {
 	short i, j;
 	for (i=0; i<MaxPorts; i++) {
@@ -361,7 +386,7 @@ static void clearPort2SlotMap (char * map)
 }
 
 /*____________________________________________________________________________*/
-static void closeDriver (short ref, TDriverPtr drv, TMSGlobalPtr g)
+static void closeDriver(short ref, TDriverPtr drv, TMSGlobalPtr g)
 {
 	short i;
 	for (i = 0; i < MaxSlots; i++) {

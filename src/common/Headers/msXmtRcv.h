@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msXmtRcv.h       $
+ *     $Date: 2005/12/08 13:38:29 $
+ * $Revision: 1.2.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - removing the sorter dependencies
@@ -30,12 +44,12 @@
 #include "msAppls.h"
 #include "lffifo.h"
 
-MSFunctionType(void)        MSSendIm   (short refNum, MidiEvPtr e, fifo* schedlist, unsigned long curdate);
-MSFunctionType(void)        MSSend     (short refNum, MidiEvPtr e, fifo* schedlist);
-MSFunctionType(void)        MSSendAt   (short refNum, MidiEvPtr e, unsigned long d, fifo* schedlist);
-MSFunctionType(ulong)       MSCountEvs (short refNum, TClientsPtr g);
-MSFunctionType(MidiEvPtr)   MSGetEv    (short refNum, TClientsPtr g);
-MSFunctionType(MidiEvPtr)   MSAvailEv  (short refNum, TClientsPtr g);
-MSFunctionType(void)        MSFlushEvs (short refNum, TClientsPtr g);
+void        MSSendIm   (short refNum, MidiEvPtr e, fifo* schedlist, DWORD curdate);
+void        MSSend     (short refNum, MidiEvPtr e, fifo* schedlist);
+void        MSSendAt   (short refNum, MidiEvPtr e, DWORD d, fifo* schedlist);
+DWORD       MSCountEvs (short refNum, TClientsPtr g);
+MidiEvPtr   MSGetEv    (short refNum, TClientsPtr g);
+MidiEvPtr   MSAvailEv  (short refNum, TClientsPtr g);
+void        MSFlushEvs (short refNum, TClientsPtr g);
 
 #endif

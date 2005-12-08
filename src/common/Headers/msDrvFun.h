@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msDrvFun.h       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.2.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 2000
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -29,25 +43,30 @@
 #include "msTypes.h"
 
 /*_______________________________________________________________*/
+/* port state */
+BOOL 	MSGetPortState(short port);
+void 		MSSetPortState(short port, BOOL state);
+
+/*_______________________________________________________________*/
 /* drivers register & unregister */
-MSFunctionType(short) 	MSRegisterDriver   (TDriverInfos * infos, TDriverOperation *op, TMSGlobalPtr g);
-MSFunctionType(void) 	MSUnregisterDriver (short refnum, TMSGlobalPtr g);
+short 	MSRegisterDriver   (TDriverInfos * infos, TDriverOperation *op, TMSGlobalPtr g);
+void 	MSUnregisterDriver (short refnum, TMSGlobalPtr g);
 
 /*_______________________________________________________________*/
 /* getting information on drivers */
-MSFunctionType(short)	MSCountDrivers	(TClientsPtr g);
-MSFunctionType(short)	MSGetIndDriver	(short index, TClientsPtr g);
-MSFunctionType(Boolean)	MSGetDriverInfos (short refnum, TDriverInfos * infos, TClientsPtr g);
+short	MSCountDrivers	(TClientsPtr g);
+short	MSGetIndDriver	(short index, TClientsPtr g);
+BOOL	MSGetDriverInfos (short refnum, TDriverInfos * infos, TClientsPtr g);
 
 /*_______________________________________________________________*/
 /* slots management */
-MSFunctionType(SlotRefNum) MSAddSlot 	  (short refnum, SlotName name, SlotDirection direction, TClientsPtr g);
-MSFunctionType(SlotRefNum) MSGetIndSlot	  (short refnum, short index, TClientsPtr g);
-MSFunctionType(void) 	MSSetSlotName 	  (SlotRefNum slot, SlotName name, TClientsPtr g);
-MSFunctionType(void)    MSRemoveSlot 	  (SlotRefNum slot, TClientsPtr g);
-MSFunctionType(Boolean)	MSGetSlotInfos 	  (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g);
-MSFunctionType(void)    MSConnectSlot	  (short port, SlotRefNum slot, Boolean state, TClientsPtr g);
-MSFunctionType(Boolean)	MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g);
+SlotRefNum	MSAddSlot 		  (short refnum, SlotName name, SlotDirection direction, TClientsPtr g);
+SlotRefNum	MSGetIndSlot	  (short refnum, short index, TClientsPtr g);
+void 		MSSetSlotName	  (SlotRefNum slot, SlotName name, TClientsPtr g);
+void		MSRemoveSlot 	  (SlotRefNum slot, TClientsPtr g);
+BOOL		MSGetSlotInfos 	  (SlotRefNum slot, TSlotInfos * infos, TClientsPtr g);
+void		MSConnectSlot	  (short port, SlotRefNum slot, BOOL state, TClientsPtr g);
+BOOL		MSIsSlotConnected (short port, SlotRefNum slot, TClientsPtr g);
 
 /*_______________________________________________________________*/
 /* internal functions */

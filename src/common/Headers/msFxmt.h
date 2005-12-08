@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msFxmt.h         $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.1.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
 */
@@ -46,7 +60,7 @@
 #define DENTRYLSB	38		/* data entry value (lsb)		*/
 
 
-typedef struct XFifo     FAR * XFifoPtr;
+typedef struct XFifo     * XFifoPtr;
 
 typedef void	(*XFAlarm)(XFifoPtr f);
 typedef void	(*XFContinuation)(XFifoPtr f);
@@ -62,12 +76,12 @@ typedef struct XFifo{
     	short          	reserved2;    	/* Reserved for alignement          	*/
    	XFContinuation 	cont;         	/* continuationde l'émission         	*/
     	MidiSEXPtr     	nextCell;     	/* Pointeur partie en cours SysEx    	*/
-    	unsigned long  	lastXmtDate;  	/* dernière date d'émission effective	*/
-    	uchar          	runStat;      	/* Code du status courant            	*/
-    	uchar          	port;         	/* Port courant                      	*/
-    	uchar          	reserved3;    	/* Reserved for alignement           	*/
+    	DWORD		 	lastXmtDate;  	/* dernière date d'émission effective	*/
+    	BYTE          	runStat;      	/* Code du status courant            	*/
+    	BYTE          	port;         	/* Port courant                      	*/
+    	BYTE          	reserved3;    	/* Reserved for alignement           	*/
     	int            	count;
-    	Byte           	data[16];
+    	BYTE           	data[16];
   
 } XFifo;
 
@@ -77,8 +91,8 @@ void XFInit( XFifoPtr f, TMSGlobalPtr g, short refnum);
 void XFInitMthTbl ();
 
 void 	XFPutEvent( register XFifoPtr f, register MidiEvPtr e);
-Boolean	XFGetByte( register XFifoPtr f, Byte FAR *code, Byte FAR *port);
-int	XFCountByte( register XFifoPtr f);
+BOOL	XFGetByte( register XFifoPtr f, BYTE *code, BYTE *port);
+int		XFCountByte( register XFifoPtr f);
 
 extern LinearizeMethodPtr LinearizeTbl[];
 

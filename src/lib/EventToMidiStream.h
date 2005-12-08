@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/lib/Stream/EventToMidiStream.h  $
+ *     $Date: 2005/12/08 13:36:18 $
+ * $Revision: 1.3.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -24,11 +38,14 @@
 #ifndef __EventToMidiStream__
 #define __EventToMidiStream__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#ifdef MODULE
-#include "MidiShareKernel.h"
+#ifdef _MSC_VER
+# define inline __inline
 #else
-#include "MidiShare.h"
+# define inline __inline__
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -41,29 +58,22 @@ typedef LinearizeMthPtr LinearizeMthTbl[256];
 
 typedef struct Ev2StreamRec {
    	Continuation 	cont;         	/* xmt continuation        	*/
-    LinearizeMthPtr * lin;			/* linearization methods	*/
+    LinearizeMthPtr *lin;			/* linearization methods	*/
     MidiSEXPtr     	nextCell;     	/* current sysex part		*/
-    Byte           	data[16];
+    BYTE           	data[16];
     short           count;
-    Byte          	runStat;      	/* running status           */
+    BYTE          	runStat;      	/* running status           */
 } Ev2StreamRec;
 
 /*___________________________________*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 void MidiStreamInitMthTbl 	(LinearizeMthTbl lin);
 void MidiStreamInit 		(Ev2StreamPtr f, LinearizeMthTbl lin);
 void MidiStreamReset 		(Ev2StreamPtr f);
 
 MidiEvPtr 	MidiStreamPutEvent	(Ev2StreamPtr f, MidiEvPtr e);
-Boolean		MidiStreamGetByte	(Ev2StreamPtr f, Byte *code);
+BOOL		MidiStreamGetByte	(Ev2StreamPtr f, BYTE *code);
 
-#ifdef WIN32
-#define inline __inline
-#endif
 static inline short MidiStreamCountByte (Ev2StreamPtr f) { return f->count;}
 
 #ifdef __cplusplus

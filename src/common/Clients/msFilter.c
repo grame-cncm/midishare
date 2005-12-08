@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Clients/msFilter.c       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.3.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [06-09-99] DF reducing dependencies by replacing msExtern.h by mem.h
@@ -31,38 +45,52 @@
 #define FreeFilter(filter)			DisposeMemory(filter)
 
 
-MSFunctionType(MidiFilterPtr) MSNewFilter (void) {
+MidiFilterPtr MSNewFilter(void) 
+{
 	return AllocateNewFilter (sizeof(TFilter));
 }
 
-MSFunctionType(void) MSFreeFilter (MidiFilterPtr filter) {
+void MSFreeFilter(MidiFilterPtr filter) 
+{
 	FreeFilter (filter);
 }
 
-MSFunctionType(void) MSAcceptPort(MidiFilterPtr f, short port, Boolean state) {
-	if (state) AcceptBit(f->port, port);
-	else RejectBit (f->port, port);
+void MSAcceptPort(MidiFilterPtr f, short port, BOOL state) 
+{
+	if (state) 
+		AcceptBit(f->port, port);
+	else
+		RejectBit (f->port, port);
 }
 
-MSFunctionType(void) MSAcceptChan(MidiFilterPtr f, short chan, Boolean state) {	
-	if (state) AcceptBit(f->channel, chan);
-	else RejectBit (f->channel, chan);
+void MSAcceptChan(MidiFilterPtr f, short chan, BOOL state)
+{
+	if (state) 
+		AcceptBit(f->channel, chan);
+	else 
+		RejectBit (f->channel, chan);
 }
 
-MSFunctionType(void) MSAcceptType(MidiFilterPtr f, short type, Boolean state) {	
-	if (state) AcceptBit(f->evType, type);
-	else RejectBit (f->evType, type);
+void MSAcceptType(MidiFilterPtr f, short type, BOOL state) 
+{
+	if (state) 
+		AcceptBit(f->evType, type);
+	else 
+		RejectBit (f->evType, type);
 }
 
-MSFunctionType(Boolean) MSIsAcceptedPort(MidiFilterPtr f, short port) {
-	return (Boolean)IsAcceptedBit (f->port, port);
+BOOL MSIsAcceptedPort(MidiFilterPtr f, short port) 
+{
+	return (BOOL) IsAcceptedBit(f->port, port);
 }
 
-MSFunctionType(Boolean) MSIsAcceptedChan(MidiFilterPtr f, short chan) {	
-	return (Boolean)IsAcceptedBit (f->channel, chan);
+BOOL MSIsAcceptedChan(MidiFilterPtr f, short chan) 
+{
+	return (BOOL) IsAcceptedBit(f->channel, chan);
 }
 
-MSFunctionType(Boolean) MSIsAcceptedType(MidiFilterPtr f, short type) {	
-	return (Boolean)IsAcceptedBit (f->evType, type);
+BOOL MSIsAcceptedType(MidiFilterPtr f, short type)
+{
+	return (BOOL) IsAcceptedBit(f->evType, type);
 }
 

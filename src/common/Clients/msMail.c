@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Clients/msMail.c         $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.2.4.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - mail box functions finalization
@@ -29,25 +43,25 @@
 /*----------------------------------------------------------------------------*/
 /* 				- MidiReadSync - read and clear an address   				  */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem)
+void* MSReadSync(void** adrMem)
 {
-	FarPtr(void) content;
+	void* content;
 	
 	do {
 		content= *adrMem;
-	} while (!MSCompareAndSwap (adrMem, content, 0));
+	} while (!CompareAndSwap (adrMem, content, 0));
 	return content;
 }
 
 /*----------------------------------------------------------------------------*/
 /* 				- MidiWriteSync - test and write an address				      */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val)
+void* MSWriteSync(void** adrMem, void* val)
 {
-	FarPtr(void) content;
+	void* content;
 	
 	do {
 		content= *adrMem;
-	} while (!MSCompareAndSwap (adrMem, content, val));
+	} while (!CompareAndSwap (adrMem, content, val));
 	return content;
 }

@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Kernel/msHandler.c       $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.12.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -29,8 +43,10 @@
 #include "msSorter.h"
 #include "msExtern.h"
 
-#ifdef __msBench__
-#include "benchs.h"
+#ifdef _MSC_VER
+# define inline __inline
+#else
+# define inline __inline__
 #endif
 
 /*===========================================================================
@@ -53,22 +69,6 @@ void ClockHandler (TMSGlobalPtr g)
 	 THorlogePtr h; TDatedEvPtr e;
 	 MidiEvPtr ready;
 
-#ifdef __msBench__
-	static TimeVal t1; TimeVal t2;
-	static int firstTime = 1;
-	
-	if (firstTime) {
-		gettimeofday (t1, 0);
-		firstTime = 0;
-	}
-	else {
-		gettimeofday (t2, 0);
-		storeTime (t1, t2);
-		t1 = t2;
-	}
-#endif
-
-#if 0
 	 h= &g->currTime;
 	 if( ++h->reenterCount) {
 		 return;
@@ -76,7 +76,7 @@ void ClockHandler (TMSGlobalPtr g)
 
 	 do {
 		 h->time++;
-		 e = (TDatedEvPtr)fifoflush (SorterList(g));
+		 e = (TDatedEvPtr)fifoclear (SorterList(g));
 		 ready = (MidiEvPtr)SorterClock(Sorter(g), e);
 		 if( ready) {
 		 	NextActiveAppl(g) = ActiveAppl(g);
@@ -84,21 +84,7 @@ void ClockHandler (TMSGlobalPtr g)
 		 	RcvAlarmLoop(g);
 		 }
 
-	} while( h->reenterCount--);
-#endif
-
-	/* YO : removed reentrance control */
-	h= &g->currTime;
-	h->time++;
-	e = (TDatedEvPtr)fifoflush (SorterList(g));
-	ready = (MidiEvPtr)SorterClock(Sorter(g), e);
-	if( ready) {
-		NextActiveAppl(g) = ActiveAppl(g);
-		DispatchEvents(g, ready);
-		RcvAlarmLoop(g);
-	}
-	
-	
+	}while( h->reenterCount--);
 }
 
 
@@ -107,7 +93,7 @@ void ClockHandler (TMSGlobalPtr g)
   ===========================================================================*/ 
 static inline void RawAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
-	fifoput (&appl->rcv, (fifocell *)ev);
+	fifoput (&appl->rcv, (cell *)ev);
 	if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 }
 
@@ -146,7 +132,7 @@ static void Port2SlotAccept( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 					MidiEvPtr copy= MSCopyEv( ev, FreeList(Memory(g)));
 					if( copy) {
 						Port(copy) = j + (i * 8);
-						fifoput (&appl->rcv, (fifocell *)copy);
+						fifoput (&appl->rcv, (cell *)copy);
 						if( !++appl->rcvFlag) *NextActiveAppl(g)++ = appl;
 					}
 				}
@@ -183,7 +169,7 @@ static void Propose( TMSGlobalPtr g, TApplPtr appl, MidiEvPtr ev)
 {
 	MidiEvPtr copy;
 	MidiFilterPtr filter;
-	Byte type, canal;
+	BYTE type, canal;
 
 	filter = appl->filter;
 	type = EvType(ev);
@@ -206,7 +192,7 @@ static void ProcessCall( TApplPtr appl, MidiEvPtr ev)
 /*__________________________________________________________________________________*/
 static inline void AcceptTask (TApplPtr appl, MidiEvPtr ev)
 {
-	fifoput (&appl->dTasks, (fifocell *)ev);
+	fifoput (&appl->dTasks, (cell *)ev);
 }
 
 /*__________________________________________________________________________________*/
@@ -229,7 +215,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 {
 	MSMemoryPtr mem = Memory(g);
 	MidiEvPtr next;
-	short refNum; Byte type;
+	short refNum; BYTE type;
 
 	do {
 		type= EvType(ev);
@@ -246,7 +232,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 
 			if( (type >= typeQuarterFrame) || (type < typePrivate)) {
 				if( RefNum(ev) & 0x80)	{	        /* refnum is marked			*/
-					RefNum(ev) = (Byte)refNum;
+					RefNum(ev) = (BYTE) refNum;
 					Accept( g, appl, ev);		    /* event is for appl itself */
 				}
 				else {					        	/* standard event received  */
@@ -256,9 +242,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 			}
 			else if (type == typeProcess) {		/* event is a realtime task		*/
 				ProcessCall( appl, ev);		    /* execute the task				*/
-#ifndef __linux__
 				MSFreeEv( ev, FreeList(mem));
-#endif
 			}
 			else if (type == typeDProcess) {    /* typeDProcess : defered task	*/
 				AcceptTask(appl, ev);    		/* store in the appl dtasks fifo*/
@@ -279,14 +263,14 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 /*__________________________________________________________________________________*/
 static void RcvAlarmLoop( TMSGlobalPtr g)
 {
-	TApplPtr FAR *applPtr, appl;
+	TApplPtr *applPtr, appl;
 	RcvAlarmPtr alarm;
 
 	*NextActiveAppl(g) = 0;               /* close the active applications table */
 	applPtr= ActiveAppl(g);              /* starts at the table beginning       */
 	while( *applPtr) {
 		appl= *applPtr++;
-		appl->rcvFlag= (uchar)kNoRcvFlag;	/* unmark the application    */
+		appl->rcvFlag= (BYTE)kNoRcvFlag;	/* unmark the application    */
 		alarm= appl->rcvAlarm;              /* get the application alarm */
 		if( alarm) {                        /* when the alarm exists     */
 			CallRcvAlarm (appl->context, alarm, appl->refNum);

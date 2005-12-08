@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msFilter.h       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.1.1.1.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -26,15 +40,15 @@
 #include "msDefs.h"
 #include "msTypes.h"
 
-MSFunctionType(MidiFilterPtr) MSNewFilter  (void);
-MSFunctionType(void)          MSFreeFilter (MidiFilterPtr);
+MidiFilterPtr MSNewFilter  (void);
+void          MSFreeFilter (MidiFilterPtr);
 
-MSFunctionType(void) MSAcceptPort(MidiFilterPtr f, short port, Boolean state);
-MSFunctionType(void) MSAcceptChan(MidiFilterPtr f, short chan, Boolean state);
-MSFunctionType(void) MSAcceptType(MidiFilterPtr f, short type, Boolean state);
+void MSAcceptPort(MidiFilterPtr f, short port, BOOL state);
+void MSAcceptChan(MidiFilterPtr f, short chan, BOOL state);
+void MSAcceptType(MidiFilterPtr f, short type, BOOL state);
 
-MSFunctionType(Boolean) MSIsAcceptedPort(MidiFilterPtr f, short port);
-MSFunctionType(Boolean) MSIsAcceptedChan(MidiFilterPtr f, short chan);
-MSFunctionType(Boolean) MSIsAcceptedType(MidiFilterPtr f, short type);
+BOOL MSIsAcceptedPort(MidiFilterPtr f, short port);
+BOOL MSIsAcceptedChan(MidiFilterPtr f, short chan);
+BOOL MSIsAcceptedType(MidiFilterPtr f, short type);
 
 #endif

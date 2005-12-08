@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msTasks.h        $
+ *     $Date: 2005/12/08 13:38:29 $
+ * $Revision: 1.3.4.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -26,15 +40,13 @@
 #ifndef __msTasks__
 #define __msTasks__
 
-#include "lflifo.h"
-#include "lffifo.h"
 #include "msDefs.h"
 #include "msTypes.h"
 #include "msAppls.h"
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
-typedef struct TTaskExt FAR *TTaskExtPtr;
+typedef struct TTaskExt *TTaskExtPtr;
 typedef struct TTaskExt
 {
     TaskPtr fun;
@@ -45,20 +57,16 @@ typedef struct TTaskExt
 
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3, 
+void      MSCall  (TaskPtr task, DWORD date, short r, long a1,long a2,long a3, 
                                    lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
+MidiEvPtr MSTask  (TaskPtr task, DWORD date, short r, long a1,long a2,long a3,  
                                    lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
+MidiEvPtr MSDTask (TaskPtr task, DWORD date, short r, long a1,long a2,long a3,  
                                    lifo* freelist, fifo* schedlist);
 
-MSFunctionType(void)      MSForgetTask	(MidiEvPtr *e);
-MSFunctionType(long)      MSCountDTasks	(short refnum, TClientsPtr g);
-MSFunctionType(void)      MSFlushDTasks	(short refnum, TClientsPtr g);
-MSFunctionType(void)      MSExec1DTask	(short refnum, TClientsPtr g);
-
-/*__________________________________________________________________________________*/
-Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
-
+void      MSForgetTask	(MidiEvPtr *e);
+long      MSCountDTasks	(short refnum, TClientsPtr g);
+void      MSFlushDTasks	(short refnum, TClientsPtr g);
+void      MSExec1DTask	(short refnum, TClientsPtr g);
 
 #endif

@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msTypes.h        $
+ *     $Date: 2005/12/08 13:38:29 $
+ * $Revision: 1.5.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - struct cell added
@@ -27,51 +41,25 @@
 #ifndef __msTypes__
 #define __msTypes__
 
-#ifdef __Macintosh__
-#ifdef __MacOSX__
-	typedef unsigned char Boolean;
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	enum { false, true };
-#else
-# include <mactypes.h> 
-#endif 
-                                   
-# ifdef __POWERPC__
-# define MSFunctionType(type)   type
-# define FAR
-# else 
-# define MSFunctionType(type)   pascal type
-# define FAR
-# endif
+#undef FALSE
+#undef TRUE
+#undef NULL
 
-typedef unsigned long ulong;
+#define FALSE   0
+#define TRUE    1
+#define NULL    0
 
-#else
-# define MSFunctionType(type)   type
-#endif
+typedef unsigned long       DWORD;
+typedef int                 BOOL;
+typedef unsigned char       BYTE;
+typedef unsigned short      WORD;
 
-#ifdef WIN32
-# include <windows.h>
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	typedef unsigned char Boolean;
-	typedef unsigned long ulong;
-	enum { false = 0, true };
-#endif
+typedef char*				Ptr;
 
-#ifdef __linux__
-#	include <linux/types.h>
-#	define FAR
-
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	typedef unsigned char Boolean;
-	enum { false = 0, true };
-#endif
-
-typedef unsigned char uchar;
-#define FarPtr(type)  type FAR *
+typedef struct cell {
+	struct cell* link;		/*+ next cell in the list +*/
+						    /*+ any data here		  +*/
+} cell;
 
 
 #endif

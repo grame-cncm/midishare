@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msAppls.h        $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.4.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - new fifo management
@@ -41,28 +55,20 @@
 #define MidiShareRef     0              /* MidiShare refnum at client side */
 #define MidiShareDriverRef  MaxAppls-1  /* MidiShare refnum at driver side */
 
-#ifdef PascalNames
-# define kMidiShareName    "\pMidiShare"
-#else
-# define kMidiShareName     "MidiShare"
-#endif
+#define kMidiShareName     "MidiShare"
 
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
 
-typedef FarPtr(void)				TApplContextPtr;
+typedef void*						TApplContextPtr;
 
-typedef struct FarPtr(TAppl) 		TApplPtr;
-typedef struct FarPtr(TClients) 	TClientsPtr;
-typedef struct FarPtr(TConnection) 	TConnectionPtr;
+typedef struct TAppl* 				TApplPtr;
+typedef struct TClients* 			TClientsPtr;
+typedef struct TConnection* 		TConnectionPtr;
 
-
-#ifdef PascalNames
-typedef unsigned char MSName[MaxApplNameLen];
-#else
 typedef char MSName[MaxApplNameLen];
-#endif
+
 
 /*------------------------------------------------------------------------*/
 /* inter-applications connections representation                          */
@@ -80,10 +86,10 @@ enum { kClientFolder = 0, kDriverFolder = 255 };
 typedef struct TAppl{
     MSName          name;        /* the application name         */
     TApplContextPtr context;     /* system dependent context     */
-    FarPtr(void)    info;        /* user field                   */
-    uchar           folder;      /* application folder           */
-    uchar           refNum;      /* reference number             */
-    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
+    void*			info;        /* user field                   */
+    BYTE            folder;      /* application folder           */
+    BYTE            refNum;      /* reference number             */
+    BYTE            rcvFlag;     /* <> 0 to call rcvAlarm        */
     RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
     ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
 

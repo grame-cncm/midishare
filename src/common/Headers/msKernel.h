@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msKernel.h       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.5.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999-2000
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -36,9 +50,9 @@
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
-typedef struct TMSGlobal FAR *  TMSGlobalPtr;
-typedef struct THorloge  FAR *  THorlogePtr;
-typedef FarPtr(void)			THost;   /* reserved for platform dependant
+typedef struct TMSGlobal *  TMSGlobalPtr;
+typedef struct THorloge  *  THorlogePtr;
+typedef void*				THost;   /* reserved for platform dependant
                                             storage */
 
 /*------------------------------------------------------------------------*/
@@ -49,7 +63,7 @@ typedef struct {
 } TimeInfo, *TimeInfoPtr;
 
 typedef struct THorloge{
-	 unsigned long  time;         /* la date sur 32 bits (millisecondes)  */
+	 DWORD			time;         /* la date sur 32 bits (millisecondes)  */
 	 long           reenterCount; /* count of clockHandler reenters       */
 	 TimeInfo		rtOffset;     /* offset to real time clock            */
 	 long			adjustCount;  /* clocks adjustment count              */

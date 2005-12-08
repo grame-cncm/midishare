@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Clients/msAppls.c        $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.6.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - new fifo management
@@ -34,32 +48,24 @@
 #include "msXmtRcv.h"
 #include "msMem.h"
 
-#ifdef PascalNames
-# define kMidiShareName 	"\pMidiShare"
-#else
-# define kMidiShareName 	"MidiShare"
-#endif
-
-#define FreeAppl(appl)		DisposeMemory(appl)
+#define kMidiShareName 	"MidiShare"
 
 #define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (g->appls[ref]->folder==kClientFolder))
 
 /*===========================================================================
   Internal functions prototypes
   =========================================================================== */
-static Boolean  equalApplName   (TApplPtr ap, MidiName name);
+static BOOL  equalApplName   (TApplPtr ap, MidiName name);
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
+short MSOpen (MidiName name, TMSGlobalPtr g)
 {
 	TApplPtr appl, drv;
 	TClientsPtr clients = Clients(g);
 	short ref = MIDIerrSpace;
-
-	msOpenMutex (kOpenCloseMutex);
-    if (clients->nbAppls == 0) {
+	if (clients->nbAppls == 0) {
 		drv  = NewAppl (sizeof(TAppl) + sizeof(TDriver));
 		if (drv) {
 			TDriverInfos infos;
@@ -85,19 +91,17 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
 	}
-	msCloseMutex (kOpenCloseMutex);
 	return ref;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
+void MSClose (short ref, TMSGlobalPtr g)
 {	
 	TClientsPtr clients = Clients(g);
 	
 	if (!CheckApplRefNum(clients, ref) || (ref == MidiShareRef))
 		return;
 		
-	msOpenMutex (kOpenCloseMutex);
 	closeClient (ref, g);
 	clients->nbAppls--;
 	if (clients->nbAppls == 1) {
@@ -111,17 +115,16 @@ MSFunctionType(void) MSClose (short ref, TMSGlobalPtr g)
 	} else {
 		CallAlarm(ref, MIDICloseAppl, clients);
 	}
-	msCloseMutex (kOpenCloseMutex);
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSCountAppls (TClientsPtr g)
+short MSCountAppls (TClientsPtr g)
 {
 	return g->nbAppls;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
+short MSGetIndAppl (short index, TClientsPtr g)
 {
 	short ref = -1;
 	
@@ -138,7 +141,7 @@ MSFunctionType(short) MSGetIndAppl (short index, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
+short MSGetNamedAppl (MidiName name, TClientsPtr g)
 {
 	short ref =0;
 	while (ref < MaxAppls && (!g->appls[ref] || !equalApplName(g->appls[ref], name))) {
@@ -148,7 +151,7 @@ MSFunctionType(short) MSGetNamedAppl (MidiName name, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
+MidiName MSGetName(short ref, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		return ref ? g->appls[ref]->name : kMidiShareName;
@@ -158,7 +161,7 @@ MSFunctionType(MidiName) MSGetName(short ref, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
+void MSSetName(short ref, MidiName name, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref) && (ref > 0)) {
 		setName(g->appls[ref]->name, name);
@@ -167,9 +170,9 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
+void *MSGetInfo (short ref, TClientsPtr g)
 {
-	FarPtr(void) info = 0;
+	void *info = 0;
 	if (CheckRefNum(g,ref)) {
 		info = g->appls[ref]->info;
 	}
@@ -177,7 +180,7 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
+void MSSetInfo (short ref, void* info, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		g->appls[ref]->info = info;
@@ -185,13 +188,13 @@ MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(MidiFilterPtr) MSGetFilter(short ref, TClientsPtr g)
+MidiFilterPtr MSGetFilter(short ref, TClientsPtr g)
 {
 	return CheckRefNum(g,ref) ? g->appls[ref]->filter : 0;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TClientsPtr g)
+void MSSetFilter(short ref, MidiFilterPtr filter, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		g->appls[ref]->filter = filter;
@@ -199,13 +202,13 @@ MSFunctionType(void) MSSetFilter(short ref, MidiFilterPtr filter, TClientsPtr g)
 }
  
 /*____________________________________________________________________________*/
-MSFunctionType(RcvAlarmPtr) MSGetRcvAlarm(short ref, TClientsPtr g)
+RcvAlarmPtr MSGetRcvAlarm(short ref, TClientsPtr g)
 {
 	return CheckRefNum(g,ref) ? g->appls[ref]->rcvAlarm : 0;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetRcvAlarm(short ref, RcvAlarmPtr alarm, TClientsPtr g)
+void MSSetRcvAlarm(short ref, RcvAlarmPtr alarm, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		g->appls[ref]->rcvAlarm = alarm;
@@ -213,13 +216,13 @@ MSFunctionType(void) MSSetRcvAlarm(short ref, RcvAlarmPtr alarm, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(ApplAlarmPtr) MSGetApplAlarm(short ref, TClientsPtr g)
+ApplAlarmPtr MSGetApplAlarm(short ref, TClientsPtr g)
 {
 	return CheckRefNum(g,ref) ? g->appls[ref]->applAlarm : 0;
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetApplAlarm(short ref, ApplAlarmPtr alarm, TClientsPtr g)
+void MSSetApplAlarm(short ref, ApplAlarmPtr alarm, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		g->appls[ref]->applAlarm = alarm;
@@ -249,9 +252,9 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 	setName(appl->name, name);	
 	appl->context = CreateApplContext();
 	appl->info = 0;
-	appl->folder = (uchar)folder;
-	appl->refNum = (uchar)ref;
-	appl->rcvFlag = (uchar)kNoRcvFlag;
+	appl->folder = (BYTE)folder;
+	appl->refNum = (BYTE)ref;
+	appl->rcvFlag = (BYTE)kNoRcvFlag;
 	appl->rcvAlarm = 0;
 	appl->applAlarm = 0;
 	appl->srcList = 0;
@@ -283,31 +286,16 @@ void closeClient (short ref, TMSGlobalPtr g)
   =========================================================================== */
 void setName (MidiName dst, MidiName name)
 {
-#ifdef PascalNames
-	int i, count = *name + 1;
-	for (i=0; (i<count) && (i<MaxApplNameLen); i++) {
-		*dst++ = *name++;
-	}
-#else
 	int i;
 	for (i=0; *name && (i< MaxApplNameLen-1); i++) {
 		*dst++ = *name++;
 	}
 	*dst = 0;
-#endif
 }
 
-static Boolean equalApplName (TApplPtr ap, MidiName name)
+static BOOL equalApplName (TApplPtr ap, MidiName name)
 {
 	MidiName apname = ap->name;
-#ifdef PascalNames
-	int count = *apname + 1;
-	while (count--) {
-		if (*apname++ != *name++) return false;
-	}
-	return true;
-#else
 	while ((*apname != 0) && (*apname == *name) ) { apname++; name++; }
 	return (*apname == *name);
-#endif
 }

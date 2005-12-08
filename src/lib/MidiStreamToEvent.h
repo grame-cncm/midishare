@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/lib/Stream/MidiStreamToEvent.h  $
+ *     $Date: 2005/12/08 13:36:18 $
+ * $Revision: 1.4.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -24,10 +38,14 @@
 #ifndef __MidiStreamToEvent__
 #define __MidiStreamToEvent__
 
-#ifdef MODULE
-#include "MidiShareKernel.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef _MSC_VER
+# define inline __inline
 #else
-#include "MidiShare.h"
+# define inline __inline__
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -35,11 +53,11 @@ typedef struct StreamFifo  * StreamFifoPtr;
 typedef MidiEvPtr   	  (* ParseMethodPtr)(StreamFifoPtr f, char c);
 
 typedef ParseMethodPtr 	ParseMethodTbl[256];
-typedef Byte 			Status2TypeTbl[256];
+typedef BYTE 			Status2TypeTbl[256];
 
 //__________________________________________________________________________
 // status byte offset in the type table
-#define offset(c) ((unsigned char)c-(unsigned char)0x80)
+#define offset(c) ((BYTE)c-(BYTE)0x80)
 // type corresponding to a status byte
 #define type(c, f) (f->typesTbl[offset(c)])
 
@@ -49,7 +67,7 @@ typedef union TMidiFastEv {
     MidiEvPtr std;
     struct {
         MidiEvPtr     link;        /* link to next event           */
-        unsigned long date;        /* event date (in ms)           */
+        DWORD		  date;        /* event date (in ms)           */
         long      	  common;
         long      	  specific;
     } * fast;
@@ -63,16 +81,16 @@ typedef union TMidiFastEv {
 typedef struct StreamFifo{
 	 ParseMethodPtr   parse;
 	 ParseMethodPtr * rcv;
-	 Byte * 	      typesTbl;
+	 BYTE * 	      typesTbl;
 	 MidiEvPtr        ptrCur;    /* current sysex event  	*/
-	 unsigned long    date;
+	 DWORD		      date;
 
 	 union {
 	 	struct {
-		 	Byte msType;
-		 	Byte refNum;
-		 	Byte port;
-		 	Byte chan;
+		 	BYTE msType;
+		 	BYTE refNum;
+		 	BYTE port;
+		 	BYTE chan;
 		 } field;
 		 long    fast;
 	 } common;
@@ -85,20 +103,13 @@ typedef struct StreamFifo{
 
 
 /*------------------------------------------------------------------------*/
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void	 	MidiParseError(StreamFifoPtr f);
-void 		MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl);
+void 		MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, BYTE * typesTbl);
 void 		MidiParseReset(StreamFifoPtr f);
 void 		MidiParseInitMthTbl (ParseMethodTbl tbl);
 void 		MidiParseInitTypeTbl(Status2TypeTbl table);
 
-#ifdef WIN32
-#define inline __inline
-#endif
-static inline MidiEvPtr MidiParseByte (StreamFifoPtr f, Byte c) { return (*f->parse)(f,c); }
+static inline MidiEvPtr MidiParseByte (StreamFifoPtr f, BYTE c) { return (*f->parse)(f,c); }
 
 #ifdef __cplusplus
 }

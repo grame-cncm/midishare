@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/common/Clients/msXmtRcv.c       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.4.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - removing the sorter dependencies
@@ -31,38 +45,38 @@
 /*===========================================================================
   MidiShare external functions implementation
 =========================================================================== */
-MSFunctionType(void) MSSendIm (short refNum, MidiEvPtr e, fifo* schedlist, 
-								unsigned long curdate)
+void MSSendIm(short refNum, MidiEvPtr e, fifo* schedlist, 
+								DWORD curdate)
 {
 	if( e) {
-		RefNum(e) = (uchar)refNum;
+		RefNum(e) = (BYTE)refNum;
 		Date(e)   = curdate;
-		fifoput (schedlist, (fifocell*)e);
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSSend (short refNum, MidiEvPtr e, fifo* schedlist)
+void MSSend(short refNum, MidiEvPtr e, fifo* schedlist)
 {
 	if( e) {
-		RefNum(e)= (uchar)refNum;
-		fifoput (schedlist, (fifocell*)e);
+		RefNum(e)= (BYTE)refNum;
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d, 
+void MSSendAt(short refNum, MidiEvPtr e, DWORD d, 
 								fifo* schedlist)
 {
 	if( e) {
-		RefNum(e)= (uchar)refNum;
+		RefNum(e)= (BYTE)refNum;
 		Date(e)= d;
-		fifoput (schedlist, (fifocell*)e);
+		fifoput (schedlist, (cell*)e);
 	}
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(ulong) MSCountEvs (short refNum, TClientsPtr g)
+DWORD MSCountEvs(short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {
 		TApplPtr appl = g->appls[refNum]; 
@@ -72,34 +86,34 @@ MSFunctionType(ulong) MSCountEvs (short refNum, TClientsPtr g)
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSGetEv (short refNum, TClientsPtr g)
+MidiEvPtr MSGetEv(short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {
 		TApplPtr appl = g->appls[refNum]; 
 		return (MidiEvPtr)fifoget (&appl->rcv);
 	}
-	return 0; 
+	return NULL; 
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSAvailEv (short refNum, TClientsPtr g)
+MidiEvPtr MSAvailEv(short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {
 		TApplPtr appl = g->appls[refNum]; 
 		return (MidiEvPtr)fifoavail (&appl->rcv);
 	}
-	return 0;
+	return NULL;
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(void) MSFlushEvs (short refNum, TClientsPtr g)
+void MSFlushEvs(short refNum, TClientsPtr g)
 {
 	TApplPtr appl;
 	MidiEvPtr ev, next;
 
 	if( CheckRefNum( g, refNum)) {
 		appl = g->appls[refNum]; 
-		ev = (MidiEvPtr)fifoflush (&appl->rcv);
+		ev = (MidiEvPtr)fifoclear (&appl->rcv);
 		while( ev) {
 			next= Link(ev);
 			MSFreeEv (ev, FreeList(g->memory));

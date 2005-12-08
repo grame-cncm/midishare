@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Clients/msTasks.c        $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.8.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,13 +30,12 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
                    includes now ForgetTaskSync
    [13-09-99] DF - removing direct fifo access
-   [16-01-01] SL - ForgetTaskSync moved to platform dependent code
 
 */
 
@@ -32,10 +45,13 @@
 #include "msSync.h"
 
 
+BOOL ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content);
+
+
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */
-MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r, 
+void MSCall(TaskPtr task, DWORD date, short r, 
                              long a1,long a2,long a3, 
                              lifo* freelist, fifo* schedlist)
 {
@@ -45,18 +61,18 @@ MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r,
 	ev= MSNewEv (typeProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
+		RefNum(ev)= (BYTE)r;
 		ext= LinkST(ev);
 		ext->val[0]= (long)task;
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (fifocell*)ev);
+		fifoput (schedlist, (cell*)ev);
 	}
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r, 
+MidiEvPtr MSTask(TaskPtr task, DWORD date, short r, 
                              long a1,long a2,long a3, 
                              lifo* freelist, fifo* schedlist)
 {
@@ -66,19 +82,19 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 	ev= MSNewEv( typeProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
+		RefNum(ev)= (BYTE)r;
 		ext= LinkST(ev);
 		ext->val[0]= (long)task;
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (fifocell*)ev);
+		fifoput (schedlist, (cell*)ev);
 	}
 	return ev;
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, 
+MidiEvPtr MSDTask(TaskPtr task, DWORD date, short r, 
                              long a1,long a2,long a3, 
                              lifo* freelist, fifo* schedlist)
 {
@@ -88,19 +104,19 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 	ev= MSNewEv( typeDProcess, freelist);
 	if( ev) {
 		Date(ev)= date;
-		RefNum(ev)= (uchar)r;
+		RefNum(ev)= (BYTE)r;
 		ext= LinkST(ev);
 		ext->val[0]= (long)task;
 		ext->val[1]= a1;
 		ext->val[2]= a2;
 		ext->val[3]= a3;
-		fifoput (schedlist, (fifocell*)ev);
+		fifoput (schedlist, (cell*)ev);
 	}
 	return ev;
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
+void MSForgetTask (MidiEvPtr *e)
 {
 	MidiEvPtr ev = e ? *e : 0;
 	if (ev && ((EvType(ev) == typeProcess) || (EvType(ev) == typeDProcess))) {
@@ -109,17 +125,17 @@ MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSCountDTasks (short refnum, TClientsPtr g)
+long MSCountDTasks(short refnum, TClientsPtr g)
 {
 	return CheckRefNum( g, refnum) ? fifosize (&g->appls[refnum]->dTasks) : 0;
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
+void MSFlushDTasks(short refnum, TClientsPtr g)
 {
 	MidiEvPtr ev, next;
 	if (CheckRefNum(g, refnum)) {
-		ev = (MidiEvPtr)fifoflush (&g->appls[refnum]->dTasks);
+		ev = (MidiEvPtr)fifoclear (&g->appls[refnum]->dTasks);
 		while (ev) {
 			next= Link(ev);
 			MSFreeEv (ev, FreeList(g->memory));
@@ -129,7 +145,7 @@ MSFunctionType(void) MSFlushDTasks (short refnum, TClientsPtr g)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
+void MSExec1DTask(short refnum, TClientsPtr g)
 {
 	TApplPtr appl;
 	MidiEvPtr ev;
@@ -146,4 +162,5 @@ MSFunctionType(void) MSExec1DTask (short refnum, TClientsPtr g)
 		}
 	}	
 }
+
 

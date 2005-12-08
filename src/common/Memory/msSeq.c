@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Memory/msSeq.c           $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.3.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -29,7 +43,7 @@
 /*==============================================================================
   External MidiShare functions implementation
   ============================================================================== */
-MSFunctionType(MidiSeqPtr) MSNewSeq (lifo* freelist)
+MidiSeqPtr MSNewSeq(lifo* freelist)
 {
 	MidiSeqPtr seq = (MidiSeqPtr)MSNewCell(freelist);
 	if( seq) {
@@ -40,10 +54,10 @@ MSFunctionType(MidiSeqPtr) MSNewSeq (lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
+void MSAddSeq(MidiSeqPtr s, MidiEvPtr e)
 {
 	MidiEvPtr current;
-	unsigned long date;
+	DWORD date;
 	
 	if (s && e) {
 		date= Date(e);
@@ -73,7 +87,7 @@ MSFunctionType(void) MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, lifo* freelist)
+void MSFreeSeq(MidiSeqPtr s, lifo* freelist)
 {
 	if( s) {
 		MSClearSeq (s, freelist);
@@ -82,7 +96,7 @@ MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
+void MSClearSeq(MidiSeqPtr s, lifo* freelist)
 {
 	if ( s ) {
 		MidiEvPtr next, e = s->first;
@@ -96,7 +110,7 @@ MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc)
+void MSApplySeq(MidiSeqPtr s, ApplyProcPtr proc)
 {
 	MidiEvPtr e, next;
 	if( s && proc) {

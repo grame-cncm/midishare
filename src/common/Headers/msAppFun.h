@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msAppFun.h       $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.1.1.1.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
@@ -27,26 +41,26 @@
 
 /*------------------------------------------------------------------------*/
 /* functions declarations                                                 */
-void     InitAppls (TClientsPtr g, MSMemoryPtr mem);
+void		InitAppls (TClientsPtr g, MSMemoryPtr mem);
 
-MSFunctionType(short)     MSOpen         (MidiName name, TMSGlobalPtr g);
-MSFunctionType(void)      MSClose        (short ref, TMSGlobalPtr g);
+short		MSOpen         (MidiName name, TMSGlobalPtr g);
+void		MSClose        (short ref, TMSGlobalPtr g);
 
-MSFunctionType(short)     MSCountAppls   (TClientsPtr g);
-MSFunctionType(short)     MSGetIndAppl   (short index, TClientsPtr g);
-MSFunctionType(short)     MSGetNamedAppl (MidiName name, TClientsPtr g);
+short		MSCountAppls   (TClientsPtr g);
+short		MSGetIndAppl   (short index, TClientsPtr g);
+short		MSGetNamedAppl (MidiName name, TClientsPtr g);
 
-MSFunctionType(MidiName)     MSGetName  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetName  (short ref, MidiName name, TClientsPtr g);
-MSFunctionType(FarPtr(void)) MSGetInfo  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetInfo  (short ref, FarPtr(void) info, TClientsPtr g);
+MidiName	MSGetName  (short ref, TClientsPtr g);
+void		MSSetName  (short ref, MidiName name, TClientsPtr g);
+void*		MSGetInfo  (short ref, TClientsPtr g);
+void		MSSetInfo  (short ref, void* info, TClientsPtr g);
 
-MSFunctionType(MidiFilterPtr) MSGetFilter  (short ref, TClientsPtr g);
-MSFunctionType(void)          MSSetFilter  (short ref, MidiFilterPtr filter, TClientsPtr g);
+MidiFilterPtr	MSGetFilter  (short ref, TClientsPtr g);
+void			MSSetFilter  (short ref, MidiFilterPtr filter, TClientsPtr g);
 
-MSFunctionType(RcvAlarmPtr)  MSGetRcvAlarm  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetRcvAlarm  (short ref, RcvAlarmPtr alarm, TClientsPtr g);
-MSFunctionType(ApplAlarmPtr) MSGetApplAlarm (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetApplAlarm (short ref, ApplAlarmPtr alarm, TClientsPtr g);
+RcvAlarmPtr		MSGetRcvAlarm  (short ref, TClientsPtr g);
+void			MSSetRcvAlarm  (short ref, RcvAlarmPtr alarm, TClientsPtr g);
+ApplAlarmPtr	MSGetApplAlarm (short ref, TClientsPtr g);
+void			MSSetApplAlarm (short ref, ApplAlarmPtr alarm, TClientsPtr g);
 
 #endif

@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Headers/msSeq.h          $
+ *     $Date: 2005/12/08 13:38:28 $
+ * $Revision: 1.2.6.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -16,7 +30,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
   modifications history:
    [08-09-99] DF - adaptation to the new memory management
@@ -31,10 +45,10 @@
 #include "msTypes.h"
 
 /* MidiShare functions interface */
-MSFunctionType(MidiSeqPtr) MSNewSeq   (lifo* freelist);
-MSFunctionType(void)       MSAddSeq   (MidiSeqPtr s, MidiEvPtr e);
-MSFunctionType(void)       MSFreeSeq  (MidiSeqPtr s, lifo* freelist);
-MSFunctionType(void)       MSClearSeq (MidiSeqPtr s, lifo* freelist);
-MSFunctionType(void)       MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc);
+MidiSeqPtr MSNewSeq   (lifo* freelist);
+void       MSAddSeq   (MidiSeqPtr s, MidiEvPtr e);
+void       MSFreeSeq  (MidiSeqPtr s, lifo* freelist);
+void       MSClearSeq (MidiSeqPtr s, lifo* freelist);
+void       MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc);
 
 #endif

@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/SYSTEM/midishare/common/Sorter/msSorter.c        $
+ *     $Date: 2005/12/08 13:38:30 $
+ * $Revision: 1.2.4.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
 
 /*
 
@@ -17,42 +30,40 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
   [01-10-99] DF - YO - sorter interface simplification
              externalization of the synchronisation mechanisms to provide a better
              module independance
- 
+
 */
 
 #include "msSorter.h"
 
 /*-------------------------------------------------------------------------*/
-
-#if defined(macintosh) || defined(__PPC__) || defined(__ppc__)  					/* Big	Endian */
+#ifdef __BIG_ENDIAN__
 	enum { kLev0, kLev1, kLev2, kLev3 };
-	#define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
-	#define GetLevel(index) (unsigned char)index
-#elif defined(__i386__) || defined(__INTEL__) || defined (_M_IX86)										/* Litte Endian */
-	enum { kLev3, kLev2, kLev1, kLev0 };
-	#define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
-	#define GetLevel(index) 3-index;
 #else
-	error "msSorter.c : cannot dertermine endianness"
+	enum { kLev3, kLev2, kLev1, kLev0 };
 #endif
 
 typedef union {
-	unsigned long date;
-	unsigned char part[4];
+	DWORD  date;
+	BYTE   part[4];
 } SorterDate;
 
-#define Next(e) e->link
+#define Next(e)          e->link
 
 
 /*===========================================================================
   Internal macros
 =========================================================================== */
+#ifdef __BIG_ENDIAN__
+  #define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
+#else
+  #define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
+#endif
 
 #define SWAP(level) { TBufferPtr tmp; tmp=level->alt; level->alt=level->pri; level->pri=tmp; }
 
@@ -63,14 +74,14 @@ typedef union {
   
 static void 		FifoInit	( TSFifoPtr fifo);
 static void 		BufferInit	( TBufferPtr buffer);
-static void 		LevelInit	( TLevelPtr level, unsigned char index);
+static void 		LevelInit	( TLevelPtr level, BYTE index);
 
 static void 		FifoPut		( TSFifoPtr fifo, TDatedEvPtr event);
-static TDatedEvPtr	BufferPut	( TBufferPtr buff, TDatedEvPtr event, unsigned char index);
+static TDatedEvPtr	BufferPut	( TBufferPtr buff, TDatedEvPtr event, BYTE index);
 
 static void 		Resort2		( TLevelPtr level, TSFifoPtr fifo);
 static void 		ResortAll	( TLevelPtr level, TSFifoPtr fifo);
-static void 		LevelClock	( TLevelPtr level, unsigned char date);
+static void 		LevelClock	( TLevelPtr level, BYTE date);
 
 static void 		HandleInput (TSorterPtr sorter, TDatedEvPtr ev);
 static void 		PutEvent (TSorterPtr sorter, TDatedEvPtr event);
@@ -85,7 +96,7 @@ static void 		PutEvent (TSorterPtr sorter, TDatedEvPtr event);
 /*-------------------------------------------------------------------------*/
 void  SorterInit (TSorterPtr sorter, long rs)
 {
-	unsigned char i;
+	BYTE i;
 	sorter->sysDate = 0;
 	sorter->rSize = rs;
 	FifoInit(&sorter->late);
@@ -179,9 +190,14 @@ static void BufferInit (TBufferPtr buffer)
 }
 
 /*-------------------------------------------------------------------------*/
-static void LevelInit (TLevelPtr level, unsigned char index)
+static void LevelInit (TLevelPtr level, BYTE index)
 {
-	level->lev = GetLevel(index); 
+#ifdef __BIG_ENDIAN__
+	level->lev = (BYTE)index;
+#else
+	level->lev = 3-index;
+#endif
+
 	level->pri=&level->buf[0];
 	level->alt=&level->buf[1];	
 
@@ -193,6 +209,8 @@ static void LevelInit (TLevelPtr level, unsigned char index)
 	BufferInit(level->pri);
 	BufferInit(level->alt);
 }
+	
+
 
 /*-------------------------------------------------------------------------*/
 static void FifoPut (TSFifoPtr fifo, TDatedEvPtr event)
@@ -203,7 +221,7 @@ static void FifoPut (TSFifoPtr fifo, TDatedEvPtr event)
 }
 
 /*-------------------------------------------------------------------------*/
-static TDatedEvPtr BufferPut (TBufferPtr Buf, TDatedEvPtr event, unsigned char index)
+static TDatedEvPtr BufferPut (TBufferPtr Buf, TDatedEvPtr event, BYTE index)
 {
 	TDatedEvPtr	nextEv;
 	TSFifoPtr	fifo;
@@ -247,7 +265,7 @@ static void ResortAll (TLevelPtr level, TSFifoPtr fifo)
 }
 
 /*-------------------------------------------------------------------------*/
-static void LevelClock (TLevelPtr level, unsigned char date)
+static void LevelClock (TLevelPtr level, BYTE date)
 {
   if ( date != level->pos ) Resort2(level->next,level->fifo);
   else {

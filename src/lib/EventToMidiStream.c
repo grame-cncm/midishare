@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/lib/Stream/EventToMidiStream.c  $
+ *     $Date: 2005/12/08 13:36:18 $
+ * $Revision: 1.1.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -20,11 +34,8 @@
   
 */
 
+#include "MidiShareKernel.h"
 #include "EventToMidiStream.h"
-
-#ifdef WIN32
-enum { false, true };
-#endif
 
 /*------------------------------------------------------------------------*/
 #define NRPLSB		98		/* non registr. param number (lsb)	*/
@@ -77,7 +88,9 @@ void MidiStreamInitMthTbl (LinearizeMthTbl lin)
 {
 	int	i;
 	
-	for (i=0; i<256; i++) lin[i] = NullLinearizeMth;
+	for (i=0; i<256; i++) 
+		lin[i] = NullLinearizeMth;
+
 	lin[typeNote]         = NoteLinearizeMth;
 	lin[typeKeyOn]        = KeyOnLinearizeMth;
 	lin[typeKeyOff]       = KeyOffLinearizeMth;
@@ -115,11 +128,14 @@ void MidiStreamInit (Ev2StreamPtr f, LinearizeMthTbl lin)
 void MidiStreamReset (Ev2StreamPtr f)
 {
 	MidiEvPtr next, e = (MidiEvPtr)f->nextCell;
-	while (e) {
+
+	while (e) 
+	{
 		next = Link(e);
 		MidiFreeCell(e);
 		e = next;
 	}
+
 	f->cont     = NormalContinuation;
 	f->nextCell = 0;
 	f->runStat	= 0;
@@ -131,24 +147,34 @@ void MidiStreamReset (Ev2StreamPtr f)
   =========================================================================== */
 MidiEvPtr MidiStreamPutEvent (Ev2StreamPtr f, MidiEvPtr e)
 {
-	if (f->count)  return e;
-	if (EvType(e) == typeNote) {
+	if (f->count)
+		return e;
+
+	if (EvType(e) == typeNote) 
+	{
 		(f->lin[EvType(e)]) (e, f);
 		EvType(e) = typeKeyOn;
 		Vel(e) = 0;
 		Date(e) += Dur(e);
 		return e;
 	}
+
 	(f->lin[EvType(e)]) (e, f);
+
 	return 0;
 }
 
-Boolean	MidiStreamGetByte (Ev2StreamPtr f, Byte *code)
+BOOL MidiStreamGetByte (Ev2StreamPtr f, BYTE *code)
 {	
- 	if (!f->count) return false;
+ 	if (!f->count) 
+		return FALSE;
+
 	*code = f->data[f->count--];
-	if (!f->count) (*f->cont)( f);
-	return true;
+
+	if (!f->count) 
+		(*f->cont)(f);
+
+	return TRUE;
 }
 		
 /*===========================================================================
@@ -222,7 +248,7 @@ static void NullLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void NoteLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = NoteOn + Chan(e);
+	BYTE status = NoteOn + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -235,7 +261,7 @@ static void NoteLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void KeyOnLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = NoteOn + Chan(e);
+	BYTE status = NoteOn + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -249,7 +275,7 @@ static void KeyOnLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void KeyOffLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = NoteOff + Chan(e);
+	BYTE status = NoteOff + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -263,7 +289,7 @@ static void KeyOffLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void KeyPressLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = PolyTouch + Chan(e);
+	BYTE status = PolyTouch + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -277,7 +303,7 @@ static void KeyPressLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void CtrlChangeLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = ControlChg + Chan(e);
+	BYTE status = ControlChg + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -291,7 +317,7 @@ static void CtrlChangeLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void ProgChangeLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = ProgramChg + Chan(e);
+	BYTE status = ProgramChg + Chan(e);
 	if( f->runStat== status)
 		f->count= 1;
 	else {
@@ -304,7 +330,7 @@ static void ProgChangeLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void ChanPressLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = AfterTouch + Chan(e);
+	BYTE status = AfterTouch + Chan(e);
 	if( f->runStat== status)
 		f->count= 1;
 	else {
@@ -317,7 +343,7 @@ static void ChanPressLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void PitchWheelLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status = PitchBend + Chan(e);
+	BYTE status = PitchBend + Chan(e);
 	if( f->runStat== status)
 		f->count= 2;
 	else {
@@ -399,30 +425,41 @@ static void ResetLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void SysExLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	MidiSEXPtr	last, first;
+	MidiSEXPtr last, first;
 	
 	last = e->info.linkSE;
 	first = last->link;
 	last->link = 0;
 	f->runStat = 0;
-	if (first == last) {
+
+	if (first == last) 
+	{
 		int i = 0;
 		int j = first->data[11]+2;
 
 		f->count = j;
 		f->data[j--] = SysEx;
-		while(j>1) f->data[j--] = first->data[i++];
+
+		while (j>1) 
+			f->data[j--] = first->data[i++];
+
 		f->data[1] = EndSysX;
-	} else {
+	}
+	else 
+	{
 		int i = 0;
 		int j = 13;
 
 		f->count = j;
 		f->data[j--] = SysEx;
-		while(j>0) f->data[j--] = first->data[i++];
+
+		while (j>0) 
+			f->data[j--] = first->data[i++];
+
 		f->nextCell = first->link;
 		f->cont = SysExContinuation;
 	}
+
 	MidiFreeCell (e);	
 	MidiFreeCell ((MidiEvPtr)first);	
 }
@@ -460,7 +497,7 @@ static void QuarterFrameLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void Ctrl14bLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status;
+	BYTE status;
 	short	n = e->info.param.num & 0x1F;
 	short	v = e->info.param.val & 0x3FFF;
 	
@@ -472,7 +509,7 @@ static void Ctrl14bLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 		f->count= 5;
 	}
 	f->data[5] = ControlChg + Chan(e);
-	f->data[4] = (Byte)n;
+	f->data[4] = (BYTE) n;
 	f->data[3] = v >> 7;
 	f->data[2] = n+32;
 	f->data[1] = v & 0x7F;
@@ -481,7 +518,7 @@ static void Ctrl14bLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void NonRegParamLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status;
+	BYTE status;
 	short	n = e->info.param.num & 0x3FFF;
 	short	v = e->info.param.val & 0x3FFF;
 	
@@ -508,7 +545,7 @@ static void NonRegParamLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 
 static void RegParamLinearizeMth (MidiEvPtr e, Ev2StreamPtr f)
 {
-	Byte status;
+	BYTE status;
 	short	n = e->info.param.num & 0x3FFF;
 	short	v = e->info.param.val & 0x3FFF;
 	

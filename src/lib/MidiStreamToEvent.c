@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * C H A M E L E O N    S. D. K.                                               *
+ *******************************************************************************
+ *  $Archive:: /Chameleon.sdk/system/midishare/lib/Stream/MidiStreamToEvent.c  $
+ *     $Date: 2005/12/08 13:36:18 $
+ * $Revision: 1.3.2.1 $
+ *-----------------------------------------------------------------------------*
+ * This file is part of the Chameleon Software Development Kit                 *
+ *                                                                             *
+ * Copyright (C) 2001 soundart                                                 *
+ * www.soundart-hot.com                                                        *
+ * codemaster@soundart-hot.com                                                 *
+ ******************************************************************************/
+
 /*
 
   Copyright © Grame 1999
@@ -20,11 +34,8 @@
   
 */
 
+#include "MidiShareKernel.h"
 #include "MidiStreamToEvent.h"
-
-#ifdef WIN32
-enum { false, true };
-#endif
 
 /*===========================================================================
 	internal functions prototypes
@@ -61,7 +72,7 @@ void MidiParseError(StreamFifoPtr f)
 }
 
 //_____________________________________________________________________________
-void MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl)
+void MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, BYTE * typesTbl)
 {
 	f->parse     = rcvStatus;
 	f->rcv       = rcv;
@@ -133,11 +144,11 @@ void MidiParseInitTypeTbl (Status2TypeTbl table)
 		*table++= typePitchWheel;
 	
 	*table++= typeSysEx;	// 0xf0
-	*table++= 18;			/* typeQuarterFrame (130) */
+	*table++= 18;		// typeQuarterFrame (en fait 130)
 	*table++= typeSongPos;
 	*table++= typeSongSel;
 	*table++= 0;
-	*table++= 19;           // pour MTP port change
+	*table++= 19;           // MTP port change
 	*table++= typeTune;
 	*table++= 0;
 	
@@ -152,27 +163,27 @@ void MidiParseInitTypeTbl (Status2TypeTbl table)
 }
 
 /*__________________________________________________________________________________*/
-static Boolean AddFSexEv (MidiEvPtr e, long v)
+static BOOL AddFSexEv (MidiEvPtr e, long v)
 {
 	MidiSEXPtr nouv;
 	MidiSEXPtr ext = LinkSE(e);
 	int i = ext->data[11];
 
 	if( i < 11) {
-		ext->data[i] = (Byte)v;	           /* store the value              */
+		ext->data[i] = (BYTE)v;	           /* store the value              */
 		ext->data[11]++;		           /* update the busy space count  */
 	} else { 
 		nouv = (MidiSEXPtr)MidiNewCell();  /* add a new cell               */
 		if( nouv) {
-			ext->data[11] = (Byte)v;        /* store the value              */
+			ext->data[11] = (BYTE)v;        /* store the value              */
 			nouv->data[11] = 0;	            /* busy space count             */
 			nouv->link= ext->link;	        /* link the new cell            */
 			ext->link= nouv;
 			LinkSE(e)= nouv;	            /* link header to the last cell */
 		}else
-			return false;
+			return FALSE;
 	}
-	return true;
+	return TRUE;
 }
 
 
@@ -325,6 +336,7 @@ static MidiEvPtr rcvSysExBeg (StreamFifoPtr f, char c)
 		Date(e) = MidiGetTime();
 		Chan(e) = 0;
 		Port(e) = f->common.field.port;
+		LinkSE(e)->data[11] = 0;
 		f->ptrCur= e;
 		f->parse= rcvSysExNext;
 	}
@@ -338,7 +350,8 @@ static MidiEvPtr rcvSysExBeg (StreamFifoPtr f, char c)
 // receiving sysex datas
 static MidiEvPtr rcvSysExNext (StreamFifoPtr f, char c)
 {
-	if( c < 0) return rcvSysExEnd( f, c);
+	if( c < 0)
+		return rcvSysExEnd( f, c);
 	
 	if (!AddFSexEv (f->ptrCur, c)) {
 		f->parse= rcvStatus;
@@ -353,13 +366,19 @@ static MidiEvPtr rcvSysExEnd (StreamFifoPtr f, char c)
 {
 	MidiEvPtr e;
 		
-	if( (unsigned char)c >= (unsigned char)MClock)
+	if( (BYTE)c >= (BYTE)MClock)
 		return rcvStatus (f, c);
-	if( c!= (char)EndSysX)
-		return rcvStatus( f, c);
 
-	e = f->ptrCur;	
-	Chan(e) = 0;
+	e = f->ptrCur;
+
+	if( c!= (char) EndSysX)
+	{
+		MidiFreeEv(e);
+		e = 0;
+	}
+	else
+		Chan(e) = 0;
+
 	f->ptrCur= 0;
 	f->parse= rcvStatus;
 	return e;
