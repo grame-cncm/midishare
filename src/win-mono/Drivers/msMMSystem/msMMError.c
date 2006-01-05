@@ -30,6 +30,23 @@
 #define kGetErrorTextBuf	256
 
 static char * ErrFile = "\\msMMSystem.log";
+void MMTrace (char *s, long value);
+char * GetProfileFullName ();
+
+//_________________________________________________________
+static void CheckMessageBox (char * msg)
+{
+	char buff[20];
+	int n = GetPrivateProfileString("error", "messagebox", "no", buff, 20, GetProfileFullName());
+	if (n) {
+		MMTrace("GetPrivateProfileString result", n);
+		MMTrace(buff, n);
+		if (!strcmp(buff, "yes")) {
+			MessageBox(0, msg, "msMMSystem driver error", MB_OK);
+		}
+	}
+	else MMTrace("GetPrivateProfileString null", n);
+}
 
 //_________________________________________________________
 static char *DateString ()
@@ -39,6 +56,22 @@ static char *DateString ()
 	return asctime (localtime (&t));
 }
 
+//_________________________________________________________
+static char *makeShortString (char *s, SlotRefNum ref, int errCode, short in)
+{
+	static char out[1024];
+	char buff[kGetErrorTextBuf];
+	TSlotInfos infos;
+
+	if(in)
+		midiInGetErrorText(errCode, buff, kGetErrorTextBuf);
+	else
+		midiOutGetErrorText(errCode, buff, kGetErrorTextBuf);
+	infos.name[0] = 0;
+	MidiGetSlotInfos (ref, &infos);
+	wsprintf (out, "%s : %s error\n%s", infos.name, s, buff);
+	return out;
+}
 //_________________________________________________________
 static char *makeErrString (char *s, SlotRefNum ref, int errCode, short in)
 {
@@ -84,6 +117,7 @@ void MMError (char *s, SlotRefNum ref, int errCode, short in)
 			CloseHandle (h);
 		}
 	}
+	CheckMessageBox(makeShortString(s, ref, errCode, in));
 }
 
 //_________________________________________________________
