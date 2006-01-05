@@ -81,3 +81,5 @@ _MidiIsAcceptedChan
 _MidiIsAcceptedType
 _MidiGetPortState
 _MidiSetPortState
+_MidiGetError
+
