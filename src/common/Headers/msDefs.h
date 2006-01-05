@@ -180,6 +180,13 @@
 #define MIDIerrEv       -5   /* event argument is nil         */
 #define MIDIerrUndef    -6   /* event argument is undef       */
 
+/*------------------------------------------------------------------------------
+* List of the global system error codes.									
+*******************************************************************************/
+#define MIDInoErr			0
+#define MIDIerrDriverLoad	1	/* failure in loading a driver */
+#define MIDIerrTime	        2	/* can't open time interrupts  */
+
 
 /******************************************************************************
 * SYNCHRONISATION CODES
