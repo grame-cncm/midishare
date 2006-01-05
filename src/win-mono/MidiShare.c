@@ -65,6 +65,9 @@ BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReser
 void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) {
   MSSpecialInit( defaultSpace, gMem);
 }
+long  MIDISHAREAPI MidiGetError(void) {
+  	return MSGetError(gMem);
+}
 short MIDISHAREAPI MidiGetVersion(void) {
   return MSGetVersion(gMem);
 }
