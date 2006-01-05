@@ -53,24 +53,24 @@ void _storeTime (TimeVal t1, TimeVal t2)
 static long std_dev (long start, long limit, long *table, long avg)
 {
 	double sum = 0; long dev, i;
-        for (i=start; i < limit; i++) {
+        for (i = start; i < limit; i++) {
 		dev = table[i] - avg;
 		sum += dev * dev;
  	}
-        sum /= limit - start;
-        return (long)sqrt(sum);
+	sum /= limit - start;
+	return (long)sqrt(sum);
 }
 
 #if defined(__APPLE__) && defined(__MACH__)
 //____________________________________________________________
 static float time_ratio ()
 {
-        mach_timebase_info_data_t info; kern_return_t ret;
-        float ratio;
-
-        ret = mach_timebase_info(&info);
-        ratio = (float)info.numer/info.denom;
-        return ratio / 1000;
+	mach_timebase_info_data_t info; 
+	kern_return_t ret;
+	float ratio;
+	ret = mach_timebase_info(&info);
+	ratio = ((double)info.numer)/((double)info.denom);
+	return (float)(ratio / 1000);
 }
 #else
 #define time_ratio() 1.0
@@ -84,7 +84,7 @@ static int _print_result (FILE* fd, long start, long limit, long *table)
     float ratio = time_ratio();
 
 	if (!limit) return 0;
-	for (i=start; i < limit; i++) {
+	for (i = start; i < limit; i++) {
 		table[i] = (long)(table[i]*ratio);
 		d = table[i];
 		if (d < min) min = d;
