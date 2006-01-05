@@ -237,6 +237,7 @@ void OpenAudioTime (TMSGlobalPtr g)
 	 
 error:
     Report("MidiShare", "cannot open audio timer:", driverName);
+	g->error += MIDIerrTime;
     CloseAudioTime(g);
 }
 

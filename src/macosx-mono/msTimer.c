@@ -178,6 +178,7 @@ void OpenTimer(TMSGlobalPtr g)
 		SetThreadToPriority(gThread, 96, true, gTimeRes * 1000000, 500 * 100, gTimeRes * 1000000); // Computation value is set to 500 us (like CoreMidi RT threads)
 		ReportN("MidiShare", "open time interrupt using a timer - time resolution is", gTimeRes);
 	} else {
+		g->error += MIDIerrTime;
 		Report("MidiShare", "cannot create real-time thread","");
 	}	
 }
