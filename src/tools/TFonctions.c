@@ -131,7 +131,7 @@ void MSALARMAPI ApplAlarm( short unused1, long unused2)
 /*____________________________________________________________________*/
 short Environment()
 {
-	int version, count; short n;
+	int version, count; short n; long err;
 	
 	print ("\nGlobal MidiShare environment :\n");
 	print ("    MidiGetVersion : ");flush;
@@ -146,7 +146,7 @@ short Environment()
 	if( refNum= MidiOpen( ApplName))
 	{
 		print ("%d %s\n", (int)refNum, OK);
-		
+
 		count+= count ? 1 : 2;
 		n= MidiCountAppls();
 		if( n!= count)
@@ -172,6 +172,10 @@ short Environment()
 		n= MidiGetNamedAppl( MidiShareName);
 		if( n!= 0)
 			print ("Warning : wrong refNum for %s : %d\n", MidiShareName, n);
+		
+		print ("    MidiGetError : ");flush;
+		err= MidiGetError();
+		print ("%lx  %s\n", err, OK);
 	}
 	else
 	{
