@@ -100,13 +100,13 @@ static void CALLBACK msWakeup (short refnum)
 	MidiParseInitTypeTbl (gTypeTbl);
 	AddSlots (refnum);
 	LoadState (gInSlots, gOutSlots);
-}
+  }
 
 static void CALLBACK msSleep (short refnum)
 {
 	SaveState (gInSlots, gOutSlots);
 	RemoveSlots (refnum);
-}
+ }
 
 // intended only to avoid link error
 main() { return 0; }
