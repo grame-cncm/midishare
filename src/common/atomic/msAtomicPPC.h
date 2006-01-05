@@ -28,7 +28,7 @@
 //----------------------------------------------------------------
 // Memory reservation only
 //----------------------------------------------------------------
-static inline void LWARX (register volatile void * addr) 
+static inline void LWARX (volatile void * addr) 
 {
 	asm volatile (
        "# LWARX					\n"
@@ -42,7 +42,7 @@ static inline void LWARX (register volatile void * addr)
 //----------------------------------------------------------------
 // Store conditionnal
 //----------------------------------------------------------------
-static inline int STWCX (register volatile void * addr, register void * value, register void * newvalue) 
+static inline int STWCX (volatile void * addr, volatile void * value, volatile void * newvalue) 
 {
     register int result;
 	asm volatile (
@@ -69,7 +69,7 @@ static inline int STWCX (register volatile void * addr, register void * value, r
 //----------------------------------------------------------------
 // Compare and swap
 //----------------------------------------------------------------
-static inline int CAS (register volatile void * addr, register void * value, register void * newvalue) 
+static inline int CAS (volatile void * addr, volatile void * value, volatile void * newvalue) 
 {
 	register int result;
 	asm volatile (
@@ -96,7 +96,7 @@ static inline int CAS (register volatile void * addr, register void * value, reg
 //----------------------------------------------------------------
 // Compare and swap link if not equal to eq
 //----------------------------------------------------------------
-static inline int CASLNE (register volatile void * addr, register void * value, register void * eq) 
+static inline int CASLNE (volatile void * addr, volatile void * value, volatile void * eq) 
 {
 	register int result;
 	asm volatile (
