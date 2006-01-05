@@ -25,11 +25,10 @@
 
 #include "msKernel.h"
 
-void OpenAudioTime (TMSGlobalPtr g);
+void OpenAudioTime(TMSGlobalPtr g);
 void CloseAudioTime(TMSGlobalPtr g);
 
-void OpenTimer (TMSGlobalPtr g);
-void CloseTimer (TMSGlobalPtr g);
-
+void OpenTimer(TMSGlobalPtr g);
+void CloseTimer(TMSGlobalPtr g);
 
 #endif
