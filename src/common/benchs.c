@@ -25,13 +25,21 @@
 #include <math.h>
 #include "benchs.h"
 
-#define kMaxValues		10100
+#define kMaxValues		30100
 #define kIgnoreValues	100
 
 static long gCount=0;
 static long gTable[kMaxValues];
 
-#ifndef RTC
+#ifdef WIN32
+//____________________________________________________________
+long elapsed (TimeVal t1, TimeVal t2)
+{
+	LARGE_INTEGER diff;
+	diff.QuadPart = t1.QuadPart - t2.QuadPart;
+	return (long)diff.QuadPart;
+}
+#elif !defined(RTC)
 //____________________________________________________________
 long elapsed (TimeVal t1, TimeVal t2)
 {
@@ -101,18 +109,38 @@ static int _print_result (FILE* fd, long start, long limit, long *table)
 	return 1;
 }
 
+//_________________________________________________________
+#ifdef WIN32
+static void trace (char *s)
+{
+	char * errFile = "midishare-trace.txt";
+	if (errFile) {
+		HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,
+			NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (h != INVALID_HANDLE_VALUE) {
+			DWORD written; 
+			SetFilePointer(h, 0, 0, FILE_END);
+			WriteFile(h, s, strlen(s), &written, NULL);
+			CloseHandle (h);
+		}
+	}
+}
+#endif
+
 //____________________________________________________________
 int print_bench ()
 {
 	static char  buff [1024]; FILE * fd;
-	const char* home = getenv("HOME");
 	int ret = 0;
-
+#ifdef WIN32
+	sprintf (buff, "midishare-bench.txt");
+#else
+	const char* home = getenv("HOME");
 	if (home)
 		sprintf (buff, "%s/midishare-bench.txt", home);
 	else
 		sprintf (buff, "/midishare-bench.txt");
-
+#endif
     fd = fopen(buff, "w");
 	if (fd) {
 		ret = _print_result (fd, kIgnoreValues, gCount, gTable);
@@ -132,3 +160,32 @@ int bench_done ()
 {
     return (gCount < kMaxValues) ? 0 : 1;
 }
+
+#ifdef WIN32
+
+int gettime(TimeVal * t)
+{
+	static LARGE_INTEGER	offset;
+	static double			frequencyToMicroseconds;
+	static int				initialized = 0;
+
+	if (!initialized) {
+		LARGE_INTEGER performanceFrequency;
+		if (QueryPerformanceFrequency(&performanceFrequency)) {
+			frequencyToMicroseconds = (double)performanceFrequency.QuadPart / 1000000.;
+			QueryPerformanceCounter(&offset);
+			initialized = 1;
+		}
+	}
+	if (initialized) {
+		LARGE_INTEGER count;
+		if (QueryPerformanceCounter(&count)) {
+			count.QuadPart -= offset.QuadPart;
+			t->QuadPart = (double)count.QuadPart / frequencyToMicroseconds;
+			return 0;
+		}
+	}
+	else t->QuadPart = 0;
+	return 1;
+}
+#endif

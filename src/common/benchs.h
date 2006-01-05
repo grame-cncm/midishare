@@ -26,7 +26,9 @@
 #if defined(__APPLE__) && defined(__MACH__)
 #include <mach/mach_time.h>
 #define RTC
-#else 
+#elif defined(WIN32)
+#include <windows.h>
+#else
 #include <sys/time.h>
 #endif
 
@@ -41,8 +43,9 @@ typedef double TimeType;
 
 #elif defined(WIN32)
 
-long elapsed (LARGE_INTEGER * t1, LARGE_INTEGER *t2);
-typedef LARGE_INTEGER * TimeVal;
+long elapsed (LARGE_INTEGER t1, LARGE_INTEGER t2);
+typedef LARGE_INTEGER TimeVal;
+#define gettimeofday(t,n)	gettime(t)
 
 #else
 
