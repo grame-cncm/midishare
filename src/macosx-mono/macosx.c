@@ -157,10 +157,13 @@ void SpecialWakeUp(TMSGlobalPtr g)
        char str[256];
        
        CheckInstall();
-
+	   g->error = MIDInoErr;
        n = CountDrivers();
        for (i=0; i<n; i++) {
-           if (GetDriver(i, str, 256)) LoadDriver(str);
+           if (GetDriver(i, str, 256)) {
+               if (!LoadDriver(str))
+			       g->error += MIDIerrDriverLoad;
+		   }
        }
 }
 
