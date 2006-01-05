@@ -7,6 +7,7 @@ UMSF1=$HOME/MidiShare
 UMSF2=$HOME/.MidiShare
 NEWUMSF=$HOME/Library/Preferences/MidiShare
 
+
 function put_info () {
 	cat <<! > $1
 Since MidiShare version 1.87, the .ini files are stored in the
@@ -35,6 +36,18 @@ function move_old () {
 		put_info $1/ReadMe-1.87.txt $user
 	fi
 }
+
+############################################################
+# fix java mess contained in previous 1.90 installer
+############################################################
+[ -h /usr/lib/*.?.?.?.jnilib ] && rm /usr/lib/*.?.?.?.jnilib
+if [ -f /usr/lib/java ] && [ -d /usr/lib/java\ 1 ] 
+then
+	rm /usr/lib/java
+	mv /usr/lib/java\ 1 /usr/lib/java
+fi
+# end fix java
+############################################################
 
 # removes the old dynamic libraries
 rm -f $LIB/libMidiShare*.dylib
