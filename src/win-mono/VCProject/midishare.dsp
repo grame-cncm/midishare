@@ -128,6 +128,19 @@ SOURCE=..\..\common\Clients\msXmtRcv.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\common\benchs.c
+
+!IF  "$(CFG)" == "midishare - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "midishare - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\common\Kernel\msHandler.c
 # End Source File
 # Begin Source File
