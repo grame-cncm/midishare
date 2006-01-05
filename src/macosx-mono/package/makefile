@@ -48,7 +48,7 @@ userpack:
 	[ -d $(ROOT) ] || cp -R Distribution $(ROOT)
 	find $(ROOT) -depth -name CVS -exec rm -rf {} \;
 	make dist
-	open msPackage.pmsp
+	open msPackage.pmproj
 
 dist:
 	cd scripts && ./makeContent && sudo ./finalize dist
@@ -57,7 +57,7 @@ devpack:
 	[ -d $(DEVROOT) ] || cp -R Developer $(DEVROOT)
 	find $(DEVROOT) -depth -name CVS -exec rm -rf {} \;
 	make dev
-	open msDevPackage.pmsp
+	open msDevPackage.pmproj
 
 dev:
 	@ echo in case of trouble, make sure your CVSROOT is correctly set
