@@ -104,7 +104,8 @@ void SpecialWakeUp (TMSGlobalPtr g)
 	char str[256];
 	for (i=0; i<n; i++) {
 		if (GetDriver (i, str, 256)) {
-			LoadDriver (str);
+			if (!LoadDriver(str))
+				g->error += MIDIerrDriverLoad;
 		}
 	}
 }
@@ -189,9 +190,12 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 		t->wTimerRes = 1;
 		res = timeBeginPeriod (t->wTimerRes);	
 
-		if (res != TIMERR_NOERROR) return;
-		t->wTimerID = timeSetEvent(1,t->wTimerRes,TimerProc,(DWORD)g,TIME_PERIODIC);
+		if (res == TIMERR_NOERROR) {
+			t->wTimerID = timeSetEvent(1,t->wTimerRes,TimerProc,(DWORD)g,TIME_PERIODIC);
+			return;
+		}
 	}
+	g->error += MIDIerrTime;
 }
 
 /*_________________________________________________________________________*/
