@@ -30,14 +30,19 @@
 #include "msEvents.h"
 #include "msExtern.h"
 #include "msTime.h"
-
+#include "msAlarms.h"
 
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
+MSFunctionType(long) MSGetError (TMSGlobalPtr g)
+{
+	return g->error;
+}
 
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
+	g->error=MIDInoErr;
 	InitEvents ();
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
