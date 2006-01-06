@@ -4,7 +4,7 @@ LIB = /usr/local/lib/librtpmidi.so
 INCF = /usr/local/include
 
 CXX = g++
-CXXFLAGS = -Wall -fPIC -g
+CXXFLAGS = -Wall -fPIC -g -D__Types__
 LIBS = -lMidiShare
 #for mac os x only:
 #CXXFLAGS = $(CXXFLAGS) -D__Types__
