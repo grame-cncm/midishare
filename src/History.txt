@@ -1,7 +1,8 @@
 
 Versions:
 ------------------------
-v 1.91  : new MidiGetError API, corrected Mac OS X timer mode : correctly handle MidiShare time in case of abnormal system latencies 		  
+v 1.91  : new MidiGetError API, 
+		  corrected Mac OS X timer mode : correctly handle MidiShare time in case of abnormal system latencies 		  
 v 1.90  : corrects bug due to tasks management conflict with fifo implementation
 		  Mac OS X: timer mode improved (uses now mach low level API)
 v 1.89  : new fifo management - WARNING! don't use: broken version due to fifo changes
