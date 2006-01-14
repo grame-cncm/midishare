@@ -7,15 +7,15 @@
  * MidiShare is a multi-tasking, real-time software environment, specially 
  * devised for the developing of MIDI applications with a triple target :
  * 
- * 	´To propose solutions to currently met problems when developing 
+ * 	To propose solutions to currently met problems when developing 
  * 	 a real-time MIDI application : memory management, communication management, 
  *	 time management, task management. 
  * 
- * 	´To enable the real-time and multi-tasking functioning of these applications, 
+ * 	To enable the real-time and multi-tasking functioning of these applications, 
  * 	 i.e. to enable the sharing of all the necessary resources and their 
  * 	 simultaneous access.
  *
- * 	´To make easier cooperation between independent MIDI applications by  proposing 
+ * 	To make easier cooperation between independent MIDI applications by  proposing 
  * 	 a real-time mechanism of inter-application communications.
  * 
  * This file contains a complete description of all the MidiShare functions and 
@@ -166,6 +166,13 @@
 #define MIDIerrIndex    -4   /* bad access index (events)     */
 #define MIDIerrEv       -5   /* event argument is nil         */
 #define MIDIerrUndef    -6   /* event argument is undef       */
+
+/*------------------------------------------------------------------------------
+* List of the global system error codes.									
+*******************************************************************************/
+#define MIDInoErr			0
+#define MIDIerrDriverLoad	1	/* failure in loading a driver */
+#define MIDIerrTime	        2	/* can't open time interrupts  */
 		
 
 /******************************************************************************
@@ -469,6 +476,7 @@ short 		MidiGetVersion		(void);
 short 		MidiCountAppls		(void);
 short 		MidiGetIndAppl 		(short index);		
 short 		MidiGetNamedAppl	(MidiName name);
+long 		MidiGetError		();
  
 /*----------------------------- SMPTE synchronization -------------------------*/
 
