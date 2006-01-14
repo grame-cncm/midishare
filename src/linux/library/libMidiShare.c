@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright  Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -135,32 +135,37 @@ void* CmdHandler(void* arg)
 	int refNum = appl->refNum;
 	TTaskExtPtr task ;
 	MidiEvPtr ev;
+	int retrycount;
 	
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
-	
-	while ((ev = MidiGetCommand(refNum))) {         		
 
-			switch (ev->evType) {
-			
-				case typeRcvAlarm: 		
-					// execute rcv alarm 
-					if (appl->rcvAlarm) (*appl->rcvAlarm) (refNum);  
-					break;
-			
-				case typeProcess : 
-					// execute pending real-time tasks 
-					task = (TTaskExtPtr)LinkST(ev);	
-					if (task->fun) (*task->fun) (ev->date, refNum, task->arg1, task->arg2, task->arg3);			
-					break;						
-					
-				case typeApplAlarm:
-					// execute application alarm 
-					if (appl->applAlarm) (*appl->applAlarm) (refNum, MSGetField(ev,0)); 	
-					break;	
-							 
-			}
-			MSFreeEv(ev, FreeList(Memory(gClients)));
+	retrycount = 4;
+	while (retrycount--) { // essai YO 12/01/2006 : pour eviter de sortir du cmd handler
+		while ((ev = MidiGetCommand(refNum))) {         		
+	
+				switch (ev->evType) {
+				
+					case typeRcvAlarm: 		
+						// execute rcv alarm 
+						if (appl->rcvAlarm) (*appl->rcvAlarm) (refNum);  
+						break;
+				
+					case typeProcess : 
+						// execute pending real-time tasks 
+						task = (TTaskExtPtr)LinkST(ev);	
+						if (task->fun) (*task->fun) (ev->date, refNum, task->arg1, task->arg2, task->arg3);			
+						break;						
+						
+					case typeApplAlarm:
+						// execute application alarm 
+						if (appl->applAlarm) (*appl->applAlarm) (refNum, MSGetField(ev,0)); 	
+						break;	
+								
+				}
+				MSFreeEv(ev, FreeList(Memory(gClients)));
+		}
 	}
+	printf("Sortie du CmdHandler\n");
 	pthread_exit(0);
 }
 
@@ -1202,3 +1207,17 @@ MidiEvPtr  MidiGetFirstEv (MidiSeqPtr seq)               { return seq->first; }
 void       MidiSetFirstEv (MidiSeqPtr seq, MidiEvPtr e)  { seq->first = e; }
 MidiEvPtr  MidiGetLastEv  (MidiSeqPtr seq)               { return seq->last; }
 void       MidiSetLastEv  (MidiSeqPtr seq, MidiEvPtr e)  { seq->last = e; }
+
+
+
+
+/*******************/
+/* MidiGetError  */
+/*******************/
+
+long MidiGetError() 
+{
+   TMidiGetErrorArgs 	args;
+   CALL(kMidiGetError,&args);
+   return args.error;
+}
