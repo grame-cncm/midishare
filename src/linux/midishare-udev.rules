@@ -1,0 +1,5 @@
+#------------------------------------
+# MidiShare device permissions
+# 26/05/05 - YO : adapted to udev rules 
+
+KERNEL="MidiShare", MODE="0666"
