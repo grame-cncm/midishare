@@ -139,8 +139,8 @@ void* CmdHandler(void* arg)
 	
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
 
-	retrycount = 4;
-	while (retrycount--) { // essai YO 12/01/2006 : pour eviter de sortir du cmd handler
+	while (1) {	// added to avoid exiting from the CmdHandler
+	
 		while ((ev = MidiGetCommand(refNum))) {         		
 	
 				switch (ev->evType) {
@@ -165,7 +165,6 @@ void* CmdHandler(void* arg)
 				MSFreeEv(ev, FreeList(Memory(gClients)));
 		}
 	}
-	printf("Sortie du CmdHandler\n");
 	pthread_exit(0);
 }
 
