@@ -6,6 +6,9 @@ INCF = /usr/local/include
 UDEV = /etc/udev/rules.d
 INIT = /etc/init.d
 
+SERV = $(INIT)/MidiShare
+#SERV = MidiShare
+
 # make, make install of the full MidiShare distribution
 
 midishare: kernel
@@ -25,12 +28,12 @@ install: libinstall clientsinstall
 	/sbin/depmod -a
 	install -m 644 midishare-udev.rules $(UDEV)
 	install MidiShare $(INIT)
-	/usr/lib/lsb/install_initd $(INIT)/MidiShare
+	/usr/lib/lsb/install_initd $(SERV)
 	./MidiShare start
 
 uninstall: libuninstall clientsuninstall
 	./MidiShare stop
-	/usr/lib/lsb/remove_initd $(INIT)/MidiShare
+	/usr/lib/lsb/remove_initd $(SERV)
 	rm -f $(INIT)/MidiShare
 	rm -f $(MODF)/midishare.ko
 	rm -f $(UDEV)/midishare-udev.rules
@@ -58,8 +61,7 @@ clientsuninstall:
 	make -f appls uninstall
 
 libuninstall:
-	rm -f /dev/MidiShare
-	rm  /usr/local/include/MidiShare.h
+	rm -f $(INCF)/MidiShare.h
 	make -C library uninstall 
 
 libinstall:
