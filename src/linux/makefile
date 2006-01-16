@@ -6,8 +6,8 @@ INCF = /usr/local/include
 UDEV = /etc/udev/rules.d
 INIT = /etc/init.d
 
-SERV = $(INIT)/MidiShare
-#SERV = MidiShare
+#SERV = $(INIT)/MidiShare
+SERV = MidiShare
 
 # make, make install of the full MidiShare distribution
 
