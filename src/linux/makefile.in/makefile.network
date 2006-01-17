@@ -2,7 +2,7 @@
 #CXX  = gcc
 INC = -I../../linux/Include/ -I./include -I../../common/Headers  -I../../common/atomic
 #CXXFLAGS = -g $(INC) -D__Pentium__ -O3 -Wall
-CXXFLAGS = $(CXXFLAGS) $(INC) -D__Pentium__ -O3 -Wall
+CXXFLAGS := $(CXXFLAGS) $(INC) -D__Pentium__ -O3 -Wall
 CFLAGS = $(CXXFLAGS)
 
 
