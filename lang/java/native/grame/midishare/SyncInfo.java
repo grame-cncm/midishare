@@ -59,6 +59,6 @@ public final class  SyncInfo
 	/** the current count of breaks (transition from state locked to unlocked).*/
  	public int		syncBreaks;
  	/** the current synchronisation format (0 : 24 f/s, 1 : 25 f/s, 2 : 30DF f/s, 3 : 30 f/s).
-   */
-  public int		syncFormat;
+	*/
+	public int		syncFormat;
 }

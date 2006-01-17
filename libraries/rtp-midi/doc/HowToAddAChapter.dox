@@ -1,0 +1,246 @@
+ 
+/**
+
+@page HowToAddAChapter How To Add A Chapter ?
+
+The recovery journal structure and class hierarchy is build in such a
+way that chapter implementors only have to deal with the very logic of
+the chapter and benefit from facilities offered by the overall
+system. The chapter is completely free to choose the way it wants
+to store the historical data needed as well as the way it wants to
+read or write the data from the payload.
+
+@section Roles Roles
+
+@subsection WriterRole Chapter Writer
+
+The role of a chapter writer is, logically, to write the chapter
+corresponding to a specific type of command in the recovery
+journal. This journal chapter encodes a historical summary of the
+previous commands that were sent on the stream concerning this type of
+command. In order to be able to write such a summary, a chapter writer
+object has to keep some historical informations locally. The format in
+with this history will be kept is let to the choice of the chapter
+implementor. This local history will be updated according to the
+commands that are send of the stream. For that, the chapter writer
+will be notified of those commands (@ref WriterNotifyCommand). At the
+beginning of payload creation, the chapter writer will have to
+calculate the content of its chapter for that payload (@ref
+WriterCalculateChapter). 
+
+@subsection ReaderRole Chapter Reader
+
+The role of a chapter reader is, logically, to read the chapter
+corresponding to a specific type of command in the recovery
+journal. This journal chapter encodes a historical summary of the
+previous commands that were sent on the stream concerning this type of
+command. In order to be able to analyse such a summary, a chapter
+reader object has to keep some historical informations locally. While
+reading the chapter, it will then compare its local informations about
+the history of the stream and the informations of the chapter written
+in the journal. From this comparison, recovery commands can be
+deduced. The format in with this history will be kept is let to the
+choice of the chapter implementor. This local history will be updated
+according to the commands that are received in the stream. For that,
+the chapter reader will be notified of those commands (@ref
+ReaderNotifyCommand).
+
+@image html historique.png
+@image latex historique.png "" width=15cm
+
+@section AddingAChapterWriter Adding a Chapter Writer
+
+%Chapter writers must be subclasses of :
+- the SystemChapterWriter class for system chapter writers.
+- the ChannelChapterWriter class for channel chapter writers.
+
+@note The code are examples taken from ChapterNWriter
+
+The following methods must be implemented in the subclass :
+
+@subsection WriterConstructor Constructor
+
+In its constructor, the chapter writer must :
+
+- set his name
+@code
+_name = 'N';
+@endcode
+
+- register for notification of the type commands it wants to be
+informed of
+@code
+_channelWriter->registerForCommandNotification ( this, typeKeyOff );
+_channelWriter->registerForCommandNotification ( this, typeKeyOn );
+@endcode
+@see @ref NotificationSystem
+
+@subsection WriterNotifyCommand ChapterWriter::notifyCommand( MidiEvPtr command )
+
+This method will be called automatically through the @ref
+NotificationSystem "notification system". It must be used to update
+the internal history kept by the chapter.
+The skeleton of this method can be as follows :
+
+@code
+if ( EvType ( command ) == typeKeyOn ) {
+	// update the history for Note On commands
+}
+  
+if ( EvType ( command ) == typeKeyOff ) {
+	// update the history for Note Off commands
+}
+@endcode
+
+@subsection WriterNotifyResetCommand ChapterWriter::notifyResetCommand( MidiEvPtr command )
+
+This method will be called automatically through the @ref
+NotificationSystem "notification system" for reset commands. All
+chapters will be notified of reset commands. It must be used to update
+or maybe purge the internal history kept by the chapter.
+The skeleton of this method can be as follows :
+
+@code
+if ( resetType == RESET_STATE || resetType == RESET_N_ACTIVE ) {
+	// modify or purge the history
+}
+@endcode
+
+@subsection WriterCalculateChapter ChapterWriter::calculateChapter( )
+
+This method will be called at the beginning of a payload creation. It
+must be used to calculate the content of the chapter for this new
+payload.
+
+@code
+free ( _chapter );
+_chapter = ( uint8 * ) malloc ( 2 );
+// write the content of the chapter in _chapter
+_chapterLength = 2;
+return _chapterLength;
+@endcode
+
+The chapter implementation doesn't have to actually write its chapter
+to the payload. The ChapterWriter::writeChapter( uint8 * buffer ) method
+is automating this transparently by using the
+ChapterWriter::chapter( ) and ChapterWriter::chapterLength ( )
+functions.
+
+@subsection WriterSBit S Bit
+
+While calculating its content, if the chapter writer is encoding
+informations about commands that were figuring in the previous payload
+it has to set its S bit to 0. It also have to unset the S bit of its
+parent structure ( system journal or channel journal ). For that it
+has to call ChapterWriter::unsetParentSBit( );
+
+@subsection WriterChapter ChapterWriter::chapter( )
+
+This function must return a buffer containing the chapter calculated
+by the last call to ChapterWriter::calculateChapter( ).
+
+@subsection WriterChapterLength ChapterWriter::chapterLength( )
+
+This function must return the length in bytes of the chapter
+calculated by the last call to ChapterWriter::calculateChapter( ).
+
+@subsection WriterPrintHistory ChapterWriter::printHistory( )
+
+The chapter can implement this call to display debugging informations
+about the historical data its maintaining. This can be accessed through
+a particular command of the @ref TestUtility "Test" utility.
+
+@subsection WriterRecoveryJournalModification Recovery Journal Modification
+
+The chapter writer must then be added to the chapters used by the
+recovery journal :
+- in the RecoveryJournalWriter constructor in case of a system chapter
+@code
+_systemChapters.push_back ( new ChapterNWriter ( this ) );
+@endcode
+
+- in the ChannelWriter constructor in case of a channel chapter
+@code
+_channelChapters.push_back ( new ChapterNWriter ( this ) );
+@endcode
+
+@section AddingAChapterReader Adding a Chapter Reader
+
+%Chapter readers must be subclasses of :
+- the SystemChapterReader class for system chapter readers.
+- the ChannelChapterReader class for channel chapter readers.
+
+@note The codes are examples taken from ChapterNReader
+
+The following methods must be implemented in the subclass :
+
+@subsection ReaderConstructor Constructor
+
+In its constructor, the chapter writer must :
+
+- set his name
+@code
+_name = 'N';
+@endcode
+
+- register for notification of the type commands it wants to be
+informed of
+@code
+_channelReader->registerForCommandNotification ( this, typeKeyOff );
+_channelReader->registerForCommandNotification ( this, typeKeyOn );
+@endcode
+@see @ref NotificationSystem
+
+@subsection ReaderNotifyCommand ChapterReader::notifyCommand( MidiEvPtr command )
+
+This method will be called automatically through the @ref
+NotificationSystem "notification system". It must be used to update
+the internal history kept by the chapter.
+The skeleton of this method can be as follows :
+
+@code
+if ( EvType ( command ) == typeKeyOn ) {
+	// update the history for Note On commands
+}
+  
+if ( EvType ( command ) == typeKeyOff ) {
+	// update the history for Note Off commands
+}
+@endcode
+
+@subsection ReaderNotifyResetCommand ChapterReader::notifyResetCommand( MidiEvPtr command )
+
+This method will be called automatically through the @ref
+NotificationSystem "notification system" for reset commands. All
+chapters will be notified of reset commands. It must be used to update
+or maybe purge the internal history kept by the chapter.
+The skeleton of this method can be as follows :
+
+@code
+if ( resetType == RESET_STATE || resetType == RESET_N_ACTIVE ) {
+	// modify or purge the history
+}
+@endcode
+
+@subsection ReaderReadChapter ChapterReader::readChapter( uint8 * buffer )
+
+This method will be called at the beginning of a payload analyse. It
+must be used to read the content of the chapter from _buffer and to
+produce the recovery commands needed. A recovery command must be added
+through a call to the
+ChapterReader::addRecoveryCommand( MidiEvPtr command ).
+
+@note If you want to use the @c ! @c printPayload command of the
+@ref TestUtility "Test" utility you will have to modify
+printingUtils.cpp to adding printing support to your new chapter.
+
+@section Tools Tools
+
+The following methods can provide useful informations for a chapter
+writer or reader :
+
+- Chapter::currentPayloadNumber( );
+- Chapter::checkpoint( );
+- Chapter::recoveryJournal( );
+
+*/

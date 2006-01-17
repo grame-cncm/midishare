@@ -25,45 +25,34 @@
 #define __MIDIFILE_H__
 
 #include <stdio.h>
-
-#ifdef __Linux__
-#define FAR
-#define NEAR
-#define MFAPI
 #include "MidiShare.h"
+
 #define nil 0
-#define errno  /* a revoir */
-#endif
 
+#if defined(linux) || defined(__MACH__)
+# define FAR
+# define NEAR
+# define MFAPI
+# define errno  /* a revoir */
 
-#ifdef __Macintosh__
-#include <midisharePPC.h>
-#define FAR
-#define NEAR
-#define MFAPI
-#endif
+#elif defined(mac_classic)
+# include <midisharePPC.h>
+# define FAR
+# define NEAR
+# define MFAPI
 
-#ifdef __Windows__
-#include <mshare.h>
-#define nil 0
-#ifdef WIN32
+#elif defined(WIN32)
+# ifdef __BuildLib__
+#	define MFAPI	__declspec(dllexport)
+# else
+#	define MFAPI	__declspec(dllimport)
+# endif
 
-#	ifdef __BuildLib__
-
-#		define MFAPI	__declspec(dllexport)
-
-#	else
-
-#		define MFAPI	__declspec(dllimport)
-
-#	endif
+#elif defined(WIN16)
+# define MFAPI WINAPI _export
 
 #else
-
-#   define MFAPI WINAPI _export
-
-#endif
-
+#error "architecture undefined"
 #endif
 
 

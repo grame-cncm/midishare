@@ -23,7 +23,8 @@
 #ifndef __TMTRACK__
 #define __TMTRACK__
 
-#include "Midifile.h"
+#include "midifile.h"
+#include "PlayerDefs.h"
 
 /*********************************** fin ************************************/
 

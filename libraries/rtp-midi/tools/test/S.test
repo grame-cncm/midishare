@@ -1,0 +1,146 @@
+
+/ 1. chapter P
+
+# newStream
+
+# newPayload	1
+> 1 ProgChange	1	1
+< 1 ProgChange	1	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+! printPayload
+
+/ 2. chapter C
+
+# newStream
+
+# newPayload	1
+> 1 CtrlChange	2	1	1
+< 1 CtrlChange	2	1	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+> 1 CtrlChange	2	1	1
+< 1 CtrlChange	2	1	1
+! printPayload
+
+# newPayload	4
+! printPayload
+
+# newPayload	5
+! printPayload
+
+/ 3. chapter W
+
+# newStream
+
+# newPayload	1
+> 1 PitchWheel	2	1	1
+< 1 PitchWheel	2	1	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+! printPayload
+
+/ 4. chapter N
+
+# newStream
+
+# newPayload	1
+> 1 KeyOn	2	1	1
+< 1 KeyOn	2	1	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+! printPayload
+
+# newPayload	4
+> 1 KeyOff	2	2	2
+< 1 KeyOff	2	2	2
+! printPayload
+
+# newPayload	5
+! printPayload
+
+# newPayload	6
+! printPayload
+
+/ 5. chapter E
+
+/ 6. chapter T
+
+# newStream
+
+# newPayload	1
+> 1 ChanPress	2	1
+< 1 ChanPress	2	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+! printPayload
+
+# newPayload	4
+> 1 ChanPress	2	2
+< 1 ChanPress	2	2
+! printPayload
+
+# newPayload	5
+! printPayload
+
+/ 7. chapter A
+
+# newStream
+
+# newPayload	1
+> 1 KeyPress	2	1	1
+< 1 KeyPress	2	1	1
+! printPayload
+
+# newPayload	2
+! printPayload
+
+# newPayload	3
+! printPayload
+
+/ 8. hierarchy
+
+# newStream
+
+# newPayload	1
+> 1 CtrlChange	1	5	5
+< 1 CtrlChange	1	5	5
+! printPayload
+
+# newPayload	2
+> 1 KeyOn	1	5	5
+> 1 KeyOn	2	5	5
+< 1 KeyOn	1	5	5
+< 1 KeyOn	2	5	5
+! printPayload
+
+# newPayload	3
+> 1 KeyOff	2	5	5
+< 1 KeyOff	2	5	5
+! printPayload
+
+# newPayload	4
+! printPayload
+
+# newPayload	5
+! printPayload

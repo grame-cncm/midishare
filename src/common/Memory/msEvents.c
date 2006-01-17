@@ -202,7 +202,7 @@ MSFunctionType(void)      MSAddField (MidiEvPtr e, long v, lifo* freelist)
   External initialization functions
   =========================================================================== */
 #if defined __linux__  && defined MODULE
-void InitStructTbl(void);
+void InitStructTbl();
 #endif
 
 void InitEvents ()

@@ -82,6 +82,3 @@ void TChaserIterator::ChaseOff (ULONG date_ticks)
 	fChaser.ChaseOff(date_ticks);
 }
 
-
-	
-	

@@ -20,13 +20,11 @@
 
 */
 
-
 /*****************************************************************************/
 /* WriteEvInfo class : 
 /*****************************************************************************/
 
 package grame.midishare;
-
 
 /**
 This class is used internally. 
@@ -52,6 +50,5 @@ public class  WriteEvInfo
 		offset = 0;
 		free = buffer.length;
 	}
-	
-	
+		
 }

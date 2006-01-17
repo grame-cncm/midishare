@@ -110,3 +110,4 @@ void  TPlayerSynchroniserInt::SetPosTicks(ULONG date_ticks)
 /*--------------------------------------------------------------------------*/
 
 void TTempoTask::Execute (TMidiApplPtr appl, ULONG date) {fSynchroniser->PlaySlice();}
+

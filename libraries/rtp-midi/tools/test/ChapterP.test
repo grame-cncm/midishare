@@ -1,0 +1,141 @@
+
+/ CHAPTER P
+
+# newStream
+
+/ 1. no loss + chapter appearance
+
+# newPayload	1
+/ chapter P is not figuring
+> 1 ProgChange	1	1
+< 1 ProgChange	1	1
+! chapterTable	1
+
+# newPayload	2
+/ chapter P is figuring
+! chapterTable	1	P
+
+/ 2. loss of a ProgChange without a BankSelect
+
+# newStream
+
+# newPayload	1
+/ loss of a ProgChange
+> 1 ProgChange	1	1
+! dropPacket
+
+# newPayload	2
+/ repaired from payload 1
+? 1 ProgChange	1	1
+
+# newPayload	3
+/ not repaired twice
+
+# newPayload	4
+/ loss of another ProgChange
+> 1 ProgChange	1	3
+! dropPacket
+
+# newPayload	5
+> 1 ProgChange	1	2
+/ repaired from payload 4
+? 1 ProgChange	1	3
+< 1 ProgChange	1	2
+
+/ 3. loss of two ProgChange
+
+# newPayload	6
+> 1 ProgChange	1	11
+! dropPacket
+
+# newPayload	7
+/ double loss ( 1 )
+> 1 ProgChange	1	11
+! dropPacket
+
+# newPayload	8
+/ double loss ( 2 )
+> 1 ProgChange	1	12
+! dropPacket
+
+# newPayload	9
+/ repaired from payload 8
+? 1 ProgChange	1	12
+
+/ 4. loss of a packet with no ProgChange
+
+# newPayload	10
+> 1 KeyOn	1	1 	1
+! dropPacket
+
+# newPayload	11
+? 1 KeyOn	1	1 	1
+
+/ 5. loss of a packet with no command
+
+# newPayload	12
+! dropPacket
+
+# newPayload	13
+
+/ 6. with a bank select
+
+# newStream
+
+# newPayload	1
+/ Bank1 - Prog1	[lost]
+> 1 CtrlChange	1	0	25
+> 2 CtrlChange	1	20	15
+> 3 ProgChange 	1	1
+! dropPacket
+
+# newPayload	2
+/ repaired from payload 1
+? 1 CtrlChange	1	0	25
+? 2 CtrlChange	1	20	15
+? 3 ProgChange 	1	1
+
+# newPayload	3
+/ Bank1 - Prog1
+/ Bank2 - Prog2	[lost]
+> 1 CtrlChange	1	0	34
+> 2 CtrlChange	1	20	2a
+> 3 ProgChange 	1	4f
+< 1 CtrlChange	1	0	34
+< 2 CtrlChange	1	20	2a
+< 3 ProgChange 	1	4f
+
+# newPayload	4
+> 1 CtrlChange	1	0	61
+> 2 CtrlChange	1	20	7f
+> 3 ProgChange 	1	6b
+! dropPacket
+
+# newPayload	5
+? 1 CtrlChange	1	0	61
+? 2 CtrlChange	1	20	7f
+? 3 ProgChange 	1	6b
+
+# newPayload	6
+/ Bank1 - Prog1
+/ Bank2 - Prog1	[lost]
+> 1 CtrlChange	1	0	1
+> 2 CtrlChange	1	20	1
+> 3 ProgChange 	1	1
+< 1 CtrlChange	1	0	1
+< 2 CtrlChange	1	20	1
+< 3 ProgChange 	1	1
+
+# newPayload	7
+> 1 CtrlChange	1	0	2
+> 2 CtrlChange	1	20	2
+> 3 ProgChange 	1	1
+! dropPacket
+
+# newPayload	8
+? 1 CtrlChange	1	0	2
+? 2 CtrlChange	1	20	2
+? 3 ProgChange 	1	1
+
+/
+/ missing test for reset

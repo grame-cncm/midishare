@@ -23,8 +23,8 @@
 #ifndef __Filter__
 #define __Filter__
 
-#include "GenericMidiShare.h"
-
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 
 #ifdef __cplusplus
 extern "C" {

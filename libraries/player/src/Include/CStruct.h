@@ -32,7 +32,8 @@
 #ifndef __CStruct__
 #define __CStruct__
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 
 /*--------------------------------------------------------------------------*/
 

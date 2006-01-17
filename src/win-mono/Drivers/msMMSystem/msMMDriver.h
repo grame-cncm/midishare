@@ -57,6 +57,7 @@ void MSALARMAPI ApplAlarm (short refNum, long code );
 
 void AddSlots (short refnum);
 void RemoveSlots (short refnum);
-void OpenSlot (SlotPtr slot, Boolean inputSlot);
+Boolean OpenSlot (SlotPtr slot, Boolean inputSlot);
+void Disconnect (SlotRefNum sref);
 
 #endif

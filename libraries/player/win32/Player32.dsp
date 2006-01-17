@@ -242,7 +242,7 @@ SOURCE=..\src\Loop\TLoopManager.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\src\MidiFile\Midifile.c
+SOURCE=..\src\MidiFile\midifile.c
 # End Source File
 # Begin Source File
 

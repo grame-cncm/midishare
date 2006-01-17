@@ -25,9 +25,17 @@ case $1 in
 		echo
 		
 		echo change owner
-		chown -R root:wheel $DIST/private
 		chown -R root:wheel $DIST/*
 		chown -R root:admin $DIST/Applications/*
+		chown -R root:wheel $DIST/System/*
+		chown -R root:admin $DIST/Library/*
+		chown -R root:wheel $DIST/private
+		chown -R root:wheel $DIST/usr
+		
+		chmod -R 775 $DIST/*
+		chmod -R 775 $DIST/Library
+		chmod -R 755 $DIST/usr
+		chmod -R 755 $DIST/private
 		
 		echo "protect .ini files"
 		chmod go-w $DIST/private/etc/MidiShare/defaults/*
@@ -48,6 +56,8 @@ case $1 in
 		
 		echo change dev owner
 		chown -R root:wheel $DEV
+		chown -R root:admin $DEV/Applications/*
+		chmod -R 775 $DEV/*
 		;;
 
 	*)

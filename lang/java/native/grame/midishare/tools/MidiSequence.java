@@ -20,7 +20,6 @@
 
 */
 
-
 package grame.midishare.tools;
 
 import  grame.midishare.*;
@@ -31,7 +30,6 @@ will be available in future release.
 */
 
 final public class MidiSequence {
-
 
 	/*--------------------------------------------------------------------------*/
 	/**
@@ -139,9 +137,9 @@ Delete endTrack events which are in the middle of a sequence.
 	
 	prev= 0;
 	ev= Midi.GetFirstEv(seq);
-	while( ev != 0)
+	while(ev != 0)
 	{
-		if((Midi.GetType(ev)== Midi.typeEndTrack) && (Midi.GetLink(ev) != 0))	/* evt fin de piste		*/
+		if((Midi.GetType(ev) == Midi.typeEndTrack) && (Midi.GetLink(ev) != 0))	/* evt fin de piste		*/
 		{												/* n'est pas le dernier */
 			if(prev != 0){								/* n'est pas le premier	*/
 				Midi.SetLink(prev, Midi.GetLink(ev)); 	/* mod. le chainage		*/
@@ -181,11 +179,10 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 		e = Midi.GetFirstEv(s);
 		
 		while (e != 0) {
-			Midi.SetDate( e, Midi.GetDate(e) * 1000 / tps) ;
+			Midi.SetDate(e, Midi.GetDate(e) * 1000 / tps) ;
 			e = Midi.GetLink(e);
 		}
 	}
-
 
 	/**
 	Convert a sequence where the dates are in ticks into a sequence where the dates 
@@ -196,7 +193,6 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 	*@param tick_per_quarter is read in the MIDIdile.
 	*@see grame.midishare.midifile.MidiFileInfos
 	*/
-
 
 	public static void TrsfTempo(int seq, double tick_per_quarter) 
 	{
@@ -256,19 +252,15 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 		}
 		return false;
 	}
-	
-	
+		
 	/**
 	Convert KeyOn/KeyOff pairs in Note events. This method changes the source sequence. KeyOn/KeyOff pairs with a duration
 	bigger than 0x7FFF are not transformed (the duration field of a Note event is only 2 bytes long).
 	*@param seq is a pointer to the source sequence.
 	*/
 
-	public static void MatchKey(int seq) { new MidiMatchKey().MatchKey(seq);}
-
-
+	public static void MatchKey(int seq) {new MidiMatchKey().MatchKey(seq);}
 }
-
 
 /**
 This class is used internally. 
@@ -278,7 +270,7 @@ final class MidiMatchKey {
 
 	MidiHashtable  eventTable;
 	
-	public MidiMatchKey () { eventTable = new MidiHashtable();}
+	public MidiMatchKey () {eventTable = new MidiHashtable();}
 		
 		public void MatchKey(int seq) {
 			int type;
@@ -321,16 +313,12 @@ final class MidiMatchKey {
 				}
 			}
 		}
-	
-		
-	
 }
 
 
 /**
 This class is used internally. 
 */
-
 
 final class MidiHashtable {
 	
@@ -392,7 +380,6 @@ final class MidiHashtable {
         }
         
         return 0;
-	}
-	
+	}	
 }
 

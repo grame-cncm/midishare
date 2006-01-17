@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2005
 
   This program is free software; you can redistribute it and modify it under 
   the terms of the GNU General Public License as published by the 
@@ -16,7 +16,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 
 */
@@ -131,7 +131,7 @@ void MSALARMAPI ApplAlarm( short unused1, long unused2)
 /*____________________________________________________________________*/
 short Environment()
 {
-	int version, count; short n;
+	int version, count; short n; long err;
 	
 	print ("\nGlobal MidiShare environment :\n");
 	print ("    MidiGetVersion : ");flush;
@@ -146,7 +146,7 @@ short Environment()
 	if( refNum= MidiOpen( ApplName))
 	{
 		print ("%d %s\n", (int)refNum, OK);
-		
+
 		count+= count ? 1 : 2;
 		n= MidiCountAppls();
 		if( n!= count)
@@ -172,6 +172,10 @@ short Environment()
 		n= MidiGetNamedAppl( MidiShareName);
 		if( n!= 0)
 			print ("Warning : wrong refNum for %s : %d\n", MidiShareName, n);
+		
+		print ("    MidiGetError : ");flush;
+		err= MidiGetError();
+		print ("%lx  %s\n", err, OK);
 	}
 	else
 	{

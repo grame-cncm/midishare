@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright  Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -89,6 +89,7 @@ enum { 	kMidiGetVersion = 1,
 		kMidiApplySeq,
 
 		kMidiGetTime,
+		kMidiGetError,
 
 		kMidiSendIm,
 		kMidiSend,
@@ -460,6 +461,14 @@ typedef struct SMidiGetTimeArgs
   unsigned long time;
 
 } TMidiGetTimeArgs;
+
+
+typedef struct SMidiGetErrorArgs 
+{
+  /* result */
+  long error;
+
+} TMidiGetErrorArgs;
 
 
 

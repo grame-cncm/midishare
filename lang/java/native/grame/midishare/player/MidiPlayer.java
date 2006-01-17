@@ -105,7 +105,6 @@ public final class MidiPlayer {
 	public static final int kNoSyncOut  		=	0;
 	/** For synchronisation management. */
 	public static final int kClockSyncOut  		=	1;
-	
 
 	/** Error code : no error.	*/
 	public static final int PLAYERnoErr 			=	-1;	
@@ -117,7 +116,6 @@ public final class MidiPlayer {
 	public static final int PLAYERerrMemory			=	-4;		
 	/** Error code : Sequencer error. 	*/
 	public static final int PLAYERerrSequencer		=	-5;	
-
 	
 	// for MIDIFile
 	
@@ -140,8 +138,7 @@ public final class MidiPlayer {
 	MidiShare application)
 	*@return The result is the Player reference number (actually the reference number
 	of the associated MidiShare application)
-	*/
-	
+	*/	
 	
 	public  static final        int Open (String name){
 		int cstr = Midi.ConvertJavaString(name);
@@ -149,15 +146,13 @@ public final class MidiPlayer {
 		Midi.FreeString(cstr);
 		return res;
 	}
-	
-	
+		
 	private  static final native  int OpenAux (int name);
 	
 	/**
 	Close a Player given it's reference number.  This function automatically frees 
 	the internal score and close the MidiShare application. 
 	*@param refnum is the Player reference number. 
-	
 	*/
 	
 	public  static final native  void Close (int refnum);
@@ -167,7 +162,6 @@ public final class MidiPlayer {
 	/**
 	Start a Player from the beginning of the score.
 	*@param refnum is the Player reference number. 
-	
 	*/
 
 	public  static final native  void Start (int refnum);
@@ -175,7 +169,6 @@ public final class MidiPlayer {
 	/**
 	Start a Player from the current position in the score.
 	*@param refnum is the Player reference number. 
-	
 	*/
 
 	public  static final native  void Cont (int refnum);
@@ -183,7 +176,6 @@ public final class MidiPlayer {
 	/**
 	Stop a Player without sending the chased events (key-off ...)
 	*@param refnum is the Player reference number. 
-	
 	*/
 
 	public  static final native  void Pause (int refnum);
@@ -191,7 +183,6 @@ public final class MidiPlayer {
 	/**
 	Stop a Player and send the chased events (key-off ...)
 	*@param refnum is the Player reference number. 
-	
 	*/
 
 	public  static final native  void Stop(int refnum);
@@ -235,7 +226,6 @@ public final class MidiPlayer {
 	*@see grame.midishare.Midi#AcceptPort 
 	*@see grame.midishare.Midi#AcceptType
 	*/
-
 	
 	public  static final native void  SetRecordFilter (int refnum, int filter);
 	
@@ -248,7 +238,6 @@ public final class MidiPlayer {
 	*@param refnum is the Player reference number. 
 	*@param pos  is a PlayerPos object.
 	*/
-
 
 	public  static final native  void  SetPosBBU (int refnum, PlayerPos pos);
 	
@@ -351,8 +340,7 @@ public final class MidiPlayer {
 	*/
 
 	public  static final native  void  SetSynchroOut  (int refnum,int state);
-	
-	
+		
 	/**
 	Allows to change the current tempo when the Player is in kExternalSync mode. 
 	The tempo is in micro-second/per/quarter-note.
@@ -506,8 +494,7 @@ public final class MidiPlayer {
 	*@param seq is a pointer on a sequence to be inserted in the Player.
 	*@return The result is an error code. This error is returned if the score "slice" can not be inserted.
 	*/
-	
-		
+			
 	public  static final native int  InsertAllTrack  (int refnum,  int seq);
 
 	/**
@@ -521,8 +508,7 @@ public final class MidiPlayer {
 	*@param refnum is the Player reference number. 
 	*@param tracknum is the  track number.
 	*@param seq is a pointer on a sequence to be inserted in the Player.
-	*@return The result is an error code. This error is returned if the track "slice" can not be inserted.
-	
+	*@return The result is an error code. This error is returned if the track "slice" can not be inserted.	
 	*/
 
 	public  static final native int  InsertTrack  (int refnum, int tracknum, int seq);

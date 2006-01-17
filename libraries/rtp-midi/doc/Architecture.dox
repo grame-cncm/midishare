@@ -1,0 +1,134 @@
+
+/**
+
+@page Architecture Architecture
+
+We will present here the main entities involved in both payloads
+creation and analyse.
+
+@section ArchitectureOverview Architecture Overview
+
+- StreamWriter
+  - Offers a unique interface to the services of the library for
+payload creation.
+  - Manages the creation of a succession of payloads.
+  - Coordinates the creation of each payload.
+  - Allows the user to modify the stream configuration.
+
+@see StreamWriter
+
+- PayloadWriter
+  - Writes the MIDI Command section of the payloads from the incoming
+MIDI commands.
+
+@see PayloadWriter
+
+- RecoveryJournalWriter
+  - Coordinates the writing of the recovery journal section of the
+payloads.
+  - Uses chapter writers to write each chapter of the recovery journal.
+  - Allows the chapters to register with it for a given type of
+command.
+  - Notifies the registered chapters with the incoming commands. See
+@ref NotificationSystem.
+
+@see RecoveryJournalWriter
+
+- ChapterWriter
+  - A specific subclass of ChapterWriter will exist for each type of
+chapter in the recovery journal.
+  - Calculates and writes a specific chapter of the recovery journal
+section.
+  - Gets notified of the incoming commands it needs to know. See @ref
+NotificationSystem.
+  - Maintains the historical data about the stream it needs to write
+the chapter.
+
+@see ChapterWriter
+
+@image html architecture_creation.png "Payload Creation Architecture"
+@image latex architecture_creation.png "Payload Creation Architecture" width=9cm
+
+- StreamReader
+  - Offers a unique interface to the services of the library for
+payload analyse.
+  - Manages the analyse of a succession of payloads.
+  - Coordinates the analyse of the payloads.
+
+@see StreamReader
+
+- PayloadReader
+  - Reads the MIDI command section of the payloads and creates from it
+MIDI commands associated with delta time values.
+
+@see PayloadReader
+
+- RecoveryJournalReader
+  - Coordinates the reading of the recovery journal section of the
+payloads.
+  - Uses chapter readers to read each chapter of the recovery journal.
+  - Transmits the recovery commands provided by the chapter readers.
+  - Allows the chapters to register with it for a given type of
+command.
+  - Notifies the registered chapters with the outgoing commands. See
+@ref NotificationSystem.
+
+@see RecoveryJournalReader
+
+- ChapterReader
+  - A specific subclass of ChapterReader will exist for each type of
+chapter in the recovery journal.
+  - Reads a specific chapter of the recovery journal and creates
+recovery commands from it.
+  - Gets notified of the incoming commands it needs to know. See @ref
+NotificationSystem.
+  - Maintains the historical data about the stream needed to create
+the recovery commands.
+
+@see ChapterReader
+
+@image html architecture_analyse.png "Payload Analyse Architecture"
+@image latex architecture_analyse.png "Payload Analyse Architecture" width=9cm
+
+@section RecoveryJournalStructure Recovery Journal Structure
+
+The recovery journal section described in the RTP MIDI standard has a
+hierarchical structure. This section is composed of :
+- a system journal further composed of system chapters
+- 16 channel journals further composed of channel chapters.
+
+@image html payload_complet_arbre.png "Recovery Journal Structure"
+@image latex payload_complet_arbre.png "Recovery Journal Structure" width=13cm
+
+The entities used to write and read this section are mapped onto this
+hierarchical structure.
+
+- The RecoveryJournalWriter used for payload creation is using :
+  - a specific subclass of SystemChapterWriter for each of its
+system chapter
+  - a ChannelWriter for each one of its 16 MIDI channels
+
+- Each ChannelWriter used to write the journal of a particular channel
+is using in turn :
+  - a specific subclass of ChannelChapterWriter for each of its channel
+chapter
+
+In the same way,
+
+- The RecoveryJournalReader used for payload analyse is using :
+  - a specific subclass of SystemChapterReader for each of its
+system chapter
+  - a ChannelReader for each one of its 16 MIDI channels
+
+- Each ChannelReader used to read the journal of a particular channel
+is using in turn :
+  - a specific subclass of ChannelChapterReader for each of its channel
+chapter
+
+@image html architecture_recovery.png "Architecture Used For The Recovery Journal"
+@image latex architecture_recovery.png "Architecture Used For The Recovery Journal" width=14cm
+
+The design is thus modular and it's easy to add or remove a chapter,
+to try another implementation for a chapter, etc.
+
+*/

@@ -154,4 +154,4 @@ void TSMPTEPlayer::SetPosMs(ULONG date_ms) {fPlayer->SetPosMs(date_ms);}
 /*----------------------------------------------------------------------------*/
 
 void TSMPTETask::Execute(TMidiApplPtr appl, ULONG date) {fPlayer->Start();}
-	
+

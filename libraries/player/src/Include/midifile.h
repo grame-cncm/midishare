@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 2004
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -20,12 +20,42 @@
 
 */
  
+ 
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
 #include <stdio.h>
-#include "GenericMidiShare.h"
+#include "MidiShare.h"
 
+#define nil 0
+
+#if defined(linux) || defined(__MACH__)
+# define FAR
+# define NEAR
+# define MFAPI
+# define errno  /* a revoir */
+
+#elif defined(mac_classic)
+# include <midisharePPC.h>
+# define FAR
+# define NEAR
+# define MFAPI
+
+#elif defined(WIN32)
+# ifdef __BuildLib__
+#	define MFAPI	__declspec(dllexport)
+# elif defined(__ImportLib__)
+#	define MFAPI	__declspec(dllimport)
+# else
+#	define MFAPI
+# endif
+
+#elif defined(WIN16)
+# define MFAPI WINAPI _export
+
+#else
+#error "architecture undefined"
+#endif
 
 
 /*--------------------------------------------------------------------------*/

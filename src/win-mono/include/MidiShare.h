@@ -138,16 +138,6 @@ typedef unsigned char Boolean;
 #define MReset         0xff
 
 
-/*******************************************************************************
-* SERIAL PORTS
-*------------------------------------------------------------------------------
-* The Modem and printer serial ports ID numbers.
-*******************************************************************************/
-
-#define ModemPort        0
-#define PrinterPort      1
-
-
 /******************************************************************************
 * ERROR CODES
 *------------------------------------------------------------------------------
@@ -160,6 +150,13 @@ typedef unsigned char Boolean;
 #define MIDIerrIndex    -4   /* bad access index (events)     */
 #define MIDIerrEv       -5   /* event argument is nil         */
 #define MIDIerrUndef    -6   /* event argument is undef       */
+
+/*------------------------------------------------------------------------------
+* List of the global system error codes.									
+*******************************************************************************/
+#define MIDInoErr			0
+#define MIDIerrDriverLoad	1	/* failure in loading a driver */
+#define MIDIerrTime	        2	/* can't open time interrupts  */
 
 
 /******************************************************************************
@@ -452,6 +449,7 @@ extern "C" {
   short MIDISHAREAPI MidiCountAppls(void);
   short MIDISHAREAPI MidiGetIndAppl(short index);
   short MIDISHAREAPI MidiGetNamedAppl(MidiName name);
+  long  MIDISHAREAPI MidiGetError();
 
 /*----------------------------- SMPTE synchronization -------------------------*/
   void	MIDISHAREAPI MidiGetSyncInfo(SyncInfoPtr p);

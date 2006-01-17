@@ -27,7 +27,8 @@
 #ifndef __UMidi__
 #define __UMidi__
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 #include "TPlayerConstants.h"
 
 ///------------

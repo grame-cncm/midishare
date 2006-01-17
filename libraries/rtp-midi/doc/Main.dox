@@ -1,0 +1,49 @@
+
+/**
+
+@mainpage
+
+This library automates the creation and the analysis of RTP payloads
+to the RTP MIDI format as described in [1]. It allows, in case of a
+client sending a RTP MIDI stream, to create from incoming MIDI
+commands, RTP MIDI payloads to be included in RTP packets. In case of
+a receiving client, it allows to extract MIDI commands from incoming
+RTP MIDI payloads and to create, in case of packet loss, appropriate
+recovery commands that can be used to repair the stream. The client is
+still responsible for all network interactions, like sending or
+receiving RTP packet, SDP and RTCP data.
+
+@image html services_anglais.png "RTP MIDI library services"
+@image latex services_anglais.png "RTP MIDI library services" width=8cm
+
+@section UserManual User Manual
+
+- @ref Creation
+	- @ref CreationServices
+	- @ref CreationSyntax
+	- @ref CreationConfiguration
+	- @ref CreationExample
+
+- @ref Analyse
+	- @ref AnalyseServices
+	- @ref AnalyseSyntax
+	- @ref AnalyseExample
+
+- @ref StreamConfiguration
+- @ref MidiConsiderations
+
+@section DeveloperDocumentation Developer Documentation
+
+- @ref Architecture
+	- @ref ArchitectureOverview
+	- @ref RecoveryJournalStructure
+- @ref NotificationSystem
+- @ref HowToAddAChapter
+- @ref TestUtility
+
+@section References
+
+[1] Lazzaro, J., and J. Wawrzynek. "RTP Payload Format for MIDI",
+work in progress, draft-ietf-avt-rtp-midi-format-06.txt.
+
+*/

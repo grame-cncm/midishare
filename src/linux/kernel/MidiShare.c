@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright  Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -324,7 +324,7 @@ int mskGetTime(unsigned long userptr , struct file* f)
 /* -- Table of event structures */
 
 static char gEvStruct[256];			
-void InitStructTbl(void);
+void InitStructTbl();
 
 #define typeLastReserved    typeDead-1    /* last reserved event type      */
 
@@ -952,6 +952,17 @@ int mskIsSlotConnected (unsigned long userptr , struct file* f)
 	args.result = MSIsSlotConnected (args.port, args.slotRef, Clients(gMem));
 	return (copy_to_user((Boolean *)userptr, &args.result, sizeof(Boolean)))
 		? -EFAULT : 0;
+}
+
+/*__________________________________________________________________________________*/
+
+int mskGetError(unsigned long userptr , struct file* f)
+{
+	TMidiGetErrorArgs args;
+	
+	args.error = MIDInoErr;
+	if (copy_to_user((TMidiGetErrorArgs *)userptr, &args, sizeof(TMidiGetErrorArgs))) return -EFAULT;
+	return 0;	
 }
 
 /*__________________________________________________________________________________*/

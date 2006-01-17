@@ -1,0 +1,89 @@
+
+/ CHAPTER N
+
+# newStream
+
+/ 1. no loss + chapter appearance
+
+# newPayload	1
+/ chapter N is not figuring
+> 1 KeyOn	1	17	21
+< 1 KeyOn	1	17	21
+! chapterTable	1
+
+# newPayload	2
+/ chapter N is figuring
+! chapterTable	1	N
+
+/ 2. loss of a single KeyOn
+
+# newStream
+
+# newPayload	1
+> 1 KeyOn	1	17	21
+! dropPacket
+
+# newPayload	2
+/ repaired from payload 1
+? 0 KeyOn	1	17	21
+
+/ 2. loss of two KeyOn on two channels
+
+# newPayload	3
+> 1 KeyOn	1	77	7f
+> 2 KeyOn	1	54	54
+! dropPacket
+
+# newPayload	4
+> 1 KeyOn	1	08	23
+> 2 KeyOn	1	00	32
+/ repaired from payload 3
+? 0 KeyOn	1	77	7f
+? 0 KeyOn	1	54	54
+< 1 KeyOn	1	08	23
+< 2 KeyOn	1	00	32
+
+# newPayload	5
+> 1 KeyOn	1	77	7f
+> 2 KeyOn	1	17	01
+< 1 KeyOn	1	77	7f
+< 2 KeyOn	1	17	01
+
+/ 3. no loss of a KeyOff
+
+# newPayload	6
+> 1 KeyOff	1	22	12
+< 1 KeyOff	1	22	12
+
+/ 4. loss of a KeyOff
+
+# newPayload	7
+> 1 KeyOff	3	22	12
+! dropPacket
+
+# newPayload	8
+/ repaired from payload 7
+? 0 KeyOff	3	22	0
+
+/ 5. loss of a KeyOn and a KeyOff
+
+# newPayload	9
+> 1 KeyOff	1	22	00
+> 2 KeyOn	1	22	12
+! dropPacket
+
+# newPayload	10
+/ repaired from payload 9
+? 0 KeyOn	1	22	12
+
+/ 6. loss of two KeyOff
+
+# newPayload	11
+> 1 KeyOff	1	00	12
+> 2 KeyOff	1	7f	23
+! dropPacket
+
+# newPayload	12
+/ repaired from payload 11
+? 0 KeyOff	1	00	00
+? 0 KeyOff	1	7f	00

@@ -63,6 +63,7 @@ typedef struct TMSGlobal {
 	TClients      clients;       /* clients applications management     */
 	TSorter       sorter;        /* sorter specific storage             */
 	fifo          toSched;       /* events to be scheduled              */
+	long          error;		 /* the global system errors            */
 	THost         local;         /* for implementation specific purpose */
 } TMSGlobal;
 

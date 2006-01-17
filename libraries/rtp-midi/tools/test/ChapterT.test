@@ -1,0 +1,88 @@
+
+/ Chapter T
+
+# newStream
+
+/ 1. no loss + chapter appearance
+
+# newPayload	1
+> 1 ChanPress	1	45
+< 1 ChanPress	1	45
+! chapterTable	1
+
+# newPayload	2
+! chapterTable	1	T
+
+/ 2. loss of a ChanPress
+
+# newPayload	3
+> 1 ChanPress	1	12
+! chapterTable	1	T
+! dropPacket
+
+# newPayload	4
+? 1 ChanPress	1	12
+
+/ 3. loss of two ChanPress in the same payload
+
+# newPayload	5
+> 1 ChanPress	1	21
+> 1 ChanPress	1	5b
+! chapterTable	1	T
+! dropPacket
+
+# newPayload	6
+! chapterTable	1	T
+? 1 ChanPress	1	5b
+
+/ 4. change checkpoint
+
+! changeCheckpoint	5
+
+# newPayload	7
+! chapterTable	1	T
+
+! changeCheckpoint	6
+
+# newPayload	8
+! chapterTable	1	
+
+/ 5. reset n-active command
+
+# newPayload	9
+> 1 ChanPress	1	1
+! dropPacket
+
+# newPayload	10
+> 1 CtrlChange	1	7e	0
+! chapterTable	1	T
+! dropPacket
+
+# newPayload	11
+> 1 ChanPress	1	1
+! chapterTable	1	C
+! dropPacket
+
+/ 6. reset c-active command
+
+# newPayload	12
+> 1 CtrlChange	1	79	0
+! chapterTable	1	C T
+! dropPacket
+
+# newPayload	13
+> 1 ChanPress	1	1
+! chapterTable	1	C T
+! dropPacket
+
+/ 7. reset state
+
+# newPayload	14
+> 1 SysEx	7e	cc	0a	02
+! chapterTable	1	C T
+! dropPacket
+
+# newPayload	15
+> 1 ChanPress	1	1
+! chapterTable	1	
+! dropPacket

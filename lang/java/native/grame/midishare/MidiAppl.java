@@ -39,7 +39,6 @@ package grame.midishare;
 import grame.midishare.MidiTask;
 import java.util.*;
 
-
 /**
 This class allows a simpler manipulation of MidiShare applications in Java. 
 A MidiAppl instance is associated to a MidiShare application, allocates
@@ -54,7 +53,6 @@ public class MidiAppl {
 		
 		static final int kPollingMode 	= 0; // Calling mode : polling
 		static final int kNativeMode 	= 1; // Calling mode : direct call of the Java code from the native side
-
 
 		MidiApplImpl appl = null;	
 		int mode;
@@ -72,8 +70,7 @@ public class MidiAppl {
 		public int filter = 0;
 		
 		private native final int  	ApplOpen(int ref,int mode);
-		private native final void  	ApplClose(int ref);
-		
+		private native final void  	ApplClose(int ref);		
 		
 		/**
 		The <b>ReceiveAlarm</b> method is automatically called 
@@ -84,8 +81,7 @@ public class MidiAppl {
 		*@param event is a pointer to the incoming Midi event. This event must
 	 	be used by the method: either re-sended, or desallocated or kept in a data structure.
 	 	*/
-	
-	
+		
 		public void ReceiveAlarm(int event){ Midi.FreeEv(event);}
 	
 		/**
@@ -99,8 +95,7 @@ public class MidiAppl {
  		*/
 
 		public void ApplAlarm(int code) {}
-			
-			
+						
 		/**
 		Schedule a MidiTask object to be executed at a given date.
 		Task objects are instances of the MidiTask (or derived) class. 
@@ -125,8 +120,7 @@ public class MidiAppl {
  		* Schedule a native task.
 		*/
 		private native int ScheduleTask (MidiTask task, int date, int ref, int mode);
-		
-		
+				
 		/**
  		* Constructor.
 		*/
@@ -157,7 +151,7 @@ public class MidiAppl {
 		{
 			int i;
 			
-			if (Midi.Share() == 0) throw new MidiException ("MidiShare not installed");
+			if (Midi.Share() == 0) throw new MidiException("MidiShare not installed");
 			
 			if (refnum == -1) {
 			
@@ -167,12 +161,14 @@ public class MidiAppl {
 					throw new MidiException ("Open error");
 				}
 
-	    		if ((filter = Midi.NewFilter()) == 0) throw new MidiException ("Filter allocation error");
+	    		if ((filter = Midi.NewFilter()) == 0) 
+					throw new MidiException("Filter allocation error");
 	    		
 	    		// Initialise calling mode
 	    		Init123456789(); 
 	    		
-	    		if (ApplOpen(refnum,mode) == 0) throw new MidiException ("Allocation error");
+	    		if (ApplOpen(refnum,mode) == 0) 
+					throw new MidiException("Allocation error");
 
 	     		for (i = 0 ; i<256; i++) {
 	                Midi.AcceptPort(filter, i, 1);
@@ -186,8 +182,7 @@ public class MidiAppl {
 	   			appl.Open(this);
 		  	}
 		}
-		
-		
+				
 		/**
 		The <b>Close</b> method applied on an previously allocated MidiAppl instance, closes the
 		corresponding MidiShare application, desallocates the Midi filter, and stops the thread. 
@@ -208,8 +203,7 @@ public class MidiAppl {
 				refnum = -1; 
 			}
 		}
-		
-		
+				
 		/**
  		* Midi event loop called by a polling thread or directly from the native side.
 		*/
@@ -238,7 +232,6 @@ public class MidiAppl {
 		}
 }
 
-
 /**
  Internal use
 */
@@ -247,7 +240,6 @@ class MidiApplImpl {
 		void Open(MidiAppl appl){}
 		void Close(){}
 }
-
 
 /**
  Internal use : polling class
@@ -276,6 +268,7 @@ final class MidiApplPolling extends MidiApplImpl {
  Internal use : polling thread
 */
 final class MidiPollingThread extends Thread {
+
 		private MidiAppl appl;
 
 		MidiPollingThread (MidiAppl appl){

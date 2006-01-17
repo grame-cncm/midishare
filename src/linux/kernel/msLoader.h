@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright  Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -69,7 +69,6 @@ int mskSetPortState (unsigned long userptr,struct file *);
 
 int mskGetTime(unsigned long userptr,struct file *);
 
-
 int mskSendIm(unsigned long userptr,struct file *);
 int mskSend(unsigned long userptr,struct file *);
 int mskSendAt(unsigned long userptr,struct file *);
@@ -117,6 +116,8 @@ int mskRemoveSlot  (unsigned long userptr,struct file *);
 int mskGetSlotInfos (unsigned long userptr,struct file *);
 int mskConnectSlot (unsigned long userptr,struct file *);
 int mskIsSlotConnected (unsigned long userptr,struct file *);
+
+int mskGetError(unsigned long userptr,struct file *);
 
 void mskCloseAll (struct file* f);
 

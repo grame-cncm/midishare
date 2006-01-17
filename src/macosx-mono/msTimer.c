@@ -57,22 +57,30 @@
   research@grame.fr
 */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "msKernel.h"
 #include "msPrefs.h"
 #include "msTimeImpl.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 #include <pthread.h>
 #include <mach/mach_time.h>
 #include <mach/thread_policy.h>
 #include <mach/thread_act.h>
 #include <CoreAudio/HostTime.h>
+#include <CoreServices/CoreServices.h>
 
 #define THREAD_SET_PRIORITY         0
 #define THREAD_SCHEDULED_PRIORITY   1
 
 extern TMSGlobalPtr gMem;
-static mach_timebase_info_data_t gTBI;
-static double gDateNanos, gInvRatio;
-static unsigned long gTimeRes;
+static unsigned long gTimeResMilli;
 static pthread_t gThread = NULL;
 
 static UInt32 GetThreadSetPriority(pthread_t thread);
@@ -88,8 +96,8 @@ static int SetThreadToPriority(pthread_t thread, UInt32 inPriority, Boolean inIs
         theTCPolicy.computation = AudioConvertNanosToHostTime(computation);
         theTCPolicy.constraint = AudioConvertNanosToHostTime(constraint);
         theTCPolicy.preemptible = true;
-        kern_return_t res = thread_policy_set(pthread_mach_thread_np(thread), THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t) & theTCPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
-        return (res == KERN_SUCCESS) ? 0 : -1;
+        kern_return_t res = thread_policy_set(pthread_mach_thread_np(thread), THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&theTCPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
+		return (res == KERN_SUCCESS) ? 0 : -1;
     } else {
         // OTHER THREADS
         thread_extended_policy_data_t theFixedPolicy;
@@ -99,7 +107,7 @@ static int SetThreadToPriority(pthread_t thread, UInt32 inPriority, Boolean inIs
         thread_policy_set(pthread_mach_thread_np(thread), THREAD_EXTENDED_POLICY, (thread_policy_t)&theFixedPolicy, THREAD_EXTENDED_POLICY_COUNT);
 		relativePriority = inPriority - GetThreadSetPriority(pthread_self());
 		thePrecedencePolicy.importance = relativePriority;
-        kern_return_t res = thread_policy_set(pthread_mach_thread_np(thread), THREAD_PRECEDENCE_POLICY, (thread_policy_t) & thePrecedencePolicy, THREAD_PRECEDENCE_POLICY_COUNT);
+        kern_return_t res = thread_policy_set(pthread_mach_thread_np(thread), THREAD_PRECEDENCE_POLICY, (thread_policy_t)&thePrecedencePolicy, THREAD_PRECEDENCE_POLICY_COUNT);
         return (res == KERN_SUCCESS) ? 0 : -1;
     }
 }
@@ -111,11 +119,11 @@ static UInt32 GetThreadSetPriority(pthread_t thread)
 
 static UInt32 GetThreadPriority(pthread_t thread, int inWhichPriority)
 {
-    thread_basic_info_data_t	threadInfo;
-    policy_info_data_t	thePolicyInfo;
-    unsigned int	count;
+    thread_basic_info_data_t threadInfo;
+    policy_info_data_t thePolicyInfo;
+    unsigned int count;
 
-    // get basic info
+    // Get basic info
     count = THREAD_BASIC_INFO_COUNT;
     thread_info(pthread_mach_thread_np(thread), THREAD_BASIC_INFO, (thread_info_t)&threadInfo, &count);
 
@@ -152,31 +160,60 @@ static UInt32 GetThreadPriority(pthread_t thread, int inWhichPriority)
     return 0;
 }
 
+static int GetParams(pthread_t thread, UInt64* period, UInt64* computation, UInt64* constraint)
+{
+    thread_time_constraint_policy_data_t theTCPolicy;
+    mach_msg_type_number_t count = THREAD_TIME_CONSTRAINT_POLICY_COUNT;
+    boolean_t get_default = false;
+
+    kern_return_t res = thread_policy_get(pthread_mach_thread_np(thread),
+                                          THREAD_TIME_CONSTRAINT_POLICY,
+                                          (thread_policy_t) & theTCPolicy,
+                                          &count,
+                                          &get_default);
+    if (res == KERN_SUCCESS) {
+        *period = AudioConvertHostTimeToNanos(theTCPolicy.period);
+        *computation = AudioConvertHostTimeToNanos(theTCPolicy.computation);
+        *constraint = AudioConvertHostTimeToNanos(theTCPolicy.constraint);
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
 static void* TimerTask(void* unused) 
 {
-	gDateNanos = mach_absolute_time() / gInvRatio;
-	unsigned long call;
+	// Initialization
+	mach_timebase_info_data_t tbi;
+	mach_timebase_info(&tbi);
+	double invRatio = ((double)tbi.denom) / ((double)tbi.numer);  
+	double timeResNanos = gTimeResMilli * 1000000; // In nanosecond
+	double nextDateNanos, curDateNanos = mach_absolute_time() / invRatio;
+	
 	while (1) {
 		pthread_testcancel();
-		call = gTimeRes;
-		while (call--)
-			ClockHandler(gMem); 
-		gDateNanos += gTimeRes * 1000000; // In nanoseconds
-		mach_wait_until(gDateNanos * gInvRatio);
+		nextDateNanos = mach_absolute_time () / invRatio;
+		while (curDateNanos < nextDateNanos) {
+			long call = gTimeResMilli;
+			while (call--) ClockHandler(gMem); 
+			curDateNanos += timeResNanos;
+		}
+		mach_wait_until(curDateNanos * invRatio);
 	}
+	return 0;
 }
 
 void OpenTimer(TMSGlobalPtr g)
 {
-	gTimeRes = LoadTimeRes();
-	if (gTimeRes < 1) gTimeRes = 1;
-	mach_timebase_info(&gTBI);
-	gInvRatio = ((double) gTBI.denom) / ((double) gTBI.numer);  // Takes the inverse to use a * instead of a / in the TimerTask
+	gTimeResMilli = LoadTimeRes();
+	if (gTimeResMilli < 1) 
+		gTimeResMilli = 1;
 	
 	if (pthread_create(&gThread, NULL, TimerTask, NULL) == 0) {
-		SetThreadToPriority(gThread, 96, true, gTimeRes * 1000000, 500 * 100, gTimeRes * 1000000); // Computation value is set to 500 us (like CoreMidi RT threads)
-		ReportN("MidiShare", "open time interrupt using a timer - time resolution is", gTimeRes);
+		SetThreadToPriority(gThread, 96, true, gTimeResMilli * 1000000, 500 * 1000, gTimeResMilli * 1000000); // Computation value is set to 500 us (like CoreMidi RT threads)
+		ReportN("MidiShare", "open time interrupt using a timer - time resolution is", gTimeResMilli);
 	} else {
+		g->error += MIDIerrTime;
 		Report("MidiShare", "cannot create real-time thread","");
 	}	
 }
@@ -189,3 +226,5 @@ void CloseTimer(TMSGlobalPtr g)
 		pthread_join(gThread, &status);
 	}
 }
+
+

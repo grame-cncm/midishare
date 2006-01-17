@@ -54,7 +54,7 @@ public class TutorialPart1 extends Applet
 
 		text = new  TextArea(1,1);
 		text.appendText( "Welcome to the MidiShare Java tutorial ! ");
-    		add("Center",text);
+		add("Center",text);
 
 		bottomPanel.setLayout(new GridLayout(1,2,5,5));
 		bottomPanel.add (go);
@@ -73,9 +73,9 @@ public class TutorialPart1 extends Applet
 	 	ourRefNum = -1;
 	}
 	
-	void test1 ()
+	void test1()
 	{
-		text.appendText("\n <TEST 1> : Check if MidiShare is installed");
+		text.appendText("\n <TEST 1> : Check if MidiShare is installed : calling the Midi.Share() function is REQUIRED to properly load the JMidi native library");
 		text.appendText("\n");
 		text.appendText("MidiShare installed : ");
 		text.appendText(String.valueOf(Midi.Share()));
@@ -84,21 +84,21 @@ public class TutorialPart1 extends Applet
 		text.appendText("0 means that MidiShare is not installed");
 	}
 
-	void test2 ()
+	void test2()
 	{
 		text.appendText("\n\n<TEST 2> Get MidiShare version\n");
 		text.appendText("MidiShare version :  ");
 		text.appendText (String.valueOf(Midi.GetVersion()));
 	}
 	
-	void test3 ()
+	void test3()
 	{
 		text.appendText("\n\n<TEST 3> Count MidiShare client applications\n");
 		text.appendText("Count of MidiShare client applications : ");
 		text.appendText( String.valueOf(Midi.CountAppls()));
 	}
 	
-	void test4 ()
+	void test4()
 	{
 		text.appendText("\n\n<TEST 4> Register a client application\n");
 		ourRefNum = Midi.Open("Tutorial");
@@ -111,17 +111,17 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test5 ()
+	void test5()
 	{
 		text.appendText("\n\n<TEST 5> Count again MidiShare client applications \n");
 		text.appendText("Count of MidiShare client applications : ");
-	    	text.appendText(String.valueOf(Midi.CountAppls()));
+		text.appendText(String.valueOf(Midi.CountAppls()));
 	}
 	
-	void listOfAppl ()
+	void listOfAppl()
 	{
 		short i;
-		int ref,	n = Midi.CountAppls();
+		int ref, n = Midi.CountAppls();
 	
 		text.appendText("List of MidiShare client applications\n");
 		text.appendText("-------------------------------------\n");
@@ -137,15 +137,13 @@ public class TutorialPart1 extends Applet
 		text.appendText("-------------------------------------");
 	}
 	
-	
-	void test6 ()
+	void test6()
 	{
 		text.appendText("\n\n<TEST 6> List every MidiShare client applications\n");
 		listOfAppl();
 	}
 	
-	
-	void test7 ()
+	void test7()
 	{
 		text.appendText("\n\n<TEST 7> search the reference number of: ");
 		text.appendText("Tutorial");
@@ -156,7 +154,7 @@ public class TutorialPart1 extends Applet
 		text.appendText(String.valueOf (Midi.GetNamedAppl("Tutorial")));
 	}
 	
-	void test8 ()
+	void test8()
 	{
 		text.appendText("\n\n<TEST 8> search the reference number of 'XYZ'\n");
 		text.appendText("Reference number of  XYZ: ");
@@ -165,21 +163,21 @@ public class TutorialPart1 extends Applet
 		text.appendText("A negative result means that the application was not found.");
 	}
 	
-	void test9 ()
+	void test9()
 	{
 		text.appendText("\n\n<TEST 9> Change the name of client application Tutorial to JavaTutorial\n");
 		Midi.SetName (Midi.GetNamedAppl ("Tutorial"), "JavaTutorial");
 		listOfAppl();
 	}
 	
-	void test10 ()
+	void test10()
 	{
 		text.appendText("\n\n<TEST 10> Connect JavaTutorial to MidiShare\n");
 		Midi.Connect (ourRefNum, 0, 1);
 		
 	}
 	
-	void test11 ()
+	void test11()
 	{
 		text.appendText("\n\n<TEST 11> Test if JavaTutorial is connected to MidiShare\n");
 		text.appendText("Connection to MidiShare : ");
@@ -189,10 +187,10 @@ public class TutorialPart1 extends Applet
 		text.appendText(String.valueOf(Midi.IsConnected (0,ourRefNum)));
 	}
 	
-	void listDest (int ref1)
+	void listDest(int ref1)
 	{
 		short i;
-		int ref2,	n = Midi.CountAppls();
+		int ref2, n = Midi.CountAppls();
 	
 		text.appendText("List of the destinations of ");
 		text.appendText(String.valueOf(ref1));
@@ -208,19 +206,18 @@ public class TutorialPart1 extends Applet
 				text.appendText(" refnum = " );
 				text.appendText(String.valueOf(ref2));
 				text.appendText("\n");
-				}
 			}
+		}
 		text.appendText("-------------------------------------");
 	}
 	
-	void test12 ()
+	void test12()
 	{
 		text.appendText("\n\n<TEST 12> List the destinations of an application\n");
 		listDest (ourRefNum);
 	}
 	
-	
-	void listSrc (int ref1)
+	void listSrc(int ref1)
 	{
 		short i;
 		int ref2,	n = Midi.CountAppls();
@@ -239,20 +236,18 @@ public class TutorialPart1 extends Applet
 				text.appendText(" refnum = " );
 				text.appendText(String.valueOf(ref2));
 				text.appendText("\n");
-				}
 			}
+		}
 		text.appendText("-------------------------------------");
 	}
 		
-	
-	void test13 ()
+	void test13()
 	{
 		text.appendText("\n\n<TEST 13> List the sources of an application\n");
 		listSrc (0);
 	}
-	
-	
-	void sendNote (int pitch) 
+		
+	void sendNote(int pitch) 
 	{
 		int event = Midi.NewEv(Midi.typeNote);  // ask for a new note event
 		
@@ -266,11 +261,11 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test14 ()
+	void test14()
 	{	int ref;
 		text.appendText("\n\n<TEST 14>Send a note with pitch, velocity and duration\n");
 		if ((ref = Midi.GetNamedAppl("msdisplay")) > 0)
-			Midi.Connect (ourRefNum,ref, 1);
+			Midi.Connect(ourRefNum,ref, 1);
 		sendNote (72); 
 	}
 	
@@ -293,13 +288,13 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test15 ()
+	void test15()
 	{
 		text.appendText("\n\n<TEST 15>Send multiple notes\n");
 		sendMultipleNotes (10, 72, 1000); 
 	}
 	
-	void sendLyric (String str) 
+	void sendLyric(String str) 
 	{
 		int event = Midi.NewEv(Midi.typeLyric); 	// ask for a new lyric event
 			
@@ -311,14 +306,13 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test16 ()
+	void test16()
 	{
 		text.appendText("\n\n<TEST 16>Send 'hello' lyric\n");
 		sendLyric("Hello"); 
 	}
-	
-	
-	void sendText (int type, String str) 
+		
+	void sendText(int type, String str) 
 	{
 		int event = Midi.NewEv(type);  			// ask for a event
 			
@@ -330,7 +324,7 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test17 ()
+	void test17()
 	{
 		text.appendText("\n\n<TEST 17>Send text events\n");
 		sendText (Midi.typeText, "Hello");
@@ -342,9 +336,7 @@ public class TutorialPart1 extends Applet
 		sendText (Midi.typeCuePoint, "Reverb here") ;
 	}
 	
-	
-	
-	void listOfDrivers ()
+	void listOfDrivers()
 	{
 		int ref, n = Midi.CountDrivers();
 
@@ -357,7 +349,7 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void printDriverInfo (int ref)
+	void printDriverInfo(int ref)
 	{
 		DriverInfos infos = new DriverInfos();
 		SlotInfos slot = new SlotInfos();
@@ -383,13 +375,13 @@ public class TutorialPart1 extends Applet
 		}
 	}
 
-	void test18 ()
+	void test18()
 	{
 		text.appendText( "\n\n<TEST 18>Display MidiShare drivers informations");
 	 	listOfDrivers();
 	}
 	
-	void printPortInfo (int ref, int port)
+	void printPortInfo(int ref, int port)
 	{
 		DriverInfos infos = new DriverInfos();
 		SlotInfos slot = new SlotInfos();
@@ -411,9 +403,8 @@ public class TutorialPart1 extends Applet
 			}
 		}
 	}
-
 	
-	void test19 ()
+	void test19()
 	{
 		text.appendText( "\n\n<TEST 19>Display port to slot connection state");
 		int ref, n = Midi.CountDrivers();
@@ -422,11 +413,10 @@ public class TutorialPart1 extends Applet
 			ref = Midi.GetIndDriver(i);		// get the refnum from the order number
 			printPortInfo(ref,0);			// display connection state of port 0
 			printPortInfo(ref,1);			// display connection state of port 1
-		}
-	 	
+		}	 	
 	}
 	
-	void connectPort (int ref, int port)
+	void connectPort(int ref, int port)
 	{
 		DriverInfos infos = new DriverInfos();
 		Midi.GetDriverInfos(ref,infos);	// get info for the driver
@@ -437,7 +427,7 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test20 ()
+	void test20()
 	{
 		text.appendText( "\n\n<TEST 20>Connect port to slot and dsiplay new connection state");
 		int ref, n = Midi.CountDrivers();
@@ -453,20 +443,18 @@ public class TutorialPart1 extends Applet
 		}
 	}
 	
-	void test21 ()
+	void test21()
 	{
 		text.appendText("\n\n<TEST 21>Close the JavaTutorial application\n");
 		Midi.Close (ourRefNum);
 		listOfAppl ();
-		//System.Runtime.exit();
 	}
 
-	
 	public boolean action( Event e , Object o) 
 	{
 		if (e.target == go) {
 			testnumber++;
-			switch (testnumber){
+			switch (testnumber) {
 				
 				case 1 : test1(); break;
 				case 2 : test2(); break;
@@ -491,7 +479,7 @@ public class TutorialPart1 extends Applet
 				case 21 : test21(); break;
 			}
 			return true;
-		  }
+		}
 		
 	 	return true;
 	}

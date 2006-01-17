@@ -28,7 +28,8 @@
 #ifndef __TTrackTable__
 #define __TTrackTable__
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 #include "TPlayerConstants.h"
 
 //-------------------

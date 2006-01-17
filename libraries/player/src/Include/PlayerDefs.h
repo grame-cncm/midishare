@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -21,59 +21,43 @@
 */
 
 
-#ifndef __GenericMidiShare__
-#define __GenericMidiShare__
+#ifndef __PlayerDefs__
+#define __PlayerDefs__
 
-#ifdef __Linux__
-	#include "MidiShare.h"
+#define nil 0
+
+#if defined(linux) || defined(__MACH__) // for linux and Mac OS X
 	#define true 1
 	#define false 0
-	#define nil 0
 	#define errno 
 	#define FAR
 	#define NEAR
 	#define EXPORT
 	#define MSALARMAPI
 	#define MFAPI
-#endif
 
-#ifdef __Macintosh__ 
-	#ifdef __MacOS9__
-		#define MidiSharePPC_68k
-                #define __SupportOldSTDef__
-	#else
-		//#define MSALARMAPI
-	#endif
-	
-	
-	#include <MidiShare.h>
-	
-	
-	//#define FAR
-	//#define NEAR
-	//#define MFAPI
-#endif
+#elif defined(mac_classic)			 // Mac OS up to 9.x
+	#define MidiSharePPC_68k
+	#define __SupportOldSTDef__
 
+#elif defined(WIN32)				// windows 32 bits OS
+	#include <windows.h>
+	#define __SupportOldSTDef__ 
+	#define  EXPORT  __declspec(dllexport)
+	#define  MFAPI
+	#define __DEBUG__ 0
+	#define true 1
+	#define false 0
 
-#ifdef  __MSWindows__
-	#ifdef WIN32
-		#include <windows.h>
-		#define __SupportOldSTDef__ 
-   		#include "MidiShare.h"
-   		#define  EXPORT  __declspec(dllexport)
-   		#define  MFAPI
-   		#define __DEBUG__ 0
-		#define true 1
-		#define false 0
-		#define nil 0
-	#else
-		#include <MidiShare.h>
-		#define true 1
-		#define false 0
-		#define nil 0
-		#define EXPORT WINAPI _export
-   		#define MFAPI WINAPI _export
-	#endif
+#elif defined(WIN16)				// windows 16 bits OS
+	#include <windows.h>
+	#define true 1
+	#define false 0
+	#define EXPORT WINAPI _export
+	#define MFAPI WINAPI _export
+
+#else
+#error "architecture undefined"
 #endif
 
 #endif

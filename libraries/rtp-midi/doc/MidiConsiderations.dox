@@ -1,0 +1,129 @@
+
+/**
+
+@page MidiConsiderations MIDI Considerations
+
+@section SupportedCommands Supported Commands
+
+All commands that can legally appears on a MIDI 1.0 DIN cable can be
+supported by the RTP MIDI standard. Our library is using MidiShare
+events to represent MIDI commands and there are thus mapped onto
+MidiShare events types. Here are the supported types and the
+corresponding MIDI commands :
+
+- @c typeKeyOff : Note Off (0x8)
+- @c typeKeyOn : Note On (0x9)
+- @c typeKeyPress : Polyphonic Aftertouch (0xA)
+- @c typeCtrlChange : Control Change (0xB)
+- @c typeCtrl14b : Control Change for controllers 0 to 31
+- @c typeNonRegParam : Control Change for controllers 98 ( Non-Registered
+  Parameter Number LSB ) and 99 ( Non-Registered Parameter MSB ) as well
+  as 6 (Data Entry MSB), 38 (Data Entry LSB), 96 (Data Increment) and
+  97 (Data Decrement)
+- @c typeRegParam : Control Change for controllers 100 ( Registered
+  Parameter Number LSB ) and 101 ( Registered Parameter MSB ) as well
+  as 6 (Data Entry MSB), 38 (Data Entry LSB), 96 (Data Increment) and
+  97 (Data Decrement)
+- @c typeProgChange : Program Change (0xC)
+- @c typeChanPress : %Channel Pressure (0xD)
+- @c typePitchWheel : Pitch Bend (0xE)
+- @c typeSongPos : Song Position (0xF2)
+- @c typeSongSel : Song Select (0xF3)
+- @c typeClock : Timing Clock (0xF8)
+- @c typeStart : Start (0xFA)
+- @c typeContinue : Continue (0xFB)
+- @c typeStop : Stop (0xFC)
+- @c typeTune : Tune Request (0xF6)
+- @c typeActiveSens : Active Sensing (0xFE)
+- @c typeReset : System Reset (0xFF)
+- @c typeSysEx : SysEx Commands (0xF0). See @ref SupportForSysEx.
+
+MIDI commands corresponding to those types can be passed to the
+library and figure in the MIDI Command section of the payloads. 
+
+@section SupportForSysEx Support For SysEx Commands
+
+On the sender side, SysEx commands must be passed by the client as
+typeSysEx events. While using the 
+StreamWriter::putCommand( MidiEvPtr command )
+interface, a SysEx might be segmented if the
+payload is not big enough to insert it fully. In that case, the call
+returns 0. At the beginning of the next payload, the client must simply
+call StreamWriter::putCommand( MidiEvPtr command ) again with the same
+SysEx command as argument and the library will insert the next segment
+of the SysEx. This will be done until the SysEx was inserted fully. The
+call will then return the total number of bytes inserted for this
+SysEx.
+If the client is not providing the same SysEx again, the SysEx
+transmission will be considered as cancelled and the library will add
+a ( 0xf7 0xf4 ) cancellation segment in the payload.
+
+On the receiver side, when using the
+StreamReader::getCommand( )
+interface, SysExs which are not segmented as provided as usual
+MidiShare typeSysEx events. SysEx segments are provided as typeStream
+events. The client is responsible for reassembling SysEx segments.
+If the SysEx transmission was cancelled, the last segment will end
+with a 0xf4 octet.
+
+@section ImplementedChapters Implemented Chapters
+
+The implementation of the recovery journal is NOT complete.
+
+Currently, the library has got implementations for :
+- %Chapter P (channel) : MIDI Program Change (0xC)
+- %Chapter C (channel) : MIDI Control Change (0xB)
+- %Chapter W (channel) : MIDI Pitch Wheel (0xE)
+- %Chapter N (channel) : MIDI Note Off (0x8) and Note On (0x9)
+- %Chapter T (channel) : MIDI %Channel Aftertouch (0xD)
+- %Chapter A (channel) : MIDI Poly Aftertouch (0xA)
+
+The following chapters are still to implement :
+- %Chapter M (channel) : MIDI Parameter System (part of 0xB)
+- %Chapter E (channel) : MIDI Note Command Extra (0x8, 0x9)
+- %Chapter D (system) : Song Select (0xF3), Tune Request (0xF6), Reset
+  (0xFF), undefined System command (0xF4, 0xF5, 0xF9, 0xFD)
+- %Chapter V (system) : Active Sense (0xFE)
+- %Chapter Q (system) : Sequencer State (0xF2, 0xF8, 0xF9, 0xFA, 0xFB,
+  0xFC)
+- %Chapter F (system) : MTC Tape Position (0xF1, 0xF0 0x7F 0xcc 0x01
+  0x01)
+- %Chapter X (system) : System Exclusive (all other 0xF0)
+
+This means that the commands corresponding to chapters which haven't
+been implemented yet cannot be recovered from packet loss. See @ref
+HowToAddAChapter for instructions if you want to add support for a
+missing chapter.
+
+@section ResetCommands Reset Commands
+
+three types of reset commands are defined in [1] Appendix A.1 :
+
+- Reset State Commands
+  - System Reset (0xFF)
+  - General MIDI System Enable (0xF0 0x7E 0xcc 0x09 0x01 0xF7)
+  - General MIDI 2 System Enable (0xF0 0x7E 0xcc 0x09 0x03 0xF7)
+  - General MIDI System Disable (0xF0 0x7E 0xcc 0x09 0x00 0xF7)
+  - Turn DLS On (0xF0 0x7E 0xcc 0x0A 0x01 0xF7)
+  - Turn DLS Off (0xF0 0x7E 0xcc 0x0A 0x02 0xF7)
+- Specific Reset N-Active Commands
+  - MIDI Control Change number 123-127 (numbers with All Notes Off
+semantics)
+  - MIDI Control Change number 120 (All Sound Off)
+- Specific Reset C-Active Commands
+  - MIDI Control Change number 121 (Reset All Controllers)
+
+@section Ctrl14bAndParameterSystem Considerations for typeCtrl14b, typeNonRegParam and typeRegParam commands
+
+Since those types of commands actually correspond to several basic
+MIDI commands, they won't be produced by the library on the receiver
+side. For example, a sender can add Ctrl14b ( 1, 0x0FFF ) but the
+receiver will extract two CtrlChange events from the payload :
+CtrlChange ( 1, 0x1F ) and CtrlChange ( 33, 0x7F ).
+
+*/
+
+By default, those controllers correspond to the semantics defined in
+the parameter system (See [1] Appendix A.1). But they will be
+considered as general purpose controllers if the inclusion rule for
+chapter M is set to UNUSED.

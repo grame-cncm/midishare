@@ -1,0 +1,57 @@
+
+
+
+######################################################################
+#
+####		      MIDISHARE RTP MIDI LIBRARY
+##############
+
+
+
+This library automates  the creation and the analysis  of RTP payloads
+to the RTP  MIDI format as described  in [1]. It allows, in  case of a
+client  sending  a RTP  MIDI  stream,  to  create from  incoming  MIDI
+commands, RTP MIDI payloads to be  included in RTP packets. In case of
+a receiving client,  it allows to extract MIDI  commands from incoming
+RTP MIDI payloads  and to create, in case  of packet loss, appropriate
+recovery commands that can be used to repair the stream. The client is
+still  responsible  for  all  network interactions,  like  sending  or
+receiving RTP packet, SDP and RTCP data. 
+
+[1]  Lazzaro, J.,  and J.  Wawrzynek. "RTP  Payload Format  for MIDI",
+Draft IETF, AVT ( Work in Progress )
+
+
+
+### CONTENT
+
+|-- doc			:: doxygen documentation
+|-- src			:: complete sources
+`-- tools
+    |-- evaluation	:: rtp midi evaluation tools
+    |-- examples	:: sendmidifile example + chapter skeletons
+    `-- test		:: test utility and test cases
+
+
+
+### COMPILING & INSTALLING
+
+You should have compiled MidiShare kernel and library before compiling
+this  RTP MIDI  library.  The sendmidifile  example in  tools/examples
+is also depending on the MidiShare Player library. 
+
+	make
+	make install	:: with root privileges
+
+
+
+### DOCUMENTATION
+
+More complete documentation can be build with doxygen [2] by running :
+
+	make dox
+
+This will build HTML documentation in doc/html and latex documentation
+in doc/latex. 
+
+[2] http://www.doxygen.org

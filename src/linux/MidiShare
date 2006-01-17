@@ -1,22 +1,29 @@
 #!/bin/bash
-#
-#	/etc/rc.d/init.d/MidiShare
-#
-# Install the MidiShare module
-#
-# description: 
+
+# chkconfig: 35 90 10
+# description: Load the midishare kernel module
+
+#-------------------------------------------------------------------
+# LSB 3.1 conformant init script to Start and Stop MidiShare. 
+#-------------------------------------------------------------------
+### BEGIN INIT INFO
+# Provides:          midishare
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: Realtime MIDI kernel module
+# Description:       
+#	Load the midishare kernel module,
+#	a realtime MIDI system that allows
+#	musical applications to communicate.
+### END INIT INFO
+
+
 
 # Source function library.
-. /etc/rc.d/init.d/functions
+. /lib/lsb/init-functions
 
-result() {
-	if [ $1 != 0 ]; then 
-		echo_failure
-	else 
-		echo_success
-	fi
-	echo
-}
 
 #
 #	See how we were called.
@@ -26,31 +33,61 @@ case "$1" in
 	# Check if MidiShare is already installed
 	lsmod | grep midishare >/dev/null
 	if [ $? == 0 ]; then 
-		echo MidiShare module is already installed
+		log_warning_msg midishare kernel module is already loaded
+		exit 0
 	else
-		echo -n Loading MidiShare module
+		# echo -n Loading MidiShare module
 		modprobe midishare 2>/dev/null
-		result $?
+		if [ $? == 0 ]; then 
+			log_success_msg midishare kernel module loaded
+			exit 0
+		else
+			log_failure_msg Unable to load midishare kernel module
+			exit 1
+		fi
 	fi
 	;;
   stop)
 	# Check if MidiShare is already installed
 	lsmod | grep midishare >/dev/null
 	if [ $? != 0 ]; then 
-		echo MidiShare module is not installed
+		log_warning_msg midishare kernel module was not load
+		exit 0
 	else
-		echo -n Removing MidiShare module
+		#echo -n Removing MidiShare module
 		rmmod midishare 2>/dev/null
-		result $?
+		if [ $? == 0 ]; then 
+			log_success_msg midishare kernel module unloaded
+			exit 0
+		else
+			log_failure_msg unable to unload midishare kernel module
+			exit 1
+		fi
 	fi
 	;;
-  reload|restart)
+  status)
+	# Check if MidiShare is already installed
+	lsmod | grep midishare >/dev/null
+	if [ $? == 0 ]; then 
+		exit 0
+	else
+		exit 3
+	fi
+	;;
+  try-restart)
+	# restart MidiShare if it is already running
+	lsmod | grep midishare >/dev/null
+	if [ $? == 0 ]; then 
+		$0 stop
+		$0 start
+	fi
+	;;
+  reload|restart|force-reload)
 	$0 stop
 	$0 start
 	;;
   *)
-	echo "Usage: $0 {start|stop|restart|reload}"
+	echo "Usage: $0 {start|stop|status|restart|try-restart|reload|force-reload}"
 	exit 1
 esac
 
-exit 0

@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+   <TITLE>MidiGetEv</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" background="../MSH_ArtWork/wpat.jpg">
+
+<H1 ALIGN=CENTER>MidiGetError</H1>
+
+
+<P><HR><IMG SRC="../MSH_ArtWork/description.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE>
+<P>A kernel operation may fail outside the call of the MidiShare API. These errors are global to the system and concern all the clients. MidiGetError gives the list of the system errors under the form of a bit field.
+
+</BLOCKQUOTE>
+
+<P><IMG SRC="../MSH_ArtWork/prototype.jpg"  WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P><PRE>
+pascal long    <A HREF="../MSH_Fonctions/MidiGetError.html" TARGET="Page">MidiGetError</A> (); 
+
+</PRE></P></BLOCKQUOTE>
+
+
+<P><IMG SRC="../MSH_ArtWork/result.jpg" WIDTH=200 HEIGHT=20 ALIGN=top></P>
+
+<BLOCKQUOTE><P>
+a 32 bit value. Possible errors are any combination of:
+<ul>
+<li>MIDInoErr         : no error
+<li>MIDIerrDriverLoad : indicates a failure to load a driver
+<li>MIDIerrTime       : indicates a failure to activate time interrupts
+</ul>
+
+</P></BLOCKQUOTE>
+
+
+<P><IMG SRC="../MSH_ArtWork/note.jpg" WIDTH=36 HEIGHT=40 ALIGN=left>
+<br>
+<I> MidiGetError() is not available before MidiShare version 1.91.</I>
+<BLOCKQUOTE><I>
+
+</I></BLOCKQUOTE>
+
+
+</BODY></HTML>

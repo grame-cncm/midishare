@@ -47,18 +47,19 @@ TMSGlobal       GlobalMem = { 0 };
 TMSGlobalPtr    gMem = &GlobalMem;
 
 /* main entry point : called at library load time */
-extern void __MSInitialize(void);
-
-void __MSInitialize() {
+void __MSInitialize(void) __attribute__ ((constructor));
+void __MSInitialize(void)
+{
 	MSSpecialInit (LoadSpace(), gMem); 
 }
-
-#pragma CALL_ON_LOAD __MSInitialize 
 
 
 /*--------------------------- Global MidiShare environment --------------------*/
 void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) {
   	MSSpecialInit( defaultSpace, gMem);
+}
+long  MIDISHAREAPI MidiGetError(void) {
+  	return MSGetError(gMem);
 }
 short MIDISHAREAPI MidiGetVersion(void) {
   	return MSGetVersion(gMem);

@@ -28,7 +28,8 @@
 #define __TTime__
 
 #include "TPlayerConstants.h"
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 
 //------------
 // Class TPos

@@ -14,6 +14,7 @@ _SetRecordFilterPlayer
 
 _SetPosBBUPlayer 
 _SetPosMsPlayer 
+_SetPosTicksPlayer
 
 _SetLoopPlayer
 _SetLoopStartBBUPlayer 
@@ -43,7 +44,6 @@ _GetParamPlayer
 
 _InsertAllTrackPlayer
 _InsertTrackPlayer
-
 
 _MidiFileLoad
 _MidiFileSave

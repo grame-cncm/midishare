@@ -1,0 +1,7 @@
+
+# newStream
+
+# newPayload	1
+> 1 Ctrl14b	1	1	0fff
+< 1 CtrlChange	1	1	1f
+< 1 CtrlChange	1	21	7f

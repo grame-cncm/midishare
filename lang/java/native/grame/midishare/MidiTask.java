@@ -48,7 +48,6 @@ Internally, a task can be in <B> kIdle </B> state or <B>kRunning </B> state:
 Real tasks must be defined by deriving the MidiTask class and overloading the Execute method.
 */
 
-
 public  class MidiTask {
 
 	private int taskptr = 0;

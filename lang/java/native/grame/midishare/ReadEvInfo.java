@@ -20,7 +20,6 @@
 
 */
 
-
 /*****************************************************************************/
 /* ReadEvInfo class : 
 /*****************************************************************************/
@@ -30,7 +29,6 @@ package grame.midishare;
 /**
 This class is used internally. 
 */
-
 
 public final class  ReadEvInfo
 {
@@ -63,6 +61,5 @@ public final class  ReadEvInfo
 	
 	public final boolean EmptyBuffer() {
 		return (offset == 0);
-	}	
-	
+	}		
 }

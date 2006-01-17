@@ -1,0 +1,151 @@
+
+/**
+
+@page StreamConfiguration Stream Configuration
+
+Numerous SDP parameters are defined in [1] Appendix C. to customize
+the stream. The library offers interfaces corresponding to the
+following parameters :
+- @a j_sec, the journalling method used for the stream (defined in
+[1] Appendix C.1.1)
+- @a ch_unused, @a ch_never, @a ch_default, @a ch_anchor and @a
+ch_active, the possible chapter inclusion rules for the journal
+chapters (defined in [1] Appendix C.1.3)
+
+It also allows to change the tool(s) used to log informations about
+the CtrlChange commands.
+
+@section JournallingMethod Journalling Method
+
+The possible values defined in [1] Appendix C.1.1 for the @a j_sec
+parameter are :
+
+@a recj : all stream payloads must contain a journal section that uses
+the recovery journal format described in [1]. This is the default
+value for the streams.
+
+@a none : all stream payloads must contain no journal section.
+
+The corresponding interface of the library is :
+StreamWriter::setJournallingMethod( journallingMethod j ). Where @a j
+can be RECJ or NONE.
+
+It is possible to switch from NONE to RECJ and vice versa
+without losing any historical information for the recovery journal
+section. Technically speaking, the internal chapter objects are still
+updating their history even if the journal section is not written to
+the payload.
+
+@section ChapterInclusion Chapter Inclusion Parameters
+
+In [1] Appendix C.1.3, the recovery journal chapters can be assigned
+to the following parameters :
+
+@a ch_unused : the command types encoded by the chapter must not
+appear in the MIDI Command section of stream packets and the chapter
+must not appear in the recovery journal
+
+@a ch_never : the chapter must not appear in the recovery journal
+
+@a ch_default : the chapter must follow the default semantics for the
+chapter. This is the default value for the chapters.
+
+@a ch_anchor : in the chapter definition, all references to the
+checkpoint history are replaced with references to the session history
+and all references to the checkpoint packet are replaced with
+references to the first packet in the stream ; this means that the
+purge of the history through the use of a checkpoint is desactivated
+
+@a ch_active : in the chapter definition, certain uses of the terms
+"C-active" and "N-active" are replaced by the term "active"
+
+The interface of the library for configuring the inclusion rules of
+the chapters is :
+StreamWriter::setChapterInclusion( char chapterName, chapterInclusion c, short channel ).
+
+The possible values for @a chapterInclusion are mapped on the SDP
+parameters : UNUSED, NEVER, DEFAULT, ANCHOR, ACTIVE and ANCHOR_ACTIVE
+(which combines the @a ch_anchor and @a ch_active policies).
+
+If the UNUSED rule is applied, the corresponding commands with be
+rejected by the library.
+See StreamWriter::putCommand( MidiEvPtr command ) and CommandFilter.
+
+@note The RTP MIDI standard allows, with the "field list" argument of
+the chapter inclusion parameters, to define inclusion rules for
+specific note numbers, controllers or parameters, etc. The
+library is not currently proposing support for such a fine level of
+configuration.
+
+The current implementation of the chapters allows to switch between
+the various possible rules without losing historical informations :
+- The commands added to the payloads will still be notified to the
+chapter even if the NEVER policy is used.
+- Changes in the checkpoint are not purging the chapters history.
+- An exception might apply for the ACTIVE policy in which @ref
+ResetCommands "specific Reset N-Active commands" can lose their
+ability to purge the history kept by the chapter.
+
+@section ControllerLogTools Controller Log Tools
+
+[1] Appendix A.3.2 defines 3 possible tools to log information
+about the controllers associated with CtrlChange commands :
+- the @a value tool which encodes the lastest value of
+a controller
+- the @a toggle tool which encodes the number of toggle (on-off or
+off-on switches) for the controller
+- the @a count tool which encodes the number of commands for the
+controller
+
+By default, the value tool is used for all controllers except for :
+
+- @a toggle tool :
+  - controller 64 (Damper pedal)
+  - controller 65 (Portamento On/Off)
+  - controller 66 (Sostenuto)
+  - controller 67 (Soft pedal)
+  - controller 68 (Legato Footswitch)
+  - controller 69 (Hold 2)
+
+- @a count tool :
+  - controller 96 (Data increment)
+  - controller 97 (Data decrement)
+  - controller 120 (All Sound Off)
+  - controller 121 (Reset All Controllers)
+  - controller 123 (All Notes Off)
+  - controller 124 (Omni Mode Off)
+  - controller 125 (Omni Mode On)
+  - controller 127 (Poly Mode On)
+
+The interface method to change the tools used to log controllers is :
+StreamWriter::setControllerLogTool( unsigned short controller, unsigned short tool, short channel ).
+The possible value for the log are : TOGGLE, VALUE and COUNT
+but also unions of the previous since it's possible to use several
+tools for loging a single controller.
+
+The strategy for creating recovery commands and the recovery commands
+created will depend on the log tool(s) used.
+
+While recovering from the loss of a controller logged with the toggle
+tool, the recovery commands created will adjust the number of toggles
+to the value of the toggle tool. In the recovery commands, the
+controller value for Off commands will be 0 and the controller value
+for On commands will be 127.
+
+While recovering from the loss of a controller logged with the value
+tool, only one recovery command will be created - if needed - to
+adjust the value of the controller to the value coded by the value
+tool.
+
+While recovering from the loss of a controller logged with the count
+tool, the recovery commands created will adjust the number of commands
+for this controller to the value of the value of the count tool. In
+the recovery commands, the controller value will be set to the last
+value for the controller or 0 by default.
+
+In case of a combinaison of tools, the recovery stategies described
+above will be applied one after the other. The order in which the
+required strategies will be applied is always "toggle" before "value"
+before "count".
+
+*/

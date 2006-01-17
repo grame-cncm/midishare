@@ -25,7 +25,6 @@ package grame.midishare;
 import grame.midishare.*;
 import java.util.*;
 
-
 /**
 This class allows a simpler manipulation of MidiShare applications in Java. 
 A MidiNativeAppl instance is associated to a MidiShare application. Java code for

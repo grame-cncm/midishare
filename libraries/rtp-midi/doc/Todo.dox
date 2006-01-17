@@ -1,0 +1,33 @@
+
+/**
+
+@page Todo Todo List
+
+Add running status managment at writting and reading time.
+
+Add support for the S bit to read the journal faster.
+
+Add support to read X bit in
+ChapterAReader::readChapter (uint8 *buffer).
+
+Add support to read Y bit in
+ChapterNReader::readChapter (uint8 *buffer)
+
+By removing the automatic notification of recovery commands in
+ChannelChapterReader::addRecoveryCommand and
+SystemChapterReader::addRecoveryCommand. It should be made possible
+for the client to get recovery commands for the stream independently
+from packet loss.
+
+Add a C interface to the library.
+
+Implement the missing chapters :
+	- chapter M
+	- chapter E
+	- chapter D
+	- chapter V
+	- chapter Q
+	- chapter F
+	- chapter X
+
+*/

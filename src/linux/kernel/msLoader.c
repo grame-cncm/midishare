@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright  Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU General Public License as published by the 
@@ -47,8 +47,8 @@
 #endif
 
 #include <linux/kernel.h>
-#include <linux/fs.h>		
-#include <linux/device.h>	
+#include <linux/fs.h>
+#include <linux/miscdevice.h>	
 
 #include "msAppFun.h"
 #include "msLoader.h" 
@@ -71,8 +71,6 @@ MODULE_SUPPORTED_DEVICE("midishare");
 
 typedef int (*KernelMth) (unsigned long userptr, struct file* f);
 
-static struct class_simple*	gMidiShareClass;			/* for sysfs support*/
-static int					gMidiShareMajor;			/* dynamically assigned major number */
 static msConf 				gConf;						/* default configuration	*/
 
 
@@ -216,6 +214,9 @@ static void initMthTable() {
 	gKernelMthTable[kMidiConnectSlot ] = mskConnectSlot;
 	gKernelMthTable[kMidiIsSlotConnected ] = mskIsSlotConnected;
 
+	/* release 1.91 additional methods */
+	gKernelMthTable[kMidiGetError ] = mskGetError;
+
 }
 
 
@@ -326,21 +327,22 @@ void cleanup_module()
 #else
 
 
-/* nouvelle version simplifiée */
+/* Retour ï¿½l'utilisation d'un numero de device statique (numero officiel) */
 
+#define kMidiShareMajor 10
+#define kMidiShareMinor 230
+
+static struct miscdevice midisharedevice = {kMidiShareMinor, kMidiShareName, &myops};
 
 int init_module()
 {
 	/* register character device and get a dynamically allocated major number */
-	gMidiShareMajor = register_chrdev(0, kMidiShareName, &myops);
-	if (gMidiShareMajor < 0) {
-		printk("Error %d registering chrdev when opening MidiShare module", gMidiShareMajor);
-		return gMidiShareMajor; 
+	int errcode = misc_register(&midisharedevice);
+	if (errcode < 0) {
+		printk("Error %d registering midishare device when opening MidiShare module", errcode);
+		return errcode; 
 	}
 
-	/* add sysfs support with class and device*/
-	gMidiShareClass = class_simple_create(THIS_MODULE, kMidiShareName);
-	class_simple_device_add(gMidiShareClass, MKDEV(gMidiShareMajor, 0), NULL, kMidiShareName);
 	
 	/* init the midishare methode table and configuration*/
 	initMthTable();
@@ -353,14 +355,8 @@ int init_module()
 
 void cleanup_module()
 {
-	
-	/* destroy sysfs device and class*/
-	class_simple_device_remove(MKDEV(gMidiShareMajor, 0));
-	class_simple_destroy(gMidiShareClass);
-	
-	/* unregister character device */
-	if (unregister_chrdev(gMidiShareMajor, kMidiShareName) < 0) printk("Error closing MidiShare module");
-
+	int errcode = misc_deregister(&midisharedevice);
+	if (errcode < 0) { printk("Error %d closing MidiShare module", errcode); }
 }
 
 #endif

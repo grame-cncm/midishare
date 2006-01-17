@@ -29,7 +29,8 @@
  
 #include <stddef.h>
 
-#include "GenericMidiShare.h"
+#include "PlayerDefs.h"
+#include "MidiShare.h"
 #include "TScoreVisitorInterface.h"
 #include "TPlayerConstants.h"
 

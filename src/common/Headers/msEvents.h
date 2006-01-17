@@ -45,6 +45,6 @@ MSFunctionType(MidiEvPtr)  MSNewCellFunction (lifo* freelist);
 MSFunctionType(void)       MSFreeCellFunction (MidiEvPtr e, lifo* freelist);
 
 /* initialization function */
-void InitEvents (void);
+void InitEvents ();
 
 #endif

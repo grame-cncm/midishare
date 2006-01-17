@@ -1,0 +1,66 @@
+
+/**
+
+@page NotificationSystem The Notification System
+
+@section Purpose Purpose
+
+The whole system, both in case of creation and analyse, needs to keep
+track of the history of the stream. At creation time, a client writing
+a payload needs to know what to put in the recovery journal and, at analyse
+time, a client reading the payload needs to compare the content of the
+recovery journal with the past history of the stream. Moreover, the design of
+the library was meant to be modular : it should be easy to add,
+remove or change a chapter or its implementation. And in the
+recovery journal format proposed by the RTP MIDI standard, each
+chapter is associated with a particular type of command.
+
+In our design, each chapter is responsible for maintaining the historical
+informations it needs to write or read his part of the recovery
+journal. We built a notification system across the entities involved
+in reading or writing the recovery journal system to propagate the
+commands that appear on the stream to the chapters that needs to be
+informed of those commands. We thus don't have any centralized way of
+storing the history of the stream and each chapter can store just the
+data it needs in an optimized way.
+
+@section UsualNotification Usual Notification
+
+In its constructor, each chapter (ChapterReader subclass or
+ChapterWriter subclass) can call
+RecoveryJournal::registerForCommandNotification( Chapter * chapter, unsigned short commandType)
+(in case of a system chapter) or
+Channel::registerForCommandNotification( Chapter * chapter, unsigned short commandType )
+(in case of a channel chapter) indicating in argument the type of
+command it wants to be notified of.
+
+While creating payloads, the incoming commands are notified to the
+RecoveryJournalWriter by the StreamWriter.
+While analyzing payloads, the outgoing commands are notified to the
+RecoveryJournalReader by the StreamReader in case of usual commands
+and directly by the ChapterReader objects in case of recovery
+commands as soon as they create them.
+
+When a command is notified to a RecoveryJournal object it is then
+propagated to the chapters that registered for notification of the
+command's type.
+
+@section ResetCommandNotification Reset Command Notification
+
+Three types of reset commands are defined in [1] Appendix A.1 :
+- Reset State Commands
+- Specific Reset N-Active Commands
+- Specific Reset C-Active Commands
+
+@see @ref ResetCommands for an extensive list of the reset commands.
+
+Since most of the chapters need to be notified of those reset
+commands, a variant of the notification system is used. All chapters
+are notified of Reset State commands. All chapters of a channel are
+notified with specific Reset N-Active and Reset C-Active commands
+concerning this channel.
+
+@image html notification.png "The Notification System"
+@image latex notification.png "The Notification System" width=15cm
+
+*/

@@ -1,0 +1,56 @@
+
+/ CHANNEL
+
+# newStream
+
+# newPayload	1
+> 1 KeyOn	1	17	21
+< 1 KeyOn	1	17	21
+! chapterTable	1
+
+# newPayload	2
+> 1 KeyOn	3	08	01
+< 1 KeyOn	3	08	01
+! chapterTable	1	N
+! chapterTable	3	
+
+# newPayload	3
+> 1	KeyOn	2	77	7f
+> 1	KeyOn	1	54	54
+< 1	KeyOn	2	77	7f
+< 1	KeyOn	1	54	54
+! chapterTable	1	N
+! chapterTable	2	
+! chapterTable	3	N
+
+# newPayload	4
+> 1	KeyOff	f	54	12
+< 1	KeyOff	f	54	12
+! chapterTable	1	N
+! chapterTable	2	N
+! chapterTable	3	N
+! chapterTable	f	
+
+# newPayload	4
+> 1	KeyOn	1	03	41
+< 1	KeyOn	1	03	41
+! chapterTable	1	N
+! chapterTable	2	N
+! chapterTable	3	N
+! chapterTable	f	N
+
+# newPayload	5
+> 1	KeyOn	5	77	7f
+< 1	KeyOn	5	77	7f
+! chapterTable	1	N
+! chapterTable	2	N
+! chapterTable	3	N
+! chapterTable	f	N
+! chapterTable  5	
+
+# newPayload	6
+! chapterTable	1	N
+! chapterTable	2	N
+! chapterTable	3	N
+! chapterTable	f	N
+! chapterTable  5	N

@@ -1,0 +1,33 @@
+
+# newStream
+
+/ 1. default method
+
+# newPayload	1
+> 1 KeyOn	0	1	1
+! dropPacket
+
+# newPayload	2
+? 1 KeyOn	0	1	1
+! printPayload
+! chapterTable	0	N
+
+/ 2. no journal
+
+! setJournallingMethod	none
+
+# newPayload	3
+> 1 KeyOn	0	1	1
+< 1 KeyOn	0	1	1
+! printPayload
+! chapterTable	0	
+
+/ 3. defaut journal
+
+! setJournallingMethod	recj
+
+# newPayload	4
+> 1 KeyOn	0	1	1
+< 1 KeyOn	0	1	1
+! printPayload
+! chapterTable	0	N

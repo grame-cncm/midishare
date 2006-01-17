@@ -20,8 +20,6 @@
 
 */
 
-
-
 /*****************************************************************************/
 /* PlayerState class : data structure used for the Player state management
 /*****************************************************************************/
@@ -68,5 +66,4 @@ public class  PlayerState
 	*@see grame.midishare.player.MidiPlayer
 	*/
 	public short syncout;
-
 }

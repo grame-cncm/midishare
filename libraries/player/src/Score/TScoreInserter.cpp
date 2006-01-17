@@ -47,4 +47,5 @@
  	MidiSeqPtr s1 = UMidi::BuildAllTrack(s); // Make the sequence
   	if (!s1) return kErrEvent;
   	return  fScore->InsertTrack(SetPosTicks (Date(FirstEv(s1))), tracknum,s1);
- } 
+ }
+
