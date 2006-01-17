@@ -11,11 +11,12 @@ function install () {
 	file=$1
 	src=$2
 	dst=$3
-	if [ -d $dst/$file ]
+	[ -d $dst ] || mkdir -p $dst
+	if [ -f $dst/$file ]
 	then
 		echo "$file is on the way"
 	else
-		cp -R  $src/$file $dst || exit 1
+		cp -Rp  $src/$file $dst || exit 1
 		echo " ok"
 	fi
 }

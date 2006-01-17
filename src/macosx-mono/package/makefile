@@ -3,7 +3,7 @@ ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
 
-VERSION =1.90
+VERSION =1.91
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
@@ -18,6 +18,7 @@ common = midishare/doc 				\
 		midishare/libraries/player/doc 	\
 		midishare/libraries/player/src 	\
 		midishare/libraries/player/Player_Doxyfile \
+		midishare/libraries/rtp-midi	\
 		midishare/libraries/seq2score 	\
 		midishare/lang/LGPL.txt 		\
 		midishare/lang/clean/src 		\
@@ -66,13 +67,15 @@ dev:
 		cvs export -D tomorrow -d samples midishare/src/macosx-mono/applications/samples
 	cd $(DEVKIT)/C_C++/Libraries && \
 		cvs export -D tomorrow -d midifile midishare/libraries/midifile
+	cd $(DEVKIT)/C_C++/Libraries && \
+		cvs export -D tomorrow -d rtp-midi midishare/libraries/rtp-midi
 	cd $(DEVKIT)/C_C++/Libraries/player && \
 		cvs export -D tomorrow -d doc midishare/libraries/player/doc
 	cd $(DEVKIT)/Java && \
 		cvs export -D tomorrow -d tutorial midishare/lang/java/samples/tutorial
 	cd $(DEVKIT)/Lisp && \
 		cvs export -D tomorrow -d openmcl midishare/lang/lisp/openmcl && \
-		cvs export -D tomorrow -d openmcl midishare/lang/lisp/readme.text
+		cvs export -D tomorrow -d readme.text midishare/lang/lisp/readme.text
 	cd $(DEVKIT)/Lisp/interface && \
 		cvs export -D tomorrow -d openmcl midishare/lang/lisp/interface/openmcl && \
 		cp -R openmcl MCL && flip -m MCL/*.lisp
