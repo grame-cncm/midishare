@@ -258,7 +258,7 @@ char trackListe[maxTrack];					/* liste des pistes ˆ Žcrire 	*/
 			if (prev)								/* n'est pas le premier	*/
 				Link(prev) = Link(ev);				/* mod. le chainage		*/
 			else									/* sinon				*/
-				seq->firs t= Link(ev);				/* suivant= premier		*/
+				seq->first= Link(ev);				/* suivant= premier		*/
 			tmp = Link(ev);							/* sauve le suivant		*/
 			MidiFreeEv(ev);							/* libre l'evt			*/
 			ev = tmp;								/* evt courant=suivant	*/
@@ -708,13 +708,13 @@ int TryToReadTrack(midiFILE *fd, MidiSeqPtr dest, int i)
 /*--------------------------------------------------------------------------*/
 static Boolean AddPortPrefix(MidiSeqPtr seq)
 {
-	MidiEvPtr ev1,ev2,prev;
+	MidiEvPtr ev1, ev2, prev;
 	short portTable[maxTrack];
     int i;
-    ev 1= seq->first;
+    ev1 = seq->first;
     prev = 0;
     
-    for (i = 0; i<maxTrack; i++) portTable[i] = 0;
+    for (i = 0; i < maxTrack; i++) portTable[i] = 0;
     
     if (MidiGetVersion() >= 185) 
     {
