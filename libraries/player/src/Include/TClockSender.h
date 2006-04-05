@@ -39,6 +39,8 @@
   \brief Task to send clocks events.
 */
 
+class TClockSender;
+
 class TClockTask : public TTicksTask {
 
 	friend class TClockSender;

@@ -36,6 +36,8 @@
  \brief A double linked list of TEvent objects
 */
 
+class TScoreIterator;
+
 class TScore {
 	
 	friend class TScoreIterator;

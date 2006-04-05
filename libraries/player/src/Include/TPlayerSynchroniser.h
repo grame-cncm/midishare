@@ -100,6 +100,8 @@ typedef TPlayerSynchroniser FAR * TPlayerSynchroniserPtr;
   \brief Task to play events at the same date and possibly reschedule pending tick tasks if the Tempo has changed.
 */
 
+class TPlayerSynchroniserInt;
+
 class TTempoTask : public TTicksTask {
 
 	friend class TPlayerSynchroniserInt;

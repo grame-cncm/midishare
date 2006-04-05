@@ -39,6 +39,8 @@
 \brief	Task used in kSMPTESync mode.
 */
 
+class TSMPTEPlayer;
+
 class TSMPTETask : public TMidiTask {
 
 	friend class TSMPTEPlayer;

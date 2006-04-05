@@ -33,7 +33,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-typedef  void (* ApplyScorePtr)( MidiEvPtr e , void* data);
+typedef  void (* ApplyScorePtr)(MidiEvPtr e, void* data);
 
 /*--------------------------------------------------------------------------*/
 // Pattern FACADE
@@ -139,9 +139,8 @@ class TPlayer : public TMidiAppl {
 		// Initialization
 		static void Init() {TEventFactory::Init();}
 		static void Destroy() {TEventFactory::Destroy();}
-};
+ };
 
 typedef TPlayer FAR * TPlayerPtr;
-
 
 #endif

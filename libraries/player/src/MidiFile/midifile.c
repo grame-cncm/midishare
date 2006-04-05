@@ -61,6 +61,10 @@
 #define false 0
 #endif
 
+#ifdef __linux__
+# include <string.h>
+#endif
+
 #include "midifile.h"
 
 /*--------------------------------------------------------------------------*/

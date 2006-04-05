@@ -38,6 +38,8 @@
   \brief  A Class to wrap a MidiShare task.
 */
 
+class TMidiAppl;
+
 class TMidiTask {
 	
 	friend class TMidiAppl;
