@@ -66,6 +66,8 @@ typedef TTickPlayerInterface FAR * TTickPlayerInterfacePtr;
   \brief Task to play events at the same date.
 */
 
+class TTickPlayer;
+
 class TPlayTask : public TTicksTask {
 
 	friend class TTickPlayer;
