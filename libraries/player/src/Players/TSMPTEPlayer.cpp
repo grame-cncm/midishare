@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -36,9 +36,9 @@ void TSMPTEPlayer::Start()
 { 
 	Stop();
 		
-	if (fSmpteInfos->IsSMPTELocked ()){
+	if (fSmpteInfos->IsSMPTELocked ()) {
 		StartAtSMPTEOffset();
-	}else{
+	} else {
 		fRunningState->SetWaiting();
 	}
 }
@@ -59,7 +59,7 @@ void TSMPTEPlayer::Stop()
 
 void TSMPTEPlayer::Pause()
 {
-	if (fRunningState->IsRunning()){
+	if (fRunningState->IsRunning()) {
 		fPlayer->Pause();
 		fRunningState->SetPause();
 	}
@@ -69,10 +69,10 @@ void TSMPTEPlayer::Pause()
 
 void TSMPTEPlayer::Cont() 
 {
-	if(fRunningState->IsIdle() || fRunningState->IsPause()){
-		if (fSmpteInfos->IsSMPTELocked ()){
+	if(fRunningState->IsIdle() || fRunningState->IsPause()) {
+		if (fSmpteInfos->IsSMPTELocked ()) {
 			StartAtSMPTEOffset();
-		}else{
+		} else {
 			fRunningState->SetWaiting();
 		}
 	}
@@ -97,11 +97,11 @@ void TSMPTEPlayer::PlaySliceBackward()
 
 void TSMPTEPlayer::SetPosTicks(ULONG date_ticks) 
 { 
- 	if (fRunningState->IsRunning()){
+ 	if (fRunningState->IsRunning()) {
 		fPlayer->Stop();
 		fPlayer->SetPosTicks(date_ticks);
 		fPlayer->Cont();
-	}else{
+	} else {
 		fPlayer->SetPosTicks(date_ticks);
 	}
 }
@@ -125,11 +125,11 @@ void TSMPTEPlayer::StartAtSMPTEOffset()
 	ULONG curexttime = MidiGetExtTime();
 	fSMPTEtask.Forget();
 	
-	if (curexttime < fSmpteInfos->GetSMPTEOffset()){
+	if (curexttime < fSmpteInfos->GetSMPTEOffset()) {
 		fMidiAppl->ScheduleTask(&fSMPTEtask, MidiGetTime() + fSmpteInfos->GetSMPTEOffset() - curexttime);
-	}else  if (curexttime == fSmpteInfos->GetSMPTEOffset()){
+	} else  if (curexttime == fSmpteInfos->GetSMPTEOffset()) {
 		fPlayer->Start();
-	}else{
+	} else {
 		fPlayer->SetPosMs(curexttime - fSmpteInfos->GetSMPTEOffset());
 		fPlayer->Cont();
 	}

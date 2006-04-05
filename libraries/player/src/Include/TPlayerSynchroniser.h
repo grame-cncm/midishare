@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -56,8 +56,8 @@ class TPlayerSynchroniser : public TSynchroniserInterface {
 	public:
 		
 		TPlayerSynchroniser(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
-			:fScheduler(scheduler),fState(state),fTempoVisitor(tpq){}
-		virtual ~TPlayerSynchroniser(){}
+			:fScheduler(scheduler),fState(state),fTempoVisitor(tpq) {}
+		virtual ~TPlayerSynchroniser() {}
 		
 		// Initialisation
 		
@@ -70,24 +70,24 @@ class TPlayerSynchroniser : public TSynchroniserInterface {
 	
 		// Transport
 		
-		virtual void Start(){}
-		virtual void Stop(){}
- 		virtual void Cont(ULONG date_ticks){}
+		virtual void Start() {}
+		virtual void Stop() {}
+ 		virtual void Cont(ULONG date_ticks) {}
  		
 		// Tempo management
 		
  		virtual void  SetTempo(ULONG tempo) {}
- 		virtual void  SetTempo(ULONG date_ticks, ULONG tempo){}
- 		virtual ULONG GetTempo(){return fTempoVisitor.GetTempo();}
+ 		virtual void  SetTempo(ULONG date_ticks, ULONG tempo) {}
+ 		virtual ULONG GetTempo() {return fTempoVisitor.GetTempo();}
  		
- 		virtual void  RcvClock(ULONG date_ms){}
+ 		virtual void  RcvClock(ULONG date_ms) {}
  		
- 		virtual Boolean IsSchedulable(ULONG date_tick){return false;}
+ 		virtual Boolean IsSchedulable(ULONG date_tick) {return false;}
  		
  		// Position management
  		
- 		virtual void SetPosTicks(ULONG date_ticks){}
- 		virtual ULONG GetPosTicks(){return 0;}
+ 		virtual void SetPosTicks(ULONG date_ticks) {}
+ 		virtual ULONG GetPosTicks() {return 0;}
 };
 
 typedef TPlayerSynchroniser FAR * TPlayerSynchroniserPtr;
@@ -112,7 +112,7 @@ class TTempoTask : public TTicksTask {
 
 	public: 
 	
-		TTempoTask(TPlayerSynchroniserInt* it):TTicksTask(),fSynchroniser(it){}
+		TTempoTask(TPlayerSynchroniserInt* it):TTicksTask(),fSynchroniser(it) {}
 		void Execute(TMidiApplPtr appl, ULONG date);
 };
 
@@ -140,8 +140,8 @@ class TPlayerSynchroniserInt : public TPlayerSynchroniser {
 	public:
 		
 		TPlayerSynchroniserInt(TScorePtr score, TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
-			:TPlayerSynchroniser(scheduler,state,tpq),fTempoTask(this),fIterator(score),fFollower(fIterator,fTempoVisitor){}
-		virtual ~TPlayerSynchroniserInt(){}
+			:TPlayerSynchroniser(scheduler,state,tpq),fTempoTask(this),fIterator(score),fFollower(fIterator,fTempoVisitor) {}
+		virtual ~TPlayerSynchroniserInt() {}
 		
 		void Init();
 		void Start();
@@ -180,7 +180,7 @@ class TPlayerSynchroniserClock : public TPlayerSynchroniser {
 	public:
 		
 		TPlayerSynchroniserClock(TSchedulerInterfacePtr scheduler, TRunningStatePtr state, ULONG tpq)
-			:TPlayerSynchroniser(scheduler,state,tpq),fClockConverter(tpq){}
+			:TPlayerSynchroniser(scheduler,state,tpq),fClockConverter(tpq) {}
 		virtual ~TPlayerSynchroniserClock() {}
 	
 		void Init();
@@ -191,7 +191,7 @@ class TPlayerSynchroniserClock : public TPlayerSynchroniser {
  		ULONG GetPosTicks ();
  		void SetPosTicks (ULONG date_ticks);
  		
- 		ULONG GetTempo(){return fTempoVisitor.GetTempo();}
+ 		ULONG GetTempo() {return fTempoVisitor.GetTempo();}
  		
  		Boolean IsSchedulable(ULONG date_tick);
  		
@@ -214,8 +214,8 @@ class TPlayerSynchroniserExt : public TPlayerSynchroniser {
 	public:
 		
 		TPlayerSynchroniserExt(TSchedulerInterfacePtr scheduler,  TRunningStatePtr state, ULONG tpq)
-			:TPlayerSynchroniser(scheduler,state,tpq){} 
-		virtual ~TPlayerSynchroniserExt(){}
+			:TPlayerSynchroniser(scheduler,state,tpq) {} 
+		virtual ~TPlayerSynchroniserExt() {}
 		
 		void Init();
 		void Start();
@@ -225,7 +225,7 @@ class TPlayerSynchroniserExt : public TPlayerSynchroniser {
  		ULONG GetPosTicks();
  		void SetPosTicks(ULONG date_ticks);
  		
- 		ULONG GetTempo(){return fTempoVisitor.GetTempo();}
+ 		ULONG GetTempo() {return fTempoVisitor.GetTempo();}
  		void SetTempo(ULONG tempo);
  		
  		Boolean IsSchedulable(ULONG date_tick);

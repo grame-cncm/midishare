@@ -1164,7 +1164,7 @@ static MidiEvPtr read_portPref( MIDIFilePtr fd, long len, short unused1)
 	/*  read only if MidiShare version > 185 to avoid error */
 	if ((MidiGetVersion () < 185) || (len != MDF_PortPrefLen)) 		/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typePortPrefix)){ 
+	else if( ev= MidiNewEv( typePortPrefix)) { 
 		PortPrefix(ev)= getc(fd->fd);
 		fd->_cnt-= len;
 	}
@@ -1253,7 +1253,7 @@ static MidiEvPtr read_sysex( MIDIFilePtr fd, short status)
 		if (c == 0xF7) {					/* Complete SysEx */
 			MidiFreeEv(ev2);
 			return ev1;
-		}else {								/* Stream */
+		} else {								/* Stream */
 	 		MidiFreeEv(ev1);
 			return ev2;
 		}		
@@ -1490,7 +1490,7 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 				{									/* error :					*/
 					MidiFile_errno= MidiFileErrAdd0;/* try to add to a 0 format	*/
 					ok= false;						/* file						*/
-				}else {
+				} else {
 					fd->mode= (mode== MidiFileAppend ? true : false);
 					ok= stdInit( fd);
 				}

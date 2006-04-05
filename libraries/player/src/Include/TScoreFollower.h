@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -57,8 +57,8 @@ class TScoreFollower {
 		
 	public:
 	
- 		TScoreFollower(){}
- 		virtual ~TScoreFollower(){}
+ 		TScoreFollower() {}
+ 		virtual ~TScoreFollower() {}
  		
 		void Init();
 		
@@ -92,8 +92,8 @@ class TScoreObjFollower : public TScoreFollower {
 		
 	public:
 	
- 		TScoreObjFollower(TScorePtr score, ULONG tpq):fIterator(score),fTempoVisitor(tpq){Init();}
- 		virtual ~TScoreObjFollower(){}
+ 		TScoreObjFollower(TScorePtr score, ULONG tpq):fIterator(score),fTempoVisitor(tpq) {Init();}
+ 		virtual ~TScoreObjFollower() {}
 };
 
 typedef TScoreObjFollower FAR * TScoreObjFollowerPtr;
@@ -119,8 +119,8 @@ class TScoreRefFollower : public TScoreFollower {
 		
 	public:
 	
- 		TScoreRefFollower(TScoreIterator& iterator, TTempoMapVisitor& visitor):fIterator(iterator),fTempoVisitor(visitor){Init();}
- 		virtual ~TScoreRefFollower(){}
+ 		TScoreRefFollower(TScoreIterator& iterator, TTempoMapVisitor& visitor):fIterator(iterator),fTempoVisitor(visitor) {Init();}
+ 		virtual ~TScoreRefFollower() {}
 };
 
 typedef TScoreRefFollower FAR * TScoreRefFollowerPtr;

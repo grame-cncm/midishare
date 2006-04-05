@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -67,7 +67,7 @@ void TTempoMap::UpdateTicks(ULONG date_ticks)
 {
 	fCur_date_ten_micro = fTempoConverter.ConvertTickToMicroSec(date_ticks);	
 	fCurdate_ticks =  date_ticks;
-	fCur_pos = fTimeConverter.ConvertTickToBBU (fCurdate_ticks);
+	fCur_pos = fTimeConverter.ConvertTickToBBU(fCurdate_ticks);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -76,10 +76,10 @@ void TTempoMap::UpdateTenMicroSec(ULONG date_ten_micro)
 {
 	fCur_date_ten_micro =  date_ten_micro;	
 	fCurdate_ticks =  fTempoConverter.ConvertMicroSecToTick (date_ten_micro);
-	fCur_pos = fTimeConverter.ConvertTickToBBU (fCurdate_ticks);
+	fCur_pos = fTimeConverter.ConvertTickToBBU(fCurdate_ticks);
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TTempoMap::UpdateMs(ULONG date_ms) { UpdateTenMicroSec(date_ms*100);}
+void TTempoMap::UpdateMs(ULONG date_ms) {UpdateTenMicroSec(date_ms*100);}
 	

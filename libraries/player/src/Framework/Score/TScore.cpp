@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -113,10 +113,10 @@ void  TScore::ItemsRemoved(TEventPtr ev)
 
 /*----------------------------------------------------------------------------*/
 
-TEventPtr TScore::FirstEvent(){return fLast ? fLast->fNext : 0;}
+TEventPtr TScore::FirstEvent() {return fLast ? fLast->fNext : 0;}
 /*----------------------------------------------------------------------------*/
 
-TEventPtr TScore::LastEvent(){return fLast;} 
+TEventPtr TScore::LastEvent() {return fLast;} 
 
 /*----------------------------------------------------------------------------*/
 
@@ -124,7 +124,10 @@ void TScore::Clear()
 {
 	TEventPtr cur;
 	TScoreIterator1 it(this);
-	while ((cur = it.NextEv())) {RemoveEvent(cur); delete cur;}
+	while ((cur = it.NextEv())) {
+		RemoveEvent(cur); 
+		delete cur;
+	}
 	fLast = 0;
 }
 
@@ -142,7 +145,7 @@ void TScore::InsertAtBeginEvent(TEventPtr ev)
 		first->fPrev = ev;
 		fLast->fNext = ev;
 		
-	}else {     	// Empty score
+	} else {     	// Empty score
 		ev->fNext = ev;
 		ev->fPrev = ev;
 		fLast = ev;
@@ -163,7 +166,7 @@ void TScore::InsertAtEndEvent(TEventPtr ev)
 		first->fPrev = ev;
 		fLast->fNext = ev;
 		fLast = ev;
-	}else {     	// Empty score
+	} else {     	// Empty score
 		ev->fNext = ev;
 		ev->fPrev = ev;
 		fLast = ev;
@@ -179,9 +182,9 @@ void TScore::InsertAfterEvent(TEventPtr ev1, TEventPtr ev2) {
 	assert(ev1);
 	assert(ev2);
 	
-	if (ev1 == fLast){
+	if (ev1 == fLast) {
 		InsertAtEndEvent(ev2);
-	}else{
+	} else {
 		ev2->fNext = ev1->fNext;
 		ev2->fPrev = ev1;
 		ev1->fNext->fPrev = ev2;
@@ -219,7 +222,7 @@ void TScore::RemoveEvent(TEventPtr ev)
 				ev->fNext = 0;
 				fLast = 0;
 				return;
-			}else {
+			} else {
 				fLast = fLast->fPrev;
 			}
 		}

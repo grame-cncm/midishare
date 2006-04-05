@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,9 +37,9 @@ void UTools::SendVal(ULONG val)
 {
 	MidiEvPtr  e ;
 
-	if ((e = MidiNewEv(typeNote))){
-		Dur(e)= (unsigned short)val;
-		MidiSendIm (0, e);
+	if ((e = MidiNewEv(typeNote))) {
+		Dur(e) = (unsigned short)val;
+		MidiSendIm(0, e);
 	}
 }
 
@@ -50,8 +50,8 @@ void UTools::MidiPrintText( char * s)
 	MidiEvPtr e;
 	ULONG c = 0;
 
-	if ((e = MidiNewEv(typeTextual))){
-		for (c = 0 ; *s ; s++,c++) MidiAddField (e ,*s);
-		MidiSendIm (0, e);
+	if ((e = MidiNewEv(typeTextual))) {
+		for (c = 0; *s; s++, c++) MidiAddField(e, *s);
+		MidiSendIm(0, e);
    	}
 }

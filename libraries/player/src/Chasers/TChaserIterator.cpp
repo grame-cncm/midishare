@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -38,7 +38,7 @@
 
 void TChaserIterator::GoBeginDateTicks(ULONG date_ticks) 
 {
-	while (!fIterator.IsLastEv() && fIterator.CurDate() < date_ticks){ 
+	while (!fIterator.IsLastEv() && fIterator.CurDate() < date_ticks) { 
 		fIterator.CurEv()->Accept(&fChaser,true);
 		fIterator.NextEv();
 	}
@@ -55,11 +55,11 @@ void TChaserIterator::Init()
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserIterator::SetPosTicks (ULONG date_ticks)
+void TChaserIterator::SetPosTicks(ULONG date_ticks)
 {
 	if (date_ticks > fCurdate_ticks) {	
 		GoBeginDateTicks(date_ticks);
-	}else if (date_ticks < fCurdate_ticks){
+	} else if (date_ticks < fCurdate_ticks) {
 		Init();
 		GoBeginDateTicks(date_ticks);
 	}
@@ -68,7 +68,7 @@ void TChaserIterator::SetPosTicks (ULONG date_ticks)
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserIterator::ChaseOn (ULONG date_ticks)
+void TChaserIterator::ChaseOn(ULONG date_ticks)
 {
 	SetPosTicks(date_ticks);
 	fChaser.ChaseOn(date_ticks);
@@ -76,7 +76,7 @@ void TChaserIterator::ChaseOn (ULONG date_ticks)
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserIterator::ChaseOff (ULONG date_ticks)
+void TChaserIterator::ChaseOff(ULONG date_ticks)
 {
 	SetPosTicks(date_ticks);
 	fChaser.ChaseOff(date_ticks);

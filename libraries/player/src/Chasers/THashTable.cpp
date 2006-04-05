@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -66,7 +66,7 @@ MidiEvPtr THashTable::RemoveEvent(MidiEvPtr e)
 	MidiEvPtr prev, cur;
 	cur = prev = fHashTable[hashcode];
 
-	if (cur && MatchEvent(cur,e)){  // Match on the first ev
+	if (cur && MatchEvent(cur,e)) {  // Match on the first ev
 		fHashTable[hashcode] = Link(cur);
 		return cur;
 	}
@@ -88,7 +88,7 @@ MidiEvPtr THashTable::RemoveEvent1(MidiEvPtr e)
 	MidiEvPtr prev, cur;
 	cur = prev = fHashTable[hashcode];
 
-	if (cur && MatchEvent1(cur,e)){  // Match on the first ev
+	if (cur && MatchEvent1(cur,e)) {  // Match on the first ev
 		fHashTable[hashcode] = Link(cur);
 		return cur;
 	}
@@ -109,7 +109,7 @@ MidiEvPtr THashTable::GetEvent(MidiEvPtr e)
 	Byte hashcode = HashCode(RefNum(e), Chan(e));
 	MidiEvPtr cur = fHashTable[hashcode];
 
-	if (cur && MatchEvent(cur,e)){  // Match on the first ev
+	if (cur && MatchEvent(cur,e)) {  // Match on the first ev
 		return cur;
 	}
 	
@@ -124,11 +124,11 @@ MidiEvPtr THashTable::GetEvent1(MidiEvPtr e)
 	Byte hashcode = HashCode(RefNum(e), Chan(e));
 	MidiEvPtr cur =  fHashTable[hashcode];
 
-	if (cur && MatchEvent1(cur,e)){  // Match on the first ev
+	if (cur && MatchEvent1(cur,e)) {  // Match on the first ev
 		return cur;
 	}
 	
-	while (cur && !MatchEvent1(cur,e)) { cur = Link (cur);}
+	while (cur && !MatchEvent1(cur,e)) {cur = Link (cur);}
 	return cur;
 }
 

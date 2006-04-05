@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -54,18 +54,18 @@ class TScoreVisitorInterface {
 	
 		virtual ~TScoreVisitorInterface() {}
 
-		virtual void Visite(TNote* ev, Boolean forward){}  
-		virtual void Visite(TKeyOn* ev, Boolean forward){} 
-		virtual void Visite(TKeyOff* ev, Boolean forward){} 
-		virtual void Visite(TKeyPress* ev, Boolean forward){}
-		virtual void Visite(TCtrlChange* ev, Boolean forward){}
-		virtual void Visite(TProgChange* ev, Boolean forward){}
-		virtual void Visite(TChanPress* ev, Boolean forward){}
-		virtual void Visite(TPitchBend* ev, Boolean forward){}
-		virtual void Visite(TTune* ev, Boolean forward){}
-		virtual void Visite(TSysEx* ev, Boolean forward){}
-		virtual void Visite(TTempo* ev, Boolean forward){}
-		virtual void Visite(TTimeSign* ev, Boolean forward){}
+		virtual void Visite(TNote* ev, Boolean forward) {}  
+		virtual void Visite(TKeyOn* ev, Boolean forward) {} 
+		virtual void Visite(TKeyOff* ev, Boolean forward) {} 
+		virtual void Visite(TKeyPress* ev, Boolean forward) {}
+		virtual void Visite(TCtrlChange* ev, Boolean forward) {}
+		virtual void Visite(TProgChange* ev, Boolean forward) {}
+		virtual void Visite(TChanPress* ev, Boolean forward) {}
+		virtual void Visite(TPitchBend* ev, Boolean forward) {}
+		virtual void Visite(TTune* ev, Boolean forward) {}
+		virtual void Visite(TSysEx* ev, Boolean forward) {}
+		virtual void Visite(TTempo* ev, Boolean forward) {}
+		virtual void Visite(TTimeSign* ev, Boolean forward) {}
 };
 
 typedef class TScoreVisitorInterface  FAR * TScoreVisitorInterfacePtr;

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -51,8 +51,8 @@ class TSMPTETask : public TMidiTask {
 
 	public: 
 	
-		TSMPTETask (TSMPTEPlayer* it):fPlayer(it){}
-		virtual ~TSMPTETask(){}
+		TSMPTETask (TSMPTEPlayer* it):fPlayer(it) {}
+		virtual ~TSMPTETask() {}
 		void Execute (TMidiApplPtr appl, ULONG date);
 };
 
@@ -84,8 +84,8 @@ class TSMPTEPlayer : public TGenericPlayerInterface {
 	  public:
 	  	
 	 	TSMPTEPlayer(TGenericPlayerInterfacePtr player, TRunningStatePtr state, TSMPTEInfosPtr smpte, TMidiApplPtr appl)
-	 		:fPlayer(player),fRunningState(state),fMidiAppl(appl),fSmpteInfos(smpte),fSMPTEtask(this){}
-	 	virtual ~TSMPTEPlayer(){}
+	 		:fPlayer(player),fRunningState(state),fMidiAppl(appl),fSmpteInfos(smpte),fSMPTEtask(this) {}
+	 	virtual ~TSMPTEPlayer() {}
 	  
 	  	void Start();
 		void Stop();

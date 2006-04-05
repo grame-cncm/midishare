@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -58,8 +58,8 @@ class TGenericPlayer : public TGenericPlayerInterface {
 	public:
 	 
 		TGenericPlayer (TEventReceiverInterfacePtr receiver, TPlayerInterfacePtr player, TTimeManagerPtr timemanager)
-			:fReceiver(receiver),fPlayer(player),fTimeManager(timemanager){}
-		virtual ~TGenericPlayer(){} 
+			:fReceiver(receiver),fPlayer(player),fTimeManager(timemanager) {}
+		virtual ~TGenericPlayer() {} 
 			
 		//------------------
 		// Player Interface 
@@ -77,7 +77,7 @@ class TGenericPlayer : public TGenericPlayerInterface {
 		void SetPosBBU(const TPos& pos)	{fPlayer->SetPosTicks(fTimeManager->ConvertBBUToTick(pos));}
 		void SetPosMs(ULONG date_ms)		{fPlayer->SetPosTicks(fTimeManager->ConvertMsToTick(date_ms));}
 		
-		ULONG GetPosTicks(){ return fPlayer->GetPosTicks();}
+		ULONG GetPosTicks() { return fPlayer->GetPosTicks();}
 		
 		void RcvClock(ULONG date_ms) {fPlayer->RcvClock(date_ms);}
 		

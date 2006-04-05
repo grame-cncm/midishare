@@ -1,12 +1,24 @@
-// ===========================================================================
-// The Player Library is Copyright (c) Grame, Computer Music Research Laboratory 
-// 1996-1999, and is distributed as Open Source software under the Artistic License;
-// see the file "Artistic" that is included in the distribution for details.
-//
-// Grame : Computer Music Research Laboratory
-// Web : http://www.grame.fr/Research
-// E-mail : MidiShare@rd.grame.fr
-// ===========================================================================
+/*
+
+  Copyright © Grame 1996-2006
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
 
 
 // ===========================================================================
@@ -19,140 +31,110 @@
 
 #include "TChaserVisitor.h"
 
-
-/*--------------------------------------------------------------------------*/
-
-TChaserVisitor::TChaserVisitor(TEventSenderInterfacePtr user) 
-{
-	fUser = user; 
-	fKeyontable = new TKeyOnTable();
-	fCtrlchangetable = new TCtrlChangeTable();
-	fKeypresstable = new TEventTable();
-	fChanpresstable = new TEventTable();
-	fPitchwheeltable = new TPitchWheelTable();
-	fProgchangetable = new TEventTable();
-	fSysextable = new TEventTable();
-	fTune = 0;
-}
-
 /*--------------------------------------------------------------------------*/
 
 void TChaserVisitor::Init()
 {
-	fKeyontable->Free();
-	fCtrlchangetable->Free();
-	fKeypresstable->Free();
-	fChanpresstable->Free();
-	fPitchwheeltable->Free();
-	fProgchangetable->Free();
-	fSysextable->Free();
+	fKeyontable.Free();
+	fCtrlchangetable.Free();
+	fKeypresstable.Free();
+	fChanpresstable.Free();
+	fPitchwheeltable.Free();
+	fProgchangetable.Free();
+	fSysextable.Free();
 	MidiFreeEv(fTune); 
 }
 
 /*--------------------------------------------------------------------------*/
-		
-TChaserVisitor::~TChaserVisitor() 
-{
-	delete(fKeyontable);
-	delete(fCtrlchangetable);
-	delete(fKeypresstable);
-	delete(fChanpresstable);
-	delete(fPitchwheeltable);
-	delete(fProgchangetable);
-	delete(fSysextable);
-	MidiFreeEv (fTune);
-}
-
-/*--------------------------------------------------------------------------*/
-void TChaserVisitor::Visite (TKeyOnPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TKeyOnPtr ev, Boolean forward)
 { 
 	MidiEvPtr key = ev->MidiEvent();
 	if(Vel(key) == 0)  // KeyOn with Vel == 0 ==> KeyOff
-		MidiFreeEv(fKeyontable->RemoveEvent(key)); 
+		MidiFreeEv(fKeyontable.RemoveEvent(key)); 
 	else
-		fKeyontable->InsertEvent(key);
+		fKeyontable.InsertEvent(key);
 }
 
 /*--------------------------------------------------------------------------*/
-void TChaserVisitor::Visite (TKeyOffPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TKeyOffPtr ev, Boolean forward)
 {
-	MidiFreeEv(fKeyontable->RemoveEvent(ev->MidiEvent()));
+	MidiFreeEv(fKeyontable.RemoveEvent(ev->MidiEvent()));
 } 
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TKeyPressPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TKeyPressPtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiEvPtr cur = fKeypresstable->GetEvent(e);
+	MidiEvPtr cur = fKeypresstable.GetEvent(e);
 	
 	if (cur) {
-		MidiSetField(cur, 1, MidiGetField (e,1));
-	}else{
-		fKeypresstable->InsertEvent(e);
+		MidiSetField(cur, 1, MidiGetField(e, 1));
+	} else {
+		fKeypresstable.InsertEvent(e);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TCtrlChangePtr ev,Boolean forward)
+void TChaserVisitor::Visite(TCtrlChangePtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiEvPtr cur = fCtrlchangetable->GetEvent(e);
+	MidiEvPtr cur = fCtrlchangetable.GetEvent(e);
 	
 	if (cur) {
-		MidiSetField(cur, 1, MidiGetField (e,1));
-	}else {
-		fCtrlchangetable->InsertEvent(e);
+		MidiSetField(cur, 1, MidiGetField(e, 1));
+	} else {
+		fCtrlchangetable.InsertEvent(e);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TProgChangePtr ev,Boolean forward)
+void TChaserVisitor::Visite(TProgChangePtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiEvPtr cur = fProgchangetable->GetEvent1(e);
+	MidiEvPtr cur = fProgchangetable.GetEvent1(e);
 	
 	if (cur) {
-		MidiSetField(cur, 0, MidiGetField (e,0));
-	}else {
-		fProgchangetable->InsertEvent(e);
+		MidiSetField(cur, 0, MidiGetField(e, 0));
+	} else {
+		fProgchangetable.InsertEvent(e);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TChanPressPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TChanPressPtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiEvPtr cur = fChanpresstable->GetEvent1(e);
+	MidiEvPtr cur = fChanpresstable.GetEvent1(e);
 	
 	if (cur) {
-		MidiSetField(cur, 0, MidiGetField (e,0));
-	}else {
-		fChanpresstable->InsertEvent(e);
+		MidiSetField(cur, 0, MidiGetField(e, 0));
+	} else {
+		fChanpresstable.InsertEvent(e);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TPitchBendPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TPitchBendPtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiEvPtr cur = fPitchwheeltable->GetEvent1(e);
+	MidiEvPtr cur = fPitchwheeltable.GetEvent1(e);
 	
 	if (cur) {
-		MidiSetField(cur, 0, MidiGetField (e,0));
-		MidiSetField(cur, 1, MidiGetField (e,1));
-	}else{
-		fPitchwheeltable->InsertEvent(e);
+		MidiSetField(cur, 0, MidiGetField(e,0));
+		MidiSetField(cur, 1, MidiGetField(e,1));
+	} else {
+		fPitchwheeltable.InsertEvent(e);
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TTunePtr ev,Boolean forward)
+void TChaserVisitor::Visite(TTunePtr ev, Boolean forward)
 {
 	if (!fTune) {
 		fTune = MidiCopyEv(ev->MidiEvent());
@@ -162,11 +144,11 @@ void TChaserVisitor::Visite (TTunePtr ev,Boolean forward)
 
 /*--------------------------------------------------------------------------*/
 
-void TChaserVisitor::Visite (TSysExPtr ev,Boolean forward)
+void TChaserVisitor::Visite(TSysExPtr ev, Boolean forward)
 {
 	MidiEvPtr e = ev->MidiEvent();
-	MidiFreeEv(fSysextable->RemoveEvent1(e)); // enleve l'ev courant (A VERIFIER)
-	fSysextable->InsertEvent(e);
+	MidiFreeEv(fSysextable.RemoveEvent1(e)); // enleve l'ev courant (A VERIFIER)
+	fSysextable.InsertEvent(e);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -175,15 +157,15 @@ void TChaserVisitor::ChaseOn (ULONG date_ticks)
 {
 	ULONG date_ms = MidiGetTime();
 	
-	fSysextable->ChaseOn(fUser,date_ms); // To be done FIRST
-	fKeyontable->ChaseOn(fUser,date_ms);
-	fCtrlchangetable->ChaseOn(fUser,date_ms);
-	fKeypresstable->ChaseOn(fUser,date_ms);
-	fProgchangetable->ChaseOn(fUser,date_ms);
-	fChanpresstable->ChaseOn(fUser,date_ms);
-	fPitchwheeltable->ChaseOn(fUser,date_ms);
+	fSysextable.ChaseOn(fUser, date_ms); // To be done FIRST
+	fKeyontable.ChaseOn(fUser, date_ms);
+	fCtrlchangetable.ChaseOn(fUser, date_ms);
+	fKeypresstable.ChaseOn(fUser, date_ms);
+	fProgchangetable.ChaseOn(fUser, date_ms);
+	fChanpresstable.ChaseOn(fUser, date_ms);
+	fPitchwheeltable.ChaseOn(fUser, date_ms);
 	
-	if (fTune) fUser->CopyAndUseEvent(fTune,date_ms);
+	if (fTune) fUser->CopyAndUseEvent(fTune, date_ms);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -192,14 +174,13 @@ void TChaserVisitor::ChaseOff (ULONG date_ticks)
 {
 	ULONG date_ms = MidiGetTime();
 	
-	fSysextable->ChaseOff(fUser,date_ms);
-	fKeyontable->ChaseOff(fUser,date_ms);
-	fCtrlchangetable->ChaseOff(fUser,date_ms);
-	fKeypresstable->ChaseOff(fUser,date_ms);
-	fProgchangetable->ChaseOff(fUser,date_ms);
-	fChanpresstable->ChaseOff(fUser,date_ms);
-	fPitchwheeltable->ChaseOff(fUser,date_ms);
-	
+	fSysextable.ChaseOff(fUser, date_ms);
+	fKeyontable.ChaseOff(fUser, date_ms);
+	fCtrlchangetable.ChaseOff(fUser, date_ms);
+	fKeypresstable.ChaseOff(fUser, date_ms);
+	fProgchangetable.ChaseOff(fUser, date_ms);
+	fChanpresstable.ChaseOff(fUser, date_ms);
+	fPitchwheeltable.ChaseOff(fUser, date_ms);
 }
 
 

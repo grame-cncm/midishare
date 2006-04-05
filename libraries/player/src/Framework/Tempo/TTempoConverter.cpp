@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -40,7 +40,7 @@ void TTempoConverter::Init(ULONG tpq)
 	assert (tpq > 0);
 	
  	fTicks_per_quarter = tpq;
- 	fLast_tempo_ten_micro =  0;
+ 	fLast_tempo_ten_micro = 0;
 	fTempo = kDefaultTempo;
 	fLast_tempo = 0;
 	fTen_micro_sec_per_tick = kDefaultTempo/fTicks_per_quarter;
@@ -70,9 +70,9 @@ void TTempoConverter::Init()
 
 void TTempoConverter::Update(ULONG date_ticks, ULONG tempo) 
 {
-	ULONG newtempo = tempo/10; 
+	ULONG newtempo = tempo / 10; 
 	
-	if ((newtempo > 0) && (fTempo !=  newtempo)) { // Update values only if the Tempo has changed
+	if ((newtempo > 0) && (fTempo != newtempo)) { // Update values only if the Tempo has changed
 	
 		fLast_tempo_ten_micro = ConvertTickToMicroSec (date_ticks);
 		fLast_tempo = date_ticks;
@@ -93,19 +93,19 @@ ULONG TTempoConverter::ConvertTickToMicroSec(ULONG date_ticks)
 {
 	ULONG delta ;
     
-	if (date_ticks >= fLast_tempo){
+	if (date_ticks >= fLast_tempo) {
 	
-		delta =  date_ticks - fLast_tempo;
+		delta = date_ticks - fLast_tempo;
 		return fLast_tempo_ten_micro + 
 		 	delta * fTen_micro_sec_per_tick +  
-			(delta *  fTen_micro_sec_per_tick_remain) / fTicks_per_quarter;
+			(delta * fTen_micro_sec_per_tick_remain) / fTicks_per_quarter;
 
-	}else{
+	} else {
 	
-		delta =  fLast_tempo - date_ticks;		
+		delta = fLast_tempo - date_ticks;		
 		return fLast_tempo_ten_micro -  
-		 	delta *  fTen_micro_sec_per_tick -  
-			(delta *  fTen_micro_sec_per_tick_remain) / fTicks_per_quarter;
+		 	delta * fTen_micro_sec_per_tick -  
+			(delta * fTen_micro_sec_per_tick_remain) / fTicks_per_quarter;
 	}
 }
 
@@ -118,10 +118,10 @@ ULONG TTempoConverter::ConvertTickToMicroSec(ULONG date_ticks)
 
 ULONG TTempoConverter::ConvertMicroSecToTick(ULONG date_ten_micro)
 {
-	if (date_ten_micro >= fLast_tempo_ten_micro){
-		return fLast_tempo +  ConvertMicroSecToTicksAux(date_ten_micro - fLast_tempo_ten_micro);
-	}else{
-		return fLast_tempo -  ConvertMicroSecToTicksAux(fLast_tempo_ten_micro - date_ten_micro);
+	if (date_ten_micro >= fLast_tempo_ten_micro) {
+		return fLast_tempo + ConvertMicroSecToTicksAux(date_ten_micro - fLast_tempo_ten_micro);
+	} else {
+		return fLast_tempo - ConvertMicroSecToTicksAux(fLast_tempo_ten_micro - date_ten_micro);
 	}
 }
 
@@ -162,7 +162,7 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux(ULONG ticks)
 	{	
 		if (fTempo) {
 			return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
-		}else{
+		} else {
 			return 1;
 	    }
 	}
@@ -171,7 +171,7 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux(ULONG ticks)
 	{	
 		if (fTempo) {
 			return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
-		}else{
+		} else {
 			return 1;
 	    }
 	}
@@ -187,7 +187,7 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 {	
 	if (fTempo) {
 		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
-	}else{
+	} else {
 		return 1;
     }
 }
@@ -202,7 +202,7 @@ ULONG TTempoConverter::ConvertMicroSecToTicksAux(ULONG ten_micro_sec)
 {	
 	if (fTempo) {
 		return (ULONG)(((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo);
-	}else{
+	} else {
 		return 1;
     }
 }

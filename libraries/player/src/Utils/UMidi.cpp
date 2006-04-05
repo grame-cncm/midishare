@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -50,7 +50,7 @@ MidiEvPtr UMidi::CheckEvType (MidiSeqPtr src, short type)
 {
 	MidiEvPtr e = FirstEv(src);
 
-	while (e && (Date(e) == 0)){
+	while (e && (Date(e) == 0)) {
 		if (EvType(e) == type) return e;
 		e = Link(e);
 	}
@@ -68,7 +68,7 @@ MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr dest)
 	while (e) {
 		if (EvType(e) == typeNote) {
 			// A typeKeyOff ev is build and add to seq
-			if (e1 = MidiCopyEv(e)){
+			if (e1 = MidiCopyEv(e)) {
 				EvType(e1) = typeKeyOff;	// Type change
 				Vel(e1) = 64;				// velocity
 				Date(e1) = Date(e1) + Dur(e); // Date + Duration
@@ -88,7 +88,7 @@ MidiSeqPtr UMidi::TrsfNoteToKeyOn (MidiSeqPtr dest)
 				}
 				if (!n) Last (dest) = e1;
 
-			}else {
+			} else {
 				return 0;
 			}
 			// typeNote is replaced by a typeKeyOn
@@ -183,7 +183,7 @@ ULONG UMidi::LengthSeq (MidiSeqPtr s)
 	ULONG n;
 	MidiEvPtr e;
 
-	for(e = FirstEv(s), n = 0; e; e = Link(e), n++){}
+	for(e = FirstEv(s), n = 0; e; e = Link(e), n++) {}
 	return n;
 }
 
@@ -212,7 +212,7 @@ ULONG UMidi::LengthSeq (MidiSeqPtr s)
 			MidiFreeEv(ev);							/* libère l'evt			*/
 			ev = tmp;
 				
-		}else {
+		} else {
 			prev = ev;
 			ev = Link(ev);
 		}
@@ -227,7 +227,7 @@ MidiSeqPtr UMidi::BuildTrack(MidiSeqPtr s)
 	
 	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
 	if (MidiFreeSpace() < len) MidiGrowSpace(len);
-	return (MidiFreeSpace() > len) ? UMidi::TrsfNoteToKeyOn (s): 0;
+	return (MidiFreeSpace() > len) ? UMidi::TrsfNoteToKeyOn(s): 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -240,10 +240,10 @@ MidiSeqPtr UMidi::BuildAllTrack(MidiSeqPtr s)
 	ULONG len = UMidi::LengthSeq(s) * 5/2 + kMemoryLimit;
 	if (MidiFreeSpace() < len) MidiGrowSpace(len);
 	
-	if (MidiFreeSpace() > len && (s1 = UMidi::TrsfNoteToKeyOn (s))){
+	if (MidiFreeSpace() > len && (s1 = UMidi::TrsfNoteToKeyOn(s))) {
 		DelEndTrack(s1);	
 		return s1;
-	}else {
+	} else {
 		return 0;
 	}
 }
@@ -259,14 +259,14 @@ Boolean UMidi::Copy_AddSeq(MidiSeqPtr s, MidiEvPtr e)
 		Link(copy) = 0;
 		MidiAddSeq(s, copy);
 		return true;
-	}else {
+	} else {
 		return false;
 	}
 }
 
 /*--------------------------------------------------------------------------*/
 
-Boolean UMidi::IsEmpty(MidiSeqPtr s) { return (FirstEv(s) == 0);}
+Boolean UMidi::IsEmpty(MidiSeqPtr s) {return (FirstEv(s) == 0);}
 
 /*--------------------------------------------------------------------------*/
 
@@ -289,7 +289,7 @@ void UMidi::RemoveEv(MidiSeqPtr seq, MidiEvPtr e)
 			
 			return;	
 				
-		}else {
+		} else {
 			prev = cur;
 			cur = Link(cur);
 		}

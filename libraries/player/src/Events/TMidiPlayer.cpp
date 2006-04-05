@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -44,7 +44,7 @@ void TMidiPlayer::CopyAndUseEvent(MidiEvPtr e, ULONG date_ms)
 { 
 	if (IsPrivate(e)) { // Private events (typeLoopEnd and typeScoreEnd) are always sent
 		fMidiAppl->SendAt(MidiCopyEv(e),date_ms); 
-	}else{
+	} else {
 		fMidiAppl->SendAt(fTrackTable->IsPlayable(e),date_ms); 
 	}
 }
@@ -59,7 +59,7 @@ void TMidiPlayer::UseEvent(MidiEvPtr e, ULONG date_ms)
 { 
 	if (IsPrivate(e)) { // Private events (typeLoopEnd and typeScoreEnd) are always sent
 		fMidiAppl->SendAt(e,date_ms); 
-	}else if (fTrackTable->IsOnTrack(TrackNum(e))) {
+	} else if (fTrackTable->IsOnTrack(TrackNum(e))) {
 		fMidiAppl->SendAt(e,date_ms);
 	}
 }

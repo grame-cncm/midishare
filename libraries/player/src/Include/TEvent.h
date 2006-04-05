@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -84,8 +84,8 @@ class TNote : public TEvent {
 
 	public:
  
- 		TNote(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
- 		virtual ~TNote(){}
+ 		TNote(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+ 		virtual ~TNote() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -102,8 +102,8 @@ class TKeyOn : public TEvent {
 
 	public:
 
-		TKeyOn(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TKeyOn(){}
+		TKeyOn(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyOn() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -120,8 +120,8 @@ class TKeyOff : public TEvent {
 
 	public:
 
-		TKeyOff	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TKeyOff(){}
+		TKeyOff	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyOff() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -138,8 +138,8 @@ class TKeyPress : public TEvent {
 
  	public:
 	
-		TKeyPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TKeyPress(){}
+		TKeyPress	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TKeyPress() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -156,8 +156,8 @@ class TCtrlChange : public TEvent {
 
  	public:
 	
-		TCtrlChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TCtrlChange(){}
+		TCtrlChange	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TCtrlChange() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
  
 };
@@ -175,8 +175,8 @@ class TProgChange : public TEvent {
 
  	public:
 	
-		TProgChange	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TProgChange(){}
+		TProgChange	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TProgChange() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -193,8 +193,8 @@ class TChanPress : public TEvent {
 
  	public:
 	
-		TChanPress	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TChanPress(){}
+		TChanPress	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TChanPress() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -211,8 +211,8 @@ class TPitchBend : public TEvent {
 
  	public:
 	
-		TPitchBend	(MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TPitchBend(){}
+		TPitchBend	(MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TPitchBend() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
 };
 
@@ -229,8 +229,8 @@ class TTune : public TEvent {
 
 	public:
 
-		TTune (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TTune(){}
+		TTune (MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TTune() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -247,8 +247,8 @@ class TSysEx : public TEvent {
 
 	public:
 
-		TSysEx (MidiEvPtr e){fEvent = e;fNext = fPrev = 0;}
-		virtual ~TSysEx(){}
+		TSysEx (MidiEvPtr e) {fEvent = e;fNext = fPrev = 0;}
+		virtual ~TSysEx() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 };
 
@@ -271,7 +271,7 @@ class TTempo : public TEvent {
 			fNext = fPrev = 0; 
 			SetTempoBackward(kDefaultTempo);
 		}
-		virtual ~TTempo(){}
+		virtual ~TTempo() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}   
 		
 		ULONG GetTempoForward()  {return Tempo(fEvent);}
@@ -302,7 +302,7 @@ class TTimeSign : public TEvent {
 			SetBnClocks(kDefaultClocks);
 			SetBn32nd(kDefaultN32);
 		}
-		virtual ~TTimeSign(){}
+		virtual ~TTimeSign() {}
 		void Accept(TScoreVisitorInterfacePtr v, Boolean forward) {v->Visite(this, forward);}  
 		
 		Byte GetFNum() 		{return TSNum(fEvent);}

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -50,7 +50,7 @@ class TRunningPlayer : public TPlayerInterface {
 	  public:
 	  	
 	 	TRunningPlayer(TPlayerInterfacePtr player, TRunningStatePtr state);
-	 	virtual ~TRunningPlayer(){}
+	 	virtual ~TRunningPlayer() {}
 	  
 		void Start();
 		void Stop();

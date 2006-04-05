@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -36,7 +36,7 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 							   TPlayerSynchroniserPtr synchro,
 							   TRunningStatePtr state,
 							   TEventDispatcherPtr successor)
-							  :TEventDispatcher(successor),fIterator(score)
+							  :TEventDispatcher(successor), fIterator(score)
 {
 	short i;
 	
@@ -73,7 +73,7 @@ TEventRecorder::TEventRecorder(TPlayerScorePtr score,
 
 /*----------------------------------------------------------------------------*/
 
-TEventRecorder::~TEventRecorder(){if (fRecFilter) MidiFreeFilter(fRecFilter);}
+TEventRecorder::~TEventRecorder() {if (fRecFilter) MidiFreeFilter(fRecFilter);}
 
 /*--------------------------------------------------------------------------*/
 
@@ -89,7 +89,7 @@ void TEventRecorder::ReceiveDefaultEvent(MidiEvPtr e)
 {
 	if (fState->IsRunning() 
 		&& IsRecording()
-		&& AcceptEv(e)){
+		&& AcceptEv(e)) {
 		Insert(e);
 	}else
 		MidiFreeEv(e);
@@ -104,7 +104,7 @@ void TEventRecorder::ReceiveEvents(MidiEvPtr e)
 		case typeScoreEnd:
 			if (IsRecording()) { 
 				MidiFreeEv(e); // if recording don't pass the event to the EventReceiver
-			}else{
+			} else {
 				TEventDispatcher::ReceiveEvents(e);
 			}
 			break;
@@ -147,7 +147,7 @@ void TEventRecorder::Insert(MidiEvPtr e)
 	if (date_ticks == fIterator.CurDate()) {
 		fScore->InsertAfterEvent(cur, TEventFactory::GenericCreateEvent(e));
 	// otherwise insert before the next event which date is > date_ticks
-	}else {
+	} else {
 		fScore->InsertBeforeEvent(cur, TEventFactory::GenericCreateEvent(e));
 	}
 }
@@ -158,7 +158,7 @@ void TEventRecorder::EraseTrack()
 {
 	MidiSeqPtr tmp;
 	
-	if (IsErasing () && IsRecording() && (tmp = MidiNewSeq()))
+	if (IsErasing() && IsRecording() && (tmp = MidiNewSeq()))
 		fScore->SetTrack(fRecordtrack,tmp);
 }
 

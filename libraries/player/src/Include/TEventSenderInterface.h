@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -40,7 +40,7 @@ class TEventSenderInterface {
 
 	public:
 	
-		virtual ~TEventSenderInterface(){};
+		virtual ~TEventSenderInterface() {};
 	
 		virtual short Init() = 0;
 		virtual void SendEvent(MidiEvPtr event, ULONG date_ms) = 0;

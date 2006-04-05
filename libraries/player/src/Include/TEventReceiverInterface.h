@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -41,7 +41,7 @@ class TEventReceiverInterface {
 
 	public:
 	
-		virtual ~TEventReceiverInterface(){}
+		virtual ~TEventReceiverInterface() {}
 		virtual void ReceiveEvents(MidiEvPtr e) = 0;
 			
 };
@@ -64,10 +64,10 @@ class TEventDispatcher : public TEventReceiverInterface {
 	public:
 	
 		TEventDispatcher() {fSuccessor = 0;}
-		TEventDispatcher(TEventDispatcher* successor){fSuccessor = successor;}
-		virtual ~TEventDispatcher(){}
+		TEventDispatcher(TEventDispatcher* successor) {fSuccessor = successor;}
+		virtual ~TEventDispatcher() {}
 		
-		void SetSuccessor(TEventDispatcher* successor){fSuccessor = successor;}
+		void SetSuccessor(TEventDispatcher* successor) {fSuccessor = successor;}
 	
 		virtual void ReceiveEvents(MidiEvPtr e)
 		{ 

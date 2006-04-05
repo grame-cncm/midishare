@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -59,7 +59,7 @@ class TMidiTask {
 		virtual ~TMidiTask() {MidiForgetTask(&fTask);}
 	
 		void Forget () {MidiForgetTask(&fTask);}
-		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
+		virtual void Execute (TMidiAppl* , ULONG date) {} // Must be implemented for concrete tasks
 };
 
 typedef TMidiTask FAR * TMidiTaskPtr;
@@ -113,8 +113,8 @@ class TMidiAppl {
 		short fRefnum;
 		MidiFilterPtr fFilter;
 		
-		TMidiAppl():fUPPGenericTask(0),fUPPGenericReceiveAlarm(0),fUPPGenericApplAlarm(0),fRefnum(-1),fFilter(0){}
-		virtual ~TMidiAppl(){Close();}
+		TMidiAppl():fUPPGenericTask(0),fUPPGenericReceiveAlarm(0),fUPPGenericApplAlarm(0),fRefnum(-1),fFilter(0) {}
+		virtual ~TMidiAppl() {Close();}
 		
 		virtual short Open (MidiName name);
 		virtual void Close();

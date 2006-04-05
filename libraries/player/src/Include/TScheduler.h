@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -44,7 +44,7 @@ class TSchedulerInterface {
 
 	public:
 	
-		virtual ~TSchedulerInterface(){};
+		virtual ~TSchedulerInterface() {};
 		
 		virtual void Init(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl) = 0;
 		virtual void ScheduleTickTask(TTicksTask* task, ULONG date_ticks) = 0;
@@ -174,7 +174,7 @@ class TTicksTask {
 			
 	public:
 	
-		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
+		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle) {}
 		// A REVOIR (risque de conflit avec les taches temps réel)
 		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
 		void Forget() { if (IsRunning ()) fStatus = kTaskForget;}
@@ -182,7 +182,7 @@ class TTicksTask {
 		Boolean IsRunning() 	{return (fStatus == kTaskRunning);}
 		Boolean IsIdle() 	 	{return (fStatus == kTaskIdle);}
 		
-		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
+		virtual void Execute (TMidiAppl* , ULONG date) {} // Must be implemented for concrete tasks
 };
 
 typedef TTicksTask FAR * TTicksTaskPtr;

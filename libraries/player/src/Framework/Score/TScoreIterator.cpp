@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,7 +33,7 @@
 
 /*----------------------------------------------------------------------------*/
 
-TScoreIterator::TScoreIterator():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLast(false),fNextIt(0){} 
+TScoreIterator::TScoreIterator():fScore(0),fCur(0),fCurDate(0),fFirst(false),fLast(false),fNextIt(0) {} 
 
 /*----------------------------------------------------------------------------*/
 
@@ -80,7 +80,7 @@ void TScoreIterator::Init()
 	fFirst = fLast = false;
 	if (fScore->fLast) {  				// Non empty 
 		fCur = fScore->fLast->fNext; 	// Set fCur on the first ev
-	}else{
+	} else {
 		fCur = 0;  // Empty score
 	}
 }
@@ -107,12 +107,12 @@ void TScoreIterator::ItemsRemoved(TEventPtr ev)
 	if (fCur == ev) {
 		
 		if (ev == fScore->fLast) {  // If last event
-			if (ev->fNext == ev){   // Only one event
+			if (ev->fNext == ev) {   // Only one event
 				fCur = 0;
 				return;
 			}else
 				fCur = fCur->fPrev;
-		}else{
+		} else {
 			fCur = fCur->fNext;
 		}
 		
@@ -144,7 +144,7 @@ TEventPtr TScoreIterator::NextEv()
 		fCurDate = ev->GetDate();
 		if (ev == fScore->fLast) {
 			fLast = true;
-		}else{
+		} else {
 			fFirst = false;
 			fCur = fCur->fNext;
 		}
@@ -167,7 +167,7 @@ TEventPtr TScoreIterator::PrevEv()
 		fCurDate = ev->GetDate();
 		if (ev == fScore->fLast->fNext) {
 			fFirst = true;
-		}else{
+		} else {
 			fLast = false;
 			fCur = fCur->fPrev;
 		}
@@ -187,12 +187,12 @@ TEventPtr TScoreIterator::NextDateEv()
 	if (fLast) return 0;
 	
 	if (ev) {
-		if (fCurDate != fCur->GetDate()){
+		if (fCurDate != fCur->GetDate()) {
 			fCurDate = fCur->GetDate();
 			return 0;
-		}else 
+		} else 
 			return NextEv();
-	}else{
+	} else {
 		return ev;
 	}
 }
@@ -208,12 +208,12 @@ TEventPtr TScoreIterator::PrevDateEv()
 	if (fFirst) return 0;
 	
 	if (ev) {
-		if (fCurDate != fCur->GetDate()){
+		if (fCurDate != fCur->GetDate()) {
 			fCurDate = fCur->GetDate();
 			return 0;
-		}else 
+		} else 
 			return PrevEv();
-	}else {
+	} else {
 		
 		return ev;
 	}
@@ -226,7 +226,7 @@ TEventPtr TScoreIterator::SetPosTicks(ULONG date_ticks)
 	if (!IsFirstEv() && (CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
 		SetPosTicksForward(date_ticks);
-	}else{
+	} else {
 		SetPosTicksForward(date_ticks);
 	}
 	return CurEv();

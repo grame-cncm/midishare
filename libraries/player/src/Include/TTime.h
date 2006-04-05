@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -53,10 +53,10 @@ class TPos {
 	
 	public :
 	
-		TPos (){Init();}
-		TPos (ULONG bar, ULONG beat, ULONG unit):fBar(bar),fBeat(beat),fUnit(unit){}
-		void Init(){fBar = fBeat = fUnit = 0;} 
-		virtual ~TPos(){}
+		TPos () {Init();}
+		TPos (ULONG bar, ULONG beat, ULONG unit):fBar(bar),fBeat(beat),fUnit(unit) {}
+		void Init() {fBar = fBeat = fUnit = 0;} 
+		virtual ~TPos() {}
 		
 		ULONG GetBar()  {return fBar;}
 		ULONG GetBeat() {return fBeat;}
