@@ -57,7 +57,7 @@ typedef struct {
 
 static TMutex gMutex[kMutexCount] = { 0 };
 static MacOSXDriverPtr gMacOSXDriver = { 0 };
-static unsigned long   gTimeMode = 0;
+static unsigned long gTimeMode = 0;
 
 /*------------------------------------------------------------------------------*/
 void msOpenMutex  (unsigned int mutex)
@@ -84,8 +84,8 @@ void msCloseMutex (unsigned int mutex)
 /*------------------------------------------------------------------------------*/
 Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
 {
-        *adr = swapWith;
-        return true;
+	*adr = swapWith;
+	return true;
 }
 
 /*------------------------------------------------------------------------------*/
@@ -113,11 +113,12 @@ void *  LoadLibrary(const char *filename, const char *symbol)
         
         if (!handle) { 
             Report("MidiShare", "can't load driver", filename);
-        }else if ((fun = (Start)dlsym(handle,symbol)) && (res = (*fun)())){
+        } else if ((fun = (Start)dlsym(handle,symbol)) && (res = (*fun)())){
             return handle;
-        }else {
+        } else {
             Report("MidiShare", "can't start driver", filename);
-            if (handle) dlclose(handle);
+            if (handle) 
+				dlclose(handle);
 	}
 	return 0;
 }
@@ -135,49 +136,49 @@ void FreeLibrary(void * handle, const char *symbol)
 /*------------------------------------------------------------------------------*/
 static Boolean LoadDriver(char *drvName) 
 {
-		MacOSXDriverPtr mem = (MacOSXDriverPtr)AllocateMemory(kStdMemory, sizeof(MacOSXDriver));
-        if (!mem) return false;
-        
-        mem->next = gMacOSXDriver;
-        mem->handle = LoadLibrary(drvName,"_Start");
-        
-        if (mem->handle) {
-            gMacOSXDriver = mem;
-        }else {
-            DisposeMemory(mem);
-            return false;
-        }
-        return true;
+	MacOSXDriverPtr mem = (MacOSXDriverPtr)AllocateMemory(kStdMemory, sizeof(MacOSXDriver));
+	if (!mem) return false;
+	
+	mem->next = gMacOSXDriver;
+	mem->handle = LoadLibrary(drvName,"_Start");
+	
+	if (mem->handle) {
+		gMacOSXDriver = mem;
+	} else {
+		DisposeMemory(mem);
+		return false;
+	}
+	return true;
 }
 
 /*------------------------------------------------------------------------------*/
 void SpecialWakeUp(TMSGlobalPtr g) 
 {
-       unsigned short i, n;
-       char str[256];
-       
-       CheckInstall();
-	   g->error = MIDInoErr;
-       n = CountDrivers();
-       for (i=0; i<n; i++) {
-           if (GetDriver(i, str, 256)) {
-               if (!LoadDriver(str))
-			       g->error += MIDIerrDriverLoad;
-		   }
-       }
+	unsigned short i, n;
+	char str[256];
+   
+	CheckInstall();
+	g->error = MIDInoErr;
+	n = CountDrivers();
+	for (i = 0; i < n; i++) {
+		if (GetDriver(i, str, 256)) {
+			if (!LoadDriver(str))
+				g->error += MIDIerrDriverLoad;
+		}
+	}
 }
 
 /*------------------------------------------------------------------------------*/
 void SpecialSleep(TMSGlobalPtr g)
 {
-        MacOSXDriverPtr next, drv = gMacOSXDriver;
-        gMacOSXDriver = 0;
-        while (drv) {
-                next = drv->next;
-				FreeLibrary (drv->handle,"_Stop");
-                DisposeMemory (drv);
-                drv = next;
-        }
+	MacOSXDriverPtr next, drv = gMacOSXDriver;
+	gMacOSXDriver = 0;
+	while (drv) {
+		next = drv->next;
+		FreeLibrary (drv->handle,"_Stop");
+		DisposeMemory (drv);
+		drv = next;
+	}
  }
 
 /*------------------------------------------------------------------------------*/
@@ -208,26 +209,26 @@ void CallTaskCode(TApplContextPtr context, MidiEvPtr e)
 /*_________________________________________________________________________*/
 void CallDTaskCode(TApplContextPtr context, MidiEvPtr e)
 {
-        TTaskExtPtr task = (TTaskExtPtr)LinkST(e);      /* event extension */
-        (*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
+	TTaskExtPtr task = (TTaskExtPtr)LinkST(e);      /* event extension */
+	(*task->fun)(Date(e), RefNum(e), task->arg1, task->arg2, task->arg3);
 }
 
 /*_________________________________________________________________________*/
 void DriverWakeUp(TApplPtr appl) 
 {
-        WakeupPtr wakeup = Wakeup(appl);
-        if (wakeup) {
-        	wakeup (appl->refNum);
-        }
+	WakeupPtr wakeup = Wakeup(appl);
+	if (wakeup) {
+		wakeup (appl->refNum);
+	}
 }
 
 /*_________________________________________________________________________*/
 void DriverSleep(TApplPtr appl)
 {
-        SleepPtr sleep = Sleep(appl);
-        if (sleep) {
-             sleep (appl->refNum);
-        }
+	SleepPtr sleep = Sleep(appl);
+	if (sleep) {
+		 sleep (appl->refNum);
+	}
 }
 
 /*_________________________________________________________________________*/
