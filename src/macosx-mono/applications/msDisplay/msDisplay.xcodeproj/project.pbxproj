@@ -1,0 +1,815 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXApplicationTarget section */
+		20286C34FDCF999611CA2CEA /* msDisplay */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 4BB41E8809ED421100EE9367 /* Build configuration list for PBXApplicationTarget "msDisplay" */;
+			buildPhases = (
+				20286C35FDCF999611CA2CEA /* Headers */,
+				20286C36FDCF999611CA2CEA /* Resources */,
+				20286C38FDCF999611CA2CEA /* Sources */,
+				20286C3BFDCF999611CA2CEA /* Frameworks */,
+				04313892FE3035C9C02AAC07 /* Rez */,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = msDisplay;
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = 0249A665FF388DC511CA2CEA /* msDisplay.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>msDisplay</string>
+	<key>CFBundleGetInfoString</key>
+	<string>v.1.2 @ Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msDisplay.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>msDisplay</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>v.1.2</string>
+	<key>CFBundleSignature</key>
+	<string>Disp</string>
+	<key>CFBundleVersion</key>
+	<string>1.2</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+		D354A73B05BE861F006B0B2F /* msDisplay dev */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 4BB41EA409ED421100EE9367 /* Build configuration list for PBXApplicationTarget "msDisplay dev" */;
+			buildPhases = (
+				D354A73C05BE861F006B0B2F /* Headers */,
+				D354A73D05BE861F006B0B2F /* Resources */,
+				D354A74105BE861F006B0B2F /* Sources */,
+				D354A74605BE861F006B0B2F /* Frameworks */,
+				D354A74A05BE861F006B0B2F /* Rez */,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = "msDisplay dev";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = D354A74C05BE861F006B0B2F /* msDisplay.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>msDisplay</string>
+	<key>CFBundleGetInfoString</key>
+	<string>v.1.2 @ Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msDisplay.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>msDisplay</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>v.1.2</string>
+	<key>CFBundleSignature</key>
+	<string>Disp</string>
+	<key>CFBundleVersion</key>
+	<string>1.2</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+/* End PBXApplicationTarget section */
+
+/* Begin PBXBuildFile section */
+		0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		4BB41E8F09ED421100EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		4BB41E9009ED421100EE9367 /* msDisplay.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581850507363A00053103 /* msDisplay.icns */; };
+		4BB41E9109ED421100EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE806A05BC06A200FE2FFB /* versions.txt */; };
+		4BB41E9309ED421100EE9367 /* msDisplay.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D760201C6E001053118 /* msDisplay.c */; };
+		4BB41E9409ED421100EE9367 /* msDisplayAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D770201C6E001053118 /* msDisplayAppl.c */; };
+		4BB41E9509ED421100EE9367 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DD0208057501053118 /* states.c */; };
+		4BB41E9609ED421100EE9367 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DE0208057501053118 /* profport.c */; };
+		4BB41E9809ED421100EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		4BB41E9A09ED421100EE9367 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EECFDF05BD91E20036F237 /* MidiShare.framework */; };
+		4BB41E9C09ED421100EE9367 /* msDisplay.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D780201C6E001053118 /* msDisplay.r */; };
+		4BDE3A7C09EE9DDC0009E823 /* Info-msDisplay.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3A7B09EE9DDC0009E823 /* Info-msDisplay.plist */; };
+		D354A73E05BE861F006B0B2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		D354A73F05BE861F006B0B2F /* msDisplay.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581850507363A00053103 /* msDisplay.icns */; };
+		D354A74005BE861F006B0B2F /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE806A05BC06A200FE2FFB /* versions.txt */; };
+		D354A74205BE861F006B0B2F /* msDisplay.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D760201C6E001053118 /* msDisplay.c */; };
+		D354A74305BE861F006B0B2F /* msDisplayAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D770201C6E001053118 /* msDisplayAppl.c */; };
+		D354A74405BE861F006B0B2F /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DD0208057501053118 /* states.c */; };
+		D354A74505BE861F006B0B2F /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DE0208057501053118 /* profport.c */; };
+		D354A74705BE861F006B0B2F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		D354A74B05BE861F006B0B2F /* msDisplay.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D780201C6E001053118 /* msDisplay.r */; };
+		D3EE806B05BC06A200FE2FFB /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE806A05BC06A200FE2FFB /* versions.txt */; };
+		D3EECFE005BD91E20036F237 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EECFDF05BD91E20036F237 /* MidiShare.framework */; };
+		D3F581860507363A00053103 /* msDisplay.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581850507363A00053103 /* msDisplay.icns */; };
+		F721C9DF0208057501053118 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DD0208057501053118 /* states.c */; };
+		F721C9E00208057501053118 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DE0208057501053118 /* profport.c */; };
+		F7274D790201C6E001053118 /* msDisplay.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D760201C6E001053118 /* msDisplay.c */; };
+		F7274D7A0201C6E001053118 /* msDisplayAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D770201C6E001053118 /* msDisplayAppl.c */; };
+		F7274D7B0201C6E001053118 /* msDisplay.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D780201C6E001053118 /* msDisplay.r */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		05952DFCFFF02D1B11CA0E50 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		05952DFDFFF02D1B11CA0E50 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		0249A665FF388DC511CA2CEA /* msDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = msDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
+		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		4BB41EA209ED421100EE9367 /* msDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BDE3A7B09EE9DDC0009E823 /* Info-msDisplay.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msDisplay.plist"; sourceTree = "<group>"; };
+		D354A74C05BE861F006B0B2F /* msDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D354A75505BE8640006B0B2F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/MidiShare.framework; sourceTree = SOURCE_ROOT; };
+		D3EE806A05BC06A200FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
+		D3EECFDF05BD91E20036F237 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
+		D3F581850507363A00053103 /* msDisplay.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msDisplay.icns; sourceTree = SOURCE_ROOT; };
+		F721C9DD0208057501053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
+		F721C9DE0208057501053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		F7274D760201C6E001053118 /* msDisplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msDisplay.c; sourceTree = "<group>"; };
+		F7274D770201C6E001053118 /* msDisplayAppl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msDisplayAppl.c; sourceTree = "<group>"; };
+		F7274D780201C6E001053118 /* msDisplay.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; path = msDisplay.r; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		20286C3BFDCF999611CA2CEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */,
+				D3EECFE005BD91E20036F237 /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41E9709ED421100EE9367 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41E9809ED421100EE9367 /* Carbon.framework in Frameworks */,
+				4BB41E9A09ED421100EE9367 /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A74605BE861F006B0B2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A74705BE861F006B0B2F /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		195DF8C9FE9D4F0611CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0249A665FF388DC511CA2CEA /* msDisplay.app */,
+				D354A74C05BE861F006B0B2F /* msDisplay.app */,
+				4BB41EA209ED421100EE9367 /* msDisplay.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE806A05BC06A200FE2FFB /* versions.txt */,
+				20286C2AFDCF999611CA2CEA /* Sources */,
+				20286C2CFDCF999611CA2CEA /* Resources */,
+				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
+				195DF8C9FE9D4F0611CA2CBB /* Products */,
+				4BDE3A7B09EE9DDC0009E823 /* Info-msDisplay.plist */,
+			);
+			name = "¬´PROJECTNAME¬ª";
+			sourceTree = "<group>";
+		};
+		20286C2AFDCF999611CA2CEA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D770201C6E001053118 /* msDisplayAppl.c */,
+				F7274D760201C6E001053118 /* msDisplay.c */,
+				F721C9DD0208057501053118 /* states.c */,
+				F721C9DE0208057501053118 /* profport.c */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		20286C2CFDCF999611CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D780201C6E001053118 /* msDisplay.r */,
+				0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */,
+				D3F581850507363A00053103 /* msDisplay.icns */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				D354A75505BE8640006B0B2F /* MidiShare.framework */,
+				D3EECFDF05BD91E20036F237 /* MidiShare.framework */,
+				20286C33FDCF999611CA2CEA /* Carbon.framework */,
+				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
+				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		20286C35FDCF999611CA2CEA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41E8D09ED421100EE9367 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A73C05BE861F006B0B2F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BB41E8C09ED421100EE9367 /* msDisplay Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BB41E9D09ED421100EE9367 /* Build configuration list for PBXNativeTarget "msDisplay Universal" */;
+			buildPhases = (
+				4BB41E8D09ED421100EE9367 /* Headers */,
+				4BB41E8E09ED421100EE9367 /* Resources */,
+				4BB41E9209ED421100EE9367 /* Sources */,
+				4BB41E9709ED421100EE9367 /* Frameworks */,
+				4BB41E9B09ED421100EE9367 /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = "msDisplay Universal";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = 4BB41EA209ED421100EE9367 /* msDisplay.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		20286C28FDCF999611CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41EA809ED421100EE9367 /* Build configuration list for PBXProject "msDisplay" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				05952DFCFFF02D1B11CA0E50 /* Development */,
+				05952DFDFFF02D1B11CA0E50 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
+			projectDirPath = "";
+			targets = (
+				20286C34FDCF999611CA2CEA /* msDisplay */,
+				4BB41E8C09ED421100EE9367 /* msDisplay Universal */,
+				D354A73B05BE861F006B0B2F /* msDisplay dev */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		20286C36FDCF999611CA2CEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */,
+				D3F581860507363A00053103 /* msDisplay.icns in Resources */,
+				D3EE806B05BC06A200FE2FFB /* versions.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41E8E09ED421100EE9367 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41E8F09ED421100EE9367 /* InfoPlist.strings in Resources */,
+				4BB41E9009ED421100EE9367 /* msDisplay.icns in Resources */,
+				4BB41E9109ED421100EE9367 /* versions.txt in Resources */,
+				4BDE3A7C09EE9DDC0009E823 /* Info-msDisplay.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A73D05BE861F006B0B2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A73E05BE861F006B0B2F /* InfoPlist.strings in Resources */,
+				D354A73F05BE861F006B0B2F /* msDisplay.icns in Resources */,
+				D354A74005BE861F006B0B2F /* versions.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		04313892FE3035C9C02AAC07 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7274D7B0201C6E001053118 /* msDisplay.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41E9B09ED421100EE9367 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41E9C09ED421100EE9367 /* msDisplay.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A74A05BE861F006B0B2F /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A74B05BE861F006B0B2F /* msDisplay.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20286C38FDCF999611CA2CEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7274D790201C6E001053118 /* msDisplay.c in Sources */,
+				F7274D7A0201C6E001053118 /* msDisplayAppl.c in Sources */,
+				F721C9DF0208057501053118 /* states.c in Sources */,
+				F721C9E00208057501053118 /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41E9209ED421100EE9367 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41E9309ED421100EE9367 /* msDisplay.c in Sources */,
+				4BB41E9409ED421100EE9367 /* msDisplayAppl.c in Sources */,
+				4BB41E9509ED421100EE9367 /* states.c in Sources */,
+				4BB41E9609ED421100EE9367 /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A74105BE861F006B0B2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A74205BE861F006B0B2F /* msDisplay.c in Sources */,
+				D354A74305BE861F006B0B2F /* msDisplayAppl.c in Sources */,
+				D354A74405BE861F006B0B2F /* states.c in Sources */,
+				D354A74505BE861F006B0B2F /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0867D6ABFE840B52C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41E8909ED421100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41E8A09ED421100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41E8B09ED421100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41E9E09ED421100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INFOPLIST_FILE = "Info-msDisplay.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41E9F09ED421100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INFOPLIST_FILE = "Info-msDisplay.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41EA009ED421100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INFOPLIST_FILE = "Info-msDisplay.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41EA509ED421100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41EA609ED421100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41EA709ED421100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../lib;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msDisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41EA909ED421100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BB41EAA09ED421100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BB41EAB09ED421100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41E8809ED421100EE9367 /* Build configuration list for PBXApplicationTarget "msDisplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41E8909ED421100EE9367 /* Development */,
+				4BB41E8A09ED421100EE9367 /* Deployment */,
+				4BB41E8B09ED421100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41E9D09ED421100EE9367 /* Build configuration list for PBXNativeTarget "msDisplay Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41E9E09ED421100EE9367 /* Development */,
+				4BB41E9F09ED421100EE9367 /* Deployment */,
+				4BB41EA009ED421100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41EA409ED421100EE9367 /* Build configuration list for PBXApplicationTarget "msDisplay dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41EA509ED421100EE9367 /* Development */,
+				4BB41EA609ED421100EE9367 /* Deployment */,
+				4BB41EA709ED421100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41EA809ED421100EE9367 /* Build configuration list for PBXProject "msDisplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41EA909ED421100EE9367 /* Development */,
+				4BB41EAA09ED421100EE9367 /* Deployment */,
+				4BB41EAB09ED421100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 20286C28FDCF999611CA2CEA /* Project object */;
+}

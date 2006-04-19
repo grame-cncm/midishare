@@ -1,0 +1,845 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXApplicationTarget section */
+		20286C34FDCF999611CA2CEA /* msControler */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 4BB41DE709ED403300EE9367 /* Build configuration list for PBXApplicationTarget "msControler" */;
+			buildPhases = (
+				20286C35FDCF999611CA2CEA /* Headers */,
+				20286C36FDCF999611CA2CEA /* Resources */,
+				20286C38FDCF999611CA2CEA /* Sources */,
+				20286C3BFDCF999611CA2CEA /* Frameworks */,
+				04313892FE3035C9C02AAC07 /* Rez */,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = msControler;
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = 0249A665FF388DC511CA2CEA /* msControler.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>msControler</string>
+	<key>CFBundleGetInfoString</key>
+	<string>v.1.2 @ Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msControler.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>msControler</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>v. 1.2</string>
+	<key>CFBundleSignature</key>
+	<string>msCt</string>
+	<key>CFBundleVersion</key>
+	<string>1.2</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+		D354A6C605BE84C3006B0B2F /* msControler dev */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 4BB41E0309ED403400EE9367 /* Build configuration list for PBXApplicationTarget "msControler dev" */;
+			buildPhases = (
+				D354A6C705BE84C3006B0B2F /* Headers */,
+				D354A6C805BE84C3006B0B2F /* Resources */,
+				D354A6CC05BE84C3006B0B2F /* Sources */,
+				D354A6D005BE84C3006B0B2F /* Frameworks */,
+				D354A6D405BE84C3006B0B2F /* Rez */,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = "msControler dev";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = D354A6D605BE84C3006B0B2F /* msControler.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>msControler</string>
+	<key>CFBundleGetInfoString</key>
+	<string>v.1.2 @ Grame 2003</string>
+	<key>CFBundleIconFile</key>
+	<string>msControler.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>msControler</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>v. 1.2</string>
+	<key>CFBundleSignature</key>
+	<string>msCt</string>
+	<key>CFBundleVersion</key>
+	<string>1.2</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+/* End PBXApplicationTarget section */
+
+/* Begin PBXBuildFile section */
+		0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		4BB41DEE09ED403300EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		4BB41DEF09ED403300EE9367 /* msControler.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F5817D0507321600053103 /* msControler.icns */; };
+		4BB41DF009ED403300EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE804C05BC065900FE2FFB /* versions.txt */; };
+		4BB41DF209ED403300EE9367 /* msControler.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D690201418F01053118 /* msControler.c */; };
+		4BB41DF309ED403300EE9367 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9D90207FE0701053118 /* states.c */; };
+		4BB41DF409ED403300EE9367 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DB020803BC01053118 /* profport.c */; };
+		4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		4BB41DF809ED403300EE9367 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354A6E505BE857D006B0B2F /* MidiShare.framework */; };
+		4BB41DFA09ED403300EE9367 /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
+		4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */; };
+		D354A6C905BE84C3006B0B2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		D354A6CA05BE84C3006B0B2F /* msControler.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F5817D0507321600053103 /* msControler.icns */; };
+		D354A6CB05BE84C3006B0B2F /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE804C05BC065900FE2FFB /* versions.txt */; };
+		D354A6CD05BE84C3006B0B2F /* msControler.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D690201418F01053118 /* msControler.c */; };
+		D354A6CE05BE84C3006B0B2F /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9D90207FE0701053118 /* states.c */; };
+		D354A6CF05BE84C3006B0B2F /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DB020803BC01053118 /* profport.c */; };
+		D354A6D105BE84C3006B0B2F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		D354A6D505BE84C3006B0B2F /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
+		D354A6E605BE857D006B0B2F /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354A6E505BE857D006B0B2F /* MidiShare.framework */; };
+		D3EE804D05BC065900FE2FFB /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE804C05BC065900FE2FFB /* versions.txt */; };
+		D3F5817E0507321600053103 /* msControler.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F5817D0507321600053103 /* msControler.icns */; };
+		F721C9DA0207FE0701053118 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9D90207FE0701053118 /* states.c */; };
+		F721C9DC020803BC01053118 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DB020803BC01053118 /* profport.c */; };
+		F7274D6C0201418F01053118 /* msControler.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D690201418F01053118 /* msControler.c */; };
+		F7274D6E0201418F01053118 /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		05952DFCFFF02D1B11CA0E50 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		05952DFDFFF02D1B11CA0E50 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		0249A665FF388DC511CA2CEA /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0249A669FF388E3911CA2CEA /* libstdc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libstdc++.a"; path = "/usr/lib/libstdc++.a"; sourceTree = "<absolute>"; };
+		0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
+		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		4BB41E0009ED403300EE9367 /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msControler.plist"; sourceTree = SOURCE_ROOT; };
+		D354A6D605BE84C3006B0B2F /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D354A6E505BE857D006B0B2F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
+		D3EE804C05BC065900FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
+		D3EE842105BC5A5600FE2FFB /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/MidiShare.framework; sourceTree = SOURCE_ROOT; };
+		D3F5817D0507321600053103 /* msControler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msControler.icns; sourceTree = SOURCE_ROOT; };
+		F721C9D90207FE0701053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
+		F721C9DB020803BC01053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		F7274D690201418F01053118 /* msControler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msControler.c; sourceTree = "<group>"; };
+		F7274D6B0201418F01053118 /* msControler.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; path = msControler.r; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		20286C3BFDCF999611CA2CEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */,
+				D354A6E605BE857D006B0B2F /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41DF509ED403300EE9367 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */,
+				4BB41DF809ED403300EE9367 /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6D005BE84C3006B0B2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A6D105BE84C3006B0B2F /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		195DF8C9FE9D4F0611CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0249A665FF388DC511CA2CEA /* msControler.app */,
+				D354A6D605BE84C3006B0B2F /* msControler.app */,
+				4BB41E0009ED403300EE9367 /* msControler.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE804C05BC065900FE2FFB /* versions.txt */,
+				20286C2AFDCF999611CA2CEA /* Sources */,
+				20286C2CFDCF999611CA2CEA /* Resources */,
+				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
+				195DF8C9FE9D4F0611CA2CBB /* Products */,
+				4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */,
+			);
+			name = "¬´PROJECTNAME¬ª";
+			sourceTree = "<group>";
+		};
+		20286C2AFDCF999611CA2CEA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D690201418F01053118 /* msControler.c */,
+				F721C9D90207FE0701053118 /* states.c */,
+				F721C9DB020803BC01053118 /* profport.c */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		20286C2CFDCF999611CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D6B0201418F01053118 /* msControler.r */,
+				0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */,
+				D3F5817D0507321600053103 /* msControler.icns */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				D354A6E505BE857D006B0B2F /* MidiShare.framework */,
+				20286C33FDCF999611CA2CEA /* Carbon.framework */,
+				0249A669FF388E3911CA2CEA /* libstdc++.a */,
+				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
+				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
+				D3EE842105BC5A5600FE2FFB /* MidiShare.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		20286C35FDCF999611CA2CEA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41DEC09ED403300EE9367 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6C705BE84C3006B0B2F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BB41DEB09ED403300EE9367 /* msControler Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BB41DFB09ED403300EE9367 /* Build configuration list for PBXNativeTarget "msControler Universal" */;
+			buildPhases = (
+				4BB41DEC09ED403300EE9367 /* Headers */,
+				4BB41DED09ED403300EE9367 /* Resources */,
+				4BB41DF109ED403300EE9367 /* Sources */,
+				4BB41DF509ED403300EE9367 /* Frameworks */,
+				4BB41DF909ED403300EE9367 /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = "msControler Universal";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = 4BB41E0009ED403300EE9367 /* msControler.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		20286C28FDCF999611CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41E0709ED403400EE9367 /* Build configuration list for PBXProject "msControler" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				05952DFCFFF02D1B11CA0E50 /* Development */,
+				05952DFDFFF02D1B11CA0E50 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
+			projectDirPath = "";
+			targets = (
+				20286C34FDCF999611CA2CEA /* msControler */,
+				4BB41DEB09ED403300EE9367 /* msControler Universal */,
+				D354A6C605BE84C3006B0B2F /* msControler dev */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		20286C36FDCF999611CA2CEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */,
+				D3F5817E0507321600053103 /* msControler.icns in Resources */,
+				D3EE804D05BC065900FE2FFB /* versions.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41DED09ED403300EE9367 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DEE09ED403300EE9367 /* InfoPlist.strings in Resources */,
+				4BB41DEF09ED403300EE9367 /* msControler.icns in Resources */,
+				4BB41DF009ED403300EE9367 /* versions.txt in Resources */,
+				4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6C805BE84C3006B0B2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A6C905BE84C3006B0B2F /* InfoPlist.strings in Resources */,
+				D354A6CA05BE84C3006B0B2F /* msControler.icns in Resources */,
+				D354A6CB05BE84C3006B0B2F /* versions.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		04313892FE3035C9C02AAC07 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7274D6E0201418F01053118 /* msControler.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41DF909ED403300EE9367 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DFA09ED403300EE9367 /* msControler.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6D405BE84C3006B0B2F /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A6D505BE84C3006B0B2F /* msControler.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20286C38FDCF999611CA2CEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7274D6C0201418F01053118 /* msControler.c in Sources */,
+				F721C9DA0207FE0701053118 /* states.c in Sources */,
+				F721C9DC020803BC01053118 /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BB41DF109ED403300EE9367 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DF209ED403300EE9367 /* msControler.c in Sources */,
+				4BB41DF309ED403300EE9367 /* states.c in Sources */,
+				4BB41DF409ED403300EE9367 /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D354A6CC05BE84C3006B0B2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D354A6CD05BE84C3006B0B2F /* msControler.c in Sources */,
+				D354A6CE05BE84C3006B0B2F /* states.c in Sources */,
+				D354A6CF05BE84C3006B0B2F /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0867D6ABFE840B52C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41DE809ED403300EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41DE909ED403300EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41DEA09ED403300EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41DFC09ED403300EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41DFD09ED403300EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41DFE09ED403300EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41E0409ED403400EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41E0509ED403400EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41E0609ED403400EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41E0809ED403400EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BB41E0909ED403400EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BB41E0A09ED403400EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41DE709ED403300EE9367 /* Build configuration list for PBXApplicationTarget "msControler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41DE809ED403300EE9367 /* Development */,
+				4BB41DE909ED403300EE9367 /* Deployment */,
+				4BB41DEA09ED403300EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41DFB09ED403300EE9367 /* Build configuration list for PBXNativeTarget "msControler Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41DFC09ED403300EE9367 /* Development */,
+				4BB41DFD09ED403300EE9367 /* Deployment */,
+				4BB41DFE09ED403300EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41E0309ED403400EE9367 /* Build configuration list for PBXApplicationTarget "msControler dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41E0409ED403400EE9367 /* Development */,
+				4BB41E0509ED403400EE9367 /* Deployment */,
+				4BB41E0609ED403400EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41E0709ED403400EE9367 /* Build configuration list for PBXProject "msControler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41E0809ED403400EE9367 /* Development */,
+				4BB41E0909ED403400EE9367 /* Deployment */,
+				4BB41E0A09ED403400EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 20286C28FDCF999611CA2CEA /* Project object */;
+}

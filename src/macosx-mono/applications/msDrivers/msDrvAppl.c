@@ -211,7 +211,7 @@ static void ClearInfoString (WindowRef win)
 }
 
 /* -----------------------------------------------------------------------------*/
-static unsigned char* C2PStr (char * str, Str255 buf)
+static unsigned char* C2PStr1 (char * str, Str255 buf)
 {
 	unsigned char n = 0;
 	while (*str) {
@@ -274,7 +274,7 @@ static void ShowDriver (WindowRef win, Point p, ListHandle list)
 		if (ref > 0) {
 			Str255 buf;
 			name = MidiGetName (ref);
-			DrawInfoString (win, C2PStr(name, buf));
+			DrawInfoString (win, C2PStr1(name, buf));
 		}
 	}
 	else ClearInfoString (win);
@@ -446,6 +446,25 @@ static void DoMouseDown()
 			break;
 	}
 }
+/* -----------------------------------------------------------------------------*/
+static void DrawHeader(WindowRef win) 
+{
+	short top ;
+	Rect titleRect;
+	Rect r;
+	GetPortBounds(GetWindowPort(win), &titleRect);
+	top = topPortArea(titleRect);
+	SetRect (&r, 4, 4, 450, 25);
+	RGBForeColor (&black);
+	FrameRect (&r);
+	
+	MoveTo (40, 17);
+	DrawString ("\pInput Slots");
+	MoveTo (125, 17);
+	DrawString ("\p  >>                       Ports                        >>");
+	MoveTo (350, 17);
+	DrawString ("\pOutput Slots");
+}
 
 /* -----------------------------------------------------------------------------*/
 static void DrawPorts (WindowRef win) 
@@ -518,13 +537,14 @@ static void DoRedraw (WindowRef win)
 	GetPort (&curPort);
 	SetPort (GetWindowPort(win));
 	BeginUpdate (win);
-	DrawPicture (titlePict, &titleRect);
+	DrawPicture (titlePict, &titleRect);  
 	for (i = 0; i < listSize; i++) {
 		LUpdate (rgn, theList[i]);
 		FrameRect (&ListRect[i]);
 	}
 	DrawPorts (win);
-	DrawPicture (handlePict, &handleRect);
+	DrawHeader (win); // Picture based drawing do no work anymore on MacIntel, use vetorial based code....
+	DrawPicture (handlePict, &handleRect); 
 	ShowEditMode (win, (portSelected >= 0));
 	EndUpdate(win);
 	SetPort (curPort);

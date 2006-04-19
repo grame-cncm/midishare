@@ -67,7 +67,6 @@ Boolean		doneFlag;
 ControlRef cTracked;
 ControlActionUPP thumbActionPtr;
 
-SysEnvRec	gMac;
 Boolean		hasWNE;
 Boolean		foreGround;
 
