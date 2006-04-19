@@ -1,0 +1,519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01205B3D0156118E7F000001 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01205B2801560F457F000001 /* JavaVM.framework */; };
+		4B43EB4209F637A8009CE70C /* Player.h in Headers */ = {isa = PBXBuildFile; fileRef = F5BE677603EAD9F901053105 /* Player.h */; };
+		4B43EB4509F637A8009CE70C /* MidiPlayer.c in Sources */ = {isa = PBXBuildFile; fileRef = F53C10A50208445201053105 /* MidiPlayer.c */; };
+		4B43EB4709F637A8009CE70C /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01205B2801560F457F000001 /* JavaVM.framework */; };
+		4B43EB7009F6386D009CE70C /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B43EB6F09F6386D009CE70C /* Player.framework */; };
+		4B43EB7109F6386D009CE70C /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B43EB6F09F6386D009CE70C /* Player.framework */; };
+		F53C10A60208445201053105 /* MidiPlayer.c in Sources */ = {isa = PBXBuildFile; fileRef = F53C10A50208445201053105 /* MidiPlayer.c */; };
+		F5BE677703EAD9F901053105 /* Player.h in Headers */ = {isa = PBXBuildFile; fileRef = F5BE677603EAD9F901053105 /* Player.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		0E20B662001FAFA711DB9C8B /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		0E20B663001FAFA711DB9C8B /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		01205B2801560F457F000001 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
+		01205B34015611757F000001 /* libJPlayer.1.1.1.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libJPlayer.1.1.1.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B43EB4E09F637A8009CE70C /* libJPlayer.1.1.2.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJPlayer.1.1.2.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B43EB6F09F6386D009CE70C /* Player.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Player.framework; path = /System/Library/Frameworks/Player.framework; sourceTree = "<absolute>"; };
+		F53C10A50208445201053105 /* MidiPlayer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = MidiPlayer.c; path = ../../src/Java/MidiPlayer.c; sourceTree = SOURCE_ROOT; };
+		F5BE677603EAD9F901053105 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Player.h; path = /System/Library/Frameworks/Player.framework/Headers/Player.h; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		01205B3B015611757F000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01205B3D0156118E7F000001 /* JavaVM.framework in Frameworks */,
+				4B43EB7109F6386D009CE70C /* Player.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B43EB4609F637A8009CE70C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B43EB4709F637A8009CE70C /* JavaVM.framework in Frameworks */,
+				4B43EB7009F6386D009CE70C /* Player.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01F12F4DFEC8CE2211DB9C8B = {
+			isa = PBXGroup;
+			children = (
+				F53C10A50208445201053105 /* MidiPlayer.c */,
+				01F12F4FFEC8CEF111DB9C8B /* Products */,
+				4B43EB6F09F6386D009CE70C /* Player.framework */,
+				01205B2801560F457F000001 /* JavaVM.framework */,
+				F5BE677603EAD9F901053105 /* Player.h */,
+			);
+			sourceTree = "<group>";
+		};
+		01F12F4FFEC8CEF111DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				01205B34015611757F000001 /* libJPlayer.1.1.1.jnilib */,
+				4B43EB4E09F637A8009CE70C /* libJPlayer.1.1.2.jnilib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		01205B36015611757F000001 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5BE677703EAD9F901053105 /* Player.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B43EB4109F637A8009CE70C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B43EB4209F637A8009CE70C /* Player.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXLibraryTarget section */
+		01205B35015611757F000001 /* libJPlayer.jnilib */ = {
+			isa = PBXLibraryTarget;
+			buildConfigurationList = 4B43EB3C09F637A8009CE70C /* Build configuration list for PBXLibraryTarget "libJPlayer.jnilib" */;
+			buildPhases = (
+				01205B36015611757F000001 /* Headers */,
+				1A22E0970156146F7F000001 /* ShellScript */,
+				01205B37015611757F000001 /* Sources */,
+				01205B3B015611757F000001 /* Frameworks */,
+				01205B3C015611757F000001 /* Rez */,
+			);
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MyPrecompPPC.h;
+				PRODUCT_NAME = libJPlayer.1.1.1.jnilib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = libJPlayer.jnilib;
+			productInstallPath = /usr/local/lib;
+			productName = libJFaust.jnilib;
+			productReference = 01205B34015611757F000001 /* libJPlayer.1.1.1.jnilib */;
+		};
+/* End PBXLibraryTarget section */
+
+/* Begin PBXNativeTarget section */
+		4B43EB4009F637A8009CE70C /* libJPlayer.jnilib Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B43EB4A09F637A8009CE70C /* Build configuration list for PBXNativeTarget "libJPlayer.jnilib Universal" */;
+			buildPhases = (
+				4B43EB4109F637A8009CE70C /* Headers */,
+				4B43EB4309F637A8009CE70C /* ShellScript */,
+				4B43EB4409F637A8009CE70C /* Sources */,
+				4B43EB4609F637A8009CE70C /* Frameworks */,
+				4B43EB4909F637A8009CE70C /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MyPrecompPPC.h;
+				PRODUCT_NAME = libJPlayer.1.1.1.jnilib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = "libJPlayer.jnilib Universal";
+			productInstallPath = /usr/local/lib;
+			productName = libJFaust.jnilib;
+			productReference = 4B43EB4E09F637A8009CE70C /* libJPlayer.1.1.2.jnilib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		01F12F4CFEC8CE2211DB9C8B /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4B43EB5209F637AC009CE70C /* Build configuration list for PBXProject "PlayerJNI" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				0E20B662001FAFA711DB9C8B /* Development */,
+				0E20B663001FAFA711DB9C8B /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 01F12F4DFEC8CE2211DB9C8B;
+			productRefGroup = 01F12F4FFEC8CEF111DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				01205B35015611757F000001 /* libJPlayer.jnilib */,
+				4B43EB4009F637A8009CE70C /* libJPlayer.jnilib Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXRezBuildPhase section */
+		01205B3C015611757F000001 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B43EB4909F637A8009CE70C /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1A22E0970156146F7F000001 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+		4B43EB4309F637A8009CE70C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		01205B37015611757F000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F53C10A60208445201053105 /* MidiPlayer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B43EB4409F637A8009CE70C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B43EB4509F637A8009CE70C /* MidiPlayer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B43EB3D09F637A8009CE70C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MyPrecompPPC.h;
+				PRODUCT_NAME = libJPlayer.1.1.1.jnilib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B43EB3E09F637A8009CE70C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MyPrecompPPC.h;
+				PRODUCT_NAME = libJPlayer.1.1.1.jnilib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B43EB3F09F637A8009CE70C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MyPrecompPPC.h;
+				PRODUCT_NAME = libJPlayer.1.1.1.jnilib;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4B43EB4B09F637A8009CE70C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_EXTENSION = jnilib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libJPlayer.1.1.2;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B43EB4C09F637A8009CE70C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				EXECUTABLE_EXTENSION = jnilib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libJPlayer.1.1.2;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B43EB4D09F637A8009CE70C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				EXECUTABLE_EXTENSION = jnilib;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_bundle;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libJPlayer.1.1.2;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4B43EB5309F637AC009CE70C /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4B43EB5409F637AC009CE70C /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4B43EB5509F637AC009CE70C /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B43EB3C09F637A8009CE70C /* Build configuration list for PBXLibraryTarget "libJPlayer.jnilib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B43EB3D09F637A8009CE70C /* Development */,
+				4B43EB3E09F637A8009CE70C /* Deployment */,
+				4B43EB3F09F637A8009CE70C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4B43EB4A09F637A8009CE70C /* Build configuration list for PBXNativeTarget "libJPlayer.jnilib Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B43EB4B09F637A8009CE70C /* Development */,
+				4B43EB4C09F637A8009CE70C /* Deployment */,
+				4B43EB4D09F637A8009CE70C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4B43EB5209F637AC009CE70C /* Build configuration list for PBXProject "PlayerJNI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B43EB5309F637AC009CE70C /* Development */,
+				4B43EB5409F637AC009CE70C /* Deployment */,
+				4B43EB5509F637AC009CE70C /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 01F12F4CFEC8CE2211DB9C8B /* Project object */;
+}
