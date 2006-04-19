@@ -1,0 +1,755 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4BB41D4109ED368600EE9367 /* lflifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BB41D4009ED368600EE9367 /* lflifo.c */; };
+		4BB41D4309ED368E00EE9367 /* lffifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BB41D4209ED368E00EE9367 /* lffifo.c */; };
+		4BE442D005BE876E00FFBCB9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE442CF05BE876E00FFBCB9 /* Info.plist */; };
+		8D07F2C00486CC7A007CD1D0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+		D365892005BD21F500DFCB64 /* msDrvUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = D365891F05BD21F500DFCB64 /* msDrvUtils.c */; };
+		D365892605BD221300DFCB64 /* msPrefs.c in Sources */ = {isa = PBXBuildFile; fileRef = D365892405BD221300DFCB64 /* msPrefs.c */; };
+		D365892705BD221300DFCB64 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = D365892505BD221300DFCB64 /* profport.c */; };
+		D3658B7D05BD2B7700DFCB64 /* msTimer.c in Sources */ = {isa = PBXBuildFile; fileRef = D3658B7C05BD2B7700DFCB64 /* msTimer.c */; };
+		D3658EB905BD730100DFCB64 /* msAudio.c in Sources */ = {isa = PBXBuildFile; fileRef = D3658EB805BD730100DFCB64 /* msAudio.c */; };
+		D371571F07CDD67100AB379D /* lffifo.h in Headers */ = {isa = PBXBuildFile; fileRef = D371570307CDD67100AB379D /* lffifo.h */; };
+		D371572207CDD67100AB379D /* lflifo.h in Headers */ = {isa = PBXBuildFile; fileRef = D371570607CDD67100AB379D /* lflifo.h */; };
+		D371572507CDD67100AB379D /* msAtomic.h in Headers */ = {isa = PBXBuildFile; fileRef = D371570907CDD67100AB379D /* msAtomic.h */; };
+		D378408005BE6D8F00330AC7 /* MidiShare.h in Headers */ = {isa = PBXBuildFile; fileRef = D378407F05BE6D8F00330AC7 /* MidiShare.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3C0BE7205BE712000152ABC /* benchs.c in Sources */ = {isa = PBXBuildFile; fileRef = D3C0BE7105BE712000152ABC /* benchs.c */; };
+		D3C0BEB105BE715F00152ABC /* msAlarms.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE8E05BE715F00152ABC /* msAlarms.h */; };
+		D3C0BEB205BE715F00152ABC /* msAppFun.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE8F05BE715F00152ABC /* msAppFun.h */; };
+		D3C0BEB305BE715F00152ABC /* msAppls.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9005BE715F00152ABC /* msAppls.h */; };
+		D3C0BEB405BE715F00152ABC /* msApplTools.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9105BE715F00152ABC /* msApplTools.h */; };
+		D3C0BEB505BE715F00152ABC /* msConnx.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9205BE715F00152ABC /* msConnx.h */; };
+		D3C0BEB605BE715F00152ABC /* msDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9305BE715F00152ABC /* msDefs.h */; };
+		D3C0BEB705BE715F00152ABC /* msDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9405BE715F00152ABC /* msDriver.h */; };
+		D3C0BEB805BE715F00152ABC /* msDrvFun.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9505BE715F00152ABC /* msDrvFun.h */; };
+		D3C0BEB905BE715F00152ABC /* msEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9605BE715F00152ABC /* msEvents.h */; };
+		D3C0BEBA05BE715F00152ABC /* msExtern.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9705BE715F00152ABC /* msExtern.h */; };
+		D3C0BEBB05BE715F00152ABC /* msFields.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9805BE715F00152ABC /* msFields.h */; };
+		D3C0BEBC05BE715F00152ABC /* msFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9905BE715F00152ABC /* msFilter.h */; };
+		D3C0BEBD05BE715F00152ABC /* msFrcv.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9A05BE715F00152ABC /* msFrcv.h */; };
+		D3C0BEBE05BE715F00152ABC /* msFxmt.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9B05BE715F00152ABC /* msFxmt.h */; };
+		D3C0BEBF05BE715F00152ABC /* msInit.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9C05BE715F00152ABC /* msInit.h */; };
+		D3C0BEC005BE715F00152ABC /* msKernel.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9D05BE715F00152ABC /* msKernel.h */; };
+		D3C0BEC105BE715F00152ABC /* msMail.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9E05BE715F00152ABC /* msMail.h */; };
+		D3C0BEC205BE715F00152ABC /* msMem.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BE9F05BE715F00152ABC /* msMem.h */; };
+		D3C0BEC305BE715F00152ABC /* msMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA005BE715F00152ABC /* msMemory.h */; };
+		D3C0BEC405BE715F00152ABC /* msSeq.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA105BE715F00152ABC /* msSeq.h */; };
+		D3C0BEC505BE715F00152ABC /* msSmpte.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA205BE715F00152ABC /* msSmpte.h */; };
+		D3C0BEC605BE715F00152ABC /* msSorter.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA305BE715F00152ABC /* msSorter.h */; };
+		D3C0BEC705BE715F00152ABC /* msSync.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA405BE715F00152ABC /* msSync.h */; };
+		D3C0BEC805BE715F00152ABC /* msTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA505BE715F00152ABC /* msTasks.h */; };
+		D3C0BEC905BE715F00152ABC /* msTime.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA605BE715F00152ABC /* msTime.h */; };
+		D3C0BECA05BE715F00152ABC /* msTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA705BE715F00152ABC /* msTypes.h */; };
+		D3C0BECB05BE715F00152ABC /* msXmtRcv.h in Headers */ = {isa = PBXBuildFile; fileRef = D3C0BEA805BE715F00152ABC /* msXmtRcv.h */; };
+		D3EE860D05BC621F00FE2FFB /* msAlarms.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860605BC621F00FE2FFB /* msAlarms.c */; };
+		D3EE860E05BC621F00FE2FFB /* msAppls.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860705BC621F00FE2FFB /* msAppls.c */; };
+		D3EE860F05BC621F00FE2FFB /* msConnx.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860805BC621F00FE2FFB /* msConnx.c */; };
+		D3EE861005BC621F00FE2FFB /* msFilter.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860905BC621F00FE2FFB /* msFilter.c */; };
+		D3EE861105BC621F00FE2FFB /* msMail.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860A05BC621F00FE2FFB /* msMail.c */; };
+		D3EE861205BC621F00FE2FFB /* msTasks.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860B05BC621F00FE2FFB /* msTasks.c */; };
+		D3EE861305BC621F00FE2FFB /* msXmtRcv.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE860C05BC621F00FE2FFB /* msXmtRcv.c */; };
+		D3EE861605BC622F00FE2FFB /* msDriver.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE861505BC622F00FE2FFB /* msDriver.c */; };
+		D3EE861C05BC623900FE2FFB /* msHandler.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE861805BC623900FE2FFB /* msHandler.c */; };
+		D3EE861D05BC623900FE2FFB /* msInit.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE861905BC623900FE2FFB /* msInit.c */; };
+		D3EE861E05BC623900FE2FFB /* msSmpte.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE861A05BC623900FE2FFB /* msSmpte.c */; };
+		D3EE861F05BC623900FE2FFB /* msTime.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE861B05BC623900FE2FFB /* msTime.c */; };
+		D3EE862605BC624100FE2FFB /* msEvents.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862105BC624100FE2FFB /* msEvents.c */; };
+		D3EE862705BC624100FE2FFB /* msFields.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862205BC624100FE2FFB /* msFields.c */; };
+		D3EE862905BC624100FE2FFB /* msMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862405BC624100FE2FFB /* msMemory.c */; };
+		D3EE862A05BC624100FE2FFB /* msSeq.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862505BC624100FE2FFB /* msSeq.c */; };
+		D3EE862D05BC624700FE2FFB /* msSorter.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862C05BC624700FE2FFB /* msSorter.c */; };
+		D3EE862F05BC625F00FE2FFB /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE862E05BC625F00FE2FFB /* macosx.c */; };
+		D3EE863105BC626C00FE2FFB /* MidiShare.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EE863005BC626C00FE2FFB /* MidiShare.c */; };
+		D3EE882505BC640400FE2FFB /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EE882405BC640400FE2FFB /* CoreAudio.framework */; };
+		D3EE883005BC641500FE2FFB /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EE882F05BC641500FE2FFB /* CoreServices.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4F0BB7EC011F40E904CA0E50 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4F0BB7ED011F40E904CA0E50 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		089C1667FE841158C02AAC07 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		4BB41D4009ED368600EE9367 /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../common/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
+		4BB41D4209ED368E00EE9367 /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../common/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
+		4BE442CF05BE876E00FFBCB9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		8D07F2C80486CC7A007CD1D0 /* MidiShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MidiShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D365891F05BD21F500DFCB64 /* msDrvUtils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msDrvUtils.c; path = ../lib/msDrvUtils.c; sourceTree = SOURCE_ROOT; };
+		D365892405BD221300DFCB64 /* msPrefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msPrefs.c; path = ../lib/msPrefs.c; sourceTree = SOURCE_ROOT; };
+		D365892505BD221300DFCB64 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		D3658B7C05BD2B7700DFCB64 /* msTimer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msTimer.c; sourceTree = SOURCE_ROOT; };
+		D3658EB805BD730100DFCB64 /* msAudio.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msAudio.c; sourceTree = SOURCE_ROOT; };
+		D371570307CDD67100AB379D /* lffifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = lffifo.h; sourceTree = "<group>"; };
+		D371570607CDD67100AB379D /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = lflifo.h; sourceTree = "<group>"; };
+		D371570907CDD67100AB379D /* msAtomic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msAtomic.h; sourceTree = "<group>"; };
+		D378407F05BE6D8F00330AC7 /* MidiShare.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MidiShare.h; path = include/MidiShare.h; sourceTree = SOURCE_ROOT; };
+		D3C0BE7105BE712000152ABC /* benchs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = benchs.c; path = ../common/benchs.c; sourceTree = SOURCE_ROOT; };
+		D3C0BE8E05BE715F00152ABC /* msAlarms.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msAlarms.h; sourceTree = "<group>"; };
+		D3C0BE8F05BE715F00152ABC /* msAppFun.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msAppFun.h; sourceTree = "<group>"; };
+		D3C0BE9005BE715F00152ABC /* msAppls.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msAppls.h; sourceTree = "<group>"; };
+		D3C0BE9105BE715F00152ABC /* msApplTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msApplTools.h; sourceTree = "<group>"; };
+		D3C0BE9205BE715F00152ABC /* msConnx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msConnx.h; sourceTree = "<group>"; };
+		D3C0BE9305BE715F00152ABC /* msDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msDefs.h; sourceTree = "<group>"; };
+		D3C0BE9405BE715F00152ABC /* msDriver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msDriver.h; sourceTree = "<group>"; };
+		D3C0BE9505BE715F00152ABC /* msDrvFun.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msDrvFun.h; sourceTree = "<group>"; };
+		D3C0BE9605BE715F00152ABC /* msEvents.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msEvents.h; sourceTree = "<group>"; };
+		D3C0BE9705BE715F00152ABC /* msExtern.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msExtern.h; sourceTree = "<group>"; };
+		D3C0BE9805BE715F00152ABC /* msFields.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msFields.h; sourceTree = "<group>"; };
+		D3C0BE9905BE715F00152ABC /* msFilter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msFilter.h; sourceTree = "<group>"; };
+		D3C0BE9A05BE715F00152ABC /* msFrcv.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msFrcv.h; sourceTree = "<group>"; };
+		D3C0BE9B05BE715F00152ABC /* msFxmt.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msFxmt.h; sourceTree = "<group>"; };
+		D3C0BE9C05BE715F00152ABC /* msInit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msInit.h; sourceTree = "<group>"; };
+		D3C0BE9D05BE715F00152ABC /* msKernel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msKernel.h; sourceTree = "<group>"; };
+		D3C0BE9E05BE715F00152ABC /* msMail.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msMail.h; sourceTree = "<group>"; };
+		D3C0BE9F05BE715F00152ABC /* msMem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msMem.h; sourceTree = "<group>"; };
+		D3C0BEA005BE715F00152ABC /* msMemory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msMemory.h; sourceTree = "<group>"; };
+		D3C0BEA105BE715F00152ABC /* msSeq.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msSeq.h; sourceTree = "<group>"; };
+		D3C0BEA205BE715F00152ABC /* msSmpte.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msSmpte.h; sourceTree = "<group>"; };
+		D3C0BEA305BE715F00152ABC /* msSorter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msSorter.h; sourceTree = "<group>"; };
+		D3C0BEA405BE715F00152ABC /* msSync.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msSync.h; sourceTree = "<group>"; };
+		D3C0BEA505BE715F00152ABC /* msTasks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msTasks.h; sourceTree = "<group>"; };
+		D3C0BEA605BE715F00152ABC /* msTime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msTime.h; sourceTree = "<group>"; };
+		D3C0BEA705BE715F00152ABC /* msTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msTypes.h; sourceTree = "<group>"; };
+		D3C0BEA805BE715F00152ABC /* msXmtRcv.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msXmtRcv.h; sourceTree = "<group>"; };
+		D3EE860605BC621F00FE2FFB /* msAlarms.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msAlarms.c; sourceTree = "<group>"; };
+		D3EE860705BC621F00FE2FFB /* msAppls.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msAppls.c; sourceTree = "<group>"; };
+		D3EE860805BC621F00FE2FFB /* msConnx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msConnx.c; sourceTree = "<group>"; };
+		D3EE860905BC621F00FE2FFB /* msFilter.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msFilter.c; sourceTree = "<group>"; };
+		D3EE860A05BC621F00FE2FFB /* msMail.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msMail.c; sourceTree = "<group>"; };
+		D3EE860B05BC621F00FE2FFB /* msTasks.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msTasks.c; sourceTree = "<group>"; };
+		D3EE860C05BC621F00FE2FFB /* msXmtRcv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msXmtRcv.c; sourceTree = "<group>"; };
+		D3EE861505BC622F00FE2FFB /* msDriver.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msDriver.c; sourceTree = "<group>"; };
+		D3EE861805BC623900FE2FFB /* msHandler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msHandler.c; sourceTree = "<group>"; };
+		D3EE861905BC623900FE2FFB /* msInit.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msInit.c; sourceTree = "<group>"; };
+		D3EE861A05BC623900FE2FFB /* msSmpte.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msSmpte.c; sourceTree = "<group>"; };
+		D3EE861B05BC623900FE2FFB /* msTime.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msTime.c; sourceTree = "<group>"; };
+		D3EE862105BC624100FE2FFB /* msEvents.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msEvents.c; sourceTree = "<group>"; };
+		D3EE862205BC624100FE2FFB /* msFields.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msFields.c; sourceTree = "<group>"; };
+		D3EE862405BC624100FE2FFB /* msMemory.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msMemory.c; sourceTree = "<group>"; };
+		D3EE862505BC624100FE2FFB /* msSeq.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msSeq.c; sourceTree = "<group>"; };
+		D3EE862C05BC624700FE2FFB /* msSorter.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msSorter.c; sourceTree = "<group>"; };
+		D3EE862E05BC625F00FE2FFB /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = macosx.c; sourceTree = SOURCE_ROOT; };
+		D3EE863005BC626C00FE2FFB /* MidiShare.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = MidiShare.c; sourceTree = SOURCE_ROOT; };
+		D3EE882405BC640400FE2FFB /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		D3EE882F05BC641500FE2FFB /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D07F2C30486CC7A007CD1D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3EE882505BC640400FE2FFB /* CoreAudio.framework in Frameworks */,
+				D3EE883005BC641500FE2FFB /* CoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D07F2C80486CC7A007CD1D0 /* MidiShare.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* midishare */ = {
+			isa = PBXGroup;
+			children = (
+				D378407E05BE6D8F00330AC7 /* include */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = midishare;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE882F05BC641500FE2FFB /* CoreServices.framework */,
+				D3EE882405BC640400FE2FFB /* CoreAudio.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4BE442CF05BE876E00FFBCB9 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D3C0BEEB05BE71A700152ABC /* lib */,
+				D3C0BE6405BE70ED00152ABC /* common */,
+				D3658EB805BD730100DFCB64 /* msAudio.c */,
+				D3658B7C05BD2B7700DFCB64 /* msTimer.c */,
+				D3EE862E05BC625F00FE2FFB /* macosx.c */,
+				D3EE863005BC626C00FE2FFB /* MidiShare.c */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		D37156EF07CDD67100AB379D /* atomic */ = {
+			isa = PBXGroup;
+			children = (
+				4BB41D4209ED368E00EE9367 /* lffifo.c */,
+				4BB41D4009ED368600EE9367 /* lflifo.c */,
+				D371570307CDD67100AB379D /* lffifo.h */,
+				D371570607CDD67100AB379D /* lflifo.h */,
+				D371570907CDD67100AB379D /* msAtomic.h */,
+			);
+			name = atomic;
+			path = ../common/atomic;
+			sourceTree = SOURCE_ROOT;
+		};
+		D378407E05BE6D8F00330AC7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				D378407F05BE6D8F00330AC7 /* MidiShare.h */,
+			);
+			path = include;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3C0BE6405BE70ED00152ABC /* common */ = {
+			isa = PBXGroup;
+			children = (
+				D37156EF07CDD67100AB379D /* atomic */,
+				D3C0BE7105BE712000152ABC /* benchs.c */,
+				D3C0BE8505BE715F00152ABC /* Headers */,
+				D3EE860505BC621F00FE2FFB /* Clients */,
+				D3EE861405BC622F00FE2FFB /* Drivers */,
+				D3EE861705BC623900FE2FFB /* Kernel */,
+				D3EE862005BC624100FE2FFB /* Memory */,
+				D3EE862B05BC624700FE2FFB /* Sorter */,
+			);
+			name = common;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3C0BE8505BE715F00152ABC /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				D3C0BE8E05BE715F00152ABC /* msAlarms.h */,
+				D3C0BE8F05BE715F00152ABC /* msAppFun.h */,
+				D3C0BE9005BE715F00152ABC /* msAppls.h */,
+				D3C0BE9105BE715F00152ABC /* msApplTools.h */,
+				D3C0BE9205BE715F00152ABC /* msConnx.h */,
+				D3C0BE9305BE715F00152ABC /* msDefs.h */,
+				D3C0BE9405BE715F00152ABC /* msDriver.h */,
+				D3C0BE9505BE715F00152ABC /* msDrvFun.h */,
+				D3C0BE9605BE715F00152ABC /* msEvents.h */,
+				D3C0BE9705BE715F00152ABC /* msExtern.h */,
+				D3C0BE9805BE715F00152ABC /* msFields.h */,
+				D3C0BE9905BE715F00152ABC /* msFilter.h */,
+				D3C0BE9A05BE715F00152ABC /* msFrcv.h */,
+				D3C0BE9B05BE715F00152ABC /* msFxmt.h */,
+				D3C0BE9C05BE715F00152ABC /* msInit.h */,
+				D3C0BE9D05BE715F00152ABC /* msKernel.h */,
+				D3C0BE9E05BE715F00152ABC /* msMail.h */,
+				D3C0BE9F05BE715F00152ABC /* msMem.h */,
+				D3C0BEA005BE715F00152ABC /* msMemory.h */,
+				D3C0BEA105BE715F00152ABC /* msSeq.h */,
+				D3C0BEA205BE715F00152ABC /* msSmpte.h */,
+				D3C0BEA305BE715F00152ABC /* msSorter.h */,
+				D3C0BEA405BE715F00152ABC /* msSync.h */,
+				D3C0BEA505BE715F00152ABC /* msTasks.h */,
+				D3C0BEA605BE715F00152ABC /* msTime.h */,
+				D3C0BEA705BE715F00152ABC /* msTypes.h */,
+				D3C0BEA805BE715F00152ABC /* msXmtRcv.h */,
+			);
+			name = Headers;
+			path = ../common/Headers;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3C0BEEB05BE71A700152ABC /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				D365892405BD221300DFCB64 /* msPrefs.c */,
+				D365892505BD221300DFCB64 /* profport.c */,
+				D365891F05BD21F500DFCB64 /* msDrvUtils.c */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		D3EE860505BC621F00FE2FFB /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE860605BC621F00FE2FFB /* msAlarms.c */,
+				D3EE860705BC621F00FE2FFB /* msAppls.c */,
+				D3EE860805BC621F00FE2FFB /* msConnx.c */,
+				D3EE860905BC621F00FE2FFB /* msFilter.c */,
+				D3EE860A05BC621F00FE2FFB /* msMail.c */,
+				D3EE860B05BC621F00FE2FFB /* msTasks.c */,
+				D3EE860C05BC621F00FE2FFB /* msXmtRcv.c */,
+			);
+			name = Clients;
+			path = ../common/Clients;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EE861405BC622F00FE2FFB /* Drivers */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE861505BC622F00FE2FFB /* msDriver.c */,
+			);
+			name = Drivers;
+			path = ../common/Drivers;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EE861705BC623900FE2FFB /* Kernel */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE861805BC623900FE2FFB /* msHandler.c */,
+				D3EE861905BC623900FE2FFB /* msInit.c */,
+				D3EE861A05BC623900FE2FFB /* msSmpte.c */,
+				D3EE861B05BC623900FE2FFB /* msTime.c */,
+			);
+			name = Kernel;
+			path = ../common/Kernel;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EE862005BC624100FE2FFB /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE862105BC624100FE2FFB /* msEvents.c */,
+				D3EE862205BC624100FE2FFB /* msFields.c */,
+				D3EE862405BC624100FE2FFB /* msMemory.c */,
+				D3EE862505BC624100FE2FFB /* msSeq.c */,
+			);
+			name = Memory;
+			path = ../common/Memory;
+			sourceTree = SOURCE_ROOT;
+		};
+		D3EE862B05BC624700FE2FFB /* Sorter */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE862C05BC624700FE2FFB /* msSorter.c */,
+			);
+			name = Sorter;
+			path = ../common/Sorter;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8D07F2BD0486CC7A007CD1D0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D378408005BE6D8F00330AC7 /* MidiShare.h in Headers */,
+				D3C0BEB105BE715F00152ABC /* msAlarms.h in Headers */,
+				D3C0BEB205BE715F00152ABC /* msAppFun.h in Headers */,
+				D3C0BEB305BE715F00152ABC /* msAppls.h in Headers */,
+				D3C0BEB405BE715F00152ABC /* msApplTools.h in Headers */,
+				D3C0BEB505BE715F00152ABC /* msConnx.h in Headers */,
+				D3C0BEB605BE715F00152ABC /* msDefs.h in Headers */,
+				D3C0BEB705BE715F00152ABC /* msDriver.h in Headers */,
+				D3C0BEB805BE715F00152ABC /* msDrvFun.h in Headers */,
+				D3C0BEB905BE715F00152ABC /* msEvents.h in Headers */,
+				D3C0BEBA05BE715F00152ABC /* msExtern.h in Headers */,
+				D3C0BEBB05BE715F00152ABC /* msFields.h in Headers */,
+				D3C0BEBC05BE715F00152ABC /* msFilter.h in Headers */,
+				D3C0BEBD05BE715F00152ABC /* msFrcv.h in Headers */,
+				D3C0BEBE05BE715F00152ABC /* msFxmt.h in Headers */,
+				D3C0BEBF05BE715F00152ABC /* msInit.h in Headers */,
+				D3C0BEC005BE715F00152ABC /* msKernel.h in Headers */,
+				D3C0BEC105BE715F00152ABC /* msMail.h in Headers */,
+				D3C0BEC205BE715F00152ABC /* msMem.h in Headers */,
+				D3C0BEC305BE715F00152ABC /* msMemory.h in Headers */,
+				D3C0BEC405BE715F00152ABC /* msSeq.h in Headers */,
+				D3C0BEC505BE715F00152ABC /* msSmpte.h in Headers */,
+				D3C0BEC605BE715F00152ABC /* msSorter.h in Headers */,
+				D3C0BEC705BE715F00152ABC /* msSync.h in Headers */,
+				D3C0BEC805BE715F00152ABC /* msTasks.h in Headers */,
+				D3C0BEC905BE715F00152ABC /* msTime.h in Headers */,
+				D3C0BECA05BE715F00152ABC /* msTypes.h in Headers */,
+				D3C0BECB05BE715F00152ABC /* msXmtRcv.h in Headers */,
+				D371571F07CDD67100AB379D /* lffifo.h in Headers */,
+				D371572207CDD67100AB379D /* lflifo.h in Headers */,
+				D371572507CDD67100AB379D /* msAtomic.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D07F2BC0486CC7A007CD1D0 /* midishare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BB41D0109ED34E100EE9367 /* Build configuration list for PBXNativeTarget "midishare" */;
+			buildPhases = (
+				8D07F2BD0486CC7A007CD1D0 /* Headers */,
+				8D07F2BF0486CC7A007CD1D0 /* Resources */,
+				8D07F2C10486CC7A007CD1D0 /* Sources */,
+				8D07F2C30486CC7A007CD1D0 /* Frameworks */,
+				8D07F2C50486CC7A007CD1D0 /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1.91;
+				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PFE_FILE_C_DIALECTS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__Macintosh__,
+					__MacOSX__,
+					__Types__,
+					__msBench__,
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = ../common/Headers;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /System/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = Dynamic;
+				OTHER_CFLAGS = "-I../lib";
+				OTHER_LDFLAGS = "-flat_namespace";
+				PRODUCT_NAME = MidiShare;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			name = midishare;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = midishare;
+			productReference = 8D07F2C80486CC7A007CD1D0 /* MidiShare.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41D0509ED34E100EE9367 /* Build configuration list for PBXProject "midishare" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4F0BB7EC011F40E904CA0E50 /* Development */,
+				4F0BB7ED011F40E904CA0E50 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* midishare */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				8D07F2BC0486CC7A007CD1D0 /* midishare */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D07F2BF0486CC7A007CD1D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D07F2C00486CC7A007CD1D0 /* InfoPlist.strings in Resources */,
+				4BE442D005BE876E00FFBCB9 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		8D07F2C50486CC7A007CD1D0 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D07F2C10486CC7A007CD1D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3EE860D05BC621F00FE2FFB /* msAlarms.c in Sources */,
+				D3EE860E05BC621F00FE2FFB /* msAppls.c in Sources */,
+				D3EE860F05BC621F00FE2FFB /* msConnx.c in Sources */,
+				D3EE861005BC621F00FE2FFB /* msFilter.c in Sources */,
+				D3EE861105BC621F00FE2FFB /* msMail.c in Sources */,
+				D3EE861205BC621F00FE2FFB /* msTasks.c in Sources */,
+				D3EE861305BC621F00FE2FFB /* msXmtRcv.c in Sources */,
+				D3EE861605BC622F00FE2FFB /* msDriver.c in Sources */,
+				D3EE861C05BC623900FE2FFB /* msHandler.c in Sources */,
+				D3EE861D05BC623900FE2FFB /* msInit.c in Sources */,
+				D3EE861E05BC623900FE2FFB /* msSmpte.c in Sources */,
+				D3EE861F05BC623900FE2FFB /* msTime.c in Sources */,
+				D3EE862605BC624100FE2FFB /* msEvents.c in Sources */,
+				D3EE862705BC624100FE2FFB /* msFields.c in Sources */,
+				D3EE862905BC624100FE2FFB /* msMemory.c in Sources */,
+				D3EE862A05BC624100FE2FFB /* msSeq.c in Sources */,
+				D3EE862D05BC624700FE2FFB /* msSorter.c in Sources */,
+				D3EE862F05BC625F00FE2FFB /* macosx.c in Sources */,
+				D3EE863105BC626C00FE2FFB /* MidiShare.c in Sources */,
+				D365892005BD21F500DFCB64 /* msDrvUtils.c in Sources */,
+				D365892605BD221300DFCB64 /* msPrefs.c in Sources */,
+				D365892705BD221300DFCB64 /* profport.c in Sources */,
+				D3658B7D05BD2B7700DFCB64 /* msTimer.c in Sources */,
+				D3658EB905BD730100DFCB64 /* msAudio.c in Sources */,
+				D3C0BE7205BE712000152ABC /* benchs.c in Sources */,
+				4BB41D4109ED368600EE9367 /* lflifo.c in Sources */,
+				4BB41D4309ED368E00EE9367 /* lffifo.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = InfoPlist.strings;
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41D0209ED34E100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1.92;
+				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__Macintosh__,
+					__MacOSX__,
+					__Types__,
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = ../common/Headers;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /System/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = Dynamic;
+				MACH_O_TYPE = mh_dylib;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "-I../lib";
+				OTHER_LDFLAGS = "-flat_namespace";
+				PRODUCT_NAME = MidiShare;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41D0309ED34E100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1.92;
+				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PFE_FILE_C_DIALECTS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__Macintosh__,
+					__MacOSX__,
+					__Types__,
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = ../common/Headers;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /System/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = Dynamic;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-I../lib";
+				OTHER_LDFLAGS = "-flat_namespace";
+				PRODUCT_NAME = MidiShare;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41D0409ED34E100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1.92;
+				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PFE_FILE_C_DIALECTS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__Macintosh__,
+					__MacOSX__,
+					__Types__,
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = ../common/Headers;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /System/Library/Frameworks;
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = Dynamic;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "-I../lib";
+				OTHER_LDFLAGS = "-flat_namespace";
+				PRODUCT_NAME = MidiShare;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Default;
+		};
+		4BB41D0609ED34E100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BB41D0709ED34E100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BB41D0809ED34E100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41D0109ED34E100EE9367 /* Build configuration list for PBXNativeTarget "midishare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41D0209ED34E100EE9367 /* Development */,
+				4BB41D0309ED34E100EE9367 /* Deployment */,
+				4BB41D0409ED34E100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41D0509ED34E100EE9367 /* Build configuration list for PBXProject "midishare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41D0609ED34E100EE9367 /* Development */,
+				4BB41D0709ED34E100EE9367 /* Deployment */,
+				4BB41D0809ED34E100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

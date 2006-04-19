@@ -72,7 +72,7 @@ inline Boolean MidiShare() { return true; }
 #	include <String.h>
 #	include <StdLib.h>
 #	include "MidiShare.h"
-# if defined(__ppc__) && defined(__GNUC__)
+# if (defined(__ppc__) || defined(__i386__)) && defined(__GNUC__)
 #	define CNAME
 #	define CTASKS
 #	define nil 0
@@ -200,14 +200,14 @@ GetEvFuncPtr GetEvTable[] = {
 
 
 /*______________________________________________________________________________*/
-static void wait( int d)
+static void mswait(int d)
 {
 	unsigned long time = MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
 }
 
 /*______________________________________________________________________________*/
-static void wait2( int d)
+static void mswait2(int d)
 {
 	long time, i, t;
 	
@@ -487,7 +487,7 @@ static GetCtrl( MidiEvPtr e)
 	int ret= false, type;
 	
 	type= EvType(e);
-	wait( 2);
+	mswait(2);
 	n1= MidiCountEvs( r1);
 	n2= MidiCountEvs( r2);
 	if( n2!= 1 || (type== typeCtrl14b && n1!= 2)
@@ -542,7 +542,7 @@ static GetNote( MidiEvPtr e)
 {
 	long n;	int ret= false;
 
-	wait (Dur(e));
+	mswait (Dur(e));
 	n= MidiCountEvs( r2);
 	if(n != 1)
 		print("\nWarning : wrong fifo content : %ld ", n);
@@ -593,7 +593,7 @@ static TestEvent( short i, Boolean display)
 					return true;
 				Date( copy)= MidiGetTime()+2;
 				MidiSend( r1, copy); 
-				wait( 6);
+				mswait( 6);
 				ret= (* GetEvTable[i])( e);
 			}
 		}
@@ -646,7 +646,7 @@ void SystemeEx()
 		MidiAddField( e, v++);
 		if( !(copy= MidiCopyEv( e))) { noEvts; break;}
 		else if( CmpEv( e, copy, "copy")){
-			MidiSendIm( r1, copy); wait( 40);
+			MidiSendIm( r1, copy); mswait( 40);
 			if( !GetEvents( e))
 			{
 				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
@@ -671,7 +671,7 @@ void SystemeEx()
 		print(" copy"); flush;
 		if( CmpEv( e, copy, "copy")){
 			print(" ok ");
-			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
+			MidiSendIm( r1, copy); mswait2( (SizeMaxSysEx*2)/3+ 10);
 			if( !GetEvents( e))
 			{
 				MidiFreeEv(e);
@@ -706,7 +706,7 @@ void Stream()
 		MidiAddField( e, (long)0xF7);
 		if( !(copy= MidiCopyEv( e))) { noEvts; break;}
 		else if( CmpEv( e, copy, "copy")){
-			MidiSendIm( r1, copy); wait( 40);
+			MidiSendIm( r1, copy); mswait( 40);
 			if( !GetStream( e))
 			{
 				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
@@ -733,7 +733,7 @@ void Stream()
 		print(" copy"); flush;
 		if( CmpEv( e, copy, "copy")){
 			print(" ok ");
-			MidiSendIm( r1, copy); wait2( (SizeMaxSysEx*2)/3+ 10);
+			MidiSendIm( r1, copy); mswait2( (SizeMaxSysEx*2)/3+ 10);
 			if( !GetStream( e))
 			{
 				MidiFreeEv(e);
@@ -873,7 +873,7 @@ main( int argc, char *argv[])
 
 		if( OpenAppls())
 		{
-			wait( 100);
+			mswait( 100);
 			ChanEvents(); flush;
 			CommonEvents(); flush;			
 			SystemeEx(); flush;

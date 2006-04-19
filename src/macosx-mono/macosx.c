@@ -140,7 +140,7 @@ static Boolean LoadDriver(char *drvName)
 	if (!mem) return false;
 	
 	mem->next = gMacOSXDriver;
-	mem->handle = LoadLibrary(drvName,"_Start");
+	mem->handle = LoadLibrary(drvName,"Start");
 	
 	if (mem->handle) {
 		gMacOSXDriver = mem;
@@ -175,8 +175,8 @@ void SpecialSleep(TMSGlobalPtr g)
 	gMacOSXDriver = 0;
 	while (drv) {
 		next = drv->next;
-		FreeLibrary (drv->handle,"_Stop");
-		DisposeMemory (drv);
+		FreeLibrary(drv->handle,"Stop");
+		DisposeMemory(drv);
 		drv = next;
 	}
  }
