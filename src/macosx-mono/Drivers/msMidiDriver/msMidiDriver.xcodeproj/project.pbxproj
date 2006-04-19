@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4BD92D9209EE504E002DCEE0 /* implicit.h in Headers */ = {isa = PBXBuildFile; fileRef = F76B9CAB02086D8E01053118 /* implicit.h */; };
+		4BD92D9309EE504E002DCEE0 /* msDriverState.c in Sources */ = {isa = PBXBuildFile; fileRef = F58CAEE4020ADF5E01053105 /* msDriverState.c */; };
+		4BD92D9409EE504F002DCEE0 /* msDriverState.h in Headers */ = {isa = PBXBuildFile; fileRef = F58CAEE5020ADF5E01053105 /* msDriverState.h */; };
+		4BD92D9509EE504F002DCEE0 /* msMidiDriver.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7801FC781301053105 /* msMidiDriver.c */; };
+		4BD92D9609EE504F002DCEE0 /* msMidiDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F54A7D7901FC781301053105 /* msMidiDriver.h */; };
+		4BD92D9709EE5050002DCEE0 /* msMidiInOut.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7701FC781301053105 /* msMidiInOut.c */; };
+		4BD92D9809EE5050002DCEE0 /* msMidiMain.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D8401FC781C01053105 /* msMidiMain.c */; };
+		4BD92D9909EE5050002DCEE0 /* msMidiState.c in Sources */ = {isa = PBXBuildFile; fileRef = F569F8E7020573BA01053105 /* msMidiState.c */; };
+		4BD92D9A09EE5051002DCEE0 /* msMidiState.h in Headers */ = {isa = PBXBuildFile; fileRef = F569F8E6020573BA01053105 /* msMidiState.h */; };
+		4BD92DE909EE52A7002DCEE0 /* MidiStreamToEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1E0208058801053105 /* MidiStreamToEvent.c */; };
+		4BD92DEA09EE52A7002DCEE0 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1F0208058801053105 /* profport.c */; };
+		4BD92DEB09EE52A8002DCEE0 /* EventToMidiStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1C0208056001053105 /* EventToMidiStream.c */; };
+		4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */; };
+		4BD92DF609EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */; };
+		4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */; };
+		4BD92E0109EE52CA002DCEE0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */; };
+		4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
+		4BD92E0609EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
+		F5240F1D0208056001053105 /* EventToMidiStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1C0208056001053105 /* EventToMidiStream.c */; };
+		F5240F200208058801053105 /* MidiStreamToEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1E0208058801053105 /* MidiStreamToEvent.c */; };
+		F5240F210208058801053105 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1F0208058801053105 /* profport.c */; };
+		F54A7D7E01FC781301053105 /* msMidiDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F54A7D7901FC781301053105 /* msMidiDriver.h */; };
+		F54A7D8001FC781301053105 /* msMidiInOut.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7701FC781301053105 /* msMidiInOut.c */; };
+		F54A7D8101FC781301053105 /* msMidiDriver.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7801FC781301053105 /* msMidiDriver.c */; };
+		F54A7D8501FC781C01053105 /* msMidiMain.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D8401FC781C01053105 /* msMidiMain.c */; };
+		F569F8E8020573BA01053105 /* msMidiState.h in Headers */ = {isa = PBXBuildFile; fileRef = F569F8E6020573BA01053105 /* msMidiState.h */; };
+		F569F8E9020573BA01053105 /* msMidiState.c in Sources */ = {isa = PBXBuildFile; fileRef = F569F8E7020573BA01053105 /* msMidiState.c */; };
+		F58CAEE6020ADF5E01053105 /* msDriverState.h in Headers */ = {isa = PBXBuildFile; fileRef = F58CAEE5020ADF5E01053105 /* msDriverState.h */; };
+		F58CAEE7020ADF5E01053105 /* msDriverState.c in Sources */ = {isa = PBXBuildFile; fileRef = F58CAEE4020ADF5E01053105 /* msDriverState.c */; };
+		F76B9CAC02086D8E01053118 /* implicit.h in Headers */ = {isa = PBXBuildFile; fileRef = F76B9CAB02086D8E01053118 /* implicit.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		F54A7D7501FC77AF01053105 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		F54A7D7601FC77AF01053105 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.7.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msMidiDriver.1.0.7.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
+		4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		D3EE80D105BC089000FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
+		F5240F1C0208056001053105 /* EventToMidiStream.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = EventToMidiStream.c; path = ../../../lib/EventToMidiStream.c; sourceTree = SOURCE_ROOT; };
+		F5240F1E0208058801053105 /* MidiStreamToEvent.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = MidiStreamToEvent.c; path = ../../../lib/MidiStreamToEvent.c; sourceTree = SOURCE_ROOT; };
+		F5240F1F0208058801053105 /* profport.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		F54A7D7701FC781301053105 /* msMidiInOut.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiInOut.c; sourceTree = "<group>"; };
+		F54A7D7801FC781301053105 /* msMidiDriver.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiDriver.c; sourceTree = "<group>"; };
+		F54A7D7901FC781301053105 /* msMidiDriver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msMidiDriver.h; sourceTree = "<group>"; };
+		F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = msMidiDriver.1.0.6.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		F54A7D8401FC781C01053105 /* msMidiMain.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiMain.c; sourceTree = "<group>"; };
+		F569F8E6020573BA01053105 /* msMidiState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msMidiState.h; sourceTree = "<group>"; };
+		F569F8E7020573BA01053105 /* msMidiState.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiState.c; sourceTree = "<group>"; };
+		F58CAEE4020ADF5E01053105 /* msDriverState.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = msDriverState.c; path = ../lib/msDriverState.c; sourceTree = SOURCE_ROOT; };
+		F58CAEE5020ADF5E01053105 /* msDriverState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = msDriverState.h; path = ../lib/msDriverState.h; sourceTree = SOURCE_ROOT; };
+		F76B9CAB02086D8E01053118 /* implicit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = implicit.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4BD92D8F09EE502D002DCEE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */,
+				4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */,
+				4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54A7D8201FC781301053105 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BD92DF609EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */,
+				4BD92E0109EE52CA002DCEE0 /* MidiShare.framework in Frameworks */,
+				4BD92E0609EE52D8002DCEE0 /* CoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F54A7D7401FC77AF01053105 = {
+			isa = PBXGroup;
+			children = (
+				D3EE80D105BC089000FE2FFB /* versions.txt */,
+				F54A7D7701FC781301053105 /* msMidiInOut.c */,
+				F569F8E6020573BA01053105 /* msMidiState.h */,
+				F569F8E7020573BA01053105 /* msMidiState.c */,
+				F54A7D7801FC781301053105 /* msMidiDriver.c */,
+				F54A7D7901FC781301053105 /* msMidiDriver.h */,
+				F54A7D8401FC781C01053105 /* msMidiMain.c */,
+				F58CAEE4020ADF5E01053105 /* msDriverState.c */,
+				F58CAEE5020ADF5E01053105 /* msDriverState.h */,
+				F76B9CAB02086D8E01053118 /* implicit.h */,
+				F76B9CAA02086C0B01053118 /* lib */,
+				F54A7D7A01FC781301053105 /* Products */,
+				4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */,
+				4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */,
+				4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */,
+			);
+			sourceTree = "<group>";
+		};
+		F54A7D7A01FC781301053105 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */,
+				4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.7.so */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F76B9CAA02086C0B01053118 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				F5240F1E0208058801053105 /* MidiStreamToEvent.c */,
+				F5240F1C0208056001053105 /* EventToMidiStream.c */,
+				F5240F1F0208058801053105 /* profport.c */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4BD92D8D09EE502D002DCEE0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BD92D9209EE504E002DCEE0 /* implicit.h in Headers */,
+				4BD92D9409EE504F002DCEE0 /* msDriverState.h in Headers */,
+				4BD92D9609EE504F002DCEE0 /* msMidiDriver.h in Headers */,
+				4BD92D9A09EE5051002DCEE0 /* msMidiState.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54A7D7D01FC781301053105 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F54A7D7E01FC781301053105 /* msMidiDriver.h in Headers */,
+				F569F8E8020573BA01053105 /* msMidiState.h in Headers */,
+				F76B9CAC02086D8E01053118 /* implicit.h in Headers */,
+				F58CAEE6020ADF5E01053105 /* msDriverState.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXLibraryTarget section */
+		F54A7D7C01FC781301053105 /* msMidiDriver */ = {
+			isa = PBXLibraryTarget;
+			buildConfigurationList = 4BB41EC509ED429100EE9367 /* Build configuration list for PBXLibraryTarget "msMidiDriver" */;
+			buildPhases = (
+				F54A7D7D01FC781301053105 /* Headers */,
+				F54A7D7F01FC781301053105 /* Sources */,
+				F54A7D8201FC781301053105 /* Frameworks */,
+				F54A7D8301FC781301053105 /* Rez */,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = (
+					"-D__POWERPC__",
+					"-D__Macintosh__",
+				);
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msMidiDriver.1.0.6.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = msMidiDriver;
+			productName = msMidiDriver;
+			productReference = F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */;
+		};
+/* End PBXLibraryTarget section */
+
+/* Begin PBXNativeTarget section */
+		4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver Universal" */;
+			buildPhases = (
+				4BD92D8D09EE502D002DCEE0 /* Headers */,
+				4BD92D8E09EE502D002DCEE0 /* Sources */,
+				4BD92D8F09EE502D002DCEE0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = "msMidiDriver Universal1";
+				ZERO_LINK = YES;
+			};
+			dependencies = (
+			);
+			name = "msMidiDriver Universal";
+			productName = "msMidiDriver Universal1";
+			productReference = 4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.7.so */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F54A7D7301FC77AF01053105 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				F54A7D7501FC77AF01053105 /* Development */,
+				F54A7D7601FC77AF01053105 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = F54A7D7401FC77AF01053105;
+			productRefGroup = F54A7D7A01FC781301053105 /* Products */;
+			projectDirPath = "";
+			targets = (
+				F54A7D7C01FC781301053105 /* msMidiDriver */,
+				4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXRezBuildPhase section */
+		F54A7D8301FC781301053105 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BD92D8E09EE502D002DCEE0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BD92D9309EE504E002DCEE0 /* msDriverState.c in Sources */,
+				4BD92D9509EE504F002DCEE0 /* msMidiDriver.c in Sources */,
+				4BD92D9709EE5050002DCEE0 /* msMidiInOut.c in Sources */,
+				4BD92D9809EE5050002DCEE0 /* msMidiMain.c in Sources */,
+				4BD92D9909EE5050002DCEE0 /* msMidiState.c in Sources */,
+				4BD92DE909EE52A7002DCEE0 /* MidiStreamToEvent.c in Sources */,
+				4BD92DEA09EE52A7002DCEE0 /* profport.c in Sources */,
+				4BD92DEB09EE52A8002DCEE0 /* EventToMidiStream.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54A7D7F01FC781301053105 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F54A7D8001FC781301053105 /* msMidiInOut.c in Sources */,
+				F54A7D8101FC781301053105 /* msMidiDriver.c in Sources */,
+				F54A7D8501FC781C01053105 /* msMidiMain.c in Sources */,
+				F569F8E9020573BA01053105 /* msMidiState.c in Sources */,
+				F5240F1D0208056001053105 /* EventToMidiStream.c in Sources */,
+				F5240F200208058801053105 /* MidiStreamToEvent.c in Sources */,
+				F5240F210208058801053105 /* profport.c in Sources */,
+				F58CAEE7020ADF5E01053105 /* msDriverState.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41EC609ED429100EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = (
+					"-D__POWERPC__",
+					"-D__Macintosh__",
+				);
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msMidiDriver.1.0.6.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41EC709ED429100EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = (
+					"-D__POWERPC__",
+					"-D__Macintosh__",
+				);
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msMidiDriver.1.0.6.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41EC809ED429100EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = (
+					"-D__POWERPC__",
+					"-D__Macintosh__",
+				);
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msMidiDriver.1.0.6.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4BB41EE909ED42BB00EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BB41EEA09ED42BB00EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BB41EEB09ED42BB00EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+		4BD92D9F09EE5098002DCEE0 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__POWERPC__,
+					__Macintosh__,
+					__Types__,
+				);
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = msMidiDriver.1.0.7;
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BD92DA009EE5098002DCEE0 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__POWERPC__,
+					__Macintosh__,
+					__Types__,
+				);
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = msMidiDriver.1.0.7;
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BD92DA109EE5098002DCEE0 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__POWERPC__,
+					__Macintosh__,
+					__Types__,
+				);
+				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = msMidiDriver.1.0.7;
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				ZERO_LINK = YES;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41EC509ED429100EE9367 /* Build configuration list for PBXLibraryTarget "msMidiDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41EC609ED429100EE9367 /* Development */,
+				4BB41EC709ED429100EE9367 /* Deployment */,
+				4BB41EC809ED429100EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41EE909ED42BB00EE9367 /* Development */,
+				4BB41EEA09ED42BB00EE9367 /* Deployment */,
+				4BB41EEB09ED42BB00EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BD92D9F09EE5098002DCEE0 /* Development */,
+				4BD92DA009EE5098002DCEE0 /* Deployment */,
+				4BD92DA109EE5098002DCEE0 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F54A7D7301FC77AF01053105 /* Project object */;
+}

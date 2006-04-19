@@ -37,6 +37,20 @@
 #define QTSlotName "QuickTime GM Synth"
 #define kProfileName  "msQTDriver.ini"
 
+#define DEBUG 1
+
+//------------------------------------------------------------------------
+void Log(char *fmt, ...)
+{
+    if (DEBUG) {
+        va_list ap;
+        va_start(ap, fmt);
+        fprintf(stderr, "JAR: ");
+        vfprintf(stderr, fmt, ap);
+        va_end(ap);
+    }
+}
+
 /* ----------------------------------*/
 /* data structures                   */
 typedef struct {
@@ -177,8 +191,8 @@ Boolean SetUpMidi ()
 	TDriverInfos infos = { QTDriverName, kQTDriverVersion, 0};
 	short refNum; TDriverOperation op = { WakeUp, Sleep, 0, 0, 0 }; 
 	DriverDataPtr data = GetData ();
-        
-  	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
+	
+ 	if (MidiGetNamedAppl (QTDriverName) > 0) return true;
    	refNum = MidiRegisterDriver(&infos, &op);
       
 	if (refNum == MIDIerrSpace) return false;
@@ -256,10 +270,18 @@ err:
 static Boolean SndChanInit (QuickTimeEnvPtr qt, short chan, short sound)
 {
 	ComponentResult err; NoteRequest nr;
-        
 	nr.info.flags = 0;
-	nr.info.polyphony = 8;
+	
+#if defined(__POWERPC__)
+	nr.info.polyphony = (BigEndianShort)8;
 	nr.info.typicalPolyphony = 0x00010000;
+#endif
+
+#if defined(__i686__)
+	nr.info.polyphony.bigEndianValue = 8;
+	nr.info.typicalPolyphony.bigEndianValue = 0x00010000;
+#endif
+
 	err = NAStuffToneDescription (qt->allocator, sound, &nr.tone);
     
 	if (err == noErr) {

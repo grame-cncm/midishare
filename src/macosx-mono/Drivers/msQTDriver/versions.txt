@@ -3,5 +3,8 @@ msQTDriver versions
 1.0.2 
 1.0.3 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
 	Jan. 22 2004 - correct bug if QuickTime cannot be initialised, in this case, the driver must be unregistered from MidiShare
+1.0.4 - ????
+1.0.5 - Apr. 19 2006 - MacIntel universal binary version
+
 	
 
