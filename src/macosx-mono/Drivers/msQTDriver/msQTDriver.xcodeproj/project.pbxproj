@@ -13,17 +13,9 @@
 		4BADAD1109ED773200BC5B44 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1A0208005601053105 /* profport.c */; };
 		4BADAD1209ED773300BC5B44 /* msQTDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EFF92601FDA77301053105 /* msQTDriver.h */; };
 		4BADAD1309ED773300BC5B44 /* QuickTimeMusic.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EFF92301FDA4CC01053105 /* QuickTimeMusic.h */; };
-		4BADAD1A09ED775E00BC5B44 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD1909ED775E00BC5B44 /* MidiShare.framework */; };
 		4BADAD1C09ED775E00BC5B44 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD1909ED775E00BC5B44 /* MidiShare.framework */; };
-		4BADAD2209ED776F00BC5B44 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD2109ED776F00BC5B44 /* QuickTime.framework */; };
 		4BADAD2409ED776F00BC5B44 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD2109ED776F00BC5B44 /* QuickTime.framework */; };
-		4BADAD4A09ED779700BC5B44 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD4909ED779700BC5B44 /* CoreServices.framework */; };
 		4BADAD4C09ED779700BC5B44 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD4909ED779700BC5B44 /* CoreServices.framework */; };
-		F5240F1B0208005601053105 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1A0208005601053105 /* profport.c */; };
-		F58CAEEA020ADF9B01053105 /* msDriverState.h in Headers */ = {isa = PBXBuildFile; fileRef = F58CAEE9020ADF9B01053105 /* msDriverState.h */; };
-		F58CAEEB020ADF9B01053105 /* msDriverState.c in Sources */ = {isa = PBXBuildFile; fileRef = F58CAEE8020ADF9B01053105 /* msDriverState.c */; };
-		F5EFF91E01FDA41501053105 /* msQTDriver.c in Sources */ = {isa = PBXBuildFile; fileRef = F5EFF91D01FDA41501053105 /* msQTDriver.c */; };
-		F5EFF92701FDA77301053105 /* msQTDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EFF92601FDA77301053105 /* msQTDriver.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -60,7 +52,6 @@
 		F5240F1A0208005601053105 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
 		F58CAEE8020ADF9B01053105 /* msDriverState.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msDriverState.c; path = ../lib/msDriverState.c; sourceTree = SOURCE_ROOT; };
 		F58CAEE9020ADF9B01053105 /* msDriverState.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = msDriverState.h; path = ../lib/msDriverState.h; sourceTree = SOURCE_ROOT; };
-		F5EFF91701FDA40901053105 /* msQTDriver.1.0.4.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = msQTDriver.1.0.4.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5EFF91D01FDA41501053105 /* msQTDriver.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msQTDriver.c; sourceTree = "<group>"; };
 		F5EFF92301FDA4CC01053105 /* QuickTimeMusic.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = QuickTimeMusic.h; path = /System/Library/Frameworks/QuickTime.framework/Versions/A/Headers/QuickTimeMusic.h; sourceTree = "<absolute>"; };
 		F5EFF92601FDA77301053105 /* msQTDriver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msQTDriver.h; sourceTree = "<group>"; };
@@ -74,16 +65,6 @@
 				4BADAD1C09ED775E00BC5B44 /* MidiShare.framework in Frameworks */,
 				4BADAD2409ED776F00BC5B44 /* QuickTime.framework in Frameworks */,
 				4BADAD4C09ED779700BC5B44 /* CoreServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F5EFF91B01FDA40901053105 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4BADAD1A09ED775E00BC5B44 /* MidiShare.framework in Frameworks */,
-				4BADAD2209ED776F00BC5B44 /* QuickTime.framework in Frameworks */,
-				4BADAD4A09ED779700BC5B44 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +92,6 @@
 		F5EFF91601FDA40901053105 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F5EFF91701FDA40901053105 /* msQTDriver.1.0.4.so */,
 				4BADAD0D09ED772600BC5B44 /* msQTDriver.1.0.5.so */,
 			);
 			name = Products;
@@ -130,59 +110,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F5EFF91901FDA40901053105 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F5EFF92701FDA77301053105 /* msQTDriver.h in Headers */,
-				F58CAEEA020ADF9B01053105 /* msDriverState.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
-
-/* Begin PBXLibraryTarget section */
-		F5EFF91801FDA40901053105 /* msQTDriver */ = {
-			isa = PBXLibraryTarget;
-			buildConfigurationList = 4BB41EF409ED42CC00EE9367 /* Build configuration list for PBXLibraryTarget "msQTDriver" */;
-			buildPhases = (
-				F5EFF91901FDA40901053105 /* Headers */,
-				F5EFF91A01FDA40901053105 /* Sources */,
-				F5EFF91B01FDA40901053105 /* Frameworks */,
-				F5EFF91C01FDA40901053105 /* Rez */,
-			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = (
-					../../../common/Headers,
-					../../../lib,
-				);
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.4.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			dependencies = (
-			);
-			name = msQTDriver;
-			productInstallPath = /usr/local/lib;
-			productName = msQTDriver;
-			productReference = F5EFF91701FDA40901053105 /* msQTDriver.1.0.4.so */;
-		};
-/* End PBXLibraryTarget section */
 
 /* Begin PBXNativeTarget section */
 		4BADAD0C09ED772600BC5B44 /* msQTDriver Universal */ = {
@@ -228,21 +156,10 @@
 			productRefGroup = F5EFF91601FDA40901053105 /* Products */;
 			projectDirPath = "";
 			targets = (
-				F5EFF91801FDA40901053105 /* msQTDriver */,
 				4BADAD0C09ED772600BC5B44 /* msQTDriver Universal */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXRezBuildPhase section */
-		F5EFF91C01FDA40901053105 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4BADAD0A09ED772600BC5B44 /* Sources */ = {
@@ -252,16 +169,6 @@
 				4BADAD0F09ED773100BC5B44 /* msDriverState.c in Sources */,
 				4BADAD1009ED773100BC5B44 /* msQTDriver.c in Sources */,
 				4BADAD1109ED773200BC5B44 /* profport.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F5EFF91A01FDA40901053105 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F5EFF91E01FDA41501053105 /* msQTDriver.c in Sources */,
-				F5240F1B0208005601053105 /* profport.c in Sources */,
-				F58CAEEB020ADF9B01053105 /* msDriverState.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,99 +238,6 @@
 			};
 			name = Default;
 		};
-		4BB41EF509ED42CC00EE9367 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					../../../common/Headers,
-					../../../lib,
-				);
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.4.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4BB41EF609ED42CC00EE9367 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					../../../common/Headers,
-					../../../lib,
-				);
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.4.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4BB41EF709ED42CC00EE9367 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = (
-					../../../common/Headers,
-					../../../lib,
-				);
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msQTDriver.1.0.4.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		4BB41F0D09ED430000EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -451,16 +265,6 @@
 				4BADAD1609ED774A00BC5B44 /* Development */,
 				4BADAD1709ED774A00BC5B44 /* Deployment */,
 				4BADAD1809ED774A00BC5B44 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		4BB41EF409ED42CC00EE9367 /* Build configuration list for PBXLibraryTarget "msQTDriver" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BB41EF509ED42CC00EE9367 /* Development */,
-				4BB41EF609ED42CC00EE9367 /* Deployment */,
-				4BB41EF709ED42CC00EE9367 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

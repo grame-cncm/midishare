@@ -1,0 +1,1131 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B234C7109F62FB500488DBD /* EventToUDPStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3B0209391401053118 /* EventToUDPStream.h */; };
+		4B234C7209F62FB500488DBD /* FeedbackProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3C0209391401053118 /* FeedbackProvider.h */; };
+		4B234C7309F62FB500488DBD /* FTMA.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3D0209391401053118 /* FTMA.h */; };
+		4B234C7409F62FB500488DBD /* Handle.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3E0209391401053118 /* Handle.h */; };
+		4B234C7509F62FB500488DBD /* HostTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3F0209391401053118 /* HostTools.h */; };
+		4B234C7609F62FB500488DBD /* INetAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA410209391401053118 /* INetAlert.h */; };
+		4B234C7709F62FB500488DBD /* InetTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA420209391401053118 /* InetTypes.h */; };
+		4B234C7809F62FB500488DBD /* IPHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA430209391401053118 /* IPHeader.h */; };
+		4B234C7909F62FB500488DBD /* MidiShareAppl.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA450209391401053118 /* MidiShareAppl.h */; };
+		4B234C7A09F62FB500488DBD /* MidiShareDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA460209391401053118 /* MidiShareDriver.h */; };
+		4B234C7B09F62FB500488DBD /* MidiShareFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA470209391401053118 /* MidiShareFilter.h */; };
+		4B234C7C09F62FB500488DBD /* MidiShareTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA480209391401053118 /* MidiShareTasks.h */; };
+		4B234C7D09F62FB500488DBD /* MidiTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA490209391401053118 /* MidiTools.h */; };
+		4B234C7E09F62FB500488DBD /* msInetLib.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4A0209391401053118 /* msInetLib.h */; };
+		4B234C7F09F62FB500488DBD /* SkewControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4B0209391401053118 /* SkewControler.h */; };
+		4B234C8009F62FB500488DBD /* StatesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4C0209391401053118 /* StatesManager.h */; };
+		4B234C8109F62FB500488DBD /* StrConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4D0209391401053118 /* StrConstants.h */; };
+		4B234C8209F62FB500488DBD /* TimeTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA500209391401053118 /* TimeTools.h */; };
+		4B234C8309F62FB500488DBD /* TInetAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA510209391401053118 /* TInetAddress.h */; };
+		4B234C8409F62FB500488DBD /* TInetControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA520209391401053118 /* TInetControler.h */; };
+		4B234C8509F62FB500488DBD /* TInetTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA530209391401053118 /* TInetTasks.h */; };
+		4B234C8609F62FB500488DBD /* TMidiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA540209391401053118 /* TMidiClient.h */; };
+		4B234C8709F62FB500488DBD /* TMidiInStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA550209391401053118 /* TMidiInStream.h */; };
+		4B234C8809F62FB500488DBD /* TMidiOutStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA560209391401053118 /* TMidiOutStream.h */; };
+		4B234C8909F62FB500488DBD /* TMidiPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA570209391401053118 /* TMidiPacket.h */; };
+		4B234C8A09F62FB500488DBD /* TMidiRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA580209391401053118 /* TMidiRemote.h */; };
+		4B234C8B09F62FB500488DBD /* TMidiServer.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA590209391401053118 /* TMidiServer.h */; };
+		4B234C8C09F62FB500488DBD /* TMidiSlot.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5A0209391401053118 /* TMidiSlot.h */; };
+		4B234C8D09F62FB500488DBD /* TNetInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5B0209391401053118 /* TNetInfos.h */; };
+		4B234C8E09F62FB500488DBD /* TPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5C0209391401053118 /* TPacket.h */; };
+		4B234C8F09F62FB500488DBD /* TRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5D0209391401053118 /* TRemote.h */; };
+		4B234C9009F62FB500488DBD /* TRemoteAppl.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5E0209391401053118 /* TRemoteAppl.h */; };
+		4B234C9109F62FB500488DBD /* TRemoteMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5F0209391401053118 /* TRemoteMgr.h */; };
+		4B234C9209F62FB500488DBD /* TRemoteSlot.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA600209391401053118 /* TRemoteSlot.h */; };
+		4B234C9309F62FB500488DBD /* TSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA610209391401053118 /* TSocket.h */; };
+		4B234C9409F62FB500488DBD /* TTCPListener.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA620209391401053118 /* TTCPListener.h */; };
+		4B234C9509F62FB500488DBD /* TTCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA630209391401053118 /* TTCPSocket.h */; };
+		4B234C9609F62FB500488DBD /* TUDPListener.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA640209391401053118 /* TUDPListener.h */; };
+		4B234C9709F62FB500488DBD /* TUDPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA650209391401053118 /* TUDPSocket.h */; };
+		4B234C9809F62FB500488DBD /* TWANControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA660209391401053118 /* TWANControler.h */; };
+		4B234C9909F62FB500488DBD /* UDPStreamToEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA670209391401053118 /* UDPStreamToEvent.h */; };
+		4B234C9A09F62FB500488DBD /* FilterUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EB0F020942D301053118 /* FilterUtils.h */; };
+		4B234C9B09F62FB500488DBD /* profport.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EB9B02098A2801053118 /* profport.h */; };
+		4B234C9C09F62FB500488DBD /* misc.h in Headers */ = {isa = PBXBuildFile; fileRef = F7219678020EB73001053118 /* misc.h */; };
+		4B234C9D09F62FB500488DBD /* msNetDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F7219679020EB73001053118 /* msNetDriver.h */; };
+		4B234C9E09F62FB500488DBD /* NetTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F721967B020EB73001053118 /* NetTools.h */; };
+		4B234C9F09F62FB500488DBD /* OSXFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = F721967D020EB73001053118 /* OSXFeedback.h */; };
+		4B234CA109F62FB500488DBD /* EventToUDPStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EA690209391401053118 /* EventToUDPStream.c */; };
+		4B234CA209F62FB500488DBD /* MidiShareAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6A0209391401053118 /* MidiShareAppl.cpp */; };
+		4B234CA309F62FB500488DBD /* MidiShareDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6B0209391401053118 /* MidiShareDriver.cpp */; };
+		4B234CA409F62FB500488DBD /* MidiShareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6C0209391401053118 /* MidiShareFilter.cpp */; };
+		4B234CA509F62FB500488DBD /* MidiShareTasks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6D0209391401053118 /* MidiShareTasks.cpp */; };
+		4B234CA609F62FB500488DBD /* MidiTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6E0209391401053118 /* MidiTools.cpp */; };
+		4B234CA709F62FB500488DBD /* TMidiSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6F0209391401053118 /* TMidiSlot.cpp */; };
+		4B234CA809F62FB500488DBD /* UDPStreamToEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EA700209391401053118 /* UDPStreamToEvent.c */; };
+		4B234CA909F62FB500488DBD /* TWANControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA780209391401053118 /* TWANControler.cpp */; };
+		4B234CAA09F62FB500488DBD /* TMidiServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA770209391401053118 /* TMidiServer.cpp */; };
+		4B234CAB09F62FB500488DBD /* TMidiClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA760209391401053118 /* TMidiClient.cpp */; };
+		4B234CAC09F62FB500488DBD /* ApplState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA730209391401053118 /* ApplState.cpp */; };
+		4B234CAD09F62FB500488DBD /* SlotState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA740209391401053118 /* SlotState.cpp */; };
+		4B234CAE09F62FB500488DBD /* SkewControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA710209391401053118 /* SkewControler.cpp */; };
+		4B234CAF09F62FB500488DBD /* FTMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA390209391401053118 /* FTMA.cpp */; };
+		4B234CB009F62FB500488DBD /* HostTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB85020988D501053118 /* HostTools.cpp */; };
+		4B234CB109F62FB500488DBD /* TPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7E0209391401053118 /* TPacket.cpp */; };
+		4B234CB209F62FB500488DBD /* TMidiRemote.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7D0209391401053118 /* TMidiRemote.cpp */; };
+		4B234CB309F62FB500488DBD /* TMidiOutStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7C0209391401053118 /* TMidiOutStream.cpp */; };
+		4B234CB409F62FB500488DBD /* TMidiInStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7B0209391401053118 /* TMidiInStream.cpp */; };
+		4B234CB509F62FB500488DBD /* TInetTasks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7A0209391401053118 /* TInetTasks.cpp */; };
+		4B234CB609F62FB500488DBD /* TInetControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA790209391401053118 /* TInetControler.cpp */; };
+		4B234CB709F62FB500488DBD /* TRemoteAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7F0209391401053118 /* TRemoteAppl.cpp */; };
+		4B234CB809F62FB500488DBD /* TRemoteMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA800209391401053118 /* TRemoteMgr.cpp */; };
+		4B234CB909F62FB500488DBD /* TRemoteSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA810209391401053118 /* TRemoteSlot.cpp */; };
+		4B234CBA09F62FB500488DBD /* TInetAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1D0209488B01053118 /* TInetAddress.cpp */; };
+		4B234CBB09F62FB500488DBD /* TNetInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1E0209488B01053118 /* TNetInfos.cpp */; };
+		4B234CBC09F62FB500488DBD /* TTCPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1F0209488B01053118 /* TTCPSocket.cpp */; };
+		4B234CBD09F62FB500488DBD /* TUDPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB200209488B01053118 /* TUDPSocket.cpp */; };
+		4B234CBE09F62FB500488DBD /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EB9A02098A2801053118 /* profport.c */; };
+		4B234CBF09F62FB500488DBD /* Handle.c in Sources */ = {isa = PBXBuildFile; fileRef = F7219674020EB73001053118 /* Handle.c */; };
+		4B234CC009F62FB500488DBD /* INetAlert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7219675020EB73001053118 /* INetAlert.cpp */; };
+		4B234CC109F62FB500488DBD /* NetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967A020EB73001053118 /* NetTools.cpp */; };
+		4B234CC209F62FB500488DBD /* OSXFeedback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967C020EB73001053118 /* OSXFeedback.cpp */; };
+		4B234CC309F62FB500488DBD /* StateManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967E020EB73001053118 /* StateManager.cpp */; };
+		4B234CC409F62FB500488DBD /* msLANDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7219699020EB75B01053118 /* msLANDriver.cpp */; };
+		4B234CC509F62FB500488DBD /* msLANMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721969A020EB75B01053118 /* msLANMain.cpp */; };
+		4B234CC709F62FB500488DBD /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B97CB95050CC7B400053105 /* MidiShare.framework */; };
+		4B234CDD09F62FDB00488DBD /* EventToUDPStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3B0209391401053118 /* EventToUDPStream.h */; };
+		4B234CDE09F62FDB00488DBD /* FeedbackProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3C0209391401053118 /* FeedbackProvider.h */; };
+		4B234CDF09F62FDB00488DBD /* FTMA.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3D0209391401053118 /* FTMA.h */; };
+		4B234CE009F62FDB00488DBD /* Handle.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3E0209391401053118 /* Handle.h */; };
+		4B234CE109F62FDB00488DBD /* HostTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA3F0209391401053118 /* HostTools.h */; };
+		4B234CE209F62FDB00488DBD /* INetAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA410209391401053118 /* INetAlert.h */; };
+		4B234CE309F62FDB00488DBD /* InetTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA420209391401053118 /* InetTypes.h */; };
+		4B234CE409F62FDB00488DBD /* IPHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA430209391401053118 /* IPHeader.h */; };
+		4B234CE509F62FDB00488DBD /* MidiShareAppl.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA450209391401053118 /* MidiShareAppl.h */; };
+		4B234CE609F62FDB00488DBD /* MidiShareDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA460209391401053118 /* MidiShareDriver.h */; };
+		4B234CE709F62FDB00488DBD /* MidiShareFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA470209391401053118 /* MidiShareFilter.h */; };
+		4B234CE809F62FDB00488DBD /* MidiShareTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA480209391401053118 /* MidiShareTasks.h */; };
+		4B234CE909F62FDB00488DBD /* MidiTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA490209391401053118 /* MidiTools.h */; };
+		4B234CEA09F62FDB00488DBD /* msInetLib.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4A0209391401053118 /* msInetLib.h */; };
+		4B234CEB09F62FDB00488DBD /* SkewControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4B0209391401053118 /* SkewControler.h */; };
+		4B234CEC09F62FDB00488DBD /* StatesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4C0209391401053118 /* StatesManager.h */; };
+		4B234CED09F62FDB00488DBD /* StrConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA4D0209391401053118 /* StrConstants.h */; };
+		4B234CEE09F62FDB00488DBD /* TimeTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA500209391401053118 /* TimeTools.h */; };
+		4B234CEF09F62FDB00488DBD /* TInetAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA510209391401053118 /* TInetAddress.h */; };
+		4B234CF009F62FDB00488DBD /* TInetControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA520209391401053118 /* TInetControler.h */; };
+		4B234CF109F62FDB00488DBD /* TInetTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA530209391401053118 /* TInetTasks.h */; };
+		4B234CF209F62FDB00488DBD /* TMidiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA540209391401053118 /* TMidiClient.h */; };
+		4B234CF309F62FDB00488DBD /* TMidiInStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA550209391401053118 /* TMidiInStream.h */; };
+		4B234CF409F62FDB00488DBD /* TMidiOutStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA560209391401053118 /* TMidiOutStream.h */; };
+		4B234CF509F62FDB00488DBD /* TMidiPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA570209391401053118 /* TMidiPacket.h */; };
+		4B234CF609F62FDB00488DBD /* TMidiRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA580209391401053118 /* TMidiRemote.h */; };
+		4B234CF709F62FDB00488DBD /* TMidiServer.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA590209391401053118 /* TMidiServer.h */; };
+		4B234CF809F62FDB00488DBD /* TMidiSlot.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5A0209391401053118 /* TMidiSlot.h */; };
+		4B234CF909F62FDB00488DBD /* TNetInfos.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5B0209391401053118 /* TNetInfos.h */; };
+		4B234CFA09F62FDB00488DBD /* TPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5C0209391401053118 /* TPacket.h */; };
+		4B234CFB09F62FDB00488DBD /* TRemote.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5D0209391401053118 /* TRemote.h */; };
+		4B234CFC09F62FDB00488DBD /* TRemoteAppl.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5E0209391401053118 /* TRemoteAppl.h */; };
+		4B234CFD09F62FDB00488DBD /* TRemoteMgr.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA5F0209391401053118 /* TRemoteMgr.h */; };
+		4B234CFE09F62FDB00488DBD /* TRemoteSlot.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA600209391401053118 /* TRemoteSlot.h */; };
+		4B234CFF09F62FDB00488DBD /* TSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA610209391401053118 /* TSocket.h */; };
+		4B234D0009F62FDB00488DBD /* TTCPListener.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA620209391401053118 /* TTCPListener.h */; };
+		4B234D0109F62FDB00488DBD /* TTCPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA630209391401053118 /* TTCPSocket.h */; };
+		4B234D0209F62FDB00488DBD /* TUDPListener.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA640209391401053118 /* TUDPListener.h */; };
+		4B234D0309F62FDB00488DBD /* TUDPSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA650209391401053118 /* TUDPSocket.h */; };
+		4B234D0409F62FDB00488DBD /* TWANControler.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA660209391401053118 /* TWANControler.h */; };
+		4B234D0509F62FDB00488DBD /* UDPStreamToEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EA670209391401053118 /* UDPStreamToEvent.h */; };
+		4B234D0609F62FDB00488DBD /* FilterUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EB0F020942D301053118 /* FilterUtils.h */; };
+		4B234D0709F62FDB00488DBD /* profport.h in Headers */ = {isa = PBXBuildFile; fileRef = F727EB9B02098A2801053118 /* profport.h */; };
+		4B234D0809F62FDB00488DBD /* misc.h in Headers */ = {isa = PBXBuildFile; fileRef = F7219678020EB73001053118 /* misc.h */; };
+		4B234D0909F62FDB00488DBD /* msNetDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F7219679020EB73001053118 /* msNetDriver.h */; };
+		4B234D0A09F62FDB00488DBD /* NetTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F721967B020EB73001053118 /* NetTools.h */; };
+		4B234D0B09F62FDB00488DBD /* OSXFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = F721967D020EB73001053118 /* OSXFeedback.h */; };
+		4B234D0D09F62FDB00488DBD /* EventToUDPStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EA690209391401053118 /* EventToUDPStream.c */; };
+		4B234D0E09F62FDB00488DBD /* MidiShareAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6A0209391401053118 /* MidiShareAppl.cpp */; };
+		4B234D0F09F62FDB00488DBD /* MidiShareDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6B0209391401053118 /* MidiShareDriver.cpp */; };
+		4B234D1009F62FDB00488DBD /* MidiShareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6C0209391401053118 /* MidiShareFilter.cpp */; };
+		4B234D1109F62FDB00488DBD /* MidiShareTasks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6D0209391401053118 /* MidiShareTasks.cpp */; };
+		4B234D1209F62FDB00488DBD /* MidiTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6E0209391401053118 /* MidiTools.cpp */; };
+		4B234D1309F62FDB00488DBD /* TMidiSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA6F0209391401053118 /* TMidiSlot.cpp */; };
+		4B234D1409F62FDB00488DBD /* UDPStreamToEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EA700209391401053118 /* UDPStreamToEvent.c */; };
+		4B234D1509F62FDB00488DBD /* ApplState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA730209391401053118 /* ApplState.cpp */; };
+		4B234D1609F62FDB00488DBD /* SlotState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA740209391401053118 /* SlotState.cpp */; };
+		4B234D1709F62FDB00488DBD /* TMidiClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA760209391401053118 /* TMidiClient.cpp */; };
+		4B234D1809F62FDB00488DBD /* TMidiServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA770209391401053118 /* TMidiServer.cpp */; };
+		4B234D1909F62FDB00488DBD /* TWANControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA780209391401053118 /* TWANControler.cpp */; };
+		4B234D1A09F62FDB00488DBD /* FTMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA390209391401053118 /* FTMA.cpp */; };
+		4B234D1B09F62FDB00488DBD /* SkewControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA710209391401053118 /* SkewControler.cpp */; };
+		4B234D1C09F62FDB00488DBD /* TInetControler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA790209391401053118 /* TInetControler.cpp */; };
+		4B234D1D09F62FDB00488DBD /* TInetTasks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7A0209391401053118 /* TInetTasks.cpp */; };
+		4B234D1E09F62FDB00488DBD /* TMidiInStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7B0209391401053118 /* TMidiInStream.cpp */; };
+		4B234D1F09F62FDB00488DBD /* TMidiOutStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7C0209391401053118 /* TMidiOutStream.cpp */; };
+		4B234D2009F62FDB00488DBD /* TMidiRemote.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7D0209391401053118 /* TMidiRemote.cpp */; };
+		4B234D2109F62FDB00488DBD /* TPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7E0209391401053118 /* TPacket.cpp */; };
+		4B234D2209F62FDB00488DBD /* TRemoteAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA7F0209391401053118 /* TRemoteAppl.cpp */; };
+		4B234D2309F62FDB00488DBD /* TRemoteMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA800209391401053118 /* TRemoteMgr.cpp */; };
+		4B234D2409F62FDB00488DBD /* TRemoteSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EA810209391401053118 /* TRemoteSlot.cpp */; };
+		4B234D2509F62FDB00488DBD /* HostTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB85020988D501053118 /* HostTools.cpp */; };
+		4B234D2609F62FDB00488DBD /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F727EB9A02098A2801053118 /* profport.c */; };
+		4B234D2709F62FDB00488DBD /* TInetAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1D0209488B01053118 /* TInetAddress.cpp */; };
+		4B234D2809F62FDB00488DBD /* TNetInfos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1E0209488B01053118 /* TNetInfos.cpp */; };
+		4B234D2909F62FDB00488DBD /* TTCPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB1F0209488B01053118 /* TTCPSocket.cpp */; };
+		4B234D2A09F62FDB00488DBD /* TUDPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F727EB200209488B01053118 /* TUDPSocket.cpp */; };
+		4B234D2B09F62FDB00488DBD /* Handle.c in Sources */ = {isa = PBXBuildFile; fileRef = F7219674020EB73001053118 /* Handle.c */; };
+		4B234D2C09F62FDB00488DBD /* INetAlert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7219675020EB73001053118 /* INetAlert.cpp */; };
+		4B234D2D09F62FDB00488DBD /* NetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967A020EB73001053118 /* NetTools.cpp */; };
+		4B234D2E09F62FDB00488DBD /* OSXFeedback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967C020EB73001053118 /* OSXFeedback.cpp */; };
+		4B234D2F09F62FDB00488DBD /* StateManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F721967E020EB73001053118 /* StateManager.cpp */; };
+		4B234D3009F62FDB00488DBD /* msWANDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7219696020EB75B01053118 /* msWANDriver.cpp */; };
+		4B234D3109F62FDB00488DBD /* msWANMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7219697020EB75B01053118 /* msWANMain.cpp */; };
+		4B234D3209F62FDB00488DBD /* lffifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE3B0A09EE9F520009E823 /* lffifo.c */; };
+		4B234D3309F62FDB00488DBD /* lflifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE3B0C09EE9F590009E823 /* lflifo.c */; };
+		4B234D3509F62FDB00488DBD /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B97CB95050CC7B400053105 /* MidiShare.framework */; };
+		4B234DA609F631A600488DBD /* lflifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE3B0C09EE9F590009E823 /* lflifo.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		F727EA290209364501053118 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		F727EA2A0209364501053118 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		4B234CCD09F62FB500488DBD /* msLANDriver.1.0.3.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msLANDriver.1.0.3.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B234D3B09F62FDB00488DBD /* msWANDriver.1.0.3.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msWANDriver.1.0.3.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B97CB95050CC7B400053105 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
+		4BDE3B0A09EE9F520009E823 /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../../../common/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
+		4BDE3B0C09EE9F590009E823 /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../../../common/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
+		D3EE80E405BC096F00FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
+		F7219674020EB73001053118 /* Handle.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = Handle.c; sourceTree = "<group>"; };
+		F7219675020EB73001053118 /* INetAlert.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = INetAlert.cpp; sourceTree = "<group>"; };
+		F7219678020EB73001053118 /* misc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = misc.h; sourceTree = "<group>"; };
+		F7219679020EB73001053118 /* msNetDriver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msNetDriver.h; sourceTree = "<group>"; };
+		F721967A020EB73001053118 /* NetTools.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = NetTools.cpp; sourceTree = "<group>"; };
+		F721967B020EB73001053118 /* NetTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NetTools.h; sourceTree = "<group>"; };
+		F721967C020EB73001053118 /* OSXFeedback.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = OSXFeedback.cpp; sourceTree = "<group>"; };
+		F721967D020EB73001053118 /* OSXFeedback.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OSXFeedback.h; sourceTree = "<group>"; };
+		F721967E020EB73001053118 /* StateManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = StateManager.cpp; sourceTree = "<group>"; };
+		F7219696020EB75B01053118 /* msWANDriver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = msWANDriver.cpp; sourceTree = "<group>"; };
+		F7219697020EB75B01053118 /* msWANMain.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = msWANMain.cpp; sourceTree = "<group>"; };
+		F7219699020EB75B01053118 /* msLANDriver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = msLANDriver.cpp; sourceTree = "<group>"; };
+		F721969A020EB75B01053118 /* msLANMain.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = msLANMain.cpp; sourceTree = "<group>"; };
+		F727EA390209391401053118 /* FTMA.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = FTMA.cpp; sourceTree = "<group>"; };
+		F727EA3B0209391401053118 /* EventToUDPStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EventToUDPStream.h; sourceTree = "<group>"; };
+		F727EA3C0209391401053118 /* FeedbackProvider.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FeedbackProvider.h; sourceTree = "<group>"; };
+		F727EA3D0209391401053118 /* FTMA.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FTMA.h; sourceTree = "<group>"; };
+		F727EA3E0209391401053118 /* Handle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Handle.h; sourceTree = "<group>"; };
+		F727EA3F0209391401053118 /* HostTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HostTools.h; sourceTree = "<group>"; };
+		F727EA410209391401053118 /* INetAlert.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = INetAlert.h; sourceTree = "<group>"; };
+		F727EA420209391401053118 /* InetTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = InetTypes.h; sourceTree = "<group>"; };
+		F727EA430209391401053118 /* IPHeader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IPHeader.h; sourceTree = "<group>"; };
+		F727EA450209391401053118 /* MidiShareAppl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiShareAppl.h; sourceTree = "<group>"; };
+		F727EA460209391401053118 /* MidiShareDriver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiShareDriver.h; sourceTree = "<group>"; };
+		F727EA470209391401053118 /* MidiShareFilter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiShareFilter.h; sourceTree = "<group>"; };
+		F727EA480209391401053118 /* MidiShareTasks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiShareTasks.h; sourceTree = "<group>"; };
+		F727EA490209391401053118 /* MidiTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiTools.h; sourceTree = "<group>"; };
+		F727EA4A0209391401053118 /* msInetLib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = msInetLib.h; sourceTree = "<group>"; };
+		F727EA4B0209391401053118 /* SkewControler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SkewControler.h; sourceTree = "<group>"; };
+		F727EA4C0209391401053118 /* StatesManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StatesManager.h; sourceTree = "<group>"; };
+		F727EA4D0209391401053118 /* StrConstants.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StrConstants.h; sourceTree = "<group>"; };
+		F727EA500209391401053118 /* TimeTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TimeTools.h; sourceTree = "<group>"; };
+		F727EA510209391401053118 /* TInetAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TInetAddress.h; sourceTree = "<group>"; };
+		F727EA520209391401053118 /* TInetControler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TInetControler.h; sourceTree = "<group>"; };
+		F727EA530209391401053118 /* TInetTasks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TInetTasks.h; sourceTree = "<group>"; };
+		F727EA540209391401053118 /* TMidiClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiClient.h; sourceTree = "<group>"; };
+		F727EA550209391401053118 /* TMidiInStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiInStream.h; sourceTree = "<group>"; };
+		F727EA560209391401053118 /* TMidiOutStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiOutStream.h; sourceTree = "<group>"; };
+		F727EA570209391401053118 /* TMidiPacket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiPacket.h; sourceTree = "<group>"; };
+		F727EA580209391401053118 /* TMidiRemote.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiRemote.h; sourceTree = "<group>"; };
+		F727EA590209391401053118 /* TMidiServer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiServer.h; sourceTree = "<group>"; };
+		F727EA5A0209391401053118 /* TMidiSlot.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiSlot.h; sourceTree = "<group>"; };
+		F727EA5B0209391401053118 /* TNetInfos.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TNetInfos.h; sourceTree = "<group>"; };
+		F727EA5C0209391401053118 /* TPacket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPacket.h; sourceTree = "<group>"; };
+		F727EA5D0209391401053118 /* TRemote.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRemote.h; sourceTree = "<group>"; };
+		F727EA5E0209391401053118 /* TRemoteAppl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRemoteAppl.h; sourceTree = "<group>"; };
+		F727EA5F0209391401053118 /* TRemoteMgr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRemoteMgr.h; sourceTree = "<group>"; };
+		F727EA600209391401053118 /* TRemoteSlot.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRemoteSlot.h; sourceTree = "<group>"; };
+		F727EA610209391401053118 /* TSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSocket.h; sourceTree = "<group>"; };
+		F727EA620209391401053118 /* TTCPListener.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTCPListener.h; sourceTree = "<group>"; };
+		F727EA630209391401053118 /* TTCPSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTCPSocket.h; sourceTree = "<group>"; };
+		F727EA640209391401053118 /* TUDPListener.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TUDPListener.h; sourceTree = "<group>"; };
+		F727EA650209391401053118 /* TUDPSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TUDPSocket.h; sourceTree = "<group>"; };
+		F727EA660209391401053118 /* TWANControler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TWANControler.h; sourceTree = "<group>"; };
+		F727EA670209391401053118 /* UDPStreamToEvent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UDPStreamToEvent.h; sourceTree = "<group>"; };
+		F727EA690209391401053118 /* EventToUDPStream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = EventToUDPStream.c; sourceTree = "<group>"; };
+		F727EA6A0209391401053118 /* MidiShareAppl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MidiShareAppl.cpp; sourceTree = "<group>"; };
+		F727EA6B0209391401053118 /* MidiShareDriver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MidiShareDriver.cpp; sourceTree = "<group>"; };
+		F727EA6C0209391401053118 /* MidiShareFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MidiShareFilter.cpp; sourceTree = "<group>"; };
+		F727EA6D0209391401053118 /* MidiShareTasks.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MidiShareTasks.cpp; sourceTree = "<group>"; };
+		F727EA6E0209391401053118 /* MidiTools.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MidiTools.cpp; sourceTree = "<group>"; };
+		F727EA6F0209391401053118 /* TMidiSlot.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiSlot.cpp; sourceTree = "<group>"; };
+		F727EA700209391401053118 /* UDPStreamToEvent.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = UDPStreamToEvent.c; sourceTree = "<group>"; };
+		F727EA710209391401053118 /* SkewControler.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SkewControler.cpp; sourceTree = "<group>"; };
+		F727EA730209391401053118 /* ApplState.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ApplState.cpp; sourceTree = "<group>"; };
+		F727EA740209391401053118 /* SlotState.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SlotState.cpp; sourceTree = "<group>"; };
+		F727EA760209391401053118 /* TMidiClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiClient.cpp; sourceTree = "<group>"; };
+		F727EA770209391401053118 /* TMidiServer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiServer.cpp; sourceTree = "<group>"; };
+		F727EA780209391401053118 /* TWANControler.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TWANControler.cpp; sourceTree = "<group>"; };
+		F727EA790209391401053118 /* TInetControler.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TInetControler.cpp; sourceTree = "<group>"; };
+		F727EA7A0209391401053118 /* TInetTasks.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TInetTasks.cpp; sourceTree = "<group>"; };
+		F727EA7B0209391401053118 /* TMidiInStream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiInStream.cpp; sourceTree = "<group>"; };
+		F727EA7C0209391401053118 /* TMidiOutStream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiOutStream.cpp; sourceTree = "<group>"; };
+		F727EA7D0209391401053118 /* TMidiRemote.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiRemote.cpp; sourceTree = "<group>"; };
+		F727EA7E0209391401053118 /* TPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPacket.cpp; sourceTree = "<group>"; };
+		F727EA7F0209391401053118 /* TRemoteAppl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TRemoteAppl.cpp; sourceTree = "<group>"; };
+		F727EA800209391401053118 /* TRemoteMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TRemoteMgr.cpp; sourceTree = "<group>"; };
+		F727EA810209391401053118 /* TRemoteSlot.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TRemoteSlot.cpp; sourceTree = "<group>"; };
+		F727EB0F020942D301053118 /* FilterUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FilterUtils.h; path = ../../../lib/FilterUtils.h; sourceTree = SOURCE_ROOT; };
+		F727EB1D0209488B01053118 /* TInetAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TInetAddress.cpp; sourceTree = "<group>"; };
+		F727EB1E0209488B01053118 /* TNetInfos.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TNetInfos.cpp; sourceTree = "<group>"; };
+		F727EB1F0209488B01053118 /* TTCPSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTCPSocket.cpp; sourceTree = "<group>"; };
+		F727EB200209488B01053118 /* TUDPSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TUDPSocket.cpp; sourceTree = "<group>"; };
+		F727EB85020988D501053118 /* HostTools.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = HostTools.cpp; path = ../../../lib/Network/HostTools.cpp; sourceTree = SOURCE_ROOT; };
+		F727EB9A02098A2801053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		F727EB9B02098A2801053118 /* profport.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = profport.h; path = ../../../lib/profport.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B234CC609F62FB500488DBD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234CC709F62FB500488DBD /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B234D3409F62FDB00488DBD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234D3509F62FDB00488DBD /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F7219673020EB73001053118 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				F7219674020EB73001053118 /* Handle.c */,
+				F7219675020EB73001053118 /* INetAlert.cpp */,
+				F7219678020EB73001053118 /* misc.h */,
+				F7219679020EB73001053118 /* msNetDriver.h */,
+				F721967A020EB73001053118 /* NetTools.cpp */,
+				F721967B020EB73001053118 /* NetTools.h */,
+				F721967C020EB73001053118 /* OSXFeedback.cpp */,
+				F721967D020EB73001053118 /* OSXFeedback.h */,
+				F721967E020EB73001053118 /* StateManager.cpp */,
+			);
+			path = common;
+			sourceTree = SOURCE_ROOT;
+		};
+		F7219695020EB75B01053118 /* WAN */ = {
+			isa = PBXGroup;
+			children = (
+				F7219696020EB75B01053118 /* msWANDriver.cpp */,
+				F7219697020EB75B01053118 /* msWANMain.cpp */,
+			);
+			path = WAN;
+			sourceTree = SOURCE_ROOT;
+		};
+		F7219698020EB75B01053118 /* LAN */ = {
+			isa = PBXGroup;
+			children = (
+				F7219699020EB75B01053118 /* msLANDriver.cpp */,
+				F721969A020EB75B01053118 /* msLANMain.cpp */,
+			);
+			path = LAN;
+			sourceTree = SOURCE_ROOT;
+		};
+		F727EA280209364501053118 = {
+			isa = PBXGroup;
+			children = (
+				D3EE80E405BC096F00FE2FFB /* versions.txt */,
+				F7219695020EB75B01053118 /* WAN */,
+				F7219698020EB75B01053118 /* LAN */,
+				F7219673020EB73001053118 /* common */,
+				F727EB1C0209488B01053118 /* sockets */,
+				F727EB120209449B01053118 /* lflifo */,
+				F727EA380209391401053118 /* Network */,
+				F727EB2902094E0A01053118 /* lib */,
+				F727EA2B0209389101053118 /* Products */,
+				4B97CB95050CC7B400053105 /* MidiShare.framework */,
+			);
+			sourceTree = "<group>";
+		};
+		F727EA2B0209389101053118 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B234CCD09F62FB500488DBD /* msLANDriver.1.0.3.so */,
+				4B234D3B09F62FDB00488DBD /* msWANDriver.1.0.3.so */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F727EA380209391401053118 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F727EB85020988D501053118 /* HostTools.cpp */,
+				F727EA390209391401053118 /* FTMA.cpp */,
+				F727EA3A0209391401053118 /* include */,
+				F727EA680209391401053118 /* Midi */,
+				F727EA710209391401053118 /* SkewControler.cpp */,
+				F727EA720209391401053118 /* state */,
+				F727EA750209391401053118 /* TCP */,
+				F727EA790209391401053118 /* TInetControler.cpp */,
+				F727EA7A0209391401053118 /* TInetTasks.cpp */,
+				F727EA7B0209391401053118 /* TMidiInStream.cpp */,
+				F727EA7C0209391401053118 /* TMidiOutStream.cpp */,
+				F727EA7D0209391401053118 /* TMidiRemote.cpp */,
+				F727EA7E0209391401053118 /* TPacket.cpp */,
+				F727EA7F0209391401053118 /* TRemoteAppl.cpp */,
+				F727EA800209391401053118 /* TRemoteMgr.cpp */,
+				F727EA810209391401053118 /* TRemoteSlot.cpp */,
+				F727EB0F020942D301053118 /* FilterUtils.h */,
+			);
+			name = Network;
+			path = ../../../lib/Network;
+			sourceTree = SOURCE_ROOT;
+		};
+		F727EA3A0209391401053118 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				F727EA3B0209391401053118 /* EventToUDPStream.h */,
+				F727EA3C0209391401053118 /* FeedbackProvider.h */,
+				F727EA3D0209391401053118 /* FTMA.h */,
+				F727EA3E0209391401053118 /* Handle.h */,
+				F727EA3F0209391401053118 /* HostTools.h */,
+				F727EA410209391401053118 /* INetAlert.h */,
+				F727EA420209391401053118 /* InetTypes.h */,
+				F727EA430209391401053118 /* IPHeader.h */,
+				F727EA450209391401053118 /* MidiShareAppl.h */,
+				F727EA460209391401053118 /* MidiShareDriver.h */,
+				F727EA470209391401053118 /* MidiShareFilter.h */,
+				F727EA480209391401053118 /* MidiShareTasks.h */,
+				F727EA490209391401053118 /* MidiTools.h */,
+				F727EA4A0209391401053118 /* msInetLib.h */,
+				F727EA4B0209391401053118 /* SkewControler.h */,
+				F727EA4C0209391401053118 /* StatesManager.h */,
+				F727EA4D0209391401053118 /* StrConstants.h */,
+				F727EA500209391401053118 /* TimeTools.h */,
+				F727EA510209391401053118 /* TInetAddress.h */,
+				F727EA520209391401053118 /* TInetControler.h */,
+				F727EA530209391401053118 /* TInetTasks.h */,
+				F727EA540209391401053118 /* TMidiClient.h */,
+				F727EA550209391401053118 /* TMidiInStream.h */,
+				F727EA560209391401053118 /* TMidiOutStream.h */,
+				F727EA570209391401053118 /* TMidiPacket.h */,
+				F727EA580209391401053118 /* TMidiRemote.h */,
+				F727EA590209391401053118 /* TMidiServer.h */,
+				F727EA5A0209391401053118 /* TMidiSlot.h */,
+				F727EA5B0209391401053118 /* TNetInfos.h */,
+				F727EA5C0209391401053118 /* TPacket.h */,
+				F727EA5D0209391401053118 /* TRemote.h */,
+				F727EA5E0209391401053118 /* TRemoteAppl.h */,
+				F727EA5F0209391401053118 /* TRemoteMgr.h */,
+				F727EA600209391401053118 /* TRemoteSlot.h */,
+				F727EA610209391401053118 /* TSocket.h */,
+				F727EA620209391401053118 /* TTCPListener.h */,
+				F727EA630209391401053118 /* TTCPSocket.h */,
+				F727EA640209391401053118 /* TUDPListener.h */,
+				F727EA650209391401053118 /* TUDPSocket.h */,
+				F727EA660209391401053118 /* TWANControler.h */,
+				F727EA670209391401053118 /* UDPStreamToEvent.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		F727EA680209391401053118 /* Midi */ = {
+			isa = PBXGroup;
+			children = (
+				F727EA690209391401053118 /* EventToUDPStream.c */,
+				F727EA6A0209391401053118 /* MidiShareAppl.cpp */,
+				F727EA6B0209391401053118 /* MidiShareDriver.cpp */,
+				F727EA6C0209391401053118 /* MidiShareFilter.cpp */,
+				F727EA6D0209391401053118 /* MidiShareTasks.cpp */,
+				F727EA6E0209391401053118 /* MidiTools.cpp */,
+				F727EA6F0209391401053118 /* TMidiSlot.cpp */,
+				F727EA700209391401053118 /* UDPStreamToEvent.c */,
+			);
+			path = Midi;
+			sourceTree = "<group>";
+		};
+		F727EA720209391401053118 /* state */ = {
+			isa = PBXGroup;
+			children = (
+				F727EA730209391401053118 /* ApplState.cpp */,
+				F727EA740209391401053118 /* SlotState.cpp */,
+			);
+			path = state;
+			sourceTree = "<group>";
+		};
+		F727EA750209391401053118 /* TCP */ = {
+			isa = PBXGroup;
+			children = (
+				F727EA760209391401053118 /* TMidiClient.cpp */,
+				F727EA770209391401053118 /* TMidiServer.cpp */,
+				F727EA780209391401053118 /* TWANControler.cpp */,
+			);
+			path = TCP;
+			sourceTree = "<group>";
+		};
+		F727EB120209449B01053118 /* lflifo */ = {
+			isa = PBXGroup;
+			children = (
+				4BDE3B0A09EE9F520009E823 /* lffifo.c */,
+				4BDE3B0C09EE9F590009E823 /* lflifo.c */,
+			);
+			name = lflifo;
+			sourceTree = "<group>";
+		};
+		F727EB1C0209488B01053118 /* sockets */ = {
+			isa = PBXGroup;
+			children = (
+				F727EB1D0209488B01053118 /* TInetAddress.cpp */,
+				F727EB1E0209488B01053118 /* TNetInfos.cpp */,
+				F727EB1F0209488B01053118 /* TTCPSocket.cpp */,
+				F727EB200209488B01053118 /* TUDPSocket.cpp */,
+			);
+			path = sockets;
+			sourceTree = SOURCE_ROOT;
+		};
+		F727EB2902094E0A01053118 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				F727EB9A02098A2801053118 /* profport.c */,
+				F727EB9B02098A2801053118 /* profport.h */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4B234C7009F62FB500488DBD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234C7109F62FB500488DBD /* EventToUDPStream.h in Headers */,
+				4B234C7209F62FB500488DBD /* FeedbackProvider.h in Headers */,
+				4B234C7309F62FB500488DBD /* FTMA.h in Headers */,
+				4B234C7409F62FB500488DBD /* Handle.h in Headers */,
+				4B234C7509F62FB500488DBD /* HostTools.h in Headers */,
+				4B234C7609F62FB500488DBD /* INetAlert.h in Headers */,
+				4B234C7709F62FB500488DBD /* InetTypes.h in Headers */,
+				4B234C7809F62FB500488DBD /* IPHeader.h in Headers */,
+				4B234C7909F62FB500488DBD /* MidiShareAppl.h in Headers */,
+				4B234C7A09F62FB500488DBD /* MidiShareDriver.h in Headers */,
+				4B234C7B09F62FB500488DBD /* MidiShareFilter.h in Headers */,
+				4B234C7C09F62FB500488DBD /* MidiShareTasks.h in Headers */,
+				4B234C7D09F62FB500488DBD /* MidiTools.h in Headers */,
+				4B234C7E09F62FB500488DBD /* msInetLib.h in Headers */,
+				4B234C7F09F62FB500488DBD /* SkewControler.h in Headers */,
+				4B234C8009F62FB500488DBD /* StatesManager.h in Headers */,
+				4B234C8109F62FB500488DBD /* StrConstants.h in Headers */,
+				4B234C8209F62FB500488DBD /* TimeTools.h in Headers */,
+				4B234C8309F62FB500488DBD /* TInetAddress.h in Headers */,
+				4B234C8409F62FB500488DBD /* TInetControler.h in Headers */,
+				4B234C8509F62FB500488DBD /* TInetTasks.h in Headers */,
+				4B234C8609F62FB500488DBD /* TMidiClient.h in Headers */,
+				4B234C8709F62FB500488DBD /* TMidiInStream.h in Headers */,
+				4B234C8809F62FB500488DBD /* TMidiOutStream.h in Headers */,
+				4B234C8909F62FB500488DBD /* TMidiPacket.h in Headers */,
+				4B234C8A09F62FB500488DBD /* TMidiRemote.h in Headers */,
+				4B234C8B09F62FB500488DBD /* TMidiServer.h in Headers */,
+				4B234C8C09F62FB500488DBD /* TMidiSlot.h in Headers */,
+				4B234C8D09F62FB500488DBD /* TNetInfos.h in Headers */,
+				4B234C8E09F62FB500488DBD /* TPacket.h in Headers */,
+				4B234C8F09F62FB500488DBD /* TRemote.h in Headers */,
+				4B234C9009F62FB500488DBD /* TRemoteAppl.h in Headers */,
+				4B234C9109F62FB500488DBD /* TRemoteMgr.h in Headers */,
+				4B234C9209F62FB500488DBD /* TRemoteSlot.h in Headers */,
+				4B234C9309F62FB500488DBD /* TSocket.h in Headers */,
+				4B234C9409F62FB500488DBD /* TTCPListener.h in Headers */,
+				4B234C9509F62FB500488DBD /* TTCPSocket.h in Headers */,
+				4B234C9609F62FB500488DBD /* TUDPListener.h in Headers */,
+				4B234C9709F62FB500488DBD /* TUDPSocket.h in Headers */,
+				4B234C9809F62FB500488DBD /* TWANControler.h in Headers */,
+				4B234C9909F62FB500488DBD /* UDPStreamToEvent.h in Headers */,
+				4B234C9A09F62FB500488DBD /* FilterUtils.h in Headers */,
+				4B234C9B09F62FB500488DBD /* profport.h in Headers */,
+				4B234C9C09F62FB500488DBD /* misc.h in Headers */,
+				4B234C9D09F62FB500488DBD /* msNetDriver.h in Headers */,
+				4B234C9E09F62FB500488DBD /* NetTools.h in Headers */,
+				4B234C9F09F62FB500488DBD /* OSXFeedback.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B234CDC09F62FDB00488DBD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234CDD09F62FDB00488DBD /* EventToUDPStream.h in Headers */,
+				4B234CDE09F62FDB00488DBD /* FeedbackProvider.h in Headers */,
+				4B234CDF09F62FDB00488DBD /* FTMA.h in Headers */,
+				4B234CE009F62FDB00488DBD /* Handle.h in Headers */,
+				4B234CE109F62FDB00488DBD /* HostTools.h in Headers */,
+				4B234CE209F62FDB00488DBD /* INetAlert.h in Headers */,
+				4B234CE309F62FDB00488DBD /* InetTypes.h in Headers */,
+				4B234CE409F62FDB00488DBD /* IPHeader.h in Headers */,
+				4B234CE509F62FDB00488DBD /* MidiShareAppl.h in Headers */,
+				4B234CE609F62FDB00488DBD /* MidiShareDriver.h in Headers */,
+				4B234CE709F62FDB00488DBD /* MidiShareFilter.h in Headers */,
+				4B234CE809F62FDB00488DBD /* MidiShareTasks.h in Headers */,
+				4B234CE909F62FDB00488DBD /* MidiTools.h in Headers */,
+				4B234CEA09F62FDB00488DBD /* msInetLib.h in Headers */,
+				4B234CEB09F62FDB00488DBD /* SkewControler.h in Headers */,
+				4B234CEC09F62FDB00488DBD /* StatesManager.h in Headers */,
+				4B234CED09F62FDB00488DBD /* StrConstants.h in Headers */,
+				4B234CEE09F62FDB00488DBD /* TimeTools.h in Headers */,
+				4B234CEF09F62FDB00488DBD /* TInetAddress.h in Headers */,
+				4B234CF009F62FDB00488DBD /* TInetControler.h in Headers */,
+				4B234CF109F62FDB00488DBD /* TInetTasks.h in Headers */,
+				4B234CF209F62FDB00488DBD /* TMidiClient.h in Headers */,
+				4B234CF309F62FDB00488DBD /* TMidiInStream.h in Headers */,
+				4B234CF409F62FDB00488DBD /* TMidiOutStream.h in Headers */,
+				4B234CF509F62FDB00488DBD /* TMidiPacket.h in Headers */,
+				4B234CF609F62FDB00488DBD /* TMidiRemote.h in Headers */,
+				4B234CF709F62FDB00488DBD /* TMidiServer.h in Headers */,
+				4B234CF809F62FDB00488DBD /* TMidiSlot.h in Headers */,
+				4B234CF909F62FDB00488DBD /* TNetInfos.h in Headers */,
+				4B234CFA09F62FDB00488DBD /* TPacket.h in Headers */,
+				4B234CFB09F62FDB00488DBD /* TRemote.h in Headers */,
+				4B234CFC09F62FDB00488DBD /* TRemoteAppl.h in Headers */,
+				4B234CFD09F62FDB00488DBD /* TRemoteMgr.h in Headers */,
+				4B234CFE09F62FDB00488DBD /* TRemoteSlot.h in Headers */,
+				4B234CFF09F62FDB00488DBD /* TSocket.h in Headers */,
+				4B234D0009F62FDB00488DBD /* TTCPListener.h in Headers */,
+				4B234D0109F62FDB00488DBD /* TTCPSocket.h in Headers */,
+				4B234D0209F62FDB00488DBD /* TUDPListener.h in Headers */,
+				4B234D0309F62FDB00488DBD /* TUDPSocket.h in Headers */,
+				4B234D0409F62FDB00488DBD /* TWANControler.h in Headers */,
+				4B234D0509F62FDB00488DBD /* UDPStreamToEvent.h in Headers */,
+				4B234D0609F62FDB00488DBD /* FilterUtils.h in Headers */,
+				4B234D0709F62FDB00488DBD /* profport.h in Headers */,
+				4B234D0809F62FDB00488DBD /* misc.h in Headers */,
+				4B234D0909F62FDB00488DBD /* msNetDriver.h in Headers */,
+				4B234D0A09F62FDB00488DBD /* NetTools.h in Headers */,
+				4B234D0B09F62FDB00488DBD /* OSXFeedback.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4B234C6F09F62FB500488DBD /* msUDPDriver Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B234CC909F62FB500488DBD /* Build configuration list for PBXNativeTarget "msUDPDriver Universal" */;
+			buildPhases = (
+				4B234C7009F62FB500488DBD /* Headers */,
+				4B234CA009F62FB500488DBD /* Sources */,
+				4B234CC609F62FB500488DBD /* Frameworks */,
+				4B234CC809F62FB500488DBD /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msLANDriver.1.0.2.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = "msUDPDriver Universal";
+			productInstallPath = /usr/local/lib;
+			productName = msUDPDriver;
+			productReference = 4B234CCD09F62FB500488DBD /* msLANDriver.1.0.3.so */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		4B234CDB09F62FDB00488DBD /* msTCPDriver Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B234D3709F62FDB00488DBD /* Build configuration list for PBXNativeTarget "msTCPDriver Universal" */;
+			buildPhases = (
+				4B234CDC09F62FDB00488DBD /* Headers */,
+				4B234D0C09F62FDB00488DBD /* Sources */,
+				4B234D3409F62FDB00488DBD /* Frameworks */,
+				4B234D3609F62FDB00488DBD /* Rez */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DWANDriver";
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = implicit.h;
+				PRODUCT_NAME = msWANDriver.1.0.2.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = "msTCPDriver Universal";
+			productInstallPath = /usr/local/lib;
+			productName = msTCPDriver;
+			productReference = 4B234D3B09F62FDB00488DBD /* msWANDriver.1.0.3.so */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F727EA270209364501053118 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BDE3B0509EE9F350009E823 /* Build configuration list for PBXProject "msNet" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				F727EA290209364501053118 /* Development */,
+				F727EA2A0209364501053118 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = F727EA280209364501053118;
+			productRefGroup = F727EA2B0209389101053118 /* Products */;
+			projectDirPath = "";
+			targets = (
+				4B234C6F09F62FB500488DBD /* msUDPDriver Universal */,
+				4B234CDB09F62FDB00488DBD /* msTCPDriver Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXRezBuildPhase section */
+		4B234CC809F62FB500488DBD /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B234D3609F62FDB00488DBD /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B234CA009F62FB500488DBD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234CA109F62FB500488DBD /* EventToUDPStream.c in Sources */,
+				4B234CA209F62FB500488DBD /* MidiShareAppl.cpp in Sources */,
+				4B234CA309F62FB500488DBD /* MidiShareDriver.cpp in Sources */,
+				4B234CA409F62FB500488DBD /* MidiShareFilter.cpp in Sources */,
+				4B234CA509F62FB500488DBD /* MidiShareTasks.cpp in Sources */,
+				4B234CA609F62FB500488DBD /* MidiTools.cpp in Sources */,
+				4B234CA709F62FB500488DBD /* TMidiSlot.cpp in Sources */,
+				4B234CA809F62FB500488DBD /* UDPStreamToEvent.c in Sources */,
+				4B234CA909F62FB500488DBD /* TWANControler.cpp in Sources */,
+				4B234CAA09F62FB500488DBD /* TMidiServer.cpp in Sources */,
+				4B234CAB09F62FB500488DBD /* TMidiClient.cpp in Sources */,
+				4B234CAC09F62FB500488DBD /* ApplState.cpp in Sources */,
+				4B234CAD09F62FB500488DBD /* SlotState.cpp in Sources */,
+				4B234CAE09F62FB500488DBD /* SkewControler.cpp in Sources */,
+				4B234CAF09F62FB500488DBD /* FTMA.cpp in Sources */,
+				4B234CB009F62FB500488DBD /* HostTools.cpp in Sources */,
+				4B234CB109F62FB500488DBD /* TPacket.cpp in Sources */,
+				4B234CB209F62FB500488DBD /* TMidiRemote.cpp in Sources */,
+				4B234CB309F62FB500488DBD /* TMidiOutStream.cpp in Sources */,
+				4B234CB409F62FB500488DBD /* TMidiInStream.cpp in Sources */,
+				4B234CB509F62FB500488DBD /* TInetTasks.cpp in Sources */,
+				4B234CB609F62FB500488DBD /* TInetControler.cpp in Sources */,
+				4B234CB709F62FB500488DBD /* TRemoteAppl.cpp in Sources */,
+				4B234CB809F62FB500488DBD /* TRemoteMgr.cpp in Sources */,
+				4B234CB909F62FB500488DBD /* TRemoteSlot.cpp in Sources */,
+				4B234CBA09F62FB500488DBD /* TInetAddress.cpp in Sources */,
+				4B234CBB09F62FB500488DBD /* TNetInfos.cpp in Sources */,
+				4B234CBC09F62FB500488DBD /* TTCPSocket.cpp in Sources */,
+				4B234CBD09F62FB500488DBD /* TUDPSocket.cpp in Sources */,
+				4B234CBE09F62FB500488DBD /* profport.c in Sources */,
+				4B234CBF09F62FB500488DBD /* Handle.c in Sources */,
+				4B234CC009F62FB500488DBD /* INetAlert.cpp in Sources */,
+				4B234CC109F62FB500488DBD /* NetTools.cpp in Sources */,
+				4B234CC209F62FB500488DBD /* OSXFeedback.cpp in Sources */,
+				4B234CC309F62FB500488DBD /* StateManager.cpp in Sources */,
+				4B234CC409F62FB500488DBD /* msLANDriver.cpp in Sources */,
+				4B234CC509F62FB500488DBD /* msLANMain.cpp in Sources */,
+				4B234DA609F631A600488DBD /* lflifo.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B234D0C09F62FDB00488DBD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234D0D09F62FDB00488DBD /* EventToUDPStream.c in Sources */,
+				4B234D0E09F62FDB00488DBD /* MidiShareAppl.cpp in Sources */,
+				4B234D0F09F62FDB00488DBD /* MidiShareDriver.cpp in Sources */,
+				4B234D1009F62FDB00488DBD /* MidiShareFilter.cpp in Sources */,
+				4B234D1109F62FDB00488DBD /* MidiShareTasks.cpp in Sources */,
+				4B234D1209F62FDB00488DBD /* MidiTools.cpp in Sources */,
+				4B234D1309F62FDB00488DBD /* TMidiSlot.cpp in Sources */,
+				4B234D1409F62FDB00488DBD /* UDPStreamToEvent.c in Sources */,
+				4B234D1509F62FDB00488DBD /* ApplState.cpp in Sources */,
+				4B234D1609F62FDB00488DBD /* SlotState.cpp in Sources */,
+				4B234D1709F62FDB00488DBD /* TMidiClient.cpp in Sources */,
+				4B234D1809F62FDB00488DBD /* TMidiServer.cpp in Sources */,
+				4B234D1909F62FDB00488DBD /* TWANControler.cpp in Sources */,
+				4B234D1A09F62FDB00488DBD /* FTMA.cpp in Sources */,
+				4B234D1B09F62FDB00488DBD /* SkewControler.cpp in Sources */,
+				4B234D1C09F62FDB00488DBD /* TInetControler.cpp in Sources */,
+				4B234D1D09F62FDB00488DBD /* TInetTasks.cpp in Sources */,
+				4B234D1E09F62FDB00488DBD /* TMidiInStream.cpp in Sources */,
+				4B234D1F09F62FDB00488DBD /* TMidiOutStream.cpp in Sources */,
+				4B234D2009F62FDB00488DBD /* TMidiRemote.cpp in Sources */,
+				4B234D2109F62FDB00488DBD /* TPacket.cpp in Sources */,
+				4B234D2209F62FDB00488DBD /* TRemoteAppl.cpp in Sources */,
+				4B234D2309F62FDB00488DBD /* TRemoteMgr.cpp in Sources */,
+				4B234D2409F62FDB00488DBD /* TRemoteSlot.cpp in Sources */,
+				4B234D2509F62FDB00488DBD /* HostTools.cpp in Sources */,
+				4B234D2609F62FDB00488DBD /* profport.c in Sources */,
+				4B234D2709F62FDB00488DBD /* TInetAddress.cpp in Sources */,
+				4B234D2809F62FDB00488DBD /* TNetInfos.cpp in Sources */,
+				4B234D2909F62FDB00488DBD /* TTCPSocket.cpp in Sources */,
+				4B234D2A09F62FDB00488DBD /* TUDPSocket.cpp in Sources */,
+				4B234D2B09F62FDB00488DBD /* Handle.c in Sources */,
+				4B234D2C09F62FDB00488DBD /* INetAlert.cpp in Sources */,
+				4B234D2D09F62FDB00488DBD /* NetTools.cpp in Sources */,
+				4B234D2E09F62FDB00488DBD /* OSXFeedback.cpp in Sources */,
+				4B234D2F09F62FDB00488DBD /* StateManager.cpp in Sources */,
+				4B234D3009F62FDB00488DBD /* msWANDriver.cpp in Sources */,
+				4B234D3109F62FDB00488DBD /* msWANMain.cpp in Sources */,
+				4B234D3209F62FDB00488DBD /* lffifo.c in Sources */,
+				4B234D3309F62FDB00488DBD /* lflifo.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B234CCA09F62FB500488DBD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				HEADER_SEARCH_PATHS = ../../../common/atomic;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msLANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B234CCB09F62FB500488DBD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				HEADER_SEARCH_PATHS = ../../../common/atomic;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msLANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B234CCC09F62FB500488DBD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				HEADER_SEARCH_PATHS = ../../../common/atomic;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msLANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4B234D3809F62FDB00488DBD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = WANDriver;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msWANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B234D3909F62FDB00488DBD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = WANDriver;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msWANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B234D3A09F62FDB00488DBD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = dylib.exp;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = implicit.h;
+				GCC_PREPROCESSOR_DEFINITIONS = WANDriver;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msWANDriver.1.0.3;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4BDE3B0609EE9F350009E823 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BDE3B0709EE9F350009E823 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BDE3B0809EE9F350009E823 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B234CC909F62FB500488DBD /* Build configuration list for PBXNativeTarget "msUDPDriver Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B234CCA09F62FB500488DBD /* Development */,
+				4B234CCB09F62FB500488DBD /* Deployment */,
+				4B234CCC09F62FB500488DBD /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4B234D3709F62FDB00488DBD /* Build configuration list for PBXNativeTarget "msTCPDriver Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B234D3809F62FDB00488DBD /* Development */,
+				4B234D3909F62FDB00488DBD /* Deployment */,
+				4B234D3A09F62FDB00488DBD /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BDE3B0509EE9F350009E823 /* Build configuration list for PBXProject "msNet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BDE3B0609EE9F350009E823 /* Development */,
+				4BDE3B0709EE9F350009E823 /* Deployment */,
+				4BDE3B0809EE9F350009E823 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F727EA270209364501053118 /* Project object */;
+}

@@ -27,6 +27,7 @@
 #include "NetTools.h"
 #include "TInetControler.h"
 #include "InetAlert.h"
+#include <unistd.h>
 
 /* ----------------------------------*/
 /* constants definitions             */
