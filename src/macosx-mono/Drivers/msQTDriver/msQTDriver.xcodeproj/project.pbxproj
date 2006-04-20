@@ -47,7 +47,6 @@
 		4BADAD1909ED775E00BC5B44 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		4BADAD2109ED776F00BC5B44 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		4BADAD4909ED779700BC5B44 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
-		4BDE3AED09EE9EF10009E823 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		D3EE810805BC09E200FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
 		F5240F1A0208005601053105 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
 		F58CAEE8020ADF9B01053105 /* msDriverState.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msDriverState.c; path = ../lib/msDriverState.c; sourceTree = SOURCE_ROOT; };
@@ -85,7 +84,6 @@
 				4BADAD1909ED775E00BC5B44 /* MidiShare.framework */,
 				4BADAD2109ED776F00BC5B44 /* QuickTime.framework */,
 				4BADAD4909ED779700BC5B44 /* CoreServices.framework */,
-				4BDE3AED09EE9EF10009E823 /* Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
