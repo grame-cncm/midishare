@@ -20,23 +20,8 @@
 		4BD92DEA09EE52A7002DCEE0 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1F0208058801053105 /* profport.c */; };
 		4BD92DEB09EE52A8002DCEE0 /* EventToMidiStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1C0208056001053105 /* EventToMidiStream.c */; };
 		4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */; };
-		4BD92DF609EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */; };
 		4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */; };
-		4BD92E0109EE52CA002DCEE0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */; };
 		4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
-		4BD92E0609EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
-		F5240F1D0208056001053105 /* EventToMidiStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1C0208056001053105 /* EventToMidiStream.c */; };
-		F5240F200208058801053105 /* MidiStreamToEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1E0208058801053105 /* MidiStreamToEvent.c */; };
-		F5240F210208058801053105 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1F0208058801053105 /* profport.c */; };
-		F54A7D7E01FC781301053105 /* msMidiDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = F54A7D7901FC781301053105 /* msMidiDriver.h */; };
-		F54A7D8001FC781301053105 /* msMidiInOut.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7701FC781301053105 /* msMidiInOut.c */; };
-		F54A7D8101FC781301053105 /* msMidiDriver.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D7801FC781301053105 /* msMidiDriver.c */; };
-		F54A7D8501FC781C01053105 /* msMidiMain.c in Sources */ = {isa = PBXBuildFile; fileRef = F54A7D8401FC781C01053105 /* msMidiMain.c */; };
-		F569F8E8020573BA01053105 /* msMidiState.h in Headers */ = {isa = PBXBuildFile; fileRef = F569F8E6020573BA01053105 /* msMidiState.h */; };
-		F569F8E9020573BA01053105 /* msMidiState.c in Sources */ = {isa = PBXBuildFile; fileRef = F569F8E7020573BA01053105 /* msMidiState.c */; };
-		F58CAEE6020ADF5E01053105 /* msDriverState.h in Headers */ = {isa = PBXBuildFile; fileRef = F58CAEE5020ADF5E01053105 /* msDriverState.h */; };
-		F58CAEE7020ADF5E01053105 /* msDriverState.c in Sources */ = {isa = PBXBuildFile; fileRef = F58CAEE4020ADF5E01053105 /* msDriverState.c */; };
-		F76B9CAC02086D8E01053118 /* implicit.h in Headers */ = {isa = PBXBuildFile; fileRef = F76B9CAB02086D8E01053118 /* implicit.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -75,7 +60,6 @@
 		F54A7D7701FC781301053105 /* msMidiInOut.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiInOut.c; sourceTree = "<group>"; };
 		F54A7D7801FC781301053105 /* msMidiDriver.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiDriver.c; sourceTree = "<group>"; };
 		F54A7D7901FC781301053105 /* msMidiDriver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msMidiDriver.h; sourceTree = "<group>"; };
-		F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = msMidiDriver.1.0.6.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		F54A7D8401FC781C01053105 /* msMidiMain.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiMain.c; sourceTree = "<group>"; };
 		F569F8E6020573BA01053105 /* msMidiState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msMidiState.h; sourceTree = "<group>"; };
 		F569F8E7020573BA01053105 /* msMidiState.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = msMidiState.c; sourceTree = "<group>"; };
@@ -92,16 +76,6 @@
 				4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */,
 				4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */,
 				4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F54A7D8201FC781301053105 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4BD92DF609EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */,
-				4BD92E0109EE52CA002DCEE0 /* MidiShare.framework in Frameworks */,
-				4BD92E0609EE52D8002DCEE0 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +106,6 @@
 		F54A7D7A01FC781301053105 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */,
 				4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.7.so */,
 			);
 			name = Products;
@@ -162,63 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F54A7D7D01FC781301053105 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F54A7D7E01FC781301053105 /* msMidiDriver.h in Headers */,
-				F569F8E8020573BA01053105 /* msMidiState.h in Headers */,
-				F76B9CAC02086D8E01053118 /* implicit.h in Headers */,
-				F58CAEE6020ADF5E01053105 /* msDriverState.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
-
-/* Begin PBXLibraryTarget section */
-		F54A7D7C01FC781301053105 /* msMidiDriver */ = {
-			isa = PBXLibraryTarget;
-			buildConfigurationList = 4BB41EC509ED429100EE9367 /* Build configuration list for PBXLibraryTarget "msMidiDriver" */;
-			buildPhases = (
-				F54A7D7D01FC781301053105 /* Headers */,
-				F54A7D7F01FC781301053105 /* Sources */,
-				F54A7D8201FC781301053105 /* Frameworks */,
-				F54A7D8301FC781301053105 /* Rez */,
-			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = (
-					"-D__POWERPC__",
-					"-D__Macintosh__",
-				);
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.6.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			dependencies = (
-			);
-			name = msMidiDriver;
-			productName = msMidiDriver;
-			productReference = F54A7D7B01FC781301053105 /* msMidiDriver.1.0.6.so */;
-		};
-/* End PBXLibraryTarget section */
 
 /* Begin PBXNativeTarget section */
 		4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */ = {
@@ -264,21 +181,10 @@
 			productRefGroup = F54A7D7A01FC781301053105 /* Products */;
 			projectDirPath = "";
 			targets = (
-				F54A7D7C01FC781301053105 /* msMidiDriver */,
 				4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXRezBuildPhase section */
-		F54A7D8301FC781301053105 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4BD92D8E09EE502D002DCEE0 /* Sources */ = {
@@ -296,126 +202,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F54A7D7F01FC781301053105 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F54A7D8001FC781301053105 /* msMidiInOut.c in Sources */,
-				F54A7D8101FC781301053105 /* msMidiDriver.c in Sources */,
-				F54A7D8501FC781C01053105 /* msMidiMain.c in Sources */,
-				F569F8E9020573BA01053105 /* msMidiState.c in Sources */,
-				F5240F1D0208056001053105 /* EventToMidiStream.c in Sources */,
-				F5240F200208058801053105 /* MidiStreamToEvent.c in Sources */,
-				F5240F210208058801053105 /* profport.c in Sources */,
-				F58CAEE7020ADF5E01053105 /* msDriverState.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		4BB41EC609ED429100EE9367 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = (
-					"-D__POWERPC__",
-					"-D__Macintosh__",
-				);
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.6.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4BB41EC709ED429100EE9367 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = (
-					"-D__POWERPC__",
-					"-D__Macintosh__",
-				);
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.6.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4BB41EC809ED429100EE9367 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = (
-					"-D__POWERPC__",
-					"-D__Macintosh__",
-				);
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msMidiDriver.1.0.6.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		4BB41EE909ED42BB00EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -518,16 +307,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4BB41EC509ED429100EE9367 /* Build configuration list for PBXLibraryTarget "msMidiDriver" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BB41EC609ED429100EE9367 /* Development */,
-				4BB41EC709ED429100EE9367 /* Deployment */,
-				4BB41EC809ED429100EE9367 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
