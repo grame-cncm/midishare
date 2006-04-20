@@ -10,9 +10,6 @@
 		4B75836309ED471E006225A2 /* Midi.c in Sources */ = {isa = PBXBuildFile; fileRef = F506805F02083B1F01053105 /* Midi.c */; };
 		4B75836409ED471E006225A2 /* MidiAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F506806002083B1F01053105 /* MidiAppl.c */; };
 		4B75836609ED471E006225A2 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCBA72406074E9F00D2BE30 /* JavaVM.framework */; };
-		4BCBA72506074E9F00D2BE30 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCBA72406074E9F00D2BE30 /* JavaVM.framework */; };
-		F506806102083B1F01053105 /* Midi.c in Sources */ = {isa = PBXBuildFile; fileRef = F506805F02083B1F01053105 /* Midi.c */; };
-		F506806202083B1F01053105 /* MidiAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F506806002083B1F01053105 /* MidiAppl.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -40,7 +37,6 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
-		01205B34015611757F000001 /* libJMidi.1.1.1.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libJMidi.1.1.1.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B75836C09ED471E006225A2 /* libJMidi.1.1.2.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJMidi.1.1.2.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCBA72406074E9F00D2BE30 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
 		F506805F02083B1F01053105 /* Midi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Midi.c; path = ../src/Midi.c; sourceTree = SOURCE_ROOT; };
@@ -48,14 +44,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		01205B3B015611757F000001 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4BCBA72506074E9F00D2BE30 /* JavaVM.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4B75836509ED471E006225A2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -80,7 +68,6 @@
 		01F12F4FFEC8CEF111DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				01205B34015611757F000001 /* libJMidi.1.1.1.jnilib */,
 				4B75836C09ED471E006225A2 /* libJMidi.1.1.2.jnilib */,
 			);
 			name = Products;
@@ -89,13 +76,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		01205B36015611757F000001 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4B75836009ED471E006225A2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -104,49 +84,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
-
-/* Begin PBXLibraryTarget section */
-		01205B35015611757F000001 /* libJMidi.jnilib */ = {
-			isa = PBXLibraryTarget;
-			buildConfigurationList = 4B75835B09ED471E006225A2 /* Build configuration list for PBXLibraryTarget "libJMidi.jnilib" */;
-			buildPhases = (
-				01205B36015611757F000001 /* Headers */,
-				1A22E0970156146F7F000001 /* ShellScript */,
-				01205B37015611757F000001 /* Sources */,
-				01205B3B015611757F000001 /* Frameworks */,
-				01205B3C015611757F000001 /* Rez */,
-			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaVM.framework/Headers\"";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = jniheader.h;
-				PRODUCT_NAME = libJMidi.1.1.1.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			dependencies = (
-			);
-			name = libJMidi.jnilib;
-			productInstallPath = /usr/local/lib;
-			productName = libJMidi.jnilib;
-			productReference = 01205B34015611757F000001 /* libJMidi.1.1.1.jnilib */;
-		};
-/* End PBXLibraryTarget section */
 
 /* Begin PBXNativeTarget section */
 		4B75835F09ED471E006225A2 /* libJMidi.jnilib Universal */ = {
@@ -209,20 +146,12 @@
 			productRefGroup = 01F12F4FFEC8CEF111DB9C8B /* Products */;
 			projectDirPath = "";
 			targets = (
-				01205B35015611757F000001 /* libJMidi.jnilib */,
 				4B75835F09ED471E006225A2 /* libJMidi.jnilib Universal */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXRezBuildPhase section */
-		01205B3C015611757F000001 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4B75836709ED471E006225A2 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,15 +162,6 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1A22E0970156146F7F000001 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "";
-		};
 		4B75836109ED471E006225A2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -254,15 +174,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		01205B37015611757F000001 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F506806102083B1F01053105 /* Midi.c in Sources */,
-				F506806202083B1F01053105 /* MidiAppl.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4B75836209ED471E006225A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -275,96 +186,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		4B75835C09ED471E006225A2 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaVM.framework/Headers\"";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = jniheader.h;
-				PRODUCT_NAME = libJMidi.1.1.1.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4B75835D09ED471E006225A2 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaVM.framework/Headers\"";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = jniheader.h;
-				PRODUCT_NAME = libJMidi.1.1.1.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4B75835E09ED471E006225A2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaVM.framework/Headers\"";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = jniheader.h;
-				PRODUCT_NAME = libJMidi.1.1.1.jnilib;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		4B75836909ED471E006225A2 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -489,16 +310,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B75835B09ED471E006225A2 /* Build configuration list for PBXLibraryTarget "libJMidi.jnilib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4B75835C09ED471E006225A2 /* Development */,
-				4B75835D09ED471E006225A2 /* Deployment */,
-				4B75835E09ED471E006225A2 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		4B75836809ED471E006225A2 /* Build configuration list for PBXNativeTarget "libJMidi.jnilib Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
