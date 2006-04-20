@@ -8,48 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4B234E1309F6363A00488DBD /* Info-Player.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B234E1209F6363A00488DBD /* Info-Player.plist */; };
-		4B4DB62104A32AEC00053105 /* Player.h in Headers */ = {isa = PBXBuildFile; fileRef = F6619897038C2A120121BE68 /* Player.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B9C4E9F048F3A5700A8728E /* UMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F6038C2A120121BE68 /* UMidi.cpp */; };
-		4B9C4EA0048F3A5800A8728E /* UTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F7038C2A120121BE68 /* UTools.cpp */; };
-		4B9C4EA1048F3A5E00A8728E /* TTrackTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F3038C2A120121BE68 /* TTrackTable.cpp */; };
-		4B9C4EA6048F3A8700A8728E /* TTempoConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988B038C2A120121BE68 /* TTempoConverter.cpp */; };
-		4B9C4EA7048F3A8800A8728E /* TTempoMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988C038C2A120121BE68 /* TTempoMap.cpp */; };
-		4B9C4EA8048F3A8800A8728E /* TTempoMapVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988D038C2A120121BE68 /* TTempoMapVisitor.cpp */; };
-		4B9C4EA9048F3A8900A8728E /* TTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988E038C2A120121BE68 /* TTime.cpp */; };
-		4B9C4EAA048F3A8900A8728E /* TTimeConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988F038C2A120121BE68 /* TTimeConverter.cpp */; };
-		4B9C4EAB048F3A8900A8728E /* TTimeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619890038C2A120121BE68 /* TTimeManager.cpp */; };
-		4B9C4EAC048F3A9900A8728E /* TScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619886038C2A120121BE68 /* TScore.cpp */; };
-		4B9C4EAD048F3A9A00A8728E /* TScoreIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619888038C2A120121BE68 /* TScoreIterator.cpp */; };
-		4B9C4EAE048F3A9A00A8728E /* UScoreManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619889038C2A120121BE68 /* UScoreManager.cpp */; };
-		4B9C4EAF048F3A9B00A8728E /* TScoreFollower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619887038C2A120121BE68 /* TScoreFollower.cpp */; };
-		4B9C4EB0048F3AC700A8728E /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198D7038C2A120121BE68 /* Player.cpp */; };
-		4B9C4EB1048F3ACF00A8728E /* TPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198D8038C2A120121BE68 /* TPlayer.cpp */; };
-		4B9C4EB2048F3AD800A8728E /* TScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619884038C2A120121BE68 /* TScheduler.cpp */; };
-		4B9C4EB3048F3AE100A8728E /* TPlayerFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661987B038C2A120121BE68 /* TPlayerFactory.cpp */; };
-		4B9C4EB4048F3AE800A8728E /* TClockEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619874038C2A120121BE68 /* TClockEventReceiver.cpp */; };
-		4B9C4EB5048F3AE900A8728E /* TEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619875038C2A120121BE68 /* TEventReceiver.cpp */; };
-		4B9C4EB6048F3AE900A8728E /* TEventRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619876038C2A120121BE68 /* TEventRecorder.cpp */; };
-		4B9C4EB7048F3AEA00A8728E /* TExtEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619877038C2A120121BE68 /* TExtEventReceiver.cpp */; };
-		4B9C4EB8048F3AEA00A8728E /* TMidiPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619878038C2A120121BE68 /* TMidiPlayer.cpp */; };
-		4B9C4EB9048F3AEB00A8728E /* TSMPTEEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619879038C2A120121BE68 /* TSMPTEEventReceiver.cpp */; };
-		4B9C4EBA048F3AFA00A8728E /* TChaserIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986C038C2A120121BE68 /* TChaserIterator.cpp */; };
-		4B9C4EBB048F3AFB00A8728E /* TChaserVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986D038C2A120121BE68 /* TChaserVisitor.cpp */; };
-		4B9C4EBC048F3AFC00A8728E /* THashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986E038C2A120121BE68 /* THashTable.cpp */; };
-		4B9C4EBD048F3B0600A8728E /* TEventFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661987F038C2A120121BE68 /* TEventFactory.cpp */; };
-		4B9C4EBE048F3B0D00A8728E /* TMidiAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619882038C2A120121BE68 /* TMidiAppl.cpp */; };
-		4B9C4EBF048F3B1400A8728E /* TLoopManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198DD038C2A120121BE68 /* TLoopManager.cpp */; };
-		4B9C4EC1048F3B1500A8728E /* Tmtrack.c in Sources */ = {isa = PBXBuildFile; fileRef = F66198E0038C2A120121BE68 /* Tmtrack.c */; };
-		4B9C4EC2048F3B2100A8728E /* TPlayerScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E9038C2A120121BE68 /* TPlayerScore.cpp */; };
-		4B9C4EC3048F3B2200A8728E /* TScoreInserter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EA038C2A120121BE68 /* TScoreInserter.cpp */; };
-		4B9C4EC4048F3B2200A8728E /* TClockSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EC038C2A120121BE68 /* TClockSender.cpp */; };
-		4B9C4EC5048F3B2300A8728E /* TPlayerSynchroniserClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198ED038C2A120121BE68 /* TPlayerSynchroniserClock.cpp */; };
-		4B9C4EC6048F3B2400A8728E /* TPlayerSynchroniserExt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EE038C2A120121BE68 /* TPlayerSynchroniserExt.cpp */; };
-		4B9C4EC7048F3B2400A8728E /* TPlayerSynchroniserInt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EF038C2A120121BE68 /* TPlayerSynchroniserInt.cpp */; };
-		4B9C4EC8048F3B2700A8728E /* TRunningPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E2038C2A120121BE68 /* TRunningPlayer.cpp */; };
-		4B9C4EC9048F3B2700A8728E /* TSMPTEPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E3038C2A120121BE68 /* TSMPTEPlayer.cpp */; };
-		4B9C4ECA048F3B2800A8728E /* TSyncInPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E4038C2A120121BE68 /* TSyncInPlayer.cpp */; };
-		4B9C4ECB048F3B2800A8728E /* TSyncOutPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */; };
-		4B9C4ECC048F3B2900A8728E /* TTickPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E6038C2A120121BE68 /* TTickPlayer.cpp */; };
 		4BB41F5509ED464000EE9367 /* Player.h in Headers */ = {isa = PBXBuildFile; fileRef = F6619897038C2A120121BE68 /* Player.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BB41F5609ED464000EE9367 /* midifile.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D020871659F00AB8D8D /* midifile.h */; };
 		4BB41F5709ED464000EE9367 /* PlayerDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D030871659F00AB8D8D /* PlayerDefs.h */; };
@@ -95,9 +53,6 @@
 		4BB41F8109ED464000EE9367 /* TSyncOutPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */; };
 		4BB41F8209ED464000EE9367 /* TTickPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E6038C2A120121BE68 /* TTickPlayer.cpp */; };
 		4BB41F8309ED464000EE9367 /* midifile.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EA0D3608717BB700AB8D8D /* midifile.c */; };
-		D3EA0D040871659F00AB8D8D /* midifile.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D020871659F00AB8D8D /* midifile.h */; };
-		D3EA0D050871659F00AB8D8D /* PlayerDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D030871659F00AB8D8D /* PlayerDefs.h */; };
-		D3EA0D3708717BB700AB8D8D /* midifile.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EA0D3608717BB700AB8D8D /* midifile.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -129,7 +84,6 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4B234E1209F6363A00488DBD /* Info-Player.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-Player.plist"; sourceTree = SOURCE_ROOT; };
-		4B9C4E73048F342700A8728E /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BB41F8B09ED464000EE9367 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3EA0D020871659F00AB8D8D /* midifile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = midifile.h; path = ../src/Include/midifile.h; sourceTree = SOURCE_ROOT; };
 		D3EA0D030871659F00AB8D8D /* PlayerDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PlayerDefs.h; path = ../src/Include/PlayerDefs.h; sourceTree = SOURCE_ROOT; };
@@ -239,89 +193,7 @@
 		F66198F7038C2A120121BE68 /* UTools.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UTools.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworkTarget section */
-		4B9C4E72048F342700A8728E /* Player */ = {
-			isa = PBXFrameworkTarget;
-			buildConfigurationList = 4BB41F4F09ED464000EE9367 /* Build configuration list for PBXFrameworkTarget "Player" */;
-			buildPhases = (
-				4B9C4E6D048F342700A8728E /* Headers */,
-				4B9C4E6E048F342700A8728E /* Resources */,
-				4B9C4E6F048F342700A8728E /* Sources */,
-				4B9C4E70048F342700A8728E /* Frameworks */,
-				4B9C4E71048F342700A8728E /* Rez */,
-			);
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = Player.exp;
-				FRAMEWORK_VERSION = A;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__MacOSX__ ";
-				OTHER_LDFLAGS = (
-					"-flat_namespace",
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = MyPrecompPPC.h;
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = Player;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = framework;
-			};
-			dependencies = (
-			);
-			name = Player;
-			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-			productName = Player1;
-			productReference = 4B9C4E73048F342700A8728E /* Player.framework */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>Player</string>
-	<key>CFBundleGetInfoString</key>
-	<string>2.07</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string>Grame</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Player</string>
-	<key>CFBundlePackageType</key>
-	<string>FMWK</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.07</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>2.0.7</string>
-</dict>
-</plist>
-";
-		};
-/* End PBXFrameworkTarget section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		4B9C4E70048F342700A8728E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41F8409ED464000EE9367 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -336,7 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				F58B924203E6E05C01053105 /* Carbon.h */,
-				4B9C4E73048F342700A8728E /* Player.framework */,
 				4BB41F8B09ED464000EE9367 /* Player.framework */,
 			);
 			name = Products;
@@ -642,16 +513,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		4B9C4E6D048F342700A8728E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4B4DB62104A32AEC00053105 /* Player.h in Headers */,
-				D3EA0D040871659F00AB8D8D /* midifile.h in Headers */,
-				D3EA0D050871659F00AB8D8D /* PlayerDefs.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41F5409ED464000EE9367 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -728,20 +589,12 @@
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
 			projectDirPath = "";
 			targets = (
-				4B9C4E72048F342700A8728E /* Player */,
 				4BB41F5309ED464000EE9367 /* Player Universal */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4B9C4E6E048F342700A8728E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41F5809ED464000EE9367 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -753,13 +606,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		4B9C4E71048F342700A8728E /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41F8509ED464000EE9367 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
@@ -770,55 +616,6 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		4B9C4E6F048F342700A8728E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4B9C4E9F048F3A5700A8728E /* UMidi.cpp in Sources */,
-				4B9C4EA0048F3A5800A8728E /* UTools.cpp in Sources */,
-				4B9C4EA1048F3A5E00A8728E /* TTrackTable.cpp in Sources */,
-				4B9C4EA6048F3A8700A8728E /* TTempoConverter.cpp in Sources */,
-				4B9C4EA7048F3A8800A8728E /* TTempoMap.cpp in Sources */,
-				4B9C4EA8048F3A8800A8728E /* TTempoMapVisitor.cpp in Sources */,
-				4B9C4EA9048F3A8900A8728E /* TTime.cpp in Sources */,
-				4B9C4EAA048F3A8900A8728E /* TTimeConverter.cpp in Sources */,
-				4B9C4EAB048F3A8900A8728E /* TTimeManager.cpp in Sources */,
-				4B9C4EAC048F3A9900A8728E /* TScore.cpp in Sources */,
-				4B9C4EAD048F3A9A00A8728E /* TScoreIterator.cpp in Sources */,
-				4B9C4EAE048F3A9A00A8728E /* UScoreManager.cpp in Sources */,
-				4B9C4EAF048F3A9B00A8728E /* TScoreFollower.cpp in Sources */,
-				4B9C4EB0048F3AC700A8728E /* Player.cpp in Sources */,
-				4B9C4EB1048F3ACF00A8728E /* TPlayer.cpp in Sources */,
-				4B9C4EB2048F3AD800A8728E /* TScheduler.cpp in Sources */,
-				4B9C4EB3048F3AE100A8728E /* TPlayerFactory.cpp in Sources */,
-				4B9C4EB4048F3AE800A8728E /* TClockEventReceiver.cpp in Sources */,
-				4B9C4EB5048F3AE900A8728E /* TEventReceiver.cpp in Sources */,
-				4B9C4EB6048F3AE900A8728E /* TEventRecorder.cpp in Sources */,
-				4B9C4EB7048F3AEA00A8728E /* TExtEventReceiver.cpp in Sources */,
-				4B9C4EB8048F3AEA00A8728E /* TMidiPlayer.cpp in Sources */,
-				4B9C4EB9048F3AEB00A8728E /* TSMPTEEventReceiver.cpp in Sources */,
-				4B9C4EBA048F3AFA00A8728E /* TChaserIterator.cpp in Sources */,
-				4B9C4EBB048F3AFB00A8728E /* TChaserVisitor.cpp in Sources */,
-				4B9C4EBC048F3AFC00A8728E /* THashTable.cpp in Sources */,
-				4B9C4EBD048F3B0600A8728E /* TEventFactory.cpp in Sources */,
-				4B9C4EBE048F3B0D00A8728E /* TMidiAppl.cpp in Sources */,
-				4B9C4EBF048F3B1400A8728E /* TLoopManager.cpp in Sources */,
-				4B9C4EC1048F3B1500A8728E /* Tmtrack.c in Sources */,
-				4B9C4EC2048F3B2100A8728E /* TPlayerScore.cpp in Sources */,
-				4B9C4EC3048F3B2200A8728E /* TScoreInserter.cpp in Sources */,
-				4B9C4EC4048F3B2200A8728E /* TClockSender.cpp in Sources */,
-				4B9C4EC5048F3B2300A8728E /* TPlayerSynchroniserClock.cpp in Sources */,
-				4B9C4EC6048F3B2400A8728E /* TPlayerSynchroniserExt.cpp in Sources */,
-				4B9C4EC7048F3B2400A8728E /* TPlayerSynchroniserInt.cpp in Sources */,
-				4B9C4EC8048F3B2700A8728E /* TRunningPlayer.cpp in Sources */,
-				4B9C4EC9048F3B2700A8728E /* TSMPTEPlayer.cpp in Sources */,
-				4B9C4ECA048F3B2800A8728E /* TSyncInPlayer.cpp in Sources */,
-				4B9C4ECB048F3B2800A8728E /* TSyncOutPlayer.cpp in Sources */,
-				4B9C4ECC048F3B2900A8728E /* TTickPlayer.cpp in Sources */,
-				D3EA0D3708717BB700AB8D8D /* midifile.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41F5909ED464000EE9367 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -882,105 +679,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		4BB41F5009ED464000EE9367 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = Player.exp;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__MacOSX__ ";
-				OTHER_LDFLAGS = (
-					"-flat_namespace",
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = MyPrecompPPC.h;
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = Player;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = framework;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4BB41F5109ED464000EE9367 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = Player.exp;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__MacOSX__ ";
-				OTHER_LDFLAGS = (
-					"-flat_namespace",
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = MyPrecompPPC.h;
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = Player;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = framework;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4BB41F5209ED464000EE9367 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = Player.exp;
-				FRAMEWORK_VERSION = A;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__MacOSX__ ";
-				OTHER_LDFLAGS = (
-					"-flat_namespace",
-					"-framework",
-					MidiShare,
-				);
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PREFIX_HEADER = MyPrecompPPC.h;
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = Player;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = framework;
-			};
-			name = Default;
-		};
 		4BB41F8709ED464000EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1118,16 +816,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4BB41F4F09ED464000EE9367 /* Build configuration list for PBXFrameworkTarget "Player" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BB41F5009ED464000EE9367 /* Development */,
-				4BB41F5109ED464000EE9367 /* Deployment */,
-				4BB41F5209ED464000EE9367 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		4BB41F8609ED464000EE9367 /* Build configuration list for PBXNativeTarget "Player Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

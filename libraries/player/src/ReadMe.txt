@@ -53,7 +53,9 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 21/01/04 : Version 2.06 : New SetPosTicks and Version functions, ticks field in PlayerState.
 
-??/??/?? : Version 2.07 : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa). Correct bug in ConvertTickToTickAtPrevSP and ConvertTickToTickAtPrevClock : floor must be used. Correct ScoreFollower intialization. Correct BBU values: start at 1 1 0
+??/??/?? : Version 2.07 : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa). Correct bug in ConvertTickToTickAtPrevSP and ConvertTickToTickAtPrevClock : floor must be used. Correct ScoreFollower intialization. Correct BBU values: start at 1 1 0.
+
+20/04/06 : Version 2.08 : Compilation on MacIntel as universal binary.
 
 ==================
 General Remarks
