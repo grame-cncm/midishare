@@ -543,8 +543,11 @@ static void DoRedraw (WindowRef win)
 		FrameRect (&ListRect[i]);
 	}
 	DrawPorts (win);
-	DrawHeader (win); // Picture based drawing do no work anymore on MacIntel, use vetorial based code....
+#ifdef __i386__
+	DrawHeader (win); // Picture based drawing do no work anymore on MacIntel, use vectorial based code....
+#else
 	DrawPicture (handlePict, &handleRect); 
+#endif
 	ShowEditMode (win, (portSelected >= 0));
 	EndUpdate(win);
 	SetPort (curPort);
