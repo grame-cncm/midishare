@@ -92,6 +92,9 @@ dev:
 source:
 	[ -d $(SRC) ] && rm -rf $(SRC) || echo -n
 	cvs export -D tomorrow $(modules)
+	make arch
+
+arch:
 	mv midishare $(SRC)
 	[ -f $(SRC).tgz ] && rm -f $(SRC).tgz || echo -n
 	tar czf $(SRC).tgz $(SRC)
