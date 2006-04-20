@@ -37,7 +37,7 @@
 # include <mactypes.h> 
 #endif 
                                    
-# if defined(__POWERPC__) || defined(__i686__)
+# if defined(__POWERPC__) || defined(__i386__)
 # define MSFunctionType(type)   type
 # define FAR
 # else 

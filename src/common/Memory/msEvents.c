@@ -109,7 +109,7 @@ static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
 /* data storage */
 
-#if defined(__Macintosh__) && !(defined(__POWERPC__) || defined(__i686__))
+#if defined(__Macintosh__) && !(defined(__POWERPC__) || defined(__i386__))
 
 static asm void NewEvMeth()       { ds.l 256 }
 static asm void CopyEvMeth()      { ds.l 256 }
