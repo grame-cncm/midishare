@@ -1,4 +1,4 @@
-    MidiShare Library 1.91
+    MidiShare Library
     Copyright (C) 1989-2006 GRAME
     Centre National de Creation Musicale
 --------------------------------------------------------------------------------------------
