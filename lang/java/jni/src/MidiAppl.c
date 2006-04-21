@@ -101,7 +101,7 @@ static int CheckThreadEnv(ApplContext* context)
 {
     if (context->fAttached) {
          return true;
-    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fCallbackEnv, NULL) == 0) {
+    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&context->fCallbackEnv, NULL) == 0) {
         context->fAttached = true;
         return true;
     }else{
@@ -176,7 +176,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 	context->fObj = (*env)->NewGlobalRef(env,obj);
 	context->fAttached = false;
 	
-	if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fApplEnv, NULL) != 0) goto error;
+	if ((*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&context->fApplEnv, NULL) != 0) goto error;
 	 
 	MidiSetInfo(ref,context);
 	
