@@ -10,6 +10,7 @@
 		4B75836309ED471E006225A2 /* Midi.c in Sources */ = {isa = PBXBuildFile; fileRef = F506805F02083B1F01053105 /* Midi.c */; };
 		4B75836409ED471E006225A2 /* MidiAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F506806002083B1F01053105 /* MidiAppl.c */; };
 		4B75836609ED471E006225A2 /* JavaVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCBA72406074E9F00D2BE30 /* JavaVM.framework */; };
+		4BABA21209F90154003211E3 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B2A2AD309F8C5DF008FC13F /* MidiShare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -37,6 +38,7 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
+		4B2A2AD309F8C5DF008FC13F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		4B75836C09ED471E006225A2 /* libJMidi.1.1.2.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJMidi.1.1.2.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCBA72406074E9F00D2BE30 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
 		F506805F02083B1F01053105 /* Midi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Midi.c; path = ../src/Midi.c; sourceTree = SOURCE_ROOT; };
@@ -49,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B75836609ED471E006225A2 /* JavaVM.framework in Frameworks */,
+				4BABA21209F90154003211E3 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +61,7 @@
 		01F12F4DFEC8CE2211DB9C8B = {
 			isa = PBXGroup;
 			children = (
+				4B2A2AD309F8C5DF008FC13F /* MidiShare.framework */,
 				4BCBA72406074E9F00D2BE30 /* JavaVM.framework */,
 				F506805F02083B1F01053105 /* Midi.c */,
 				F506806002083B1F01053105 /* MidiAppl.c */,
@@ -241,10 +245,7 @@
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					MidiShare,
-				);
+				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
