@@ -3,7 +3,7 @@ ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
 
-VERSION =1.91
+VERSION =1.92
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
@@ -75,7 +75,7 @@ dev:
 		cvs export -D tomorrow -d tutorial midishare/lang/java/samples/tutorial
 	cd $(DEVKIT)/Lisp && \
 		cvs export -D tomorrow -d openmcl midishare/lang/lisp/openmcl && \
-		cvs export -D tomorrow -d readme.text midishare/lang/lisp/readme.text
+		cvs export -D tomorrow  midishare/lang/lisp/readme.text
 	cd $(DEVKIT)/Lisp/interface && \
 		cvs export -D tomorrow -d openmcl midishare/lang/lisp/interface/openmcl && \
 		cp -R openmcl MCL && flip -m MCL/*.lisp
