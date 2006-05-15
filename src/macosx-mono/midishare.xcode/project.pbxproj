@@ -100,7 +100,6 @@
 				D3658B7C05BD2B7700DFCB64,
 				D3EE862E05BC625F00FE2FFB,
 				D3EE863005BC626C00FE2FFB,
-				4B102A2D05BE85DB007776E0,
 			);
 			isa = PBXGroup;
 			name = Source;
@@ -117,20 +116,6 @@
 //4B2
 //4B3
 //4B4
-		4B102A2D05BE85DB007776E0 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = dlopen.c;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4B102A2E05BE85DB007776E0 = {
-			fileRef = 4B102A2D05BE85DB007776E0;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4BE442CF05BE876E00FFBCB9 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -318,7 +303,6 @@
 				D3658B7D05BD2B7700DFCB64,
 				D3658EB905BD730100DFCB64,
 				D3C0BE7205BE712000152ABC,
-				4B102A2E05BE85DB007776E0,
 				D3093EDC07D5D0780010CB81,
 				D3093EDD07D5D0780010CB81,
 			);
