@@ -3,5 +3,5 @@ msMidiDriver versions
 1.0.4 
 1.0.5 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
 1.0.6 - Jan. 22 2004 - Time stamping of played events, rewrite sending of SysEx
-1.0.7 - Apr. 19 2006 - MacIntel universal binary version
+1.0.7 - Apr. 19 2006 - MacIntel universal binary version. Check if the CoreMidi client is still running in CompletionProc. 
 

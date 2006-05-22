@@ -278,7 +278,7 @@ void OpenSlot (SlotPtr slot, Boolean input)
 static void ScanSlotChanges (SlotPtr slot)
 {
 	while (slot) {
-     		if (IsSlotConnected (slot->refNum)) {
+		if (IsSlotConnected (slot->refNum)) {
    			OpenInputSlot (slot);
 		}else{
    			CloseInputSlot (slot);
