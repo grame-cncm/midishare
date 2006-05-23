@@ -239,9 +239,9 @@ static void msSleep (short refnum)
 	gClient = NULL;
 	gInPort = NULL;
 	gOutPort = NULL;
+	RemoveSlots (refnum);
 	/* when sysex are still sent, the completion routine may still be called... wait 1 sec 
 	hoping the CompletionProc will see the null gClient.... */
 	usleep(100000);
-	RemoveSlots (refnum);
 }
 
