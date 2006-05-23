@@ -316,6 +316,7 @@ void CloseDrivers (TMSGlobalPtr g)
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (appl->folder == kDriverFolder)) {
 			DriverSleep (appl);
+			clearClient(ref, g);
 			appl->srcList = appl->dstList = 0;
 			n--;
 		}

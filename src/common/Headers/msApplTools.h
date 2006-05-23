@@ -32,6 +32,7 @@
 #define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
 
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
+void clearClient (short ref, TMSGlobalPtr g);
 void closeClient (short ref, TMSGlobalPtr g);
 void makeDriver (TClientsPtr g, TApplPtr appl, short ref, TDriverInfos * infos, TDriverOperation *op);
 void setName 	(MidiName dst, MidiName name);
