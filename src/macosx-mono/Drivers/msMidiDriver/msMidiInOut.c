@@ -174,7 +174,7 @@ void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
 	DBUG(("ReadProc \n"));
 
 	for (i = 0; i < pktlist->numPackets; ++i) {
-		LMM2MS( slot, packet);
+		LMM2MS(slot, packet);
 		packet = MIDIPacketNext(packet);
 	}
 	

@@ -29,6 +29,7 @@
 #include "MidiStreamToEvent.h"
 
 #include <pthread.h>
+#include <unistd.h>
 #include <CoreFoundation/CFRunLoop.h>
 
 #define profileName "msMidiDriver.ini"
@@ -229,6 +230,7 @@ static void msSleep (short refnum)
 {
 	SaveState (gInSlots, gOutSlots, fullProfileName);  
 	DBUG(("msSleep \n"));
+	
 	//stopThread(gThread); // Does not work because of pthread_cancel
 	
 	if (gInPort) MIDIPortDispose(gInPort);
@@ -237,6 +239,9 @@ static void msSleep (short refnum)
 	gClient = NULL;
 	gInPort = NULL;
 	gOutPort = NULL;
+	/* when sysex are still sent, the completion routine may still be called... wait 1 sec 
+	hoping the CompletionProc will see the null gClient.... */
+	usleep(100000);
 	RemoveSlots (refnum);
 }
 
