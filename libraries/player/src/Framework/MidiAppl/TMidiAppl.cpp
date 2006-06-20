@@ -20,7 +20,7 @@
 //  A Class to wrap a MidiShare application
 //
 
-
+#define __SupportOldSTDef__
 #include "TMidiAppl.h"
 
 

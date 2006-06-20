@@ -153,47 +153,15 @@ ULONG TTempoConverter::ConvertTicksToMicroSecAux (ULONG ticks)
 
 /*--------------------------------------------------------------------------*/
 
-
-#ifdef __Macintosh__
-
 ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
 {	
 	if (fTempo) {
-		return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
-	}else{
-		return 1;
-    }
-}
-
-#endif
-/*--------------------------------------------------------------------------*/
-
-#ifdef __MSWindows__
-
-ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
-{	
-	if (fTempo) {
+//#ifdef __Macintosh__
+//		return UMath::CalcLong(ten_micro_sec, fTicks_per_quarter, fTempo);
+//#endif
 		return ((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo;
 	}else{
 		return 1;
     }
 }
-
-#endif
-
-/*--------------------------------------------------------------------------*/
-
-#ifdef __Linux__
-
-ULONG TTempoConverter::ConvertMicroSecToTicksAux (ULONG ten_micro_sec)
-{	
-	if (fTempo) {
-		return ((double)ten_micro_sec * (double) fTicks_per_quarter) / (double) fTempo;
-	}else{
-		return 1;
-    }
-}
-
-#endif
-
 

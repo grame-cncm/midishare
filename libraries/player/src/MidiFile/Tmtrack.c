@@ -61,7 +61,7 @@
 
 #ifdef __Macintosh__
 	#include <CType.h>
-	#include <Files.h>
+//	#include <Files.h>
 	#include <StdLib.h>
 	#include <String.h>
 #endif
