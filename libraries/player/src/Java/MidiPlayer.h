@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     grame_midishare_player_MidiPlayer1
  * Method:    OpenAux
- * Signature: (I)I
+ * Signature: (Ljava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_OpenAux
-  (JNIEnv *, jclass, jint);
+ (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     grame_midishare_player_MidiPlayer1
@@ -278,31 +278,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_Load
  */
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_Save
   (JNIEnv *, jclass, jstring, jint, jobject);
-  
-  
-  
-
-JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer1_SetEventProducer
-   (JNIEnv *, jclass, jint, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_GetEventProducer
-  (JNIEnv *, jclass, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeScoreProducer
-  (JNIEnv *, jclass, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeSeqProducer
-  (JNIEnv *, jclass, jint, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeMixProducer
-  (JNIEnv *, jclass, jint, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeReactiveProducer
-  (JNIEnv *, jclass, jint, jint);
-
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_MakeEventFilter
-  (JNIEnv *, jclass, jint );
-
 
 #ifdef __cplusplus
 }

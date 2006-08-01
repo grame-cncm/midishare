@@ -22,9 +22,10 @@
 /*           16/07/96 version 1.02  MidiShare package management
 /*            ....... version 1.03
 /*           8/10/96  version 1.04  Packages names in unsercase
-/*          26/07/97  version 1.07  New InsertAllTrack and InsertTrack functions
-/*          25/11/97  version 1.08  NewSetTempo function and kExternalSync mode
-/*          28/11/97  version 1.09  JNI compatible
+/*           26/07/97 version 1.07  New InsertAllTrack and InsertTrack functions
+/*           25/11/97 version 1.08  NewSetTempo function and kExternalSync mode
+/*           28/11/97 version 1.09  JNI compatible
+/*           01/08/06 version 1.12  Use of JNI string
 /*****************************************************************************/
 
 #include "Player.h"
@@ -32,12 +33,12 @@
 
 /*--------------------------------------------------------------------------*/
 
- void pTocCopy(  char *dest,  unsigned char * src);
- void cTocCopy(  char *dest,  char * src);
- void cTopCopy(  unsigned char *dest,  char * src);
+ void pTocCopy(char *dest,  unsigned char * src);
+ void cTocCopy(char *dest,  char * src);
+ void cTopCopy(unsigned char *dest,  char * src);
 
 /*--------------------------------------------------------------------------*/
- void pTocCopy(  char *dest,  unsigned char * src)  // chaine pascal dans chaine c
+ void pTocCopy(char *dest,  unsigned char * src)  // chaine pascal dans chaine c
 {
 	register short i;
 	
@@ -48,7 +49,7 @@
 }
 
 /*--------------------------------------------------------------------------*/
- void cTocCopy(  char *dest,  char * src) // chaine c dans chaine c
+ void cTocCopy(char *dest,  char * src) // chaine c dans chaine c
 {
 	register short i = 0;
 	
@@ -60,7 +61,7 @@
 }
 
 /*--------------------------------------------------------------------------*/
- void cTopCopy(  unsigned char *dest,  char * src) // chaine c dans chaine p
+ void cTopCopy(unsigned char *dest,  char * src) // chaine c dans chaine p
 {
 	register short i = 0;
 	
@@ -74,17 +75,16 @@
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer1_OpenAux
-  (JNIEnv * inEnv, jclass cl, jint midiname){
+ (JNIEnv * inEnv, jclass cl, jstring str) {
   
-  	#ifdef __Macintosh__
-    		unsigned char buffer [128];
-    		cTopCopy (buffer, (char*)midiname);
-		return  OpenPlayer(buffer);
-	#else
-    		char buffer [128];
-    		cTocCopy (buffer, (char*)midiname);
-		return  OpenPlayer(buffer);
-	#endif
+  	const char *midiname;
+	jint refNum;
+
+	midiname = (*inEnv)->GetStringUTFChars(inEnv, str, NULL);
+	if (midiname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	refNum = (jint) OpenPlayer(midiname);
+	(*inEnv)->ReleaseStringUTFChars(inEnv, str, midiname); 
+	return refNum;
 }
 
 /*--------------------------------------------------------------------------*/
