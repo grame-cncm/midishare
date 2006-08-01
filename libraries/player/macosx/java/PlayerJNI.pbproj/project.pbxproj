@@ -29,7 +29,7 @@
 				01205B3C015611757F000001,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = /Volumes/Users/Users/fober/src/midishare/libraries/player/macosx0/build;
+				FRAMEWORK_SEARCH_PATHS = ../build/;
 				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers/;
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O3";
@@ -71,7 +71,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01205B3D0156118E7F000001,
-				D3E044B60A46F13300BB76A8,
+				4B487EA30A7F554C004B5E6E,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,10 +107,10 @@
 		};
 		01F12F4DFEC8CE2211DB9C8B = {
 			children = (
-				D3E044B50A46F13300BB76A8,
 				F53C10A50208445201053105,
 				01F12F4FFEC8CEF111DB9C8B,
 				01205B2801560F457F000001,
+				4B487EA20A7F554C004B5E6E,
 				F5BE677603EAD9F901053105,
 			);
 			isa = PBXGroup;
@@ -181,12 +181,12 @@
 //1A2
 //1A3
 //1A4
-//D30
-//D31
-//D32
-//D33
-//D34
-		D3E044B50A46F13300BB76A8 = {
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4B487EA20A7F554C004B5E6E = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Player1.framework;
@@ -194,17 +194,17 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
-		D3E044B60A46F13300BB76A8 = {
-			fileRef = D3E044B50A46F13300BB76A8;
+		4B487EA30A7F554C004B5E6E = {
+			fileRef = 4B487EA20A7F554C004B5E6E;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-//D30
-//D31
-//D32
-//D33
-//D34
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //F50
 //F51
 //F52
