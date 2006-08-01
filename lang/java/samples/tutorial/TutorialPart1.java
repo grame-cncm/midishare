@@ -25,9 +25,7 @@ import java.util.*;
 import java.applet.Applet;
 import java.awt.event.*;
 import java.applet.*;
-
 import grame.midishare.*;
-
 
 public class TutorialPart1 extends Applet 
  {
@@ -399,7 +397,10 @@ public class TutorialPart1 extends Applet
 				text.appendText(slot.name);
 				text.appendText("\nslot direction : ");
 				text.appendText(String.valueOf(slot.direction));
-				text.appendText("\n");
+				text.appendText("\nslot connexions : ");
+				for (int u = 0 ; u < 32 ; u++)
+					for (int v = 0 ; v < 8 ; v++)
+						text.appendText((slot.cnx[u]==Math.pow(2,v))?((8*u+v)+" "):(""));
 			}
 		}
 	}
@@ -429,7 +430,7 @@ public class TutorialPart1 extends Applet
 	
 	void test20()
 	{
-		text.appendText( "\n\n<TEST 20>Connect port to slot and dsiplay new connection state");
+		text.appendText( "\n\n<TEST 20>Connect port to slot and display new connection state");
 		int ref, n = Midi.CountDrivers();
 		
 		for (int i = 1; i<= n; i++) {

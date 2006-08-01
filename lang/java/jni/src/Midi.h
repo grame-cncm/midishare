@@ -249,19 +249,19 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetInfo
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    GetNameAux
- * Signature: (I)I
+ * Method:    GetName
+ * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetNameAux
+JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetName
   (JNIEnv *, jclass, jint);
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    GetNamedApplAux
- * Signature: (I)I
+ * Method:    GetNamedAppl
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetNamedApplAux
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetNamed
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     grame_midishare_Midi
@@ -353,11 +353,11 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewSeq
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    OpenAux
- * Signature: (I)I
+ * Method:    Open
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_OpenAux
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Open
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     grame_midishare_Midi
@@ -425,11 +425,11 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetInfo
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    SetNameAux
- * Signature: (II)V
+ * Method:    SetName
+ * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetNameAux
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetName
+  (JNIEnv *, jclass, jint, jstring);
 
 /*
  * Class:     grame_midishare_Midi
@@ -665,19 +665,19 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData3
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    GetTextAux
- * Signature: (I)I
+ * Method:    GetText
+ * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetTextAux
+JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetText
   (JNIEnv *, jclass, jint);
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    SetTextAux
- * Signature: (II)V
+ * Method:    SetText
+ * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetTextAux
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetText
+  (JNIEnv *, jclass, jint, jstring);
 
 /*
  * Class:     grame_midishare_Midi
@@ -801,19 +801,19 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndDriver
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    GetDriverInfosAux
+ * Method:    GetDriverInfos
  * Signature: (ILgrame/midishare/DriverInfos;)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfosAux
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfos
 	(JNIEnv *, jclass, jint, jobject);
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    AddSlotAux
- * Signature: (III)I
+ * Method:    AddSlot
+ * Signature: (ILjava/lang/String;I)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlotAux
-	(JNIEnv *, jclass, jint, jint, jint);
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlot
+	(JNIEnv *, jclass, jint, jstring, jint);
 
 /*
  * Class:     grame_midishare_Midi
@@ -833,10 +833,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_RemoveSlot
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    GetSlotInfosAux
+ * Method:    GetSlotInfos
  * Signature: (ILgrame/midishare/SlotInfos;)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfosAux
+JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfos
 	(JNIEnv *, jclass, jint, jobject);
 
 /*
@@ -857,11 +857,11 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsSlotConnected
 
 /*
  * Class:     grame_midishare_Midi
- * Method:    SetSlotNameAux
- * Signature: (II)V
+ * Method:    SetSlotName
+ * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotNameAux
-	(JNIEnv *, jclass, jint, jint);
+JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotName
+	(JNIEnv *, jclass, jint, jstring);
 
 /*
  * Class:     grame_midishare_Midi
