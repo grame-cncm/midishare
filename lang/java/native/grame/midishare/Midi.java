@@ -1470,8 +1470,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param port  is a port number to be accessed in the filter (0 to  255).
-    *@param val  if set to 1, the event on this port will be rejected,
-    	if set to 0, the event on this port will be accepted.
+    *@param val  if set to 1, the event on this port will be accepted,
+    	if set to 0, the event on this port will be rejected.
   	*/
 
 	public  static native final void AcceptPort(int filter, int port, int val);
@@ -1481,8 +1481,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param chan  is a channel number to be accessed in the filter (0 to 15).
-    *@param val   if set to 1, the event on this channel will be rejected,
-    	if set to 0, the event on this channel will be accepted.
+    *@param val   if set to 1, the event on this channel will be accepted,
+    	if set to 0, the event on this channel will be rejected.
   	*/
 
 	public  static native final void AcceptChan(int filter, int chan, int val);
@@ -1492,8 +1492,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param type  is a type number to be accessed in the filter (0 to  255).
-    *@param val   if set to 1, the event of this type will be rejected,
-    	if set to 0, the event of this type will be accepted.
+    *@param val   if set to 1, the event of this type will be accepted,
+    	if set to 0, the event of this type will be rejected.
   	*/
     
 	public  static native final void AcceptType(int filter, int type, int val);
