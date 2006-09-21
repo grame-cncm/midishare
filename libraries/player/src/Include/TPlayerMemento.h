@@ -48,7 +48,7 @@ class TPlayerMemento {
 			
 	public :
 		
-		TPlayerMemento() {}
+		TPlayerMemento():fCurdate_ticks(0),fLoopStart(0),fLoopEnd(0),fLoopState(false),fRestoreLoop(false) {}
 		virtual ~TPlayerMemento () {}
 		
 		void SaveState(TPlayerPtr player)

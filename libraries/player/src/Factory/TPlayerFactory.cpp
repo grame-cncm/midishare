@@ -58,7 +58,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer()
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
 	
-	long res;
+	long res = kNoErr;
 	
 	switch (fUser->fOutput) {
 		

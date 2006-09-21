@@ -416,6 +416,6 @@ void TPlayerScore::ClearTrack (short tracknum)
 void TPlayerScore::CheckAndAllocateMemory() 
 {
 	ULONG l = Length() + kMemoryLimit;
-	if (MidiFreeSpace() < l) MidiGrowSpace(l);
+	if (ULONG(MidiFreeSpace()) < l) MidiGrowSpace(l);
 }
 	
