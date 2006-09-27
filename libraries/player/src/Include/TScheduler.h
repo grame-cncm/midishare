@@ -113,22 +113,19 @@ class TScheduler : public TSchedulerInterface {
 		TMidiApplPtr 			   fMidiAppl;
 		
 		TScheduler() {}
-		TScheduler(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl);
-		void Init(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl);
+		TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl);
+		void Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl);
 		
  		virtual ~TScheduler();
- 		
- 		
+ 		 		
  		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks);	
  		void ReScheduleTasks();
  		
- 		// Internal functions made public to be called from tasks
- 		
+ 		// Internal functions made public to be called from tasks 		
  		void ExecuteTaskInt(TTicksTask* task, ULONG date);		
 };
 
 typedef TScheduler FAR * TSchedulerPtr;
-
 
 //-----------------------
 // Class TTicksTask 
@@ -165,7 +162,13 @@ class TTicksTask {
 		void SetRunning() 	{fStatus = kTaskRunning;}
 		
 		void Clear() {fTask = 0;}
-		void Kill() {MidiForgetTask(&fTask);}
+		void Kill()
+		{
+			if (fTask) {
+				MidiForgetTask(&fTask);
+				fTask = 0;
+			}
+		}
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
@@ -176,8 +179,8 @@ class TTicksTask {
 	
 		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle) {}
 		// A REVOIR (risque de conflit avec les taches temps réel)
-		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
-		void Forget() { if (IsRunning ()) fStatus = kTaskForget;}
+		virtual ~TTicksTask() {Kill();}
+		void Forget() {if (IsRunning()) fStatus = kTaskForget;}
 		
 		Boolean IsRunning() 	{return (fStatus == kTaskRunning);}
 		Boolean IsIdle() 	 	{return (fStatus == kTaskIdle);}

@@ -56,9 +56,15 @@ class TMidiTask {
 	public:
 	
 		TMidiTask() {fTask = 0;}
-		virtual ~TMidiTask() {MidiForgetTask(&fTask);}
+		virtual ~TMidiTask() {Forget();}
 	
-		void Forget () {MidiForgetTask(&fTask);}
+		void Forget () 
+		{
+			if (fTask) {
+				MidiForgetTask(&fTask);
+				fTask = 0;
+			}
+		}
 		virtual void Execute (TMidiAppl* , ULONG date) {} // Must be implemented for concrete tasks
 };
 
