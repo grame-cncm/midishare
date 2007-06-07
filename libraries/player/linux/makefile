@@ -33,7 +33,7 @@ TTimeConverter.o TTimeManager.o
 OBJJAVA = $(OBJ) MidiPlayer.o
  
 $(TARGET) :   $(OBJ)
-	$(CC)  $(OBJ) -lMidiShare -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
+	$(CC)  $(OBJ) -lMidiShare -lstdc++ -shared -fPIC -W1,soname,libPlayer.so.1 -o $(TARGET)
 
 install: $(LIB).1.0
 	if [ ! -f $(LIB) ]; then ln -s $(LIB).1 $(LIB); fi
@@ -42,7 +42,7 @@ install: $(LIB).1.0
 	install  ../src/Include/Player.h $(INCF)
 
 java : $(OBJJAVA)
-	$(CC)  $(OBJJAVA) -lMidiShare -shared -fPIC -W1,soname,libJPlayer.so.1 -o $(TARGETJAVA)
+	$(CC)  $(OBJJAVA) -lMidiShare -lstdc++ -shared -fPIC -W1,soname,libJPlayer.so.1 -o $(TARGETJAVA)
 
 $(LIB).1.0 : $(TARGET)
 	cp $(TARGET)   $(LIB).1.0
