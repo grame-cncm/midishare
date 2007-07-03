@@ -7,22 +7,22 @@ L=../../../../lang
 LIB=../../../../libraries
 DIST=../root
 DEV=../devroot
+BUILD=build/Deployment
 
 # lists format: [ src dest ]+
-FRMWKS="../../build/MidiShare.framework							$DIST/System/Library/Frameworks \
-	 ../../../../libraries/player/macosx/build/Player.framework $DIST/System/Library/Frameworks"
+FRMWKS="../../$BUILD/MidiShare.framework	$DIST/System/Library/Frameworks \
+	 ../../../../libraries/player/macosx/$BUILD/Player.framework $DIST/System/Library/Frameworks"
 
-APPLS="$A/msControler/build/msControler.app 			$DIST/Applications/MidiShare \
-	 $A/msDisplay/build/msDisplay.app 					$DIST/Applications/MidiShare\
-	 $A/msDrivers/build/msDrivers.app 					$DIST/Applications/MidiShare\
-	 $A/RadioHardDisk/build/RadioHardDisk.app			$DIST/Applications/MidiShare"
+APPLS="$A/msControler/$BUILD/msControler.app 			$DIST/Applications/MidiShare \
+	 $A/msDisplay/$BUILD/msDisplay.app 			$DIST/Applications/MidiShare\
+	 $A/msDrivers/$BUILD/msDrivers.app 			$DIST/Applications/MidiShare"
 
-DRIVERS="$D/msMidiDriver/build/msMidiDriver.*.so 		$DIST/usr/lib \
-	$D/msQTDriver/build/msQTDriver.*.so 				$DIST/usr/lib \
-	$D/msNet/build/msLANDriver.*.so 					$DIST/usr/lib \
-	$D/msNet/build/msWANDriver.*.so						$DIST/usr/lib"
+DRIVERS="$D/msMidiDriver/$BUILD/msMidiDriver.*.so 		$DIST/usr/lib \
+	$D/msQTDriver/$BUILD/msQTDriver.*.so 			$DIST/usr/lib \
+	$D/msNet/$BUILD/msLANDriver.*.so 			$DIST/usr/lib \
+	$D/msNet/$BUILD/msWANDriver.*.so			$DIST/usr/lib"
 
-JAVA="$LIB/player/macosx/java/build/libJPlayer.*.jnilib $DIST/usr/lib/java \
-	$L/java/jni/macosx/build/libJMidi.*.jnilib			$DIST/usr/lib/java
-	$L/java/native/macosx/build/grame.jar				$DIST/Library/Java/Extensions"
+JAVA="$LIB/player/macosx/java/$BUILD/libJPlayer.*.jnilib $DIST/usr/lib/java \
+	$L/java/jni/macosx/$BUILD/libJMidi.*.jnilib	$DIST/usr/lib/java
+	$L/java/native/macosx/$BUILD/grame.jar		$DIST/Library/Java/Extensions"
 

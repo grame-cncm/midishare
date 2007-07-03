@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -58,13 +58,13 @@ class TLoopManager {
 	public:
 		
 		TLoopManager(TPlayerScorePtr score, ULONG tpq)
-			:fFollower(score,tpq),fLoopEndMarker(typeLoopEnd),fScore(score),fLoopState(kLoopOff),fLoopStart(0){}
+			:fFollower(score,tpq),fLoopEndMarker(typeLoopEnd),fScore(score),fLoopState(kLoopOff),fLoopStart(0) {}
 		virtual ~TLoopManager () {fLoopEndMarker.Remove(fScore);}
 		
 		void SetLoop (Boolean state) {fLoopState = state;}
 		Boolean GetLoop () {return fLoopState;}
-		Boolean IsLoopOn(){ return fLoopState == kLoopOn; }
-		Boolean IsLoopPlaced(){ return fLoopEndMarker.IsInserted(); }
+		Boolean IsLoopOn() { return fLoopState == kLoopOn; }
+		Boolean IsLoopPlaced() { return fLoopEndMarker.IsInserted(); }
 		
 		long SetLoopStartTicks (ULONG date_ticks);
 		long SetLoopStartBBU (const TPos& pos);

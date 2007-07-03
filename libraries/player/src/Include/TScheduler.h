@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -44,7 +44,7 @@ class TSchedulerInterface {
 
 	public:
 	
-		virtual ~TSchedulerInterface(){};
+		virtual ~TSchedulerInterface() {};
 		
 		virtual void Init(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl) = 0;
 		virtual void ScheduleTickTask(TTicksTask* task, ULONG date_ticks) = 0;
@@ -113,22 +113,19 @@ class TScheduler : public TSchedulerInterface {
 		TMidiApplPtr 			   fMidiAppl;
 		
 		TScheduler() {}
-		TScheduler(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl);
-		void Init(TSynchroniserInterfacePtr  synchro, TMidiApplPtr appl);
+		TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl);
+		void Init(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl);
 		
  		virtual ~TScheduler();
- 		
- 		
+ 		 		
  		void ScheduleTickTask(TTicksTask* task, ULONG date_ticks);	
  		void ReScheduleTasks();
  		
- 		// Internal functions made public to be called from tasks
- 		
+ 		// Internal functions made public to be called from tasks 		
  		void ExecuteTaskInt(TTicksTask* task, ULONG date);		
 };
 
 typedef TScheduler FAR * TSchedulerPtr;
-
 
 //-----------------------
 // Class TTicksTask 
@@ -165,7 +162,13 @@ class TTicksTask {
 		void SetRunning() 	{fStatus = kTaskRunning;}
 		
 		void Clear() {fTask = 0;}
-		void Kill() {MidiForgetTask(&fTask);}
+		void Kill()
+		{
+			if (fTask) {
+				MidiForgetTask(&fTask);
+				fTask = 0;
+			}
+		}
 		
 		void  SetDate(ULONG date) {fDate_ticks = date;}
 		ULONG GetDate() {return fDate_ticks;}
@@ -174,15 +177,15 @@ class TTicksTask {
 			
 	public:
 	
-		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle){}
+		TTicksTask():fTask(0),fDate_ticks(0),fIndex(-1),fStatus(kTaskIdle) {}
 		// A REVOIR (risque de conflit avec les taches temps réel)
-		virtual ~TTicksTask() {MidiForgetTask(&fTask);}
-		void Forget() { if (IsRunning ()) fStatus = kTaskForget;}
+		virtual ~TTicksTask() {Kill();}
+		void Forget() {if (IsRunning()) fStatus = kTaskForget;}
 		
 		Boolean IsRunning() 	{return (fStatus == kTaskRunning);}
 		Boolean IsIdle() 	 	{return (fStatus == kTaskIdle);}
 		
-		virtual void Execute (TMidiAppl* , ULONG date){} // Must be implemented for concrete tasks
+		virtual void Execute (TMidiAppl* , ULONG date) {} // Must be implemented for concrete tasks
 };
 
 typedef TTicksTask FAR * TTicksTaskPtr;

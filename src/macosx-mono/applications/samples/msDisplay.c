@@ -13,6 +13,7 @@ DESCRIPTION
 
 #include <stdio.h>
 #include <MidiShare.h>
+#include <string.h>
 
 
 #define MSALARMAPI

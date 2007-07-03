@@ -1,0 +1,785 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B234E1309F6363A00488DBD /* Info-Player.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B234E1209F6363A00488DBD /* Info-Player.plist */; };
+		4BB41F5509ED464000EE9367 /* Player.h in Headers */ = {isa = PBXBuildFile; fileRef = F6619897038C2A120121BE68 /* Player.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4BB41F5609ED464000EE9367 /* midifile.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D020871659F00AB8D8D /* midifile.h */; };
+		4BB41F5709ED464000EE9367 /* PlayerDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = D3EA0D030871659F00AB8D8D /* PlayerDefs.h */; };
+		4BB41F5A09ED464000EE9367 /* UMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F6038C2A120121BE68 /* UMidi.cpp */; };
+		4BB41F5B09ED464000EE9367 /* UTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F7038C2A120121BE68 /* UTools.cpp */; };
+		4BB41F5C09ED464000EE9367 /* TTrackTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198F3038C2A120121BE68 /* TTrackTable.cpp */; };
+		4BB41F5D09ED464000EE9367 /* TTempoConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988B038C2A120121BE68 /* TTempoConverter.cpp */; };
+		4BB41F5E09ED464000EE9367 /* TTempoMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988C038C2A120121BE68 /* TTempoMap.cpp */; };
+		4BB41F5F09ED464000EE9367 /* TTempoMapVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988D038C2A120121BE68 /* TTempoMapVisitor.cpp */; };
+		4BB41F6009ED464000EE9367 /* TTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988E038C2A120121BE68 /* TTime.cpp */; };
+		4BB41F6109ED464000EE9367 /* TTimeConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661988F038C2A120121BE68 /* TTimeConverter.cpp */; };
+		4BB41F6209ED464000EE9367 /* TTimeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619890038C2A120121BE68 /* TTimeManager.cpp */; };
+		4BB41F6309ED464000EE9367 /* TScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619886038C2A120121BE68 /* TScore.cpp */; };
+		4BB41F6409ED464000EE9367 /* TScoreIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619888038C2A120121BE68 /* TScoreIterator.cpp */; };
+		4BB41F6509ED464000EE9367 /* UScoreManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619889038C2A120121BE68 /* UScoreManager.cpp */; };
+		4BB41F6609ED464000EE9367 /* TScoreFollower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619887038C2A120121BE68 /* TScoreFollower.cpp */; };
+		4BB41F6709ED464000EE9367 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198D7038C2A120121BE68 /* Player.cpp */; };
+		4BB41F6809ED464000EE9367 /* TPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198D8038C2A120121BE68 /* TPlayer.cpp */; };
+		4BB41F6909ED464000EE9367 /* TScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619884038C2A120121BE68 /* TScheduler.cpp */; };
+		4BB41F6A09ED464000EE9367 /* TPlayerFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661987B038C2A120121BE68 /* TPlayerFactory.cpp */; };
+		4BB41F6B09ED464000EE9367 /* TClockEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619874038C2A120121BE68 /* TClockEventReceiver.cpp */; };
+		4BB41F6C09ED464000EE9367 /* TEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619875038C2A120121BE68 /* TEventReceiver.cpp */; };
+		4BB41F6D09ED464000EE9367 /* TEventRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619876038C2A120121BE68 /* TEventRecorder.cpp */; };
+		4BB41F6E09ED464000EE9367 /* TExtEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619877038C2A120121BE68 /* TExtEventReceiver.cpp */; };
+		4BB41F6F09ED464000EE9367 /* TMidiPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619878038C2A120121BE68 /* TMidiPlayer.cpp */; };
+		4BB41F7009ED464000EE9367 /* TSMPTEEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619879038C2A120121BE68 /* TSMPTEEventReceiver.cpp */; };
+		4BB41F7109ED464000EE9367 /* TChaserIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986C038C2A120121BE68 /* TChaserIterator.cpp */; };
+		4BB41F7209ED464000EE9367 /* TChaserVisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986D038C2A120121BE68 /* TChaserVisitor.cpp */; };
+		4BB41F7309ED464000EE9367 /* THashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661986E038C2A120121BE68 /* THashTable.cpp */; };
+		4BB41F7409ED464000EE9367 /* TEventFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F661987F038C2A120121BE68 /* TEventFactory.cpp */; };
+		4BB41F7509ED464000EE9367 /* TMidiAppl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6619882038C2A120121BE68 /* TMidiAppl.cpp */; };
+		4BB41F7609ED464000EE9367 /* TLoopManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198DD038C2A120121BE68 /* TLoopManager.cpp */; };
+		4BB41F7709ED464000EE9367 /* Tmtrack.c in Sources */ = {isa = PBXBuildFile; fileRef = F66198E0038C2A120121BE68 /* Tmtrack.c */; };
+		4BB41F7809ED464000EE9367 /* TPlayerScore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E9038C2A120121BE68 /* TPlayerScore.cpp */; };
+		4BB41F7909ED464000EE9367 /* TScoreInserter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EA038C2A120121BE68 /* TScoreInserter.cpp */; };
+		4BB41F7A09ED464000EE9367 /* TClockSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EC038C2A120121BE68 /* TClockSender.cpp */; };
+		4BB41F7B09ED464000EE9367 /* TPlayerSynchroniserClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198ED038C2A120121BE68 /* TPlayerSynchroniserClock.cpp */; };
+		4BB41F7C09ED464000EE9367 /* TPlayerSynchroniserExt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EE038C2A120121BE68 /* TPlayerSynchroniserExt.cpp */; };
+		4BB41F7D09ED464000EE9367 /* TPlayerSynchroniserInt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198EF038C2A120121BE68 /* TPlayerSynchroniserInt.cpp */; };
+		4BB41F7E09ED464000EE9367 /* TRunningPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E2038C2A120121BE68 /* TRunningPlayer.cpp */; };
+		4BB41F7F09ED464000EE9367 /* TSMPTEPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E3038C2A120121BE68 /* TSMPTEPlayer.cpp */; };
+		4BB41F8009ED464000EE9367 /* TSyncInPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E4038C2A120121BE68 /* TSyncInPlayer.cpp */; };
+		4BB41F8109ED464000EE9367 /* TSyncOutPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */; };
+		4BB41F8209ED464000EE9367 /* TTickPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E6038C2A120121BE68 /* TTickPlayer.cpp */; };
+		4BB41F8309ED464000EE9367 /* midifile.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EA0D3608717BB700AB8D8D /* midifile.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		4B234E1209F6363A00488DBD /* Info-Player.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-Player.plist"; sourceTree = SOURCE_ROOT; };
+		4BB41F8B09ED464000EE9367 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3EA0D020871659F00AB8D8D /* midifile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = midifile.h; path = ../src/Include/midifile.h; sourceTree = SOURCE_ROOT; };
+		D3EA0D030871659F00AB8D8D /* PlayerDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PlayerDefs.h; path = ../src/Include/PlayerDefs.h; sourceTree = SOURCE_ROOT; };
+		D3EA0D3608717BB700AB8D8D /* midifile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = midifile.c; path = ../src/MidiFile/midifile.c; sourceTree = SOURCE_ROOT; };
+		F58B924203E6E05C01053105 /* Carbon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Carbon.h; path = /System/Library/Frameworks/Carbon.framework/Versions/A/Headers/Carbon.h; sourceTree = "<absolute>"; };
+		F5EC6D2A03E83BC901053105 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = ../../../../../../../../../System/Library/Frameworks/CoreAudio.framework; sourceTree = SOURCE_ROOT; };
+		F661986C038C2A120121BE68 /* TChaserIterator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TChaserIterator.cpp; sourceTree = "<group>"; };
+		F661986D038C2A120121BE68 /* TChaserVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TChaserVisitor.cpp; sourceTree = "<group>"; };
+		F661986E038C2A120121BE68 /* THashTable.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = THashTable.cpp; sourceTree = "<group>"; };
+		F6619874038C2A120121BE68 /* TClockEventReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TClockEventReceiver.cpp; sourceTree = "<group>"; };
+		F6619875038C2A120121BE68 /* TEventReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TEventReceiver.cpp; sourceTree = "<group>"; };
+		F6619876038C2A120121BE68 /* TEventRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TEventRecorder.cpp; sourceTree = "<group>"; };
+		F6619877038C2A120121BE68 /* TExtEventReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TExtEventReceiver.cpp; sourceTree = "<group>"; };
+		F6619878038C2A120121BE68 /* TMidiPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiPlayer.cpp; sourceTree = "<group>"; };
+		F6619879038C2A120121BE68 /* TSMPTEEventReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TSMPTEEventReceiver.cpp; sourceTree = "<group>"; };
+		F661987B038C2A120121BE68 /* TPlayerFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayerFactory.cpp; sourceTree = "<group>"; };
+		F661987F038C2A120121BE68 /* TEventFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TEventFactory.cpp; sourceTree = "<group>"; };
+		F6619882038C2A120121BE68 /* TMidiAppl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TMidiAppl.cpp; sourceTree = "<group>"; };
+		F6619884038C2A120121BE68 /* TScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TScheduler.cpp; sourceTree = "<group>"; };
+		F6619886038C2A120121BE68 /* TScore.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TScore.cpp; sourceTree = "<group>"; };
+		F6619887038C2A120121BE68 /* TScoreFollower.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TScoreFollower.cpp; sourceTree = "<group>"; };
+		F6619888038C2A120121BE68 /* TScoreIterator.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TScoreIterator.cpp; sourceTree = "<group>"; };
+		F6619889038C2A120121BE68 /* UScoreManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UScoreManager.cpp; sourceTree = "<group>"; };
+		F661988B038C2A120121BE68 /* TTempoConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTempoConverter.cpp; sourceTree = "<group>"; };
+		F661988C038C2A120121BE68 /* TTempoMap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTempoMap.cpp; sourceTree = "<group>"; };
+		F661988D038C2A120121BE68 /* TTempoMapVisitor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTempoMapVisitor.cpp; sourceTree = "<group>"; };
+		F661988E038C2A120121BE68 /* TTime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTime.cpp; sourceTree = "<group>"; };
+		F661988F038C2A120121BE68 /* TTimeConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTimeConverter.cpp; sourceTree = "<group>"; };
+		F6619890038C2A120121BE68 /* TTimeManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTimeManager.cpp; sourceTree = "<group>"; };
+		F6619893038C2A120121BE68 /* CStruct.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CStruct.h; sourceTree = "<group>"; };
+		F6619896038C2A120121BE68 /* MidiFilter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MidiFilter.h; sourceTree = "<group>"; };
+		F6619897038C2A120121BE68 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		F6619898038C2A120121BE68 /* TChaserIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TChaserIterator.h; sourceTree = "<group>"; };
+		F6619899038C2A120121BE68 /* TChaserVisitor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TChaserVisitor.h; sourceTree = "<group>"; };
+		F661989A038C2A120121BE68 /* TClockConverter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TClockConverter.h; sourceTree = "<group>"; };
+		F661989B038C2A120121BE68 /* TClockSender.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TClockSender.h; sourceTree = "<group>"; };
+		F661989C038C2A120121BE68 /* TDestructor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TDestructor.h; sourceTree = "<group>"; };
+		F661989D038C2A120121BE68 /* TEvent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEvent.h; sourceTree = "<group>"; };
+		F661989E038C2A120121BE68 /* TEventFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventFactory.h; sourceTree = "<group>"; };
+		F661989F038C2A120121BE68 /* TEventReceiver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventReceiver.h; sourceTree = "<group>"; };
+		F66198A0038C2A120121BE68 /* TEventReceiverInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventReceiverInterface.h; sourceTree = "<group>"; };
+		F66198A1038C2A120121BE68 /* TEventRecorder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventRecorder.h; sourceTree = "<group>"; };
+		F66198A2038C2A120121BE68 /* TEventSenderInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventSenderInterface.h; sourceTree = "<group>"; };
+		F66198A3038C2A120121BE68 /* TEventTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TEventTable.h; sourceTree = "<group>"; };
+		F66198A4038C2A120121BE68 /* TGenericPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TGenericPlayer.h; sourceTree = "<group>"; };
+		F66198A5038C2A120121BE68 /* TGenericPlayerInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TGenericPlayerInterface.h; sourceTree = "<group>"; };
+		F66198A6038C2A120121BE68 /* THashTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = THashTable.h; sourceTree = "<group>"; };
+		F66198A7038C2A120121BE68 /* TLoopManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TLoopManager.h; sourceTree = "<group>"; };
+		F66198A8038C2A120121BE68 /* TMidiAppl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiAppl.h; sourceTree = "<group>"; };
+		F66198A9038C2A120121BE68 /* TMidiPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TMidiPlayer.h; sourceTree = "<group>"; };
+		F66198AA038C2A120121BE68 /* Tmtrack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Tmtrack.h; sourceTree = "<group>"; };
+		F66198AB038C2A120121BE68 /* TPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayer.h; sourceTree = "<group>"; };
+		F66198AC038C2A120121BE68 /* TPlayerConstants.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerConstants.h; sourceTree = "<group>"; };
+		F66198AD038C2A120121BE68 /* TPlayerFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerFactory.h; sourceTree = "<group>"; };
+		F66198AE038C2A120121BE68 /* TPlayerInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerInterface.h; sourceTree = "<group>"; };
+		F66198AF038C2A120121BE68 /* TPlayerMemento.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerMemento.h; sourceTree = "<group>"; };
+		F66198B0038C2A120121BE68 /* TPlayerScore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerScore.h; sourceTree = "<group>"; };
+		F66198B1038C2A120121BE68 /* TPlayerSynchroniser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TPlayerSynchroniser.h; sourceTree = "<group>"; };
+		F66198B2038C2A120121BE68 /* TRunningPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRunningPlayer.h; sourceTree = "<group>"; };
+		F66198B3038C2A120121BE68 /* TRunningState.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TRunningState.h; sourceTree = "<group>"; };
+		F66198B4038C2A120121BE68 /* TScheduler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScheduler.h; sourceTree = "<group>"; };
+		F66198B5038C2A120121BE68 /* TScore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScore.h; sourceTree = "<group>"; };
+		F66198B6038C2A120121BE68 /* TScoreFollower.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreFollower.h; sourceTree = "<group>"; };
+		F66198B7038C2A120121BE68 /* TScoreInserter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreInserter.h; sourceTree = "<group>"; };
+		F66198B8038C2A120121BE68 /* TScoreIterator.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreIterator.h; sourceTree = "<group>"; };
+		F66198B9038C2A120121BE68 /* TScoreMarker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreMarker.h; sourceTree = "<group>"; };
+		F66198BA038C2A120121BE68 /* TScoreState.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreState.h; sourceTree = "<group>"; };
+		F66198BB038C2A120121BE68 /* TScoreVisitorInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TScoreVisitorInterface.h; sourceTree = "<group>"; };
+		F66198BC038C2A120121BE68 /* TSliceVisitor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSliceVisitor.h; sourceTree = "<group>"; };
+		F66198BD038C2A120121BE68 /* TSMPTEInfos.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSMPTEInfos.h; sourceTree = "<group>"; };
+		F66198BE038C2A120121BE68 /* TSMPTEPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSMPTEPlayer.h; sourceTree = "<group>"; };
+		F66198BF038C2A120121BE68 /* TSynchroniserInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSynchroniserInterface.h; sourceTree = "<group>"; };
+		F66198C0038C2A120121BE68 /* TSyncInPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSyncInPlayer.h; sourceTree = "<group>"; };
+		F66198C1038C2A120121BE68 /* TSyncOutPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TSyncOutPlayer.h; sourceTree = "<group>"; };
+		F66198C2038C2A120121BE68 /* TTempoConverter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTempoConverter.h; sourceTree = "<group>"; };
+		F66198C3038C2A120121BE68 /* TTempoMap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTempoMap.h; sourceTree = "<group>"; };
+		F66198C4038C2A120121BE68 /* TTempoMapBuilder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTempoMapBuilder.h; sourceTree = "<group>"; };
+		F66198C5038C2A120121BE68 /* TTempoMapVisitor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTempoMapVisitor.h; sourceTree = "<group>"; };
+		F66198C6038C2A120121BE68 /* TTickPlayer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTickPlayer.h; sourceTree = "<group>"; };
+		F66198C7038C2A120121BE68 /* TTicksScheduler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTicksScheduler.h; sourceTree = "<group>"; };
+		F66198C8038C2A120121BE68 /* TTime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTime.h; sourceTree = "<group>"; };
+		F66198C9038C2A120121BE68 /* TTimeConverter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTimeConverter.h; sourceTree = "<group>"; };
+		F66198CA038C2A120121BE68 /* TTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTimeManager.h; sourceTree = "<group>"; };
+		F66198CC038C2A120121BE68 /* TTrackTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TTrackTable.h; sourceTree = "<group>"; };
+		F66198CD038C2A120121BE68 /* UDebug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UDebug.h; sourceTree = "<group>"; };
+		F66198CE038C2A120121BE68 /* UMath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UMath.h; sourceTree = "<group>"; };
+		F66198CF038C2A120121BE68 /* UMidi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UMidi.h; sourceTree = "<group>"; };
+		F66198D0038C2A120121BE68 /* UScoreManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UScoreManager.h; sourceTree = "<group>"; };
+		F66198D1038C2A120121BE68 /* UTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UTools.h; sourceTree = "<group>"; };
+		F66198D7038C2A120121BE68 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		F66198D8038C2A120121BE68 /* TPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayer.cpp; sourceTree = "<group>"; };
+		F66198DD038C2A120121BE68 /* TLoopManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TLoopManager.cpp; sourceTree = "<group>"; };
+		F66198E0038C2A120121BE68 /* Tmtrack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = Tmtrack.c; sourceTree = "<group>"; };
+		F66198E2038C2A120121BE68 /* TRunningPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TRunningPlayer.cpp; sourceTree = "<group>"; };
+		F66198E3038C2A120121BE68 /* TSMPTEPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TSMPTEPlayer.cpp; sourceTree = "<group>"; };
+		F66198E4038C2A120121BE68 /* TSyncInPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TSyncInPlayer.cpp; sourceTree = "<group>"; };
+		F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TSyncOutPlayer.cpp; sourceTree = "<group>"; };
+		F66198E6038C2A120121BE68 /* TTickPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTickPlayer.cpp; sourceTree = "<group>"; };
+		F66198E9038C2A120121BE68 /* TPlayerScore.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayerScore.cpp; sourceTree = "<group>"; };
+		F66198EA038C2A120121BE68 /* TScoreInserter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TScoreInserter.cpp; sourceTree = "<group>"; };
+		F66198EC038C2A120121BE68 /* TClockSender.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TClockSender.cpp; sourceTree = "<group>"; };
+		F66198ED038C2A120121BE68 /* TPlayerSynchroniserClock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayerSynchroniserClock.cpp; sourceTree = "<group>"; };
+		F66198EE038C2A120121BE68 /* TPlayerSynchroniserExt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayerSynchroniserExt.cpp; sourceTree = "<group>"; };
+		F66198EF038C2A120121BE68 /* TPlayerSynchroniserInt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TPlayerSynchroniserInt.cpp; sourceTree = "<group>"; };
+		F66198F3038C2A120121BE68 /* TTrackTable.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TTrackTable.cpp; sourceTree = "<group>"; };
+		F66198F6038C2A120121BE68 /* UMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UMidi.cpp; sourceTree = "<group>"; };
+		F66198F7038C2A120121BE68 /* UTools.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UTools.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4BB41F8409ED464000EE9367 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F58B924203E6E05C01053105 /* Carbon.h */,
+				4BB41F8B09ED464000EE9367 /* Player.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77ACFE841707C02AAC07 /* Source */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+				4B234E1209F6363A00488DBD /* Info-Player.plist */,
+			);
+			name = Player;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AAFE841565C02AAC07 /* Carbon.framework */,
+				F5EC6D2A03E83BC901053105 /* CoreAudio.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				F661986B038C2A120121BE68 /* Chasers */,
+				F6619873038C2A120121BE68 /* Events */,
+				F661987A038C2A120121BE68 /* Factory */,
+				F661987C038C2A120121BE68 /* Framework */,
+				F6619891038C2A120121BE68 /* Include */,
+				F66198D6038C2A120121BE68 /* Library */,
+				F66198DC038C2A120121BE68 /* Loop */,
+				F66198DE038C2A120121BE68 /* MidiFile */,
+				F66198E1038C2A120121BE68 /* Players */,
+				F66198E8038C2A120121BE68 /* Score */,
+				F66198EB038C2A120121BE68 /* Synchroniser */,
+				F66198F2038C2A120121BE68 /* Tracks */,
+				F66198F4038C2A120121BE68 /* Utils */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		F661986B038C2A120121BE68 /* Chasers */ = {
+			isa = PBXGroup;
+			children = (
+				F661986C038C2A120121BE68 /* TChaserIterator.cpp */,
+				F661986D038C2A120121BE68 /* TChaserVisitor.cpp */,
+				F661986E038C2A120121BE68 /* THashTable.cpp */,
+			);
+			name = Chasers;
+			path = ../src/Chasers;
+			sourceTree = SOURCE_ROOT;
+		};
+		F6619873038C2A120121BE68 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				F6619874038C2A120121BE68 /* TClockEventReceiver.cpp */,
+				F6619875038C2A120121BE68 /* TEventReceiver.cpp */,
+				F6619876038C2A120121BE68 /* TEventRecorder.cpp */,
+				F6619877038C2A120121BE68 /* TExtEventReceiver.cpp */,
+				F6619879038C2A120121BE68 /* TSMPTEEventReceiver.cpp */,
+				F6619878038C2A120121BE68 /* TMidiPlayer.cpp */,
+			);
+			name = Events;
+			path = ../src/Events;
+			sourceTree = SOURCE_ROOT;
+		};
+		F661987A038C2A120121BE68 /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+				F661987B038C2A120121BE68 /* TPlayerFactory.cpp */,
+			);
+			name = Factory;
+			path = ../src/Factory;
+			sourceTree = SOURCE_ROOT;
+		};
+		F661987C038C2A120121BE68 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				F661987E038C2A120121BE68 /* Events */,
+				F6619880038C2A120121BE68 /* MidiAppl */,
+				F6619883038C2A120121BE68 /* Scheduler */,
+				F6619885038C2A120121BE68 /* Score */,
+				F661988A038C2A120121BE68 /* Tempo */,
+			);
+			name = Framework;
+			path = ../src/Framework;
+			sourceTree = SOURCE_ROOT;
+		};
+		F661987E038C2A120121BE68 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				F661987F038C2A120121BE68 /* TEventFactory.cpp */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		F6619880038C2A120121BE68 /* MidiAppl */ = {
+			isa = PBXGroup;
+			children = (
+				F6619882038C2A120121BE68 /* TMidiAppl.cpp */,
+			);
+			path = MidiAppl;
+			sourceTree = "<group>";
+		};
+		F6619883038C2A120121BE68 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				F6619884038C2A120121BE68 /* TScheduler.cpp */,
+			);
+			path = Scheduler;
+			sourceTree = "<group>";
+		};
+		F6619885038C2A120121BE68 /* Score */ = {
+			isa = PBXGroup;
+			children = (
+				F6619886038C2A120121BE68 /* TScore.cpp */,
+				F6619887038C2A120121BE68 /* TScoreFollower.cpp */,
+				F6619888038C2A120121BE68 /* TScoreIterator.cpp */,
+				F6619889038C2A120121BE68 /* UScoreManager.cpp */,
+			);
+			path = Score;
+			sourceTree = "<group>";
+		};
+		F661988A038C2A120121BE68 /* Tempo */ = {
+			isa = PBXGroup;
+			children = (
+				F661988B038C2A120121BE68 /* TTempoConverter.cpp */,
+				F661988C038C2A120121BE68 /* TTempoMap.cpp */,
+				F661988D038C2A120121BE68 /* TTempoMapVisitor.cpp */,
+				F661988E038C2A120121BE68 /* TTime.cpp */,
+				F661988F038C2A120121BE68 /* TTimeConverter.cpp */,
+				F6619890038C2A120121BE68 /* TTimeManager.cpp */,
+			);
+			path = Tempo;
+			sourceTree = "<group>";
+		};
+		F6619891038C2A120121BE68 /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				F6619893038C2A120121BE68 /* CStruct.h */,
+				D3EA0D020871659F00AB8D8D /* midifile.h */,
+				F6619896038C2A120121BE68 /* MidiFilter.h */,
+				F6619897038C2A120121BE68 /* Player.h */,
+				D3EA0D030871659F00AB8D8D /* PlayerDefs.h */,
+				F6619898038C2A120121BE68 /* TChaserIterator.h */,
+				F6619899038C2A120121BE68 /* TChaserVisitor.h */,
+				F661989A038C2A120121BE68 /* TClockConverter.h */,
+				F661989B038C2A120121BE68 /* TClockSender.h */,
+				F661989C038C2A120121BE68 /* TDestructor.h */,
+				F661989D038C2A120121BE68 /* TEvent.h */,
+				F661989E038C2A120121BE68 /* TEventFactory.h */,
+				F661989F038C2A120121BE68 /* TEventReceiver.h */,
+				F66198A0038C2A120121BE68 /* TEventReceiverInterface.h */,
+				F66198A1038C2A120121BE68 /* TEventRecorder.h */,
+				F66198A2038C2A120121BE68 /* TEventSenderInterface.h */,
+				F66198A3038C2A120121BE68 /* TEventTable.h */,
+				F66198A4038C2A120121BE68 /* TGenericPlayer.h */,
+				F66198A5038C2A120121BE68 /* TGenericPlayerInterface.h */,
+				F66198A6038C2A120121BE68 /* THashTable.h */,
+				F66198A7038C2A120121BE68 /* TLoopManager.h */,
+				F66198A8038C2A120121BE68 /* TMidiAppl.h */,
+				F66198A9038C2A120121BE68 /* TMidiPlayer.h */,
+				F66198AA038C2A120121BE68 /* Tmtrack.h */,
+				F66198AB038C2A120121BE68 /* TPlayer.h */,
+				F66198AC038C2A120121BE68 /* TPlayerConstants.h */,
+				F66198AD038C2A120121BE68 /* TPlayerFactory.h */,
+				F66198AE038C2A120121BE68 /* TPlayerInterface.h */,
+				F66198AF038C2A120121BE68 /* TPlayerMemento.h */,
+				F66198B0038C2A120121BE68 /* TPlayerScore.h */,
+				F66198B1038C2A120121BE68 /* TPlayerSynchroniser.h */,
+				F66198B2038C2A120121BE68 /* TRunningPlayer.h */,
+				F66198B3038C2A120121BE68 /* TRunningState.h */,
+				F66198B4038C2A120121BE68 /* TScheduler.h */,
+				F66198B5038C2A120121BE68 /* TScore.h */,
+				F66198B6038C2A120121BE68 /* TScoreFollower.h */,
+				F66198B7038C2A120121BE68 /* TScoreInserter.h */,
+				F66198B8038C2A120121BE68 /* TScoreIterator.h */,
+				F66198B9038C2A120121BE68 /* TScoreMarker.h */,
+				F66198BA038C2A120121BE68 /* TScoreState.h */,
+				F66198BB038C2A120121BE68 /* TScoreVisitorInterface.h */,
+				F66198BC038C2A120121BE68 /* TSliceVisitor.h */,
+				F66198BD038C2A120121BE68 /* TSMPTEInfos.h */,
+				F66198BE038C2A120121BE68 /* TSMPTEPlayer.h */,
+				F66198BF038C2A120121BE68 /* TSynchroniserInterface.h */,
+				F66198C0038C2A120121BE68 /* TSyncInPlayer.h */,
+				F66198C1038C2A120121BE68 /* TSyncOutPlayer.h */,
+				F66198C2038C2A120121BE68 /* TTempoConverter.h */,
+				F66198C3038C2A120121BE68 /* TTempoMap.h */,
+				F66198C4038C2A120121BE68 /* TTempoMapBuilder.h */,
+				F66198C5038C2A120121BE68 /* TTempoMapVisitor.h */,
+				F66198C6038C2A120121BE68 /* TTickPlayer.h */,
+				F66198C7038C2A120121BE68 /* TTicksScheduler.h */,
+				F66198C8038C2A120121BE68 /* TTime.h */,
+				F66198C9038C2A120121BE68 /* TTimeConverter.h */,
+				F66198CA038C2A120121BE68 /* TTimeManager.h */,
+				F66198CC038C2A120121BE68 /* TTrackTable.h */,
+				F66198CD038C2A120121BE68 /* UDebug.h */,
+				F66198CE038C2A120121BE68 /* UMath.h */,
+				F66198D1038C2A120121BE68 /* UTools.h */,
+				F66198CF038C2A120121BE68 /* UMidi.h */,
+				F66198D0038C2A120121BE68 /* UScoreManager.h */,
+			);
+			name = Include;
+			path = ../src/Include;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198D6038C2A120121BE68 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				F66198D7038C2A120121BE68 /* Player.cpp */,
+				F66198D8038C2A120121BE68 /* TPlayer.cpp */,
+			);
+			name = Library;
+			path = ../src/Library;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198DC038C2A120121BE68 /* Loop */ = {
+			isa = PBXGroup;
+			children = (
+				F66198DD038C2A120121BE68 /* TLoopManager.cpp */,
+			);
+			name = Loop;
+			path = ../src/Loop;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198DE038C2A120121BE68 /* MidiFile */ = {
+			isa = PBXGroup;
+			children = (
+				D3EA0D3608717BB700AB8D8D /* midifile.c */,
+				F66198E0038C2A120121BE68 /* Tmtrack.c */,
+			);
+			name = MidiFile;
+			path = ../src/MidiFile;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198E1038C2A120121BE68 /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				F66198E2038C2A120121BE68 /* TRunningPlayer.cpp */,
+				F66198E3038C2A120121BE68 /* TSMPTEPlayer.cpp */,
+				F66198E4038C2A120121BE68 /* TSyncInPlayer.cpp */,
+				F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */,
+				F66198E6038C2A120121BE68 /* TTickPlayer.cpp */,
+			);
+			name = Players;
+			path = ../src/Players;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198E8038C2A120121BE68 /* Score */ = {
+			isa = PBXGroup;
+			children = (
+				F66198E9038C2A120121BE68 /* TPlayerScore.cpp */,
+				F66198EA038C2A120121BE68 /* TScoreInserter.cpp */,
+			);
+			name = Score;
+			path = ../src/Score;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198EB038C2A120121BE68 /* Synchroniser */ = {
+			isa = PBXGroup;
+			children = (
+				F66198EC038C2A120121BE68 /* TClockSender.cpp */,
+				F66198ED038C2A120121BE68 /* TPlayerSynchroniserClock.cpp */,
+				F66198EE038C2A120121BE68 /* TPlayerSynchroniserExt.cpp */,
+				F66198EF038C2A120121BE68 /* TPlayerSynchroniserInt.cpp */,
+			);
+			name = Synchroniser;
+			path = ../src/Synchroniser;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198F2038C2A120121BE68 /* Tracks */ = {
+			isa = PBXGroup;
+			children = (
+				F66198F3038C2A120121BE68 /* TTrackTable.cpp */,
+			);
+			name = Tracks;
+			path = ../src/Tracks;
+			sourceTree = SOURCE_ROOT;
+		};
+		F66198F4038C2A120121BE68 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F66198F6038C2A120121BE68 /* UMidi.cpp */,
+				F66198F7038C2A120121BE68 /* UTools.cpp */,
+			);
+			name = Utils;
+			path = ../src/Utils;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4BB41F5409ED464000EE9367 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41F5509ED464000EE9367 /* Player.h in Headers */,
+				4BB41F5609ED464000EE9367 /* midifile.h in Headers */,
+				4BB41F5709ED464000EE9367 /* PlayerDefs.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BB41F5309ED464000EE9367 /* Player Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BB41F8609ED464000EE9367 /* Build configuration list for PBXNativeTarget "Player Universal" */;
+			buildPhases = (
+				4BB41F5409ED464000EE9367 /* Headers */,
+				4BB41F5809ED464000EE9367 /* Resources */,
+				4BB41F5909ED464000EE9367 /* Sources */,
+				4BB41F8409ED464000EE9367 /* Frameworks */,
+				4BB41F8509ED464000EE9367 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Player Universal";
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = Player1;
+			productReference = 4BB41F8B09ED464000EE9367 /* Player.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41F8C09ED464000EE9367 /* Build configuration list for PBXProject "Player" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* Player */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				4BB41F5309ED464000EE9367 /* Player Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4BB41F5809ED464000EE9367 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B234E1309F6363A00488DBD /* Info-Player.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		4BB41F8509ED464000EE9367 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BB41F5909ED464000EE9367 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41F5A09ED464000EE9367 /* UMidi.cpp in Sources */,
+				4BB41F5B09ED464000EE9367 /* UTools.cpp in Sources */,
+				4BB41F5C09ED464000EE9367 /* TTrackTable.cpp in Sources */,
+				4BB41F5D09ED464000EE9367 /* TTempoConverter.cpp in Sources */,
+				4BB41F5E09ED464000EE9367 /* TTempoMap.cpp in Sources */,
+				4BB41F5F09ED464000EE9367 /* TTempoMapVisitor.cpp in Sources */,
+				4BB41F6009ED464000EE9367 /* TTime.cpp in Sources */,
+				4BB41F6109ED464000EE9367 /* TTimeConverter.cpp in Sources */,
+				4BB41F6209ED464000EE9367 /* TTimeManager.cpp in Sources */,
+				4BB41F6309ED464000EE9367 /* TScore.cpp in Sources */,
+				4BB41F6409ED464000EE9367 /* TScoreIterator.cpp in Sources */,
+				4BB41F6509ED464000EE9367 /* UScoreManager.cpp in Sources */,
+				4BB41F6609ED464000EE9367 /* TScoreFollower.cpp in Sources */,
+				4BB41F6709ED464000EE9367 /* Player.cpp in Sources */,
+				4BB41F6809ED464000EE9367 /* TPlayer.cpp in Sources */,
+				4BB41F6909ED464000EE9367 /* TScheduler.cpp in Sources */,
+				4BB41F6A09ED464000EE9367 /* TPlayerFactory.cpp in Sources */,
+				4BB41F6B09ED464000EE9367 /* TClockEventReceiver.cpp in Sources */,
+				4BB41F6C09ED464000EE9367 /* TEventReceiver.cpp in Sources */,
+				4BB41F6D09ED464000EE9367 /* TEventRecorder.cpp in Sources */,
+				4BB41F6E09ED464000EE9367 /* TExtEventReceiver.cpp in Sources */,
+				4BB41F6F09ED464000EE9367 /* TMidiPlayer.cpp in Sources */,
+				4BB41F7009ED464000EE9367 /* TSMPTEEventReceiver.cpp in Sources */,
+				4BB41F7109ED464000EE9367 /* TChaserIterator.cpp in Sources */,
+				4BB41F7209ED464000EE9367 /* TChaserVisitor.cpp in Sources */,
+				4BB41F7309ED464000EE9367 /* THashTable.cpp in Sources */,
+				4BB41F7409ED464000EE9367 /* TEventFactory.cpp in Sources */,
+				4BB41F7509ED464000EE9367 /* TMidiAppl.cpp in Sources */,
+				4BB41F7609ED464000EE9367 /* TLoopManager.cpp in Sources */,
+				4BB41F7709ED464000EE9367 /* Tmtrack.c in Sources */,
+				4BB41F7809ED464000EE9367 /* TPlayerScore.cpp in Sources */,
+				4BB41F7909ED464000EE9367 /* TScoreInserter.cpp in Sources */,
+				4BB41F7A09ED464000EE9367 /* TClockSender.cpp in Sources */,
+				4BB41F7B09ED464000EE9367 /* TPlayerSynchroniserClock.cpp in Sources */,
+				4BB41F7C09ED464000EE9367 /* TPlayerSynchroniserExt.cpp in Sources */,
+				4BB41F7D09ED464000EE9367 /* TPlayerSynchroniserInt.cpp in Sources */,
+				4BB41F7E09ED464000EE9367 /* TRunningPlayer.cpp in Sources */,
+				4BB41F7F09ED464000EE9367 /* TSMPTEPlayer.cpp in Sources */,
+				4BB41F8009ED464000EE9367 /* TSyncInPlayer.cpp in Sources */,
+				4BB41F8109ED464000EE9367 /* TSyncOutPlayer.cpp in Sources */,
+				4BB41F8209ED464000EE9367 /* TTickPlayer.cpp in Sources */,
+				4BB41F8309ED464000EE9367 /* midifile.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41F8709ED464000EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = Player.exp;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				GCC_PREPROCESSOR_DEFINITIONS = __MacOSX__;
+				INFOPLIST_FILE = "Info-Player.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = Player;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41F8809ED464000EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = Player.exp;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				GCC_PREPROCESSOR_DEFINITIONS = __MacOSX__;
+				INFOPLIST_FILE = "Info-Player.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = Player;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41F8909ED464000EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = Player.exp;
+				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREFIX_HEADER = MyPrecompPPC.h;
+				GCC_PREPROCESSOR_DEFINITIONS = __MacOSX__;
+				INFOPLIST_FILE = "Info-Player.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-framework",
+					MidiShare,
+				);
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = Player;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Default;
+		};
+		4BB41F8D09ED464000EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BB41F8E09ED464000EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BB41F8F09ED464000EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41F8609ED464000EE9367 /* Build configuration list for PBXNativeTarget "Player Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41F8709ED464000EE9367 /* Development */,
+				4BB41F8809ED464000EE9367 /* Deployment */,
+				4BB41F8909ED464000EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41F8C09ED464000EE9367 /* Build configuration list for PBXProject "Player" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41F8D09ED464000EE9367 /* Development */,
+				4BB41F8E09ED464000EE9367 /* Deployment */,
+				4BB41F8F09ED464000EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -31,7 +31,7 @@
 #include <math.h>
 
 #ifdef __MSWindows__
-static float round(float val){return (float)floor(val+0.5f);}
+static float round(float val) {return (float)floor(val+0.5f);}
 #endif
 
 
@@ -51,7 +51,7 @@ class TClockConverter {
 	public: 
 	
 		TClockConverter(ULONG tpq) {Init (tpq);}
-		virtual ~TClockConverter(){}
+		virtual ~TClockConverter() {}
 			
 		void Init (ULONG tpq) {fTicks_per_quarter = (float)tpq;}
 				

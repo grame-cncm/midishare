@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -43,8 +43,8 @@ class TSMPTEInfos {
 	 
 	public:
 	
-		TSMPTEInfos():fSMPTEoffset(0){}
-		virtual ~TSMPTEInfos(){}
+		TSMPTEInfos():fSMPTEoffset(0) {}
+		virtual ~TSMPTEInfos() {}
 	
 		void SetSMPTEOffset(SmpteLocPtr smptepos) 
 		{ 

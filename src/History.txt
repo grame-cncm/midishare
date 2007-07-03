@@ -1,6 +1,7 @@
 
 Versions:
 ------------------------
+v 1.92  : correct bug in MSUnregisterDriver, the driver context was not correctly saved on the stack. 
 v 1.91  : new MidiGetError API, 
 		  corrected Mac OS X timer mode : correctly handle MidiShare time in case of abnormal system latencies 		  
 v 1.90  : corrects bug due to tasks management conflict with fifo implementation

@@ -63,13 +63,13 @@ public class TutorialPart2 extends Applet
 		testnumber = 0;
 	}
 			
-	public void stop () 
+	public void stop() 
 	{
 	 	if (appl!= null) appl.Close();
 	  	appl = null;
 	}	 
 		 
-	void listOfAppl ()
+	void listOfAppl()
 	{
 		short i;
 		int ref, n = Midi.CountAppls();
@@ -88,7 +88,7 @@ public class TutorialPart2 extends Applet
 			text.appendText("-------------------------------------");
 	}
 
-	void listDest (int ref1)
+	void listDest(int ref1)
 	{
 		short i;
 		int ref2,	n = Midi.CountAppls();
@@ -112,7 +112,7 @@ public class TutorialPart2 extends Applet
 		text.appendText("-------------------------------------");
 	}
 			
-	void listSrc (int ref1)
+	void listSrc(int ref1)
 	{
 		short i;
 		int ref2, n = Midi.CountAppls();
@@ -137,7 +137,7 @@ public class TutorialPart2 extends Applet
 		text.appendText("-------------------------------------");
 	}
 		
-	void sendText (int refnum, int type, String str) 
+	void sendText(int refnum, int type, String str) 
 	{
 		int event = Midi.NewEv(type);  				// ask for a event
 				
@@ -149,7 +149,7 @@ public class TutorialPart2 extends Applet
 		}
 	}
 	 
-	void test1 ()
+	void test1()
 	{
 		try {
 			text.appendText( "\n <TEST 1> : Allocate and open a new MidiAppl object");
@@ -162,13 +162,13 @@ public class TutorialPart2 extends Applet
 	 	}
 	 }
 
-	void test2 ()
+	void test2()
 	{
 		text.appendText("\n\n<TEST 2>Configure the Midi filter\n");
 		appl.configureFilter();
 	}
 
-	void test3 ()
+	void test3()
 	{
 		text.appendText("\n\n<TEST 3> Connect to Midi applications\n");
 		Midi.Connect(appl.refnum, 0, 1);
@@ -177,7 +177,7 @@ public class TutorialPart2 extends Applet
 		listDest(appl.refnum);
 	}
 		
-	void sendNote (int pitch) 
+	void sendNote(int pitch) 
 	{
 		int event = Midi.NewEv(Midi.typeNote);  // ask for a new ctrlchange event
 			
@@ -191,7 +191,7 @@ public class TutorialPart2 extends Applet
 		}
 	}
 		
-	void sendCtrlChange (int ctrl, int val) 
+	void sendCtrlChange(int ctrl, int val) 
 	{
 		int event = Midi.NewEv(Midi.typeCtrlChange);  // ask for a new note event
 			
@@ -204,7 +204,7 @@ public class TutorialPart2 extends Applet
 		}
 	}
 		
-	void sendProgChange (int pgm) 
+	void sendProgChange(int pgm) 
 	{
 		int event = Midi.NewEv(Midi.typeProgChange);  // ask for a new progchange event
 			
@@ -216,7 +216,7 @@ public class TutorialPart2 extends Applet
 		}
 	}
 
-	void test4 ()
+	void test4()
 	{
 		int ref;
 		text.appendText("\n\n<TEST 4> Send events\n");
@@ -233,7 +233,7 @@ public class TutorialPart2 extends Applet
 		sendProgChange(2);
 	}
 		
-	void test5 ()
+	void test5()
 	{		
 		int ref1, ref2;
 		text.appendText("\n\n<TEST 5>Delay and transpose incoming notes\n");
@@ -244,7 +244,7 @@ public class TutorialPart2 extends Applet
 		if (ref2 > 0)  Midi.Connect (ref1,ref2, 1);
 	}
 
-	void test6 ()
+	void test6()
 	{
 		text.appendText("\n\n<TEST 6> Install a Appl alarm \n");
 		int  ref = Midi.Open("foo");
@@ -261,13 +261,13 @@ public class TutorialPart2 extends Applet
 		appl.ScheduleTask(task, Midi.GetTime());
 	}
 		
-	void test8 ()
+	void test8()
 	{
 		text.appendText("\n\n<TEST 8>Forget the task");
 		task.Forget();
 	}
 		
-	void test9 ()
+	void test9()
 	{
 		text.appendText("\n\n<TEST 8>Close the MidiAppl instance");
 		appl.Close();
@@ -316,7 +316,7 @@ class MidiTutorial extends MidiAppl
 		myUser = user;
 	}
 	
-	public void configureFilter () 
+	public void configureFilter() 
  	{
 		int i;
 		
@@ -333,9 +333,9 @@ class MidiTutorial extends MidiAppl
 		Midi.AcceptType(filter, Midi.typeSysEx, 0);
 	}
 	
-	public void ReceiveAlarm (int event) 
+	public void ReceiveAlarm(int event) 
 	{
-		switch (Midi.GetType (event)) {
+		switch (Midi.GetType(event)) {
 		
 			case Midi.typeNote:    // for Key event
 			case Midi.typeKeyOn:
@@ -357,7 +357,7 @@ class MidiTutorial extends MidiAppl
 		int ref = (code & 0xFFFF0000) >> 16 ;
 
 		if (myUser.testnumber == 6) {
-		    switch (param){
+		    switch (param) {
 		      case Midi.OpenAppl :
 		      	myUser.text.appendText(" A new application has opened \n");
 		        break ;

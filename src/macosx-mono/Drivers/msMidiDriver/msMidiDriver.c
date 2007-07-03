@@ -26,7 +26,7 @@
 #define SlotLength DrvNameLen // defined in "MidiShare.h"
 #define StringLen 64
 
-SlotPtr gInSlots = 0, gOutSlots = 0;
+SlotPtr gInSlots = NULL, gOutSlots = NULL;
 extern LinearizeMthTbl	gLinMethods;
 extern ParseMethodTbl	gParseTbl;
 extern Status2TypeTbl	gTypeTbl;
@@ -175,11 +175,14 @@ void AddSlots (short refNum)
 //_________________________________________________________
 void RemoveSlotList (SlotPtr slot, Boolean input)
 {
-	OSStatus err;
 	SlotPtr next;
 	while (slot) {
 		next = slot->next;
-		if (input) err = MIDIPortDisconnectSource(gInPort, slot->src);  // disconnect source
+		if (input) {
+			MIDIPortDisconnectSource(gInPort, slot->src);  // disconnect source
+		}else{ 
+			slot->request.complete = TRUE; // possibly stops sysex sending
+		}
 		MidiRemoveSlot(slot->refNum);
 		FreeSlot (slot);
 		slot = next;
@@ -189,10 +192,10 @@ void RemoveSlotList (SlotPtr slot, Boolean input)
 //_________________________________________________________
 void RemoveSlots (short refNum)
 {
-	RemoveSlotList (gInSlots, true);
-	gInSlots = 0;
-	RemoveSlotList (gOutSlots, false);
-	gOutSlots = 0;
+	RemoveSlotList(gInSlots, true);
+	RemoveSlotList(gOutSlots, false);
+	gOutSlots = NULL;
+	gInSlots = NULL;
 }
 
 //_________________________________________________________
@@ -216,7 +219,7 @@ void SendEvents1 (short refNum)
 		if (!slot || (Slot(slot->refNum) != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
-			if (!MS2MM (refNum, slot, e)) return; 
+			if (!MS2MM(refNum, slot, e)) return; 
 		}else{
 			MidiFreeEv(e);
 		}
@@ -233,7 +236,7 @@ void SendEvents2 (short refNum)
 		if (!slot || (Slot(slot->refNum) != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
-			if (!MS2MM (refNum, slot, e)) return;  // A SysEx is sent 
+			if (!MS2MM(refNum, slot, e)) return;  // A SysEx is sent 
 		}else{
 			MidiFreeEv(e);
 		}
@@ -250,8 +253,8 @@ void RcvAlarm (short refNum) {SendEvents1(refNum);}
 static Boolean IsSlotConnected (SlotRefNum sref)
 {
 	short i;
-	for (i=0; i<256; i++) {
-		if (MidiIsSlotConnected (i, sref)) return true;
+	for (i = 0; i < 256; i++) {
+		if (MidiIsSlotConnected(i, sref)) return true;
 	}
 	return false;
 }
@@ -278,10 +281,10 @@ void OpenSlot (SlotPtr slot, Boolean input)
 static void ScanSlotChanges (SlotPtr slot)
 {
 	while (slot) {
-     		if (IsSlotConnected (slot->refNum)) {
-   			OpenInputSlot (slot);
+		if (IsSlotConnected(slot->refNum)) {
+   			OpenInputSlot(slot);
 		}else{
-   			CloseInputSlot (slot);
+   			CloseInputSlot(slot);
 		}
 		slot = slot->next;
 	}

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -64,9 +64,9 @@ class TScoreMarker {
 			Date(fEvent->MidiEvent()) = date_ticks;  
 			score->InsertBeforeEvent(prev, fEvent);
 		}
-		void Remove (TScorePtr score){score->RemoveEvent(fEvent);}
-		Boolean IsInserted(){return fEvent->fPrev && fEvent->fNext;}
-		ULONG GetDateTicks(){return Date(fEvent->MidiEvent());}
+		void Remove (TScorePtr score) {score->RemoveEvent(fEvent);}
+		Boolean IsInserted() {return fEvent->fPrev && fEvent->fNext;}
+		ULONG GetDateTicks() {return Date(fEvent->MidiEvent());}
 };
 
 typedef TScoreMarker FAR * TScoreMarkerPtr;

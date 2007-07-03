@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -46,14 +46,14 @@ class TTempoMapBuilder : public TScoreVisitorInterface {
 	
 	public:
 	
-		TTempoMapBuilder():fLastTempo(0),fLastTs(0){}
-		virtual ~TTempoMapBuilder(){}
+		TTempoMapBuilder():fLastTempo(0),fLastTs(0) {}
+		virtual ~TTempoMapBuilder() {}
 	
 		void Visite(TTempo* ev, Boolean  forward)
 		{
 			if (fLastTempo) {
 				ev->SetTempoBackward(Tempo(fLastTempo));
-			}else{
+			} else {
 				ev->SetTempoBackward (kDefaultTempoEv);
 			}	
 			fLastTempo = ev->MidiEvent();
@@ -66,7 +66,7 @@ class TTempoMapBuilder : public TScoreVisitorInterface {
 				ev->SetBDenom(TSDenom(fLastTs));
 				ev->SetBnClocks(TSClocks(fLastTs));
 				ev->SetBn32nd(TS32nd(fLastTs)) ;
-			}else {
+			} else {
 				ev->SetBNum(kDefaultNum);
 				ev->SetBDenom(kDefaultDenom);
 				ev->SetBnClocks(kDefaultClocks);

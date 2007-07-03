@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -56,5 +56,5 @@ MidiEvPtr TTrackTable::IsPlayable(MidiEvPtr e) {return (IsOnTrack(TrackNum(e))) 
 void TTrackTable::Clear()
 {
 	fSolo = 0;
-	for (short i = 0; i< kMaxTrack; i++) fTracktable[i].Init();
+	for (short i = 0; i < kMaxTrack; i++) fTracktable[i].Init();
 }

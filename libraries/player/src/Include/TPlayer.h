@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,7 +33,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-typedef  void (* ApplyScorePtr)( MidiEvPtr e , void* data);
+typedef  void (* ApplyScorePtr)(MidiEvPtr e, void* data);
 
 /*--------------------------------------------------------------------------*/
 // Pattern FACADE
@@ -139,9 +139,8 @@ class TPlayer : public TMidiAppl {
 		// Initialization
 		static void Init() {TEventFactory::Init();}
 		static void Destroy() {TEventFactory::Destroy();}
-};
+ };
 
 typedef TPlayer FAR * TPlayerPtr;
-
 
 #endif

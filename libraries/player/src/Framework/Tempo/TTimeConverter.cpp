@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -100,7 +100,7 @@ void TTimeConverter::Update(ULONG date_ticks, short num, short denom, short cloc
  {
  	if (date_ticks >= fLast_timesign) {
 		return fInt.Add (fLast_pos, fInt.ConvertTicksToBBUInBar(date_ticks - fLast_timesign));
-	}else{
+	} else {
 		return fInt.ConvertTicksToBBUInBar(fInt.ConvertBBUToTicksInBar(fLast_pos) - (fLast_timesign - date_ticks));
 	}
  }
@@ -111,7 +111,7 @@ ULONG TTimeConverter::ConvertBBUToTick(const TPos& pos)
 {
 	if (fInt.SupEq(pos,fLast_pos))  {
 		return fLast_timesign + fInt.ConvertBBUToTicksInBar(fInt.Sub (pos, fLast_pos));
-	}else{
+	} else {
 		return fLast_timesign - fInt.ConvertBBUToTicksInBar(fInt.Sub (fLast_pos ,pos));
 	}
 }

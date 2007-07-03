@@ -140,14 +140,7 @@ public final class MidiPlayer {
 	of the associated MidiShare application)
 	*/	
 	
-	public  static final        int Open (String name){
-		int cstr = Midi.ConvertJavaString(name);
-		int res =  OpenAux (cstr);
-		Midi.FreeString(cstr);
-		return res;
-	}
-		
-	private  static final native  int OpenAux (int name);
+	public  static final native int Open(String name);		
 	
 	/**
 	Close a Player given it's reference number.  This function automatically frees 
@@ -155,7 +148,7 @@ public final class MidiPlayer {
 	*@param refnum is the Player reference number. 
 	*/
 	
-	public  static final native  void Close (int refnum);
+	public  static final native  void Close(int refnum);
 	
 	// Transport control
 
@@ -164,28 +157,28 @@ public final class MidiPlayer {
 	*@param refnum is the Player reference number. 
 	*/
 
-	public  static final native  void Start (int refnum);
+	public  static final native void Start(int refnum);
 	
 	/**
 	Start a Player from the current position in the score.
 	*@param refnum is the Player reference number. 
 	*/
 
-	public  static final native  void Cont (int refnum);
+	public  static final native void Cont(int refnum);
 	
 	/**
 	Stop a Player without sending the chased events (key-off ...)
 	*@param refnum is the Player reference number. 
 	*/
 
-	public  static final native  void Pause (int refnum);
+	public  static final native void Pause(int refnum);
 	
 	/**
 	Stop a Player and send the chased events (key-off ...)
 	*@param refnum is the Player reference number. 
 	*/
 
-	public  static final native  void Stop(int refnum);
+	public  static final native void Stop(int refnum);
 
 	// Record management
 
@@ -202,7 +195,7 @@ public final class MidiPlayer {
 	*@param state is the recording state : can be kEraseMode  or kMixMode. 
 	*/
 	
-	public  static final native void  SetRecordMode (int refnum, int state) ;
+	public  static final native void SetRecordMode(int refnum, int state) ;
 	
 	/**
 	Set a track in record mode. A Player can record in one track at a time. 
@@ -214,7 +207,7 @@ public final class MidiPlayer {
 	kNoTrack will switch off all recording. 
 	*/
 	
-	public  static final native void  Record (int refnum, int tracknum);
+	public  static final native void  Record(int refnum, int tracknum);
 	/**
 	Allows to set a record filter for the Player. Midi events can be filtered by type, port, and channel. 
 
@@ -227,7 +220,7 @@ public final class MidiPlayer {
 	*@see grame.midishare.Midi#AcceptType
 	*/
 	
-	public  static final native void  SetRecordFilter (int refnum, int filter);
+	public  static final native void SetRecordFilter(int refnum, int filter);
 	
 	// Position management
 	
@@ -239,7 +232,7 @@ public final class MidiPlayer {
 	*@param pos  is a PlayerPos object.
 	*/
 
-	public  static final native  void  SetPosBBU (int refnum, PlayerPos pos);
+	public  static final native void SetPosBBU(int refnum, PlayerPos pos);
 	
 	/**
 	Change the current position in the score. The new position is given as a date in 
@@ -249,7 +242,7 @@ public final class MidiPlayer {
 	*@param date  is a date in millisecond.	
 	*/
 
-	public  static final native  void  SetPosMs (int refnum, int date_ms);
+	public  static final native void SetPosMs(int refnum, int date_ms);
 	
 	// Loop management
 	
@@ -259,7 +252,7 @@ public final class MidiPlayer {
 	*@param state can be kLoopOn or kLoopOff.	
 	*/
 
-	public  static final native  void  SetLoop (int refnum, int state);
+	public  static final native void SetLoop (int refnum, int state);
 	
 	/**
 	Set the position of the loop start marker with a position given in musical time 
@@ -269,7 +262,7 @@ public final class MidiPlayer {
 	*@param pos  is a PlayerPos object.
 	*/
 	
-	public  static final native  int   SetLoopStartBBU  (int refnum,  PlayerPos pos);
+	public  static final native int SetLoopStartBBU(int refnum, PlayerPos pos);
 	
 	/**
 	Set the position of the loop end marker with a position given in musical time 
@@ -282,7 +275,7 @@ public final class MidiPlayer {
 	marker.
 	*/
 
-	public  static final native  int   SetLoopEndBBU  (int refnum,  PlayerPos pos);
+	public  static final native int SetLoopEndBBU(int refnum, PlayerPos pos);
 	
 	/**
 	Set the position of the loop start marker with a date given in millisecond. This 
@@ -294,7 +287,7 @@ public final class MidiPlayer {
 	marker.
 	*/
 
-	public  static final native  int   SetLoopStartMs (int refnum,   int date_ms);
+	public  static final native int SetLoopStartMs(int refnum, int date_ms);
 	
 	/**
 	Set the position of the loop end marker with a date given in millisecond. This 
@@ -305,7 +298,7 @@ public final class MidiPlayer {
 	end marker before a the Loop start marker or a Loop start after a Loop end marker.
 	*/
 
-	public  static final native  int   SetLoopEndMs  (int refnum,   int date_ms);
+	public  static final native int SetLoopEndMs(int refnum, int date_ms);
 	
 	// Synchronisation management
 	
@@ -328,7 +321,7 @@ public final class MidiPlayer {
 	*@param state can be kInternalSync, kClockSync, kSMPTEsync or kExternalSync.
 	*/
 
-	public  static final native  void  SetSynchroIn  (int refnum, int state);
+	public  static final native void SetSynchroIn(int refnum, int state);
 	
 	/**
 	Set the Player mode of synchronization sending, which can be kNoSyncOut or 
@@ -339,7 +332,7 @@ public final class MidiPlayer {
 	*@param state can be kNoSyncOut or kClockSyncOut.
 	*/
 
-	public  static final native  void  SetSynchroOut  (int refnum,int state);
+	public  static final native void SetSynchroOut(int refnum,int state);
 		
 	/**
 	Allows to change the current tempo when the Player is in kExternalSync mode. 
@@ -357,7 +350,7 @@ public final class MidiPlayer {
 	*@param smptepos a SmpteLoc object.
 	*/
 
-	public  static final native  void  SetSMPTEOffset  (int refnum, SmpteLoc smptepos) ;
+	public  static final native void SetSMPTEOffset(int refnum, SmpteLoc smptepos);
 	
 	// State management
 	
@@ -368,7 +361,7 @@ public final class MidiPlayer {
 	*@param state a PlayerState object, will be filled with the state of the Player.
 	*/
 
-	public  static final native  void   GetState  (int refnum,  PlayerState playerstate) ;
+	public  static final native void GetState(int refnum,  PlayerState playerstate) ;
 	
 	/**
 	Returns  information about the last event in the score: position in musical time 
@@ -379,7 +372,7 @@ public final class MidiPlayer {
 	(Bar, Beat,Unit) and millisecond.
 	*/
 
-	public  static final native  void   GetEndScore  (int refnum, PlayerState playerstate);
+	public  static final native void GetEndScore(int refnum, PlayerState playerstate);
 	
 	// Step playing 
 	
@@ -392,7 +385,7 @@ public final class MidiPlayer {
 	*@param state can be kStepPlay or kStepMute : event will be played or not.	
 	*/
 
-	public  static final native void   ForwardStep  (int refnum , int flag);
+	public  static final native void ForwardStep(int refnum , int flag);
 	
 	/**
 	This function allows to implement step playing. BackwardStep plays 
@@ -403,7 +396,7 @@ public final class MidiPlayer {
 	*@param state can be kStepPlay or kStepMute : event will be played or not.	
 	*/
 
-	public  static final native void   BackwardStep  (int refnum , int flag);
+	public  static final native void BackwardStep(int refnum , int flag);
 	
 	
 	// Tracks management
@@ -416,7 +409,7 @@ public final class MidiPlayer {
 	*@return The result is a MidiShare sequence where all tracks are mixed.
 	*/
 
-	public  static final native  int   GetAllTrack  (int refnum);
+	public  static final native int GetAllTrack(int refnum);
 	/**
 	Returns a track contained in a Player as a MidiShare sequence given the 
 	tracknumber. The returned sequence is a COPY of the internal track.
@@ -425,7 +418,7 @@ public final class MidiPlayer {
 	*@return The result is MidiShare sequence.
 	*/
 
-	public  static final native  int   GetTrack  (int refnum, int tracknum);
+	public  static final native int GetTrack(int refnum, int tracknum);
 	
 	/**
 	Replace a track in a Player with a new MidiShare sequence. The existing track 
@@ -440,7 +433,7 @@ public final class MidiPlayer {
 	*/
 
 	
-	public  static final native  int   SetTrack  (int refnum, int tracknum, int seq);
+	public  static final native int SetTrack(int refnum, int tracknum, int seq);
 	
 	/**
 	Replace all tracks of a Player with a new MidiShare sequence. All tracks are 
@@ -455,7 +448,7 @@ public final class MidiPlayer {
 	when the Player is running or if the sequence could not be inserted.
 	*/
 
-	public  static final native  int   SetAllTrack  (int refnum, int seq, int ticks_per_quarter);
+	public  static final native int SetAllTrack(int refnum, int seq, int ticks_per_quarter);
 	
 	/**
 	Set parameters which define the behavior of a track: a track can be muted or 
@@ -466,7 +459,7 @@ public final class MidiPlayer {
 	*@param param is the parameter to be set (kMute or kSolo).
 	*@param val is tha value to be set, can be kMuteOn, kMuteOff, kSoloOn or kSoloOff.
 	*/
-	public  static final native void   SetParam  (int refnum, int tracknum, int param , int value);
+	public  static final native void SetParam(int refnum, int tracknum, int param , int value);
 	
 	/**
 	Returns the current value of the parameter solo or mute in a track.
@@ -477,7 +470,7 @@ public final class MidiPlayer {
 	*@return The result is the value of the corresponding parameter.
 	*/
 
-	public  static final native int  GetParam  (int refnum, int tracknum, int  param);
+	public  static final native int  GetParam(int refnum, int tracknum, int  param);
 	
 	/**
 	This function is provided as a way to insert in real-time new events 
@@ -495,7 +488,7 @@ public final class MidiPlayer {
 	*@return The result is an error code. This error is returned if the score "slice" can not be inserted.
 	*/
 			
-	public  static final native int  InsertAllTrack  (int refnum,  int seq);
+	public  static final native int  InsertAllTrack(int refnum,  int seq);
 
 	/**
 	This function is provided as a way to insert in real-time new events 
@@ -511,10 +504,10 @@ public final class MidiPlayer {
 	*@return The result is an error code. This error is returned if the track "slice" can not be inserted.	
 	*/
 
-	public  static final native int  InsertTrack  (int refnum, int tracknum, int seq);
+	public  static final native int  InsertTrack(int refnum, int tracknum, int seq);
 	
-	static final 	native int Load (String name, int sequence, MidiFileInfos info);
-	static final  	native int Save (String name, int sequence, MidiFileInfos info); 
+	static final 	native int Load(String name, int sequence, MidiFileInfos info);
+	static final  	native int Save(String name, int sequence, MidiFileInfos info); 
 
   	static {
 		if (!interfaceLoaded){

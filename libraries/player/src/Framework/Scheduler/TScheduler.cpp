@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,7 +37,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-TScheduler::TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl){Init(synchro,appl);}
+TScheduler::TScheduler(TSynchroniserInterfacePtr synchro, TMidiApplPtr appl) {Init(synchro,appl);}
 
 /*--------------------------------------------------------------------------*/
 
@@ -112,7 +112,7 @@ void TScheduler::ExecuteTaskInt(TTicksTaskPtr task, ULONG date_ms)
 	if (task->IsRunning()) {
 		task->SetIdle();
 		task->Execute(fMidiAppl,date_ms);
-	}else {   	   // Forgeted task 
+	} else {   	   // Forgeted task 
 		task->SetIdle();
 	}
 }
@@ -138,7 +138,7 @@ void MSALARMAPI ExecuteTask(ULONG date_ms, short refnum, long scheduler, long ta
 
 /*----------------------------------------------------------------------------*/
 
-void  TScheduler::RemoveTask(TTicksTaskPtr task){ fTaskTable[task->GetIndex()] = 0;}
+void  TScheduler::RemoveTask(TTicksTaskPtr task) { fTaskTable[task->GetIndex()] = 0;}
 
 /*----------------------------------------------------------------------------*/
 /*
@@ -154,7 +154,7 @@ Boolean  TScheduler::InsertTask(TTicksTaskPtr task)
 		if (task->GetIndex() < 0) task->SetIndex(fTaskIndex++); 
 		fTaskTable[task->GetIndex()] = task;
 		return true;
-	}else {
+	} else {
 		return false;
 	}
  } 		

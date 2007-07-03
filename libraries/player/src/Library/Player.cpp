@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -144,7 +144,7 @@ short  EXPORT OpenPlayer(MidiName name)
 void   EXPORT ClosePlayer(short refnum)
 {
 	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
-	if (player){
+	if (player) {
 		player->Close();
 		delete(player);
 	}

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2001
+  Copyright © Grame 1999-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,11 +33,8 @@ This class describes a DriverInfos structure.
 *@see grame.midishare.Midi#GetDriverInfos
 */
 
-
 public final class  DriverInfos
 {
-	// pointer to C string (Warning : for internal use only, do not use it)
-	int	nameAux;  
 	/** Driver name*/	 		
 	public String	name;
 	/** Driver version*/	
@@ -48,6 +45,6 @@ public final class  DriverInfos
  	public int		reserved[];	
  	
  	public DriverInfos() {
- 		reserved = new int [2];
+ 		reserved = new int[2];
  	}
 }

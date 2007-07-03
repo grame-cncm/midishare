@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -65,8 +65,8 @@ class TScoreIterator {
 		
 		virtual ~TScoreIterator();
 		
-		void			SetNextIterator(TScoreIterator* inIt){ fNextIt = inIt;}
-		TScoreIterator*	GetNextIterator(){return fNextIt;}
+		void			SetNextIterator(TScoreIterator* inIt) { fNextIt = inIt;}
+		TScoreIterator*	GetNextIterator() {return fNextIt;}
 		
 		void Init();
 		void Init(TEventPtr cur);
@@ -100,7 +100,7 @@ class TScoreIterator1 :	public TScoreIterator {
 		
 		public:
 		
-			virtual ~TScoreIterator1(){}
+			virtual ~TScoreIterator1() {}
 		
 			TScoreIterator1(TScorePtr score) 
 			{

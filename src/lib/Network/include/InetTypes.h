@@ -49,7 +49,7 @@ enum {  kDefaultLANPort=4950, kDefaultLANLatency = 10, kDefaultLANGroupTime = 10
 
 #define kWANVersion		100
 
-# if defined(__MACH__) && defined(__ppc__) && defined(__GNUC__)
+# if defined(__MACH__) && (defined(__ppc__) || defined(__i386__))  && defined(__GNUC__)
 # define __MacOSX__
 #endif
 

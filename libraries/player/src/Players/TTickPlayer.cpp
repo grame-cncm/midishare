@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -56,7 +56,7 @@ void TTickPlayer::PlaySlice(ULONG date_ms)
    TEventPtr cur;	
 	if (fIterator.IsLastEv()) {
 		fEventUser->CopyAndUseEvent(fIterator.CurEv(),date_ms);
-	}else {
+	} else {
 	
 		// For all events at the same date
 		while ((cur = fIterator.NextDateEv())) {fEventUser->CopyAndUseEvent(cur,date_ms);}

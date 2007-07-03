@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -53,7 +53,7 @@ void MSALARMAPI TMidiAppl::GenericReceiveAlarm(short ref)
 
 void MSALARMAPI TMidiAppl::GenericApplAlarm(short ref, long code) 
 {
-	((TMidiApplPtr)MidiGetInfo(ref))->ApplAlarm (ref,code);
+	((TMidiApplPtr)MidiGetInfo(ref))->ApplAlarm(ref,code);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -64,11 +64,11 @@ short TMidiAppl::Open(MidiName name)
 		
 	#if defined (__Macintosh__) && defined (__MacOS9__)
 		fUPPGenericTask = NewTaskPtr(GenericTask);
-		fUPPGenericReceiveAlarm =  NewRcvAlarmPtr(GenericReceiveAlarm);
-		fUPPGenericApplAlarm =  NewApplAlarmPtr(GenericApplAlarm);
+		fUPPGenericReceiveAlarm = NewRcvAlarmPtr(GenericReceiveAlarm);
+		fUPPGenericApplAlarm = NewApplAlarmPtr(GenericApplAlarm);
 	#else
 		fUPPGenericTask = (TaskPtr)GenericTask;
-		fUPPGenericReceiveAlarm =  (RcvAlarmPtr)GenericReceiveAlarm;
+		fUPPGenericReceiveAlarm = (RcvAlarmPtr)GenericReceiveAlarm;
 		fUPPGenericApplAlarm = (ApplAlarmPtr)GenericApplAlarm;
   	#endif
 	
@@ -91,7 +91,7 @@ short TMidiAppl::Open(MidiName name)
 		MidiSetFilter(fRefnum, fFilter);
 		MidiSetInfo(fRefnum, this);
 		
-	}else {
+	} else {
 		 Close();
 	}
 	
@@ -123,9 +123,9 @@ void TMidiAppl::Close()
 /*--------------------------------------------------------------------------*/
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
-		void TMidiAppl::NewMidiTask (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
+		void TMidiAppl::NewMidiTask (UPPTaskPtr routine, ULONG date, long a1, long a2, long a3, MidiEvPtr* adr) {
 	#else
-		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date,  long a1,long a2,long a3, MidiEvPtr* adr){
+		void TMidiAppl::NewMidiTask (TaskPtr routine, ULONG date, long a1, long a2, long a3, MidiEvPtr* adr) {
 	#endif
 	
 	MidiEvPtr ev;
@@ -133,22 +133,22 @@ void TMidiAppl::Close()
 	ev= MidiNewEv(typeProcess);
      
  	if( ev) {
- 		Date(ev)= date;
-		RefNum(ev)= fRefnum;
-		ext= LinkST(ev);
+ 		Date(ev) = date;
+		RefNum(ev) = fRefnum;
+		ext = LinkST(ev);
 		#ifdef __MacOS9__
-			ext->ptr1= (Ptr)routine;
-			ext->ptr2= (Ptr)a1;
-			ext->ptr3= (Ptr)a2;
-			ext->ptr4= (Ptr)a3;
+			ext->ptr1 = (Ptr)routine;
+			ext->ptr2 = (Ptr)a1;
+			ext->ptr3 = (Ptr)a2;
+			ext->ptr4 = (Ptr)a3;
 		#else
-			ext->val[0]= (long)routine;
-			ext->val[1]= (long)a1;
-			ext->val[2]= (long)a2;
-			ext->val[3]= (long)a3;
+			ext->val[0] = (long)routine;
+			ext->val[1] = (long)a1;
+			ext->val[2] = (long)a2;
+			ext->val[3] = (long)a3;
 		#endif
 		*adr = ev;
-		MidiSend(fRefnum,ev);
+		MidiSend(fRefnum, ev);
 	}else
 		*adr = 0;
 }
@@ -156,7 +156,7 @@ void TMidiAppl::Close()
 
 
 #ifdef __MSWindows__
-	void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long a3,MidiEvPtr* adr)
+	void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date, long a1, long a2, long a3, MidiEvPtr* adr)
 
 {
 	MidiEvPtr ev;
@@ -164,15 +164,15 @@ void TMidiAppl::Close()
 	ev= MidiNewEv(typeProcess);
 	
  	if( ev) {
- 		Date(ev)= date;
-		RefNum(ev)= (Byte)fRefnum;
-		ext= LinkST(ev);
-		ext->ptr1= (Ptr)routine;
-		ext->ptr2= (Ptr)a1;
-		ext->ptr3= (Ptr)a2;
-		ext->ptr4= (Ptr)a3;
+ 		Date(ev) = date;
+		RefNum(ev) = (Byte)fRefnum;
+		ext = LinkST(ev);
+		ext->ptr1 = (Ptr)routine;
+		ext->ptr2 = (Ptr)a1;
+		ext->ptr3 = (Ptr)a2;
+		ext->ptr4 = (Ptr)a3;
 		*adr = ev;
-		MidiSend(fRefnum,ev);
+		MidiSend(fRefnum, ev);
 	}else
 		*adr = 0;
 }
@@ -193,20 +193,20 @@ void  TMidiAppl::NewMidiTask(TaskPtr routine, ULONG date,  long a1,long a2,long 
 
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
-		void TMidiAppl::NewMidiCall (UPPTaskPtr routine, ULONG date,  long a1,long a2,long a3)
+		void TMidiAppl::NewMidiCall(UPPTaskPtr routine, ULONG date, long a1, long a2, long a3)
 	#else
-		void TMidiAppl::NewMidiCall (TaskPtr routine, ULONG date,  long a1,long a2,long a3)
+		void TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date, long a1, long a2, long a3)
 	#endif
 
 #endif
 
 #ifdef __MSWindows__
-	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date,  long a1,long a2,long a3)
+	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date, long a1, long a2, long a3)
 #endif
 
 #ifdef __Linux__
-	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date,  long a1,long a2,long a3)
+	void  TMidiAppl::NewMidiCall(TaskPtr routine, ULONG date, long a1, long a2, long a3)
 #endif
 {
-	MidiCall(routine,date,fRefnum,a1,a2,a3);
+	MidiCall(routine, date, fRefnum, a1, a2, a3);
 }

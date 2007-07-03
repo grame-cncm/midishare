@@ -13,7 +13,7 @@ DESCRIPTION
 ===============================================================================*/
  
 #include <stdio.h>
-
+#include <stdlib.h>
 #include <MidiShare.h>
 #include "midifile.h"
 

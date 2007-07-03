@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -42,7 +42,7 @@ class TChaserInterface {
 
 	public:
 	
-		virtual ~TChaserInterface(){}
+		virtual ~TChaserInterface() {}
 	
 		virtual void Init() = 0;
 		
@@ -80,8 +80,8 @@ class TChaserIterator :public TChaserInterface {
 			
 	public:
 	
-		TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user):fChaser(user),fIterator(score){}
-		virtual ~TChaserIterator(){}
+		TChaserIterator(TScorePtr score, TEventSenderInterfacePtr user):fChaser(user),fIterator(score) {}
+		virtual ~TChaserIterator() {}
 	
 		void Init();
 		

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -45,8 +45,8 @@ class TScoreInserter : public TScoreObjFollower {
 		
 	public:
  
- 		TScoreInserter(TPlayerScorePtr score, ULONG tpq):TScoreObjFollower(score,tpq),fScore(score){}
- 		virtual ~TScoreInserter(){}
+ 		TScoreInserter(TPlayerScorePtr score, ULONG tpq):TScoreObjFollower(score,tpq),fScore(score) {}
+ 		virtual ~TScoreInserter() {}
  		
  		long InsertAllTrack(MidiSeqPtr s);
  		long InsertTrack(short tracknum, MidiSeqPtr s);

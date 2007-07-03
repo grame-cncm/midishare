@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -48,7 +48,7 @@ ULONG TPlayerScore::GetLastDate() { return fScoreEnd->GetDate();}
 
 /*----------------------------------------------------------------------------*/
 
-TPlayerScore::TPlayerScore():TScore(){ Init();}
+TPlayerScore::TPlayerScore():TScore() { Init();}
 
 /*----------------------------------------------------------------------------*/
 
@@ -120,7 +120,7 @@ void TPlayerScore::InsertAfterEvent(TEventPtr ev1, TEventPtr ev2)
 	if (ev1 == fScoreEnd) {
 		TScore::InsertBeforeEvent(ev1,ev2);
 		AdjustEndDate(ev2->GetDate());  
-	}else{
+	} else {
 		TScore::InsertAfterEvent(ev1,ev2);
 	}
 }
@@ -134,9 +134,9 @@ void TPlayerScore::InsertBeforeEvent(TEventPtr ev1, TEventPtr ev2)
 	
 	if (ev1 == fScoreBegin) { 
 		InsertAtBeginEvent(ev2);
-	}else if (ev1 == fScoreEnd) {
+	} else if (ev1 == fScoreEnd) {
 		InsertAtEndEvent(ev2);
-	}else {
+	} else {
 		TScore::InsertBeforeEvent(ev1,ev2);
 	}
 }
@@ -191,7 +191,7 @@ short  TPlayerScore::InsertEventsIn(TScoreIteratorPtr it, MidiEvPtr* adr)
 			if ((next = TEventFactory::GenericCreateEvent(e1))) {
 				InsertBeforeEvent(cur,next);
 				e1 = e2;
-			}else{
+			} else {
 				return kErrEvent;
 			}
 		}
@@ -214,7 +214,7 @@ short TPlayerScore::InsertEventsIn(TScoreIteratorPtr it, MidiEvPtr* adr, short t
 				TrackNum(e1) = (unsigned char)tracknum;
 				InsertBeforeEvent(cur,next);
 				e1 = e2;
-			}else{
+			} else {
 				return kErrEvent;
 			}
 		}
@@ -286,7 +286,7 @@ long TPlayerScore::SetTrack(short tracknum,MidiSeqPtr s)
 		MidiFreeCell((MidiEvPtr)s);
 		return kNoErr;
 		
-	}else{
+	} else {
 		return kErrSequencer;
 	}
 }
@@ -307,7 +307,7 @@ MidiSeqPtr TPlayerScore::GetAllTrack()
 	
 		while ((cur = it.NextEv())) {
 			e1 = cur->MidiEvent();
-			if (IsScore (e1)){
+			if (IsScore (e1)) {
 				if (!UMidi::Copy_AddSeq(dst,e1)) {
 					MidiFreeSeq(dst);
 					return 0;
@@ -335,7 +335,7 @@ MidiSeqPtr TPlayerScore::GetTrack(short tracknum)
 	
 		while ((cur = it.NextEv())) {
 			e1 = cur->MidiEvent();
-			if (IsScore (e1) && (TrackNum(e1) == tracknum)){
+			if (IsScore (e1) && (TrackNum(e1) == tracknum)) {
 				if (!UMidi::Copy_AddSeq(dst,e1)) {
 					MidiFreeSeq(dst);
 					return 0;
@@ -404,7 +404,7 @@ void TPlayerScore::ClearTrack (short tracknum)
 	
 	while ((cur = it.NextEv())) {
 		e = cur->MidiEvent();
-		if (IsScore(e) && (TrackNum(e) == tracknum)){
+		if (IsScore(e) && (TrackNum(e) == tracknum)) {
 			RemoveEvent(cur);
 			delete(cur);
 		}
@@ -416,6 +416,6 @@ void TPlayerScore::ClearTrack (short tracknum)
 void TPlayerScore::CheckAndAllocateMemory() 
 {
 	ULONG l = Length() + kMemoryLimit;
-	if (MidiFreeSpace() < l) MidiGrowSpace(l);
+	if (ULONG(MidiFreeSpace()) < l) MidiGrowSpace(l);
 }
 	

@@ -8,7 +8,7 @@
 		01205B34015611757F000001 = {
 			explicitFileType = "compiled.mach-o.dylib";
 			isa = PBXFileReference;
-			path = libJMidi.1.1.1.jnilib;
+			path = libJMidi.1.1.2.jnilib;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -30,7 +30,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PREFIX_HEADER = jniheader.h;
-				PRODUCT_NAME = libJMidi.1.1.1.jnilib;
+				PRODUCT_NAME = libJMidi.1.1.2.jnilib;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";

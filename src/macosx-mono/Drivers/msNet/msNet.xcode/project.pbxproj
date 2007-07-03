@@ -6,8 +6,7 @@
 	objectVersion = 39;
 	objects = {
 		4B97CB95050CC7B400053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
@@ -404,8 +403,6 @@
 			sourceTree = "<group>";
 		};
 		F727EA290209364501053118 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -418,8 +415,6 @@
 			name = Development;
 		};
 		F727EA2A0209364501053118 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -440,16 +435,14 @@
 		};
 		F727EA2C0209389101053118 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
+			isa = PBXFileReference;
 			path = msLANDriver.1.0.2.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F727EA2D0209389101053118 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
+			isa = PBXFileReference;
 			path = msWANDriver.1.0.2.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;

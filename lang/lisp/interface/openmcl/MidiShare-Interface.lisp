@@ -72,8 +72,9 @@
 ;;;   17-03-04   Rename type macro to evtype in OpenMCL and CMUCL interfaces
 ;;;   19-03-04   New MidiNewSmpteLocation, MidiFreeSmpteLocation, MidiNewSyncInfo, MidiFreeSyncInfo
 ;;;   19-03-04   Add nullptr and nullptrp for OpenMCL interface 
-;;;	  22-03-04   Correct MidiFreeSmpteLocation and MidiFreeSyncInfo for OpenMcl interface
-;;;	  07-07-04   Val renamed to valint to avoid symbol conflict
+;;;   22-03-04   Correct MidiFreeSmpteLocation and MidiFreeSyncInfo for OpenMcl interface
+;;;   07-07-04   Val renamed to valint to avoid symbol conflict
+;;;   02-06-06   Remove MIDISHARE symbol that cause a package conflict on MCL 5.1
 
 (in-package :cl-user)       
     
@@ -106,7 +107,7 @@
           "LINKSE" "LINKST" "KPRESS" "CTRL" "PARAM" "NUM" "PREFIX" "TEMPO" "SECONDS"
           "SUBFRAMES" "VALINT" "PGM" "BEND" "CLK" "SONG" "FIELDS" "TEXT" "FMSG" "FCOUNT"
           "TSNUM" "TSDENOM" "TSCLICK" "TSQUARTER" "ALTERATION" "MINOR-SCALE" "INFO"
-          "FIRSTEV" "LASTEV" "MIDISHARE"
+          "FIRSTEV" "LASTEV" 
           "MIDIGETVERSION" "MIDICOUNTAPPLS" "MIDIGETINDAPPL"
           "MIDIGETNAMEDAPPL" "MIDIOPEN" "MIDICLOSE"
           "MIDIGETNAME" "MIDISETNAME" "MIDIGETINFO" "MIDISETINFO" "MIDINEWFILTER"

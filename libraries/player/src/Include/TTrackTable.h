@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -49,8 +49,8 @@ class TTrackTable {
 		        
 			short fParam[kMaxParam];   // Parameter table for one track
 			
-		 	TTrack(){Init();}	
-		 	virtual ~TTrack(){}
+		 	TTrack() {Init();}	
+		 	virtual ~TTrack() {}
 		 		
 		 	void Init() 
 		 	{
@@ -72,8 +72,8 @@ class TTrackTable {
 		
 	public:
  	
- 		TTrackTable():fSolo(0){}
- 		virtual ~TTrackTable(){}
+ 		TTrackTable():fSolo(0) {}
+ 		virtual ~TTrackTable() {}
  	
 		void	SetParam (short tracknum, short param, short value);
 		short	GetParam (short tracknum, short param);

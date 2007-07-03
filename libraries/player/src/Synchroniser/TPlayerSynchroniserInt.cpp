@@ -1,6 +1,6 @@
-/*
+  /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,17 +37,17 @@
 void TPlayerSynchroniserInt::PlaySlice() 
 {
 	TEventPtr cur; 
-	if (!fIterator.IsLastEv()){
+	if (!fIterator.IsLastEv()) {
 	
 		ULONG cur_tempo = fTempoVisitor.GetTempo();
 	
 		// For all events at the same date
-		while ((cur = fIterator.NextDateEv())){
+		while ((cur = fIterator.NextDateEv())) {
 			cur->Accept(&fTempoVisitor,true);
 		}
 		
 		// If Tempo has changed, update the Scheduler
-		if (cur_tempo != fTempoVisitor.GetTempo()){ 
+		if (cur_tempo != fTempoVisitor.GetTempo()) { 
 			fScheduler->ReScheduleTasks(); 
 		}
 		
@@ -58,7 +58,7 @@ void TPlayerSynchroniserInt::PlaySlice()
 
 /*--------------------------------------------------------------------------*/
 
-void TPlayerSynchroniserInt::Init(){fFollower.Init();}
+void TPlayerSynchroniserInt::Init() {fFollower.Init();}
 
 /*--------------------------------------------------------------------------*/
 
@@ -96,7 +96,8 @@ Boolean TPlayerSynchroniserInt::IsSchedulable(ULONG date_ticks) {return fState->
 
 ULONG TPlayerSynchroniserInt::GetPosTicks() 
 {
-	if (fState->IsRunning()) fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
+	if (fState->IsRunning()) 
+		fTempoVisitor.UpdateMs(MidiGetTime() - fOffset);
 	return fTempoVisitor.CurDateTicks();
 }
 

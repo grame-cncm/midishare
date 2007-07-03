@@ -32,24 +32,26 @@
 /* History : 1/06/96  version 1.00
 /*           15/07/96 version 1.01  correction retour de certaines fonctions
 /*           16/07/96 version 1.02  MidiShare package management
-/*            ....... version 1.03
-/*           08/10/96  version 1.04  Packages names in unsercase
-/*           26/07/97  version 1.07  New InsertAllTrack and InsertTrack functions
-/*           25/11/97  version 1.08  NewSetTempo function and kExternalSync mode
-/*           28/11/97  version 1.09  JNI compatible
-/*	     06/11/02  version 1.10  Add null pointer checking for objects coming from Java side
+/*           ??/??/?? version 1.03
+/*           08/10/96 version 1.04  Packages names in unsercase
+/*           26/07/97 version 1.07  New InsertAllTrack and InsertTrack functions
+/*           25/11/97 version 1.08  NewSetTempo function and kExternalSync mode
+/*           28/11/97 version 1.09  JNI compatible
+/*	         06/11/02 version 1.10  Add null pointer checking for objects coming from Java side
+/*           ??/??/?? version 1.11  Intel version 
+/*           01/08/06 version 1.12  Use of JNI string
 /*****************************************************************************/
 
 #include <Player.h>
 #include "MidiPlayer.h"
 
 /*--------------------------------------------------------------------------*/
- void pTocCopy(  char *dest,  unsigned char * src);
- void cTocCopy(  char *dest,  char * src);
- void cTopCopy(  unsigned char *dest,  char * src);
+ void pTocCopy(char *dest,  unsigned char * src);
+ void cTocCopy(char *dest,  char * src);
+ void cTopCopy(unsigned char *dest,  char * src);
 
 /*--------------------------------------------------------------------------*/
- void pTocCopy(  char *dest,  unsigned char * src)  // chaine pascal dans chaine c
+ void pTocCopy(char *dest,  unsigned char * src)  // chaine pascal dans chaine c
 {
 	register short i;
 	
@@ -60,7 +62,7 @@
 }
 
 /*--------------------------------------------------------------------------*/
- void cTocCopy(  char *dest,  char * src) // chaine c dans chaine c
+ void cTocCopy(char *dest,  char * src) // chaine c dans chaine c
 {
 	register short i = 0;
 	
@@ -72,7 +74,7 @@
 }
 
 /*--------------------------------------------------------------------------*/
- void cTopCopy(  unsigned char *dest,  char * src) // chaine c dans chaine p
+ void cTopCopy(unsigned char *dest,  char * src) // chaine c dans chaine p
 {
 	register short i = 0;
 	
@@ -85,85 +87,84 @@
 
 /*--------------------------------------------------------------------------*/
 #define Check_Pointer(env,ptr)\
-    if ((ptr) == NULL){\
+    if ((ptr) == NULL) {\
         (*(env))->ThrowNew((env), (*(env))->FindClass((env),"java.lang.NullPointerException"), "");\
         return;\
     }\
 
 /*--------------------------------------------------------------------------*/
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
-  (JNIEnv * inEnv, jclass cl, jint midiname){
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Open
+  (JNIEnv * inEnv, jclass cl, jstring str) {
   
-  	#ifdef __Macintosh__
-    		unsigned char buffer [128];
-    		cTopCopy (buffer, (char*)midiname);
-		return  OpenPlayer(buffer);
-	#else
-    		char buffer [128];
-    		cTocCopy (buffer, (char*)midiname);
-		return  OpenPlayer(buffer);
-	#endif
+  	const char *midiname;
+	jint refNum;
+
+	midiname = (*inEnv)->GetStringUTFChars(inEnv, str, NULL);
+	if (midiname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	refNum = (jint) OpenPlayer(midiname);
+	(*inEnv)->ReleaseStringUTFChars(inEnv, str, midiname); 
+	return refNum;
 }
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Close
-  (JNIEnv * inEnv, jclass cl, jint ref){
+  (JNIEnv * inEnv, jclass cl, jint ref) {
 
  	ClosePlayer(ref);
  }
  
  /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Start
-  (JNIEnv * inEnv, jclass cl, jint ref){
+  (JNIEnv * inEnv, jclass cl, jint ref) {
 
  	StartPlayer(ref);
  }
 
  /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Cont
-  (JNIEnv * inEnv, jclass cl, jint ref){
+  (JNIEnv * inEnv, jclass cl, jint ref) {
 
  	ContPlayer(ref);
  }
 
  /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Pause
-  (JNIEnv * inEnv,  jclass cl, jint ref){
+  (JNIEnv * inEnv,  jclass cl, jint ref) {
 
  	PausePlayer(ref);
  }	
 
  /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Stop
-  (JNIEnv * inEnv, jclass cl, jint ref){
+  (JNIEnv * inEnv, jclass cl, jint ref) {
 
  	StopPlayer(ref);
  }
 
  /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetRecordMode
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint mode){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint mode) {
 
  	SetRecordModePlayer(refnum, mode);
  }
  
  /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_Record
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum) {
 
  	RecordPlayer(refnum, tracknum);
  }
  
  /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetRecordFilter
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint filter){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint filter) {
 
  	SetRecordFilterPlayer(refnum, (MidiFilterPtr)filter);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
-  (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos) {
 
  	Pos tpos;
  	jfieldID fbar,fbeat,funit;
@@ -187,21 +188,21 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosBBU
 
 /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetPosMs
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint date) {
 
  	SetPosMsPlayer(refnum, date);
  }
  
 /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetLoop
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint loopstate){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint loopstate) {
 
  	SetLoopPlayer(refnum, loopstate);
  }
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartBBU
-  (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jobject pos) {
   
  	Pos tpos;
  	jfieldID fbar,fbeat,funit;
@@ -225,7 +226,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartBBU
  
  /*--------------------------------------------------------------------------*/
  JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopEndBBU
-  (JNIEnv * inEnv, jclass cl, jint refnum , jobject pos){
+  (JNIEnv * inEnv, jclass cl, jint refnum , jobject pos) {
 
  	Pos tpos;
  	jfieldID fbar,fbeat,funit;
@@ -249,42 +250,42 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartBBU
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopStartMs
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint date) {
 
  	return SetLoopStartMsPlayer(refnum, date);
  }
 
 /*--------------------------------------------------------------------------*/
  JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetLoopEndMs
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint date){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint date) {
 
  	return SetLoopEndMsPlayer(refnum, date);
  }
 
 /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroIn
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate) {
 
  	SetSynchroInPlayer(refnum,  syncstate);
  }
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSynchroOut
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint syncstate) {
 
  	SetSynchroOutPlayer(refnum,  syncstate);
   }
   
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetTempo
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tempo){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tempo) {
 
  	SetTempoPlayer(refnum,  tempo);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSMPTEOffset
-  (JNIEnv * inEnv, jclass cl, jint refnum, jobject smptepos){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jobject smptepos) {
   
  	TSmpteLocation tsmptepos;
  	jfieldID fformat,fhours,fminutes,fseconds,fframes,ffracs;
@@ -315,7 +316,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetSMPTEOffset
  
  /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetState
-  (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate) {
 
  	PlayerState tstate;
  	jfieldID fdate,ftempo,ftsnum,ftsdenom,ftsclick,ftsquarter,fbar,fbeat,funit,fstate,fsyncin,fsyncout;
@@ -361,7 +362,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetState
  
  /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetEndScore
- (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate){
+ (JNIEnv * inEnv, jclass cl, jint refnum, jobject playerstate) {
 
  	PlayerState tstate;
  	jfieldID fdate,ftempo,ftsnum,ftsdenom,ftsclick,ftsquarter,fbar,fbeat,funit,fstate,fsyncin,fsyncout;
@@ -408,77 +409,77 @@ JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_GetEndScore
 
 /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_ForwardStep
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate) {
 
  	ForwardStepPlayer(refnum, stepstate);
  }
  
 /*--------------------------------------------------------------------------*/
  JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_BackwardStep
-   (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate){
+   (JNIEnv * inEnv, jclass cl, jint refnum, jint stepstate) {
 
 	BackwardStepPlayer(refnum, stepstate);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetAllTrack
-  (JNIEnv * inEnv, jclass cl, jint refnum){
+  (JNIEnv * inEnv, jclass cl, jint refnum) {
 
  	return (jint)GetAllTrackPlayer(refnum);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetTrack
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum) {
 
  	return (jint)GetTrackPlayer(refnum, tracknum);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetTrack
-  (JNIEnv *inEnv, jclass cl, jint refnum, jint tracknum, jint seq){
+  (JNIEnv *inEnv, jclass cl, jint refnum, jint tracknum, jint seq) {
 
  	return SetTrackPlayer(refnum, tracknum, (MidiSeqPtr)seq);
  }
  
 /*--------------------------------------------------------------------------*/
  JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_SetAllTrack
-  (JNIEnv * inEnv, jclass cl, jint refnum , jint seq, jint tpq){
+  (JNIEnv * inEnv, jclass cl, jint refnum , jint seq, jint tpq) {
 
    	return SetAllTrackPlayer(refnum, (MidiSeqPtr)seq, tpq);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT void JNICALL Java_grame_midishare_player_MidiPlayer_SetParam
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param, jint value){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param, jint value) {
 
  	SetParamPlayer( refnum, tracknum,  param ,  value);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_GetParam
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint param) {
 
  	return GetParamPlayer(refnum, tracknum, param);
  }
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertAllTrack
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint seq){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint seq) {
 
  	return InsertAllTrackPlayer(refnum, (MidiSeqPtr)seq);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_InsertTrack
-  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint seq){
+  (JNIEnv * inEnv, jclass cl, jint refnum, jint tracknum, jint seq) {
 
  	return InsertTrackPlayer(refnum,tracknum, (MidiSeqPtr)seq);
  }
  
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Load
-  (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj){
+  (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj) {
 
 	/* no more implemented */
 	
@@ -487,7 +488,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Load
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Save
-  (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj){
+  (JNIEnv * inEnv, jclass cl, jstring str, jint seq, jobject obj) {
 
 	/* no more implemented */
 	

@@ -9,11 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     grame_midishare_player_MidiPlayer
- * Method:    OpenAux
- * Signature: (I)I
+ * Method:    Open
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_OpenAux
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jint JNICALL Java_grame_midishare_player_MidiPlayer_Open
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     grame_midishare_player_MidiPlayer

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -54,7 +54,7 @@ class TEventTable {
 		MidiEvPtr 	RemoveEvent(MidiEvPtr ev)	{return fHashTable.RemoveEvent(ev);}
 		MidiEvPtr 	RemoveEvent1(MidiEvPtr ev)	{return fHashTable.RemoveEvent1(ev);}
 	
-		virtual ~TEventTable(){}
+		virtual ~TEventTable() {}
 		
 		virtual void ChaseOn(TEventSenderInterfacePtr user , ULONG date_ms) 
 		{
@@ -63,7 +63,7 @@ class TEventTable {
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur = fHashTable.GetLine(i);
 				while (cur) {
-					if ((e = MidiCopyEv(cur))){user->UseEvent(e,date_ms);}
+					if ((e = MidiCopyEv(cur))) {user->UseEvent(e,date_ms);}
 					cur = Link(cur);
 				}
 			}
@@ -86,7 +86,7 @@ class TKeyOnTable : public TEventTable {
 
 	public:
 	
-		virtual ~TKeyOnTable(){}
+		virtual ~TKeyOnTable() {}
 
 		void ChaseOn(TEventSenderInterfacePtr user, ULONG date_ms) {}
 	
@@ -97,7 +97,7 @@ class TKeyOnTable : public TEventTable {
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur =  fHashTable.GetLine(i);
 				while (cur) {
-					if ((e = MidiCopyEv(cur))){
+					if ((e = MidiCopyEv(cur))) {
 						EvType(e) = typeKeyOff;
 						Vel(e) = 64; // KeyOff 
 						user->UseEvent(e,date_ms);
@@ -129,7 +129,7 @@ class TCtrlChangeTable : public TEventTable {
 	public:
 	
 		TCtrlChangeTable() {for (short i = 0; i < kMaxCtrl; i++) {fCtrldefault [i] = 0;}}
-		virtual ~TCtrlChangeTable(){}
+		virtual ~TCtrlChangeTable() {}
 	
 		void ChaseOff(TEventSenderInterfacePtr user, ULONG date_ms) 
 		{
@@ -138,7 +138,7 @@ class TCtrlChangeTable : public TEventTable {
 			for (short i = 0; i < kMaxHashCode; i++) {
 				cur =  fHashTable.GetLine(i);
 				while (cur) {
-					if (IsSustain(cur) && (e = MidiCopyEv(cur))){ 	
+					if (IsSustain(cur) && (e = MidiCopyEv(cur))) { 	
 						MidiSetField(e,1,fCtrldefault[64]); 		// Default value
 						user->UseEvent(e,date_ms);
 					}

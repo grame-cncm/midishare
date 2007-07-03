@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2001
+  Copyright © Grame 2001-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,11 +33,6 @@ This class describes a SlotInfos structure.
 
 public final class  SlotInfos
 {
-	// pointer to C string (Warning : for internal use only, do not use it)
-	int	nameAux;  
-	// pointer to C buffer (Warning : for internal use only, do not use it)
-	int	cnxAux;  
-	
 	/** Slot name*/	
 	public String	name;
 	/** Slot direction 

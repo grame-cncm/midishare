@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -90,7 +90,7 @@ short TPlayer::Open(MidiName name)
 	// If OK, return the reference number else close the Player
 	if (res == kNoErr) {
 		return ref;
-	}else {
+	} else {
 		Close();
 		return kErrMemory;
 	}
@@ -228,11 +228,11 @@ long TPlayer::InsertTrack(short tracknum,MidiSeqPtr s)
 
 void TPlayer::SetParam(short tracknum, short p, short v) 
 { 
-	if(fRunningState.IsRunning()){
+	if(fRunningState.IsRunning()) {
 		fPlayer->Stop();
  		fTrackTable.SetParam (tracknum, p, v);
  		fPlayer->Cont();
- 	}else{
+ 	} else {
  		fTrackTable.SetParam (tracknum, p, v);
  	}
  }
@@ -356,11 +356,11 @@ long TPlayer::SetLoopEndMs(long date_ms) {return fLoopManager->SetLoopEndMs(date
 
 void TPlayer::SetRecordMode(short state) 
 {  
-	if(fRunningState.IsRunning()){
+	if(fRunningState.IsRunning()) {
 		fPlayer->Stop();
  		fEventReceiver->SetRecordMode(state);
  		fPlayer->Cont();
- 	}else{
+ 	} else {
  		fEventReceiver->SetRecordMode(state);
  	}
 }
@@ -373,11 +373,11 @@ void TPlayer::SetRecordFilter(MidiFilterPtr filter) {fEventReceiver->SetRecordFi
 
 void TPlayer::Record(short tracknum) 
 { 	
-	if(fRunningState.IsRunning()){
+	if(fRunningState.IsRunning()) {
 		fPlayer->Stop();
  		fEventReceiver->SetRecordTrack(tracknum);
  		fPlayer->Cont();
- 	}else{
+ 	} else {
  		fEventReceiver->SetRecordTrack(tracknum);
  	}
 }
@@ -397,11 +397,11 @@ long TPlayer::SetOutput(short output)
 	 	
 	 	if (fPlayer == 0) {
 	 		return kErrSequencer; // If allocation error
-	 	}else {
+	 	} else {
 	 		memento.RestoreState(this);		// Restore the current state
 	 		return kNoErr;
 	 	}
-	 }else {
+	 } else {
 	 	return kErrSequencer; 
 	 }
 }
@@ -447,7 +447,7 @@ void TPlayer::ReceiveAlarm(short ref)
 					break;
 			}
 		} 
-	}else{
+	} else {
 		MidiFlushEvs(ref);
 	}
 }

@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		4B97CB90050CC76F00053105 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4B97CB91050CC76F00053105 = {
 			fileRef = 4B97CB90050CC76F00053105;
@@ -30,16 +32,20 @@
 		F58CAEF0020ADFE701053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = msDriverState.c;
 			path = ../lib/msDriverState.c;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F58CAEF1020ADFE701053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = msDriverState.h;
 			path = ../lib/msDriverState.h;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F58CAEF2020ADFE701053105 = {
 			fileRef = F58CAEF1020ADFE701053105;
@@ -56,9 +62,11 @@
 		F58CAEF4020AE0C701053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = profport.c;
 			path = ../../../lib/profport.c;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F58CAEF5020AE0C701053105 = {
 			fileRef = F58CAEF4020AE0C701053105;
@@ -67,6 +75,8 @@
 			};
 		};
 		F5EFF92801FDE04F01053105 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				F5EFF92A01FDE04F01053105,
 				F5EFF92B01FDE04F01053105,
@@ -92,21 +102,25 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EFF92A01FDE04F01053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		F5EFF92B01FDE04F01053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -118,11 +132,14 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EFF92D01FDE09501053105 = {
-			isa = PBXLibraryReference;
+			explicitFileType = "compiled.mach-o.dylib";
+			isa = PBXFileReference;
 			path = msPTDriver.1.0.0.so;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5EFF92E01FDE09501053105 = {
 			buildPhases = (
@@ -192,14 +209,18 @@
 		F5EFF93301FDE0DA01053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = msPTDriver.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EFF93401FDE0FF01053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = msPTDriver.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EFF93501FDE0FF01053105 = {
 			fileRef = F5EFF93401FDE0FF01053105;

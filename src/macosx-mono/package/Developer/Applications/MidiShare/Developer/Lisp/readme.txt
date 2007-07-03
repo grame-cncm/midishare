@@ -18,3 +18,9 @@ tutorials/
 
 	Contains a tutorial for the MidiShare interface and 
 	a tutorial for the Player library interface.
+
+
+CFFI interface
+---------------
+
+An interface using the CFFI (Common Foreign Function Interface see http://common-lisp.net/project/cffi/) system has been developed by Rick Taube. A package (part of the Common Music system) can be found here : http://sourceforge.net/project/showfiles.php?group_id=9766&package_id=172112

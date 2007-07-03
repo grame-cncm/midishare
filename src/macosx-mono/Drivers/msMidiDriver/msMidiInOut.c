@@ -96,7 +96,7 @@ static void SendSysExAux(SlotPtr slot)
  }
  
 //_________________________________________________________
-static void SendSysEx(SlotPtr slot,MidiEvPtr e)
+static void SendSysEx(SlotPtr slot, MidiEvPtr e)
 {
 	slot->remaining = (EvType(e) == typeSysEx) ? (MidiCountFields(e)+2) : MidiCountFields(e);
 	
@@ -135,6 +135,12 @@ static void SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 //________________________________________________________________________________________
 static void CompletionProc(MIDISysexSendRequest *request)
 {
+	/* check client */
+	if (gClient == NULL) {
+		fprintf(stderr, "CompletionProc : dead driver\n");
+		return;
+	}
+		
     SlotPtr slot = (SlotPtr)request->completionRefCon;
 	
 	if (slot->remaining > 0){
@@ -150,8 +156,8 @@ bool MS2MM(short refNum, SlotPtr slot, MidiEvPtr e)
 	int type = EvType(e);
 	
 	if ((type == typeSysEx) || (type == typeStream)) {
-		MidiSetRcvAlarm(refNum,0);
-		SendSysEx(slot,e);
+		MidiSetRcvAlarm(refNum,0);  
+		SendSysEx(slot,e); 
 		return false;
 	}else{
 		SendSmallEv(slot,e,&slot->state);
@@ -168,7 +174,7 @@ void ReadProc(const MIDIPacketList *pktlist, void *refCon, void *connRefCon)
 	DBUG(("ReadProc \n"));
 
 	for (i = 0; i < pktlist->numPackets; ++i) {
-		LMM2MS( slot, packet);
+		LMM2MS(slot, packet);
 		packet = MIDIPacketNext(packet);
 	}
 	

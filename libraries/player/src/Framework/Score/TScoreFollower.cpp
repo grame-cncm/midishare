@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -65,10 +65,10 @@ ULONG TScoreFollower::GetPosTicks() {return GetVisitor().CurDateTicks();}
 
 TEventPtr TScoreFollower::SetPosBBU(const TPos& pos)
 {
-	if (!GetIterator().IsFirstEv() && GetVisitor().SupEq (GetIterator().CurDate(), pos)){
+	if (!GetIterator().IsFirstEv() && GetVisitor().SupEq (GetIterator().CurDate(), pos)) {
 		SetPosBBUBackward(pos);
 		SetPosBBUForward(pos);
-	}else{
+	} else {
 		SetPosBBUForward(pos);
 	}
 	
@@ -84,7 +84,7 @@ TEventPtr TScoreFollower::SetPosMs(ULONG date_ms)
 	if (!GetIterator().IsFirstEv() && (GetVisitor().SupEq(GetIterator().CurDate(),date_ten_micro))) {
 		SetPosMicroBackward(date_ten_micro);
 		SetPosMicroForward(date_ten_micro);
-	}else{
+	} else {
 		SetPosMicroForward(date_ten_micro);
 	}
 	
@@ -99,7 +99,7 @@ TEventPtr TScoreFollower::SetPosTicks(ULONG date_ticks)
 	if (!GetIterator().IsFirstEv() && (GetIterator().CurDate() >= date_ticks)) {
 		SetPosTicksBackward(date_ticks);
 		SetPosTicksForward(date_ticks);
-	}else{
+	} else {
 		SetPosTicksForward(date_ticks);
 	}
 	
@@ -129,7 +129,7 @@ void TScoreFollower::SetPosTicksBackward(ULONG date_ticks)
 
 void TScoreFollower::SetPosTicksForward(ULONG date_ticks)
 {
-	while (!GetIterator().IsLastEv() && GetIterator().CurDate() < date_ticks){ 
+	while (!GetIterator().IsLastEv() && GetIterator().CurDate() < date_ticks) { 
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);
 		GetIterator().NextEv();
 	}
@@ -157,7 +157,7 @@ void TScoreFollower::SetPosMicroBackward(ULONG date_ten_micro)
 
 void TScoreFollower::SetPosMicroForward(ULONG date_ten_micro)
 {
-	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), date_ten_micro)){ 
+	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), date_ten_micro)) { 
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);
 		GetIterator().NextEv();
 	}
@@ -185,7 +185,7 @@ void TScoreFollower::SetPosBBUBackward(const TPos& pos)
 
 void TScoreFollower::SetPosBBUForward(const TPos& pos)
 {
-	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), pos)){	
+	while (!GetIterator().IsLastEv() && GetVisitor().Inf(GetIterator().CurDate(), pos)) {	
 		GetIterator().CurEv()->Accept(&GetVisitor(),true);
 		GetIterator().NextEv();
 	}

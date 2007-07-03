@@ -28,6 +28,7 @@
 #include "TMidiServer.h"
 #include "OSXFeedback.h"
 #include "profport.h"
+#include <unistd.h>
 
 /* ----------------------------------*/
 TWANControler * gControl = 0;

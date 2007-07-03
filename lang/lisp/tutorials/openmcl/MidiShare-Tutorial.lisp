@@ -19,6 +19,7 @@
 ;; 28-10-03 Rename type macro to evtype.
 ;; 04-11-03 Add some explanation for port/slot connection management in test 14.
 ;; 29-01-04 Updated for new MidiShare function behaviour.
+;; 02-06-06 Remove MIDISHARE symbol that cause a package conflict on MCL 5.1
 
 ;;
 ;;/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
@@ -43,7 +44,7 @@
 
 
 
- (midishare)                                           	; <== EVALUATE THIS EXPRESSION.
+ (ms::midishare)                                           	; <== EVALUATE THIS EXPRESSION.
 
 ;; Check the Listener window for the result.It must be 1. If it is not, you must 
 ;; install MidiShare an reboot.

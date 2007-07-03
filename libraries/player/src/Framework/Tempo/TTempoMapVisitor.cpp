@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -31,7 +31,7 @@ void TTempoMapVisitor::Visite(TTempoPtr ev,Boolean forward)
 {
 	if (forward) {
 		fTempoConverter.Update(ev->GetDate(),ev->GetTempoForward()); 
-	}else {
+	} else {
 		fTempoConverter.Update(ev->GetDate(),ev->GetTempoBackward());
 	}
 }
@@ -42,7 +42,7 @@ void TTempoMapVisitor::Visite(TTimeSignPtr ev,Boolean forward)
 {
 	if (forward) {
 		fTimeConverter.Update(ev->GetDate(),ev->GetFNum(),ev->GetFDenom(),ev->GetFnClocks(),ev->GetFn32nd());
-	}else {
+	} else {
 		fTimeConverter.Update(ev->GetDate(),ev->GetBNum(),ev->GetBDenom(),ev->GetBnClocks(),ev->GetBn32nd());
 	}
 }

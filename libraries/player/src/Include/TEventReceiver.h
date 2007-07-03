@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -52,8 +52,8 @@ class TEventReceiver : public TEventDispatcher {
 	public:
 	
 		TEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, TEventDispatcherPtr successor)
-			:TEventDispatcher(successor),fPlayer(player),fLoopManager(loopmanager){}
-		virtual ~TEventReceiver(){}
+			:TEventDispatcher(successor),fPlayer(player),fLoopManager(loopmanager) {}
+		virtual ~TEventReceiver() {}
 	
 		virtual void ReceiveEvents(MidiEvPtr e);
 };
@@ -81,8 +81,8 @@ class TClockEventReceiver : public TEventReceiver {
 	public:
 	
 		TClockEventReceiver(TPlayerInterfacePtr  player, TLoopManagerPtr loopmanager, TClockConverterPtr converter, TEventDispatcherPtr successor)
-			:TEventReceiver(player,loopmanager,successor),fClockConverter(converter){}
-		virtual ~TClockEventReceiver(){}
+			:TEventReceiver(player,loopmanager,successor),fClockConverter(converter) {}
+		virtual ~TClockEventReceiver() {}
 	
 		void ReceiveEvents(MidiEvPtr e);
 };
@@ -104,8 +104,8 @@ class TExtEventReceiver : public TEventReceiver {
 	public:
 	
 		TExtEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
-			:TEventReceiver(player,loopmanager,successor){}
-		virtual ~TExtEventReceiver(){}
+			:TEventReceiver(player,loopmanager,successor) {}
+		virtual ~TExtEventReceiver() {}
 	
 		void ReceiveEvents (MidiEvPtr e);
 };
@@ -127,8 +127,8 @@ class TSMPTEEventReceiver : public TEventReceiver {
 	public:
 	
 		TSMPTEEventReceiver(TPlayerInterfacePtr player, TLoopManagerPtr loopmanager,TEventDispatcherPtr successor)
-			:TEventReceiver(player,loopmanager,successor){}
-		virtual ~TSMPTEEventReceiver(){}
+			:TEventReceiver(player,loopmanager,successor) {}
+		virtual ~TSMPTEEventReceiver() {}
 	
 		void ReceiveEvents(MidiEvPtr e);
 };

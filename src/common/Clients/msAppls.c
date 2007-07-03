@@ -264,7 +264,7 @@ void makeClient (TClientsPtr g, TApplPtr appl, short ref, MidiName name, short f
 }
 
 /*____________________________________________________________________________*/
-void closeClient (short ref, TMSGlobalPtr g)
+void clearClient (short ref, TMSGlobalPtr g)
 {
 	TClientsPtr clients = Clients(g);
 	TApplPtr appl = clients->appls[ref];
@@ -273,6 +273,15 @@ void closeClient (short ref, TMSGlobalPtr g)
 	RemAllDstCon (appl, FreeList(Memory(g)));
 	MSFlushEvs (ref, clients);
 	MSFlushDTasks (ref, clients);
+}
+
+/*____________________________________________________________________________*/
+void closeClient (short ref, TMSGlobalPtr g)
+{
+	TClientsPtr clients = Clients(g);
+	TApplPtr appl = clients->appls[ref];
+	
+	clearClient(ref, g);
 	DisposeApplContext (appl->context);
 	FreeAppl (appl);
 	clients->appls[ref] = 0;

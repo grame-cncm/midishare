@@ -32,8 +32,7 @@
 /* History : 20/07/96 Suppression des fonction SetData et GetData : utilisation de MidiSetField
 /*          19/03/02 Thread bloquant sur MacOS9
 /*          17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
-/*			05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback
-/*			un pour le thread de l'application. 
+/*			05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback, un pour le thread de l'application. 
 /*		
 /*****************************************************************************/
 
@@ -86,7 +85,7 @@ typedef struct ApplContext {
 }ApplContext;
 
 /*--------------------------------------------------------------------------*/
-static void  MSALARMAPI ApplAlarm( short ref,long code)
+static void  MSALARMAPI ApplAlarm(short ref,long code)
 {	
     MidiEvPtr e;
     
@@ -101,7 +100,7 @@ static int CheckThreadEnv(ApplContext* context)
 {
     if (context->fAttached) {
          return true;
-    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fCallbackEnv, NULL) == 0) {
+    }else if ((*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&context->fCallbackEnv, NULL) == 0) {
         context->fAttached = true;
         return true;
     }else{
@@ -110,7 +109,7 @@ static int CheckThreadEnv(ApplContext* context)
 }
          
 /*--------------------------------------------------------------------------*/
-static void MSALARMAPI JavaTask ( long date, short refNum, long a1,long a2,long a3 )
+static void MSALARMAPI JavaTask(long date, short refNum, long a1, long a2, long a3)
 {
     ApplContext* context = MidiGetInfo(refNum);
     jclass class;
@@ -135,7 +134,7 @@ static void MSALARMAPI JavaTask ( long date, short refNum, long a1,long a2,long 
 }
                             
 /*--------------------------------------------------------------------------*/
-static void MSALARMAPI ReceiveAlarm( short ref)
+static void MSALARMAPI ReceiveAlarm(short ref)
 {
 #if defined (__Macintosh__) && defined(__MacOS9__)
 	UniversalProcPtr proc = MidiGetInfo(ref);
@@ -157,7 +156,7 @@ static void MSALARMAPI ReceiveAlarm( short ref)
 
 /*--------------------------------------------------------------------------*/
 JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
-  (JNIEnv * env , jobject obj, jint ref , jint mode) {
+  (JNIEnv * env, jobject obj, jint ref , jint mode) {
   
 	ApplContext* context;
 	jclass cls;
@@ -176,7 +175,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 	context->fObj = (*env)->NewGlobalRef(env,obj);
 	context->fAttached = false;
 	
-	if ((*context->fJvm)->AttachCurrentThread(context->fJvm, &context->fApplEnv, NULL) != 0) goto error;
+	if ((*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&context->fApplEnv, NULL) != 0) goto error;
 	 
 	MidiSetInfo(ref,context);
 	
@@ -192,17 +191,17 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 	// Configure calling mode
 	switch (mode) {
 		case kNativeMode:
-			MidiSetRcvAlarm(ref,UPPJRcvAlarmPtr);
+			MidiSetRcvAlarm(ref, UPPJRcvAlarmPtr);
 			break;
 		 case kPollingMode:
 			break;
 	}
    
-	MidiSetApplAlarm(ref,UPPJApplAlarmPtr);
+	MidiSetApplAlarm(ref, UPPJApplAlarmPtr);
 	return 1;
    
 error :
-   if (context) free (context);
+   if (context) free(context);
    return 0;         
 }
 

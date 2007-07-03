@@ -2,4 +2,6 @@ msDrivers versions
 
 1.2 
 1.3 - Jan. 19 2004 - looks for state in $HOME/Library/Preferences/MidiShare
+1.4 - Apr. 19 2006 - MacIntel universal binary version
+
 

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -35,7 +35,7 @@
 
 long TLoopManager::SetLoopStartTicks(ULONG date_ticks) 
 {
-	if (date_ticks  > GetLoopEndTicks()){
+	if (date_ticks > GetLoopEndTicks()) {
 		return  kErrSequencer;
 	} else {
 		fFollower.SetPosTicks(date_ticks);
@@ -49,7 +49,7 @@ long TLoopManager::SetLoopStartTicks(ULONG date_ticks)
 long TLoopManager::SetLoopStartBBU(const TPos& pos) 
 {
 	fFollower.SetPosBBU(pos);
-	return SetLoopStartTicks (fFollower.GetPosTicks());
+	return SetLoopStartTicks(fFollower.GetPosTicks());
 }
 
 /*--------------------------------------------------------------------------*/
@@ -57,7 +57,7 @@ long TLoopManager::SetLoopStartBBU(const TPos& pos)
 long TLoopManager::SetLoopStartMs(ULONG date_ms)
 {
 	fFollower.SetPosMs(date_ms);
-	return SetLoopStartTicks (fFollower.GetPosTicks());
+	return SetLoopStartTicks(fFollower.GetPosTicks());
 }
 	 
 /*--------------------------------------------------------------------------*/
@@ -80,7 +80,7 @@ long TLoopManager::SetLoopEndTicks(ULONG date_ticks)
 long TLoopManager::SetLoopEndBBU(const TPos& pos) 
 {
 	fFollower.SetPosBBU(pos);
-	return SetLoopEndTicks (fFollower.GetPosTicks());
+	return SetLoopEndTicks(fFollower.GetPosTicks());
 }
 
 /*--------------------------------------------------------------------------*/
@@ -88,6 +88,6 @@ long TLoopManager::SetLoopEndBBU(const TPos& pos)
 long TLoopManager::SetLoopEndMs(ULONG date_ms)
 {
 	fFollower.SetPosMs(date_ms);
-	return SetLoopEndTicks (fFollower.GetPosTicks());
+	return SetLoopEndTicks(fFollower.GetPosTicks());
 }
 

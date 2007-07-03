@@ -70,17 +70,22 @@ MSFunctionType(short) MSRegisterDriver (TDriverInfos * infos, TDriverOperation *
 /*____________________________________________________________________________*/
 MSFunctionType(void) MSUnregisterDriver (short ref, TMSGlobalPtr g)
 {
-	TDriverPtr drv; TAppl saved;
+	TDriverPtr drv; 
+	TAppl saved_driver; 
+	TDriver save_driver_int;
 	TClientsPtr clients = Clients(g);	
 	if (!CheckDriverRefNum(clients, ref) || (ref == MidiShareDriverRef))
 		return;
 
-	saved = *clients->appls[ref];
 	drv = Driver(clients->appls[ref]);
+	// Save driver context on the stack so that we can safely call DriverSleep later.  
+	saved_driver = *clients->appls[ref];
+	save_driver_int = *drv;
+	saved_driver.driver = &save_driver_int;
 	closeDriver (ref, drv, g);
 	clients->nbDrivers--;
 	if (Clients(g)->nbAppls) {			
-		DriverSleep (&saved);		
+		DriverSleep (&saved_driver);		
 		CallAlarm (ref, MIDICloseDriver, clients);
 	}
 }
@@ -311,6 +316,7 @@ void CloseDrivers (TMSGlobalPtr g)
 		TApplPtr appl = clients->appls[ref];
 		if (appl && (appl->folder == kDriverFolder)) {
 			DriverSleep (appl);
+			clearClient(ref, g);
 			appl->srcList = appl->dstList = 0;
 			n--;
 		}

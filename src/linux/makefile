@@ -5,6 +5,8 @@ MODF = /lib/modules/`uname -r`/misc
 INCF = /usr/local/include
 UDEV = /etc/udev/rules.d
 INIT = /etc/init.d
+VERSION = 1.91
+DISTDIR = midishare-$(VERSION)-linux2.6-src
 
 #SERV = $(INIT)/MidiShare
 SERV = MidiShare
@@ -81,4 +83,19 @@ dep:
 	make -i -C ../common dep 
 	make -i -C kernel dep 
 	make -i -C library dep 
+
+dist :
+	$(MAKE) clean
+	mkdir -p ../../$(DISTDIR)
+	cp -r ../../doc ../../$(DISTDIR)
+	cp -r ../../lang ../../$(DISTDIR)
+	cp -r ../../doc ../../$(DISTDIR)
+	cp -r ../../libraries ../../$(DISTDIR)
+	cp -r ../../src ../../$(DISTDIR)
+	find ../../$(DISTDIR) -name CVS | xargs rm -rf
+	find ../../$(DISTDIR) -name '*.o' | xargs rm -rf
+	find ../../$(DISTDIR) -name '*~' | xargs rm -rf
+	rm -rf ../../$(DISTDIR).tar.gz
+	tar czfv ../../$(DISTDIR).tar.gz ../../$(DISTDIR)
+	rm -rf ../../$(DISTDIR)
 

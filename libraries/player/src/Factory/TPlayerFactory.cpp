@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,7 +33,7 @@
 
 /*--------------------------------------------------------------------------*/
 
-TPlayerFactory::TPlayerFactory (TPlayer* user):fUser(user){}
+TPlayerFactory::TPlayerFactory (TPlayer* user):fUser(user) {}
 
 /*--------------------------------------------------------------------------*/
 // Creation of Players
@@ -58,7 +58,7 @@ TGenericPlayerInterfacePtr TPlayerFactory::CreatePlayer()
 	TEventSenderInterfacePtr  	eventsender = 0;
 	TTimeManagerPtr  			timemanager = 0;
 	
-	long res;
+	long res = kNoErr;
 	
 	switch (fUser->fOutput) {
 		

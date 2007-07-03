@@ -49,7 +49,6 @@ WindowRef	myWindow;
 DialogRef	myDlog;
 Boolean		doneFlag;
 
-SysEnvRec	gMac;
 Boolean		hasWNE;
 Boolean		foreGround;
 

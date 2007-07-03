@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -66,11 +66,11 @@ class TEventRecorder : public TEventDispatcher {
 		virtual ~TEventRecorder();
 	
 		void SetRecordMode(short state);
-		short GetRecordMode(){return fRecordmode;}
+		short GetRecordMode() {return fRecordmode;}
 		void SetRecordTrack(short tracknum);
 		short GetRecordTrack() {return fRecordtrack;}
 		void SetRecordFilter(MidiFilterPtr filter);
-		MidiFilterPtr GetRecordFilter (){return fRecFilter;}
+		MidiFilterPtr GetRecordFilter () {return fRecFilter;}
 		
 		void ReceiveEvents(MidiEvPtr e);	
 	

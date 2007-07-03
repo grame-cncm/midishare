@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright © Grame 1999-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -44,6 +44,7 @@
 /* 133: Direct call of Java code for MacOSX
 /* 134: Correct Midi.Share semantic : now the JMidi interface is loaded in Midi.Share 
 /*      thus clients *must* use Midi.Share as the first call to the MidiShare API
+/* 135: Use of  standard JNI string functions
 /*****************************************************************************/
 
 
@@ -62,7 +63,7 @@ For perfomances reasons, MidiShare events, sequences and filters are manipulated
 
 public final class Midi {
 	private  static  boolean interfaceLoaded = false;
-	public   static  int  Version =  134;
+	public   static  int  Version =  135;
 
 	/* Don't let anyone instantiate this class.*/
 	private Midi() {}
@@ -730,7 +731,7 @@ public final class Midi {
     System Exclusive and between 0 and 255 for a Stream. 
 	*/
 	
-	public  static native final void AddField (int event, int val);
+	public  static native final void AddField(int event, int val);
 	
 	/**
   	Inserts an event in to a sequence while maintaining the dates in
@@ -741,7 +742,7 @@ public final class Midi {
     *@param event is the event to be added. 			
 	*/
 	
-	public  static native final void AddSeq (int seq, int event);
+	public  static native final void AddSeq(int seq, int event);
 	  		static native final void ApplySeq(int seq, int event);
 	  			
 	/**
@@ -756,7 +757,7 @@ public final class Midi {
 	*/
 
 	public  static native final int AvailEv(int ref);
-	 		static native final void Call (int proc, int date, int ref, int a1,int a2,int a3);
+	 		static native final void Call(int proc, int date, int ref, int a1, int a2, int a3);
 	 				
 	/**
   	Frees the content of a sequence. ClearSeq de-allocates all
@@ -766,7 +767,7 @@ public final class Midi {
 	*@param seq is a pointer on a sequence whose eventsare to be freed.		
 	*/
  				
-	public  static native final void ClearSeq (int seq);
+	public  static native final void ClearSeq(int seq);
 	
 	/**
   	This is used for closing of a MidiShare application. Every
@@ -780,7 +781,7 @@ public final class Midi {
     application, given by the corresponding Open. 		
 	*/
 
-	public  static native final void Close (int ref);
+	public  static native final void Close(int ref);
 	
 	/**
   	Connects or disconnects two applications. The Connect
@@ -796,7 +797,7 @@ public final class Midi {
 	*@param state indicates if a connection must be switched on (1 = True) or off (0 = False).	
 	*/
 	
-	public  static native final void Connect (int src, int dst, int state);
+	public  static native final void Connect(int src, int dst, int state);
 	
 	/**
   	Duplicates an event, taking into account the structure of the
@@ -809,7 +810,7 @@ public final class Midi {
      allocate enough memory space for the copy. 		
 	*/
 	
-	public  static native final int CopyEv (int event);
+	public  static native final int CopyEv(int event);
 	
 	/**
   	Gives the number of Midi applications currently active. 
@@ -818,14 +819,14 @@ public final class Midi {
      Midi applications. 		
 	*/
 
-	public  static native final int CountAppls ();
+	public  static native final int CountAppls();
 	  		static native final int CountDTasks(int ref);
 	  		
 	/**
   	Gives the number of events waiting into the application reception FIFO. 
-  	 *@param ref is the reference number of the application.
+	*@param ref is the reference number of the application.
   
-	*@return   The result is the number of waiting events in
+	*@return The result is the number of waiting events in
     the reception FIFO. 		
 	*/
 
@@ -837,9 +838,9 @@ public final class Midi {
 	*@return   The result is the number of fields of the event. 		
 	*/
 
-	public  static native final int CountFields (int event);
-	 		static native final int DTask (int proc, int date, int ref, int a1,int a2,int a3);
-			static native final void Exec1DTask (int ref);
+	public  static native final int CountFields(int event);
+	 		static native final int DTask(int proc, int date, int ref, int a1, int a2, int a3);
+			static native final void Exec1DTask(int ref);
 			
 	/**
     Converts an external time in millisecond to the value of an
@@ -847,11 +848,11 @@ public final class Midi {
     offset between internal and external time. 
 
    	*@param time is in milliseconds.    
-	*@return   The result is the corresponding internal time in milliseconds.		
+	*@return The result is the corresponding internal time in milliseconds.		
 	*/
 
-	public  static native final int Ext2IntTime (int time);
-			static native final void FlushDTasks (int ref);
+	public  static native final int Ext2IntTime(int time);
+			static native final void FlushDTasks(int ref);
 			
 	/**
     Flushes all the waiting events in the reception FIFO of the
@@ -859,8 +860,8 @@ public final class Midi {
     *@param ref  is the reference number of the application. 		
 	*/
 
-	public  static native final void FlushEvs (int ref);
-			static native final void ForgetTask (int ref);
+	public  static native final void FlushEvs(int ref);
+			static native final void ForgetTask(int ref);
 			
 	/**
     Frees a cell allocated by NewCell function. This is the
@@ -871,7 +872,7 @@ public final class Midi {
     *@param cell is a pointer to a basic cell of 16 bytes.	
 	*/
 
-	public  static native final void FreeCell (int cell);
+	public  static native final void FreeCell(int cell);
 	
 	/**
   	Frees a MidiShare event allocated with NewEv.
@@ -889,7 +890,7 @@ public final class Midi {
     sequence header itself.    
     *@param seq is a pointer on a sequence to be freed. 	
 	*/
-	public  static native final void FreeSeq (int seq);
+	public  static native final void FreeSeq(int seq);
 	
 	/**
   	Returns the available free MidiShare event space.
@@ -899,20 +900,19 @@ public final class Midi {
     in the MidiShare memory manager.
     */
 
-	public  static native final int FreeSpace ();
+	public  static native final int FreeSpace();
 			static native final int GetApplAlarm(int ref);
 			
 	/**
-    Extracts the first event on in the reception FIFO. The received
-     events, stored automatically by MidiShare in the application
-     reception FIFO, can be picked up by successive calls to
-     GetEv function. 
-     *@param ref is the reference number of the
-          application. 
-     *@return The result is a pointer to the first event in the reception
-     FIFO, or 0 if the FIFO is empty. The event is extracted
-     from the reception FIFO.     
-     */
+	Extracts the first event on in the reception FIFO. The received
+	events, stored automatically by MidiShare in the application
+	reception FIFO, can be picked up by successive calls to
+	GetEv function. 
+	*@param ref is the reference number of the application. 
+	*@return The result is a pointer to the first event in the reception
+	FIFO, or 0 if the FIFO is empty. The event is extracted
+	from the reception FIFO.     
+	*/
 
 	public  static native final int GetEv(int ref);
 	
@@ -922,7 +922,7 @@ public final class Midi {
      
     *@return The result is the external time.
     */
-	public  static native final int GetExtTime ();
+	public  static native final int GetExtTime();
 	
 	/**
     Gives the index field value of an event. Field index start from 0.
@@ -937,7 +937,7 @@ public final class Midi {
     considered as unsigned. 
     */
 	
-	public  static native final int GetField (int event,int field);
+	public  static native final int GetField (int event, int field);
 	
 	/**
     Gives the associated filter of an application. Each application
@@ -966,9 +966,6 @@ public final class Midi {
 	public  static native final int GetIndAppl(int index);
 			static native final int GetInfo(int ref);
 	
-	
-	private  static native final int GetNameAux(int ref);
-	
 	/**
   	Gives the name of an application. Knowing an application
     reference number, it is possible to find its name using the
@@ -980,18 +977,8 @@ public final class Midi {
     *@return The result is a string representing the application name.     
     */
 		
-	public  static  final  String GetName(int ref) {
-		String res = null;
-		try {
-			 res = ConvertCString (GetNameAux(ref));
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	}
-		
-	private  static native final int GetNamedApplAux(int midiname);
-		
+	public  static native final String GetName(int ref);		
+
 	/**
   	Returns the reference number of an application. Knowing an
     application name, it is possible to find its reference number
@@ -1003,18 +990,8 @@ public final class Midi {
     *@return The result is the reference number of the application.
     */
 	
-	public  static final  int GetNamedAppl(String midiname){
-		int res = 0;
-		try {
-		 	int cstr = ConvertJavaString(midiname);
-		 	res =  GetNamedApplAux(cstr);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	}
-		
+	public  static native final int GetNamedAppl(String midiname);
+
 	/**
   	*@deprecated see new drivers management functions.
 	*@see grame.midishare.Midi#CountDrivers
@@ -1031,7 +1008,7 @@ public final class Midi {
     *@param info  a SyncInfo object.     
     */
 
-	public  static native final void GetSyncInfo (SyncInfo info);
+	public  static native final void GetSyncInfo(SyncInfo info);
 	
 	/**
   	Gives in milliseconds the time elapsed since the starting up of
@@ -1041,7 +1018,7 @@ public final class Midi {
     milliseconds since the starting up of MidiShare.        
     */
     
-	public  static native final int GetTime ();
+	public  static native final int GetTime();
 	
 	/**
   	Gives the version number of MidiShare.                  
@@ -1049,7 +1026,7 @@ public final class Midi {
     result of 161 means "version 1.61".      
     */
 
-	public  static native final int GetVersion ();
+	public  static native final int GetVersion();
 		
 	/**
   	Tries to increase the memory space of MidiShare.                     
@@ -1057,7 +1034,7 @@ public final class Midi {
     *@return The result is a 32-bit integer, the number of new cells allocated.   
     */
 
-	public  static native final int GrowSpace (int space);
+	public  static native final int GrowSpace(int space);
 	
 	/**
   	Convert an internal time in millisecond to an external time. The
@@ -1070,7 +1047,6 @@ public final class Midi {
 	public  static native final int Int2ExtTime (int time);
 	
 	/**
-  	
     Gives the state of a connection between two MidiShare
     applications. Connections allow real-time communications of
     midi events between applications. 
@@ -1084,7 +1060,6 @@ public final class Midi {
 	public  static native final int IsConnected (int src, int dest);
 	
 	/**
-  	
     Allocates a simple memory cell from the MidiShare memory
     manager. For some special application, it may be useful to have
     access to the basic functions of the memory manager. All the
@@ -1097,7 +1072,6 @@ public final class Midi {
 	public  static native final int NewCell ();
 	
 	/**
-  	
     Allocates a new event of desirable type. 
              
     *@param type the type of event to be allocated.                      
@@ -1106,19 +1080,16 @@ public final class Midi {
     exhausted.      
     */
 
-	public  static native final int NewEv (int type);
+	public  static native final int NewEv(int type);
 	
 	/**
     Allocation of a new empty sequence.              
     *@return The result is a pointer to an empty sequence.  
     */
 
-	public  static native final int NewSeq ();
+	public  static native final int NewSeq();
 	
-	private static native final int OpenAux(int midiname);
-
 	/**
-  	
     Opening of MidiShare. Open allows the recording of
     some information relative to the application context (its name,
     the value of the global data register, etc.), to allocate a
@@ -1133,23 +1104,11 @@ public final class Midi {
     application.  
     */
     
-	public 	static  final  int Open(String midiname){
-		int res = 0;
-		try {
-			int cstr = ConvertJavaString(midiname);
-			res =  OpenAux(cstr);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	
-	}
-		
-			static native final int ReadSync (int adr);
+	public 	static  native final int Open(String midiname); 		
+
+			static native final int ReadSync(int adr);
 			
 	/**
-  	
     Sends an event. A copy of the event is sent to all the
     application destinations. The date field of the event is used to
     specify when the destinations will actually receive the event. 
@@ -1162,7 +1121,6 @@ public final class Midi {
 	public  static native final void Send(int ref, int event);
 	
 	/**
-  	
     Sends an event. A copy of the event is sent to all the
     application destinations. The date argument is used to specify
     when destinations will actually receive the event. 
@@ -1172,10 +1130,9 @@ public final class Midi {
     *@param  date ia a 32-bit integer, the date when destinations will receive the event.    
     */
 
-	public  static native final void SendAt (int ref, int event, int date);
+	public  static native final void SendAt(int ref, int event, int date);
 	
 	/**
-  	
     Immediately sends an event. A copy of the event is sent to all
     the application destinations. 
      
@@ -1187,7 +1144,6 @@ public final class Midi {
 			static native final void SetApplAlarm(int ref, int alarm);
 			
 	/**
-  	
     Attributes a value to a field of an event. The access to the
     compulsory fields of the event is done directly. But the access
     to the variables fields is achieved through the SetField and
@@ -1199,7 +1155,7 @@ public final class Midi {
     *@param val is 32-bit value to put in the field. This value will beconverted to the right size (8, 16 or 32-bit).  
     */		
 			
-	public  static native final void SetField(int event, int field, int val );
+	public  static native final void SetField(int event, int field, int val);
 		
 	/**
   	Associates a filter to an application. Each application can select
@@ -1214,9 +1170,7 @@ public final class Midi {
     */
 	
 	public  static native final void SetFilter(int ref, int filter);
-			static native final void SetInfo(int ref,int info);
-		
-	private  static native final void SetNameAux(int ref,int midiname);
+			static native final void SetInfo(int ref, int info);
 		
 	/**
   	Changes the name of an application.  
@@ -1225,16 +1179,8 @@ public final class Midi {
     *@param midiname, the new application name.     
     */
   
-  	public  static  final       void SetName(int ref,String midiname){
-		try {
-			int cstr = ConvertJavaString(midiname);
-			SetNameAux(ref,cstr);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-	}
-	
+  	public  static  native final void SetName(int ref, String midiname);
+
 	/**
 	*@deprecated see new drivers management functions.
 	*@see grame.midishare.Midi#CountDrivers
@@ -1253,7 +1199,7 @@ public final class Midi {
     When a=1 the port number is ignored, the first port with incoming MTC is used.     
     */
 			
-	public  static native final int SetSyncMode (int mode);
+	public  static native final int SetSyncMode(int mode);
 	
 	/**
   	Test if MidiShare is available on the Machine. The function actually tries to load the JMidi native library
@@ -1263,7 +1209,7 @@ public final class Midi {
     *@return The result is true (= 1) if MidiShare is available, false (= 0) otherwise.
     */
 	
-	public	static final int Share ()
+	public static final int Share()
 	{
 		if (interfaceLoaded){
 			return 1;
@@ -1286,8 +1232,8 @@ public final class Midi {
     *@return The result is a 32-bits time in milliseconds 
     */
     
-	public  static native final int Smpte2Time (SmpteLoc loc);
-			static native final int Task (int proc, int date, int ref, int a1,int a2,int a3);
+	public  static native final int Smpte2Time(SmpteLoc loc);
+			static native final int Task(int proc, int date, int ref, int a1,int a2,int a3);
 			
 	/**
   	Convert a time in millisecond to an SMPTE location.              
@@ -1301,7 +1247,7 @@ public final class Midi {
           the resulting SMPTE location. 
     */
 
-	public  static native final void Time2Smpte (int time, int format, SmpteLoc loc);
+	public  static native final void Time2Smpte(int time, int format, SmpteLoc loc);
 	
 	/**
   	Gives the total number of cells allocated to MidiShare.
@@ -1312,8 +1258,8 @@ public final class Midi {
     *@return The result is a 32-bit integer, the total number of cells in the MidiShare memory manager. 
   	*/
      
-	public  static native final int TotalSpace ();
-			static native final int WriteSync (int adr, int val);
+	public  static native final int TotalSpace();
+			static native final int WriteSync(int adr, int val);
 
 
 	/* for common fieds management */
@@ -1325,7 +1271,7 @@ public final class Midi {
     *@return The result is a pointer to the event link field.  
     */
 
-	public   static native final int GetLink (int event);
+	public   static native final int GetLink(int event);
 	
 	/**
 	Set the link field of a Midi event with a new event.		
@@ -1334,7 +1280,7 @@ public final class Midi {
     *@param link is a pointer to the new event.
   	*/
 
-	public   static native final void SetLink (int event,int link);
+	public   static native final void SetLink(int event,int link);
 
 	/**
 	Return the date field of a Midi event.
@@ -1352,7 +1298,7 @@ public final class Midi {
     *@param date is the new date.
     */
 
-	public   static native final void SetDate (int event,int date);
+	public   static native final void SetDate(int event,int date);
 
 	/**
 	Return the refnum field of a Midi event.
@@ -1361,7 +1307,7 @@ public final class Midi {
     *@return The result is the event refnum
     */
 
-	public   static native final int GetRefnum (int event);
+	public   static native final int GetRefnum(int event);
 	
 	/**
 	Set the refnum field of a Midi event with a new refnum.		
@@ -1370,7 +1316,7 @@ public final class Midi {
     *@param ref is the new refnum.
   	*/
 
-	public   static native final void SetRefnum (int event,int ref);
+	public   static native final void SetRefnum(int event,int ref);
 
 	/**
 	Return the type field of a Midi event.
@@ -1390,7 +1336,7 @@ public final class Midi {
     *@param type is the new type.
    */
 
-	public   static native final void SetType (int event,int type);
+	public   static native final void SetType(int event,int type);
 
 	/**
 	Return the channel field of a Midi event.
@@ -1399,7 +1345,7 @@ public final class Midi {
     *@return The result is the event channel.
     */
 
-	public   static native final int GetChan (int event);
+	public   static native final int GetChan(int event);
 	
 	/**
 	Set the channel field of a Midi event with a new channel. 
@@ -1408,7 +1354,7 @@ public final class Midi {
     *@param chan is the new channel.
     */
 
-	public   static native final void SetChan (int event,int chan);
+	public   static native final void SetChan(int event,int chan);
 
 	/**
 	Return the port field of a Midi event.
@@ -1417,7 +1363,7 @@ public final class Midi {
     *@return The result is the event port.
     */
 
-	public   static native final int GetPort (int event);
+	public   static native final int GetPort(int event);
 	
 	/**
 	Set the port field of a Midi event with a new port. 
@@ -1426,7 +1372,7 @@ public final class Midi {
     *@param port is the new port.
  	*/
 
-	public   static native final void SetPort (int event,int port);	
+	public   static native final void SetPort(int event,int port);	
 	
 	public   static native final int GetData0(int event);
 	public   static native final int GetData1(int event);
@@ -1440,8 +1386,6 @@ public final class Midi {
 	
 	/* for event with text */
 
-	private   static  native final int GetTextAux(int event);
-	
 	/**
 	Return the text field of a Midi event. This function must be used
 	only for "text events" like typeText, typeSeqName... etc..
@@ -1450,18 +1394,8 @@ public final class Midi {
     *@return The result is a string. 
     */
 
-	public   static  final String GetText(int event){
-		String res = null;
-		try {
-			res = ConvertCString (GetTextAux(event));
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	}
-		
-	private   static native final void SetTextAux(int event,int text);
-	
+	public   static  native final String GetText(int event); 		
+
 	/**
 	Set the text field of a Midi event. This function must be used
 	only for "text events" like typeText, typeSeqName... etc..
@@ -1471,15 +1405,7 @@ public final class Midi {
     *@param text is the new text.
   	*/
 
-	public   static  final void SetText(int event,String text){
-		try {
-			int cstr = ConvertJavaString(text);
-			SetTextAux(event,cstr);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-	}
+	public   static  native final void SetText(int event, String text); 
 
 	/* for sequences */
 
@@ -1490,7 +1416,7 @@ public final class Midi {
     *@return The result is the first event of the sequence.
     */
 
-	public   static native final int GetFirstEv (int seq);
+	public   static native final int GetFirstEv(int seq);
 	
 	/**
 	Set the first event of a Midi sequence. 
@@ -1499,7 +1425,7 @@ public final class Midi {
     *@param event is the new event
 	*/
 
-	public   static native final void SetFirstEv (int seq,int event);
+	public   static native final void SetFirstEv(int seq, int event);
 
 	/**
 	Return the last event  of a Midi sequence.
@@ -1508,7 +1434,7 @@ public final class Midi {
     *@return The result is the last event of the sequence.
     */
 
-	public   static native final int GetLastEv (int seq);
+	public   static native final int GetLastEv(int seq);
 	
 	/**
 	Set the last event of a Midi sequence. 
@@ -1517,7 +1443,7 @@ public final class Midi {
     *@param event is the new event
      */
 
-	public   static native final void SetLastEv (int seq,int event);
+	public   static native final void SetLastEv(int seq, int event);
 
 	/* for filters */
 	
@@ -1529,7 +1455,7 @@ public final class Midi {
     *@return  The result is a pointer to the new filter.
     */
 
-	public  static native  final int NewFilter();
+	public  static native final int NewFilter();
 	
 	/**
   	Free an application filter. 
@@ -1544,8 +1470,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param port  is a port number to be accessed in the filter (0 to  255).
-    *@param val  if set to 1, the event on this port will be rejected,
-    	if set to 0, the event on this port will be accepted.
+    *@param val  if set to 1, the event on this port will be accepted,
+    	if set to 0, the event on this port will be rejected.
   	*/
 
 	public  static native final void AcceptPort(int filter, int port, int val);
@@ -1555,8 +1481,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param chan  is a channel number to be accessed in the filter (0 to 15).
-    *@param val   if set to 1, the event on this channel will be rejected,
-    	if set to 0, the event on this channel will be accepted.
+    *@param val   if set to 1, the event on this channel will be accepted,
+    	if set to 0, the event on this channel will be rejected.
   	*/
 
 	public  static native final void AcceptChan(int filter, int chan, int val);
@@ -1566,8 +1492,8 @@ public final class Midi {
           
     *@param filter is a pointer to the filter.
     *@param type  is a type number to be accessed in the filter (0 to  255).
-    *@param val   if set to 1, the event of this type will be rejected,
-    	if set to 0, the event of this type will be accepted.
+    *@param val   if set to 1, the event of this type will be accepted,
+    	if set to 0, the event of this type will be rejected.
   	*/
     
 	public  static native final void AcceptType(int filter, int type, int val);
@@ -1634,19 +1560,8 @@ public final class Midi {
               about the driver or not.
 
    	*/
-	public  static final int GetDriverInfos (int refnum, DriverInfos infos){
-		int res = 0 ;
-		try {
-			res = GetDriverInfosAux (refnum,infos); // Get the infos
-			if (res > 0) infos.name = ConvertCString (infos.nameAux); // If OK, converts the name in C string to Java string
-			infos.nameAux = 0;
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	}
-		
-	private static native final int GetDriverInfosAux (int refnum, DriverInfos infos);
+	public  static native final int GetDriverInfos(int refnum, DriverInfos infos);
+
 	
 	/**
   	Add a new slot to a driver. MidiShare applications owning a "context alarm" will be informed
@@ -1657,19 +1572,7 @@ public final class Midi {
     *@return The result is a 32-bit integer, a MidiShare unique slot reference number.
    	*/
 		
-	public  static  final int AddSlot (int refnum, String slotname, int direction){
-		int slotrefnum = 0;
-		try {
-			int cstr = ConvertJavaString(slotname);
-			slotrefnum =  AddSlotAux(refnum,cstr,direction);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return slotrefnum;
-	}
-	
-	private  static native final int	AddSlotAux (int refnum, int name, int direction);
+	public  static native final int AddSlot (int refnum, String slotname, int direction);
 	
 	/**
   	Gives the reference of number of a driver slot from its order number. The GetIndSlot
@@ -1689,7 +1592,7 @@ public final class Midi {
     *@param ref, a slot reference number. 
    	*/
 		
-	public  static native final	void RemoveSlot (int slot);
+	public  static native final	void RemoveSlot(int slot);
 		
 	/**
   	Gives information about a slot: it includes the slot name, the slot direction and its connection set to
@@ -1700,25 +1603,7 @@ public final class Midi {
               about the slot or not.
    	*/
  
-	public  static final int  GetSlotInfos (int slot, SlotInfos  infos){
-		int res = 0 ;
-		try {
-			res = GetSlotInfosAux (slot,infos); // Get the infos
-			if (res > 0) {
-				infos.name = ConvertCString (infos.nameAux); // If OK, converts the name in C string to Java string
-				for (int i = 0 ; i<32; i++) infos.cnx[i] = ReadChar(infos.cnxAux,i); // Get the connection array
-				FreeString(infos.cnxAux);
-			}
-			infos.nameAux = 0;
-			infos.cnxAux = 0;
-			
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-		return res;
-	}
-	
-	private  static native final	int GetSlotInfosAux (int slot, SlotInfos  infos);
+	public  static native final int GetSlotInfos(int slot, SlotInfos infos); 
 
 	/**
  	 Make or remove a connection between a slot and a MidiShare logical port. MidiShare
@@ -1730,7 +1615,7 @@ public final class Midi {
      *@param state a Boolean value to specify whether the connection should be done (true) or removed (false). 
    	*/
    	   	
-	public  static native final	void ConnectSlot (int port, int slot, int state);
+	public  static native final	void ConnectSlot(int port, int slot, int state);
 	
 	/**
   	Gives the state of a connection between a MidiShare port and a driver slot. 
@@ -1738,7 +1623,7 @@ public final class Midi {
     *@param ref the slot reference number 
     *@return The result is true when a connection exist between the port and the slot and false otherwise.  
    	*/
-	public  static native final	int	IsSlotConnected	(int port, int slot);
+	public  static native final	int	IsSlotConnected(int port, int slot);
 	
 	/**
   	Changes the name of a slot.  
@@ -1746,60 +1631,12 @@ public final class Midi {
     *@param slot the slot reference number .                  
     *@param slotname the new slot name.     
     */
-	public  static  final	void SetSlotName (int slot, String slotname){
-		try {
-			int cstr = ConvertJavaString(slotname);
-			SetSlotNameAux(slot,cstr);
-			FreeString(cstr);
-		}catch (OutOfMemoryError e) {
-			System.out.println (e);
-		}
-	}
+	public  static native final	void SetSlotName(int slot, String slotname);
 	
-	private  static native final	void SetSlotNameAux (int slot, int name);
-		
 	/* linearisation functions */
 	
 	/** For internal use only. */
 	public  static native final int WriteEv(WriteEvInfo info);
 	/** For internal use only. */
-	public  static native final int ReadEv (ReadEvInfo info);	
-
-	/* string manipulations functions */
-	
-	/** For internal use only. */
-	public static native final int  NewString();
-	/** For internal use only. */
-	public static native final void FreeString(int dst);
-	private  static native final void WriteChar(int string, int index, byte car);
-	private  static native final byte ReadChar(int string, int index);
-	
-	/** For internal use only. */
-	public static final int ConvertJavaString(String str) throws OutOfMemoryError {
-		int i,dst = NewString();
-		
-		if (dst == 0 || str.length() > 128) throw new OutOfMemoryError();
-
-		for (i = 0; i < str.length(); i++ ) {
-			WriteChar(dst, i, (byte) str.charAt(i));
-		}
-		WriteChar(dst, i, (byte)0);
-		return dst;
-	}
-	
-	/** For internal use only. */
-	public static final  String ConvertCString(int src) throws OutOfMemoryError {
-		int character, i = 0;
-		
-		if (src == 0) throw new OutOfMemoryError();
-		
-		char  buffer[] = new char[128];
-		
-		while ((character = ReadChar(src,i)) != 0) {
-			buffer[i]= (char)character;
-			i++;
-		}
-		FreeString(src);
-		return new String(buffer,0,i);
-	}
+	public  static native final int ReadEv(ReadEvInfo info);	
  }

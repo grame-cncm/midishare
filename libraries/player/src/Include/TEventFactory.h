@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -48,13 +48,13 @@ class TEventFactory {
 	public: 
 		
 		TEventFactory();
-		virtual ~TEventFactory(){}
+		virtual ~TEventFactory() {}
 		
 		static TEventPtr GenericCreateEvent(MidiEvPtr e) {return fInstance->fBuildTable[EvType(e)](e);}
 		static void Init() {if (fInstance == 0) fInstance = new TEventFactory();}
 		static void Destroy() 
 		{
-			if (fInstance){ 
+			if (fInstance) { 
 				delete(fInstance);
 			 	fInstance = 0;
 			}

@@ -1,0 +1,378 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B48BD9C0C3A54EE002BBE34 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */; };
+		4BB41DEE09ED403300EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
+		4BB41DEF09ED403300EE9367 /* msControler.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F5817D0507321600053103 /* msControler.icns */; };
+		4BB41DF009ED403300EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE804C05BC065900FE2FFB /* versions.txt */; };
+		4BB41DF209ED403300EE9367 /* msControler.c in Sources */ = {isa = PBXBuildFile; fileRef = F7274D690201418F01053118 /* msControler.c */; };
+		4BB41DF309ED403300EE9367 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9D90207FE0701053118 /* states.c */; };
+		4BB41DF409ED403300EE9367 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DB020803BC01053118 /* profport.c */; };
+		4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		4BB41DFA09ED403300EE9367 /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
+		4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
+		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
+		4BB41E0009ED403300EE9367 /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msControler.plist"; sourceTree = SOURCE_ROOT; };
+		D3EE804C05BC065900FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
+		D3F5817D0507321600053103 /* msControler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msControler.icns; sourceTree = SOURCE_ROOT; };
+		F721C9D90207FE0701053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
+		F721C9DB020803BC01053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
+		F7274D690201418F01053118 /* msControler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msControler.c; sourceTree = "<group>"; };
+		F7274D6B0201418F01053118 /* msControler.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; path = msControler.r; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4BB41DF509ED403300EE9367 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */,
+				4B48BD9C0C3A54EE002BBE34 /* MidiShare.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		195DF8C9FE9D4F0611CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4BB41E0009ED403300EE9367 /* msControler.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */ = {
+			isa = PBXGroup;
+			children = (
+				D3EE804C05BC065900FE2FFB /* versions.txt */,
+				20286C2AFDCF999611CA2CEA /* Sources */,
+				20286C2CFDCF999611CA2CEA /* Resources */,
+				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
+				195DF8C9FE9D4F0611CA2CBB /* Products */,
+				4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */,
+			);
+			name = "¬´PROJECTNAME¬ª";
+			sourceTree = "<group>";
+		};
+		20286C2AFDCF999611CA2CEA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D690201418F01053118 /* msControler.c */,
+				F721C9D90207FE0701053118 /* states.c */,
+				F721C9DB020803BC01053118 /* profport.c */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		20286C2CFDCF999611CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F7274D6B0201418F01053118 /* msControler.r */,
+				0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */,
+				D3F5817D0507321600053103 /* msControler.icns */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */,
+				20286C33FDCF999611CA2CEA /* Carbon.framework */,
+				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
+				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4BB41DEC09ED403300EE9367 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BB41DEB09ED403300EE9367 /* msControler Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BB41DFB09ED403300EE9367 /* Build configuration list for PBXNativeTarget "msControler Universal" */;
+			buildPhases = (
+				4BB41DEC09ED403300EE9367 /* Headers */,
+				4BB41DED09ED403300EE9367 /* Resources */,
+				4BB41DF109ED403300EE9367 /* Sources */,
+				4BB41DF509ED403300EE9367 /* Frameworks */,
+				4BB41DF909ED403300EE9367 /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "msControler Universal";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "¬´PROJECTNAME¬ª";
+			productReference = 4BB41E0009ED403300EE9367 /* msControler.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		20286C28FDCF999611CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BB41E0709ED403400EE9367 /* Build configuration list for PBXProject "msControler" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
+			projectDirPath = "";
+			targets = (
+				4BB41DEB09ED403300EE9367 /* msControler Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4BB41DED09ED403300EE9367 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DEE09ED403300EE9367 /* InfoPlist.strings in Resources */,
+				4BB41DEF09ED403300EE9367 /* msControler.icns in Resources */,
+				4BB41DF009ED403300EE9367 /* versions.txt in Resources */,
+				4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		4BB41DF909ED403300EE9367 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DFA09ED403300EE9367 /* msControler.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BB41DF109ED403300EE9367 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB41DF209ED403300EE9367 /* msControler.c in Sources */,
+				4BB41DF309ED403300EE9367 /* states.c in Sources */,
+				4BB41DF409ED403300EE9367 /* profport.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0867D6ABFE840B52C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4BB41DFC09ED403300EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BB41DFD09ED403300EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BB41DFE09ED403300EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				HEADER_SEARCH_PATHS = (
+					"../macosx-mono",
+					../../../lib,
+				);
+				INFOPLIST_FILE = "Info-msControler.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = msControler;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4BB41E0809ED403400EE9367 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Development;
+		};
+		4BB41E0909ED403400EE9367 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment;
+		};
+		4BB41E0A09ED403400EE9367 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BB41DFB09ED403300EE9367 /* Build configuration list for PBXNativeTarget "msControler Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41DFC09ED403300EE9367 /* Development */,
+				4BB41DFD09ED403300EE9367 /* Deployment */,
+				4BB41DFE09ED403300EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BB41E0709ED403400EE9367 /* Build configuration list for PBXProject "msControler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BB41E0809ED403400EE9367 /* Development */,
+				4BB41E0909ED403400EE9367 /* Deployment */,
+				4BB41E0A09ED403400EE9367 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 20286C28FDCF999611CA2CEA /* Project object */;
+}

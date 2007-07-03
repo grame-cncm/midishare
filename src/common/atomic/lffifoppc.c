@@ -105,7 +105,7 @@ fifocell* fifoavail (fifo* ff)
 	/* simulated atomic read of the required fields*/
 	while (1) {
 		LWARX (&ff->head);
-		fifocell * 	hd  = ff->head;
+		fifocell* 	hd  = ff->head;
 		fifocell*	n   = hd->link;
 		fifocell*	tail= ff->tail;
 		
@@ -121,10 +121,9 @@ fifocell* fifoavail (fifo* ff)
 //----------------------------------------------------------------
 fifocell* fifoflush (fifo* ff) 
 {
-	fifocell	*next, *cur;
+	fifocell* next, *cur;
 	fifocell* first;
-	if (ff->head==0) return 0;	
-	
+		
 	first = fifoget(ff);
 	if (first==0) return 0;	
 	cur = first;	

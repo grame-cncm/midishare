@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -66,6 +66,8 @@ typedef TTickPlayerInterface FAR * TTickPlayerInterfacePtr;
   \brief Task to play events at the same date.
 */
 
+class TTickPlayer;
+
 class TPlayTask : public TTicksTask {
 
 	friend class TTickPlayer;
@@ -76,7 +78,7 @@ class TPlayTask : public TTicksTask {
 
 	public : 
 	
-		TPlayTask (TTickPlayer* it):TTicksTask(),fPlayer(it){}
+		TPlayTask (TTickPlayer* it):TTicksTask(),fPlayer(it) {}
 		void Execute (TMidiApplPtr appl , ULONG date_ms);
 };
 
@@ -106,8 +108,8 @@ class TTickPlayer : public TTickPlayerInterface {
 	public:
  
  		TTickPlayer(TScorePtr score, TEventSenderInterfacePtr user, TSchedulerInterfacePtr scheduler)
- 			:fSliceVisitor(user),fIterator(score),fPlayTask(this),fEventUser(user),fScheduler(scheduler){}
- 		virtual ~TTickPlayer(){}
+ 			:fSliceVisitor(user),fIterator(score),fPlayTask(this),fEventUser(user),fScheduler(scheduler) {}
+ 		virtual ~TTickPlayer() {}
  		
  		void Init();
  		void Start();

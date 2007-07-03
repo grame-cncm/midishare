@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -48,8 +48,8 @@ class THashTable {
 	
 	public:
 		
-		THashTable(){Init();}
-		virtual ~THashTable(){Free();}
+		THashTable() {Init();}
+		virtual ~THashTable() {Free();}
 	
 		void		Free();
 		void 		InsertEvent(MidiEvPtr ev);

@@ -27,6 +27,6 @@
 typedef unsigned char 	Boolean;
 typedef unsigned char 	Byte;
 typedef unsigned char * Ptr;
-typedef int				socklen_t;
+//typedef int			socklen_t;  20-04-06 not needed anymore
 
 #endif

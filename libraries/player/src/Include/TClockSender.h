@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright © Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -39,6 +39,8 @@
   \brief Task to send clocks events.
 */
 
+class TClockSender;
+
 class TClockTask : public TTicksTask {
 
 	friend class TClockSender;
@@ -48,7 +50,7 @@ class TClockTask : public TTicksTask {
 		TClockSender* fSender;
 
 	public : 
-		TClockTask (TClockSender* it):TTicksTask(),fSender(it){}
+		TClockTask (TClockSender* it):TTicksTask(),fSender(it) {}
 		void Execute (TMidiApplPtr appl, ULONG date_ms);
 };
 
@@ -81,8 +83,8 @@ class TClockSender {
 	public:
 	
 		TClockSender(TSchedulerInterfacePtr scheduler,TClockConverterPtr converter,TEventSenderInterfacePtr user)
-			:fScheduler(scheduler),fClockConverter(converter),fEventUser(user),fClockTask(this),fClockCount(0){}
-		virtual ~TClockSender(){}
+			:fScheduler(scheduler),fClockConverter(converter),fEventUser(user),fClockTask(this),fClockCount(0) {}
+		virtual ~TClockSender() {}
  		
  		void Start();
  		void Stop();
