@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B48BDC00C3A555D002BBE34 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B48BDBF0C3A555D002BBE34 /* MidiShare.framework */; };
 		4BB41E4A09ED417D00EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
 		4BB41E4B09ED417D00EE9367 /* msDrivers.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581810507341900053103 /* msDrivers.icns */; };
 		4BB41E4C09ED417D00EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE809C05BC06E000FE2FFB /* versions.txt */; };
@@ -17,7 +18,6 @@
 		4BB41E5309ED417D00EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4BB41E5609ED417D00EE9367 /* msDrivers.r in Rez */ = {isa = PBXBuildFile; fileRef = F72817510206AC2D01053118 /* msDrivers.r */; };
 		4BDE3A6809EE9D9D0009E823 /* Info-msDrivers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3A6709EE9D9D0009E823 /* Info-msDrivers.plist */; };
-		D34DD3640C3A451800F4134A /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D34DD3630C3A451800F4134A /* MidiShare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,9 +25,9 @@
 		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		4B48BDBF0C3A555D002BBE34 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		4BB41E5C09ED417D00EE9367 /* msDrivers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDrivers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDE3A6709EE9D9D0009E823 /* Info-msDrivers.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msDrivers.plist"; sourceTree = SOURCE_ROOT; };
-		D34DD3630C3A451800F4134A /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		D3EE809C05BC06E000FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
 		D3F581810507341900053103 /* msDrivers.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msDrivers.icns; sourceTree = SOURCE_ROOT; };
 		F72817500206AC2D01053118 /* msDrivers.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = msDrivers.c; sourceTree = SOURCE_ROOT; };
@@ -43,7 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BB41E5309ED417D00EE9367 /* Carbon.framework in Frameworks */,
-				D34DD3640C3A451800F4134A /* MidiShare.framework in Frameworks */,
+				4B48BDC00C3A555D002BBE34 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +95,7 @@
 		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				D34DD3630C3A451800F4134A /* MidiShare.framework */,
+				4B48BDBF0C3A555D002BBE34 /* MidiShare.framework */,
 				20286C33FDCF999611CA2CEA /* Carbon.framework */,
 				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
 				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
@@ -213,8 +213,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../../build/Deployment\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -251,8 +253,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../../build/Deployment\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -287,8 +291,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../../build/Deployment\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = ../../../lib;
@@ -314,18 +320,33 @@
 		4BB41E6309ED417D00EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
 		4BB41E6409ED417D00EE9367 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};
 		4BB41E6509ED417D00EE9367 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Default;
 		};
