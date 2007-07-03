@@ -15,7 +15,6 @@
 		4BB41E9509ED421100EE9367 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DD0208057501053118 /* states.c */; };
 		4BB41E9609ED421100EE9367 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DE0208057501053118 /* profport.c */; };
 		4BB41E9809ED421100EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
-		4BB41E9A09ED421100EE9367 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3EECFDF05BD91E20036F237 /* MidiShare.framework */; };
 		4BB41E9C09ED421100EE9367 /* msDisplay.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D780201C6E001053118 /* msDisplay.r */; };
 		4BDE3A7C09EE9DDC0009E823 /* Info-msDisplay.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3A7B09EE9DDC0009E823 /* Info-msDisplay.plist */; };
 /* End PBXBuildFile section */
@@ -27,9 +26,8 @@
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4BB41EA209ED421100EE9367 /* msDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDE3A7B09EE9DDC0009E823 /* Info-msDisplay.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msDisplay.plist"; sourceTree = "<group>"; };
-		D354A75505BE8640006B0B2F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/MidiShare.framework; sourceTree = SOURCE_ROOT; };
+		D354A75505BE8640006B0B2F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		D3EE806A05BC06A200FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
-		D3EECFDF05BD91E20036F237 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		D3F581850507363A00053103 /* msDisplay.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msDisplay.icns; sourceTree = SOURCE_ROOT; };
 		F721C9DD0208057501053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
 		F721C9DE0208057501053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
@@ -44,7 +42,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BB41E9809ED421100EE9367 /* Carbon.framework in Frameworks */,
-				4BB41E9A09ED421100EE9367 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				D354A75505BE8640006B0B2F /* MidiShare.framework */,
-				D3EECFDF05BD91E20036F237 /* MidiShare.framework */,
 				20286C33FDCF999611CA2CEA /* Carbon.framework */,
 				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
 				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,

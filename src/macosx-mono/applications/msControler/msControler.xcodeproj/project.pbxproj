@@ -14,22 +14,19 @@
 		4BB41DF309ED403300EE9367 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9D90207FE0701053118 /* states.c */; };
 		4BB41DF409ED403300EE9367 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F721C9DB020803BC01053118 /* profport.c */; };
 		4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
-		4BB41DF809ED403300EE9367 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D354A6E505BE857D006B0B2F /* MidiShare.framework */; };
 		4BB41DFA09ED403300EE9367 /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
 		4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0249A669FF388E3911CA2CEA /* libstdc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libstdc++.a"; path = "/usr/lib/libstdc++.a"; sourceTree = "<absolute>"; };
 		0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4BB41E0009ED403300EE9367 /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msControler.plist"; sourceTree = SOURCE_ROOT; };
-		D354A6E505BE857D006B0B2F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		D3EE804C05BC065900FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
-		D3EE842105BC5A5600FE2FFB /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/MidiShare.framework; sourceTree = SOURCE_ROOT; };
+		D3EE842105BC5A5600FE2FFB /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		D3F5817D0507321600053103 /* msControler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msControler.icns; sourceTree = SOURCE_ROOT; };
 		F721C9D90207FE0701053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
 		F721C9DB020803BC01053118 /* profport.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = profport.c; path = ../../../lib/profport.c; sourceTree = SOURCE_ROOT; };
@@ -43,7 +40,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */,
-				4BB41DF809ED403300EE9367 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,9 +90,7 @@
 		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				D354A6E505BE857D006B0B2F /* MidiShare.framework */,
 				20286C33FDCF999611CA2CEA /* Carbon.framework */,
-				0249A669FF388E3911CA2CEA /* libstdc++.a */,
 				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
 				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
 				D3EE842105BC5A5600FE2FFB /* MidiShare.framework */,
