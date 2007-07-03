@@ -24,30 +24,6 @@
 		4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		F54A7D7501FC77AF01053105 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		F54A7D7601FC77AF01053105 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
 		4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.7.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msMidiDriver.1.0.7.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
@@ -148,15 +124,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = "msMidiDriver Universal1";
-				ZERO_LINK = YES;
-			};
 			dependencies = (
 			);
 			name = "msMidiDriver Universal";
@@ -170,12 +137,6 @@
 		F54A7D7301FC77AF01053105 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				F54A7D7501FC77AF01053105 /* Development */,
-				F54A7D7601FC77AF01053105 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = F54A7D7401FC77AF01053105;
 			productRefGroup = F54A7D7A01FC781301053105 /* Products */;
@@ -247,7 +208,8 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -274,7 +236,8 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -299,7 +262,8 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				USER_HEADER_SEARCH_PATHS = ../../../lib;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = YES;
 			};
 			name = Default;

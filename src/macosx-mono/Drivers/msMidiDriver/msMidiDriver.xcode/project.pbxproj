@@ -6,8 +6,7 @@
 	objectVersion = 39;
 	objects = {
 		4B97CB9E050CC7E600053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = MidiShare.framework;
 			path = /System/Library/Frameworks/MidiShare.framework;
@@ -128,8 +127,6 @@
 			sourceTree = "<group>";
 		};
 		F54A7D7501FC77AF01053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -142,8 +139,6 @@
 			name = Development;
 		};
 		F54A7D7601FC77AF01053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -184,8 +179,7 @@
 		};
 		F54A7D7B01FC781301053105 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
+			isa = PBXFileReference;
 			path = msMidiDriver.1.0.6.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -386,8 +380,7 @@
 			};
 		};
 		F76B9CAD02086E8001053118 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreMIDI.framework;
 			path = /System/Library/Frameworks/CoreMIDI.framework;

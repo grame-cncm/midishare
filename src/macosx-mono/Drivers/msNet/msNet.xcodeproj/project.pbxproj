@@ -182,30 +182,6 @@
 		4B234DA609F631A600488DBD /* lflifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE3B0C09EE9F590009E823 /* lflifo.c */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		F727EA290209364501053118 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		F727EA2A0209364501053118 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
 		4B234CCD09F62FB500488DBD /* msLANDriver.1.0.3.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msLANDriver.1.0.3.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B234D3B09F62FDB00488DBD /* msWANDriver.1.0.3.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msWANDriver.1.0.3.so; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -641,29 +617,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = dylib.exp;
-				FRAMEWORK_SEARCH_PATHS = "";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msLANDriver.1.0.2.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = "msUDPDriver Universal";
@@ -683,30 +636,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = dylib.exp;
-				FRAMEWORK_SEARCH_PATHS = "";
-				LIBRARY_STYLE = BUNDLE;
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DWANDriver";
-				OTHER_LDFLAGS = "-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = implicit.h;
-				PRODUCT_NAME = msWANDriver.1.0.2.so;
-				REZ_EXECUTABLE = YES;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = "msTCPDriver Universal";
@@ -721,12 +650,6 @@
 		F727EA270209364501053118 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BDE3B0509EE9F350009E823 /* Build configuration list for PBXProject "msNet" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				F727EA290209364501053118 /* Development */,
-				F727EA2A0209364501053118 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = F727EA280209364501053118;
 			productRefGroup = F727EA2B0209389101053118 /* Products */;
@@ -879,7 +802,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msLANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -917,7 +842,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msLANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -953,7 +880,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msLANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -991,7 +920,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msWANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -1029,7 +960,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msWANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -1065,7 +998,9 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = msWANDriver.1.0.3;
 				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",

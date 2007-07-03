@@ -6,8 +6,7 @@
 	objectVersion = 39;
 	objects = {
 		4BB494EF054EB73400053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;
@@ -21,8 +20,7 @@
 			};
 		};
 		4BB494F1054EB74800053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = AudioToolbox.framework;
 			path = /System/Library/Frameworks/AudioToolbox.framework;
@@ -91,8 +89,6 @@
 			sourceTree = "<group>";
 		};
 		F54622F601FC5D7801053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -105,8 +101,6 @@
 			name = Development;
 		};
 		F54622F701FC5D7801053105 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -127,8 +121,7 @@
 		};
 		F547CC8201FC5DCC01053105 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
+			isa = PBXFileReference;
 			path = msSynthDriver.1.0.2.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -212,8 +205,7 @@
 			};
 		};
 		F54A7D7201FC623E01053105 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;

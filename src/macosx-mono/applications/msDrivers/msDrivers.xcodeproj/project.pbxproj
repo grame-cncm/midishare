@@ -6,142 +6,7 @@
 	objectVersion = 42;
 	objects = {
 
-/* Begin PBXApplicationTarget section */
-		20286C34FDCF999611CA2CEA /* msDrivers */ = {
-			isa = PBXApplicationTarget;
-			buildConfigurationList = 4BB41E4309ED417D00EE9367 /* Build configuration list for PBXApplicationTarget "msDrivers" */;
-			buildPhases = (
-				20286C35FDCF999611CA2CEA /* Headers */,
-				20286C36FDCF999611CA2CEA /* Resources */,
-				20286C38FDCF999611CA2CEA /* Sources */,
-				20286C3BFDCF999611CA2CEA /* Frameworks */,
-				04313892FE3035C9C02AAC07 /* Rez */,
-			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			name = msDrivers;
-			productInstallPath = "$(HOME)/Applications";
-			productName = "¬´PROJECTNAME¬ª";
-			productReference = 0249A665FF388DC511CA2CEA /* msDrivers.app */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>msDrivers</string>
-	<key>CFBundleGetInfoString</key>
-	<string>v.1.3 © Grame 2003</string>
-	<key>CFBundleIconFile</key>
-	<string>msDrivers.icns</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>msDrivers</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>v. 1.3</string>
-	<key>CFBundleSignature</key>
-	<string>SlCt</string>
-	<key>CFBundleVersion</key>
-	<string>1.3</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-</dict>
-</plist>
-";
-		};
-		D354A78605BE8681006B0B2F /* msDrivers dev */ = {
-			isa = PBXApplicationTarget;
-			buildConfigurationList = 4BB41E5E09ED417D00EE9367 /* Build configuration list for PBXApplicationTarget "msDrivers dev" */;
-			buildPhases = (
-				D354A78705BE8681006B0B2F /* Headers */,
-				D354A78805BE8681006B0B2F /* Resources */,
-				D354A78C05BE8681006B0B2F /* Sources */,
-				D354A79105BE8681006B0B2F /* Frameworks */,
-				D354A79405BE8681006B0B2F /* Rez */,
-			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			name = "msDrivers dev";
-			productInstallPath = "$(HOME)/Applications";
-			productName = "¬´PROJECTNAME¬ª";
-			productReference = D354A79605BE8681006B0B2F /* msDrivers.app */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>msDrivers</string>
-	<key>CFBundleGetInfoString</key>
-	<string>v.1.3 © Grame 2003</string>
-	<key>CFBundleIconFile</key>
-	<string>msDrivers.icns</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>msDrivers</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>v. 1.3</string>
-	<key>CFBundleSignature</key>
-	<string>SlCt</string>
-	<key>CFBundleVersion</key>
-	<string>1.3</string>
-	<key>CSResourcesFileMapped</key>
-	<true/>
-</dict>
-</plist>
-";
-		};
-/* End PBXApplicationTarget section */
-
 /* Begin PBXBuildFile section */
-		0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
-		20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4BB41E4A09ED417D00EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
 		4BB41E4B09ED417D00EE9367 /* msDrivers.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581810507341900053103 /* msDrivers.icns */; };
 		4BB41E4C09ED417D00EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE809C05BC06E000FE2FFB /* versions.txt */; };
@@ -153,59 +18,15 @@
 		4BB41E5409ED417D00EE9367 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3658A4805BD260600DFCB64 /* MidiShare.framework */; };
 		4BB41E5609ED417D00EE9367 /* msDrivers.r in Rez */ = {isa = PBXBuildFile; fileRef = F72817510206AC2D01053118 /* msDrivers.r */; };
 		4BDE3A6809EE9D9D0009E823 /* Info-msDrivers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3A6709EE9D9D0009E823 /* Info-msDrivers.plist */; };
-		D354A78905BE8681006B0B2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
-		D354A78A05BE8681006B0B2F /* msDrivers.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581810507341900053103 /* msDrivers.icns */; };
-		D354A78B05BE8681006B0B2F /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE809C05BC06E000FE2FFB /* versions.txt */; };
-		D354A78D05BE8681006B0B2F /* msDrivers.c in Sources */ = {isa = PBXBuildFile; fileRef = F72817500206AC2D01053118 /* msDrivers.c */; };
-		D354A78E05BE8681006B0B2F /* msDrvAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F72817520206AC2D01053118 /* msDrvAppl.c */; };
-		D354A78F05BE8681006B0B2F /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F7504113020708BE01053118 /* profport.c */; };
-		D354A79005BE8681006B0B2F /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F75041100207042D01053118 /* states.c */; };
-		D354A79205BE8681006B0B2F /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
-		D354A79505BE8681006B0B2F /* msDrivers.r in Rez */ = {isa = PBXBuildFile; fileRef = F72817510206AC2D01053118 /* msDrivers.r */; };
-		D3658A4905BD260600DFCB64 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3658A4805BD260600DFCB64 /* MidiShare.framework */; };
-		D3EE809D05BC06E000FE2FFB /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE809C05BC06E000FE2FFB /* versions.txt */; };
-		D3F581820507341900053103 /* msDrivers.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F581810507341900053103 /* msDrivers.icns */; };
-		F721C9E10208216001053118 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F7504113020708BE01053118 /* profport.c */; };
-		F721C9E20208216001053118 /* states.c in Sources */ = {isa = PBXBuildFile; fileRef = F75041100207042D01053118 /* states.c */; };
-		F72817570206AC2D01053118 /* msDrivers.c in Sources */ = {isa = PBXBuildFile; fileRef = F72817500206AC2D01053118 /* msDrivers.c */; };
-		F72817580206AC2D01053118 /* msDrvAppl.c in Sources */ = {isa = PBXBuildFile; fileRef = F72817520206AC2D01053118 /* msDrvAppl.c */; };
-		F728175A0206AC2D01053118 /* msDrivers.r in Rez */ = {isa = PBXBuildFile; fileRef = F72817510206AC2D01053118 /* msDrivers.r */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		05952DFCFFF02D1B11CA0E50 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		05952DFDFFF02D1B11CA0E50 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
-		0249A665FF388DC511CA2CEA /* msDrivers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = msDrivers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4BB41E5C09ED417D00EE9367 /* msDrivers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDrivers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDE3A6709EE9D9D0009E823 /* Info-msDrivers.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msDrivers.plist"; sourceTree = SOURCE_ROOT; };
-		D354A79605BE8681006B0B2F /* msDrivers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msDrivers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3658A4805BD260600DFCB64 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		D3EE809C05BC06E000FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
 		D3F581810507341900053103 /* msDrivers.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msDrivers.icns; sourceTree = SOURCE_ROOT; };
@@ -217,15 +38,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		20286C3BFDCF999611CA2CEA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				20286C3CFDCF999611CA2CEA /* Carbon.framework in Frameworks */,
-				D3658A4905BD260600DFCB64 /* MidiShare.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41E5209ED417D00EE9367 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -235,22 +47,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D354A79105BE8681006B0B2F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D354A79205BE8681006B0B2F /* Carbon.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		195DF8C9FE9D4F0611CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0249A665FF388DC511CA2CEA /* msDrivers.app */,
-				D354A79605BE8681006B0B2F /* msDrivers.app */,
 				4BB41E5C09ED417D00EE9367 /* msDrivers.app */,
 			);
 			name = Products;
@@ -304,21 +106,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		20286C35FDCF999611CA2CEA /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41E4809ED417D00EE9367 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D354A78705BE8681006B0B2F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -340,25 +128,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = "msDrivers Universal";
@@ -373,34 +142,16 @@
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41E6209ED417D00EE9367 /* Build configuration list for PBXProject "msDrivers" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				05952DFCFFF02D1B11CA0E50 /* Development */,
-				05952DFDFFF02D1B11CA0E50 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
 			projectDirPath = "";
 			targets = (
-				20286C34FDCF999611CA2CEA /* msDrivers */,
 				4BB41E4709ED417D00EE9367 /* msDrivers Universal */,
-				D354A78605BE8681006B0B2F /* msDrivers dev */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		20286C36FDCF999611CA2CEA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0867D6ACFE840B52C02AAC07 /* InfoPlist.strings in Resources */,
-				D3F581820507341900053103 /* msDrivers.icns in Resources */,
-				D3EE809D05BC06E000FE2FFB /* versions.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41E4909ED417D00EE9367 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -412,27 +163,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D354A78805BE8681006B0B2F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D354A78905BE8681006B0B2F /* InfoPlist.strings in Resources */,
-				D354A78A05BE8681006B0B2F /* msDrivers.icns in Resources */,
-				D354A78B05BE8681006B0B2F /* versions.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		04313892FE3035C9C02AAC07 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F728175A0206AC2D01053118 /* msDrivers.r in Rez */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41E5509ED417D00EE9367 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
@@ -441,28 +174,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D354A79405BE8681006B0B2F /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D354A79505BE8681006B0B2F /* msDrivers.r in Rez */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		20286C38FDCF999611CA2CEA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F72817570206AC2D01053118 /* msDrivers.c in Sources */,
-				F72817580206AC2D01053118 /* msDrvAppl.c in Sources */,
-				F721C9E10208216001053118 /* profport.c in Sources */,
-				F721C9E20208216001053118 /* states.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4BB41E4D09ED417D00EE9367 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,17 +185,6 @@
 				4BB41E4F09ED417D00EE9367 /* msDrvAppl.c in Sources */,
 				4BB41E5009ED417D00EE9367 /* profport.c in Sources */,
 				4BB41E5109ED417D00EE9367 /* states.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D354A78C05BE8681006B0B2F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D354A78D05BE8681006B0B2F /* msDrivers.c in Sources */,
-				D354A78E05BE8681006B0B2F /* msDrvAppl.c in Sources */,
-				D354A78F05BE8681006B0B2F /* profport.c in Sources */,
-				D354A79005BE8681006B0B2F /* states.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,84 +202,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		4BB41E4409ED417D00EE9367 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4BB41E4509ED417D00EE9367 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4BB41E4609ED417D00EE9367 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		4BB41E5809ED417D00EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -598,7 +223,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msDrivers;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -629,7 +256,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msDrivers;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -658,85 +287,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msDrivers;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
-		4BB41E5F09ED417D00EE9367 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4BB41E6009ED417D00EE9367 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4BB41E6109ED417D00EE9367 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = ../../../lib;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = msDrivers;
-				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -767,32 +320,12 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4BB41E4309ED417D00EE9367 /* Build configuration list for PBXApplicationTarget "msDrivers" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BB41E4409ED417D00EE9367 /* Development */,
-				4BB41E4509ED417D00EE9367 /* Deployment */,
-				4BB41E4609ED417D00EE9367 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		4BB41E5709ED417D00EE9367 /* Build configuration list for PBXNativeTarget "msDrivers Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4BB41E5809ED417D00EE9367 /* Development */,
 				4BB41E5909ED417D00EE9367 /* Deployment */,
 				4BB41E5A09ED417D00EE9367 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		4BB41E5E09ED417D00EE9367 /* Build configuration list for PBXApplicationTarget "msDrivers dev" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BB41E5F09ED417D00EE9367 /* Development */,
-				4BB41E6009ED417D00EE9367 /* Deployment */,
-				4BB41E6109ED417D00EE9367 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

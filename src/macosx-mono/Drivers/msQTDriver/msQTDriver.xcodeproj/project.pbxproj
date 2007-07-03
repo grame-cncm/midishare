@@ -18,30 +18,6 @@
 		4BADAD4C09ED779700BC5B44 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BADAD4909ED779700BC5B44 /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		F567580D01FDA3E101053105 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		F567580E01FDA3E101053105 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXFileReference section */
 		4BADAD0D09ED772600BC5B44 /* msQTDriver.1.0.5.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msQTDriver.1.0.5.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BADAD1909ED775E00BC5B44 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
@@ -121,15 +97,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = Untitled;
-				ZERO_LINK = YES;
-			};
 			dependencies = (
 			);
 			name = "msQTDriver Universal";
@@ -143,12 +110,6 @@
 		F567580B01FDA3E101053105 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41F0C09ED430000EE9367 /* Build configuration list for PBXProject "msQTDriver" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				F567580D01FDA3E101053105 /* Development */,
-				F567580E01FDA3E101053105 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = F567580C01FDA3E101053105;
 			productRefGroup = F5EFF91601FDA40901053105 /* Products */;
@@ -192,6 +153,8 @@
 				MACH_O_TYPE = mh_dylib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msQTDriver.1.0.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -213,6 +176,8 @@
 				MACH_O_TYPE = mh_dylib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msQTDriver.1.0.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -232,6 +197,8 @@
 				MACH_O_TYPE = mh_dylib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msQTDriver.1.0.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				USER_HEADER_SEARCH_PATHS = /usr/local/include;
 				ZERO_LINK = YES;
 			};
 			name = Default;

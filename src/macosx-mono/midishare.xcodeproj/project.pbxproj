@@ -532,6 +532,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -581,6 +582,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -628,6 +630,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",

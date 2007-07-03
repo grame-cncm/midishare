@@ -119,9 +119,8 @@ static void redrawButtons()
 
 gint my_delete_action(GtkWidget* w, GdkEvent* ev, gpointer data) 
 {
-	
 	MidiForgetTask(&gClockTask);
-	//if(gFilter) MidiFreeFilter(gFilter);
+	if (gFilter) MidiFreeFilter(gFilter);
 	MidiClose(gRefNum);
 	gtk_main_quit();
 	return FALSE;
@@ -192,8 +191,7 @@ void contSynchro( GtkWidget *widget,gpointer   data )
 	redrawButtons();
 }
 
-
- GtkWidget *create_bbox( gint  horizontal,
+GtkWidget *create_bbox( gint  horizontal,
                                char *title,
                                gint  spacing,
                                gint  child_w,
@@ -289,15 +287,12 @@ int main(int argc, char *argv[] )
 	gtk_widget_show_all (window);
 	
 	// Connexion of signals
-		
 	gtk_signal_connect(
 			GTK_OBJECT(window), "destroy", 
 			GTK_SIGNAL_FUNC(my_delete_action), NULL
 	);
 
 	gtk_main ();
-
-
 	return(0);
 }
 
