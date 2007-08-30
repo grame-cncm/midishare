@@ -21,7 +21,7 @@ Provided you didn't store some personnal files in your home MidiShare
 folder, you can now safely remove it.
 
 !
-	/usr/sbin/chown $2 $1
+	[ $2 ] && /usr/sbin/chown $2 $1
 }
 
 function move_old () {
@@ -54,11 +54,11 @@ rm -f $LIB/libMidiShare*.dylib
 rm -f $LIB/ms*Driver*.dylib
 rm -f $MSF/.checkinstall
 
-user=$(ls -ld $HOME | sed -e's/  */ /g' | cut -d' ' -f3)
+user=$(id -p | grep login | cut -f2)
 
 # creates the new MidiShare folder
 [ -d $NEWUMSF ] || mkdir -p $NEWUMSF
-/usr/sbin/chown $user $NEWUMSF
+[ $user ] && /usr/sbin/chown $user $NEWUMSF
 
 # moves the ini files to the new user MidiShare folder
 move_old $UMSF1
@@ -73,7 +73,7 @@ located int the Library/Preferences folder of your
 home directory.
 The .MidiShare folder isn't used any more.
 !
-/usr/sbin/chown $user $UMSF2
+[ $user ] && /usr/sbin/chown $user $UMSF2
 fi
 
 # check for hostname
