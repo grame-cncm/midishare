@@ -495,7 +495,7 @@ void TPlayer::ReceiveAlarm(short ref)
 	}
 	
 #ifdef WIN32	
-	fMutex.Unlock():
+	fMutex.Unlock();
 #endif
 }
 

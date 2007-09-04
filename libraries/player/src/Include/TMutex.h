@@ -32,9 +32,6 @@
 
 #include<assert.h>
 
-namespace ScoreProcessing 
-{
-
 class TMutex 
 {
 	
@@ -155,7 +152,5 @@ class TLock
 		}
 };
 
-
-} // namespace
 
 #endif
