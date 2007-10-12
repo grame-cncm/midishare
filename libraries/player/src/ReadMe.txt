@@ -59,6 +59,8 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 04/09/07 : Version 2.09 : Use a mutex to protect internal player destruction/creation.
 
+12/10/07 : Version 2.10 : Use Convert2UTF8 to manage midifile filename.
+
 ==================
 General Remarks
 ==================

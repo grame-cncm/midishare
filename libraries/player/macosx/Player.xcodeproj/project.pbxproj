@@ -53,6 +53,9 @@
 		4BB41F8109ED464000EE9367 /* TSyncOutPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E5038C2A120121BE68 /* TSyncOutPlayer.cpp */; };
 		4BB41F8209ED464000EE9367 /* TTickPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66198E6038C2A120121BE68 /* TTickPlayer.cpp */; };
 		4BB41F8309ED464000EE9367 /* midifile.c in Sources */ = {isa = PBXBuildFile; fileRef = D3EA0D3608717BB700AB8D8D /* midifile.c */; };
+		4BE0E3B60CBF6F6F00D3D272 /* TMutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE0E3B50CBF6F6F00D3D272 /* TMutex.h */; };
+		4BE0E3B80CBF6F9000D3D272 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE0E3B70CBF6F9000D3D272 /* StringTools.h */; };
+		4BE0E3BB0CBF6FA800D3D272 /* StringTools.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BE0E3BA0CBF6FA800D3D272 /* StringTools.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4B234E1209F6363A00488DBD /* Info-Player.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-Player.plist"; sourceTree = SOURCE_ROOT; };
 		4BB41F8B09ED464000EE9367 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BE0E3B50CBF6F6F00D3D272 /* TMutex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TMutex.h; path = ../src/Include/TMutex.h; sourceTree = SOURCE_ROOT; };
+		4BE0E3B70CBF6F9000D3D272 /* StringTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = StringTools.h; path = ../src/Include/StringTools.h; sourceTree = SOURCE_ROOT; };
+		4BE0E3BA0CBF6FA800D3D272 /* StringTools.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = StringTools.c; path = ../src/MidiFile/StringTools.c; sourceTree = SOURCE_ROOT; };
 		D3EA0D020871659F00AB8D8D /* midifile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = midifile.h; path = ../src/Include/midifile.h; sourceTree = SOURCE_ROOT; };
 		D3EA0D030871659F00AB8D8D /* PlayerDefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PlayerDefs.h; path = ../src/Include/PlayerDefs.h; sourceTree = SOURCE_ROOT; };
 		D3EA0D3608717BB700AB8D8D /* midifile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = midifile.c; path = ../src/MidiFile/midifile.c; sourceTree = SOURCE_ROOT; };
@@ -335,6 +341,8 @@
 		F6619891038C2A120121BE68 /* Include */ = {
 			isa = PBXGroup;
 			children = (
+				4BE0E3B70CBF6F9000D3D272 /* StringTools.h */,
+				4BE0E3B50CBF6F6F00D3D272 /* TMutex.h */,
 				F6619893038C2A120121BE68 /* CStruct.h */,
 				D3EA0D020871659F00AB8D8D /* midifile.h */,
 				F6619896038C2A120121BE68 /* MidiFilter.h */,
@@ -424,6 +432,7 @@
 		F66198DE038C2A120121BE68 /* MidiFile */ = {
 			isa = PBXGroup;
 			children = (
+				4BE0E3BA0CBF6FA800D3D272 /* StringTools.c */,
 				D3EA0D3608717BB700AB8D8D /* midifile.c */,
 				F66198E0038C2A120121BE68 /* Tmtrack.c */,
 			);
@@ -495,6 +504,8 @@
 				4BB41F5509ED464000EE9367 /* Player.h in Headers */,
 				4BB41F5609ED464000EE9367 /* midifile.h in Headers */,
 				4BB41F5709ED464000EE9367 /* PlayerDefs.h in Headers */,
+				4BE0E3B60CBF6F6F00D3D272 /* TMutex.h in Headers */,
+				4BE0E3B80CBF6F9000D3D272 /* StringTools.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,6 +616,7 @@
 				4BB41F8109ED464000EE9367 /* TSyncOutPlayer.cpp in Sources */,
 				4BB41F8209ED464000EE9367 /* TTickPlayer.cpp in Sources */,
 				4BB41F8309ED464000EE9367 /* midifile.c in Sources */,
+				4BE0E3BB0CBF6FA800D3D272 /* StringTools.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
