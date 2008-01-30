@@ -22,10 +22,13 @@ arch=i386
 echo $res | grep __ppc__ 2>&1 > /dev/null
 [ $? -eq 0 ] && arch=powerpc
 echo $arch
+echo $res | grep __APPLE__ 2>&1 > /dev/null
+[ $? -eq 0 ] && SYS=MACOS
 
-if [ $arch == "powerpc" ]
+
+if [ $SYS == "MACOS" ]
 then
-	echo Calling conf powerpc
+	echo Calling conf MacOSX
 	makemake osx
 elif [ $arch == "i386" ]
 then

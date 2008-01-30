@@ -35,10 +35,6 @@
 #define kLastIndex		kIndexLimit-1
 #define	kSokPerms		S_IRUSR+S_IWUSR+S_IRGRP+S_IWGRP+S_IROTH+S_IWOTH
 
-#ifndef linux
-	typedef int socklen_t;
-#endif
-
 
 //_____________________________________________________________________
 TLocalSocket::TLocalSocket ()
