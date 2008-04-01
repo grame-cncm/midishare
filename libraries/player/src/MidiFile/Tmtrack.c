@@ -71,12 +71,12 @@
 #include "StringTools.h"
 
 #ifdef __Macintosh__
-	#include <CType.h>
+	#include <ctype.h>
 	#ifdef __MacOS9__
 		#include <Files.h>
 	#endif
-	#include <StdLib.h>
-	#include <String.h>
+	#include <stdlib.h>
+	#include <string.h>
 #endif
 
 #ifdef __Windows__

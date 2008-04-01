@@ -49,9 +49,9 @@
  
 
 #ifdef __Macintosh__
-# include <Errno.h>
-# include <StdLib.h>
-# include <String.h>
+# include <errno.h>
+# include <stdlib.h>
+# include <string.h>
 #endif
 
 #ifdef WIN32
