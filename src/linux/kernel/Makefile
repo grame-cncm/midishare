@@ -1,5 +1,4 @@
-
-KERNEL_DIR := /usr/src/linux
+### updated 2008-04-07 on ubuntu 7.10 (Yann)
 
 EXTRA_CFLAGS += -I$(obj)/../../common/Headers  -I$(obj)/../../common/atomic -D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 
@@ -29,7 +28,9 @@ $(S)/msSorter.c $(D)/msDriver.c
 
 all:
 	for x in $(COMMON); do ln -sf ../../common/$$x `basename $$x`; done
-	$(MAKE) modules -C $(KERNEL_DIR) SUBDIRS=$(shell pwd)
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+###	$(MAKE) modules -C $(KERNEL_DIR) SUBDIRS=$(shell pwd)
 
 clean:
 	-rm -f *.ko *.o
