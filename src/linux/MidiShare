@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # chkconfig: 35 90 10
 # description: Load the midishare kernel module
