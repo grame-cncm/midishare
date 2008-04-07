@@ -30,12 +30,14 @@ install: libinstall clientsinstall
 	/sbin/depmod -a
 	install -m 644 midishare-udev.rules $(UDEV)
 	install MidiShare $(INIT)
-	/usr/lib/lsb/install_initd $(SERV)
+	##/usr/lib/lsb/install_initd $(SERV)
+	update-rc.d $(SERV) defaults
 	./MidiShare start
 
 uninstall: libuninstall clientsuninstall
 	./MidiShare stop
-	/usr/lib/lsb/remove_initd $(SERV)
+##	/usr/lib/lsb/remove_initd $(SERV)
+	update-rc.d $(SERV) remove	
 	rm -f $(INIT)/MidiShare
 	rm -f $(MODF)/midishare.ko
 	rm -f $(UDEV)/midishare-udev.rules
