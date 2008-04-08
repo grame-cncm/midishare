@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -57,7 +57,7 @@ void CloseTimeInterrupts(TMSGlobalPtr g);
 /*------------------------------------------------------------------------------*/
 /*                   client applications context and tasks                      */
 /*------------------------------------------------------------------------------*/
-TApplContextPtr CreateApplContext ();
+TApplContextPtr CreateApplContext (void);
 void			DisposeApplContext (TApplContextPtr context);
 void CallApplAlarm (TApplContextPtr context, ApplAlarmPtr alarm, short refNum, long alarmCode);
 void CallRcvAlarm  (TApplContextPtr context, RcvAlarmPtr alarm, short refNum);
