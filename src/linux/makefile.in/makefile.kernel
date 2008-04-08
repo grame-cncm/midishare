@@ -28,7 +28,7 @@ $(S)/msSorter.c $(D)/msDriver.c
 
 all:
 	for x in $(COMMON); do ln -sf ../../common/$$x `basename $$x`; done
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	make -C /lib/modules/$(shell uname -r)/build M=`pwd` modules
 
 clean:
 	-rm -f *.ko *.o
