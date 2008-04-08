@@ -1,5 +1,5 @@
-### updated 2008-04-07 on ubuntu 7.10 (Yann)
-
+# Works with ubuntu 7.10 (Yann, 7 april 2008)
+ 
 EXTRA_CFLAGS += -I$(obj)/../../common/Headers  -I$(obj)/../../common/atomic -D_LOOSE_KERNEL_NAMES -DMODVERSIONS -D__Pentium__ -DCONFIG_KERNELD -DMODULE -D__KERNEL__ -DLINUX
 
 obj-m := midishare.o
@@ -28,9 +28,7 @@ $(S)/msSorter.c $(D)/msDriver.c
 
 all:
 	for x in $(COMMON); do ln -sf ../../common/$$x `basename $$x`; done
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-
-###	$(MAKE) modules -C $(KERNEL_DIR) SUBDIRS=$(shell pwd)
+	make -C /lib/modules/$(shell uname -r)/build M=`pwd` modules
 
 clean:
 	-rm -f *.ko *.o
