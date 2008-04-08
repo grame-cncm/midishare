@@ -1,7 +1,7 @@
 /*
 
-  Copyright © Grame 2001
-  Copyright © Mil Productions 2001
+  Copyright ï¿½ Grame 2001
+  Copyright ï¿½ Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -39,7 +39,7 @@ typedef void * (*thread_main_ptr) (void * ptr);
 // TCP threads entry points
 //____________________________________________________________
 
-static void QuitHandler (int sigNum) { pthread_exit (0); }
+//static void QuitHandler (int sigNum) { pthread_exit (0); }
 static void * sok_accept (void * ptr)
 {
 	int old;
