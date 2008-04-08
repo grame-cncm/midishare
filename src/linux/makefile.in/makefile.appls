@@ -1,7 +1,7 @@
 
-TARGET = msApplsLib.o
-CFLAGS = $(CFLAGS) -I../../Include `pkg-config --cflags --libs gtk+-2.0`
-OBJ  = msApplsTools.o
+TARGET := msApplsLib.o
+CFLAGS := $(CFLAGS) -I../../Include `pkg-config --cflags --libs gtk+-2.0`
+OBJ  := msApplsTools.o
 #CC   = gcc
 
 all : $(TARGET)
