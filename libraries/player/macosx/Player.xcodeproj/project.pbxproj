@@ -61,7 +61,7 @@
 /* Begin PBXFileReference section */
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		4B234E1209F6363A00488DBD /* Info-Player.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-Player.plist"; sourceTree = SOURCE_ROOT; };
+		4B234E1209F6363A00488DBD /* Info-Player.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Info-Player.plist"; sourceTree = SOURCE_ROOT; };
 		4BB41F8B09ED464000EE9367 /* Player.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Player.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE0E3B50CBF6F6F00D3D272 /* TMutex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TMutex.h; path = ../src/Include/TMutex.h; sourceTree = SOURCE_ROOT; };
 		4BE0E3B70CBF6F9000D3D272 /* StringTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = StringTools.h; path = ../src/Include/StringTools.h; sourceTree = SOURCE_ROOT; };

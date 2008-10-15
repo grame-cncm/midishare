@@ -65,9 +65,7 @@ class TPlayer : public TMidiAppl {
 		
 		TScoreStatePtr   	fScoreState;		// For internal state 
 		TSMPTEInfos	        fSmpteInfos;        // For SMPTE synchronization
-	#ifdef WIN32	
-		TMutex	fMutex;
-	#endif
+        TMutex	fMutex;
 		
 		ULONG	fTick_per_quarter;  	// Current resolution
 		short   fSyncIn;         // SynchroIn state

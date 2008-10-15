@@ -63,6 +63,8 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 01/04/08 : Version 2.11 : Correct TimeSign management.
 
+12/10/08 : Version 2.12 : Correct IsTempoMap macro (typeKeySign not a tempo map event), use mutex in all platforms and also protect TPlayer::~TPlayer.
+
 ==================
 General Remarks
 ==================

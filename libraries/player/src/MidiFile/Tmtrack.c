@@ -55,7 +55,6 @@
  *							typeTempo
  *							typeSMPTEOffset
  *							typeTimeSign
- *							typeKeySign
  *  ˆ la relecture, il n'est donc pas possible de restaurer leur numŽro de rŽfŽrence
  *  si celui-ci diffre de 0.
  *	
@@ -96,7 +95,7 @@ char *Player= "PLAYER ref:";
 
 /*--------------- les types stockŽs dans la tempo map ----------------------*/
 
-#define IsTempoMap(t) ((t)==typeCopyright || (t)==typeMarker || ((t)>=typeTempo && (t)<=typeKeySign))
+#define IsTempoMap(t) ((t)==typeCopyright || (t)==typeMarker || ((t)>=typeTempo && (t)<typeKeySign))
 
 /*--------------- les variables globales -----------------------------------*/
 

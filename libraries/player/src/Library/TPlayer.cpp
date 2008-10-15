@@ -67,7 +67,12 @@ the MidiShare memory manager is no more available. TMidiAppl::Close() will be la
 called by the TMidiAppl destructor.
 */
 
-TPlayer::~TPlayer() {fFactory.DestroyPlayer(&fPlayer);}
+TPlayer::~TPlayer() 
+{
+    fMutex.Lock();
+    fFactory.DestroyPlayer(&fPlayer);
+    fMutex.Unlock();
+}
 
 /*--------------------------------------------------------------------------*/
 // Open/Close
@@ -148,10 +153,7 @@ void TPlayer::SetPosTicks(long date_ticks) {fPlayer->SetPosTicks(date_ticks);}
  		MidiSeqPtr s1 = UMidi::BuildTrack(s); // Build the sequence
 	 	if (!s1) return kErrEvent;
 
-	#ifdef WIN32	
-		fMutex.Lock();
-	#endif
-	 		
+        fMutex.Lock();
 	 	long res;
 	 	fFactory.DestroyPlayer(&fPlayer);
 			 		
@@ -159,11 +161,8 @@ void TPlayer::SetPosTicks(long date_ticks) {fPlayer->SetPosTicks(date_ticks);}
 	  		fPlayer = fFactory.CreatePlayer();
 	 	}
 		
-	#ifdef WIN32	
 		fMutex.Unlock();
-	#endif
-	 	
-	 	return res;
+ 	 	return res;
 	 }else
 	 	return kErrSequencer;
  }
@@ -177,9 +176,7 @@ void TPlayer::SetPosTicks(long date_ticks) {fPlayer->SetPosTicks(date_ticks);}
  		MidiSeqPtr s1 = UMidi::BuildAllTrack(s); // Build the sequence
  		if (!s1) return kErrEvent;
 	
-	#ifdef WIN32	
-		fMutex.Lock();
-	#endif
+        fMutex.Lock();
 	
  		long res;
  		fTick_per_quarter = ticks_per_quarter;
@@ -191,10 +188,7 @@ void TPlayer::SetPosTicks(long date_ticks) {fPlayer->SetPosTicks(date_ticks);}
 	 		memento.DefaultState(this);
 		}
 		
-	#ifdef WIN32	
 		fMutex.Unlock();
-	#endif
-	
 		return res;
 	 	
 	 }else
@@ -268,17 +262,12 @@ void TPlayer::SetSynchroIn(short state)
 		TPlayerMemento memento;
 		memento.SaveState(this);			// Save the current state
 		
-	#ifdef WIN32	
 		fMutex.Lock();
-	#endif
 		
  		fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
  		fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
 		
-	#ifdef WIN32	
 		fMutex.Unlock();
-	#endif
- 		
  		memento.RestoreState(this);			// Restore the current state
  	}
 }
@@ -293,17 +282,12 @@ void TPlayer::SetSynchroOut(short state)
    		TPlayerMemento memento;
 		memento.SaveState(this);			// Save the current state
  	
-	#ifdef WIN32	
 		fMutex.Lock();
-	#endif
 	 		
 	 	fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
 	 	fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
 		
-	#ifdef WIN32	
 		fMutex.Unlock();
-	#endif 	
-	
 	 	memento.RestoreState(this);			// Restore the current state
 	 }
  }
@@ -423,16 +407,13 @@ long TPlayer::SetOutput(short output)
   		TPlayerMemento memento;
 		memento.SaveState(this);			// Save the current state
 		
-	#ifdef WIN32	
 		fMutex.Lock();
-	#endif
 			
 	 	fFactory.DestroyPlayer(&fPlayer);	// Delete the current Player
 	 	fPlayer = fFactory.CreatePlayer();	// Allocate a new Player
 		
-	#ifdef WIN32	
 		fMutex.Unlock();
-	#endif	 	
+
 	 	if (fPlayer == 0) {
 	 		return kErrSequencer; // If allocation error
 	 	} else {
@@ -454,10 +435,8 @@ void TPlayer::ReceiveAlarm(short ref)
 	
 	// Player may not be correctly allocated when the first ReceiveAlarm is called
 	
-#ifdef WIN32	
 	if (fMutex.TryLock() != 0)
 		return;
-#endif
 	
 	if (fPlayer) {  
 	
@@ -494,9 +473,7 @@ void TPlayer::ReceiveAlarm(short ref)
 		MidiFlushEvs(ref);
 	}
 	
-#ifdef WIN32	
 	fMutex.Unlock();
-#endif
 }
 
 /*--------------------------------------------------------------------------*/
