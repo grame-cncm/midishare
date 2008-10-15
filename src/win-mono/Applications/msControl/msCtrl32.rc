@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 #ifdef _WIN32
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
@@ -46,7 +46,7 @@ BEGIN
     PUSHBUTTON      "OK",1,98,107,23,15
     CTEXT           "msControler send the more usefull MIDI messages.",
                     IDC_STATIC,22,41,83,20
-    CTEXT           "Email : msh@rd.grame.fr",IDC_STATIC,17,85,97,9
+    CTEXT           "Email : midishare@grame.fr",IDC_STATIC,17,85,97,9
     LTEXT           "Copyright GRAME 1995",IDC_STATIC,27,106,65,16
     CTEXT           "A freeware MidiShare application",IDC_STATIC,10,69,108,
                     9
@@ -110,7 +110,7 @@ ICON                    ICON    DISCARDABLE     "icon.ico"
 /////////////////////////////////////////////////////////////////////////////
 // Neutral (Default) resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
 #ifdef _WIN32
 LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 #pragma code_page(1252)

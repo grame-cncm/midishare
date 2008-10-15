@@ -89,6 +89,14 @@ LINK32=link.exe
 # Name "msControl32 - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\bmp1811.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\bmp1812.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\icon.ico
 # End Source File
 # Begin Source File
