@@ -310,7 +310,7 @@ void  EXPORT SetSMPTEOffsetPlayer(short refnum, SmpteLocPtr smptepos)
 	TPlayerPtr player = (TPlayerPtr)MidiGetInfo(refnum);
 	if (player) player->SetSMPTEOffset(smptepos);
 }
-/*--------------------------------------------------------------------------*)
+/*--------------------------------------------------------------------------*/
 // State management
 /*--------------------------------------------------------------------------*/
 
