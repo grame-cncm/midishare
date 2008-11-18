@@ -65,6 +65,8 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 12/10/08 : Version 2.12 : Correct IsTempoMap macro (typeKeySign not a tempo map event), use mutex in all platforms and also protect TPlayer::~TPlayer.
 
+18/11/08 : Version 2.13 : Correct bug in midifile.c (in MidiFileWriteEv,  private events are just ignored).
+
 ==================
 General Remarks
 ==================
