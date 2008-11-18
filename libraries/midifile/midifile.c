@@ -1,12 +1,25 @@
-/* ===========================================================================
-   This file is Copyright (c) Grame, Computer Music Research Laboratory 
-   1996-1999, and is distributed as Open Source software under the Artistic License;
-   see the file "Artistic" that is included in the distribution for details.
+/*
 
-   Grame : Computer Music Research Laboratory
-   Web : http://www.grame.fr/Research
-   E-mail : MidiShare@rd.grame.fr
-   ===========================================================================
+  Copyright © Grame 2004
+
+  This library is free software; you can redistribute it and modify it under 
+  the terms of the GNU Library General Public License as published by the 
+  Free Software Foundation version 2 of the License, or any later version.
+
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+  for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  research@grame.fr
+
+*/
+/* ===========================================================================
  *
  *	MIDIFILE.C
  *
@@ -28,7 +41,12 @@
  * v121 [Dec 4,00]     SL remove the obsolete __MWERKS__ tag
  * v122 [Apr 23,01]    SL add PortPrefix management : works with version 185 or later
  * v123 [Jun 01,01]    SL remove fgetpos and fsetpos use for easier cross platform code management
+ * v124 [Mars 26,02]   JJC bug correction in MidiFileOpen function
+ * v125 [Jul 16,02]    SL bug correction in write_sysex and read_sysex functions, new functions for typeStream
+ * v126 [May 03,04]    JJC bug correction in ReadEv function
+ * v127 [Nov 18,08]    SL bug correction in MidiFileWriteEv, private events are just ignored
 
+ *
  */
  
 #include "midifile.h"
@@ -48,7 +66,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	123				/* source code version 			*/
+#define SRC_VERSION	127				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -60,6 +78,7 @@
 static MidiEvPtr mdf_ignoreEv( MIDIFilePtr fd, long len);
 static MidiEvPtr read_undef( MIDIFilePtr fd, short status);
 static MidiEvPtr read_sysex( MIDIFilePtr fd, short status);
+static MidiEvPtr read_stream( MIDIFilePtr fd, short status);
 static MidiEvPtr read_2DataEv( MIDIFilePtr fd, short status);
 static MidiEvPtr read_1DataEv( MIDIFilePtr fd, short status);
 static MidiEvPtr read_0DataEv( MIDIFilePtr fd, short status);
@@ -78,6 +97,7 @@ static Boolean write_1DataEv( MIDIFilePtr fd, MidiEvPtr ev, short status);
 static Boolean write_0DataEv( MIDIFilePtr fd, MidiEvPtr ev, short status);
 static Boolean dont_write( MIDIFilePtr , MidiEvPtr , short);
 static Boolean write_sysex( MIDIFilePtr fd, MidiEvPtr ev, short);
+static Boolean write_stream( MIDIFilePtr fd, MidiEvPtr ev, short);
 static Boolean write_Ctrl14b( MIDIFilePtr fd, MidiEvPtr ev, short);
 static Boolean write_RegP( MIDIFilePtr fd, MidiEvPtr ev, short);
 static Boolean write_NRegP( MIDIFilePtr fd, MidiEvPtr ev, short);
@@ -174,7 +194,7 @@ static ReadFunc ReadEvTbl[]=
 			read_undef,			/* $f4							*/
 			read_undef,			/* $f5							*/
 			read_0DataEv,		/* $f6 :  14 typeTune			*/
-			read_sysex,			/* $f7 :  18 typeStream			*/
+			read_stream,		/* $f7 :  18 typeStream			*/
 			read_0DataEv,		/* $f8 :  10 typeClock			*/
 			read_undef,			/* $f9							*/
 			read_0DataEv,		/* $fa :  11 typeStart			*/
@@ -226,7 +246,7 @@ static WriteFunc WriteEvTbl[]=
 			write_0DataEv,		/* 15 typeActiveSens	*/
 			dont_write,			/* 16 typeReset			*/
 			write_sysex,		/* 17 typeSysEx			*/
-			write_sysex,		/* 18 typeStream		*/
+			write_stream,		/* 18 typeStream		*/
 	};
 
 
@@ -329,6 +349,32 @@ static unsigned long ReadVarLen( MIDIFilePtr fd)
 	fd->_cnt--;
 	return val;
 }
+
+/*--------------------------------------------------------------------------*/
+/* read a variable length and stopre bytes in the event */ 
+static unsigned long ReadVarLen1( MIDIFilePtr fd, MidiEvPtr str)
+{
+	FILE *fp;
+	unsigned long val;
+	short c;
+
+	fp= fd->fd;
+	val = (unsigned long) getc(fp);
+	MidiAddField(str,val);
+	
+	if (val & 0x80)
+	{
+		val &= 0x7F;
+		do {
+			val=  (val<< 7) + ((c= getc(fp)) & 0x7F);
+			MidiAddField(str,c);
+			fd->_cnt--;
+		} while (c & 0x80 && !feof( fp));
+	}
+	fd->_cnt--;
+	return val;
+}
+
 
 /*--------------------------------------------------------------------------*/
 static Boolean WriteVarLen( unsigned long val, FILE *fd)
@@ -654,12 +700,12 @@ static Boolean write_Ctrl14b( MIDIFilePtr f, MidiEvPtr ev, short unused1)
 	FILE *fd;
 	
 	fd= f->fd;
-	num= (short)MidiGetField( ev, 0);					/* control number	*/
-	val= (short)MidiGetField( ev, 1);					/* 14 bits value	*/
+	num= (short)MidiGetField( ev, 0);			/* control number	*/
+	val= (short)MidiGetField( ev, 1);			/* 14 bits value	*/
 	putc( ControlChg + Canal( ev), fd);			/* status byte		*/
 	putc( num, fd);								/* control number	*/
 	putc( val >> 7, fd);						/* msb				*/
-	WriteVarLen( 0, fd);					/* next ev, running status 	*/
+	WriteVarLen( 0, fd);						/* next ev, running status 	*/
 	putc( num+32, fd);							/* associated control 	*/
 	putc( val & 0x7F, fd);						/* lsb				*/
 	return !ferror( fd);	
@@ -673,12 +719,28 @@ static Boolean write_sysex( MIDIFilePtr f, MidiEvPtr ev, short unused1)
 	MidiSEXPtr e;
 	
 	fd= f->fd;
+	count= MidiCountFields( ev)	;      
+	putc( 0xF0, fd);					/* sysex header			*/
+	WriteVarLen( count+1, fd);			/* message length = bytes to be written + last 0xF7	*/
+	e= Link( LinkSE(ev));
+	while( count) {
+		fwrite( e->data, (count >= 12) ? 12 : (int)count, 1, fd);
+		e= Link(e);
+		count-= (count >= 12) ? 12 : count;
+	}
+	putc( 0xF7, fd);					/* sysex end			*/
+	return !ferror( fd);	
+}
+
+/*--------------------------------------------------------------------------*/
+static Boolean write_stream( MIDIFilePtr f, MidiEvPtr ev, short unused1)
+{
+	unsigned long count;
+	FILE *fd;
+	MidiSEXPtr e;
+	
+	fd= f->fd;
 	count= MidiCountFields( ev);
-	if( EvType( ev)== typeSysEx)			/* sysex message		*/
-		putc( 0xF0, fd);					/* sysex header			*/
-	else									/* stream message		*/
-		putc( 0xF7, fd);					/* header sysex	next 	*/
-	WriteVarLen( count, fd);				/* message length		*/
 	e= Link( LinkSE(ev));
 	while( count) {
 		fwrite( e->data, (count >= 12) ? 12 : (int)count, 1, fd);
@@ -687,6 +749,7 @@ static Boolean write_sysex( MIDIFilePtr f, MidiEvPtr ev, short unused1)
 	}
 	return !ferror( fd);	
 }
+
 
 /*--------------------------------------------------------------------------*/
 static Boolean dont_write( MIDIFilePtr unused1, MidiEvPtr unused2, short unused3)
@@ -902,6 +965,11 @@ Boolean MFAPI MidiFileWriteEv( MIDIFilePtr fd, MidiEvPtr ev)
 		if( !(off= seq->first))						/* key off = next		*/
 			seq->last= nil;
 	}
+
+	// 18/11/20008 Private events are just ignored
+	if (EvType(ev) >= typePrivate && EvType(ev) < typeQuarterFrame) 
+		return true;
+
 	if( !WriteVarLen( Date( ev)- date, fd->fd) ||		/* write the offset	*/
 		!WriteEv( fd, ev))								/* and the event	*/
 		return false;
@@ -1147,7 +1215,6 @@ static MidiEvPtr mdf_read_meta( MIDIFilePtr fd)
 static MidiEvPtr read_undef( MIDIFilePtr fd,  short len)
 {
 	//MidiFile_errno= MidiFileErrUnknow;
-	
 	return nil;
 }
 
@@ -1156,26 +1223,71 @@ static MidiEvPtr read_undef( MIDIFilePtr fd,  short len)
 /* functions to read a MIDI event											*/
 /*--------------------------------------------------------------------------*/
 
+
 /*--------------------------------------------------------------------------*/
 static MidiEvPtr read_sysex( MIDIFilePtr fd, short status)
+{
+	MidiEvPtr ev1,ev2;
+	unsigned long len;
+	short c;
+	
+	ev1 = MidiNewEv(typeSysEx);			
+	ev2 = MidiNewEv(typeStream);
+	
+	/* try to parse as if the event is a SysEx or a Stream : choice is made when the last byte is known */
+
+	if( ev1 && ev2)
+	{
+		MidiAddField( ev2, status);			/* store the first byte in the stream event */
+		len= ReadVarLen1( fd,ev2);			/* message length bytes are put in the Stream event	*/
+		
+		while( len--)
+		{
+			c= getc( fd->fd);				/* read the datas	*/
+			fd->_cnt--;
+			MidiAddField( ev2, c);			/* and store them to the Stream event */
+			if (c != 0xF7)
+				MidiAddField( ev1, c);		/* and store them to the SysEx event */
+		}
+		
+		if (c == 0xF7) {					/* Complete SysEx */
+			MidiFreeEv(ev2);
+			return ev1;
+		}else {								/* Stream */
+	 		MidiFreeEv(ev1);
+			return ev2;
+		}		
+	}
+	else MidiFile_errno= MidiFileErrEvs;
+	return nil;
+}
+
+
+
+/*--------------------------------------------------------------------------*/
+static MidiEvPtr read_stream( MIDIFilePtr fd, short status)
 {
 	MidiEvPtr ev;
 	unsigned long len;
 	short c;
 
-	if( ev= MidiNewEv( status== 0xF0 ? typeSysEx : typeStream))
+	if( ev= MidiNewEv(typeStream))
 	{
-		len= ReadVarLen( fd);				/* message length	*/
+		MidiAddField( ev, status);			/* store the first byte in the stream event */
+		len= ReadVarLen1( fd, ev);			/* message length bytes are put in the stream event	*/
+	
 		while( len--)
 		{
 			c= getc( fd->fd);				/* read the datas	*/
 			fd->_cnt--;
-			MidiAddField( ev, c);			/* and store them to the event */
+			MidiAddField( ev, c);			/* and store them to the Stream event */
 		}
 	}
 	else MidiFile_errno= MidiFileErrEvs;
 	return ev;
 }
+
+
 
 /*--------------------------------------------------------------------------*/
 static MidiEvPtr read_2DataEv( MIDIFilePtr fd, short status)
@@ -1229,7 +1341,7 @@ static MidiEvPtr ReadEv( MIDIFilePtr fd)
 	if( c== META)									/* meta evt			*/
 	{
 		ev= mdf_read_meta( fd);
-		c= status= 0;
+		c=0;
 	}
 	else if( c & 0x80)								/* status byte		*/
 		status= c;
@@ -1360,7 +1472,7 @@ static Boolean stdInit( MIDIFilePtr fd)
 /*--------------------------------------------------------------------------*/
 MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 {
-	MIDIFilePtr fd;			/* my MIDI file descriptor	*/
+	MIDIFilePtr fd;					/* my MIDI file descriptor	*/
 	Boolean ok= true;				/* to check for errors		*/
 	const char *stdMode;			/* standard opening mode	*/
 	
@@ -1368,7 +1480,7 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 	if( fd= (MIDIFilePtr)malloc( sizeof( midiFILE)))
 	{
 		fd->fd= nil;
-		stdInit( fd);								/* standard initialization	*/
+		fd->mode= 0;								/* standard initialization	*/
 		if( (stdMode= mdf_getStdMode( mode)) &&		/* opening mode control		*/
 			(fd->fd= fopen( filename, stdMode)))	/* file opening				*/
 		{			
@@ -1378,9 +1490,10 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 				{									/* error :					*/
 					MidiFile_errno= MidiFileErrAdd0;/* try to add to a 0 format	*/
 					ok= false;						/* file						*/
+				}else {
+					fd->mode= (mode== MidiFileAppend ? true : false);
+					ok= stdInit( fd);
 				}
-				fd->mode= (mode== MidiFileAppend ? true : false);
-				ok= stdInit( fd);
 			}
 		}
 		else ok= false;
