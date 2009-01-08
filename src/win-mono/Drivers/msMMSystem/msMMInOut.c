@@ -65,6 +65,8 @@ void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg,
 	SlotPtr slot = (SlotPtr)userData;
 	switch (wMsg) {
 		case MIM_OPEN: break;
+		case MIM_CLOSE:
+			break;
 
 		case MIM_ERROR:
 		case MIM_DATA:
