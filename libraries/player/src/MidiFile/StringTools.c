@@ -24,21 +24,21 @@
 #include <stdio.h>
 
 #ifdef __APPLE__
-
 #include <CoreFoundation/CoreFoundation.h>
 
 void Convert2UTF8(const char* name, char* res, int len) 
 {
-	CFURLRef urlref = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8*)name, strlen(name), kCFStringEncodingMacRoman, NULL);
-	/*CFIndex ret = */ CFURLGetFileSystemRepresentation(urlref, true, (UInt8*)res, len);
+    CFStringRef strref = CFStringCreateWithCString(kCFAllocatorDefault, name, CFStringGetSystemEncoding());
+    CFStringGetCString(strref, res, len, kCFStringEncodingUTF8);
+    CFRelease(strref);
 }
 
 #else
 
 void Convert2UTF8(const char* name, char* res, int len) 
 {
-	//strncpy(res, name, len);
 	strcpy(res, name);
 }
 
 #endif
+

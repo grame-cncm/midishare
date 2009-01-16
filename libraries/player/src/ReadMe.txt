@@ -67,6 +67,8 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 18/11/08 : Version 2.13 : Correct bug in midifile.c (in MidiFileWriteEv,  private events are just ignored).
 
+16/01/09 : Version 2.14 : Correct Convert2UTF8.
+
 ==================
 General Remarks
 ==================
