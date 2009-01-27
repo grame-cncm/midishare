@@ -1,7 +1,10 @@
 
-CFLAGS := $(CFLAGS) -Wall -DPROCESSCLOCK
 
-all : lfbench ffbench ffbench2 fftest fflock
+CFLAGS := $(CFLAGS) -Wall -DPROCESSCLOCK 
+#CFLAGS := $(CFLAGS) -Wall -DPROCESSCLOCK -m64 -D__x86_64__
+
+all : lfbench ffbench ffbench2  fflock 
+#fftest
 
 lfbench : lfbench.c ../lflifo.o
 	$(CC) $(CFLAGS) -O3 lfbench.c -I.. -lpthread  ../lflifo.o -o lfbench
@@ -19,4 +22,4 @@ fftest : fftest.c ../lffifo.o
 	$(CC) $(CFLAGS) -O3 fftest.c -I.. -lpthread  ../lffifo.o -o fftest
 
 clean :
-	rm fflock fftest ffbench ffbench2 lfbench ../lffifo.o ../lflifo.o
+	rm -f fflock fftest ffbench ffbench2 lfbench ../lffifo.o ../lflifo.o

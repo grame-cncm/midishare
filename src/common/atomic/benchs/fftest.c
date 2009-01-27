@@ -4,31 +4,43 @@
 #include "pthread.h"
 
 #include "lffifo.h"
-
-typedef struct testcell {
-	struct fifocell* volatile link;	/* next cell in the list */
-	long value[2];
-} testcell;
-
-#define Q 21
-testcell tbl[Q];
-fifo 	f;
-
 	
 #define ITER 	10000000 //0 //100000000
-#define THR		20
+#define THR		2
+#define Q		THR+1
+
+fifocell tbl[Q];
+fifo 	f;
+long gid=-1, gcount, glock=0;
+
+static void trace (fifo * f, long id) {
+	printf( "trace fifo %p for thread %ld\n", f, id);
+	printf( "  head: %p\n", f->head);
+	printf( "  tail: %p\n", f->tail);
+	printf( "  next: %p\n", f->tail->link);
+	printf( "  size: %ld\n", fifosize(f));
+}
 
 void * runtest(void* param)
 {
-	long id = (long) param;
+	long id = (long) param; //, prev=-1;
 	int i;	
-	for ( i= 0; i < ITER; i++) {
-		testcell* c = (testcell*)fifoget(&f);
-		assert(c);
+	for ( i= 0; (i < ITER) && !glock; i++) {
+		fifocell* c = fifoget(&f);
+		if (!c) {
+			glock++;
+			trace(&f, id);
+			printf("trying to get another cell: %p\n", fifoget(&f));
+			trace(&f, id);
+			printf("trying to get another cell: %p\n", fifoget(&f));
+			trace(&f, id);
+			assert(c);
+		}
 		if (c) {
+//			c->link = 0;
 			c->value[0] = id;
 			c->value[1] ++;
-			fifoput(&f,(fifocell*)c);
+			if (!glock) fifoput(&f,c);
 		}
 	}
 	pthread_exit(NULL);
@@ -43,13 +55,13 @@ int main()
 		fifoput(&f, (fifocell*)&tbl[i]);
 	}
 	
-	printf("Fifo test preamble...");
+//	printf("Fifo test preamble...");
 	for (i = 0; i < 1002; i++) {
 		fifocell* c = fifoget(&f);
 		assert(c);
 		fifoput(&f, c);
 	}
-	printf("\n");
+//	printf("\n");
 	
 	printf("Running fifo test with %d threads and %d iterations...\n", THR, ITER);
 	{	// test avec des threads
@@ -62,6 +74,8 @@ int main()
 		}
 	}
 		
+//	return 0;
+	
 	printf("Fifo size = %ld\n", fifosize(&f));	
 	{
 		testcell* c;

@@ -1,6 +1,5 @@
 /*
-
-  Copyright © Grame 2001-2002
+  Copyright  Grame 2001-2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -66,6 +65,15 @@ fifocell	dummy;
 #define fifoinit(f)		fifoinit(f, &dummy);
 #endif
 
+/*
+static void fifoprint(pile *f)
+{
+	printf ("fifo     : %p\n", f);
+	printf ("fifo head: %p\n", f->head);
+	printf ("fifo tail: %p\n", f->tail);
+}
+*/
+
 // init stack with cells
 void initstack (pile *f)
 {
@@ -121,11 +129,11 @@ static long count (pile * ff)
 }
 #endif
 
-void checkstack (pile * f, int n)
+void checkstack (pile * f, long n)
 {
-	int i = count(f);
+	long i = count(f);
 	if (i != n) { 
-		printf("error checking stack %p : count=%d, (should be %d)\n", f, i, n);
+		printf("error checking stack %p : count=%ld, (should be %ld)\n", f, i, n);
 		printf("       fifo size: %ld\n", fifosize(f));
 	}
 }
@@ -134,7 +142,7 @@ void bench (int max)
 {
 	pthread_t	fils[MAXTHREADS];
 	pont		bridge[MAXTHREADS]; 
-	int			i, end, th;
+	long		i, end, th;
 	double		perf=0; struct sched_param sp;
 
 	sp.sched_priority=63;
@@ -142,7 +150,8 @@ void bench (int max)
 	
 	for (th=1; th <= max; th++) {
 		initstack (&gstack);
-		printf("threads count:\t %d \t", th); fflush (stdout);
+
+		printf("threads count:\t %ld \t", th); fflush (stdout);
 		for (i=0; i<th; i++) {
 		  	bridge[i].limit = LIMIT;
 		  	bridge[i].stopped = 0; 
