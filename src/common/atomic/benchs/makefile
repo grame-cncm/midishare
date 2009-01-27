@@ -1,7 +1,5 @@
 
-
 CFLAGS := $(CFLAGS) -Wall -DPROCESSCLOCK 
-#CFLAGS := $(CFLAGS) -Wall -DPROCESSCLOCK -m64 -D__x86_64__
 
 all : lfbench ffbench ffbench2  fflock 
 #fftest
