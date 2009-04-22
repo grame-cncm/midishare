@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2002
+  Copyright © Grame 1999-2009
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,6 +33,7 @@
 /*          19/03/02 Thread bloquant sur MacOS9
 /*          17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
 /*			05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback, un pour le thread de l'application. 
+/*			21/04/09 Dans Java_grame_midishare_MidiAppl_ApplClose, utilisation du parametre JNIEnv * env et pas celui garde dans la structure context.
 /*		
 /*****************************************************************************/
 
@@ -212,8 +213,11 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
 	ApplContext* context = MidiGetInfo(ref);
 	
 	if (context) {
-		(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fClass);
-		(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fObj);
+		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fClass);
+		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fObj);
+        // 21/04/2009 
+        (*env)->DeleteGlobalRef(env, context->fClass);
+        (*env)->DeleteGlobalRef(env, context->fObj);
 		free(context);
 	}
 		
