@@ -128,7 +128,11 @@ void FreeLibrary(void * handle, const char *symbol)
 { 
 	Stop fun;
 	if (fun = (Stop)dlsym(handle, symbol)) (*fun)(); 
-	dlclose(handle);
+    /*
+    Andre Schnoor 18/12/2008 : unlike Tiger, Leopard doesn't like unloading dynamic libs while their code is still in use (due to threads cleanup). 
+    IMHO, it doesn't harm to never actually unload the rather small MS driver libraries (60KB only)
+    */
+	//dlclose(handle);
 }
 
 /*------------------------------------------------------------------------------*/

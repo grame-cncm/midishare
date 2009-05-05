@@ -111,7 +111,7 @@ int MidiReset (unsigned long userptr, struct file * f)
 static int mskNullMth(unsigned long userptr,struct file * f){ return 0; }
 
 
-static void initMthTable() {
+static void initMthTable(void) {
 
 	int i;
 	for (i = 0; i< kMaxMth; i++) { gKernelMthTable[i] = mskNullMth; }

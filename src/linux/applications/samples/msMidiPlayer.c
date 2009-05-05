@@ -1,4 +1,4 @@
-/*====================== A MIDI SHARE TOOL  (© GRAME 99-01) =====================
+/*====================== A MIDI SHARE TOOL  (ï¿½ GRAME 99-01) =====================
 
 NAME
       msMidiPlay -- a small MidiShare tool
@@ -13,6 +13,7 @@ DESCRIPTION
 ===============================================================================*/
  
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <MidiShare.h>
 #include "midifile.h"

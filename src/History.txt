@@ -1,6 +1,7 @@
 
 Versions:
 ------------------------
+v 1.93  : correct crash in MidiClose under OSX Leopard : driver shared libraries cannot be unloaded anymore and msMidiDriver thread cleanup code has been reworked (Andre Schnoor).
 v 1.92  : correct bug in MSUnregisterDriver, the driver context was not correctly saved on the stack. 
 v 1.91  : new MidiGetError API, 
 		  corrected Mac OS X timer mode : correctly handle MidiShare time in case of abnormal system latencies 		  

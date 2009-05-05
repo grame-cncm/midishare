@@ -44,6 +44,8 @@
  * v124 [Mars 26,02]   JJC bug correction in MidiFileOpen function
  * v125 [Jul 16,02]    SL bug correction in write_sysex and read_sysex functions, new functions for typeStream
  * v126 [May 03,04]    JJC bug correction in ReadEv function
+ * v127 [Nov 18,08]    SL bug correction in MidiFileWriteEv, private events are just ignored
+
  *
  */
  
@@ -64,7 +66,7 @@
 /* constants																*/
 #define MDF_MThd	"MThd"			/* file header					*/
 #define MDF_MTrk	"MTrk"			/* track header					*/
-#define SRC_VERSION	126				/* source code version 			*/
+#define SRC_VERSION	127				/* source code version 			*/
 #define MDF_VERSION 100				/* MIDI File format version 	*/
 #define offset_ntrks	10			/* tracks count offset	related */
 									/* to the beginning of the file */
@@ -963,6 +965,11 @@ Boolean MFAPI MidiFileWriteEv( MIDIFilePtr fd, MidiEvPtr ev)
 		if( !(off= seq->first))						/* key off = next		*/
 			seq->last= nil;
 	}
+
+	// 18/11/20008 Private events are just ignored
+	if (EvType(ev) >= typePrivate && EvType(ev) < typeQuarterFrame) 
+		return true;
+
 	if( !WriteVarLen( Date( ev)- date, fd->fd) ||		/* write the offset	*/
 		!WriteEv( fd, ev))								/* and the event	*/
 		return false;

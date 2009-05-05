@@ -30,6 +30,7 @@
 #include "TPlayerFactory.h"
 #include "TTrackTable.h"
 #include "TSMPTEInfos.h"
+#include "TMutex.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -49,7 +50,7 @@ class TPlayer : public TMidiAppl {
 
 	private:
 
-		TPlayerFactory   		fFactory;  		// Player factory
+		TPlayerFactory  fFactory;  		// Player factory
 		TGenericPlayerInterfacePtr 	fPlayer;	// Current player
 			
 		TTrackTable		 fTrackTable;		// TrackTable: tracks state
@@ -64,6 +65,7 @@ class TPlayer : public TMidiAppl {
 		
 		TScoreStatePtr   	fScoreState;		// For internal state 
 		TSMPTEInfos	        fSmpteInfos;        // For SMPTE synchronization
+        TMutex	fMutex;
 		
 		ULONG	fTick_per_quarter;  	// Current resolution
 		short   fSyncIn;         // SynchroIn state

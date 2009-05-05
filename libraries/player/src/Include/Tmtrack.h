@@ -56,47 +56,45 @@ typedef struct MidiFileInfos
 extern "C" {
 #endif
 
-void SetSeqRef( MidiSeqPtr seq, register short refNum);
-char *GetBeginKey( register char *buff);
-MidiEvPtr RestoreSeqName( char *buff);
-MidiEvPtr GetTrackName( MidiSeqPtr seq, MidiEvPtr *prec);
-short GetEvRef( char *buff, int keyLen, short numPiste);
-short GetSeqRef( MidiSeqPtr seq, short numPiste);
-void DelEndTrack( MidiSeqPtr seq);
-MidiEvPtr AddSeq( register MidiEvPtr e1, register MidiEvPtr e2);
-void MixeSeq( MidiSeqPtr src, MidiSeqPtr dest);
-void UseTrack (MidiSeqPtr seq, MidiSeqPtr dest , int i);
-int ReadTracks( register midiFILE *fd, MidiSeqPtr dest);
-void InitTrackListe( void);
-Boolean WriteEndTrack( register midiFILE *fd, register MidiEvPtr prev);
-Boolean WriteSeqName( midiFILE *fd, MidiEvPtr ev, short ref, short numPiste);
-Boolean WriteTrackFormat2( register midiFILE *fd, MidiSeqPtr seq,
+void SetSeqRef(MidiSeqPtr seq, register short refNum);
+char *GetBeginKey(register char *buff);
+MidiEvPtr RestoreSeqName(char *buff);
+MidiEvPtr GetTrackName(MidiSeqPtr seq, MidiEvPtr *prec);
+short GetEvRef(char *buff, int keyLen, short numPiste);
+short GetSeqRef(MidiSeqPtr seq, short numPiste);
+void DelEndTrack(MidiSeqPtr seq);
+MidiEvPtr AddSeq(register MidiEvPtr e1, register MidiEvPtr e2);
+void MixeSeq(MidiSeqPtr src, MidiSeqPtr dest);
+void UseTrack(MidiSeqPtr seq, MidiSeqPtr dest , int i);
+int ReadTracks(register midiFILE *fd, MidiSeqPtr dest);
+void InitTrackListe(void);
+Boolean WriteEndTrack(register midiFILE *fd, register MidiEvPtr prev);
+Boolean WriteSeqName(midiFILE *fd, MidiEvPtr ev, short ref, short numPiste);
+Boolean WriteTrackFormat2(register midiFILE *fd, MidiSeqPtr seq,
 								  register short ref, short numPiste);
 								  
- Boolean WriteTrackFormat1( register midiFILE *fd, MidiSeqPtr seq,
+ Boolean WriteTrackFormat1(register midiFILE *fd, MidiSeqPtr seq,
 								  register short ref, short numPiste);
 								  
-Boolean WriteTempoMap( register midiFILE *fd, MidiSeqPtr seq); 
-void AnalyseSeq( midiFILE *fd, MidiSeqPtr seq);			
-void pCopy( register char *dest, register char * src);			
-void cCopy( register char *dest, register char * src);
-Boolean WriteTracks( register midiFILE *fd, register MidiSeqPtr seq);	
-void SetLoadDates( MidiFileInfosPtr infos, MidiSeqPtr s);
-int TryToReadTrack ( register midiFILE *fd, MidiSeqPtr dest, int i);
-void ReturnTimeInfos( register midiFILE *fd, MidiFileInfosPtr infos);
+Boolean WriteTempoMap(register midiFILE *fd, MidiSeqPtr seq); 
+void AnalyseSeq(midiFILE *fd, MidiSeqPtr seq);			
+void pCopy(register char *dest, register char * src);			
+void cCopy(register char *dest, register char * src);
+Boolean WriteTracks(register midiFILE *fd, register MidiSeqPtr seq);	
+void SetLoadDates(MidiFileInfosPtr infos, MidiSeqPtr s);
+int TryToReadTrack(register midiFILE *fd, MidiSeqPtr dest, int i);
+void ReturnTimeInfos(register midiFILE *fd, MidiFileInfosPtr infos);
 
 #ifdef __Macintosh__
 	#pragma export on
 #endif
 
-	int  EXPORT MidiFileSave( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
-	int  EXPORT MidiFileLoad( char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
+	int  EXPORT MidiFileSave(char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
+	int  EXPORT MidiFileLoad(char * name, MidiSeqPtr seq, MidiFileInfosPtr infos);
 
-	
 #ifdef __Macintosh__
 	#pragma export off
 #endif
-
 	
 #ifdef __cplusplus
 }

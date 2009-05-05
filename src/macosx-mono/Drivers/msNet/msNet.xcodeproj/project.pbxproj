@@ -650,10 +650,12 @@
 		F727EA270209364501053118 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BDE3B0509EE9F350009E823 /* Build configuration list for PBXProject "msNet" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = F727EA280209364501053118;
 			productRefGroup = F727EA2B0209389101053118 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				4B234C6F09F62FB500488DBD /* msUDPDriver Universal */,
 				4B234CDB09F62FDB00488DBD /* msTCPDriver Universal */,

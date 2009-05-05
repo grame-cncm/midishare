@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -67,7 +67,8 @@ typedef unsigned long ulong;
 	typedef unsigned char Byte;
 	typedef char * Ptr;
 	typedef unsigned char Boolean;
-	enum { false = 0, true };
+#define false 0
+#define true 1
 #endif
 
 typedef unsigned char uchar;

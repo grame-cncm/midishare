@@ -57,6 +57,18 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 20/04/06 : Version 2.08 : Compilation on MacIntel as universal binary.
 
+04/09/07 : Version 2.09 : Use a mutex to protect internal player destruction/creation.
+
+12/10/07 : Version 2.10 : Use Convert2UTF8 to manage midifile filename.
+
+01/04/08 : Version 2.11 : Correct TimeSign management.
+
+12/10/08 : Version 2.12 : Correct IsTempoMap macro (typeKeySign not a tempo map event), use mutex in all platforms and also protect TPlayer::~TPlayer.
+
+18/11/08 : Version 2.13 : Correct bug in midifile.c (in MidiFileWriteEv,  private events are just ignored).
+
+16/01/09 : Version 2.14 : Correct Convert2UTF8.
+
 ==================
 General Remarks
 ==================

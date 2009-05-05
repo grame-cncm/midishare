@@ -23,14 +23,14 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /* TMtrack.cpp : gestion des MidiFile et des tracks
-/*
-/* History
-/*
-/* 3/05/96: version 1.00
-/*
-/*
-/*----------------------------------------------------------------------------*/
- /*
+ *
+ * History
+ *
+ * 3/05/96: version 1.00
+ *
+ *
+ *----------------------------------------------------------------------------
+ *
  * interface des fonctions de lecture et d'écriture de fichier
  * au format MidiFile.
  *
@@ -55,7 +55,6 @@
  *							typeTempo
  *							typeSMPTEOffset
  *							typeTimeSign
- *							typeKeySign
  *  à la relecture, il n'est donc pas possible de restaurer leur numéro de référence
  *  si celui-ci diffère de 0.
  *	
@@ -65,17 +64,18 @@
  *
  * GRAME Friday, March 27, 1992 D.F.
  *
-/*----------------------------------------------------------------------------*/
+ *----------------------------------------------------------------------------*/
 
 #include "Tmtrack.h"
+#include "StringTools.h"
 
 #ifdef __Macintosh__
-	#include <CType.h>
+	#include <ctype.h>
 	#ifdef __MacOS9__
 		#include <Files.h>
 	#endif
-	#include <StdLib.h>
-	#include <String.h>
+	#include <stdlib.h>
+	#include <string.h>
 #endif
 
 #ifdef __Windows__
@@ -87,13 +87,15 @@
 	#include <string.h>
 #endif
 
+#include <assert.h>
+
 /*----------------------------------------------------------------------------*/
 
 char *Player= "PLAYER ref:";
 
 /*--------------- les types stockés dans la tempo map ----------------------*/
 
-#define IsTempoMap(t) ((t)==typeCopyright || (t)==typeMarker || ((t)>=typeTempo && (t)<=typeKeySign))
+#define IsTempoMap(t) ((t)==typeCopyright || (t)==typeMarker || ((t)>=typeTempo && (t)<typeKeySign))
 
 /*--------------- les variables globales -----------------------------------*/
 
@@ -844,7 +846,9 @@ int  EXPORT MidiFileSave(char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 	if (!seq) return MidiFileErrEvs;    /* plus d'evs MidiShare */
 
 	InitTrackListe();					/* init la liste des pistes à nil	*/
-	cCopy (Cname, name);
+	
+	assert(strlen(name) < 256);
+	Convert2UTF8(name, Cname, 256);
 	
 	/* codage des ports */
 	if (!TrsfNoteToKeyOn(seq)) {		/* transformation des notes an couple KeyOn/KeyOff 	*/
@@ -902,7 +906,8 @@ int  EXPORT MidiFileLoad(char * name, MidiSeqPtr seq, MidiFileInfosPtr infos)
 	midiFILE *fd;					/* descripteur du fichier MidiFile	*/
 	int ret = 0; 					/* code de retour de la fonction	*/
 	
-	cCopy(Cname, name);
+	assert(strlen(name) < 256);
+	Convert2UTF8(name, Cname, 256);
 	
 	if (fd = MidiFileOpen(Cname, MidiFileRead))	/* ouvre le fichier 		*/
 	{

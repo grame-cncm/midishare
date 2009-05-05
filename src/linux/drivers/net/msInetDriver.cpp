@@ -1,7 +1,7 @@
 /*
 
-  Copyright © Grame 2001
-  Copyright © Mil Productions 2001
+  Copyright ï¿½ Grame 2001
+  Copyright ï¿½ Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -267,6 +267,7 @@ static int getopts (int argc, char *argv[])
 	return 0;
 }
 
+#if 0
 //_______________________________________________________________________
 static int checkopt (int argc, char *argv[], char opt)
 {
@@ -281,6 +282,7 @@ static int checkopt (int argc, char *argv[], char opt)
 	}
 	return 0;
 }
+#endif
 
 //_______________________________________________________________________
 static void checkNetParams (NetConfig *net, Boolean serverMode)

@@ -184,7 +184,7 @@ GetEvFuncPtr GetEvTable[] = {
 
 
 /*______________________________________________________________________________*/
-static void wait( int d)
+static void _wait( int d)
 {
 	unsigned long time;
 	time= MidiGetTime()+ d;
@@ -424,7 +424,7 @@ static GetCtrl (MidiEvPtr e)
 	int ret= false, type;
 	
 	type= EvType(e);
-	wait (10);
+	_wait (10);
 	switch (type) {
 		case typeCtrl14b:		expected = 2;
 			 break;
@@ -450,7 +450,7 @@ static GetNote( MidiEvPtr e)
 {
 	long n;	int ret= false;
 
-	wait (Dur(e));
+	_wait (Dur(e));
 	n= MidiCountEvs( r1);
 	if(n != 2)
 		WrongCount(2, n);
@@ -513,7 +513,7 @@ static TestEvent( short i, Boolean display)
 		else 
 		{
 			MidiSend( r1, copy); 
-			wait (10);
+			_wait (10);
 			ret= (* GetEvTable[i])(e);
 		}
 		MidiFreeEv (e);
@@ -564,7 +564,7 @@ void SystemeEx()
 		copy= MidiCopyEv (e);
 		if (!copy) { noEvts; break;}
 		else {
-			MidiSendIm (r1, copy); wait( 40);
+			MidiSendIm (r1, copy); _wait( 40);
 			if (!GetEvents(e)) {
 				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
@@ -583,7 +583,7 @@ void SystemeEx()
 	if( !(copy= MidiCopyEv( e)))  noEvts;
 	else {
 		print(" send "); flush;
-		MidiSendIm (r1, copy); wait( (SizeMaxSysEx*2)/3+ 100);
+		MidiSendIm (r1, copy); _wait( (SizeMaxSysEx*2)/3+ 100);
 		if (!GetEvents (e)) {
 			MidiFreeEv(e);
 			goto failed;
@@ -616,7 +616,7 @@ void Stream()
 		copy = MidiCopyEv (e);
 		if (!copy) { noEvts; break;}
 		else {
-			MidiSendIm( r1, copy); wait(50);
+			MidiSendIm( r1, copy); _wait(50);
 			if (!GetStream( e)) {
 				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
@@ -637,7 +637,7 @@ void Stream()
 	if (!(copy= MidiCopyEv( e)))  noEvts;
 	else {
 		print(" send "); flush;
-		MidiSendIm (r1, copy); wait( (SizeMaxSysEx*2)/3+ 100);
+		MidiSendIm (r1, copy); _wait( (SizeMaxSysEx*2)/3+ 100);
 		if( !GetStream( e)) {
 			MidiFreeEv(e);
 			goto failed;
@@ -683,7 +683,7 @@ main( int argc, char *argv[])
 		print("\nWarning : MidiShare must have at least 10000 events !\n");
 
 		if( OpenAppl()) {
-			wait (100);
+			_wait (100);
 			ChanEvents(); flush;
 			CommonEvents(); flush;			
 			SystemeEx(); flush;

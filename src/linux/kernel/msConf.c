@@ -52,7 +52,8 @@ char * keywords[] = {
 };
 /* enums should be kept in the same order than keywords */
 enum { kIgnore, kMem, kDriver };
-enum { false, true };
+#define false 0
+#define true 1
 
 #define rem '#'
 #define equal '='
@@ -198,7 +199,7 @@ static char read_char (fileptr fd)
 	current_thread_info()->addr_limit.seg = 0xffffffff;
 
 	do {
-		n = generic_file_read (fd, c, 1, &(fd->f_pos));
+		n = do_sync_read (fd, c, 1, &(fd->f_pos));
 		if (n <= 0) {
 			current_thread_info()->addr_limit.seg = savedLimit;
 			return EOF;

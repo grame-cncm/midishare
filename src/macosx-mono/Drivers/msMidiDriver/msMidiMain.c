@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2002
+  Copyright ï¿½ Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -34,8 +34,8 @@
 
 #define profileName "msMidiDriver.ini"
 
-#define PRINT(x) { printf x; fflush(stdout); }
-#define DBUG(x)     /*PRINT(x) */
+#define PRINT(x) { fprintf (stdout, x ); }
+#define DBUG(x)    /*PRINT(x)*/
 
 static char * fullProfileName = 0;
 
@@ -54,14 +54,33 @@ ParseMethodTbl	gParseTbl  = { 0 };
 Status2TypeTbl	gTypeTbl  = { 0 };
 
 /* MacOSX Midi client */
-MIDIClientRef   gClient = NULL;
-MIDIPortRef		gInPort = NULL;
-MIDIPortRef		gOutPort = NULL;
+MIDIClientRef		gClient = NULL;
+MIDIPortRef			gInPort = NULL;
+MIDIPortRef			gOutPort = NULL;
+
 static pthread_t 	gThread; 	// For NotificationProc 
-static long 		gReenter;	// Notification reentrancy counter
-static Boolean 		gInit;
+static CFRunLoopRef	gRunLoop = NULL; // The CFRunLoop
 
 typedef void * (* threadProcPtr) (void * ptr);
+
+
+/* Simple mutex for synchronizing threads */
+static pthread_mutex_t initLock = PTHREAD_MUTEX_INITIALIZER;
+
+Boolean syncWait ( Boolean wait )
+{
+	if (wait) {
+		pthread_mutex_lock (&initLock);
+		return TRUE;
+	} else {
+		return pthread_mutex_trylock (&initLock) == 0;	
+	}
+}
+
+void syncSignal ()
+{
+	pthread_mutex_unlock (&initLock);
+}
 
 //____________________________________________________________
 pthread_t create_thread (int priority, threadProcPtr proc)
@@ -112,21 +131,18 @@ static void SetupFilter (MidiFilterPtr filter)
 //________________________________________________________________________________________
 void NotifyProc(const MIDINotification *message, void *refCon)
 {
-	if (message->messageID == kMIDIMsgSetupChanged) {
+	static int reEntered = 0;
 	
+	if (message->messageID == kMIDIMsgSetupChanged) {	
 		if (gRefNum > 0 ) {
-		
-			// Mutex for Slot list management : access by this thread and global thread
-			gReenter++;
-			if (!gInit) {
-				gInit = true;
-				do {
-					RemoveSlots(gRefNum);
-					AddSlots (gRefNum);
-				}while(gReenter--);
-					LoadState (gInSlots, gOutSlots,fullProfileName);  // To be checked
-					gInit = false;
-			}
+			// Synchronize with reentrant and concurrent threads
+			syncWait(reEntered == 0);
+				reEntered++;			
+				RemoveSlots(gRefNum);
+				AddSlots (gRefNum);
+				LoadState (gInSlots, gOutSlots,fullProfileName);  // To be checked
+				reEntered--;			
+			syncSignal();
 		}
 	}
 }
@@ -137,8 +153,8 @@ static void * OpenThread (void * ptr)
 	OSStatus err;
 	fullProfileName = GetProfileFullName (profileName);
         
-	gInit = true; // Start initialisation
-	//pthread_testcancel();
+	// Wait for concurrent actions to complete
+    syncWait(TRUE);
 	
 	DBUG(("MIDIClientCreate \n"));
   	err = MIDIClientCreate(CFSTR("MidiShare"), NotifyProc, NULL, &gClient);
@@ -181,10 +197,13 @@ static void * OpenThread (void * ptr)
    	LoadState (gInSlots, gOutSlots,fullProfileName); 
 	DBUG(("LoadState OK\n"));
 	
-	gReenter = -1;
-	gInit = false; // End of initialisation
+	// Signal waiting threads to continue
+    syncSignal();
         
+	gRunLoop = CFRunLoopGetCurrent();
 	CFRunLoopRun();
+	// Returns here only after run loop was stopped
+	gRunLoop = NULL;
 	return 0;
 	
 error :
@@ -200,6 +219,8 @@ error :
 		MIDIClientDispose(gClient);
 		gClient = NULL;
 	}
+	// Be sure to signal waiting threads to continue
+    syncSignal();	
 	return 0;
 }
 
@@ -228,11 +249,15 @@ static void msWakeup (short refnum)
 //_________________________________________________________
 static void msSleep (short refnum)
 {
+	syncWait(TRUE);
 	SaveState (gInSlots, gOutSlots, fullProfileName);  
 	DBUG(("msSleep \n"));
 	
-	//stopThread(gThread); // Does not work because of pthread_cancel
-	
+	if (gRunLoop) {
+		CFRunLoopStop(gRunLoop);
+		// allow a certain time for the loop to settle
+		usleep(100000);
+	}
 	if (gInPort) MIDIPortDispose(gInPort);
 	if (gOutPort) MIDIPortDispose(gOutPort);
 	if (gClient) MIDIClientDispose(gClient);
@@ -243,5 +268,6 @@ static void msSleep (short refnum)
 	/* when sysex are still sent, the completion routine may still be called... wait 1 sec 
 	hoping the CompletionProc will see the null gClient.... */
 	usleep(100000);
+	syncSignal();
 }
 

@@ -299,13 +299,10 @@ void RadioHDFeedback::DoIdle ()
 	ScanInput ();
 	DrawChans ();
 	if (fCurrent.complete) {
-fprintf (stdout, "RadioHDFeedback::DoIdle new complete\n");
 		StartClock ();
 		Clear ();
 		TextLine (0, "\pYou are listening to", &yellow, kCenter);
-fprintf (stdout, "titre %s\n", &fCurrent.title[1]);
 		TextLine (1, fCurrent.title, &yellow, kCenter);
-fprintf (stdout, "from %s\n", &fCurrent.from[1]);
 		TextLine (2, fCurrent.from, &yellow, kCenter);
 		fCurrent.complete = false;
 	}

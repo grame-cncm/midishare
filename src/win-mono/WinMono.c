@@ -28,6 +28,10 @@
 #include "msPrefs.h"
 #include "msTasks.h"
 
+#ifdef __msBench__
+#include "benchs.h"
+#endif
+
 /*------------------------------------------------------------------------------*/
 /* windows specific resources		*/
 typedef struct {
@@ -186,6 +190,10 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 	MMRESULT res;
 	WinTimerPtr t = &gWinRsrc.timer;
 
+#ifdef __msBench__
+	bench_reset();
+#endif
+
 	if ( timeGetDevCaps(&tc,sizeof(TIMECAPS)) == TIMERR_NOERROR ) {
 		t->wTimerRes = 1;
 		res = timeBeginPeriod (t->wTimerRes);	
@@ -209,6 +217,9 @@ void CloseTimeInterrupts(TMSGlobalPtr g)
 		t->wTimerID = 0;
 	}
 	timeEndPeriod (t->wTimerRes);
+#ifdef __msBench__
+	print_bench();
+#endif
 }
 
 /*_________________________________________________________________________*/

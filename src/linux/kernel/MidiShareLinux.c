@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -192,8 +192,8 @@ static void wakeUp (TApplContextPtr context)
 	LinuxContextPtr linuxContext = (LinuxContextPtr)context;
 	
 	if (!linuxContext->wakeFlag){
+        linuxContext->wakeFlag = true;
 		wake_up_interruptible(GetCommandQueue(context));
-		linuxContext->wakeFlag = true;	
 	}
 }
 
@@ -232,7 +232,7 @@ void CallApplAlarm (TApplContextPtr c, ApplAlarmPtr alarm, short refNum, long al
 	
 	if (context->status) {
 		alarm (refNum, alarmCode);
-	}else {
+	} else {
 		/* put an applAlarm event in the application command fifo  */	
 		ev = MSNewEv(typeApplAlarm,FreeList(Memory(gMem)));  // A REVOIR
 
@@ -391,9 +391,10 @@ MidiEvPtr MSAvailCommand (short refNum, TClientsPtr g)
 		TApplPtr appl = g->appls[refNum]; 
 		LinuxContextPtr context = (LinuxContextPtr)appl->context;
 		
-		if (fifosize(&context->commands) == 0){
+		if (fifosize(&context->commands) == 0) {
+            // no commands available : suspend the thread
 			context->wakeFlag = false;
-			interruptible_sleep_on(&context->commandsQueue);
+            wait_event_interruptible(context->commandsQueue, context->wakeFlag);
 		} 
 		return (MidiEvPtr)fifoavail(&context->commands);
 	}
@@ -408,9 +409,10 @@ MidiEvPtr MSGetCommand (short refNum, TClientsPtr g)
 		TApplPtr appl = g->appls[refNum]; 
 		LinuxContextPtr context = (LinuxContextPtr)appl->context;
 		
-		if (fifosize(&context->commands) == 0){
+		if (fifosize(&context->commands) == 0) {
+            // no commands available : suspend the thread
 			context->wakeFlag = false;
-			interruptible_sleep_on(&context->commandsQueue);
+            wait_event_interruptible(context->commandsQueue, context->wakeFlag);
 		} 
 		return (MidiEvPtr)fifoget(&context->commands);
 	}

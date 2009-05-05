@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 
-TMSGlobal       GlobalMem = { 0 };
+TMSGlobal       GlobalMem = { { 0 } };
 TMSGlobalPtr    gMem = &GlobalMem;
 
 /* main entry point : called at library load time */

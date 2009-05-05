@@ -75,7 +75,7 @@
 		089C1667FE841158C02AAC07 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		4BB41D4009ED368600EE9367 /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../common/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BB41D4209ED368E00EE9367 /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../common/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
-		4BE442CF05BE876E00FFBCB9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		4BE442CF05BE876E00FFBCB9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D07F2C80486CC7A007CD1D0 /* MidiShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MidiShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D365891F05BD21F500DFCB64 /* msDrvUtils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msDrvUtils.c; path = ../lib/msDrvUtils.c; sourceTree = SOURCE_ROOT; };
 		D365892405BD221300DFCB64 /* msPrefs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = msPrefs.c; path = ../lib/msPrefs.c; sourceTree = SOURCE_ROOT; };
@@ -409,10 +409,12 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41D0509ED34E100EE9367 /* Build configuration list for PBXProject "midishare" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* midishare */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D07F2BC0486CC7A007CD1D0 /* midishare */,
 			);
@@ -527,7 +529,6 @@
 				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Dynamic;
 				MACH_O_TYPE = mh_dylib;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-I../lib";
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
@@ -644,21 +645,21 @@
 		4BB41D0609ED34E100EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
 		4BB41D0709ED34E100EE9367 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};
 		4BB41D0809ED34E100EE9367 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Default;
 		};

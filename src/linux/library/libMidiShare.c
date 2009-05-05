@@ -135,7 +135,7 @@ void* CmdHandler(void* arg)
 	int refNum = appl->refNum;
 	TTaskExtPtr task ;
 	MidiEvPtr ev;
-	int retrycount;
+	//int retrycount;
 	
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
 

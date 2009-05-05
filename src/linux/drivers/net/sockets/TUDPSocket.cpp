@@ -1,7 +1,7 @@
 /*
 
-  Copyright © Grame 2001
-  Copyright © Mil Productions 2001
+  Copyright ï¿½ Grame 2001
+  Copyright ï¿½ Mil Productions 2001
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -65,10 +65,10 @@ void TUDPSocket::Close ()
 }
 
 //_______________________________________________________________________
-static void QuitHandler (int sigNum)
-{
-	pthread_exit (0);	
-}
+// static void QuitHandler (int sigNum)
+// {
+// 	pthread_exit (0);	
+// }
 
 //_______________________________________________________________________
 static void * sok_listen (void * ptr)

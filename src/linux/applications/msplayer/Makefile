@@ -2,7 +2,7 @@
 cappl := msplayer
 LIB   := ../lib/msApplsLib.o -Wl,-L../../library -lMidiShare -lPlayer
 INC   := -I../../Include -I../lib
-options := $(INC) -Wall -O6 `gtk-config --cflags --libs` $(LIB)
+options := $(INC) -Wall -O6 `pkg-config --cflags --libs gtk+-2.0` $(LIB)
 DEST=/usr/local/bin
 
 all : $(cappl)
