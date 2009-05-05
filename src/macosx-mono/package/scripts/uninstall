@@ -29,8 +29,8 @@ remove /usr/lib/msWANDriver*.so
 remove /usr/lib/msMidiDriver*.so
 remove /usr/lib/msQTDriver*.so
 
-remove Library/Java/Extensions/grame.jar
-remove Library/Java/Extensions/grame.jar
+remove /Library/Java/Extensions/grame.jar
+remove /Library/Java/Extensions/grame.jar
 
 remove $HOME/Library/Preferences/MidiShare
 remove $HOME/.MidiShare

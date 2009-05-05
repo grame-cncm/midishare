@@ -3,7 +3,7 @@ ROOT 	= root
 DEVROOT = devroot
 DEVKIT	= $(DEVROOT)/Applications/MidiShare/Developer
 
-VERSION = 1.92
+VERSION = 1.93
 PACK= midishare/src/macosx-mono/package
 SRC = midishare-$(VERSION)-macosx-src
 JAVADOC = $(shell find ../../../lang/java/native/grame -name *.java)
@@ -49,7 +49,7 @@ userpack:
 	[ -d $(ROOT) ] || cp -R Distribution $(ROOT)
 	find $(ROOT) -depth -name CVS -exec rm -rf {} \;
 	make dist
-	open msPackage.pmproj
+	open msPackage.pmdoc
 
 dist:
 	cd scripts && ./makeContent && sudo ./finalize dist
@@ -59,7 +59,7 @@ devpack:
 	#find $(DEVROOT) -depth -name CVS -exec rm -rf {} \;
 	make dev
 	sudo find $(DEVROOT) -depth -name CVS -exec rm -rf {} \;
-	open msDevPackage.pmproj
+	open msDevPackage.pmdoc
 
 dev:
 	@ echo in case of trouble, make sure your CVSROOT is correctly set
