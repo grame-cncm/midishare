@@ -23,7 +23,7 @@ function conf_I386 ()
 	  move makefile.appls 	$APPLIB/makefile
 	  move makefile.kernel 	kernel/Makefile
 	  move make.lib 		$LIB/makefile
-	  move make.module 		$LIB/make.module
+##	  move make.module 		$LIB/make.module
 	  move tests/makefile.drivers 	tests/Drivers/makefile
 	  move tests/makefile.events 	tests/Events/makefile
 	  move tests/makefile.filters 	tests/Filters/makefile
