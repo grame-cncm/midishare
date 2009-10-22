@@ -105,19 +105,25 @@ static char * ErrFilePath ()
 //_________________________________________________________
 void MMError (char *s, SlotRefNum ref, int errCode, short in)
 {
+	char buff[20];
 	char * string = makeErrString(s, ref, errCode, in);
 	char * errFile = ErrFilePath ();
-	if (errFile) {
-		HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,
+
+	GetPrivateProfileString("log", "file", "yes", buff, 20, GetProfileFullName());
+
+	if (strcmp(buff, "yes") == 0) {
+		if (errFile) {
+			HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,
 			NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (h != INVALID_HANDLE_VALUE) {
-			DWORD written;
-			SetFilePointer(h, 0, 0, FILE_END);
-			WriteFile(h, string, strlen(string), &written, NULL);
-			CloseHandle (h);
+			if (h != INVALID_HANDLE_VALUE) {
+				DWORD written;
+				SetFilePointer(h, 0, 0, FILE_END);
+				WriteFile(h, string, strlen(string), &written, NULL);
+				CloseHandle (h);
+			}
 		}
+		CheckMessageBox(makeShortString(s, ref, errCode, in));
 	}
-	CheckMessageBox(makeShortString(s, ref, errCode, in));
 }
 
 //_________________________________________________________

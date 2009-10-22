@@ -5,6 +5,7 @@ Built on top of Windows MMSystem
 Versions history:
 ---------------------------------------------------------------------------
 
+v 1.0.5.0	: supports error message log using ini file (section [log], file="yes"|"no")
 v 1.0.4.0	: supports error message box using ini file (section [error], messagebox="yes"|"no")
 v 1.0.3.5	: don't allow connections to a slot that can't be opened
 v 1.0.3.4	: a slot connected to multiple ports is opened only once, therefore
