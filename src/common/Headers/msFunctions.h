@@ -1,7 +1,7 @@
 
 /*
 
-  Copyright © Grame 2002
+  Copyright (c) Grame 2002-2010
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@grame.fr
+  research@grame.fr
   
 */
 
@@ -190,7 +190,7 @@ extern "C" {
   MSAPI(void)           MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
   MSAPI(MidiEvPtr)      MidiTask (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
   MSAPI(MidiEvPtr)      MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MSAPI(void)           MidiForgetTask(MidiEvPtr FAR *e);
+  MSAPI(void)           MidiForgetTask(MidiEvPtr* e);
   MSAPI(long)           MidiCountDTasks(short refNum);
   MSAPI(void)           MidiFlushDTasks(short refNum);
   MSAPI(void)           MidiExec1DTask(short refNum);
