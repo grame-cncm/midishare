@@ -1,4 +1,4 @@
-/*====================== A MIDI SHARE TOOL  (© GRAME 99) =====================
+/*====================== A MIDI SHARE TOOL  (ï¿½ GRAME 99) =====================
 
 NAME
       MidiGetTime -- a very simple MidiShare tool
@@ -12,13 +12,15 @@ DESCRIPTION
 ===============================================================================*/
  
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "MidiShare.h"
 
 //_______________________________________________________________________
 static void usage (char *name) 
 {
 	fprintf (stderr, "usage : %s [options]\n", name);
-	fprintf (stderr, "        %s gives the current MidiShare date\n");
+	fprintf (stderr, "        %s gives the current MidiShare date\n", name);
 	fprintf (stderr, "        option is: -h output in human readable form\n");
 	exit (1);
 }

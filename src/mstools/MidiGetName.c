@@ -1,4 +1,4 @@
-/*====================== A MIDI SHARE TOOL  (© GRAME 99) =====================
+/*====================== A MIDI SHARE TOOL  (ï¿½ GRAME 99) =====================
 
 NAME
       MidiGetName -- a very simple MidiShare tool
@@ -13,6 +13,7 @@ DESCRIPTION
 ===============================================================================*/
  
 #include <stdio.h>
+#include <stdlib.h>
 #include "MidiShare.h"
 
 //_______________________________________________________________________

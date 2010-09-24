@@ -1,4 +1,4 @@
-/*====================== A MIDI SHARE TOOL  (© GRAME 99) =====================
+/*====================== A MIDI SHARE TOOL  (ï¿½ GRAME 99) =====================
 
 NAME
       MidiIsConnected -- a very simple MidiShare tool
@@ -13,6 +13,8 @@ DESCRIPTION
 ===============================================================================*/
  
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "MidiShare.h"
 
 #define nil     0
@@ -79,7 +81,7 @@ int GetState (char * state)
 //_______________________________________________________________________
 int main (int argc, char *argv[])
 {
-	int src, dst, state;
+	int src, dst;
 	if (argc != 3) usage (argv[0]);
 	
 	CheckMidiShare (argv[0]);
