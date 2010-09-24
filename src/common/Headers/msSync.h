@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -27,7 +27,7 @@
 
 
 #ifdef __Macintosh__
-# if defined(__POWERPC__) || defined(__i386__)
+# if defined(__POWERPC__) || defined(__i386__) || __x86_64__
 
 # else
 
@@ -40,6 +40,6 @@ void    INT_ON(void)  = {0x46DF};
 /*------------------------------------------------------------------------------*/
 /*                             synchronization functions                        */
 /*------------------------------------------------------------------------------*/
-Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith);
+Boolean MSCompareAndSwap (void** adr, void* compareTo, void* swapWith);
 
 #endif

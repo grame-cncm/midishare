@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -34,7 +34,7 @@
 
 /*__________________________________________________________________________________*/
 /* Task extension block                                                             */
-typedef struct TTaskExt FAR *TTaskExtPtr;
+typedef struct TTaskExt *TTaskExtPtr;
 typedef struct TTaskExt
 {
     TaskPtr fun;

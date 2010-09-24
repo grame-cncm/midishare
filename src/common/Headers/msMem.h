@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -41,7 +41,7 @@ typedef enum {
                            /* the calling process                                         */
 } MemoryType;
 
-FarPtr(void) AllocateMemory (MemoryType type, unsigned long size);
-void         DisposeMemory  (FarPtr(void) memPtr);
+void*	AllocateMemory (MemoryType type, unsigned long size);
+void	DisposeMemory  (void* memPtr);
 
 #endif

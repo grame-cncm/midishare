@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright ï¿½ Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -51,7 +51,17 @@ MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 {
+#ifdef __x86_64__
+//printf("sizeof(long): %d\n", sizeof(long));
+//printf("sizeof(int): %d\n", sizeof(int));
+//printf("sizeof(short): %d\n", sizeof(short));
+	return 194;
+#else
+//printf("sizeof(long): %d\n", sizeof(long));
+//printf("sizeof(int): %d\n", sizeof(int));
+//printf("sizeof(short): %d\n", sizeof(short));
 	return 193;
+#endif
 }
 
 

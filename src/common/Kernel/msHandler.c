@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -279,7 +279,7 @@ static void DispatchEvents (TMSGlobalPtr g, MidiEvPtr ev)
 /*__________________________________________________________________________________*/
 static void RcvAlarmLoop( TMSGlobalPtr g)
 {
-	TApplPtr FAR *applPtr, appl;
+	TApplPtr *applPtr, appl;
 	RcvAlarmPtr alarm;
 
 	*NextActiveAppl(g) = 0;               /* close the active applications table */

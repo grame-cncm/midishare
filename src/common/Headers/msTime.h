@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -32,7 +32,7 @@ void OpenTime (TMSGlobalPtr g);
 
 /*____________________________________________________________________________*/
 MSFunctionType(unsigned long) MSGetTime (TMSGlobalPtr g);
-MSFunctionType(FarPtr(unsigned long)) MSGetTimeAddr(TMSGlobalPtr g);
+MSFunctionType(unsigned long*) MSGetTimeAddr(TMSGlobalPtr g);
 
 MSFunctionType(void) MSTime2Smpte  (long time, short format, SmpteLocPtr loc, TMSGlobalPtr g);
 MSFunctionType(long) MSSmpte2Time  (SmpteLocPtr loc, TMSGlobalPtr g);

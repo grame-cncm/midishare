@@ -37,7 +37,7 @@
 #define kLineOn		3		/* fifo initialisé et actif			*/
 
 
-typedef struct RFifo     FAR * RFifoPtr;
+typedef struct RFifo * RFifoPtr;
 typedef void   (*RcvMethodPtr)  (RFifoPtr f, char c);
 
 /*__________________________________________________________________________*/
@@ -59,8 +59,8 @@ typedef union TMidiFastEv
             short     shortF[2];
             long      longF;
         }             specific;
-    } FAR *           fast;
-    long FAR *        tab;
+    }*           fast;
+    long *       tab;
 } TMidiFastEv;
 
 #define Common(e)        (e).fast->common

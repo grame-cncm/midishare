@@ -46,7 +46,7 @@
 #define DENTRYLSB	38		/* data entry value (lsb)		*/
 
 
-typedef struct XFifo     FAR * XFifoPtr;
+typedef struct XFifo  * XFifoPtr;
 
 typedef void	(*XFAlarm)(XFifoPtr f);
 typedef void	(*XFContinuation)(XFifoPtr f);
@@ -77,7 +77,7 @@ void XFInit( XFifoPtr f, TMSGlobalPtr g, short refnum);
 void XFInitMthTbl ();
 
 void 	XFPutEvent( register XFifoPtr f, register MidiEvPtr e);
-Boolean	XFGetByte( register XFifoPtr f, Byte FAR *code, Byte FAR *port);
+Boolean	XFGetByte( register XFifoPtr f, Byte *code, Byte *port);
 int	XFCountByte( register XFifoPtr f);
 
 extern LinearizeMethodPtr LinearizeTbl[];

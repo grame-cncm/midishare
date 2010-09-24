@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2000
+  Copyright ï¿½ Grame 1999-2000
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -36,10 +36,9 @@
 /*------------------------------------------------------------------------*/
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
-typedef struct TMSGlobal FAR *  TMSGlobalPtr;
-typedef struct THorloge  FAR *  THorlogePtr;
-typedef FarPtr(void)			THost;   /* reserved for platform dependant
-                                            storage */
+typedef struct TMSGlobal *  TMSGlobalPtr;
+typedef struct THorloge  *  THorlogePtr;
+typedef void*				THost;   /* reserved for platform dependant storage */
 
 /*------------------------------------------------------------------------*/
 /* realtime clock */

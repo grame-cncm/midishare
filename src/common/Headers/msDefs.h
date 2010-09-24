@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -28,28 +28,24 @@
 
 #include "msTypes.h"
 
-#ifdef __Macintosh__
-#	define  MSALARMAPI
-#	define  FAR
-#	define	MIDISHAREAPI
-#ifdef __MacOSX__
-#   define  ALARMTYPE   
-#else
+#ifdef __Pascal_alarm__
 #   define  ALARMTYPE pascal
-#endif
+# else
+#   define  ALARMTYPE   
 #endif
 
 #ifdef WIN32
-#   include  "windows.h"
 #   define  ALARMTYPE
 #	define	MIDISHAREAPI __declspec(dllexport)
 #	define  MSALARMAPI	CALLBACK
+#else
+#	define	MIDISHAREAPI
+#	define  MSALARMAPI
 #endif
 
 #ifdef __linux__
 #   define  ALARMTYPE
 #	define  MSALARMAPI
-#	define  FAR
 #endif
 
 /*******************************************************************************
@@ -234,33 +230,33 @@ enum{   MIDIOpenAppl=1,
 /******************************************************************************
 *                                 DATA TYPES
 *******************************************************************************/
+#ifdef __x86_64__
+# define CELLSIZE		32
+#else
+# define CELLSIZE		16
+#endif
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
-    typedef struct TMidiSEX FAR *MidiSEXPtr;
+    typedef struct TMidiSEX *MidiSEXPtr;
     typedef struct TMidiSEX
     {
-        MidiSEXPtr link;          /* link to next cell */
-        Byte data[12];            /* 12 data bytes     */
+        MidiSEXPtr link;								/* link to next cell */
+        Byte data[CELLSIZE - sizeof(MidiSEXPtr)];       /* data bytes     */
     }   TMidiSEX;
 
 /*------------------------------ Private extension cell -------------------------*/
 
-    typedef struct TMidiST FAR *MidiSTPtr;
+    typedef struct TMidiST *MidiSTPtr;
     typedef struct TMidiST
     {
-#ifdef __SupportOldSTDef__
-        Ptr ptr1;                  /* 4 32-bits fields */
-        Ptr ptr2;
-        Ptr ptr3;
-        Ptr ptr4;
-#endif
 		long val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/
+#define HEADERSIZE	sizeof(void*) + sizeof(unsigned long) + 4
 
-    typedef struct TMidiEv FAR *MidiEvPtr;
+    typedef struct TMidiEv *MidiEvPtr;
     typedef struct TMidiEv
     {
         MidiEvPtr   link;           /* link to next event   */
@@ -273,7 +269,8 @@ enum{   MIDIOpenAppl=1,
             struct {                /* for notes            */
                 Byte pitch;         /* pitch                */
                 Byte vel;           /* velocity             */
-                unsigned short dur; /* duration             */
+                int dur;			/* duration             */
+				Byte unused[CELLSIZE - HEADERSIZE - sizeof(int) - 2];
             } note;
 
             struct {              /* for MidiFile time signature */
@@ -284,41 +281,48 @@ enum{   MIDIOpenAppl=1,
                                   /* a metronome click           */
                 Byte n32nd;       /* number of 32nd notes in     */
                                   /* a Midi quarter note         */
+				Byte unused[CELLSIZE - HEADERSIZE - 4];
             } timeSign;
 
             struct {            /* for MidiFile key signature  */
                 char ton;       /* 0: key of C, 1: 1 sharp     */
                                 /* -1: 1 flat etc...           */
                 Byte mode;      /* 0: major 1: minor           */
-                Byte unused[2];
-
+                Byte unused[CELLSIZE - HEADERSIZE - 2];
             } keySign;
             
-	    struct {            /* for paramchg & 14-bits ctrl  */
+			struct {            /* for paramchg & 14-bits ctrl  */
             	short num;      /* param or ctrl num            */
             	short val;      /* 14-bits value                */
+				Byte unused[CELLSIZE - HEADERSIZE - 2*sizeof(short)];
             } param;
 
 
             struct {            /* for MidiFile sequence number */
-                unsigned short number;
-                short unused;
+                int	 number;
+				Byte unused[CELLSIZE - HEADERSIZE - sizeof(int)];
             } seqNum;
 
-			short shortFields[2];/* for 14-bits controlers		*/
-            long longField;
+			short shortFields[(CELLSIZE - HEADERSIZE ) / sizeof(short)]; /* for 14-bits controlers		*/
+            int longField[(CELLSIZE - HEADERSIZE ) / sizeof(int)];
 
-            long tempo;         /* MidiFile tempo in            */
+            long tempo;          /* MidiFile tempo in            */
                                 /* microsec/Midi quarter note   */
-            Byte data[4];       /* for other small events       */
-            MidiSEXPtr linkSE;  /* link to last sysex extension */
-            MidiSTPtr linkST;   /* link to private extension    */
+            Byte data[CELLSIZE - HEADERSIZE];       /* for other small events       */
+            union {
+				Byte data[CELLSIZE - HEADERSIZE - sizeof(void*)];
+				MidiSEXPtr linkSE;  /* link to last sysex extension */
+			}se;
+            union {
+				Byte data[CELLSIZE - HEADERSIZE - sizeof(void*)];
+	            MidiSTPtr linkST;   /* link to private extension    */
+			}st;
         } info;
     } TMidiEv;
 
 /*------------------------------ sequence header ---------------------------*/
 
-    typedef struct TMidiSeq FAR *MidiSeqPtr;
+    typedef struct TMidiSeq *MidiSeqPtr;
     typedef struct TMidiSeq
     {
         MidiEvPtr first;        /* first event pointer  */
@@ -330,7 +334,7 @@ enum{   MIDIOpenAppl=1,
 
 /*-------------------------------- input Filter -------------------------------*/
 
-    typedef struct TFilter FAR *MidiFilterPtr;
+    typedef struct TFilter *MidiFilterPtr;
     typedef struct TFilter
     {
         char port[32];         /* 256 bits */
@@ -348,8 +352,8 @@ enum{   MIDIOpenAppl=1,
     typedef unsigned char * MidiName;
 	typedef unsigned char	DriverName[DrvNameLen];
 #else
-    typedef char FAR * MidiName;
-	typedef char	   DriverName[DrvNameLen];
+    typedef char * MidiName;
+	typedef char   DriverName[DrvNameLen];
 #endif
 typedef DriverName SlotName;
 
@@ -388,7 +392,7 @@ typedef struct TDriverInfos {
 
 /*------------------------ Synchronisation informations -----------------------*/
 
-    typedef struct TSyncInfo FAR *SyncInfoPtr;
+    typedef struct TSyncInfo *SyncInfoPtr;
     typedef struct TSyncInfo
     {
         long        time;
@@ -404,7 +408,7 @@ typedef struct TDriverInfos {
         short       syncFormat;
     } TSyncInfo;
 
-    typedef struct TSmpteLocation FAR *SmpteLocPtr;
+    typedef struct TSmpteLocation *SmpteLocPtr;
     typedef struct TSmpteLocation
     {
         short format;       /* (0:24f/s, 1:25f/s, 2:30DFf/s, 3:30f/s) */
@@ -442,8 +446,8 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 #define Vel(e)        ( (e)->info.note.vel )
 #define Dur(e)        ( (e)->info.note.dur )
 #define Data(e)       ( (e)->info.data )
-#define LinkSE(e)     ( (e)->info.linkSE )
-#define LinkST(e)     ( (e)->info.linkST )
+#define LinkSE(e)     ( (e)->info.se.linkSE )
+#define LinkST(e)     ( (e)->info.st.linkST )
 
 #define TSNum(e)      ( (e)->info.timeSign.numerator )
 #define TSDenom(e)    ( (e)->info.timeSign.denominator )
@@ -469,19 +473,19 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 *******************************************************************************/
 
 #ifdef __cplusplus
-    inline void AcceptBit( char FAR *a, Byte n)   { (a)[(n)>>3] |=  (1<<((n)&7)); }
-    inline void RejectBit( char FAR *a, Byte n)   { (a)[(n)>>3] &= ~(1<<((n)&7)); }
-    inline void InvertBit( char FAR *a, Byte n)   { (a)[(n)>>3] ^=  (1<<((n)&7)); }
+    inline void AcceptBit( char *a, Byte n)   { (a)[(n)>>3] |=  (1<<((n)&7)); }
+    inline void RejectBit( char *a, Byte n)   { (a)[(n)>>3] &= ~(1<<((n)&7)); }
+    inline void InvertBit( char *a, Byte n)   { (a)[(n)>>3] ^=  (1<<((n)&7)); }
 
-    inline Boolean IsAcceptedBit( char FAR *a, Byte n) { return (a)[(n)>>3] & (1<<((n)&7)); }
+    inline Boolean IsAcceptedBit( char *a, Byte n) { return (a)[(n)>>3] & (1<<((n)&7)); }
 
 #else
 
-    #define AcceptBit(a,n)      ( ((char FAR*) (a))[(n)>>3] |=   (1<<((n)&7)) )
-    #define RejectBit(a,n)      ( ((char FAR*) (a))[(n)>>3] &=  ~(1<<((n)&7)) )
-    #define InvertBit(a,n)      ( ((char FAR*) (a))[(n)>>3] ^=   (1<<((n)&7)) )
+    #define AcceptBit(a,n)      ( ((char*) (a))[(n)>>3] |=   (1<<((n)&7)) )
+    #define RejectBit(a,n)      ( ((char*) (a))[(n)>>3] &=  ~(1<<((n)&7)) )
+    #define InvertBit(a,n)      ( ((char*) (a))[(n)>>3] ^=   (1<<((n)&7)) )
 
-    #define IsAcceptedBit(a,n)  ( ((char FAR*) (a))[(n)>>3]  &   (1<<((n)&7)) )
+    #define IsAcceptedBit(a,n)  ( ((char*) (a))[(n)>>3]  &   (1<<((n)&7)) )
 #endif
 
 #endif

@@ -1,7 +1,7 @@
 
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -34,7 +34,7 @@
 	enum { kLev0, kLev1, kLev2, kLev3 };
 	#define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
 	#define GetLevel(index) (unsigned char)index
-#elif defined(__i386__) || defined(__INTEL__) || defined (_M_IX86)										/* Litte Endian */
+#elif __x86_64__ || defined(__i386__) || defined(__INTEL__) || defined (_M_IX86)	/* Litte Endian */
 	enum { kLev3, kLev2, kLev1, kLev0 };
 	#define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
 	#define GetLevel(index) 3-index;

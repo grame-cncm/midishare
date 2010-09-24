@@ -109,37 +109,37 @@ static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
 /* data storage */
 
-#if defined(__Macintosh__) && !(defined(__POWERPC__) || defined(__i386__))
-
-static asm void NewEvMeth()       { ds.l 256 }
-static asm void CopyEvMeth()      { ds.l 256 }
-static asm void FreeEvMeth()      { ds.l 256 }
-static asm void SetFieldMeth()    { ds.l 256 }
-static asm void GetFieldMeth()    { ds.l 256 }
-static asm void CountFieldsMeth() { ds.l 256 }
-static asm void AddFieldMeth()    { ds.l 256 }
-
-
-#define NewEvMethodTbl	     ((NewEvMethodPtr *)NewEvMeth)
-#define CopyEvMethodTbl      ((CopyEvMethodPtr *)CopyEvMeth)
-#define FreeEvMethodTbl      ((FreeEvMethodPtr *)FreeEvMeth)
-#define SetFieldMethodTbl    ((SetFieldMethodPtr *)SetFieldMeth)
-#define GetFieldMethodTbl    ((GetFieldMethodPtr *)GetFieldMeth)
-#define CountFieldsMethodTbl ((CountFieldsMethodPtr *)CountFieldsMeth)
-#define AddFieldMethodTbl    ((AddFieldMethodPtr *)AddFieldMeth)
-
-static asm void smpteMask() { 
-	dc.l 0x06000000,0x1F000000,0x00FC0000
-	dc.l 0x0003F000,0x00000F80,0x0000007F
-}
-static asm void smpteShft() { 
-	dc.b 29,24,18,12,7,0 
-}
-
-#define smpteMaskTbl	  (const unsigned long *)smpteMask
-#define smpteShftTbl      (const char *)smpteShft
-
-#else
+//#if defined(__Macintosh__) && !(defined(__POWERPC__) || defined(__i386__))
+//
+//static asm void NewEvMeth()       { ds.l 256 }
+//static asm void CopyEvMeth()      { ds.l 256 }
+//static asm void FreeEvMeth()      { ds.l 256 }
+//static asm void SetFieldMeth()    { ds.l 256 }
+//static asm void GetFieldMeth()    { ds.l 256 }
+//static asm void CountFieldsMeth() { ds.l 256 }
+//static asm void AddFieldMeth()    { ds.l 256 }
+//
+//
+//#define NewEvMethodTbl	     ((NewEvMethodPtr *)NewEvMeth)
+//#define CopyEvMethodTbl      ((CopyEvMethodPtr *)CopyEvMeth)
+//#define FreeEvMethodTbl      ((FreeEvMethodPtr *)FreeEvMeth)
+//#define SetFieldMethodTbl    ((SetFieldMethodPtr *)SetFieldMeth)
+//#define GetFieldMethodTbl    ((GetFieldMethodPtr *)GetFieldMeth)
+//#define CountFieldsMethodTbl ((CountFieldsMethodPtr *)CountFieldsMeth)
+//#define AddFieldMethodTbl    ((AddFieldMethodPtr *)AddFieldMeth)
+//
+//static asm void smpteMask() { 
+//	dc.l 0x06000000,0x1F000000,0x00FC0000
+//	dc.l 0x0003F000,0x00000F80,0x0000007F
+//}
+//static asm void smpteShft() { 
+//	dc.b 29,24,18,12,7,0 
+//}
+//
+//#define smpteMaskTbl	  (const unsigned long *)smpteMask
+//#define smpteShftTbl      (const char *)smpteShft
+//
+//#else
 
 static NewEvMethodPtr       NewEvMeth[256];        /* Allocation methods table */
 static CopyEvMethodPtr      CopyEvMeth[256];       /* Copy methods table       */
@@ -164,7 +164,7 @@ const char 		    smpteShft[]= { 29,24,18,12,7,0 };
 #define smpteMaskTbl	  smpteMask
 #define smpteShftTbl      smpteShft
 
-#endif
+//#endif
 
 
 /*===========================================================================
@@ -428,7 +428,13 @@ static MidiEvPtr NewSmallEv( lifo* fl, short typeNum)
 		EvType(ev)= (uchar)typeNum;
 		RefNum(ev)= 0xff;
 		Chan(ev) = Port(ev) = 0;
-		ev->info.longField = 0;
+#ifdef __x86_64__
+		ev->info.longField[0] = 0;
+		ev->info.longField[1] = 0;
+		ev->info.longField[2] = 0;
+#else
+		ev->info.longField[0] = 0;
+#endif
 	}
 	return ev;
 }
@@ -614,7 +620,7 @@ static void SetFSMPTEOffset( MidiEvPtr e, unsigned long f, long v)
 		const char * shift = smpteShftTbl;
 		v <<= shift[f];
 		v &= mask[f];
-		e->info.longField |= v;
+		e->info.longField[0] |= v;
 	}
 }
 

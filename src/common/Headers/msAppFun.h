@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -38,8 +38,8 @@ MSFunctionType(short)     MSGetNamedAppl (MidiName name, TClientsPtr g);
 
 MSFunctionType(MidiName)     MSGetName  (short ref, TClientsPtr g);
 MSFunctionType(void)         MSSetName  (short ref, MidiName name, TClientsPtr g);
-MSFunctionType(FarPtr(void)) MSGetInfo  (short ref, TClientsPtr g);
-MSFunctionType(void)         MSSetInfo  (short ref, FarPtr(void) info, TClientsPtr g);
+MSFunctionType(void*)		 MSGetInfo  (short ref, TClientsPtr g);
+MSFunctionType(void)         MSSetInfo  (short ref, void* info, TClientsPtr g);
 
 MSFunctionType(MidiFilterPtr) MSGetFilter  (short ref, TClientsPtr g);
 MSFunctionType(void)          MSSetFilter  (short ref, MidiFilterPtr filter, TClientsPtr g);

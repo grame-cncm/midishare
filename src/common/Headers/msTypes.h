@@ -1,6 +1,6 @@
 /*
 
-  Copyright � Grame 1999
+  Copyright (c) Grame 1999-2010
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,63 +16,46 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
   
   modifications history:
    [08-09-99] DF - struct cell added
    [13-09-99] DF - 'PascalNames' definition moved to platform dependent header
-
+   [24-09-10] DF - 64 bits support: definitions revised 
 */
 
 #ifndef __msTypes__
 #define __msTypes__
 
+#if defined(__Macintosh__) && !defined(__POWERPC__) && !defined(__i386__) && !__x86_64__
+# define __Pascal_fun__
+#endif
+
 #ifdef __Macintosh__
-#ifdef __MacOSX__
-	typedef unsigned char Boolean;
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	enum { false, true };
-#else
-# include <mactypes.h> 
-#endif 
-                                   
-# if defined(__POWERPC__) || defined(__i386__)
-# define MSFunctionType(type)   type
-# define FAR
-# else 
-# define MSFunctionType(type)   pascal type
-# define FAR
+# ifndef __MacOSX__
+# include <mactypes.h>
+# define __Pascal_alarm__
 # endif
 
-typedef unsigned long ulong;
+#elif defined(WIN32)
+# include <windows.h>
 
+#elif defined(__linux__)
+# include <linux/types.h>
+#endif
+
+#ifdef __Pascal_fun__
+# define MSFunctionType(type)   pascal type
 #else
 # define MSFunctionType(type)   type
 #endif
 
-#ifdef WIN32
-# include <windows.h>
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	typedef unsigned char Boolean;
-	typedef unsigned long ulong;
-	enum { false = 0, true };
-#endif
+enum { false, true };
 
-#ifdef __linux__
-#	include <linux/types.h>
-#	define FAR
-
-	typedef unsigned char Byte;
-	typedef char * Ptr;
-	typedef unsigned char Boolean;
-#define false 0
-#define true 1
-#endif
-
+typedef unsigned char Boolean;
+typedef unsigned char Byte;
+typedef char * Ptr;
+typedef unsigned long ulong;
 typedef unsigned char uchar;
-#define FarPtr(type)  type FAR *
-
 
 #endif

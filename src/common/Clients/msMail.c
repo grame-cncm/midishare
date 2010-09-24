@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -29,9 +29,9 @@
 /*----------------------------------------------------------------------------*/
 /* 				- MidiReadSync - read and clear an address   				  */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem)
+MSFunctionType(void*) MSReadSync	(void** adrMem)
 {
-	FarPtr(void) content;
+	void* content;
 	
 	do {
 		content= *adrMem;
@@ -42,9 +42,9 @@ MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem)
 /*----------------------------------------------------------------------------*/
 /* 				- MidiWriteSync - test and write an address				      */
 /*----------------------------------------------------------------------------*/
-MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val)
+MSFunctionType(void*) MSWriteSync (void** adrMem, void* val)
 {
-	FarPtr(void) content;
+	void* content;
 	
 	do {
 		content= *adrMem;

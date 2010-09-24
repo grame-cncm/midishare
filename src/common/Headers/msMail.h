@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -29,7 +29,7 @@
 #include "msTypes.h"
 
 /* MidiShare functions interface */
-MSFunctionType(FarPtr(void)) MSReadSync	(FarPtr(void) FAR * adrMem);
-MSFunctionType(FarPtr(void)) MSWriteSync (FarPtr(void) FAR * adrMem, FarPtr(void) val);
+MSFunctionType(void*) MSReadSync	(void** adrMem);
+MSFunctionType(void*) MSWriteSync	(void** adrMem, void* val);
 
 #endif

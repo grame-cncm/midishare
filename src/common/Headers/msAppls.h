@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -51,11 +51,11 @@
 /* data types                                                             */
 /*------------------------------------------------------------------------*/
 
-typedef FarPtr(void)				TApplContextPtr;
+typedef void*					TApplContextPtr;
 
-typedef struct FarPtr(TAppl) 		TApplPtr;
-typedef struct FarPtr(TClients) 	TClientsPtr;
-typedef struct FarPtr(TConnection) 	TConnectionPtr;
+typedef struct TAppl*			TApplPtr;
+typedef struct TClients*		TClientsPtr;
+typedef struct TConnection* 	TConnectionPtr;
 
 
 #ifdef PascalNames
@@ -80,7 +80,7 @@ enum { kClientFolder = 0, kDriverFolder = 255 };
 typedef struct TAppl{
     MSName          name;        /* the application name         */
     TApplContextPtr context;     /* system dependent context     */
-    FarPtr(void)    info;        /* user field                   */
+    void*			info;        /* user field                   */
     uchar           folder;      /* application folder           */
     uchar           refNum;      /* reference number             */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */

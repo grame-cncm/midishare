@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -167,9 +167,9 @@ MSFunctionType(void) MSSetName(short ref, MidiName name, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
+MSFunctionType(void*) MSGetInfo (short ref, TClientsPtr g)
 {
-	FarPtr(void) info = 0;
+	void* info = 0;
 	if (CheckRefNum(g,ref)) {
 		info = g->appls[ref]->info;
 	}
@@ -177,7 +177,7 @@ MSFunctionType(FarPtr(void)) MSGetInfo (short ref, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetInfo (short ref, FarPtr(void) info, TClientsPtr g)
+MSFunctionType(void) MSSetInfo (short ref, void* info, TClientsPtr g)
 {
 	if (CheckRefNum(g,ref)) {
 		g->appls[ref]->info = info;
