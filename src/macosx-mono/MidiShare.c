@@ -1,5 +1,5 @@
 /*
-  Copyright © Grame 2002
+  Copyright ï¿½ Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -331,7 +331,7 @@ MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNu
 MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
   	return MSDTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
-void MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e) {
+void MIDISHAREAPI MidiForgetTask(MidiEvPtr *e) {
   	MSForgetTask( e);
 }
 long MIDISHAREAPI MidiCountDTasks(short refNum) {

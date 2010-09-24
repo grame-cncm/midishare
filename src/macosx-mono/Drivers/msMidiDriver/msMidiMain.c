@@ -54,9 +54,9 @@ ParseMethodTbl	gParseTbl  = { 0 };
 Status2TypeTbl	gTypeTbl  = { 0 };
 
 /* MacOSX Midi client */
-MIDIClientRef		gClient = NULL;
-MIDIPortRef			gInPort = NULL;
-MIDIPortRef			gOutPort = NULL;
+MIDIClientRef		gClient = 0;
+MIDIPortRef			gInPort = 0;
+MIDIPortRef			gOutPort = 0;
 
 static pthread_t 	gThread; 	// For NotificationProc 
 static CFRunLoopRef	gRunLoop = NULL; // The CFRunLoop
@@ -209,15 +209,15 @@ static void * OpenThread (void * ptr)
 error :
 	if (gInPort){
 		 MIDIPortDispose(gInPort);
-		 gInPort = NULL;
+		 gInPort = 0;
 	}
 	if (gOutPort) {
 		MIDIPortDispose(gOutPort);
-		gInPort = NULL;
+		gInPort = 0;
 	}
 	if (gClient) {
 		MIDIClientDispose(gClient);
-		gClient = NULL;
+		gClient = 0;
 	}
 	// Be sure to signal waiting threads to continue
     syncSignal();	
@@ -261,9 +261,9 @@ static void msSleep (short refnum)
 	if (gInPort) MIDIPortDispose(gInPort);
 	if (gOutPort) MIDIPortDispose(gOutPort);
 	if (gClient) MIDIClientDispose(gClient);
-	gClient = NULL;
-	gInPort = NULL;
-	gOutPort = NULL;
+	gClient = 0;
+	gInPort = 0;
+	gOutPort = 0;
 	RemoveSlots (refnum);
 	/* when sysex are still sent, the completion routine may still be called... wait 1 sec 
 	hoping the CompletionProc will see the null gClient.... */

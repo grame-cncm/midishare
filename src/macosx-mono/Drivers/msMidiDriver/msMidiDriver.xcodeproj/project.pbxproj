@@ -20,15 +20,15 @@
 		4BD92DEA09EE52A7002DCEE0 /* profport.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1F0208058801053105 /* profport.c */; };
 		4BD92DEB09EE52A8002DCEE0 /* EventToMidiStream.c in Sources */ = {isa = PBXBuildFile; fileRef = F5240F1C0208056001053105 /* EventToMidiStream.c */; };
 		4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */; };
-		4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */; };
 		4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */; };
+		D36738BC124CE606006AB177 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D36738BB124CE606006AB177 /* MidiShare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.8.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msMidiDriver.1.0.8.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
-		4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
 		4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		D36738BB124CE606006AB177 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /Users/fober/src/midishare/src/cmake/Release/MidiShare.framework; sourceTree = "<absolute>"; };
 		D3EE80D105BC089000FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
 		F5240F1C0208056001053105 /* EventToMidiStream.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = EventToMidiStream.c; path = ../../../lib/EventToMidiStream.c; sourceTree = SOURCE_ROOT; };
 		F5240F1E0208058801053105 /* MidiStreamToEvent.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = MidiStreamToEvent.c; path = ../../../lib/MidiStreamToEvent.c; sourceTree = SOURCE_ROOT; };
@@ -50,8 +50,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BD92DF409EE52C2002DCEE0 /* CoreMIDI.framework in Frameworks */,
-				4BD92DFF09EE52CA002DCEE0 /* MidiShare.framework in Frameworks */,
 				4BD92E0409EE52D8002DCEE0 /* CoreServices.framework in Frameworks */,
+				D36738BC124CE606006AB177 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,8 +74,8 @@
 				F76B9CAA02086C0B01053118 /* lib */,
 				F54A7D7A01FC781301053105 /* Products */,
 				4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */,
-				4BD92DFE09EE52CA002DCEE0 /* MidiShare.framework */,
 				4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */,
+				D36738BB124CE606006AB177 /* MidiShare.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -205,12 +205,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
+					x86_64,
 					i386,
 				);
 				COPY_PHASE_STRIP = NO;
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -225,7 +230,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = YES;
 			};
@@ -235,12 +240,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
+					x86_64,
 					i386,
 				);
 				COPY_PHASE_STRIP = YES;
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
@@ -253,7 +263,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.8;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = NO;
 			};
@@ -263,11 +273,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
+					x86_64,
 					i386,
 				);
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -279,7 +294,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
 				ZERO_LINK = YES;
 			};

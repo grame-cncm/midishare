@@ -92,7 +92,7 @@ static void SendSysExAux(SlotPtr slot)
 	slot->request.completionRefCon = slot;
 	
 	err = MIDISendSysex(&slot->request);
-	if (err != noErr) fprintf(stderr, "MIDISendSysex : error %ld\n", err);
+	if (err != noErr) fprintf(stderr, "MIDISendSysex : error %d\n", err);
  }
  
 //_________________________________________________________
@@ -128,7 +128,7 @@ static void SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 	
 	MIDIPacketListAdd(pktlist,sizeof(state->packetBuffer),packet,MIDIGetCurrentHostTime(),n,state->evBuffer);
 	err = MIDISend(slot->port,slot->dest,pktlist);
-	if (err != noErr) fprintf(stderr, "MIDISend : error %ld\n", err);
+	if (err != noErr) fprintf(stderr, "MIDISend : error %d\n", err);
 }
 
 

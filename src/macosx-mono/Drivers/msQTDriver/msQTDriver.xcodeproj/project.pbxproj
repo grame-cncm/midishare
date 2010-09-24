@@ -110,10 +110,12 @@
 		F567580B01FDA3E101053105 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41F0C09ED430000EE9367 /* Build configuration list for PBXProject "msQTDriver" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = F567580C01FDA3E101053105;
 			productRefGroup = F5EFF91601FDA40901053105 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				4BADAD0C09ED772600BC5B44 /* msQTDriver Universal */,
 			);

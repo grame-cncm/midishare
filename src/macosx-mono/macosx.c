@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2002
+  Copyright ï¿½ Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -55,8 +55,8 @@ typedef struct {
     int             initialized;
 } TMutex;
 
-static TMutex gMutex[kMutexCount] = { 0 };
-static MacOSXDriverPtr gMacOSXDriver = { 0 };
+static TMutex gMutex[kMutexCount]; // = { 0 };
+static MacOSXDriverPtr gMacOSXDriver; // = { 0 };
 static unsigned long gTimeMode = 0;
 
 /*------------------------------------------------------------------------------*/
@@ -82,7 +82,7 @@ void msCloseMutex (unsigned int mutex)
 
 
 /*------------------------------------------------------------------------------*/
-Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
+Boolean MSCompareAndSwap (void** adr, void* compareTo, void* swapWith)
 {
 	*adr = swapWith;
 	return true;
@@ -126,12 +126,13 @@ void *  LoadLibrary(const char *filename, const char *symbol)
 /*------------------------------------------------------------------------------*/
 void FreeLibrary(void * handle, const char *symbol)
 { 
-	Stop fun;
-	if (fun = (Stop)dlsym(handle, symbol)) (*fun)(); 
+	Stop fun = (Stop)dlsym(handle, symbol);
+	if (fun) (*fun)(); 
     /*
     Andre Schnoor 18/12/2008 : unlike Tiger, Leopard doesn't like unloading dynamic libs while their code is still in use (due to threads cleanup). 
     IMHO, it doesn't harm to never actually unload the rather small MS driver libraries (60KB only)
     */
+	//if (fun) (*fun)(); 
 	//dlclose(handle);
 }
 
@@ -250,8 +251,8 @@ Boolean ForgetTaskSync(MidiEvPtr * taskPtr, MidiEvPtr content)
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory(MemoryType type, unsigned long size) {return (void*)malloc(size);}
-void DisposeMemory(FarPtr(void) memPtr) {if (memPtr) free(memPtr);}
+void* AllocateMemory(MemoryType type, unsigned long size) {return (void*)malloc(size);}
+void DisposeMemory(void* memPtr) {if (memPtr) free(memPtr);}
 
 /*_________________________________________________________________________*/
 /* time task                                                               */

@@ -160,26 +160,26 @@ static UInt32 GetThreadPriority(pthread_t thread, int inWhichPriority)
     return 0;
 }
 
-static int GetParams(pthread_t thread, UInt64* period, UInt64* computation, UInt64* constraint)
-{
-    thread_time_constraint_policy_data_t theTCPolicy;
-    mach_msg_type_number_t count = THREAD_TIME_CONSTRAINT_POLICY_COUNT;
-    boolean_t get_default = false;
-
-    kern_return_t res = thread_policy_get(pthread_mach_thread_np(thread),
-                                          THREAD_TIME_CONSTRAINT_POLICY,
-                                          (thread_policy_t) & theTCPolicy,
-                                          &count,
-                                          &get_default);
-    if (res == KERN_SUCCESS) {
-        *period = AudioConvertHostTimeToNanos(theTCPolicy.period);
-        *computation = AudioConvertHostTimeToNanos(theTCPolicy.computation);
-        *constraint = AudioConvertHostTimeToNanos(theTCPolicy.constraint);
-        return 0;
-    } else {
-        return -1;
-    }
-}
+//static int GetParams(pthread_t thread, UInt64* period, UInt64* computation, UInt64* constraint)
+//{
+//    thread_time_constraint_policy_data_t theTCPolicy;
+//    mach_msg_type_number_t count = THREAD_TIME_CONSTRAINT_POLICY_COUNT;
+//    boolean_t get_default = false;
+//
+//    kern_return_t res = thread_policy_get(pthread_mach_thread_np(thread),
+//                                          THREAD_TIME_CONSTRAINT_POLICY,
+//                                          (thread_policy_t) & theTCPolicy,
+//                                          &count,
+//                                          &get_default);
+//    if (res == KERN_SUCCESS) {
+//        *period = AudioConvertHostTimeToNanos(theTCPolicy.period);
+//        *computation = AudioConvertHostTimeToNanos(theTCPolicy.computation);
+//        *constraint = AudioConvertHostTimeToNanos(theTCPolicy.constraint);
+//        return 0;
+//    } else {
+//        return -1;
+//    }
+//}
 
 static void* TimerTask(void* unused) 
 {

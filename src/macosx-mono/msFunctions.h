@@ -155,7 +155,7 @@ extern "C" {
   void       MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
   MidiEvPtr  MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
   MidiEvPtr  MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  void       MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e);
+  void       MIDISHAREAPI MidiForgetTask(MidiEvPtr *e);
   long       MIDISHAREAPI MidiCountDTasks(short refNum);
   void       MIDISHAREAPI MidiFlushDTasks(short refNum);
   void       MIDISHAREAPI MidiExec1DTask(short refNum);
