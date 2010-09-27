@@ -29,6 +29,14 @@
  * 		    English version 11/11/99 SL
  */
  
+#include <stdio.h>
+#include "MidiShare.h"
+
+#define CTASKS
+#define CNAME
+#define flush   fflush(stdout)
+#define print	printf
+
 #ifdef __Windows__
 #	include <stdio.h>
 #	include <MidiShare.h>
@@ -38,7 +46,7 @@
 #	define flush    fflush(stdout)
 #	define print	printf
 #else
-#	define MSALARMAPI
+//#	define MSALARMAPI
 #endif
 
 #if macintosh
@@ -90,7 +98,7 @@ inline Boolean MidiShare() { return true; }
 #define false	0
 
 char *OK = "OK", *Erreur= "ERREUR";
-short refNum= nil;
+short refNum= 0;
 
 #ifdef PASCALNAME
 MidiName ApplName   = "\pFonctions";
@@ -301,7 +309,7 @@ void ApplConfiguration()
 	if( (info= MidiGetInfo( refNum))!= s)
 		print ("Warning : incorrect info zone  : contains %lx instead of %lx\n"
 						, info, s);
-	MidiSetInfo( refNum, (void* )nil);
+	MidiSetInfo( refNum, (void* )0);
 	if( info= MidiGetInfo( refNum))
 		print ("Warning : incorrect info zone : contains %lx instead of nil\n"
 						, info);
@@ -317,9 +325,9 @@ void ApplConfiguration()
 	print ("%s\n", OK);
 	if( (f= MidiGetFilter( refNum))!= (MidiFilterPtr)s)
 		print ("Warning : incorrect filter : %lx instead of %lx\n", f, s);
-	MidiSetFilter( refNum, (MidiFilterPtr)nil);
+	MidiSetFilter( refNum, (MidiFilterPtr)0);
 	if( f= MidiGetFilter( refNum))
-		print ("Warning : incorrect filter : %lx instead of nil\n", f);
+		print ("Warning : incorrect filter : %lx instead of 0\n", f);
 	
 	print ("    MidiGetRcvAlarm : ");flush;
 	rcv= MidiGetRcvAlarm( refNum);
@@ -332,9 +340,9 @@ void ApplConfiguration()
 	print ("%s\n", OK);
 	if( (rcv= MidiGetRcvAlarm( refNum))!= RcvAlarm)
 		print ("Warning : incorrect alarm : %lx  instead of %lx\n", rcv, RcvAlarm);
-	MidiSetRcvAlarm( refNum, (RcvAlarmPtr)nil);
+	MidiSetRcvAlarm( refNum, (RcvAlarmPtr)0);
 	if( rcv= MidiGetRcvAlarm( refNum))
-		print ("Warning : incorrect alarm : %lx  instead of nil\n", rcv);
+		print ("Warning : incorrect alarm : %lx  instead of 0\n", rcv);
 	
 	print ("    MidiGetApplAlarm : ");flush;
 	appl= MidiGetApplAlarm( refNum);
@@ -347,9 +355,9 @@ void ApplConfiguration()
 	print ("%s\n", OK);
 	if( (appl= MidiGetApplAlarm( refNum))!= ApplAlarm)
 		print ("Warning : incorrect alarm : %lx instead of %lx\n", appl, ApplAlarm);
-	MidiSetApplAlarm( refNum, (ApplAlarmPtr)nil);
+	MidiSetApplAlarm( refNum, (ApplAlarmPtr)0);
 	if( appl= MidiGetApplAlarm( refNum))
-		print ("Warning : incorrect alarm : %lx instead of nil\n", appl);
+		print ("Warning : incorrect alarm : %lx instead of 0\n", appl);
 }
 
 /*____________________________________________________________________*/
@@ -439,7 +447,7 @@ void Events( short isFreeMem)
 		print ("Warning :incoherent result : %lx\n", e); 
 	if( e && isFreeMem)
 	{
-		Date(e)= nil;
+		Date(e)= 0;
 		Pitch(e)= 80;
 		Chan(e)= 10;
 		Vel(e)= 120;
@@ -589,7 +597,7 @@ void Sequences( short isFreeMem)
 		print ("%s\n", OK);
 		if( (n= MidiFreeSpace())!= free)
 			print ("Warning : incoherent freeSpace : %ld\n", n);
-		seq= nil;
+		seq= 0;
 	}
 	else print ("Warning : no more MidiShare events !\n");
 	if( seq)
@@ -677,7 +685,7 @@ void Sending()
 		}
 		else print ("Warning : no more MidiShare events !\n");
 
-		Date(e)= nil;
+		Date(e)= 0;
 		print ("    MidiSendAt : ");flush;
 		MidiSendAt( refNum, e, time= MidiGetTime()+ 4);
 		print ("%s\n", OK);
@@ -712,7 +720,7 @@ void Mail()
 	if( a)
 		print ("Warning : non null value : %ld\n", a);
 	
-	a= nil;
+	a= 0;
 	print ("    MidiWriteSync : ");flush;
 	b= MidiWriteSync( &a, (void* )2);
 	print ("%ld %s\n", b, OK);
@@ -989,75 +997,75 @@ void Tolerance()
 	}
 
 	print ("    MidiFreeCell : ");flush;
-	MidiFreeCell( (MidiEvPtr)nil);
+	MidiFreeCell( (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiCopyEv : ");flush;
-	MidiCopyEv( (MidiEvPtr)nil);
+	MidiCopyEv( (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiFreeEv : ");flush;
-	MidiFreeEv( (MidiEvPtr)nil);
+	MidiFreeEv( (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 #if macintosh && !defined __POWERPC__
 	print ("    OldMidiSetField : ");flush;
-	OldMidiSetField( (MidiEvPtr)nil, 0, 0L);
+	OldMidiSetField( (MidiEvPtr)0, 0, 0L);
 	print ("%s\n", OK);
 
 	print ("    OldMidiGetField : ");flush;
-	OldMidiGetField( (MidiEvPtr)nil, 0);
+	OldMidiGetField( (MidiEvPtr)0, 0);
 	print ("%s\n", OK);
 
 	print ("    OldMidiCountFields : ");flush;
-	OldMidiCountFields( (MidiEvPtr)nil);
+	OldMidiCountFields( (MidiEvPtr)0);
 	print ("%s\n", OK);
 #endif
 
 	print ("    MidiSetField : ");flush;
-	MidiSetField( (MidiEvPtr)nil, 0L, 0L);
+	MidiSetField( (MidiEvPtr)0, 0L, 0L);
 	print ("%s\n", OK);
 
 	print ("    MidiGetField : ");flush;
-	MidiGetField( (MidiEvPtr)nil, 0L);
+	MidiGetField( (MidiEvPtr)0, 0L);
 	print ("%s\n", OK);
 
 	print ("    MidiAddField : ");flush;
-	MidiAddField( (MidiEvPtr)nil, 0L);
+	MidiAddField( (MidiEvPtr)0, 0L);
 	print ("%s\n", OK);
 
 	print ("    MidiCountFields : ");flush;
-	MidiCountFields( (MidiEvPtr)nil);
+	MidiCountFields( (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiAddSeq : ");flush;
-	MidiAddSeq( (MidiSeqPtr)nil, (MidiEvPtr)nil);
-	MidiAddSeq( (MidiSeqPtr)1, (MidiEvPtr)nil);
+	MidiAddSeq( (MidiSeqPtr)0, (MidiEvPtr)0);
+	MidiAddSeq( (MidiSeqPtr)1, (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiFreeSeq : ");flush;
-	MidiFreeSeq( (MidiSeqPtr)nil);
+	MidiFreeSeq( (MidiSeqPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiClearSeq : ");flush;
-	MidiClearSeq( (MidiSeqPtr)nil);
+	MidiClearSeq( (MidiSeqPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiApplySeq : ");flush;
-	MidiApplySeq( (MidiSeqPtr)nil, (ApplyProcPtr)nil);
-	MidiApplySeq( (MidiSeqPtr)1, (ApplyProcPtr)nil);
+	MidiApplySeq( (MidiSeqPtr)0, (ApplyProcPtr)0);
+	MidiApplySeq( (MidiSeqPtr)1, (ApplyProcPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiSendIm : ");flush;
-	MidiSendIm( nil, (MidiEvPtr)nil);
+	MidiSendIm( 0, (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiSend : ");flush;
-	MidiSend( nil, (MidiEvPtr)nil);
+	MidiSend( 0, (MidiEvPtr)0);
 	print ("%s\n", OK);
 
 	print ("    MidiSendAt : ");flush;
-	MidiSendAt( nil, (MidiEvPtr)nil, 0L);
+	MidiSendAt( 0, (MidiEvPtr)0, 0L);
 	print ("%s\n", OK);
 }
 

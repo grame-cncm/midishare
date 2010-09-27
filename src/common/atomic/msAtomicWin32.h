@@ -24,13 +24,15 @@
 #ifndef __msAtomicWin32__
 #define __msAtomicWin32__
 
+#define inline __inline
+
+#ifndef __x86_64__
+
 #ifdef __SMP__
 #	define LOCK lock
 #else
 #	define LOCK 
 #endif
-
-#define inline __inline
 
 //----------------------------------------------------------------
 // CAS functions
@@ -74,5 +76,13 @@ inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, vo
 	}
 	return c;
 }
+#else
 
+//extern "C" char CAS  (volatile void * addr, volatile void * value, void * newvalue);
+//extern "C" char CAS2 (volatile void * addr, volatile void * v1, volatile void * v2, void * n1, void * n2);
+
+extern char CAS  (volatile void * addr, volatile void * value, void * newvalue);
+extern char CAS2 (volatile void * addr, volatile void * v1, volatile long long v2, void * n1, long long n2);
+
+#endif
 #endif

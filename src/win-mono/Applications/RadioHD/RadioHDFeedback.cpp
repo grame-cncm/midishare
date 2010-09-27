@@ -39,7 +39,7 @@ enum {
 
 #define	cwhite 	 RGB( 0xff, 0xff, 0xff )
 #define	cred 	 RGB( 0xff, 0, 0 )
-#define	cyellow  RGB( 0xff, 0xff, , 0 )
+#define	cyellow  RGB( 0xff, 0xff, 0 )
 #define	chdcolor RGB( 0xef, 0xc9, 0x92 )
 #define	cgreen 	 RGB( 0, 0xff, 0 )
 #define	cblue 	 RGB( 0, 0, 0xff )

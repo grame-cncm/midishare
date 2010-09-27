@@ -77,7 +77,7 @@ void msCloseMutex (unsigned int mutex) {
 }
 
 /*------------------------------------------------------------------------------*/
-Boolean MSCompareAndSwap (FarPtr(void) *adr, FarPtr(void) compareTo, FarPtr(void) swapWith)
+Boolean MSCompareAndSwap (void** adr, void* compareTo, void* swapWith)
 {
 	*adr = swapWith;
 	return true;
@@ -179,7 +179,8 @@ void DriverSleep (TApplPtr appl)
 /*__________________________________________________________________________*/
 /*	Interrupt handlers														*/
 /*__________________________________________________________________________*/
-static void CALLBACK TimerProc(UINT wID,UINT wMsg,DWORD dwUser,DWORD dw1,DWORD dw2)
+//static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
+static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD_PTR dwUser, DWORD dw1, DWORD_PTR dw2)
 {
 	ClockHandler((TMSGlobalPtr)dwUser);
 }
@@ -199,7 +200,7 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 		res = timeBeginPeriod (t->wTimerRes);	
 
 		if (res == TIMERR_NOERROR) {
-			t->wTimerID = timeSetEvent(1,t->wTimerRes,TimerProc,(DWORD)g,TIME_PERIODIC);
+			t->wTimerID = timeSetEvent(1, t->wTimerRes, TimerProc,(DWORD_PTR)g, TIME_PERIODIC);
 			return;
 		}
 	}
@@ -236,7 +237,7 @@ Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
-FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
+void* AllocateMemory (MemoryType type, unsigned long size)
 {
 	HLOCAL h = LocalAlloc (LMEM_FIXED, size + sizeof(HLOCAL));
 	if (h) {
@@ -250,7 +251,7 @@ FarPtr(void) AllocateMemory (MemoryType type, unsigned long size)
 }
 
 /*_________________________________________________________________________*/
-void DisposeMemory  (FarPtr(void) memPtr)
+void DisposeMemory  (void* memPtr)
 {
 	HLOCAL * ptr = (HLOCAL *)memPtr;
 	if (ptr) {

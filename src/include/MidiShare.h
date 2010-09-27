@@ -47,6 +47,7 @@
 #endif
 
 #ifdef WIN32
+#   include <windows.h>
 #   define  ALARMTYPE
 #	define	MIDISHAREAPI __declspec(dllexport)
 #	define  MSALARMAPI	CALLBACK

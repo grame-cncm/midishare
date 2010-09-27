@@ -21,6 +21,8 @@
 
 */
 
+#include "MidiShare.h"
+
 #ifdef __Windows__
 #	include <stdio.h>
 #	include <MidiShare.h>

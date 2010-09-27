@@ -180,8 +180,8 @@ Boolean Initialize(HWND hDlg)
 	SetWindowPos (hDlg, HWND_TOP, dlgXPos, dlgYPos,0,0,SWP_NOSIZE);
 #ifdef WIN32
 	 // Associate an icon with the dialog box.
-	SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
-	SendDlgItemMessage(hDlg, AboutButton, BM_SETIMAGE, 0, (LONG)LoadBitmap (ghInst, (char *)1800));
+	//SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
+	//SendDlgItemMessage(hDlg, AboutButton, BM_SETIMAGE, 0, (LONG)LoadBitmap (ghInst, (char *)1800));
 #endif
 	return TRUE ;
 }

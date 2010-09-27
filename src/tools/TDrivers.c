@@ -21,6 +21,8 @@
 
 */
  
+#include "MidiShare.h"
+
 #ifdef __Windows__
 #	include <stdio.h>
 #	include <MidiShare.h>
@@ -83,7 +85,7 @@ inline Boolean MidiShare() { return true; }
 #define false	0
 
 char *OK = "OK", *Erreur= "ERREUR";
-short refNum= nil;
+short refNum= 0;
 
 #ifdef PASCALNAME
 MidiName ApplName   = "\pDrivers";

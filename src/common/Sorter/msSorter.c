@@ -34,12 +34,12 @@
 	enum { kLev0, kLev1, kLev2, kLev3 };
 	#define GetFifo(sorter, date, lev) (sorter->level[lev].pri->fifo[date.part[lev]])
 	#define GetLevel(index) (unsigned char)index
-#elif __x86_64__ || defined(__i386__) || defined(__INTEL__) || defined (_M_IX86)	/* Litte Endian */
+#elif defined(__i386__) || defined(__INTEL__) || defined (_M_IX86) || defined(__x86_64__)		/* Litte Endian */
 	enum { kLev3, kLev2, kLev1, kLev0 };
 	#define GetFifo(sorter, date, lev) (sorter->level[3-lev].pri->fifo[date.part[lev]])
 	#define GetLevel(index) 3-index;
 #else
-	error "msSorter.c : cannot dertermine endianness"
+#	error "msSorter.c : cannot dertermine endianness"
 #endif
 
 typedef union {
