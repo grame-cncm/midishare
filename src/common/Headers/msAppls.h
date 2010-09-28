@@ -84,6 +84,7 @@ typedef struct TAppl{
     uchar           folder;      /* application folder           */
     uchar           refNum;      /* reference number             */
     uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
+	uchar			unused[sizeof(void*)-3];		 /* for alignments */
     RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
     ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
 

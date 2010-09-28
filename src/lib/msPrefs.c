@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2002
+  Copyright ï¿½ Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -69,8 +69,8 @@ static char * GetProfileFullName (char* filename)
 //________________________________________________________________________
 unsigned long LoadTimeMode()
 {
-	char buff[128];
-	get_private_profile_string (timeSectionName, timeMode, kDefaultTimeMode, buff, 128, GetProfileFullName(profileName));
+	char buff[512];
+	get_private_profile_string (timeSectionName, timeMode, kDefaultTimeMode, buff, 512, GetProfileFullName(profileName));
 	if (!strcmp(buff, "audio")) return kAudioTime;
 	return kTimerTime;
 }

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright ï¿½ Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -46,15 +46,15 @@ static inline char CAS (volatile void * addr, volatile void * value, void * newv
 	return ret;
 }
 
-#if defined(__APPLE__) && !defined(__x86_64__)
+#if (defined(__APPLE__) && !defined(__x86_64__))
 
 /*
-On MacIntel, version 4.0.1 of the gcc compiler gives the following error: 
+On MacIntel, version 4.0.1 of the gcc compiler gives the following error:
 can't find a register in class 'BREG' while reloading 'asm'
 To solve that, %%ebx register has to be saved and restored.
 */
 
-static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
 	register char ret;
 	__asm__ __volatile__ (
@@ -64,14 +64,14 @@ static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long
 		"sete %0             \n\t"
 		"xchgl %%ebx, %%esi \n\t"  /* Restore %ebx.  */
 		:"=a" (ret)
-		:"D" (addr), "d" (v2), "a" (v1), "S" (n1), "c" (n2)		
+		:"D" (addr), "d" (v2), "a" (v1), "S" (n1), "c" (n2)
 	);
 	return ret;
 }
 
 #else
 
-static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
 	register char ret;
 	__asm__ __volatile__ (

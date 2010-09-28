@@ -44,7 +44,7 @@
 
 typedef union {
 	unsigned long date;
-	unsigned char part[4];
+	unsigned char part[sizeof(long)];
 } SorterDate;
 
 #define Next(e) e->link

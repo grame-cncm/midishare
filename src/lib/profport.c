@@ -190,12 +190,12 @@ int get_private_profile_string(char *section, char *entry, char *def,
     if (!read_section (fp, section)) goto err;
     if (!read_entry (fp, entry, buff, MAX_LINE_LENGTH)) goto err;
 	val = read_value (buff);
-    if(val) def = val;
+    if (val) def = val;
 
 err:
 	if (fp) fclose (fp);
-	strncpy (buffer, def, buffer_len - 1);
-	buffer[buffer_len] = '\0';
+	strncpy (buffer, def, buffer_len - 2);
+	buffer[buffer_len-1] = '\0';
 	return strlen (buffer);
 }
 

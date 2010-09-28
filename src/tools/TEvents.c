@@ -30,18 +30,15 @@
  *          Lundi 20 Septembre 1999 SL Adapation Linux (plus de MidiAvailEv)
  * 		    English version 11/11/99 SL
  */
+ 
+#include <stdio.h>
+#include "MidiShare.h"
 
-#ifdef __Windows__
-#	include <stdio.h>
-#	include <MidiShare.h>
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-#	define flush    fflush(stdout)
-#	define print	printf
-#else
-#	define MSALARMAPI
-#endif
+#define CTASKS
+#define CNAME
+#define flush   fflush(stdout)
+#define print	printf
+#define nil 0
 
 #ifdef __linux__
 #ifdef MODULE
@@ -55,34 +52,12 @@
 #	define print(args...)	printk(## args)
 inline Boolean MidiShare() { return true; }
 #else
-#	include <stdio.h>
-#	include "MidiShare.h"
 #	define flush		fflush( stdout)
 #	define print(args...)	fprintf(stdout, ## args)
 #endif
-#	define CNAME
-#	define CTASKS
-#	define nil 0
 #	define MidiAvailEv(r)  MidiGetEv(r)
 #endif
 
-
-#if macintosh
-#	include <stdio.h>
-#	include <String.h>
-#	include <StdLib.h>
-#	include "MidiShare.h"
-# if (defined(__ppc__) || defined(__i386__)) && defined(__GNUC__)
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-# else
-#	define PASCALNAME
-#	define PASCALTASKS
-# endif
-#	define flush	fflush( stdout)
-#	define print	printf
-#endif
 
 #include "TEvents.h"
 
@@ -243,7 +218,7 @@ int OpenAppls()
 }
 
 /*______________________________________________________________________________*/
-static CmpCommon( MidiEvPtr o, MidiEvPtr c, char *src)
+static int CmpCommon( MidiEvPtr o, MidiEvPtr c, char *src)
 {
 	int ret= true;
 	
@@ -266,7 +241,7 @@ static CmpCommon( MidiEvPtr o, MidiEvPtr c, char *src)
 }
 
 /*______________________________________________________________________________*/
-static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
+static int CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 {
 	long f1, f2, i;
 	
@@ -291,23 +266,23 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c, register char *src)
 }
 
 /*______________________________________________________________________________*/
-static CompareEv( MidiEvPtr e, short refnum, char *src)
+static int CompareEv( MidiEvPtr e, short refnum, char *src)
 {
 	MidiEvPtr get;
 	
-	if( get= MidiAvailEv( refnum))
+	if( (get= MidiAvailEv( refnum)))
 		return CmpEv( e, get, src);
 	else print("\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
 
 /*______________________________________________________________________________*/
-static CompareStream( MidiEvPtr e, short refnum, char *src)
+static int CompareStream( MidiEvPtr e, short refnum, char *src)
 {
 	long f1, f2, i;
 	MidiEvPtr get;
 	
-	if( get= MidiAvailEv( refnum))
+	if( (get= MidiAvailEv( refnum)))
 	{
 		if( EvType(get)== typeSysEx)
 			EvType(get)= typeStream;
@@ -340,7 +315,7 @@ static CompareStream( MidiEvPtr e, short refnum, char *src)
 }
 
 /*______________________________________________________________________________*/
-static CompareCtrl14b( MidiEvPtr e)
+static int CompareCtrl14b( MidiEvPtr e)
 {
 	MidiEvPtr a, b;
 	long v1, v2;
@@ -369,7 +344,7 @@ static CompareCtrl14b( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static CompareRegParam( MidiEvPtr e)
+static int CompareRegParam( MidiEvPtr e)
 {
 	MidiEvPtr a, b, c, d;
 	long v1, v2, v3, v4;
@@ -409,7 +384,7 @@ static CompareRegParam( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetEvents( MidiEvPtr e)
+static int GetEvents( MidiEvPtr e)
 {
 	long n;
 	int ret= false;
@@ -422,7 +397,7 @@ static GetEvents( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetStream( MidiEvPtr e)
+static int GetStream( MidiEvPtr e)
 {
 	long n;
 	int ret= false;
@@ -435,7 +410,7 @@ static GetStream( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetNothing( MidiEvPtr unused)
+static int GetNothing( MidiEvPtr unused)
 {
 	long n;
 	int ret= false;
@@ -448,7 +423,7 @@ static GetNothing( MidiEvPtr unused)
 }
 
 /*______________________________________________________________________________*/
-static GetNoExt( MidiEvPtr e)
+static int GetNoExt( MidiEvPtr e)
 {
 	long n;
 	int ret= false;
@@ -463,7 +438,7 @@ static GetNoExt( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetPrivate( MidiEvPtr e)
+static int GetPrivate( MidiEvPtr e)
 {
 	long n;
 	int ret= false;
@@ -481,7 +456,7 @@ static GetPrivate( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetCtrl( MidiEvPtr e)
+static int GetCtrl( MidiEvPtr e)
 {
 	long n1, n2;
 	int ret= false, type;
@@ -506,7 +481,7 @@ static GetCtrl( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
+static int CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 {
 	short dc;
 	int ret= true;
@@ -538,7 +513,7 @@ static CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 }
 
 /*______________________________________________________________________________*/
-static GetNote( MidiEvPtr e)
+static int GetNote( MidiEvPtr e)
 {
 	long n;	int ret= false;
 
@@ -566,7 +541,7 @@ static void SetMidiEvent( MidiEvPtr e, Boolean display)
 }
 
 /*______________________________________________________________________________*/
-static TestEvent( short i, Boolean display)
+static int TestEvent( short i, Boolean display)
 {
 	MidiEvPtr e, copy;
 	int ret= false;
@@ -649,7 +624,7 @@ void SystemeEx()
 			MidiSendIm( r1, copy); mswait( 40);
 			if( !GetEvents( e))
 			{
-				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %ld length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				goto failed;
 			}
@@ -709,7 +684,7 @@ void Stream()
 			MidiSendIm( r1, copy); mswait( 40);
 			if( !GetStream( e))
 			{
-				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %ld length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				goto failed;
 			}
@@ -836,14 +811,14 @@ void Reserved()
 	print("\nReserved events :\n");	
 	/*												typeReserved until typeDead */
 	print("    type %s : ", typeListe[typeReserved]); flush;
-	if( e= MidiNewEv(typeReserved)) 
+	if( (e= MidiNewEv(typeReserved))) 
 	{
-		print("\ntype %d : allocation return %lx\n", (int)typeReserved, e);
+		print("\ntype %d : allocation return %p\n", (int)typeReserved, e);
 		ret= false;
 	}
-	if( e= MidiNewEv( typeDead-1)) 
+	if( (e= MidiNewEv( typeDead-1))) 
 	{
-		print("\ntype %d : allocation return %lx\n", (int)typeDead-1, e);
+		print("\ntype %d : allocation return %p\n", (int)typeDead-1, e);
 		ret= false;
 	}
 	if( ret) ok;
@@ -860,7 +835,7 @@ void Close ()
 }
 
 /*______________________________________________________________________________*/
-main( int argc, char *argv[])
+int main( int argc, char *argv[])
 {
 	print("\nAllocation, emission and reception of MidiShare events.\n");
 	print("==========================================================\n");

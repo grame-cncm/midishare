@@ -151,7 +151,7 @@ short Environment()
 	print ("%d  %s\n", count, OK);
 
 	print ("    MidiOpen : ");flush;
-	if( refNum= MidiOpen( ApplName))
+	if( (refNum= MidiOpen( ApplName)))
 	{
 		print ("%d %s\n", (int)refNum, OK);
 
@@ -159,8 +159,8 @@ short Environment()
 		n= MidiCountAppls();
 		if( n!= count)
 		{
-			print ("    MidiCountAppls : %d\n");flush;
-			print ("Warning : inconsistant number of opened applications !\n", n);
+			print ("    MidiCountAppls : %d\n", n);flush;
+			print ("Warning : inconsistant number of opened applications ! (%d)\n", n);
 		}
 
 		print ("    MidiGetIndAppl : ");flush;
@@ -216,7 +216,7 @@ void OpenClose()
 		print ("Warning : not all appplications are closed : remain %d\n", n);
 	n = MidiFreeSpace();
 	if (n != free) 
-		print ("Warning : incoherent freeSpace : %ld (lost: %d)\n", n, free-n);
+		print ("Warning : incoherent freeSpace : %d (lost: %d)\n", n, free-n);
 }
 
 /*____________________________________________________________________*/
@@ -261,7 +261,7 @@ void ApplConfiguration()
 	print ("\nApplication configuration :\n");
 	
 	print ("    MidiGetName : ");flush;
-	if( s= MidiGetName( refNum))
+	if( (s= MidiGetName( refNum)))
 	{
 #ifdef CNAME
 		print ("%s %s\n", s, OK);
@@ -280,7 +280,7 @@ void ApplConfiguration()
 	print ("    MidiSetName : ");flush;
 	MidiSetName( refNum, NewName);
 	print ("%s : ", OK);
-	if( s= MidiGetName( refNum))
+	if( (s= MidiGetName( refNum)))
 	{
 #ifdef CNAME
 		print ("%s\n", s);
@@ -299,7 +299,7 @@ void ApplConfiguration()
 	
 	print ("    MidiGetInfo : ");flush;
 	info= MidiGetInfo( refNum);
-	print ("%lx %s\n", info, OK);
+	print ("%p %s\n", info, OK);
 	if( info)
 		print ("Warning : info zone not set and not null\n");
 	
@@ -307,16 +307,14 @@ void ApplConfiguration()
 	MidiSetInfo( refNum, (void* )s);
 	print ("%s\n", OK);
 	if( (info= MidiGetInfo( refNum))!= s)
-		print ("Warning : incorrect info zone  : contains %lx instead of %lx\n"
-						, info, s);
+		print ("Warning : incorrect info zone  : contains %p instead of %p\n", info, s);
 	MidiSetInfo( refNum, (void* )0);
-	if( info= MidiGetInfo( refNum))
-		print ("Warning : incorrect info zone : contains %lx instead of nil\n"
-						, info);
+	if( (info= MidiGetInfo( refNum)))
+		print ("Warning : incorrect info zone : contains %p instead of nil\n", info);
 	
 	print ("    MidiGetFilter : ");flush;
 	f= MidiGetFilter( refNum);
-	print ("%lx %s\n", f, OK);
+	print ("%p %s\n", f, OK);
 	if( f)
 		print ("Warning : filter not set and not null\n");
 	
@@ -324,14 +322,14 @@ void ApplConfiguration()
 	MidiSetFilter( refNum, (MidiFilterPtr)s);
 	print ("%s\n", OK);
 	if( (f= MidiGetFilter( refNum))!= (MidiFilterPtr)s)
-		print ("Warning : incorrect filter : %lx instead of %lx\n", f, s);
+		print ("Warning : incorrect filter : %p instead of %p\n", f, s);
 	MidiSetFilter( refNum, (MidiFilterPtr)0);
-	if( f= MidiGetFilter( refNum))
-		print ("Warning : incorrect filter : %lx instead of 0\n", f);
+	if( (f= MidiGetFilter( refNum)))
+		print ("Warning : incorrect filter : %p instead of 0\n", f);
 	
 	print ("    MidiGetRcvAlarm : ");flush;
 	rcv= MidiGetRcvAlarm( refNum);
-	print ("%lx %s\n", rcv, OK);
+	print ("%p %s\n", rcv, OK);
 	if( rcv)
 		print ("Warning : alarm not set and not null \n");
 	
@@ -339,14 +337,14 @@ void ApplConfiguration()
 	MidiSetRcvAlarm( refNum, RcvAlarm);
 	print ("%s\n", OK);
 	if( (rcv= MidiGetRcvAlarm( refNum))!= RcvAlarm)
-		print ("Warning : incorrect alarm : %lx  instead of %lx\n", rcv, RcvAlarm);
+		print ("Warning : incorrect alarm : %p  instead of %p\n", rcv, RcvAlarm);
 	MidiSetRcvAlarm( refNum, (RcvAlarmPtr)0);
-	if( rcv= MidiGetRcvAlarm( refNum))
-		print ("Warning : incorrect alarm : %lx  instead of 0\n", rcv);
+	if( (rcv= MidiGetRcvAlarm( refNum)))
+		print ("Warning : incorrect alarm : %p instead of 0\n", rcv);
 	
 	print ("    MidiGetApplAlarm : ");flush;
 	appl= MidiGetApplAlarm( refNum);
-	print ("%lx %s\n", appl, OK);
+	print ("%p %s\n", appl, OK);
 	if( appl)
 		print ("Warning : alarm not set and not null \n");
 	
@@ -354,10 +352,10 @@ void ApplConfiguration()
 	MidiSetApplAlarm( refNum, ApplAlarm);
 	print ("%s\n", OK);
 	if( (appl= MidiGetApplAlarm( refNum))!= ApplAlarm)
-		print ("Warning : incorrect alarm : %lx instead of %lx\n", appl, ApplAlarm);
+		print ("Warning : incorrect alarm : %p instead of %p\n", appl, ApplAlarm);
 	MidiSetApplAlarm( refNum, (ApplAlarmPtr)0);
-	if( appl= MidiGetApplAlarm( refNum))
-		print ("Warning : incorrect alarm : %lx instead of 0\n", appl);
+	if( (appl= MidiGetApplAlarm( refNum)))
+		print ("Warning : incorrect alarm : %p instead of 0\n", appl);
 }
 
 /*____________________________________________________________________*/
@@ -424,9 +422,9 @@ void Events( short isFreeMem)
 	free= MidiFreeSpace();
 	print ("    MidiNewCell : ");flush;
 	e= MidiNewCell();
-	print ("%lx %s\n", e, OK);
+	print ("%p %s\n", e, OK);
 	if( e && !isFreeMem)
-		print ("Warning : incoherent result : %lx\n", e); 
+		print ("Warning : incoherent result : %p\n", e); 
 	if( (l= MidiFreeSpace())!= free-1)
 		if( isFreeMem)
 			print ("Warning : incoherent FreeSpace : %ld\n", l); 
@@ -442,9 +440,9 @@ void Events( short isFreeMem)
 	
 	print ("    MidiNewEv : ");flush;
 	e= MidiNewEv( typeNote);
-	print ("%lx %s\n", e, OK);
+	print ("%p %s\n", e, OK);
 	if( e && !isFreeMem)
-		print ("Warning :incoherent result : %lx\n", e); 
+		print ("Warning :incoherent result : %p\n", e); 
 	if( e && isFreeMem)
 	{
 		Date(e)= 0;
@@ -455,7 +453,7 @@ void Events( short isFreeMem)
 	
 		print ("    MidiCopyEv : ");flush;
 		copy= MidiCopyEv(e);
-		print ("%lx %s\n", copy, OK);
+		print ("%p %s\n", copy, OK);
 		if( copy)
 		{
 			if( Date(copy) || (Pitch(copy)!=80) || (Chan(copy)!=10)
@@ -550,7 +548,7 @@ void Sequences( short isFreeMem)
 	free= MidiFreeSpace();
 	print ("    MidiNewSeq : ");flush;
 	seq= MidiNewSeq();
-	print ("%lx %s\n", seq, OK);
+	print ("%p %s\n", seq, OK);
 	if( seq && !isFreeMem)
 		print ("Warning : sequence not null !\n");
 	
@@ -565,7 +563,7 @@ void Sequences( short isFreeMem)
 		return;
 	}
 		
-	if( e= MidiNewEv( typeNote))
+	if( (e= MidiNewEv( typeNote)))
 	{
 		Pitch(e)= 60;
 		
@@ -584,12 +582,12 @@ void Sequences( short isFreeMem)
 		print ("    MidiClearSeq : ");flush;
 		MidiClearSeq( seq);
 		print ("%s\n", OK);
-		if( n=CountOfEvents( seq))
+		if( (n=CountOfEvents( seq)))
 			print ("Warning : incoherent event number : %ld\n", n);
 	}
 	else print ("Warning : no more MidiShare events !\n");
 		
-	if( e= MidiNewEv( typeNote))
+	if( (e= MidiNewEv( typeNote)))
 	{
 		MidiAddSeq( seq, e);
 		print ("    MidiFreeSeq : ");flush;
@@ -635,13 +633,13 @@ void Sending()
 	}
 //	MidiConnect( refNum, 0, true);
 	MidiConnect( refNum, r, true);
-	if( e= MidiNewEv( typeKeyOn))
+	if( (e= MidiNewEv( typeKeyOn)))
 	{
 
 		Pitch(e)= 60;
 		Vel(e)= 120;
 
-		if( copy= MidiCopyEv( e))
+		if( (copy= MidiCopyEv( e)))
 		{
 			print ("    MidiSendIm : ");flush;
 			MidiSendIm( refNum, copy);
@@ -657,7 +655,7 @@ void Sending()
 			
 			print ("    MidiGetEv : ");flush;
 			get= MidiGetEv(r);
-			print ("%lx %s\n", get, OK);
+			print ("%p %s\n", get, OK);
 			n= MidiCountEvs(r);
 			if( n)
 				print ("Warning : incoherent event number : %ld\n", n);
@@ -666,7 +664,7 @@ void Sending()
 		}
 		else print ("Warning : no more MidiShare events !\n");
 
-		if( copy= MidiCopyEv( e))
+		if( (copy= MidiCopyEv( e)))
 		{
 			print ("    MidiSend : ");flush;
 			Date(copy)= time= MidiGetTime()+ 4;
@@ -679,7 +677,7 @@ void Sending()
 			
 			print ("    MidiAvailEv : ");flush;
 			get= MidiAvailEv(r);
-			print ("%lx %s\n", get, OK);
+			print ("%p %s\n", get, OK);
 			if( (count= MidiCountEvs(r))!= n)
 				print ("Warning : incoherent event number : %ld\n", count);
 		}
@@ -697,7 +695,7 @@ void Sending()
 		print ("    MidiFlushEvs : ");flush;
 		MidiFlushEvs(r);
 		print ("%s\n", OK);
-		if( n= MidiCountEvs(r))
+		if( (n= MidiCountEvs(r)))
 			print ("Warning : incoherent event number : %ld\n", n);
 	}
 	else print ("Warning : plus d'evt disponible !\n");
@@ -716,21 +714,21 @@ void Mail()
 	print ("\nMail boxes :\n");
 	print ("    MidiReadSync : ");flush;
 	b= MidiReadSync(&a);
-	print ("%ld %s\n", b, OK);
+	print ("%ld %s\n", (long)b, OK);
 	if( a)
 		print ("Warning : non null value : %ld\n", a);
 	
 	a= 0;
 	print ("    MidiWriteSync : ");flush;
 	b= MidiWriteSync( &a, (void* )2);
-	print ("%ld %s\n", b, OK);
+	print ("%ld %s\n", (long)b, OK);
 
 	a=1;
 	b= MidiWriteSync( &a, (void* )2);
 	if( a!= 2)
 		print ("Warning : not null variable but correctly set : %ld\n", a);
 	if( b!= (void*)1)
-		print ("Warning : incorrect return : %ld\n", b);
+		print ("Warning : incorrect return : %ld\n", (long)b);
 }
 
 
@@ -826,7 +824,7 @@ void Tasks( short isFreeMem)
 	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
 	time+= 50;
 	while( MidiGetTime() <= time);
-	print ("%lx %s\n", e, OK);
+	print ("%p %s\n", e, OK);
 	if( (p1!= 1) && isFreeMem)
 		print ("Warning : task not completed !\n");
 		
@@ -884,8 +882,8 @@ void Tasks( short isFreeMem)
 		print ("Warning : task2 address not set to 0 !\n");
 		
 	/* test MidiForgetTask inside a task execution 
-	/* Warning : using MidiForgetTask in the execution of the task may produce unspecified behavior.
-	/* The result of this test may change on different implementations */
+	   Warning : using MidiForgetTask in the execution of the task may produce unspecified behavior.
+	   The result of this test may change on different implementations */
 	
 	print ("    MidiForgetTask(4) : ");flush;	
 	gContext.res1 = gContext.res2 = false;
@@ -910,7 +908,7 @@ void Tasks( short isFreeMem)
 	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
 	time+= 4;
 	while( MidiGetTime() <= time);
-	print ("%lx %s\n", e, OK);
+	print ("%p %s\n", e, OK);
 	
 	print ("    MidiCountDTasks : ");flush;
 	p1= MidiCountDTasks( refNum);
@@ -1076,7 +1074,7 @@ static MidiSeqPtr GetAllFreeEvs()
 	MidiEvPtr e;
 	
 	s= MidiNewSeq();
-	while( e= MidiNewEv( typeNote))
+	while( (e= MidiNewEv( typeNote)))
 		MidiAddSeq( s, e);
 	return s;
 }
@@ -1106,7 +1104,7 @@ void Close()
 }
 
 /*____________________________________________________________________*/
-main()
+int main()
 {
 	print ("\nMidiShare functions test.\n");
 	print ("================================\n");

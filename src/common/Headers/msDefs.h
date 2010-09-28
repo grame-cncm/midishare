@@ -230,11 +230,7 @@ enum{   MIDIOpenAppl=1,
 /******************************************************************************
 *                                 DATA TYPES
 *******************************************************************************/
-#ifdef __x86_64__
-# define CELLSIZE		32
-#else
-# define CELLSIZE		16
-#endif
+# define CELLSIZE		4*sizeof(void*)
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
@@ -254,8 +250,8 @@ enum{   MIDIOpenAppl=1,
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/
-#define HEADERSIZE	sizeof(void*) + sizeof(unsigned long) + 4
-
+#define HEADERSIZE	(sizeof(void*) + sizeof(unsigned long) + sizeof(void*))
+#define DATASIZE	(CELLSIZE - HEADERSIZE)
     typedef struct TMidiEv *MidiEvPtr;
     typedef struct TMidiEv
     {
@@ -265,12 +261,14 @@ enum{   MIDIOpenAppl=1,
         Byte        refNum;         /* sender reference number */
         Byte        port;           /* Midi port            */
         Byte        chan;           /* Midi channel         */
-        union {                     /* info depending of event type : */
+		
+		Byte		data[sizeof(void*)-4];	/* padding for 64 bits and to ensure natural alignment */
+        
+		union {                     /* info depending of event type : */
             struct {                /* for notes            */
                 Byte pitch;         /* pitch                */
                 Byte vel;           /* velocity             */
                 int dur;			/* duration             */
-				Byte unused[CELLSIZE - HEADERSIZE - sizeof(int) - 2];
             } note;
 
             struct {              /* for MidiFile time signature */
@@ -281,42 +279,31 @@ enum{   MIDIOpenAppl=1,
                                   /* a metronome click           */
                 Byte n32nd;       /* number of 32nd notes in     */
                                   /* a Midi quarter note         */
-				Byte unused[CELLSIZE - HEADERSIZE - 4];
             } timeSign;
 
             struct {            /* for MidiFile key signature  */
                 char ton;       /* 0: key of C, 1: 1 sharp     */
                                 /* -1: 1 flat etc...           */
                 Byte mode;      /* 0: major 1: minor           */
-                Byte unused[CELLSIZE - HEADERSIZE - 2];
             } keySign;
             
 			struct {            /* for paramchg & 14-bits ctrl  */
             	short num;      /* param or ctrl num            */
             	short val;      /* 14-bits value                */
-				Byte unused[CELLSIZE - HEADERSIZE - 2*sizeof(short)];
             } param;
-
 
             struct {            /* for MidiFile sequence number */
                 int	 number;
-				Byte unused[CELLSIZE - HEADERSIZE - sizeof(int)];
             } seqNum;
 
-			short shortFields[(CELLSIZE - HEADERSIZE ) / sizeof(short)]; /* for 14-bits controlers		*/
-            int longField[(CELLSIZE - HEADERSIZE ) / sizeof(int)];
+			short shortFields[DATASIZE / sizeof(short)]; /* for 14-bits controlers		*/
+            int longField[DATASIZE / sizeof(int)];
 
             long tempo;          /* MidiFile tempo in            */
-                                /* microsec/Midi quarter note   */
-            Byte data[CELLSIZE - HEADERSIZE];       /* for other small events       */
-            union {
-				Byte data[CELLSIZE - HEADERSIZE - sizeof(void*)];
-				MidiSEXPtr linkSE;  /* link to last sysex extension */
-			}se;
-            union {
-				Byte data[CELLSIZE - HEADERSIZE - sizeof(void*)];
-	            MidiSTPtr linkST;   /* link to private extension    */
-			}st;
+								 /* microsec/Midi quarter note   */
+            Byte data[DATASIZE]; /* for other small events       */
+			MidiSEXPtr linkSE;   /* link to last sysex extension */
+			MidiSTPtr linkST;    /* link to private extension    */
         } info;
     } TMidiEv;
 
@@ -446,8 +433,8 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 #define Vel(e)        ( (e)->info.note.vel )
 #define Dur(e)        ( (e)->info.note.dur )
 #define Data(e)       ( (e)->info.data )
-#define LinkSE(e)     ( (e)->info.se.linkSE )
-#define LinkST(e)     ( (e)->info.st.linkST )
+#define LinkSE(e)     ( (e)->info.linkSE )
+#define LinkST(e)     ( (e)->info.linkST )
 
 #define TSNum(e)      ( (e)->info.timeSign.numerator )
 #define TSDenom(e)    ( (e)->info.timeSign.denominator )
