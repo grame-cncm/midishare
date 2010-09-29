@@ -74,6 +74,7 @@ static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long
 static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
 	register char ret;
+
 	__asm__ __volatile__ (
 		"# CAS2 \n\t"
 #ifdef __x86_64__

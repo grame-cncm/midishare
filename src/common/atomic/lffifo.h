@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright ï¿½ Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -71,6 +71,7 @@ typedef struct fifo {
     fifocell * volatile tail;	/* pointer to the tail cell */
 	ffCount(ic);
 	TAtomic	count;
+	long unused[3];				/* for aligments */
 	fifocell dummy;
 } fifo;
 

@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright ï¿½ Grame 1999-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -73,8 +73,9 @@ typedef struct lifocell {
 
 typedef struct lifo {
 	lifocell * volatile top;	/* top of the stack          */
-	lfCount(oc);					/* used to avoid ABA problem */
+	lfCount(oc);				/* used to avoid ABA problem */
 	TAtomic	count;
+	long	unused;				/* for 32 bytes alignment */
 } lifo;
 
 
