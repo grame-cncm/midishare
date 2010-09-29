@@ -21,8 +21,10 @@
 */
 
 
+#include "stdio.h"
 #include "lffifo.h"
 
+//#define __trace__
 #define fifo_end(ff)	(fifocell *)ff
 
 //----------------------------------------------------------------
@@ -32,6 +34,9 @@ void fifoinit (fifo* ff)
 	ff->oc = ff->ic = 0;
 	ff->dummy.link = fifo_end(ff);
 	ff->head = ff->tail = &ff->dummy;
+#ifdef __trace__
+printf("fifoinit %p %p\n", ff, ff->head);
+#endif
 }
 
 
@@ -61,6 +66,10 @@ void fifoput (fifo * ff, fifocell * cl)
     /* enqeue is done, try to set tail to the enqueued cell */
 	CAS2 (&ff->tail, tail, ic, cl, ic+1);
 	msAtomicInc (&ff->count);
+#ifdef __trace__
+fprintf(stdout, "fifoput %p %p %ld\n", ff, cl, ff->count.value); 
+fflush(stdout);
+#endif
 }
 
 //----------------------------------------------------------------
@@ -96,6 +105,10 @@ fifocell *  fifoget(fifo * ff)
 		fifoput(ff,head);
 		head = fifoget(ff);
 	}
+#ifdef __trace__
+fprintf(stdout, "fifoget %p %p %ld\n", ff, head, ff->count.value);
+fflush(stdout);
+#endif
 	return (fifocell *)head;
 }
 
@@ -139,6 +152,9 @@ fifocell* fifoflush (fifo* ff)
 		cur = next;
 	}
 	cur->link = 0;
+#ifdef __trace__
+printf("fifoflush %p %p %ld\n", ff, first, ff->count.value);
+#endif
 	return first;
 }
 

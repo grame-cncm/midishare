@@ -20,10 +20,16 @@
 
 */
 
+#include "stdio.h"
 #include "lflifo.h"
+
+//#define __trace__
 
 void lfinit(lifo* lf)
 {
+#ifdef __trace__
+printf("lfinit %p\n", lf);
+#endif
 	lf->top = 0;
 	lf->count.value = 0;
 	lf->oc = 0;
@@ -31,6 +37,9 @@ void lfinit(lifo* lf)
 
 void lfpush (lifo * lf, lifocell * cl)
 {
+#ifdef __trace__
+printf("lfpush %p %p\n", lf, cl);
+#endif
 	lifocell * volatile  top;
 	do {
 		top = lf->top;
@@ -45,6 +54,9 @@ void lfpush (lifo * lf, lifocell * cl)
 */
 lifocell* lfpop (lifo * lf)
 {
+#ifdef __trace__
+printf("lfpop %p ", lf);
+#endif
 	volatile  long oc;
 	lifocell * volatile top;
 	do {
@@ -53,5 +65,8 @@ lifocell* lfpop (lifo * lf)
 		if (!top) return 0;
 	} while (!CAS2 (&lf->top, top, oc, top->link, oc+1));
 	msAtomicDec (&lf->count);
+#ifdef __trace__
+printf("%p\n", top);
+#endif
 	return top;
 }
