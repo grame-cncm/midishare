@@ -431,7 +431,6 @@ static MidiEvPtr NewSmallEv( lifo* fl, short typeNum)
 #ifdef __x86_64__
 		ev->info.longField[0] = 0;
 		ev->info.longField[1] = 0;
-		ev->info.longField[2] = 0;
 #else
 		ev->info.longField[0] = 0;
 #endif
