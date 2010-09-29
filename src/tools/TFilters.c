@@ -20,18 +20,15 @@
 
 
 */
-
+ 
+#include <stdio.h>
 #include "MidiShare.h"
 
-#ifdef __Windows__
-#	include <stdio.h>
-#	include <MidiShare.h>
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-#	define flush    fflush(stdout)
-#	define print	printf
-#endif
+#define CTASKS
+#define CNAME
+#define flush   fflush(stdout)
+#define print	printf
+#define nil 0
 
 
 #ifdef __linux__
@@ -68,8 +65,6 @@ inline Boolean MidiShare() { return true; }
 #	define PASCALNAME
 #	define PASCALTASKS
 # endif
-#	define flush	fflush( stdout)
-#	define print	printf
 #endif
 
 #include "TFilters.h"
@@ -367,7 +362,7 @@ void Close (void)
 }
 
 /*____________________________________________________________________*/
-main(void)
+int main(void)
 {
 	print ("\nMidiShare filters tests.\n");
 	print ("================================\n");

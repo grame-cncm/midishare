@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2000
+  Copyright ï¿½ Grame 2000
 
   This program is free software; you can redistribute it and modify it under 
   the terms of the GNU General Public License as published by the 
@@ -20,18 +20,17 @@
 
 
 */
- 
+
+#include <stdio.h>
 #include "MidiShare.h"
 
-#ifdef __Windows__
-#	include <stdio.h>
-#	include <MidiShare.h>
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-#	define flush    fflush(stdout)
-#	define print	printf
-#else
+#define CTASKS
+#define CNAME
+#define flush   fflush(stdout)
+#define print	printf
+#define nil 0
+
+#ifndef __Windows__
 #	define MSALARMAPI
 #endif
 
@@ -126,7 +125,7 @@ void MSALARMAPI RcvAlarm( short refnum)
 #endif
 {
 	MidiEvPtr e;
-	while (e= MidiGetEv(refnum)) {
+	while ((e= MidiGetEv(refnum))) {
 		RefNum(e) = (Byte)refnum;
 		Link(e) = gReceived;
 		gReceived = e;
@@ -387,7 +386,7 @@ void Slots()
 	print ("    MidiAddSlot : ");flush;
 	sref1 = MidiAddSlot (r1, gSlot1, MidiInputSlot);
 	sref2 = MidiAddSlot (r1, gSlot2, MidiOutputSlot);
-	print ("(%lx , %lx) %s\n", sref1, sref2, OK);
+	print ("(%x , %x) %s\n", sref1, sref2, OK);
 	if (MidiGetDriverInfos (r1, &infos)) {
 		if (infos.slots != 2)
 			print ("Warning : MidiGetDriverInfos returned %d slots (instead 2)\n", (int)infos.slots);
@@ -584,7 +583,7 @@ void SendingAndReceiving()
 }
 
 /*____________________________________________________________________*/
-main()
+int main()
 {
 	print ("\nMidiShare drivers test.\n");
 	print ("================================\n");
