@@ -288,7 +288,10 @@ enum{   MIDIOpenAppl=1,
         Byte        port;           /* Midi port            */
         Byte        chan;           /* Midi channel         */
 		
-		Byte		data[sizeof(void*)-4];	/* padding for 64 bits and to ensure natural alignment */
+#ifdef __x86_64__
+		/* padding for 64 bits and to ensure natural alignment */
+		Byte		data[sizeof(12 - sizeof(long))];	
+#endif
         
 		union {                     /* info depending of event type : */
             struct {                /* for notes            */
