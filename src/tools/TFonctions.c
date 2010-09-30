@@ -1111,8 +1111,6 @@ int main()
 {
 	print ("\nMidiShare functions test.\n");
 	print ("================================\n");
-TMidiEv ev;
-	print ("longfield size: %ld\n", sizeof(ev.info.longField));
 
 	if( MidiShare()) {
 		if( !Environment()) return 1;

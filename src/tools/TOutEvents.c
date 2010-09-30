@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2000
+  Copyright ï¿½ Grame 2000
 
   This program is free software; you can redistribute it and modify it under 
   the terms of the GNU General Public License as published by the 
@@ -20,23 +20,15 @@
 
 
 */
-
+ 
+#include <stdio.h>
 #include "MidiShare.h"
 
-#ifdef __Windows__
-#	include <stdio.h>
-#	include <String.h>
-#	include <StdLib.h>
-#	include <MidiShare.h>
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-#	define flush    fflush(stdout)
-#	define print	printf
-#else
-#	define MSALARMAPI
-#endif
-
+#define CTASKS
+#define CNAME
+#define flush   fflush(stdout)
+#define print	printf
+#define nil 0
 
 #ifdef __linux__
 #ifdef MODULE
@@ -50,33 +42,8 @@
 #	define print(args...)	printk(## args)
 inline Boolean MidiShare() { return true; }
 #else
-#	include <stdio.h>
-#	include "MidiShare.h"
-#	define flush		fflush( stdout)
-#	define print(args...)	fprintf(stdout, ## args)
 #endif
-#	define CNAME
-#	define CTASKS
-#	define nil 0
 #	define MidiAvailEv(r)  MidiGetEv(r)
-#endif
-
-
-#if macintosh
-#	include <stdio.h>
-#	include <String.h>
-#	include <StdLib.h>
-#	include "MidiShare.h"
-# if defined(__ppc__) && defined(__GNUC__)
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-# else
-#	define PASCALNAME
-#	define PASCALTASKS
-# endif
-#	define flush	fflush( stdout)
-#	define print	printf
 #endif
 
 #include "TOutEvents.h"
