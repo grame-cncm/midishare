@@ -173,7 +173,7 @@ Boolean Initialize ( HWND hDlg)
 
     ghWnd = hDlg;
 #ifdef WIN32
-	SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
+//	SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
 	SendDlgItemMessage(hDlg, AboutButton, BM_SETIMAGE, 0, (LONG)LoadBitmap (ghInst, (char *)1800));	
 	SetWindowText(hDlg, MidiGetName(myRefNum));
 #endif

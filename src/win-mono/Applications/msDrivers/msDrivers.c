@@ -472,7 +472,7 @@ BOOL CALLBACKAPI msCnctDlg (HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	switch (message) {
 		case WM_INITDIALOG:
 			ghDlg = hDlg;
-			SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
+//			SetClassLong (hDlg, GCL_HICON, (LONG)LoadIcon (ghInst, "ICON"));
 			SendDlgItemMessage(hDlg, AboutButton, BM_SETIMAGE, 0, (LONG)LoadBitmap (ghInst, (char *)1800));	
 			AboutDlgProcInst= (DLGPROC)MakeProcInstance((FARPROC)AboutDlgProc,ghInst);
 			LoadState();

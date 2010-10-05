@@ -27,7 +27,7 @@
 #include "EventToMidiStream.h"
 #include "MidiStreamToEvent.h"
 
-enum { false, true };
+//enum { false, true };
 
 #define kMMDriverVersion	100
 #define MidiShareDrvRef     127

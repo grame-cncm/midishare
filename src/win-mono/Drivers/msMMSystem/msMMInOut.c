@@ -36,7 +36,8 @@ static void MM2MS (SlotPtr slot, char * buff)
 		n--;
 	} while (!e && n);
 	if (e) {
-		Port(e) = (Byte)Slot(slot->refNum);
+//		Port(e) = (Byte)Slot(slot->refNum);
+		Port(e) = (Byte)slot->refNum.slotRef;
 		MidiSendIm (gRefNum, e);
 	}
 	else MidiParseReset(&slot->in);
@@ -51,7 +52,8 @@ static void LMM2MS (SlotPtr slot, LPMIDIHDR h)
 		unsigned long v = *(unsigned char *)ptr;
 		e = MidiParseByte (&slot->in, *ptr++);
 		if (e) {
-			Port(e) = (Byte)Slot(slot->refNum);
+//			Port(e) = (Byte)Slot(slot->refNum);
+			Port(e) = (Byte)slot->refNum.slotRef;
 			MidiSendIm (gRefNum, e);
 		}	
 	}

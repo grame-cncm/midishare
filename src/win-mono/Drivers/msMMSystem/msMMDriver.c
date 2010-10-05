@@ -51,7 +51,7 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir)
 	SlotPtr slot = NewSlot ();
 	if (!slot) return 0;
 	slot->refNum = MidiAddSlot (refNum, name, dir);
-	if (Slot(slot->refNum) < 0) {
+	if (slot->refNum.slotRef < 0) {
 		FreeSlot (slot);
 		return 0;
 	}
@@ -122,7 +122,7 @@ void RemoveSlots (short refNum)
 static SlotPtr FindSlot (SlotPtr list, short port)
 {
 	while (list) {
-		if (Slot(list->refNum) == port)
+		if (list->refNum.slotRef == port)
 			return list;
 		list = list->next;
 	}
@@ -142,7 +142,7 @@ void MSALARMAPI RcvAlarm  (short refNum )
 	SlotPtr slot = 0;
 	MidiEvPtr e = MidiGetEv (refNum);
 	while (e) {
-		if (!slot || (Slot(slot->refNum) != Port(e)))
+		if (!slot || (slot->refNum.slotRef != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot && slot->mmHandle) {
 			e = MS2MM (slot, e);
