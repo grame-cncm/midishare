@@ -4,7 +4,12 @@
 project(midishare)
 cmake_minimum_required(VERSION 2.6)
 
-set (target MidiShare)
+if(WIN32)
+	set (target mshare64)
+else(WIN32)
+	set (target MidiShare)
+endif(WIN32)
+
 #######################################
 # versions management
 set (VERSION 1.93)
