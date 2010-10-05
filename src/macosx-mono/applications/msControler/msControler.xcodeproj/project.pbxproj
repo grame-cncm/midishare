@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B48BD9C0C3A54EE002BBE34 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */; };
 		4BB41DEE09ED403300EE9367 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
 		4BB41DEF09ED403300EE9367 /* msControler.icns in Resources */ = {isa = PBXBuildFile; fileRef = D3F5817D0507321600053103 /* msControler.icns */; };
 		4BB41DF009ED403300EE9367 /* versions.txt in Resources */ = {isa = PBXBuildFile; fileRef = D3EE804C05BC065900FE2FFB /* versions.txt */; };
@@ -17,6 +16,7 @@
 		4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4BB41DFA09ED403300EE9367 /* msControler.r in Rez */ = {isa = PBXBuildFile; fileRef = F7274D6B0201418F01053118 /* msControler.r */; };
 		4BDE3AA509EE9E3E0009E823 /* Info-msControler.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */; };
+		D3A1AF57125B8951007CC3B0 /* MidiShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A1AF56125B8951007CC3B0 /* MidiShare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,9 +24,9 @@
 		0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		0867D6ABFE840B52C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../build/Deployment/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		4BB41E0009ED403300EE9367 /* msControler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = msControler.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-msControler.plist"; sourceTree = SOURCE_ROOT; };
+		4BDE3AA409EE9E3E0009E823 /* Info-msControler.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Info-msControler.plist"; sourceTree = SOURCE_ROOT; };
+		D3A1AF56125B8951007CC3B0 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../../cmake/Release/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		D3EE804C05BC065900FE2FFB /* versions.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = versions.txt; sourceTree = "<group>"; };
 		D3F5817D0507321600053103 /* msControler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = msControler.icns; sourceTree = SOURCE_ROOT; };
 		F721C9D90207FE0701053118 /* states.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = states.c; path = ../lib/states.c; sourceTree = SOURCE_ROOT; };
@@ -41,7 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BB41DF609ED403300EE9367 /* Carbon.framework in Frameworks */,
-				4B48BD9C0C3A54EE002BBE34 /* MidiShare.framework in Frameworks */,
+				D3A1AF57125B8951007CC3B0 /* MidiShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,10 +92,10 @@
 		20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4B48BD9B0C3A54EE002BBE34 /* MidiShare.framework */,
 				20286C33FDCF999611CA2CEA /* Carbon.framework */,
 				0640BAA4FFF0323A11CA0E50 /* ApplicationServices.framework */,
 				0640BAA5FFF0323A11CA0E50 /* CoreServices.framework */,
+				D3A1AF56125B8951007CC3B0 /* MidiShare.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -139,9 +139,11 @@
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4BB41E0709ED403400EE9367 /* Build configuration list for PBXProject "msControler" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				4BB41DEB09ED403300EE9367 /* msControler Universal */,
 			);
@@ -202,15 +204,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
 					i386,
+					x86_64,
 				);
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -218,6 +221,7 @@
 				HEADER_SEARCH_PATHS = (
 					"../macosx-mono",
 					../../../lib,
+					../../../include,
 				);
 				INFOPLIST_FILE = "Info-msControler.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -226,9 +230,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msControler;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
-				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				USER_HEADER_SEARCH_PATHS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -243,21 +247,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
 					i386,
+					x86_64,
 				);
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = (
 					"../macosx-mono",
 					../../../lib,
+					../../../include,
 				);
 				INFOPLIST_FILE = "Info-msControler.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -266,9 +272,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msControler;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
-				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				USER_HEADER_SEARCH_PATHS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -283,19 +289,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
 					i386,
+					x86_64,
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = (
 					"../macosx-mono",
 					../../../lib,
+					../../../include,
 				);
 				INFOPLIST_FILE = "Info-msControler.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -304,9 +312,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = msControler;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
-				USER_HEADER_SEARCH_PATHS = /usr/local/include;
+				USER_HEADER_SEARCH_PATHS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",

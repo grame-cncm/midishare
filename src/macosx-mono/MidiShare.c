@@ -32,6 +32,7 @@
 #include "msInit.h"
 #include "msKernel.h"
 #include "msMail.h"
+#include "msMem.h"
 #include "msSeq.h"
 #include "msSmpte.h"
 #include "msSync.h"
@@ -46,6 +47,19 @@
 TMSGlobal       GlobalMem = { { 0 } };
 TMSGlobalPtr    gMem = &GlobalMem;
 
+//#define kMemAlign	16
+//static void gMemInit()
+//{
+//	if (gMem == 0) {
+//		char* ptr;
+//		int mod;
+//		ptr = (char*)AllocateMemory (kStdMemory, sizeof(TMSGlobal) + kMemAlign);
+//		mod = (int)ptr % kMemAlign;
+//printf ("gMemInit gmem %p mod %d\n", ptr, mod);
+//		gMem = (TMSGlobalPtr)(ptr + kMemAlign - mod);
+//	}
+//}
+
 /* main entry point : called at library load time */
 void __MSInitialize(void) __attribute__ ((constructor));
 void __MSInitialize(void)
@@ -55,8 +69,9 @@ void __MSInitialize(void)
 
 
 /*--------------------------- Global MidiShare environment --------------------*/
-void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) {
-  	MSSpecialInit( defaultSpace, gMem);
+void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) 
+{  	
+	MSSpecialInit( defaultSpace, gMem);
 }
 long  MIDISHAREAPI MidiGetError(void) {
   	return MSGetError(gMem);
@@ -322,13 +337,13 @@ void* MIDISHAREAPI MidiWriteSync(void** adrMem,void* val) {
 }
 
 /*---------------------------------- Task Managing ----------------------------*/
-void MIDISHAREAPI MidiCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+void MIDISHAREAPI MidiCall(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   	MSCall( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
-MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   	return MSTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
-MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   	return MSDTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
 void MIDISHAREAPI MidiForgetTask(MidiEvPtr *e) {

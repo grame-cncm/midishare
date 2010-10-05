@@ -142,6 +142,7 @@ static void Cell2Slot (ListHandle list, Cell * c, SlotRefNum *sref)
 	*sref = GetIndSlot (ref, i, direction);
 }
 
+Cell LLastClick (ListHandle list);
 /* -----------------------------------------------------------------------------*/
 static SlotRefNum LastClickedSlot (ListHandle list, Cell * c)
 {

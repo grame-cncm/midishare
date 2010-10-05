@@ -64,7 +64,7 @@ static void LMM2MS (SlotPtr slot, MIDIPacket *packet)
 	while (n--) {
 		e = MidiParseByte (&slot->in, *ptr++);
 		if (e) {
-			Port(e) = (Byte)Slot(slot->refNum);
+			Port(e) = (Byte)slot->refNum.slotRef;
 			MidiSendIm (gRefNum, e);
 		}	
 	}
@@ -106,7 +106,7 @@ static void SendSysEx(SlotPtr slot, MidiEvPtr e)
 }
 
 //_________________________________________________________
-void KOffTask (long date, short ref, long a1,long a2,long a3)
+void KOffTask (long date, short ref, void* a1, void* a2, void* a3)
 {
 	MidiEvPtr e = (MidiEvPtr)a1;
 	MS2MM (ref, (SlotPtr)a2, e);
@@ -122,7 +122,7 @@ static void SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 	int n = 0;
   	 
 	e = MidiStreamPutEvent (&state->outsmall, e);
-	if (e) MidiTask (KOffTask, Date(e), gRefNum, (long)e, (long)slot, 0); // typeNote
+	if (e) MidiTask (KOffTask, Date(e), gRefNum, e, slot, 0); // typeNote
 	
 	while (MidiStreamGetByte (&state->outsmall, ptr++)) {n++;}
 	
@@ -136,7 +136,7 @@ static void SendSmallEv(SlotPtr slot, MidiEvPtr e, sendState* state)
 static void CompletionProc(MIDISysexSendRequest *request)
 {
 	/* check client */
-	if (gClient == NULL) {
+	if (!gClient) {
 		fprintf(stderr, "CompletionProc : dead driver\n");
 		return;
 	}

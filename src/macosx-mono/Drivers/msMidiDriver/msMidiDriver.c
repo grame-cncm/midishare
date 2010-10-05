@@ -48,7 +48,7 @@ static SlotPtr CreateSlot(short refNum, char *name, SlotDirection dir, MIDIEndpo
 	SlotPtr slot = NewSlot ();
 	if (!slot) return 0;
 	slot->refNum = MidiAddSlot (refNum, name, dir);
-	if (Slot(slot->refNum) < 0) {
+	if (slot->refNum.slotRef < 0) {
 		FreeSlot (slot);
 		return 0;
 	}
@@ -202,7 +202,7 @@ void RemoveSlots (short refNum)
 static SlotPtr FindSlot (SlotPtr list, short port)
 {
 	while (list) {
-		if (Slot(list->refNum) == port)
+		if (list->refNum.slotRef == port)
 			return list;
 		list = list->next;
 	}
@@ -216,7 +216,7 @@ void SendEvents1 (short refNum)
 	MidiEvPtr e;
 	
 	while ((e = MidiGetEv (refNum))) {
-		if (!slot || (Slot(slot->refNum) != Port(e)))
+		if (!slot || (slot->refNum.slotRef != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
 			if (!MS2MM(refNum, slot, e)) return; 
@@ -233,7 +233,7 @@ void SendEvents2 (short refNum)
 	MidiEvPtr e;
 	
 	while ((e = MidiGetEv (refNum))) {
-		if (!slot || (Slot(slot->refNum) != Port(e)))
+		if (!slot || (slot->refNum.slotRef != Port(e)))
 			slot = FindSlot(gOutSlots, Port(e));
 		if (slot) {
 			if (!MS2MM(refNum, slot, e)) return;  // A SysEx is sent 

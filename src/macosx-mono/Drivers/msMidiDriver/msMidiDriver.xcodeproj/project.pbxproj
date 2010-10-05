@@ -226,12 +226,15 @@
 					__Macintosh__,
 					__Types__,
 				);
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../include,
+					../../../common/Headers,
+				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -259,12 +262,15 @@
 					__Macintosh__,
 					__Types__,
 				);
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../include,
+					../../../common/Headers,
+				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.8;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -290,12 +296,15 @@
 					__Macintosh__,
 					__Types__,
 				);
-				HEADER_SEARCH_PATHS = ../../../common/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../include,
+					../../../common/Headers,
+				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				USER_HEADER_SEARCH_PATHS = "../../../lib /usr/local/include";
+				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};
 			name = Default;
