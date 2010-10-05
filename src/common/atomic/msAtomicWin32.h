@@ -81,8 +81,17 @@ inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, vo
 //extern "C" char CAS  (volatile void * addr, volatile void * value, void * newvalue);
 //extern "C" char CAS2 (volatile void * addr, volatile void * v1, volatile void * v2, void * n1, void * n2);
 
-extern char CAS  (volatile void * addr, volatile void * value, void * newvalue);
-extern char CAS2 (volatile void * addr, volatile void * v1, volatile long long v2, void * n1, long long n2);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+char CAS  (volatile void * addr, volatile void * value, void * newvalue);
+char CAS2 (volatile void * addr, volatile void * v1, volatile long long v2, void * n1, long long n2);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 #endif

@@ -33,7 +33,7 @@
 MSFunctionType(void)        MSSendIm   (short refNum, MidiEvPtr e, fifo* schedlist, unsigned long curdate);
 MSFunctionType(void)        MSSend     (short refNum, MidiEvPtr e, fifo* schedlist);
 MSFunctionType(void)        MSSendAt   (short refNum, MidiEvPtr e, unsigned long d, fifo* schedlist);
-MSFunctionType(ulong)       MSCountEvs (short refNum, TClientsPtr g);
+MSFunctionType(atomic_long) MSCountEvs (short refNum, TClientsPtr g);
 MSFunctionType(MidiEvPtr)   MSGetEv    (short refNum, TClientsPtr g);
 MSFunctionType(MidiEvPtr)   MSAvailEv  (short refNum, TClientsPtr g);
 MSFunctionType(void)        MSFlushEvs (short refNum, TClientsPtr g);

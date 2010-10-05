@@ -55,25 +55,26 @@
                            DATA STRUCTURES
  *****************************************************************/
 #ifndef __ppc__
-# define ffCount(name) unsigned long volatile name
+# define ffCount(name) atomic_long volatile name
 #else
 # define ffCount(name) long name[7]
 #endif
 
 typedef struct fifocell {
 	struct fifocell* volatile link;	/* next cell in the list */
-	long value[3];					/* any data here */
+	atomic_long value[3];			/* any data here */
 } fifocell;
 
-typedef struct fifo {
+struct fifo {
 	fifocell * volatile head;	/* pointer to the head cell */
 	ffCount(oc);
     fifocell * volatile tail;	/* pointer to the tail cell */
 	ffCount(ic);
 	TAtomic	count;
-	long unused[3];				/* for aligments */
+	atomic_long padding[3];		/* for aligment */
 	fifocell dummy;
-} fifo;
+};
+typedef struct fifo fifo;
 
 
 #ifdef __cplusplus
@@ -81,7 +82,7 @@ extern "C" {
 #endif
 
  void 	       	fifoinit(fifo* ff);
- unsigned long 	fifosize (fifo * ff);
+atomic_long 	fifosize (fifo * ff);
  void 	       	fifoput (fifo * ff, fifocell * cl);
  fifocell * 	fifoget (fifo * ff);
  fifocell * 	fifoavail (fifo * ff); 

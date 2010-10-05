@@ -26,6 +26,12 @@
 /* by default, compiles for SMP architecture */
 #define __SMP__
 
+#ifdef __x86_64__
+typedef long long	atomic_long;
+#else
+typedef long atomic_long;
+#endif
+
 #if defined(powerpc) || defined(__ppc__) || defined(__MWERKS__)
 	typedef struct {
 		long value;
@@ -33,7 +39,7 @@
 	} TAtomic;
 #else
 	typedef struct {
-		long value;
+		atomic_long value;
 	} TAtomic;
 #endif
 
@@ -54,18 +60,18 @@
 # error "msAtomic.h : target compiler and processor undefined"
 #endif
 
-static inline long msAtomicInc (volatile TAtomic * val)
+static inline atomic_long msAtomicInc (volatile TAtomic * val)
 {
-    long actual;
+    atomic_long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual+1)));
 	return actual;
 }
 
-static inline long msAtomicDec (volatile TAtomic * val)
+static inline atomic_long msAtomicDec (volatile TAtomic * val)
 {
-    long actual;
+    atomic_long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual-1)));

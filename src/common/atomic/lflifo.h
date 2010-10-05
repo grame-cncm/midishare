@@ -61,22 +61,24 @@
                            DATA STRUCTURES
  *****************************************************************/
 #ifndef __ppc__
-# define lfCount(name) unsigned long volatile name
+# define lfCount(name) atomic_long volatile name
 #else
 # define lfCount(name) long name[7]
 #endif
 
 typedef struct lifocell {
 	struct lifocell* volatile link;	/* next cell in the list */
-	long value[3];					/* any data here		 */
+	atomic_long value[3];			/* any data here		 */
 } lifocell;
 
-typedef struct lifo {
+struct lifo {
 	lifocell * volatile top;	/* top of the stack          */
 	lfCount(oc);				/* used to avoid ABA problem */
+	char	unused[2*sizeof(atomic_long)];		/* alignment */
 	TAtomic	count;
-	long	unused;				/* for 32 bytes alignment */
-} lifo;
+	char	padding[3*sizeof(atomic_long)];		/* alignment */
+};
+typedef struct lifo lifo;
 
 
 #ifdef __cplusplus
@@ -93,6 +95,6 @@ extern "C" {
 
 
 static inline lifocell* lfavail(lifo* lf) 		{ return (lifocell*)lf->top; }
-static inline unsigned long lfsize (lifo * lf) 	{ return lf->count.value; }
+static inline atomic_long lfsize (lifo * lf) 	{ return lf->count.value; }
 
 #endif

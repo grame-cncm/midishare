@@ -41,7 +41,7 @@ printf("fifoinit %p %p\n", ff, ff->head);
 
 
 //----------------------------------------------------------------
-unsigned long fifosize (fifo * ff)
+atomic_long fifosize (fifo * ff)
 {
     return ff->count.value;
 }
@@ -49,7 +49,7 @@ unsigned long fifosize (fifo * ff)
 //----------------------------------------------------------------
 void fifoput (fifo * ff, fifocell * cl) 
 {
-    long ic;
+    atomic_long ic;
 	fifocell * volatile tail;
 
 	cl->link = fifo_end(ff);	/* set the cell next pointer to the end marker */
@@ -77,7 +77,7 @@ fifocell *  fifoget(fifo * ff)
 {
 	fifocell * volatile head;
 	fifocell * next; 
-	unsigned long ic, oc;
+	atomic_long ic, oc;
 	short done = 0;
 	
 	do {
@@ -123,7 +123,7 @@ fifocell* fifoavail (fifo* ff)
 {
 	/* simulated atomic read of the required fields*/
 	while (1) {
-		unsigned long count = ff->oc;
+		atomic_long count = ff->oc;
 		fifocell * 	hd  = ff->head;
 		fifocell*	n   = hd->link;
 		fifocell*	tail= ff->tail;

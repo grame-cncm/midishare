@@ -62,7 +62,7 @@ MSFunctionType(void) MSSendAt (short refNum, MidiEvPtr e, unsigned long d,
 }
 
 /*__________________________________________________________________________*/
-MSFunctionType(ulong) MSCountEvs (short refNum, TClientsPtr g)
+MSFunctionType(atomic_long) MSCountEvs (short refNum, TClientsPtr g)
 {
 	if( CheckRefNum( g, refNum)) {
 		TApplPtr appl = g->appls[refNum]; 

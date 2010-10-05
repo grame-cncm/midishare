@@ -57,7 +57,7 @@ lifocell* lfpop (lifo * lf)
 #ifdef __trace__
 printf("lfpop %p ", lf);
 #endif
-	volatile  long oc;
+	volatile  atomic_long oc;
 	lifocell * volatile top;
 	do {
 		oc =  lf->oc;

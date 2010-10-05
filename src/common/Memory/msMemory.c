@@ -58,7 +58,7 @@ MSFunctionType(ulong) MSGrowSpace (unsigned long nbev, MSMemoryPtr g)
 	else return GrowSpace (g, nbev);
 }
 
-MSFunctionType(ulong) MSFreeSpace (MSMemoryPtr g)
+MSFunctionType(atomic_long) MSFreeSpace (MSMemoryPtr g)
 {
 	return g->active ? lfsize (FreeList(g)) : g->desiredSpace;
 }
