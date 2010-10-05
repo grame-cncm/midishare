@@ -62,7 +62,7 @@
 #endif
 
 
-enum { false, true };
+//enum { false, true };
 
 typedef unsigned char Boolean;
 typedef unsigned char Byte;

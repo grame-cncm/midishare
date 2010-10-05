@@ -22,8 +22,8 @@
 
 #include "EventToMidiStream.h"
 
-#ifdef WIN32
-//enum { false, true };
+#ifndef WIN32
+enum { false, true };
 #endif
 
 /*------------------------------------------------------------------------*/
