@@ -230,7 +230,7 @@ enum{   MIDIOpenAppl=1,
 /******************************************************************************
 *                                 DATA TYPES
 *******************************************************************************/
-# define CELLSIZE		4*sizeof(void*)
+#define CELLSIZE		4*sizeof(void*)
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
@@ -246,7 +246,7 @@ enum{   MIDIOpenAppl=1,
     typedef struct TMidiST *MidiSTPtr;
     typedef struct TMidiST
     {
-		long val[4];
+		void* val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/

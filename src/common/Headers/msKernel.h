@@ -53,15 +53,16 @@ typedef struct THorloge{
 	 TimeInfo		rtOffset;     /* offset to real time clock            */
 	 long			adjustCount;  /* clocks adjustment count              */
 	 long			offset;       /* current real-time clock offset       */
+	 char			padding[40];  /* alignment      */
 } THorloge;
 
 /*___________________________________*/
 typedef struct TMSGlobal {
+	fifo          toSched;       /* events to be scheduled              */
 	THorloge      currTime;      /* time management                     */
 	TMSMemory     memory;        /* memory management                   */
 	TClients      clients;       /* clients applications management     */
 	TSorter       sorter;        /* sorter specific storage             */
-	fifo          toSched;       /* events to be scheduled              */
 	long          error;		 /* the global system errors            */
 	THost         local;         /* for implementation specific purpose */
 } TMSGlobal;

@@ -40,6 +40,7 @@ typedef struct TMSMemory
     ulong	     desiredSpace;         	/* count of free+used events      */
     ulong	     totalSpace;         	/* count of free+used events      */
     long         active;                /* active > 0 if memory is active */
+	char		 padding[4];			/* alignment */
 } TMSMemory, * MSMemoryPtr;
 
 /*------------------------------------------------------------------------------*/
@@ -51,7 +52,7 @@ typedef struct TMSMemory
 /* Memory management functions         */
 MSFunctionType(ulong) MSGrowSpace    (unsigned long nbev, MSMemoryPtr g);
 MSFunctionType(ulong) MSDesiredSpace (MSMemoryPtr g);
-MSFunctionType(ulong) MSFreeSpace    (MSMemoryPtr g);
+MSFunctionType(atomic_long) MSFreeSpace (MSMemoryPtr g);
 MSFunctionType(ulong) MSTotalSpace   (MSMemoryPtr g);
 
 /* private memory management functions */

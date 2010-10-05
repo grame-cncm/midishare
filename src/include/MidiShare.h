@@ -272,7 +272,7 @@ enum{   MIDIOpenAppl=1,
     typedef struct TMidiST *MidiSTPtr;
     typedef struct TMidiST
     {
-		long val[4];
+		void* val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/

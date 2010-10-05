@@ -448,7 +448,7 @@ static MidiEvPtr NewSexEv( lifo* fl, short typeNum)
 			MSFreeCell (ev, fl);
 			return 0;
 		}
-		ext->val[0]= (long)ext;			/* creates a clear extension block */
+		ext->val[0]= ext;				/* creates a clear extension block */
 		ext->val[1]= ext->val[2]= ext->val[3]= 0;
 		
 		Link(ev)= 0;					/* initialize the header           */
@@ -659,7 +659,7 @@ static void SetFSexEv( MidiEvPtr e, unsigned long f, long v)
 /*__________________________________________________________________________________*/
 static void SetFPrivateEv( MidiEvPtr e, unsigned long f, long v)
 {
-	if( f < 4) LinkST(e)->val[f] = v;
+	if( f < 4) LinkST(e)->val[f] = (void*)v;
 }
 
 
@@ -700,7 +700,7 @@ static long GetFSexEv( MidiEvPtr e, unsigned long f)
 /*__________________________________________________________________________________*/
 static long GetFPrivateEv( MidiEvPtr e, unsigned long f)
 {
-	return (f < 4) ?  LinkST(e)->val[f] : kGetFieldError;
+	return (f < 4) ?  (long)LinkST(e)->val[f] : kGetFieldError;
 }
 
 /*__________________________________________________________________________________*/
