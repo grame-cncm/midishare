@@ -39,7 +39,6 @@ static short  CountSlots ();
 static void * memcopy (void *src, void *dst, long size);
 static char * getDriverLocation (TDriverInfos *dInfos, char *ptr, long size);
 static void	  RestoreSlot (SlotRefNum sref, TSlotInfos * sInfos, char *ptr, long size);
-#define Slot(ref) 			((ref).slotRef)
 
 
 /*===========================================================================
