@@ -59,8 +59,8 @@ typedef struct THorloge{
 /*___________________________________*/
 typedef struct TMSGlobal {
 	fifo          toSched;       /* events to be scheduled              */
-	THorloge      currTime;      /* time management                     */
 	TMSMemory     memory;        /* memory management                   */
+	THorloge      currTime;      /* time management                     */
 	TClients      clients;       /* clients applications management     */
 	TSorter       sorter;        /* sorter specific storage             */
 	long          error;		 /* the global system errors            */
