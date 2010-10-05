@@ -76,13 +76,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		}
 	}
 	if (CheckClientsCount(clients)) {
-		int mod; void* ptr;
 		appl = NewAppl (sizeof(TAppl));
-
-ptr = &appl->rcv;
-mod = (int)ptr%16;
-if (mod) printf("NewAppl %p fifo reste %d\n", appl, mod);
-
 		if (appl) {
 			for (ref = 1; clients->appls[ref]; ref++)
 				;

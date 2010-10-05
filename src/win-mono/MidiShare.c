@@ -167,7 +167,7 @@ void MIDISHAREAPI MidiSetPortState(short port, Boolean state) {
 
 /*-------------------------- Events and memory managing -----------------------*/
 unsigned long MIDISHAREAPI MidiFreeSpace(void) {
-  return MSFreeSpace(Memory(gMem));
+  return (unsigned long)MSFreeSpace(Memory(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiNewCell(void) {
   return MSNewCell(FreeList(Memory(gMem)));
@@ -265,7 +265,7 @@ void MIDISHAREAPI MidiSendAt(short refNum, MidiEvPtr e, unsigned long d) {
 
 /*------------------------------------ Receving -------------------------------*/
 unsigned long MIDISHAREAPI MidiCountEvs(short refNum) {
-  return MSCountEvs( refNum, Clients(gMem));
+  return (unsigned long)MSCountEvs( refNum, Clients(gMem));
 }
 MidiEvPtr MIDISHAREAPI MidiGetEv(short refNum) {
   return MSGetEv( refNum, Clients(gMem));
@@ -326,20 +326,20 @@ LPVOID MIDISHAREAPI MidiWriteSync(LPVOID FAR *adrMem,LPVOID val) {
 }
 
 /*---------------------------------- Task Managing ----------------------------*/
-void MIDISHAREAPI MidiCall(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+void MIDISHAREAPI MidiCall(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   MSCall( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
-MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MidiEvPtr MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   return MSTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
-MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3) {
+MidiEvPtr MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3) {
   return MSDTask( routine,date,refNum,a1,a2,a3, FreeList(Memory(gMem)), SorterList(gMem));
 }
 void MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e) {
   MSForgetTask( e);
 }
 long MIDISHAREAPI MidiCountDTasks(short refNum) {
-  return MSCountDTasks( refNum, Clients(gMem));
+  return (long)MSCountDTasks( refNum, Clients(gMem));
 }
 void MIDISHAREAPI MidiFlushDTasks(short refNum) {
   MSFlushDTasks( refNum, Clients(gMem));

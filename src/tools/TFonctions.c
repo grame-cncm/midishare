@@ -747,7 +747,7 @@ ApplContext gContext;
 static pascal void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 #ifdef CTASKS
-void MSALARMAPI MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
+void MSALARMAPI MyTask( long unused1, short unused2, void* a1, void* unused3, void* unused4)
 #endif
 {
 	if( a1)
@@ -759,7 +759,7 @@ void MSALARMAPI MyTask( long unused1, short unused2, long a1,long unused3,long u
 static pascal void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
 #endif
 #ifdef CTASKS
-void MSALARMAPI MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
+void MSALARMAPI MyTask2( long unused1, short unused2, void* a1, void* unused3, void* unused4)
 #endif
 {
 	gContext.res1 = true;
@@ -772,7 +772,7 @@ void MSALARMAPI MyTask2( long unused1, short unused2, long a1,long unused3,long 
 static pascal void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
 #endif
 #ifdef CTASKS
-void MSALARMAPI MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
+void MSALARMAPI MyTask3( long unused1, short unused2, void* a1, void* a2, void* unused4)
 #endif
 {
 	gContext.res2 = true;
@@ -783,11 +783,11 @@ void MSALARMAPI MyTask3( long unused1, short unused2, long a1,long a2,long unuse
 static pascal void MyTask4( long time, short refnum, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
-void MSALARMAPI MyTask4( long time, short refnum, long a1,long a2,long a3)
+void MSALARMAPI MyTask4( long time, short refnum, void* a1, void* a2, void* a3)
 #endif
 {
 	gContext.res1 = true;
-	gContext.t2 = MidiTask( MyTask3, time, refnum,a1, a2, a3);
+	gContext.t2 = MidiTask( MyTask3, time, refnum, a1, a2, a3);
 	MidiForgetTask(&gContext.t1);
 }
 
@@ -796,7 +796,7 @@ void MSALARMAPI MyTask4( long time, short refnum, long a1,long a2,long a3)
 static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 #endif
 #ifdef CTASKS
-void MSALARMAPI MyDTask( long unused1, short unused2, long a1,long a2,long a3)
+void MSALARMAPI MyDTask( long unused1, short unused2, void* a1, void* a2, void* a3)
 #endif
 {
 	print ("dtask rcv %ld %ld %ld ", a1, a2, a3);
@@ -821,7 +821,7 @@ void Tasks( short isFreeMem)
 #endif			
 	print ("    MidiTask (%p): ", MyTask);flush;
 	p1= 0;
-	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
+	e= MidiTask( MyTask, time= MidiGetTime(), refNum, &p1, &p2, &p3);
 	time+= 50;
 	while( MidiGetTime() <= time);
 	print ("%p %s\n", e, OK);
@@ -830,7 +830,7 @@ void Tasks( short isFreeMem)
 		
 	print ("    MidiForgetTask(1) : ");flush;	
 	p1= 0;
-	e= MidiTask( MyTask, time= MidiGetTime()+100, refNum, (long)&p1, (long)&p2, (long)&p3);
+	e= MidiTask( MyTask, time= MidiGetTime()+100, refNum, &p1, &p2, &p3);
 	MidiForgetTask(&e);
 	print ("%s\n",OK);
 	if(e) print ("Warning : MidiForgetTask does not set task address to 0 !\n");
@@ -845,8 +845,8 @@ void Tasks( short isFreeMem)
 	gContext.res1 = gContext.res2 = false;
 	gContext.t1 = gContext.t2 = 0;
 	time = MidiGetTime()+10 ;
-	gContext.t1= MidiTask( MyTask2, time, refNum, (long)&p1, (long)&p2, (long)&p3);
-	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	gContext.t1= MidiTask( MyTask2, time, refNum, &p1, &p2, &p3);
+	gContext.t2= MidiTask( MyTask3, time, refNum, &p1, &p2, &p3);
 	print ("%s\n",OK);
 	time+= 14;
 	while( MidiGetTime() <= time);
@@ -865,8 +865,8 @@ void Tasks( short isFreeMem)
 	gContext.t1 = gContext.t2 = 0;
 	time = MidiGetTime()-10 ;
 	
-	gContext.t1= MidiTask( MyTask2, time, refNum, (long)&p1, (long)&p2, (long)&p3);
-	gContext.t2= MidiTask( MyTask3, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	gContext.t1= MidiTask( MyTask2, time, refNum, &p1, &p2, &p3);
+	gContext.t2= MidiTask( MyTask3, time, refNum, &p1, &p2, &p3);
 	print ("%s\n",OK);
 	
 	time= MidiGetTime()+50;
@@ -890,7 +890,7 @@ void Tasks( short isFreeMem)
 	gContext.t1 = gContext.t2 = 0;
 	time = MidiGetTime() ;
 	
-	gContext.t1= MidiTask( MyTask4, time, refNum, (long)&p1, (long)&p2, (long)&p3);
+	gContext.t1= MidiTask( MyTask4, time, refNum, &p1, &p2, &p3);
 	print ("%s\n",OK);
 	
 	time= MidiGetTime()+50;
@@ -905,7 +905,7 @@ void Tasks( short isFreeMem)
 	
 			
 	print ("    MidiDTask : ");flush;
-	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
+	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, (void*)1, (void*)2, (void*)3);
 	time+= 4;
 	while( MidiGetTime() <= time);
 	print ("%p %s\n", e, OK);
@@ -926,7 +926,7 @@ void Tasks( short isFreeMem)
 	if( p1)
 		print ("Warning : incorrect task number : %ld\n", p1);
 
-	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, 1L, 2L, 3L);
+	e= MidiDTask( MyDTask, time= MidiGetTime(), refNum, (void*)1, (void*)2, (void*)3);
 	time+= 50;
 	while( MidiGetTime() <= time);
 	p1= MidiCountDTasks( refNum);
@@ -940,7 +940,7 @@ void Tasks( short isFreeMem)
 		print ("Warning : incorrect task number : %ld\n", p1);
 
 	time= MidiGetTime()+100;
-	e= MidiDTask( MyDTask, time, refNum, 1L, 2L, 3L);
+	e= MidiDTask( MyDTask, time, refNum, (void*)1, (void*)2, (void*)3);
 	print ("    MidiForgetTask : ");flush;
 	MidiForgetTask( &e);
 	time+= 4;

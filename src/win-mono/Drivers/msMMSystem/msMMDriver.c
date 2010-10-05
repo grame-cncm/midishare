@@ -130,7 +130,7 @@ static SlotPtr FindSlot (SlotPtr list, short port)
 }
 
 //_________________________________________________________
-void MSALARMAPI KOffTask( long date, short ref, long a1,long a2,long a3)
+void MSALARMAPI KOffTask( long date, short ref, void* a1, void* a2, void* a3)
 {
 	MidiEvPtr e = (MidiEvPtr)a1;
 	MS2MM ((SlotPtr)a2, e);
@@ -147,7 +147,7 @@ void MSALARMAPI RcvAlarm  (short refNum )
 		if (slot && slot->mmHandle) {
 			e = MS2MM (slot, e);
 			if (e)
-				MidiTask (KOffTask, Date(e), refNum, (long)e, (long)slot, 0);
+				MidiTask (KOffTask, Date(e), refNum, e, slot, 0);
 		}else{
 			MidiFreeEv(e);
 		}

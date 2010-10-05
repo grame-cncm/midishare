@@ -38,18 +38,18 @@ typedef struct TTaskExt *TTaskExtPtr;
 typedef struct TTaskExt
 {
     TaskPtr fun;
-    long    arg1;
-    long    arg2;
-    long    arg3;
+    void*   arg1;
+    void*   arg2;
+    void*   arg3;
 } TTaskExt;
 
 
 /*__________________________________________________________________________________*/
-MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3, 
+MSFunctionType(void)      MSCall  (TaskPtr task, unsigned long date, short r, void* a1, void* a2, void* a3, 
                                    lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
+MSFunctionType(MidiEvPtr) MSTask  (TaskPtr task, unsigned long date, short r, void* a1, void* a2, void* a3,  
                                    lifo* freelist, fifo* schedlist);
-MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, long a1,long a2,long a3,  
+MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, void* a1, void* a2, void* a3,  
                                    lifo* freelist, fifo* schedlist);
 
 MSFunctionType(void)      MSForgetTask	(MidiEvPtr *e);

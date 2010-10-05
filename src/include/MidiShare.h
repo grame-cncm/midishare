@@ -439,7 +439,7 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 
 /*----------------------------- Alarms prototypes ----------------------------*/
 
-    typedef ALARMTYPE void (MSALARMAPI * TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
+    typedef ALARMTYPE void (MSALARMAPI * TaskPtr)         ( long date, short refNum, void* a1, void* a2, void* a3 );
     typedef ALARMTYPE void (MSALARMAPI * RcvAlarmPtr)     ( short refNum );
     typedef ALARMTYPE void (MSALARMAPI * ApplAlarmPtr)    ( short refNum,long code );
     typedef ALARMTYPE void (MSALARMAPI * ApplyProcPtr)    ( MidiEvPtr e );
@@ -627,9 +627,9 @@ void* 		MidiWriteSync 	(void* adrMem, void* val);
 
 /*---------------------------------- Task Managing ----------------------------*/
 
-void		MidiCall 	(TaskPtr routine, long date, short refNum, long a1,long a2,long a3);
-MidiEvPtr	MidiTask 	(TaskPtr routine, long date, short refNum, long a1,long a2,long a3);
-MidiEvPtr	MidiDTask 	(TaskPtr routine, long date, short refNum, long a1,long a2,long a3);
+void		MidiCall 	(TaskPtr routine, long date, short refNum, void* a1, void* a2, void* a3);
+MidiEvPtr	MidiTask 	(TaskPtr routine, long date, short refNum, void* a1, void* a2, void* a3);
+MidiEvPtr	MidiDTask 	(TaskPtr routine, long date, short refNum, void* a1, void* a2, void* a3);
 void		MidiForgetTask	(MidiEvPtr *e);
 long		MidiCountDTasks (short refnum);
 void		MidiFlushDTasks (short refnum);

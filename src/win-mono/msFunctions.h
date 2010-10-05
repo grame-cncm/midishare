@@ -151,9 +151,9 @@ extern "C" {
   LPVOID MIDISHAREAPI MidiWriteSync(LPVOID FAR *adrMem,LPVOID val);
 
 /*---------------------------------- Task Managing ----------------------------*/
-  void			MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr 	MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr 	MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
+  void			MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
+  MidiEvPtr 	MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
+  MidiEvPtr 	MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
   void			MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e);
   long			MIDISHAREAPI MidiCountDTasks(short refNum);
   void			MIDISHAREAPI MidiFlushDTasks(short refNum);

@@ -36,7 +36,7 @@
   External MidiShare functions implementation
   =========================================================================== */
 MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
+                             void* a1, void* a2, void* a3, 
                              lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
@@ -48,16 +48,16 @@ MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r,
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
 		ext->val[0]= task;
-		ext->val[1]= (void*)a1;
-		ext->val[2]= (void*)a2;
-		ext->val[3]= (void*)a3;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 }
 
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
+                             void* a1, void* a2, void* a3, 
                              lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
@@ -69,9 +69,9 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
 		ext->val[0]= task;
-		ext->val[1]= (void*)a1;
-		ext->val[2]= (void*)a2;
-		ext->val[3]= (void*)a3;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
@@ -79,7 +79,7 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 
 /*__________________________________________________________________________________*/
 MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r, 
-                             long a1,long a2,long a3, 
+                             void* a1, void* a2, void* a3, 
                              lifo* freelist, fifo* schedlist)
 {
 	MidiEvPtr ev;
@@ -91,9 +91,9 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
 		ext->val[0]= task;
-		ext->val[1]= (void*)a1;
-		ext->val[2]= (void*)a2;
-		ext->val[3]= (void*)a3;
+		ext->val[1]= a1;
+		ext->val[2]= a2;
+		ext->val[3]= a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
