@@ -92,6 +92,7 @@ endif(WIN32)
 if(WIN32)
 	enable_language(RC)
 	set(LIBCONTENT ${LIBSRC} ${LIBH} ${ROOT_PATH}/win-mono/midishare.rc)
+	set(LINK_FLAGS /ENTRY:"DllEntryPoint")
 else(WIN32)
 	set(LIBCONTENT ${LIBSRC} ${LIBH})
 endif(WIN32)
@@ -106,6 +107,9 @@ set_target_properties (${target} PROPERTIES
 			MACOSX_FRAMEWORK_BUNDLE_VERSION ${SSTRVERS}
 			MACOSX_FRAMEWORK_BUNDLE_VERSION "A"
 )
+if(WIN32)
+set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
+endif(WIN32)
 
 target_link_libraries (${target} ${LINK})
 
