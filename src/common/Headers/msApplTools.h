@@ -29,7 +29,8 @@
 #include "msDriver.h"
 #include "msKernel.h"
 
-#define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
+//#define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
+TApplPtr NewAppl(size);
 
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
 void clearClient (short ref, TMSGlobalPtr g);

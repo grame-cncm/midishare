@@ -47,10 +47,10 @@ MSFunctionType(void) MSCall (TaskPtr task, unsigned long date, short r,
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
+		ext->val[0]= task;
+		ext->val[1]= (void*)a1;
+		ext->val[2]= (void*)a2;
+		ext->val[3]= (void*)a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 }
@@ -68,10 +68,10 @@ MSFunctionType(MidiEvPtr) MSTask (TaskPtr task, unsigned long date, short r,
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
+		ext->val[0]= task;
+		ext->val[1]= (void*)a1;
+		ext->val[2]= (void*)a2;
+		ext->val[3]= (void*)a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
@@ -90,10 +90,10 @@ MSFunctionType(MidiEvPtr) MSDTask (TaskPtr task, unsigned long date, short r,
 		Date(ev)= date;
 		RefNum(ev)= (uchar)r;
 		ext= LinkST(ev);
-		ext->val[0]= (long)task;
-		ext->val[1]= a1;
-		ext->val[2]= a2;
-		ext->val[3]= a3;
+		ext->val[0]= task;
+		ext->val[1]= (void*)a1;
+		ext->val[2]= (void*)a2;
+		ext->val[3]= (void*)a3;
 		fifoput (schedlist, (fifocell*)ev);
 	}
 	return ev;
@@ -109,7 +109,7 @@ MSFunctionType(void) MSForgetTask (MidiEvPtr *e)
 }
 
 /*__________________________________________________________________________________*/
-MSFunctionType(long) MSCountDTasks (short refnum, TClientsPtr g)
+MSFunctionType(atomic_long) MSCountDTasks (short refnum, TClientsPtr g)
 {
 	return CheckRefNum( g, refnum) ? fifosize (&g->appls[refnum]->dTasks) : 0;
 }

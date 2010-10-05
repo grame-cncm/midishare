@@ -79,12 +79,6 @@ enum { kClientFolder = 0, kDriverFolder = 255 };
 
 typedef struct TAppl{
     MSName          name;        /* the application name         */
-    TApplContextPtr context;     /* system dependent context     */
-    void*			info;        /* user field                   */
-    uchar           folder;      /* application folder           */
-    uchar           refNum;      /* reference number             */
-    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
-	uchar			unused[sizeof(void*)*2 - 3]; /* for alignment */
     RcvAlarmPtr     rcvAlarm;    /* rcv alarm pointer            */
     ApplAlarmPtr    applAlarm;   /* application alarm pointer    */
 
@@ -93,9 +87,17 @@ typedef struct TAppl{
 
     fifo            rcv;         /* received events fifo      */
     fifo            dTasks;      /* defered tasks fifo        */
+
+	TApplContextPtr context;     /* system dependent context     */
+    void*			info;        /* user field                   */
+    uchar           folder;      /* application folder           */
+    uchar           refNum;      /* reference number             */
+    uchar           rcvFlag;     /* <> 0 to call rcvAlarm        */
+	uchar			unused[sizeof(void*)*2 - 3]; /* for alignment */
  
     MidiFilterPtr   filter;      /* application filter        */
     TDriverPtr		driver;		 /* driver specific storage   */
+	void*			mem;
     
 } TAppl;
 

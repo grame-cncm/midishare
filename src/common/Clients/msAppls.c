@@ -40,7 +40,7 @@
 # define kMidiShareName 	"MidiShare"
 #endif
 
-#define FreeAppl(appl)		DisposeMemory(appl)
+#define FreeAppl(appl)		DisposeMemory(appl->mem)
 
 #define CheckApplRefNum( g, r) (CheckRefNum(g, r) && (g->appls[ref]->folder==kClientFolder))
 
@@ -76,7 +76,13 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 		}
 	}
 	if (CheckClientsCount(clients)) {
+		int mod; void* ptr;
 		appl = NewAppl (sizeof(TAppl));
+
+ptr = &appl->rcv;
+mod = (int)ptr%16;
+if (mod) printf("NewAppl %p fifo reste %d\n", appl, mod);
+
 		if (appl) {
 			for (ref = 1; clients->appls[ref]; ref++)
 				;
@@ -290,6 +296,20 @@ void closeClient (short ref, TMSGlobalPtr g)
 /*===========================================================================
   Internal functions implementation
   =========================================================================== */
+#define kMemAlign	16
+TApplPtr NewAppl(size)
+{
+	char * ptr;
+	int mod;
+	TApplPtr appl;
+
+	ptr = (char*)AllocateMemory(kernelSharedMemory, size + kMemAlign );
+	mod = (int)ptr % kMemAlign;
+	appl = (TApplPtr)(ptr + kMemAlign - mod);
+	appl->mem = ptr;
+	return appl;
+}
+
 void setName (MidiName dst, MidiName name)
 {
 #ifdef PascalNames
