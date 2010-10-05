@@ -621,7 +621,7 @@ void Sending()
 {
 	MidiEvPtr e, copy, get;
 	short r;
-	unsigned long free, time, n, count;
+	long free, time, n, count;
 
 	free= MidiFreeSpace();
 	print ("\nSending and receiving events :\n");
@@ -709,7 +709,7 @@ void Sending()
 /*____________________________________________________________________*/
 void Mail()
 {
-	long a= 1; void* b;
+	void* a= (void*)1; void* b;
 	
 	print ("\nMail boxes :\n");
 	print ("    MidiReadSync : ");flush;
@@ -723,9 +723,9 @@ void Mail()
 	b= MidiWriteSync( &a, (void* )2);
 	print ("%ld %s\n", (long)b, OK);
 
-	a=1;
+	a= (void*)1;
 	b= MidiWriteSync( &a, (void* )2);
-	if( a!= 2)
+	if( a!= (void*)2)
 		print ("Warning : not null variable but correctly set : %ld\n", a);
 	if( b!= (void*)1)
 		print ("Warning : incorrect return : %ld\n", (long)b);
@@ -806,7 +806,7 @@ void MSALARMAPI MyDTask( long unused1, short unused2, long a1,long a2,long a3)
 void Tasks( short isFreeMem)
 {
 	MidiEvPtr e;
-	unsigned long time, p1=0, p2=0, p3=0;
+	long time, p1=0, p2=0, p3=0;
 	
 	print ("\nTask Managing :\n");
 
@@ -819,7 +819,7 @@ void Tasks( short isFreeMem)
 	if( (p1!= 1) && isFreeMem)
 		print ("Warning : task not completed !\n");
 #endif			
-	print ("    MidiTask : ");flush;
+	print ("    MidiTask (%p): ", MyTask);flush;
 	p1= 0;
 	e= MidiTask( MyTask, time= MidiGetTime(), refNum, (long)&p1, (long)&p2, (long)&p3);
 	time+= 50;
