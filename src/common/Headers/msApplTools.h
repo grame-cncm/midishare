@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2000
+  Copyright ï¿½ Grame 2000
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -30,7 +30,7 @@
 #include "msKernel.h"
 
 //#define NewAppl(size)		(TApplPtr)AllocateMemory(kernelSharedMemory, size)
-TApplPtr NewAppl(size);
+TApplPtr NewAppl(int size);
 
 void makeClient (TClientsPtr g, TApplPtr ap, short ref, MidiName n, short folder);
 void clearClient (short ref, TMSGlobalPtr g);

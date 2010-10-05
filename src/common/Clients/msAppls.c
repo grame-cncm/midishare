@@ -291,7 +291,7 @@ void closeClient (short ref, TMSGlobalPtr g)
   Internal functions implementation
   =========================================================================== */
 #define kMemAlign	16
-TApplPtr NewAppl(size)
+TApplPtr NewAppl(int size)
 {
 	char * ptr;
 	int mod;
