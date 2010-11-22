@@ -79,7 +79,7 @@ short GetCnx (char * cnxString, short index)
 }
 
 //________________________________________________________________________
-char * GetProfileFullName (char * name)
+const char * GetProfileFullName (const char * name)
 {
 	static char  buff [1024];
 	const char* home = getenv("HOME");
@@ -117,7 +117,7 @@ int SaveConfigNum (char * section, char* key, int val, char* fullname)
 }
 
 //________________________________________________________________________
-void LoadSlot (char * section, char* fullname, char* drivername)
+void LoadSlot (const char * section, const char* fullname, const char* drivername)
 {
         SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(drivername),1);
         TSlotInfos infos;
@@ -137,8 +137,9 @@ void LoadSlot (char * section, char* fullname, char* drivername)
 			}
 		}
 }
+
 //________________________________________________________________________
-void SaveSlot (char * section, char* fullname, char* drivername)
+void SaveSlot (const char * section, const char* fullname, const char* drivername)
 {
         SlotRefNum refNum = MidiGetIndSlot(MidiGetNamedAppl(drivername),1);
         TSlotInfos infos;

@@ -35,13 +35,13 @@ static __inline Boolean CnxSeparator(char c) { return ((c)==' ') || ((c)=='	'); 
 unsigned short CountCnx (char * cnxString);
 short GetCnx (char * cnxString, short index);
 
-char * GetProfileFullName (char * name);
+const char * GetProfileFullName (const char * name);
 char* LoadConfig (char * section, char* key, char* fullname, char* def);
 unsigned long LoadConfigNum (char * section, char* key, char* fullname, int def);
 int SaveConfig (char * section, char* key, char* name, char* fullname);
 int SaveConfigNum (char * section, char* key, int val, char* fullname);
-void LoadSlot (char * section, char* fullname, char* drivername);
-void SaveSlot (char * section, char* fullname,char* drivername);
+void LoadSlot (const char * section, const char* fullname, const char* drivername);
+void SaveSlot (const char * section, const char* fullname, const char* drivername);
 
 #ifdef __cplusplus
 }
