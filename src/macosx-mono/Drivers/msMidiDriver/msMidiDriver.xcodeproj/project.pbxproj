@@ -25,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.8.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msMidiDriver.1.0.8.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.9.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = msMidiDriver.1.0.9.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BD92DF309EE52C2002DCEE0 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
 		4BD92E0309EE52D8002DCEE0 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		D36738BB124CE606006AB177 /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /Users/fober/src/midishare/src/cmake/Release/MidiShare.framework; sourceTree = "<absolute>"; };
@@ -82,7 +82,7 @@
 		F54A7D7A01FC781301053105 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.8.so */,
+				4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.9.so */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,7 +128,7 @@
 			);
 			name = "msMidiDriver Universal";
 			productName = "msMidiDriver Universal1";
-			productReference = 4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.8.so */;
+			productReference = 4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.9.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -232,7 +232,7 @@
 				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
-				PRODUCT_NAME = msMidiDriver.1.0.7;
+				PRODUCT_NAME = msMidiDriver.1.0.9;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
@@ -268,7 +268,7 @@
 				);
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
-				PRODUCT_NAME = msMidiDriver.1.0.8;
+				PRODUCT_NAME = msMidiDriver.1.0.9;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = NO;

@@ -109,18 +109,27 @@ void *  LoadLibrary(const char *filename, const char *symbol)
 {
 	void * handle = dlopen(filename, RTLD_LAZY);
 	Start fun ;
-	Boolean res;
         
-        if (!handle) { 
-            Report("MidiShare", "can't load driver", filename);
-        } else if ((fun = (Start)dlsym(handle,symbol)) && (res = (*fun)())){
-            return handle;
-        } else {
-            Report("MidiShare", "can't start driver", filename);
-            if (handle) 
-				dlclose(handle);
-	}
-	return 0;
+	if (!handle) { 
+		Report("MidiShare", "can't load driver", filename);
+		return 0;
+	} 
+
+	fun = (Start)dlsym(handle,symbol);
+//	if ((fun = (Start)dlsym(handle,symbol)) && (res = (*fun)())) {
+	if (!fun) {
+		Report("MidiShare", "can't find driver entry point", filename);
+		dlclose(handle);
+		return 0;
+	} 
+	
+	if (!(*fun)()) {
+		Report("MidiShare", "can't start driver", filename);
+		dlclose(handle);
+		return 0;
+	} 
+
+	return handle;
 }
 
 /*------------------------------------------------------------------------------*/
