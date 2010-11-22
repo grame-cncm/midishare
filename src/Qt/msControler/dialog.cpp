@@ -134,7 +134,7 @@ void Dialog::setPort(int value)		{ sendNote (fPitch, fVel, fChan, fPort = value)
 void Dialog::setProg(int value)		{ sendProg (fProg = value, fChan, fPort); }
 void Dialog::setMod(int value)		{ sendCtrl (1, fMod = value, fChan, fPort); }
 void Dialog::setVol(int value)		{ sendCtrl (7, fVol = value, fChan, fPort); }
-void Dialog::setPan(int value)		{ sendCtrl (10, fPan = value, fChan, fPort = value); }
+void Dialog::setPan(int value)		{ sendCtrl (10, fPan = value, fChan, fPort); }
 
 
 //_______________________________________________________________________________
