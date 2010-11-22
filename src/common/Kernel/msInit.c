@@ -32,6 +32,8 @@
 #include "msTime.h"
 #include "msAlarms.h"
 
+static int	initialized = 0;
+
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
@@ -42,11 +44,13 @@ MSFunctionType(long) MSGetError (TMSGlobalPtr g)
 
 MSFunctionType(void) MSSpecialInit( ulong defaultSpace, TMSGlobalPtr g)
 {
+	if (initialized) return;
 	g->error=MIDInoErr;
 	InitEvents ();
 	InitMemory(Memory(g), defaultSpace);
 	InitAppls (Clients(g), Memory(g));
 	InitTime( g);
+	initialized = 1;
 }
 
 MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
