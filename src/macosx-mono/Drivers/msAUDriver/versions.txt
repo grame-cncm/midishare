@@ -1,0 +1,4 @@
+msAUDriver versions
+
+1.0.0 - Nov. 2010 - first release 
+
