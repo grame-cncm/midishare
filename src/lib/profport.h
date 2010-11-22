@@ -21,10 +21,10 @@ extern "C" {
 #define write_private_profile_string   WritePrivateProfileString
 #define write_private_profile_int      WritePrivateProfileInt
 #else
-int get_private_profile_int      (char * section, char * entry, int def, char * file_name);
-int get_private_profile_string   (char * section, char * entry, char * def, char * buffer, int buffer_len, char * file_name);
-int write_private_profile_string (char * section, char * entry, char * buffer, char * file_name);
-int write_private_profile_int    (char * section, char * entry, int val, char * file_name);
+int get_private_profile_int      (const char * section, const char * entry, int def, const char * file_name);
+int get_private_profile_string   (const char * section, const char * entry, const char * def, char * buffer, int buffer_len, const char * file_name);
+int write_private_profile_string (const char * section, const char * entry, const char * buffer, const char * file_name);
+int write_private_profile_int    (const char * section, const char * entry, int val, const char * file_name);
 #endif
 
 #ifdef __cplusplus

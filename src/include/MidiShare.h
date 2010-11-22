@@ -365,10 +365,8 @@ enum{   MIDIOpenAppl=1,
 #define DrvNameLen 32
 
 #ifdef PascalNames
-    typedef unsigned char * MidiName;
 	typedef unsigned char	DriverName[DrvNameLen];
 #else
-    typedef char * MidiName;
 	typedef char   DriverName[DrvNameLen];
 #endif
 typedef DriverName SlotName;
@@ -400,7 +398,7 @@ typedef struct TDriverOperation {
 typedef struct TDriverInfos {
 	DriverName  name;
 	short 		version;
-	short 		slots;			// slots count - ignored at register time
+	short 		drvslots;
 	long		reserved[2];
 } TDriverInfos;
 
@@ -505,7 +503,7 @@ short 		MidiGetVersion		(void);
 
 short 		MidiCountAppls		(void);
 short 		MidiGetIndAppl 		(short index);		
-short 		MidiGetNamedAppl	(MidiName name);
+short 		MidiGetNamedAppl	(const char* name);
 long 		MidiGetError		();
  
 /*----------------------------- SMPTE synchronization -------------------------*/
@@ -520,14 +518,14 @@ long 		MidiSmpte2Time		(SmpteLocPtr loc);
 
 /*----------------------------- Open / close application ----------------------*/
 
-short 		MidiOpen 			(MidiName applName);
+short 		MidiOpen 			(const char* applName);
 void 		MidiClose 			(short refNum);	
 
 
 /*--------------------------- Application configuration -----------------------*/
 
-MidiName 	MidiGetName 		(short refNum);
-void 		MidiSetName 		(short refNum, MidiName applName);
+const char* 	MidiGetName 		(short refNum);
+void 		MidiSetName 		(short refNum, const char* applName);
 void* 		MidiGetInfo 		(short refNum);	
 void 		MidiSetInfo 		(short refNum, void* InfoZone);
 MidiFilterPtr 	MidiGetFilter 		(short refNum);
@@ -549,10 +547,10 @@ Boolean	MidiGetDriverInfos 	(short refnum, TDriverInfos * infos);
 
 /*-------------------------------- Slots management ---------------------------*/
 
-SlotRefNum	MidiAddSlot 		(short refnum, MidiName name, SlotDirection direction);
+SlotRefNum	MidiAddSlot 		(short refnum, const char* name, SlotDirection direction);
 SlotRefNum	MidiGetIndSlot		(short refnum, short index);
 void		MidiRemoveSlot 		(SlotRefNum slot);
-void		MidiSetSlotName 	(SlotRefNum slot, MidiName name);
+void		MidiSetSlotName 	(SlotRefNum slot, const char* name);
 Boolean		MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
 void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state);
 Boolean		MidiIsSlotConnected	(short port, SlotRefNum slot);

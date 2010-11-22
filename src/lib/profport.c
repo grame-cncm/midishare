@@ -22,12 +22,12 @@ History :
 #include "profport.h"   /* function prototypes in here */
 
 static int read_line (FILE *fp, char *bp, int size);
-static int read_section(FILE *fp, char *section);
-static int read_entry (FILE *fp, char *entry, char *buff, int size);
+static int read_section(FILE *fp, const char *section);
+static int read_entry (FILE *fp, const char *entry, char *buff, int size);
 static char * read_value (char *buff);
 static int read_int_value (char *buff, int def);
-static char * read_file (char *file);
-static char * str_search (char * buff, char * str, int stopCond);
+static char * read_file (const char *file);
+static char * str_search (char * buff, const char * str, int stopCond);
 
 /*****************************************************************
 * Function:     read_line()
@@ -53,7 +53,7 @@ static int read_line(FILE *fp, char *bp, int size)
 	return i;
 }
 
-static int read_section (FILE *fp, char *section)
+static int read_section (FILE *fp, const char *section)
 {  
 	char buff[MAX_LINE_LENGTH];
 	char t_section[MAX_LINE_LENGTH];
@@ -70,7 +70,7 @@ static int read_section (FILE *fp, char *section)
 	return 1;
  }
 
-static int read_entry (FILE *fp, char *entry, char *buff, int size)
+static int read_entry (FILE *fp, const char *entry, char *buff, int size)
 {  
 	int n, elen = strlen (entry);
 
@@ -111,7 +111,7 @@ static int read_int_value (char *buff, int def)
     return value[0] ? atoi(value) : def;
 }
  
-static char * read_file (char *file)
+static char * read_file (const char *file)
 {
 	FILE *fd = fopen (file,"r");
 	int size; char * buff = 0;
@@ -132,7 +132,7 @@ err:
 	return buff;
 }
  
-static char * str_search (char * buff, char * str, int stopCond)
+static char * str_search (char * buff, const char * str, int stopCond)
 {
 	char *ptr = buff;
 	int len = strlen (str);
@@ -153,8 +153,8 @@ static char * str_search (char * buff, char * str, int stopCond)
 *               <char *> file_name - the name of the .ini file to read from
 * Returns:      the value located at entry
 ***************************************************************************/
-int get_private_profile_int(char *section,
-    char *entry, int def, char *file_name)
+int get_private_profile_int(const char *section,
+    const char *entry, int def, const char *file_name)
 {   
     FILE *fp = fopen(file_name,"r");
     char buff[MAX_LINE_LENGTH];
@@ -179,8 +179,8 @@ err:
 * Returns:      the number of characters copied into the supplied buffer
 ***************************************************************************/
 
-int get_private_profile_string(char *section, char *entry, char *def,
-    char *buffer, int buffer_len, char *file_name)
+int get_private_profile_string(const char *section, const char *entry, const char *def,
+    char *buffer, int buffer_len, const char *file_name)
 {   
     FILE *fp = fopen (file_name,"r");
     char buff[MAX_LINE_LENGTH];
@@ -208,8 +208,8 @@ err:
  *              <char *> file_name - the name of the .ini file to read from
  * Returns:     TRUE if successful, otherwise FALSE
  ***************************************************************************/
-int write_private_profile_string(char *section,
-    char *entry, char *buffer, char *file_name)
+int write_private_profile_string(const char *section,
+    const char *entry, const char *buffer, const char *file_name)
 
 {
 	char * content = read_file(file_name);
@@ -271,8 +271,8 @@ end:
  * Returns:     TRUE if successful, otherwise FALSE
  ***************************************************************************/
  
-int write_private_profile_int(char *section,
-    char *entry, int val, char *file_name)
+int write_private_profile_int(const char *section,
+    const char *entry, int val, const char *file_name)
 {
     char buffer [64];
     sprintf(buffer, "%d", val);

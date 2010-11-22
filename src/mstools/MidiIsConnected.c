@@ -55,7 +55,7 @@ Boolean CheckRef (int ref)
 }
 
 //_______________________________________________________________________
-int GetAppl (MidiName name)
+int GetAppl (const char* name)
 {
 	int ref;
 	if (sscanf (name, "%d", &ref)) return ref;
