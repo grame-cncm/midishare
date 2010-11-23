@@ -25,7 +25,7 @@
 
 #include "msMidiDriver.h"
 
-char * GetProfileFullName (char * name);
+const char * GetProfileFullName (const char * name);
 void SaveState (SlotPtr in, SlotPtr out, char* fullname);
 void LoadState (SlotPtr in, SlotPtr out, char* fullname);
 
