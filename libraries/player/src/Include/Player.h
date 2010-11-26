@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2006
+  Copyright ï¿½ Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -24,15 +24,15 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-/*------------------------------------------------------------------*/
-/*  Player: a library to develop  multi-tracks synchronisable MidiShare sequencers
-/*
-/*  version 1.00
-/*  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions.
-/*  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, new SetTempoPlayer function.
-/*  version 2.06  24/10/03  New SetPosTicks and Version functions, ticks field in PlayerState.
-/*
-/*------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+ *  Player: a library to develop  multi-tracks synchronisable MidiShare sequencers
+ *
+ *  version 1.00
+ *  version 1.11  08/12/97  New InsertAllTrackPlayer and InsertTrackPlayer functions.
+ *  version 2.00  03/30/99  Complete rewrite of the library, new kExternalSync mode, new SetTempoPlayer function.
+ *  version 2.06  24/10/03  New SetPosTicks and Version functions, ticks field in PlayerState.
+ *
+ *------------------------------------------------------------------*/
 
 #include <MidiShare.h>
 

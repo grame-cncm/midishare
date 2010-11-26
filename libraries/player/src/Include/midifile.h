@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2004
+  Copyright ï¿½ Grame 2004
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -33,7 +33,7 @@
 # define FAR
 # define NEAR
 # define MFAPI
-# define errno  /* a revoir */
+//# define errno  /* a revoir */
 
 #elif defined(mac_classic)
 # include <midisharePPC.h>

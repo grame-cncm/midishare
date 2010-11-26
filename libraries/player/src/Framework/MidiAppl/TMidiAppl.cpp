@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2006
+  Copyright ï¿½ Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -142,10 +142,10 @@ void TMidiAppl::Close()
 			ext->ptr3 = (Ptr)a2;
 			ext->ptr4 = (Ptr)a3;
 		#else
-			ext->val[0] = (long)routine;
-			ext->val[1] = (long)a1;
-			ext->val[2] = (long)a2;
-			ext->val[3] = (long)a3;
+			ext->val[0] = routine;
+			ext->val[1] = a1;
+			ext->val[2] = a2;
+			ext->val[3] = a3;
 		#endif
 		*adr = ev;
 		MidiSend(fRefnum, ev);

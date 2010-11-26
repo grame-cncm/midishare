@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2004
+  Copyright ï¿½ Grame 2004
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -60,6 +60,10 @@
 # include <String.h>
 #define true 1
 #define false 0
+#endif
+
+#ifndef true
+enum { false, true };
 #endif
 
 #ifdef __linux__
@@ -312,11 +316,11 @@ static unsigned long LongValSwap(long val)
 	#ifdef __POWERPC__
 		#define LongVal(val) LongValDirect(val)
 		#define ShortVal(val) ShortValDirect(val)
-	#endif
-
-	#ifdef __i386__
+	#elifdef __i386__
 		#define LongVal(val) LongValSwap(val)
 		#define ShortVal(val) ShortValSwap(val)
+	#else
+		#error undefined indianness
 	#endif
 #endif
 
@@ -800,7 +804,7 @@ static Boolean write_note(MIDIFilePtr f, MidiEvPtr ev, short status)
 	FILE *fd;
 	
 	fd= f->fd;
-	if( c = MidiCopyEv( ev))
+	if( (c = MidiCopyEv( ev)) )
 	{
 		EvType(c)= typeKeyOff;
 		Vel(c) = 0;
@@ -1046,7 +1050,7 @@ static MidiEvPtr read_text(MIDIFilePtr fd, long len, short type)
 {
 	MidiEvPtr ev=nil;
 
-	if( ev= MidiNewEv( type + 133))
+	if( (ev= MidiNewEv( type + 133)) )
 	{
 		fd->_cnt-= len;
 		while( len--)
@@ -1076,7 +1080,7 @@ static MidiEvPtr read_tempo(MIDIFilePtr fd, long len, short unused1)
 	
 	if (len != MDF_TempoLen) 			/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeTempo))
+	else if( (ev= MidiNewEv( typeTempo)) )
 	{
 		tempo= (long)getc(fd->fd);
 		tempo <<= 8;
@@ -1097,7 +1101,7 @@ static MidiEvPtr read_keySign(MIDIFilePtr fd, long len, short unused1)
 
 	if (len != MDF_TonLen) 				/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeKeySign))
+	else if( (ev= MidiNewEv( typeKeySign)) )
 	{
 		KSTon( ev)= getc(fd->fd);
 		KSMode( ev)= getc(fd->fd);
@@ -1114,7 +1118,7 @@ static MidiEvPtr read_timeSign(MIDIFilePtr fd, long len, short unused1)
 
 	if (len != MDF_MeasLen) 			/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeTimeSign))
+	else if( (ev= MidiNewEv( typeTimeSign)) )
 	{
 		TSNum( ev)= getc(fd->fd);
 		TSDenom( ev)= getc(fd->fd);
@@ -1134,7 +1138,7 @@ static MidiEvPtr read_seqNum(MIDIFilePtr fd, long len, short unused1)
 
 	if (len != MDF_NumSeqLen) 			/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeSeqNum))
+	else if( (ev= MidiNewEv( typeSeqNum)) )
 	{
 		num= getc(fd->fd);
 		num <<= 8;
@@ -1153,7 +1157,7 @@ static MidiEvPtr read_chanPref(MIDIFilePtr fd, long len, short unused1)
 
 	if (len != MDF_ChanPrefLen) 		/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeChanPrefix))
+	else if( (ev= MidiNewEv( typeChanPrefix)) )
 	{
 		ChanPrefix(ev)= getc(fd->fd);
 		fd->_cnt-= len;
@@ -1170,7 +1174,7 @@ static MidiEvPtr read_portPref(MIDIFilePtr fd, long len, short unused1)
 	/*  read only if MidiShare version > 185 to avoid error */
 	if ((MidiGetVersion () < 185) || (len != MDF_PortPrefLen)) 		/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typePortPrefix)) { 
+	else if( (ev= MidiNewEv( typePortPrefix)) ) { 
 		PortPrefix(ev)= getc(fd->fd);
 		fd->_cnt-= len;
 	}
@@ -1186,7 +1190,7 @@ static MidiEvPtr read_smpte(MIDIFilePtr fd, long len, short unused1)
 
 	if (len != MDF_OffsetLen) 			/* message length */
 		mdf_ignoreEv( fd, len);
-	else if( ev= MidiNewEv( typeSMPTEOffset))
+	else if( (ev= MidiNewEv( typeSMPTEOffset)) )
 	{
 		tmp= getc(fd->fd)* 3600;		/* hours -> sec.		*/
 		tmp+= getc(fd->fd)* 60;			/* min.  -> sec.		*/
@@ -1277,7 +1281,7 @@ static MidiEvPtr read_stream(MIDIFilePtr fd, short status)
 	unsigned long len;
 	short c;
 
-	if( ev= MidiNewEv(typeStream))
+	if( (ev= MidiNewEv(typeStream)) )
 	{
 		MidiAddField( ev, status);			/* store the first byte in the stream event */
 		len= ReadVarLen1( fd, ev);			/* message length bytes are put in the stream event	*/
@@ -1300,7 +1304,7 @@ static MidiEvPtr read_2DataEv(MIDIFilePtr fd, short status)
 {
 	MidiEvPtr ev;
 
-	if( ev= MidiNewEv( typeTbl[status & 0x7F]))	/* event allocation	*/
+	if( (ev= MidiNewEv( typeTbl[status & 0x7F])) )	/* event allocation	*/
 	{
 		Data( ev)[0]= getc( fd->fd);			/* store the first data */
 		Data( ev)[1]= getc( fd->fd);			/* and the 2nd data		*/
@@ -1315,7 +1319,7 @@ static MidiEvPtr read_1DataEv(MIDIFilePtr fd, short status)
 {
 	MidiEvPtr ev;
 	
-	if( ev= MidiNewEv( typeTbl[status & 0x7F]))	/* event allocation	*/
+	if( (ev= MidiNewEv( typeTbl[status & 0x7F])) )	/* event allocation	*/
 	{
 		Data( ev)[0]= getc( fd->fd);			/* store the data	*/
 		fd->_cnt--;
@@ -1364,7 +1368,7 @@ static MidiEvPtr ReadEv(MIDIFilePtr fd)
 	}
 	if( c)
 	{
-		if( ev= (* ReadEvTbl[(c<SysEx) ? (c & 0x7F)/16 : c- SysEx+7])( fd, c))
+		if( (ev= (* ReadEvTbl[(c<SysEx) ? (c & 0x7F)/16 : c- SysEx+7])( fd, c)) )
 			if( c < SysEx)
 				Canal(ev)= c%16;
 	}
@@ -1389,7 +1393,7 @@ MidiEvPtr MFAPI MidiFileReadEv(MIDIFilePtr fd)
 		if( fd->_cnt > 0)					/* if there are events to read	*/
 		{
 			if( mdf_GetDate( fd))			/* read the next event date		*/
-				if( ev= ReadEv( fd))		/* read the event				*/
+				if( (ev= ReadEv( fd)) )		/* read the event				*/
 					Date( ev)= fd->curDate;	/* store its date				*/
 		}
 		else fd->opened= false;				/* otherwise: close the track	*/
@@ -1406,9 +1410,9 @@ MidiSeqPtr MFAPI MidiFileReadTrack(MIDIFilePtr fd)
 	
 	MidiFile_errno= MidiFileNoErr;
 	if( MidiFileOpenTrack( fd)) {					/* open the track			*/
-		if( seq= MidiNewSeq()) {					/* allocate a sequence 		*/
+		if( (seq= MidiNewSeq()) ) {					/* allocate a sequence 		*/
 			while( isTrackOpen( fd)) {			/* while there are events	*/
-				if( ev= MidiFileReadEv( fd)) {	/* read these events		*/
+				if( (ev= MidiFileReadEv( fd)) ) {	/* read these events		*/
 					if( !seq->first)			/* store them to the seq 	*/
 						seq->first= seq->last= ev;
 					else {
@@ -1483,14 +1487,14 @@ MIDIFilePtr MFAPI MidiFileOpen( const char *filename, short mode)
 	const char *stdMode;			/* standard opening mode	*/
 	
 	MidiFile_errno= MidiFileNoErr;
-	if( fd= (MIDIFilePtr)malloc( sizeof( midiFILE)))
+	if( (fd= (MIDIFilePtr)malloc( sizeof( midiFILE))) )
 	{
 		fd->fd= nil;
 		fd->mode= 0;								/* standard initialization	*/
 		if( (stdMode= mdf_getStdMode( mode)) &&		/* opening mode control		*/
 			(fd->fd= fopen( filename, stdMode)))	/* file opening				*/
 		{			
-			if( ok= ReadMdfHeader( fd))				/* read the file header		*/
+			if( (ok= ReadMdfHeader( fd))	)			/* read the file header		*/
 			{
 				if( fd->format== midifile0 && mode== MidiFileAppend)
 				{									/* error :					*/
@@ -1521,9 +1525,9 @@ MIDIFilePtr MFAPI MidiFileCreate( const char *name, short format, short timeDef,
 	short time;						/* time representation 		*/
 	
 	MidiFile_errno= MidiFileNoErr;
-	if( fd= (MIDIFilePtr )malloc( sizeof( midiFILE)))
+	if( (fd= (MIDIFilePtr )malloc( sizeof( midiFILE))) )
 	{
-		if( fd->fd= fopen( name, "wb+"))		/* open the file	*/
+		if( (fd->fd= fopen( name, "wb+")) )		/* open the file	*/
 		{
 			fd->mode= true;						/* writing mode		*/
 			fd->ntrks= 0;						/* tracks count = 0	*/
@@ -1534,7 +1538,7 @@ MIDIFilePtr MFAPI MidiFileCreate( const char *name, short format, short timeDef,
 				time|= (char) ticks;
 			}
 			else time= ticks & 0x7FFF;
-			if( ok= stdInit( fd))				/* standard initialization	*/
+			if( (ok= stdInit( fd)) )			/* standard initialization	*/
 				ok= Create_mdfHeader( fd, format, fd->time= time);
 		}
 		else ok= false;

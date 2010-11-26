@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2004
+  Copyright ï¿½ Grame 1996-2004
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -22,25 +22,25 @@
 
 /*****************************************************************************/
 /* MidiPlayer.c : JNI interface to the Player library
-/*
-/* Copyright GRAME May 1996-1999
-/*
-/* MidiShare home page : http://www.grame.fr/MidiShare.html
-/*
-/* Bug & comments report : MidiShare@rd.grame.fr
-/*	
-/* History : 1/06/96  version 1.00
-/*           15/07/96 version 1.01  correction retour de certaines fonctions
-/*           16/07/96 version 1.02  MidiShare package management
-/*           ??/??/?? version 1.03
-/*           08/10/96 version 1.04  Packages names in unsercase
-/*           26/07/97 version 1.07  New InsertAllTrack and InsertTrack functions
-/*           25/11/97 version 1.08  NewSetTempo function and kExternalSync mode
-/*           28/11/97 version 1.09  JNI compatible
-/*	         06/11/02 version 1.10  Add null pointer checking for objects coming from Java side
-/*           ??/??/?? version 1.11  Intel version 
-/*           01/08/06 version 1.12  Use of JNI string
-/*****************************************************************************/
+ *
+ * Copyright GRAME May 1996-1999
+ *
+ * MidiShare home page : http://www.grame.fr/MidiShare.html
+ *
+ * Bug & comments report : MidiShare@rd.grame.fr
+ *	
+ * History : 1/06/96  version 1.00
+ *           15/07/96 version 1.01  correction retour de certaines fonctions
+ *           16/07/96 version 1.02  MidiShare package management
+ *           ??/??/?? version 1.03
+ *           08/10/96 version 1.04  Packages names in unsercase
+ *           26/07/97 version 1.07  New InsertAllTrack and InsertTrack functions
+ *           25/11/97 version 1.08  NewSetTempo function and kExternalSync mode
+ *           28/11/97 version 1.09  JNI compatible
+ *	         06/11/02 version 1.10  Add null pointer checking for objects coming from Java side
+ *           ??/??/?? version 1.11  Intel version 
+ *           01/08/06 version 1.12  Use of JNI string
+ *****************************************************************************/
 
 #include <Player.h>
 #include "MidiPlayer.h"
