@@ -67,7 +67,7 @@ Boolean		doneFlag;
 State 		gState;
 short 		gResFile;
 
-SysEnvRec	gMac;
+//SysEnvRec	gMac;
 Boolean		hasWNE;
 Boolean		foreGround;
 

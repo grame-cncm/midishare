@@ -12,7 +12,7 @@ endif(WIN32)
 
 #######################################
 # versions management
-set (VERSION 1.93)
+set (VERSION B)
 set (STRVERS "v.1.93")
 set (SSTRVERS "1.93")
 
@@ -70,8 +70,8 @@ set (PUBLICHEADERS ${SRC_PATH}/include)
 foreach(folder ${HEADERS_PATH})
 	set(HEADERS ${HEADERS} "${folder}/*.h")		# add header files
 endforeach(folder)
-file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS})
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${PUBLICHEADERS}/*.h")
+file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS})
 
 #######################################
 # set includes
@@ -96,24 +96,26 @@ endif(WIN32)
 # set library target
 if(WIN32)
 	enable_language(RC)
-	set(LIBCONTENT ${LIBSRC} ${LIBH} ${ROOT_PATH}/win-mono/midishare.rc)
+	set(LIBCONTENT ${LIBSRC} ${LIBH} ${PUBLICHEADERS} ${ROOT_PATH}/win-mono/midishare.rc)
 	set(LINK_FLAGS /ENTRY:"DllEntryPoint")
 else(WIN32)
-	set(LIBCONTENT ${LIBSRC} ${LIBH})
+	set(LIBCONTENT ${LIBSRC} ${LIBH} ${PUBLICHEADERS})
 endif(WIN32)
 
 
 add_library(${target} SHARED ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES
 			FRAMEWORK TRUE
-			PUBLIC_HEADER "${PUBLICHEADERS}"
 			VERSION ${VERSION}
+			FRAMEWORK_VERSION ${VERSION}
+			PUBLIC_HEADER "${PUBLICHEADERS}"
 			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
 			MACOSX_FRAMEWORK_BUNDLE_VERSION ${SSTRVERS}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION "A"
 )
 if(WIN32)
 set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
+elseif(APPLE)
+set_target_properties (${target} PROPERTIES LINK_FLAGS -flat_namespace)
 endif(WIN32)
 
 target_link_libraries (${target} ${LINK})
