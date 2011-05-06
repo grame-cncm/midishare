@@ -362,7 +362,7 @@ JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetName
   (JNIEnv * env, jclass cl, jint refnum) {
   
 	MidiName midiname = MidiGetName(refnum);
-	return (*env)->NewStringUTF(env,midiname);
+	return (*env)->NewStringUTF(env, (midiname ? midiname : ""));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -374,7 +374,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetNamedAppl
 	  jint refNum;
 
 	  applName = (*env)->GetStringUTFChars(env, midiname, NULL);
-	  if (applName == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	  if (applName == NULL) { return 0; /* OutOfMemoryError already thrown */ }
 	  refNum = (jint)MidiGetNamedAppl(applName);
 	  (*env)->ReleaseStringUTFChars(env, midiname, applName); 
 	  return refNum;
@@ -515,7 +515,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Open
 	jint refNum;
 
 	midiname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (midiname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	if (midiname == NULL) { return 0; /* OutOfMemoryError already thrown */ }
 	refNum = (jint) MidiOpen(midiname);
 	(*env)->ReleaseStringUTFChars(env, str, midiname); 
 	return refNum;
@@ -593,9 +593,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetName
 	const char *midiname;
 
 	midiname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (midiname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
-	MidiSetName(ref,midiname);
-	(*env)->ReleaseStringUTFChars(env, str, midiname); 
+	if (midiname) {
+		MidiSetName(ref,midiname);
+		(*env)->ReleaseStringUTFChars(env, str, midiname); 
+	}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -1131,7 +1132,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AddSlot
  	const char *slotname;
 
 	slotname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (slotname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	if (slotname == NULL) { return 0; /* OutOfMemoryError already thrown */ }
 	
 	ref =  MidiAddSlot(refnum, slotname,(SlotDirection)slotdirection);
 
@@ -1221,9 +1222,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetSlotName
 	const char *slotname;
 
 	slotname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (slotname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
-	MidiSetSlotName(*(SlotRefNum *)&slotrefnum, slotname);
-	(*env)->ReleaseStringUTFChars(env, str, slotname); 
+	if (slotname) {
+		MidiSetSlotName(*(SlotRefNum *)&slotrefnum, slotname);
+		(*env)->ReleaseStringUTFChars(env, str, slotname); 
+	}
 }
 
 int main () {return 0;}
