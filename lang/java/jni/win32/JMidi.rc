@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "mshare32.rh"
 
@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// French (France) resources
+// Français (France) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
 #ifdef _WIN32
@@ -21,15 +21,14 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 #pragma code_page(1252)
 #endif //_WIN32
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,1,0
- PRODUCTVERSION 1,1,1,0
+ FILEVERSION 1,1,2,0
+ PRODUCTVERSION 1,1,2,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -44,18 +43,15 @@ BEGIN
     BEGIN
         BLOCK "040c04b0"
         BEGIN
-            VALUE "Comments", "32 bits JMidi JNI Library 1.11\0"
-            VALUE "CompanyName", "Grame\0"
-            VALUE "FileDescription", "JMidi\0"
-            VALUE "FileVersion", "1, 1, 1, 0\0"
-            VALUE "InternalName", "JMidi JNI 32 bits 1.11\0"
-            VALUE "LegalCopyright", "Copyright © GRAME 1996,2005\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "JMidi.dll\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "JMidi Shared Library\0"
-            VALUE "ProductVersion", "1, 1, 1, 0\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "Comments", "32 bits JMidi JNI Library 1.12"
+            VALUE "CompanyName", "Grame"
+            VALUE "FileDescription", "JMidi"
+            VALUE "FileVersion", "1, 1, 2, 0"
+            VALUE "InternalName", "JMidi JNI 32 bits 1.12"
+            VALUE "LegalCopyright", "Copyright © GRAME 1996,2011"
+            VALUE "OriginalFilename", "JMidi.dll"
+            VALUE "ProductName", "JMidi Shared Library"
+            VALUE "ProductVersion", "1, 1, 2, 0"
         END
     END
     BLOCK "VarFileInfo"
@@ -64,8 +60,6 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -73,18 +67,18 @@ END
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "mshare32.rh\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -92,7 +86,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // French (France) resources
+#endif    // Français (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
