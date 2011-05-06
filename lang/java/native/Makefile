@@ -1,3 +1,7 @@
+
+VERSION = 1.1.2
+F = msjni-$(VERSION)
+
 SRC = $(shell find grame -name "*.java")
 CLASS = $(patsubst %.java, %.class, $(SRC) )
 JAVA  = java
@@ -8,6 +12,13 @@ JAVA  = java
 class : $(CLASS)
 
 jar : grame.jar
+
+zip : grame.jar JMidi.dll
+	[ -d $(F) ] || mkdir $(F)
+	rm -rf $(F)/*
+	cp grame.jar $(F)
+	cp JMidi.dll $(F)
+	cp ../../jni/src/changelog.txt $(F)
 
 folder :
 	-[ -d grameclasses ] && rm -rf grameclasses
