@@ -69,8 +69,8 @@ public class MidiAppl {
 
 		public int filter = 0;
 		
-		private native final int  	ApplOpen(int ref,int mode);
-		private native final void  	ApplClose(int ref);		
+		private native final synchronized int  	ApplOpen(int ref,int mode);
+		private native final synchronized void  ApplClose(int ref);		
 		
 		/**
 		The <b>ReceiveAlarm</b> method is automatically called 
@@ -82,7 +82,7 @@ public class MidiAppl {
 	 	be used by the method: either re-sended, or desallocated or kept in a data structure.
 	 	*/
 		
-		public void ReceiveAlarm(int event){ Midi.FreeEv(event);}
+		public synchronized void ReceiveAlarm(int event){ Midi.FreeEv(event);}
 	
 		/**
 		The <b>ApplAlarm</b> method is automatically 
@@ -94,7 +94,7 @@ public class MidiAppl {
       	*@see grame.midishare.Midi  	 
  		*/
 
-		public void ApplAlarm(int code) {}
+		public synchronized void ApplAlarm(int code) {}
 						
 		/**
 		Schedule a MidiTask object to be executed at a given date.
@@ -190,15 +190,21 @@ public class MidiAppl {
 
 		public void Close()
 		{
-			if (filter != 0){
+ //System.out.println("Close... " + refnum);
+ 			if (filter != 0){
 				Midi.SetFilter(refnum, 0);
 				Midi.FreeFilter(filter);
 				filter = 0;
 			}
 				
 			if (refnum > 0){
-				if (appl != null) appl.Close();
+				if (appl != null) {
+ //System.out.println("appl close...");
+					appl.Close();
+				}
+ //System.out.println("ApplClose...");
 				ApplClose(refnum);
+ //System.out.println("MidiClose...\n");
 				Midi.Close(refnum);
 				refnum = -1; 
 			}
