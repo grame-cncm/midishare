@@ -145,12 +145,12 @@ static void MSALARMAPI ReceiveAlarm(short ref)
 		WakeUpProcess(&gJavaProcess);
 	}
 #else
-	ApplContext* context = MidiGetInfo(ref);
-		
+	ApplContext* context = MidiGetInfo(ref);	
+//printf("ReceiveAlarm %d\n", ref);
 	if (context && CheckThreadEnv(context)) {   
 		(*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, context->fObj, context->fMid);
 	}else{
-		printf("ReceiveAlarm error : cannot callback Java MidiEventLoop\n");
+		printf("ReceiveAlarm error : cannot callback Java MidiEventLoop (%d)\n", ref);
 	}
 #endif
 }
@@ -211,14 +211,17 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
   (JNIEnv * env, jobject obj, jint ref) 
 {
 	ApplContext* context = MidiGetInfo(ref);
-	
+//	MidiSetRcvAlarm (ref, 0);
+//	MidiClose(ref);
+//printf("midiappl close %d %p\n", ref, context);
 	if (context) {
 		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fClass);
 		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fObj);
         // 21/04/2009 
-        (*env)->DeleteGlobalRef(env, context->fClass);
+		(*env)->DeleteGlobalRef(env, context->fClass);
         (*env)->DeleteGlobalRef(env, context->fObj);
 		free(context);
+		MidiSetInfo (ref, 0);
 	}
 		
 #if defined( __Macintosh__) && defined( __MacOS9__)
