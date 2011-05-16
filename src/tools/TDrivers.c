@@ -107,7 +107,7 @@ static void MSALARMAPI wakeup (short refnum);
 static void MSALARMAPI sleep  (short refnum);
 static void MSALARMAPI silentwakeup (short refnum);
 static void MSALARMAPI silentsleep  (short refnum);
-static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos);
+//static Boolean	slotInfo (SlotRefNum slot, TSlotInfos * infos);
 
 TDriverOperation gDrvOp   	 = { wakeup, sleep, 0, 0, 0 };
 TDriverOperation gSilentOp   = { silentwakeup, silentsleep, 0, 0, 0 };
@@ -487,6 +487,7 @@ static void printReceived()
 }
 
 /*____________________________________________________________________*/
+/*
 static void countReceived()
 {
 	MidiEvPtr e = gReceived;
@@ -498,6 +499,7 @@ static void countReceived()
 	print ("received events count is %ld\n", n);
 	print ("free space is %ld\n", MidiFreeSpace());
 }
+*/
 
 /*____________________________________________________________________*/
 static void sendev (short port, short ref, Boolean shouldReceive)

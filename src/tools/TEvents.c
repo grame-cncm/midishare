@@ -126,7 +126,7 @@ static int GetNote( MidiEvPtr e);
 static int GetEvents( MidiEvPtr e);
 static int GetNoExt( MidiEvPtr e);
 static int GetPrivate( MidiEvPtr e);
-static int GetCtrl( MidiEvPtr e);
+//static int GetCtrl( MidiEvPtr e);
 static int GetNothing( MidiEvPtr e);
 
 
@@ -277,6 +277,7 @@ static int CompareEv( MidiEvPtr e, short refnum, char *src)
 }
 
 /*______________________________________________________________________________*/
+/*
 static int CompareStream( MidiEvPtr e, short refnum, char *src)
 {
 	long f1, f2, i;
@@ -313,8 +314,10 @@ static int CompareStream( MidiEvPtr e, short refnum, char *src)
 	else print("\n%s : MidiAvailEv return nil ", src);
 	return false;
 }
+*/
 
 /*______________________________________________________________________________*/
+/*
 static int CompareCtrl14b( MidiEvPtr e)
 {
 	MidiEvPtr a, b;
@@ -342,8 +345,10 @@ static int CompareCtrl14b( MidiEvPtr e)
 	else print("\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
+*/
 
 /*______________________________________________________________________________*/
+/*
 static int CompareRegParam( MidiEvPtr e)
 {
 	MidiEvPtr a, b, c, d;
@@ -382,6 +387,7 @@ static int CompareRegParam( MidiEvPtr e)
 	else print("\n%s : MidiAvailEv return nil ", "ext");
 	return ret;
 }
+*/
 
 /*______________________________________________________________________________*/
 static int GetEvents( MidiEvPtr e)
@@ -456,6 +462,7 @@ static int GetPrivate( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
+/*
 static int GetCtrl( MidiEvPtr e)
 {
 	long n1, n2;
@@ -479,8 +486,10 @@ static int GetCtrl( MidiEvPtr e)
 		ret &= CompareEv( e, r2, "int");
 	return ret;
 }
+*/
 
 /*______________________________________________________________________________*/
+/*
 static int CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 {
 	short dc;
@@ -511,6 +520,7 @@ static int CmpKeyOnOff( MidiEvPtr e1, MidiEvPtr e2, short d)
 	Dur(e1)= dc;
 	return ret;
 }
+*/
 
 /*______________________________________________________________________________*/
 static int GetNote( MidiEvPtr e)

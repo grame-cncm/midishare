@@ -68,7 +68,7 @@ char *gOK = " OK";
 
 #define noEvts		print("\nno more MidiShare events !\n")
 #define ok			print("%s\n", gOK)
-#define WrongCount(expected,received)	print("\nWarning: wrong fifo content: expected %ld, received %ld", expected,received)
+#define WrongCount(expected,received)	print("\nWarning: wrong fifo content: expected %ld, received %ld", (long)expected, (long)received)
 
 /* ================================ ev type names ==============================*/
 char *typeListe[] =
@@ -175,7 +175,7 @@ int OpenAppl()
 }
 
 /*______________________________________________________________________________*/
-static CmpCommon( MidiEvPtr o, MidiEvPtr c)
+static int CmpCommon( MidiEvPtr o, MidiEvPtr c)
 {
 	int ret= true;
 	
@@ -198,7 +198,7 @@ static CmpCommon( MidiEvPtr o, MidiEvPtr c)
 }
 
 /*______________________________________________________________________________*/
-static CmpEv( register MidiEvPtr o, register MidiEvPtr c)
+static int CmpEv( register MidiEvPtr o, register MidiEvPtr c)
 {
 	long f1, f2, i;
 	
@@ -220,7 +220,7 @@ static CmpEv( register MidiEvPtr o, register MidiEvPtr c)
 }
 
 /*______________________________________________________________________________*/
-static CompareEv( MidiEvPtr e, short refnum)
+static int CompareEv( MidiEvPtr e, short refnum)
 {
 	Boolean ret = false;
 	MidiEvPtr get = MidiGetEv (refnum);
@@ -235,7 +235,7 @@ static CompareEv( MidiEvPtr e, short refnum)
 
 
 /*______________________________________________________________________________*/
-static CompareCtrl14b (MidiEvPtr e)
+static int CompareCtrl14b (MidiEvPtr e)
 {
 	MidiEvPtr a, b;
 	long v1, v2;
@@ -264,7 +264,7 @@ static CompareCtrl14b (MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static CompareRegParam( MidiEvPtr e)
+static int CompareRegParam( MidiEvPtr e)
 {
 	MidiEvPtr a, b, c, d;
 	long v1, v2, v3, v4;
@@ -304,9 +304,9 @@ static CompareRegParam( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static CompareStream( MidiEvPtr e, short refnum)
+static int CompareStream( MidiEvPtr e, short refnum)
 {
-	Boolean ret = false; long f1, f2, i;
+	long f1, f2, i;
 	MidiEvPtr get = MidiGetEv( refnum);
 	
 	if (get) {
@@ -338,13 +338,15 @@ err:
 }
 
 /*______________________________________________________________________________*/
-static GetRegAndNonReg( MidiEvPtr e)
+/*
+static int GetRegAndNonReg( MidiEvPtr e)
 {
 	return CompareEv (e, r1);
 }
+*/
 
 /*______________________________________________________________________________*/
-static GetEvents( MidiEvPtr e)
+static int GetEvents( MidiEvPtr e)
 {
 	long n = MidiCountEvs (r1);
 	if (n!= 1) WrongCount(1, n);
@@ -353,7 +355,7 @@ static GetEvents( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetStream (MidiEvPtr e)
+static int GetStream (MidiEvPtr e)
 {
 	long n = MidiCountEvs (r1);
 	if (n!= 1) WrongCount(1, n);
@@ -362,7 +364,7 @@ static GetStream (MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetNothing( MidiEvPtr unused)
+static int GetNothing( MidiEvPtr unused)
 {
 	long n = MidiCountEvs (r1);
 	if( n) WrongCount(0, n);
@@ -371,7 +373,7 @@ static GetNothing( MidiEvPtr unused)
 }
 
 /*______________________________________________________________________________*/
-static GetNoExt( MidiEvPtr e)
+static int GetNoExt( MidiEvPtr e)
 {
 	long n = MidiCountEvs (r1);
 	if (n!= 1) WrongCount(1, n);
@@ -380,14 +382,14 @@ static GetNoExt( MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetPrivate( MidiEvPtr e)
+static int GetPrivate( MidiEvPtr e)
 {
 	print("\nWarning : private event received\n");
 	return false;
 }
 
 /*______________________________________________________________________________*/
-static GetCtrl (MidiEvPtr e)
+static int GetCtrl (MidiEvPtr e)
 {
 	long n, expected;
 	int ret= false, type;
@@ -415,7 +417,7 @@ static GetCtrl (MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-static GetNote( MidiEvPtr e)
+static int GetNote( MidiEvPtr e)
 {
 	long n;	int ret= false;
 
@@ -463,7 +465,7 @@ static void SetMSEvent( MidiEvPtr e, Boolean display)
 }
 
 /*______________________________________________________________________________*/
-static TestEvent( short i, Boolean display)
+static int TestEvent( short i, Boolean display)
 {
 	MidiEvPtr e, copy;
 	int ret= false;
@@ -535,7 +537,7 @@ void SystemeEx()
 		else {
 			MidiSendIm (r1, copy); _wait( 40);
 			if (!GetEvents(e)) {
-				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %ld length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				goto failed;
 			}
@@ -587,7 +589,7 @@ void Stream()
 		else {
 			MidiSendIm( r1, copy); _wait(50);
 			if (!GetStream( e)) {
-				print("\n      loop %d length %ld\n", n+1, MidiCountFields(e));
+				print("\n      loop %ld length %ld\n", n+1, MidiCountFields(e));
 				MidiFreeEv(e);
 				goto failed;
 			}
@@ -640,7 +642,7 @@ void Close ()
 }
 
 /*______________________________________________________________________________*/
-main( int argc, char *argv[])
+int main( int argc, char *argv[])
 {
 	print("\nMidiShare drivers transmission and reception tests.\n");
 	print("===================================================\n");

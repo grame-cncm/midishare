@@ -219,6 +219,7 @@ void OpenClose()
 }
 
 /*____________________________________________________________________*/
+/*
 static int pascalcmp( unsigned char *s1, unsigned char *s2)
 {
 	int i1, i2;
@@ -236,6 +237,7 @@ static int pascalcmp( unsigned char *s1, unsigned char *s2)
 	else return 1;
 	return 0;
 }
+*/
 
 /*____________________________________________________________________*/
 static int equal(const char *s1, const char *s2)
@@ -715,7 +717,7 @@ void Mail()
 	b= MidiReadSync(&a);
 	print ("%ld %s\n", (long)b, OK);
 	if( a)
-		print ("Warning : non null value : %ld\n", a);
+		print ("Warning : non null value : %ld\n", (long)a);
 	
 	a= 0;
 	print ("    MidiWriteSync : ");flush;
@@ -725,7 +727,7 @@ void Mail()
 	a= (void*)1;
 	b= MidiWriteSync( &a, (void* )2);
 	if( a!= (void*)2)
-		print ("Warning : not null variable but correctly set : %ld\n", a);
+		print ("Warning : not null variable but correctly set : %ld\n", (long)a);
 	if( b!= (void*)1)
 		print ("Warning : incorrect return : %ld\n", (long)b);
 }
@@ -798,7 +800,7 @@ static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3
 void MSALARMAPI MyDTask( long unused1, short unused2, void* a1, void* a2, void* a3)
 #endif
 {
-	print ("dtask rcv %ld %ld %ld ", a1, a2, a3);
+	print ("dtask rcv %ld %ld %ld ", (long)a1, (long)a2, (long)a3);
 }
 
 /*____________________________________________________________________*/
