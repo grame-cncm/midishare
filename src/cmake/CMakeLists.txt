@@ -5,7 +5,7 @@ project(midishare)
 cmake_minimum_required(VERSION 2.6)
 
 if(WIN32)
-	set (target mshare64)
+	set (target mshare32)
 else(WIN32)
 	set (target MidiShare)
 endif(WIN32)
@@ -28,7 +28,8 @@ if(APPLE)
 endif(APPLE)
 
 if(WIN32)
-	add_definitions(-DWINVER=0x0400 -DWIN32 -D__x86_64__)
+#	add_definitions(-DWINVER=0x0400 -DWIN32 -D__x86_64__)
+	add_definitions(-DWINVER=0x0400 -DWIN32 )
 endif(WIN32)
 
 #######################################
@@ -36,6 +37,7 @@ endif(WIN32)
 set (ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (SRC_PATH  ${ROOT_PATH})
 set (TOOLS_PATH  ${ROOT_PATH}/mstools)
+set (TESTS_PATH  ${ROOT_PATH}/tools)
 set (SRCFOLDERS  common/Clients common/Drivers common/Kernel common/Memory  common/Sorter)
 set (HEADERS_PATH ${SRC_PATH}/common/Headers ${SRC_PATH}/common/atomic ${SRC_PATH}/lib)
 if(WIN32)
@@ -130,6 +132,18 @@ include_directories( ${SRC_PATH}/include)
 
 foreach(tool ${MSTOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.c )
+	target_link_libraries( ${tool} ${target})
+	add_dependencies(${tool} ${target})
+endforeach(tool)
+
+#######################################
+# set test targets
+set (MSTESTS TFonctions TEvents TFilters TDrivers TOutEvents)
+
+include_directories( ${SRC_PATH}/include)
+
+foreach(tool ${MSTESTS})
+	add_executable( ${tool} ${TESTS_PATH}/${tool}.c )
 	target_link_libraries( ${tool} ${target})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
