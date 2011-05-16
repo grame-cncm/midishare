@@ -37,9 +37,8 @@
 #define flush   fflush(stdout)
 #define print	printf
 
-#ifdef __Windows__
+#ifdef WIN32
 #	include <stdio.h>
-#	include <MidiShare.h>
 #	define CNAME
 #	define CTASKS
 #	define nil 0
@@ -108,10 +107,10 @@ MidiName TestName   = "\pTest";
 #endif
 
 #ifdef CNAME
-MidiName ApplName   = "Fonctions";
-MidiName NewName    = "NewName";
-MidiName MidiShareName = "MidiShare";
-MidiName TestName   = "Test";
+const char* ApplName   = "Fonctions";
+const char* NewName    = "NewName";
+const char* MidiShareName = "MidiShare";
+const char* TestName   = "Test";
 #endif
 
 
@@ -239,7 +238,7 @@ static int pascalcmp( unsigned char *s1, unsigned char *s2)
 }
 
 /*____________________________________________________________________*/
-static int equal(char *s1, char *s2)
+static int equal(const char *s1, const char *s2)
 {
 	while (*s1) {
 		if (*s1 != *s2) return 1;
@@ -252,7 +251,7 @@ static int equal(char *s1, char *s2)
 /*____________________________________________________________________*/
 void ApplConfiguration()
 {
-	MidiName s;
+	const char* s;
 	void* info;
 	MidiFilterPtr f;
 	RcvAlarmPtr rcv;

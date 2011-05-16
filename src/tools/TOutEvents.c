@@ -56,7 +56,7 @@ MidiName ApplName = "\pTest Out Evts";
 #endif
 
 #ifdef CNAME
-MidiName ApplName = "Test Out Evts";
+const char* ApplName = "Test Out Evts";
 #endif
 
 /* ============================================================================*/
@@ -155,7 +155,7 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void _wait( int d)
 {
-	unsigned long time;
+	long time;
 	time= MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
 }

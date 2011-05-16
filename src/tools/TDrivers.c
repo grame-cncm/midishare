@@ -30,9 +30,6 @@
 #define print	printf
 #define nil 0
 
-#ifndef __Windows__
-#	define MSALARMAPI
-#endif
 
 #if macintosh
 #	include <stdio.h>
@@ -97,13 +94,13 @@ MidiName		NewName = "\pNew Name";
 #endif
 
 #ifdef CNAME
-MidiName ApplName   = "Drivers";
-DriverName TestName   = "Test Driver";
+const char* ApplName   = "Drivers";
+const char* TestName   = "Test Driver";
 TDriverInfos	gDrvInfo1 = { "Test Driver1", 100, 0 };
 TDriverInfos	gDrvInfo2 = { "Test Driver2", 100, 0 };
-MidiName		gSlot1 = "Slot 1";
-MidiName		gSlot2 = "Slot 2";
-MidiName		NewName = "New Name";
+const char*		gSlot1 = "Slot 1";
+const char*		gSlot2 = "Slot 2";
+const char*		NewName = "New Name";
 #endif
 
 static void MSALARMAPI wakeup (short refnum);
@@ -265,7 +262,7 @@ void WakeupSleep()
 void Infos()
 {
 	short r1=0, r2=0, r3, ref, n, i;
-	MidiName name; char *s;
+	const char* name; const char *s;
 	TDriverInfos infos;
 	
 	print ("\nDrivers infos :\n");flush;
@@ -303,7 +300,7 @@ void Infos()
 #else
 				s = infos.name;
 #endif
-				print ("      %d : \"%s\" v%d - %d slots\n", i, s, infos.version, infos.slots);
+				print ("      %d : \"%s\" v%d - %d slots\n", i, s, infos.version, infos.drvslots);
 			}
 			else print ("Warning : MidiGetDriverInfos returned false for %d\n", ref);
 		}
@@ -358,7 +355,7 @@ void Connections()
 }
 
 /*____________________________________________________________________*/
-static int EqualNames (MidiName n1, MidiName n2)
+static int EqualNames (const char* n1, const char* n2)
 {
 #ifdef PASCALNAME
 		int n = *n1++;
@@ -388,8 +385,8 @@ void Slots()
 	sref2 = MidiAddSlot (r1, gSlot2, MidiOutputSlot);
 	print ("(%x , %x) %s\n", sref1, sref2, OK);
 	if (MidiGetDriverInfos (r1, &infos)) {
-		if (infos.slots != 2)
-			print ("Warning : MidiGetDriverInfos returned %d slots (instead 2)\n", (int)infos.slots);
+		if (infos.drvslots != 2)
+			print ("Warning : MidiGetDriverInfos returned %d slots (instead 2)\n", (int)infos.drvslots);
 	}
 	else print ("Warning : MidiGetDriverInfos returned false\n");
 
@@ -462,8 +459,8 @@ void Slots()
 	MidiRemoveSlot (sref1);
 	print ("%s\n", OK);
 	if (MidiGetDriverInfos (r1, &infos)) {
-		if (infos.slots != 1)
-			print ("Warning : MidiGetDriverInfos returned %d slots (instead 1)\n", (int)infos.slots);
+		if (infos.drvslots != 1)
+			print ("Warning : MidiGetDriverInfos returned %d slots (instead 1)\n", (int)infos.drvslots);
 	}
 	else print ("Warning : MidiGetDriverInfos returned false\n");
 	if (MidiGetSlotInfos (sref1, &islot)) {

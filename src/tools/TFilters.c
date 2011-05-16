@@ -81,7 +81,7 @@ MidiName ApplName = "\pFiltres";
 #endif
 
 #ifdef CNAME
-MidiName ApplName = "Filtres";
+const char* ApplName = "Filtres";
 #endif
 
 #define LastPort 32

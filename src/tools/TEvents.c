@@ -70,8 +70,8 @@ MidiName OtherName = "\pReceiver";
 #endif
 
 #ifdef CNAME
-MidiName ApplName = "Sender";
-MidiName OtherName = "Receiver";
+const char* ApplName = "Sender";
+const char* OtherName = "Receiver";
 #endif
 
 /* ========================= variables globales de l'application ==================*/
@@ -177,7 +177,7 @@ GetEvFuncPtr GetEvTable[] = {
 /*______________________________________________________________________________*/
 static void mswait(int d)
 {
-	unsigned long time = MidiGetTime()+ d;
+	long time = MidiGetTime()+ d;
 	while( MidiGetTime()<= time);
 }
 
