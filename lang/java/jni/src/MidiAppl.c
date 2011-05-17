@@ -80,21 +80,11 @@ typedef struct ApplContext {
    JNIEnv * fCallbackEnv;
    JNIEnv * fApplEnv;
    jmethodID fMid;
+   jmethodID fApplAlarm;
    jobject fObj;
    jclass fClass;
    int fAttached;
 }ApplContext;
-
-/*--------------------------------------------------------------------------*/
-static void  MSALARMAPI ApplAlarm(short ref,long code)
-{	
-    MidiEvPtr e;
-    
-    if ((e = MidiNewEv(typeAlarm))) {
-            MidiSetField(e,0,code);
-            MidiSendIm (ref+128, e);
-    }
-}
 
 /*--------------------------------------------------------------------------*/
 static int CheckThreadEnv(ApplContext* context)
@@ -108,9 +98,28 @@ static int CheckThreadEnv(ApplContext* context)
         return false;
     }
 }
+
+/*--------------------------------------------------------------------------*/
+static void  MSALARMAPI ApplAlarm(short ref,long code)
+{	
+	ApplContext* context = MidiGetInfo(ref);
+ 	if (context && CheckThreadEnv(context)) {
+		(*context->fCallbackEnv)->CallIntMethod(context->fCallbackEnv, context->fObj, context->fApplAlarm, code);
+	}
+	else{
+		printf("ApplAlarm error : cannot callback Java ApplAlarm (%d)\n", ref);
+	}
+/*
+	MidiEvPtr e = MidiNewEv(typeAlarm);    
+    if (e ) {
+		MidiSetField(e,0,code);
+		MidiSendIm (ref+128, e);
+    }
+*/
+}
          
 /*--------------------------------------------------------------------------*/
-static void MSALARMAPI JavaTask(long date, short refNum, long a1, long a2, long a3)
+static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, void* a3)
 {
     ApplContext* context = MidiGetInfo(refNum);
     jclass class;
@@ -135,6 +144,26 @@ static void MSALARMAPI JavaTask(long date, short refNum, long a1, long a2, long 
 }
                             
 /*--------------------------------------------------------------------------*/
+/*
+HANDLE gMutex = 0;
+int gMutexRefCount = 0;
+static void initMutex()		{ 
+	if (gMutex == 0) 
+		gMutex = (HANDLE)CreateMutex(0, FALSE, 0); 
+	gMutexRefCount++;
+}
+static void releaseMutex()	{ 
+	if (!--gMutexRefCount) { 
+		CloseHandle(gMutex); 
+		gMutex = 0;
+	}
+}
+static Boolean Lock()		{ return (WAIT_OBJECT_0 == WaitForSingleObject(gMutex, INFINITE)); }
+static Boolean Trylock()	{ return (WAIT_OBJECT_0 == WaitForSingleObject(gMutex, 0)); }
+static Boolean Unlock()		{ return (ReleaseMutex(gMutex) != 0); }
+*/
+
+/*--------------------------------------------------------------------------*/
 static void MSALARMAPI ReceiveAlarm(short ref)
 {
 #if defined (__Macintosh__) && defined(__MacOS9__)
@@ -145,13 +174,14 @@ static void MSALARMAPI ReceiveAlarm(short ref)
 		WakeUpProcess(&gJavaProcess);
 	}
 #else
-	ApplContext* context = MidiGetInfo(ref);	
-//printf("ReceiveAlarm %d\n", ref);
-	if (context && CheckThreadEnv(context)) {   
-		(*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, context->fObj, context->fMid);
-	}else{
-		printf("ReceiveAlarm error : cannot callback Java MidiEventLoop (%d)\n", ref);
-	}
+		ApplContext* context;
+		context = MidiGetInfo(ref);
+		if (context && CheckThreadEnv(context)) { 
+			(*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, context->fObj, context->fMid);
+		}
+		else{
+			printf("ReceiveAlarm error : cannot callback Java MidiEventLoop (%d)\n", ref);
+		}
 #endif
 }
 
@@ -173,6 +203,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 	cls = (*env)->GetObjectClass(env, obj);
 	context->fClass = (*env)->NewGlobalRef(env,cls);
 	context->fMid = (*env)->GetMethodID(env, context->fClass, "MidiEventLoop", "()V");
+	context->fApplAlarm = (*env)->GetMethodID(env, context->fClass, "ApplAlarm", "(I)V");
 	context->fObj = (*env)->NewGlobalRef(env,obj);
 	context->fAttached = false;
 	
@@ -211,17 +242,16 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
   (JNIEnv * env, jobject obj, jint ref) 
 {
 	ApplContext* context = MidiGetInfo(ref);
-//	MidiSetRcvAlarm (ref, 0);
-//	MidiClose(ref);
-//printf("midiappl close %d %p\n", ref, context);
+	MidiSetRcvAlarm (ref, 0);
+	MidiSetApplAlarm (ref, 0);
 	if (context) {
+		MidiSetInfo (ref, 0);
 		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fClass);
 		//(*context->fApplEnv)->DeleteGlobalRef(context->fApplEnv, context->fObj);
         // 21/04/2009 
 		(*env)->DeleteGlobalRef(env, context->fClass);
-        (*env)->DeleteGlobalRef(env, context->fObj);
+		(*env)->DeleteGlobalRef(env, context->fObj);
 		free(context);
-		MidiSetInfo (ref, 0);
 	}
 		
 #if defined( __Macintosh__) && defined( __MacOS9__)
@@ -245,10 +275,10 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 	// Configure calling mode
 	switch (mode) {
 		case kNativeMode:
-			taskev = MidiTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
+			taskev = MidiTask(JavaTask, date, ref, (void*)((*env)->NewGlobalRef(env,appl)), (*env)->NewGlobalRef(env,task), 0);
 			break;
 		case kPollingMode:
-			taskev = MidiDTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
+			taskev = MidiDTask(JavaTask, date, ref, (*env)->NewGlobalRef(env,appl), (*env)->NewGlobalRef(env,task), 0);
 			break;
 	}
 		

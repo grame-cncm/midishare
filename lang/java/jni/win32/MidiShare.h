@@ -1,39 +1,78 @@
-/*
-
-  Copyright © Grame 2001
-
-  This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
-  Free Software Foundation version 2 of the License, or any later version.
-
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
-  for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@grame.fr
-  
-*/
-
 #ifndef __MidiShare__
 #define __MidiShare__
 
-#include  "windows.h"
-#ifdef MSSTATIC
-#define	MIDISHAREAPI
-#else
-#define	MIDISHAREAPI __declspec(dllimport)
-#endif
-#define MSALARMAPI	CALLBACK
+/*****************************************************************************
+ *                                MIDI SHARE									
+ *----------------------------------------------------------------------------
+ * MidiShare is a multi-tasking, real-time software environment, specially 
+ * devised for the developing of MIDI applications with a triple target :
+ * 
+ * 	To propose solutions to currently met problems when developing 
+ * 	 a real-time MIDI application : memory management, communication management, 
+ *	 time management, task management. 
+ * 
+ * 	To enable the real-time and multi-tasking functioning of these applications, 
+ * 	 i.e. to enable the sharing of all the necessary resources and their 
+ * 	 simultaneous access.
+ *
+ * 	To make easier cooperation between independent MIDI applications by  proposing 
+ * 	 a real-time mechanism of inter-application communications.
+ * 
+ * This file contains a complete description of all the MidiShare functions and 
+ * procedures, as well as all the data structures in use.
+ *----------------------------------------------------------------------------
+ * 		      c GRAME 1989, 1990, 1991, 1992, 1999, 2010
+ *	     [Yann Orlarey, Herve Lequay, Dominique fober, Stephane Letz]						
+******************************************************************************/
 
-typedef unsigned char Byte;
-typedef void * Ptr;
+/*******************************************************************************
+ *						MIDISHARE EVENTS									
+ *------------------------------------------------------------------------------
+ * 	The listing below presents the different types of MidiShare handled events. 
+ * 	This typology contains the whole of the standard Midi messages, plus specific 
+ * 	messages such as typeNote corresponding to a note with its duration;  
+ * 	or typeStream corresponding to a series of arbitrary bytes, possibly including 
+ * 	data and status codes, sent directly without any processing; or typePrivate 
+ * 	that are application private messages.
+ * 	
+ * 	All these codes may be used in the MidiNewEv function to allocate an event
+ * 	of the desirable type and are accessible in an event evType field.
+ *******************************************************************************/
+
+
+#ifdef __Pascal_alarm__
+#   define  ALARMTYPE pascal
+# else
+#   define  ALARMTYPE   
+#endif
+
+#ifdef WIN32
+#   include <windows.h>
+#   define  ALARMTYPE
+# ifdef MSEXPORT
+#	define	MIDISHAREAPI __declspec(dllexport)
+# else
+#	define	MIDISHAREAPI __declspec(dllimport)
+# endif
+#	define  MSALARMAPI	CALLBACK
+#else
+#	define	MIDISHAREAPI
+#	define  MSALARMAPI
+#endif
+
+#ifdef __linux__
+#   define  ALARMTYPE
+#	define  MSALARMAPI
+#endif
+
+
+//enum { false, true };
+
 typedef unsigned char Boolean;
+typedef unsigned char Byte;
+typedef char * Ptr;
+typedef unsigned long ulong;
+typedef unsigned char uchar;
 
 /*******************************************************************************
  * MIDISHARE EVENTS
@@ -95,11 +134,17 @@ typedef unsigned char Boolean;
 #define typeTempo          144   /* changement de tempo       */
 #define typeSMPTEOffset    145   /* smpte offset              */
 
-#define typeTimeSign       146   /* time signature                         */
-#define typeKeySign        147   /* signature tonale                       */
-#define typeSpecific       148   /* sequencer specific meta event          */
+#define typeTimeSign       146   /* time signature                 		*/
+#define typeKeySign        147   /* signature tonale                    */
+#define typeSpecific       148   /* sequencer specific meta event       */
 
-#define typeReserved       149   /*149..254 reserved for future extensions */
+#define typePortPrefix     149   /* Midi Port  Prefix       */
+#define typeRcvAlarm       150   /* RcvAlam         		*/
+#define typeApplAlarm      151   /* ApplAlam        		*/
+
+
+#define typeReserved       152   /*152..254 reserved for future extensions */
+
 #define typeDead           255   /* dead Task or DTask                     */
 
 
@@ -157,6 +202,13 @@ typedef unsigned char Boolean;
 #define MIDIerrEv       -5   /* event argument is nil         */
 #define MIDIerrUndef    -6   /* event argument is undef       */
 
+/*------------------------------------------------------------------------------
+* List of the global system error codes.									
+*******************************************************************************/
+#define MIDInoErr			0
+#define MIDIerrDriverLoad	1	/* failure in loading a driver */
+#define MIDIerrTime	        2	/* can't open time interrupts  */
+
 
 /******************************************************************************
 * SYNCHRONISATION CODES
@@ -186,10 +238,10 @@ enum{   MIDIOpenAppl=1,
 		MIDICloseAppl,
 		MIDIChgName,
 		MIDIChgConnect,
-		MIDIOpenModem,		// now obsolete
-		MIDICloseModem,		// now obsolete
-		MIDIOpenPrinter,	// now obsolete
-		MIDIClosePrinter,	// now obsolete
+		MIDIOpenModem,		/* now obsolete */
+		MIDICloseModem,		/* now obsolete */
+		MIDIOpenPrinter,	/* now obsolete */
+		MIDIClosePrinter,	/* now obsolete */
         MIDISyncStart,
         MIDISyncStop,
         MIDIChangeSync,
@@ -201,36 +253,36 @@ enum{   MIDIOpenAppl=1,
         MIDIChgSlotName
 };
 
+		
 /******************************************************************************
-*                                 DATA TYPES
+* 							    EVENTS STRUCTURES							
+*------------------------------------------------------------------------------
+* All events are built using one or several fixed size cells (16 bytes)
+* Most events use  one cell. Some other like SysEx events use several linked cells.
 *******************************************************************************/
+#define CELLSIZE		4*sizeof(void*)
 
 /*------------------------ System Exclusive extension cell ----------------------*/
 
-    typedef struct TMidiSEX FAR *MidiSEXPtr;
+    typedef struct TMidiSEX *MidiSEXPtr;
     typedef struct TMidiSEX
     {
-        MidiSEXPtr link;          /* link to next cell */
-        Byte data[12];            /* 12 data bytes     */
+        MidiSEXPtr link;								/* link to next cell */
+        Byte data[CELLSIZE - sizeof(MidiSEXPtr)];       /* data bytes     */
     }   TMidiSEX;
 
 /*------------------------------ Private extension cell -------------------------*/
 
-    typedef struct TMidiST FAR *MidiSTPtr;
+    typedef struct TMidiST *MidiSTPtr;
     typedef struct TMidiST
     {
-#ifdef __SupportOldSTDef__
-        Ptr ptr1;                  /* 4 32-bits fields */
-        Ptr ptr2;
-        Ptr ptr3;
-        Ptr ptr4;
-#endif
-		long val[4];
+		void* val[4];
     }   TMidiST;
 
 /*------------------------- Common Event Structure ----------------------*/
-
-    typedef struct TMidiEv FAR *MidiEvPtr;
+#define HEADERSIZE	(sizeof(void*) + sizeof(unsigned long) + sizeof(void*))
+#define DATASIZE	(CELLSIZE - HEADERSIZE)
+    typedef struct TMidiEv *MidiEvPtr;
     typedef struct TMidiEv
     {
         MidiEvPtr   link;           /* link to next event   */
@@ -239,11 +291,17 @@ enum{   MIDIOpenAppl=1,
         Byte        refNum;         /* sender reference number */
         Byte        port;           /* Midi port            */
         Byte        chan;           /* Midi channel         */
-        union {                     /* info depending of event type : */
+		
+#ifdef __x86_64__
+		/* padding for 64 bits and to ensure natural alignment */
+		Byte		data[sizeof(12 - sizeof(long))];	
+#endif
+        
+		union {                     /* info depending of event type : */
             struct {                /* for notes            */
                 Byte pitch;         /* pitch                */
                 Byte vel;           /* velocity             */
-                unsigned short dur; /* duration             */
+                int dur;			/* duration             */
             } note;
 
             struct {              /* for MidiFile time signature */
@@ -260,35 +318,31 @@ enum{   MIDIOpenAppl=1,
                 char ton;       /* 0: key of C, 1: 1 sharp     */
                                 /* -1: 1 flat etc...           */
                 Byte mode;      /* 0: major 1: minor           */
-                Byte unused[2];
-
             } keySign;
             
-	    struct {            /* for paramchg & 14-bits ctrl  */
+			struct {            /* for paramchg & 14-bits ctrl  */
             	short num;      /* param or ctrl num            */
             	short val;      /* 14-bits value                */
             } param;
 
-
             struct {            /* for MidiFile sequence number */
-                unsigned short number;
-                short unused;
+                int	 number;
             } seqNum;
 
-			short shortFields[2];/* for 14-bits controlers		*/
-            long longField;
+			short shortFields[DATASIZE / sizeof(short)]; /* for 14-bits controlers		*/
+            int longField[DATASIZE / sizeof(int)];
 
-            long tempo;         /* MidiFile tempo in            */
-                                /* microsec/Midi quarter note   */
-            Byte data[4];       /* for other small events       */
-            MidiSEXPtr linkSE;  /* link to last sysex extension */
-            MidiSTPtr linkST;   /* link to private extension    */
+            long tempo;          /* MidiFile tempo in            */
+								 /* microsec/Midi quarter note   */
+            Byte data[DATASIZE]; /* for other small events       */
+			MidiSEXPtr linkSE;   /* link to last sysex extension */
+			MidiSTPtr linkST;    /* link to private extension    */
         } info;
     } TMidiEv;
 
 /*------------------------------ sequence header ---------------------------*/
 
-    typedef struct TMidiSeq FAR *MidiSeqPtr;
+    typedef struct TMidiSeq *MidiSeqPtr;
     typedef struct TMidiSeq
     {
         MidiEvPtr first;        /* first event pointer  */
@@ -300,7 +354,7 @@ enum{   MIDIOpenAppl=1,
 
 /*-------------------------------- input Filter -------------------------------*/
 
-    typedef struct TFilter FAR *MidiFilterPtr;
+    typedef struct TFilter *MidiFilterPtr;
     typedef struct TFilter
     {
         char port[32];         /* 256 bits */
@@ -313,8 +367,12 @@ enum{   MIDIOpenAppl=1,
 
 /*------------------------------------ names ----------------------------------*/
 #define DrvNameLen 32
-typedef char FAR * MidiName;
-typedef char	   DriverName[DrvNameLen];
+
+#ifdef PascalNames
+	typedef unsigned char	DriverName[DrvNameLen];
+#else
+	typedef char   DriverName[DrvNameLen];
+#endif
 typedef DriverName SlotName;
 
 /*----------------------- drivers and slots information -----------------------*/
@@ -323,7 +381,6 @@ typedef struct {
 	short	drvRef;
 	short 	slotRef;
 } SlotRefNum;
-#define Slot(ref)  ((ref).slotRef)
 
 typedef enum { MidiInputSlot=1, MidiOutputSlot, MidiInputOutputSlot } SlotDirection;
 
@@ -345,7 +402,7 @@ typedef struct TDriverOperation {
 typedef struct TDriverInfos {
 	DriverName  name;
 	short 		version;
-	short 		slots;			// slots count - ignored at register time
+	short 		drvslots;
 	long		reserved[2];
 } TDriverInfos;
 
@@ -353,7 +410,7 @@ typedef struct TDriverInfos {
 
 /*------------------------ Synchronisation informations -----------------------*/
 
-    typedef struct TSyncInfo FAR *SyncInfoPtr;
+    typedef struct TSyncInfo *SyncInfoPtr;
     typedef struct TSyncInfo
     {
         long        time;
@@ -369,7 +426,7 @@ typedef struct TDriverInfos {
         short       syncFormat;
     } TSyncInfo;
 
-    typedef struct TSmpteLocation FAR *SmpteLocPtr;
+    typedef struct TSmpteLocation *SmpteLocPtr;
     typedef struct TSmpteLocation
     {
         short format;       /* (0:24f/s, 1:25f/s, 2:30DFf/s, 3:30f/s) */
@@ -384,10 +441,10 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 
 /*----------------------------- Alarms prototypes ----------------------------*/
 
-    typedef void (MSALARMAPI * TaskPtr)         ( long date, short refNum, long a1,long a2,long a3 );
-    typedef void (MSALARMAPI * RcvAlarmPtr)     ( short refNum );
-    typedef void (MSALARMAPI * ApplAlarmPtr)    ( short refNum,long code );
-    typedef void (MSALARMAPI * ApplyProcPtr)    ( MidiEvPtr e );
+    typedef ALARMTYPE void (MSALARMAPI * TaskPtr)         ( long date, short refNum, void* a1, void* a2, void* a3 );
+    typedef ALARMTYPE void (MSALARMAPI * RcvAlarmPtr)     ( short refNum );
+    typedef ALARMTYPE void (MSALARMAPI * ApplAlarmPtr)    ( short refNum,long code );
+    typedef ALARMTYPE void (MSALARMAPI * ApplyProcPtr)    ( MidiEvPtr e );
 
 
 /******************************************************************************
@@ -396,189 +453,203 @@ enum { kSync24fs, kSync25fs, kSync30dfs, kSync30fs };
 * Somes macros to read and write event's fields 
 *******************************************************************************/
 
-    #define Link(e)       ( (e)->link )
-    #define Date(e)       ( (e)->date )
-    #define EvType(e)     ( (e)->evType )
-    #define RefNum(e)     ( (e)->refNum )
-    #define Port(e)       ( (e)->port )
-    #define Canal(e)      ( (e)->chan )
-    #define Chan(e)       ( (e)->chan )
-    #define Pitch(e)      ( (e)->info.note.pitch )
-    #define Vel(e)        ( (e)->info.note.vel )
-    #define Dur(e)        ( (e)->info.note.dur )
-    #define Data(e)       ( (e)->info.data )
-    #define LinkSE(e)     ( (e)->info.linkSE )
-    #define LinkST(e)     ( (e)->info.linkST )
+#define Link(e)       ( (e)->link )
+#define Date(e)       ( (e)->date )
+#define EvType(e)     ( (e)->evType )
+#define RefNum(e)     ( (e)->refNum )
+#define Port(e)       ( (e)->port )
+#define Canal(e)      ( (e)->chan )
+#define Chan(e)       ( (e)->chan )
+#define Pitch(e)      ( (e)->info.note.pitch )
+#define Vel(e)        ( (e)->info.note.vel )
+#define Dur(e)        ( (e)->info.note.dur )
+#define Data(e)       ( (e)->info.data )
+#define LinkSE(e)     ( (e)->info.linkSE )
+#define LinkST(e)     ( (e)->info.linkST )
 
-    #define TSNum(e)      ( (e)->info.timeSign.numerator )
-    #define TSDenom(e)    ( (e)->info.timeSign.denominator )
-    #define TSClocks(e)   ( (e)->info.timeSign.nClocks )
-    #define TS32nd(e)     ( (e)->info.timeSign.n32nd )
+#define TSNum(e)      ( (e)->info.timeSign.numerator )
+#define TSDenom(e)    ( (e)->info.timeSign.denominator )
+#define TSClocks(e)   ( (e)->info.timeSign.nClocks )
+#define TS32nd(e)     ( (e)->info.timeSign.n32nd )
 
-    #define KSTon(e)      ( (e)->info.keySign.ton )
-    #define KSMode(e)     ( (e)->info.keySign.mode )
+#define KSTon(e)      ( (e)->info.keySign.ton )
+#define KSMode(e)     ( (e)->info.keySign.mode )
 
-    #define Tempo(e)      ( (e)->info.tempo )
-    #define SeqNum(e)     ( (e)->info.seqNum.number )
-    #define ChanPrefix(e) ( (e)->info.data[0] )
+#define Tempo(e)      ( (e)->info.tempo )
+#define SeqNum(e)     ( (e)->info.seqNum.number )
+#define ChanPrefix(e) ( (e)->info.data[0] )
+#define PortPrefix(e) ( (e)->info.data[0] )
 
-    #define First(e)      ( (e)->first )
-    #define Last(e)       ( (e)->last )
-    #define FirstEv(e)    ( (e)->first )
-    #define LastEv(e)     ( (e)->last )
+#define First(e)      ( (e)->first )
+#define Last(e)       ( (e)->last )
+#define FirstEv(e)    ( (e)->first )
+#define LastEv(e)     ( (e)->last )
+
 
 
 /*******************************************************************************
-* 							MIDISHARE ENTRY POINTS
+* 						MidiShare API									
+*------------------------------------------------------------------------------
+* 		
 *******************************************************************************/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/*----------------------------------- MidiShare -------------------------------*/
+
+MIDISHAREAPI Boolean 	MidiShare();
+ 
 /*--------------------------- Global MidiShare environment --------------------*/
-  short MIDISHAREAPI MidiGetVersion(void);
 
-  short MIDISHAREAPI MidiCountAppls(void);
-  short MIDISHAREAPI MidiGetIndAppl(short index);
-  short MIDISHAREAPI MidiGetNamedAppl(MidiName name);
+MIDISHAREAPI short 		MidiGetVersion		(void);
 
+MIDISHAREAPI short 		MidiCountAppls		(void);
+MIDISHAREAPI short 		MidiGetIndAppl 		(short index);		
+MIDISHAREAPI short 		MidiGetNamedAppl	(const char* name);
+MIDISHAREAPI long 		MidiGetError		();
+ 
 /*----------------------------- SMPTE synchronization -------------------------*/
-  void	MIDISHAREAPI MidiGetSyncInfo(SyncInfoPtr p);
-  void	MIDISHAREAPI MidiSetSyncMode(unsigned short mode);
-  long	MIDISHAREAPI MidiGetExtTime(void);
-  long	MIDISHAREAPI MidiInt2ExtTime(long xl);
-  long	MIDISHAREAPI MidiExt2IntTime(long xl);
-  void	MIDISHAREAPI MidiTime2Smpte(long time, short format, SmpteLocPtr loc);
-  long	MIDISHAREAPI MidiSmpte2Time(SmpteLocPtr loc);
+
+MIDISHAREAPI void 		MidiGetSyncInfo	(SyncInfoPtr p);
+MIDISHAREAPI void 		MidiSetSyncMode	(unsigned short mode);
+MIDISHAREAPI long 		MidiGetExtTime	(void);						
+MIDISHAREAPI long 		MidiInt2ExtTime	(long);						
+MIDISHAREAPI long 		MidiExt2IntTime	(long);						
+MIDISHAREAPI void 		MidiTime2Smpte	(long time, short format, SmpteLocPtr loc);						
+MIDISHAREAPI long 		MidiSmpte2Time	(SmpteLocPtr loc);						
 
 /*----------------------------- Open / close application ----------------------*/
-  short MIDISHAREAPI MidiOpen(MidiName applName);
-  void  MIDISHAREAPI MidiClose(short refNum);
+
+MIDISHAREAPI short 		MidiOpen 			(const char* applName);
+MIDISHAREAPI void 		MidiClose 			(short refNum);	
+
 
 /*--------------------------- Application configuration -----------------------*/
-  MidiName		MIDISHAREAPI MidiGetName(short refNum);
-  void			MIDISHAREAPI MidiSetName(short refNum, MidiName applName);
-  LPVOID		MIDISHAREAPI MidiGetInfo(short refNum);
-  void			MIDISHAREAPI MidiSetInfo(short refNum,LPVOID InfoZone);
-  RcvAlarmPtr	MIDISHAREAPI MidiGetRcvAlarm(short refNum);
-  void			MIDISHAREAPI MidiSetRcvAlarm(short refNum, RcvAlarmPtr alarm);
-  ApplAlarmPtr	MIDISHAREAPI MidiGetApplAlarm(short refNum);
-  void			MIDISHAREAPI MidiSetApplAlarm(short refNum, ApplAlarmPtr alarm);
+
+MIDISHAREAPI const char* 	MidiGetName 		(short refNum);
+MIDISHAREAPI void 			MidiSetName 		(short refNum, const char* applName);
+MIDISHAREAPI void* 			MidiGetInfo 		(short refNum);	
+MIDISHAREAPI void 			MidiSetInfo 		(short refNum, void* InfoZone);
+MIDISHAREAPI MidiFilterPtr 	MidiGetFilter 		(short refNum);
+MIDISHAREAPI void 			MidiSetFilter 		(short refNum, MidiFilterPtr f);
+MIDISHAREAPI RcvAlarmPtr 	MidiGetRcvAlarm 	(short refNum);		
+MIDISHAREAPI void 			MidiSetRcvAlarm		(short refNum, RcvAlarmPtr alarm);	
+MIDISHAREAPI ApplAlarmPtr 	MidiGetApplAlarm 	(short refNum);		
+MIDISHAREAPI void 			MidiSetApplAlarm 	(short refNum, ApplAlarmPtr alarm);
+
 
 /*------------------------------- Drivers management --------------------------*/
-  short   MIDISHAREAPI MidiRegisterDriver   (TDriverInfos * infos, TDriverOperation *op);
-  void    MIDISHAREAPI MidiUnregisterDriver (short refnum);
-  short   MIDISHAREAPI MidiCountDrivers     ();
-  short   MIDISHAREAPI MidiGetIndDriver     (short index);
-  Boolean MIDISHAREAPI MidiGetDriverInfos   (short refnum, TDriverInfos * infos);
+
+MIDISHAREAPI short 		MidiRegisterDriver		(TDriverInfos * infos, TDriverOperation *op);
+MIDISHAREAPI void 		MidiUnregisterDriver	(short refnum);
+MIDISHAREAPI short		MidiCountDrivers		();
+MIDISHAREAPI short		MidiGetIndDriver		(short index);
+MIDISHAREAPI Boolean	MidiGetDriverInfos 		(short refnum, TDriverInfos * infos);
+
 
 /*-------------------------------- Slots management ---------------------------*/
-  SlotRefNum MIDISHAREAPI MidiAddSlot         (short refnum, MidiName name, SlotDirection direction);
-  SlotRefNum MIDISHAREAPI MidiGetIndSlot      (short refnum, short index);
-  void       MIDISHAREAPI MidiRemoveSlot      (SlotRefNum slot);
-  void       MIDISHAREAPI MidiSetSlotName     (SlotRefNum slot, MidiName name);
-  Boolean    MIDISHAREAPI MidiGetSlotInfos    (SlotRefNum slot, TSlotInfos * infos);
-  void       MIDISHAREAPI MidiConnectSlot     (short port, SlotRefNum slot, Boolean state);
-  Boolean    MIDISHAREAPI MidiIsSlotConnected (short port, SlotRefNum slot);
 
-/*----------------------------- Filters configuration -------------------------*/
-  MidiFilterPtr MIDISHAREAPI MidiGetFilter(short refNum);
-  void			MIDISHAREAPI MidiSetFilter(short refNum, MidiFilterPtr f);
- 
-  MidiFilterPtr	MIDISHAREAPI MidiNewFilter (void);
-  void			MIDISHAREAPI MidiFreeFilter (MidiFilterPtr);
-  void			MIDISHAREAPI MidiAcceptPort(MidiFilterPtr f, short port, Boolean);
-  void			MIDISHAREAPI MidiAcceptChan(MidiFilterPtr f, short chan, Boolean);
-  void			MIDISHAREAPI MidiAcceptType(MidiFilterPtr f, short type, Boolean);
-  Boolean		MIDISHAREAPI MidiIsAcceptedPort(MidiFilterPtr f, short port);
-  Boolean		MIDISHAREAPI MidiIsAcceptedChan(MidiFilterPtr f, short chan);
-  Boolean		MIDISHAREAPI MidiIsAcceptedType(MidiFilterPtr f, short type);
+MIDISHAREAPI SlotRefNum	MidiAddSlot 		(short refnum, const char* name, SlotDirection direction);
+MIDISHAREAPI SlotRefNum	MidiGetIndSlot		(short refnum, short index);
+MIDISHAREAPI void		MidiRemoveSlot 		(SlotRefNum slot);
+MIDISHAREAPI void		MidiSetSlotName 	(SlotRefNum slot, const char* name);
+MIDISHAREAPI Boolean	MidiGetSlotInfos 	(SlotRefNum slot, TSlotInfos * infos);
+MIDISHAREAPI void		MidiConnectSlot		(short port, SlotRefNum slot, Boolean state);
+MIDISHAREAPI Boolean	MidiIsSlotConnected	(short port, SlotRefNum slot);
+
 
 /*------------------------- Inter-Application Connections ---------------------*/
-  void    MIDISHAREAPI MidiConnect(short src, short dest , Boolean state);
-  Boolean MIDISHAREAPI MidiIsConnected(short src, short dest);
+
+MIDISHAREAPI void 		MidiConnect 		(short src, short dest , Boolean state);
+MIDISHAREAPI Boolean 	MidiIsConnected		(short src, short dest);
+
 
 /*-------------------------------- Serial ports -------------------------------*/
-  Boolean MIDISHAREAPI MidiGetPortState(short port);
-  void    MIDISHAREAPI MidiSetPortState(short port, Boolean state);
+
+MIDISHAREAPI Boolean 	MidiGetPortState 	(short port);	
+MIDISHAREAPI void 		MidiSetPortState 	(short port, Boolean state);
+
 
 /*-------------------------- Events and memory managing -----------------------*/
-  unsigned long	MIDISHAREAPI MidiFreeSpace(void);
-  unsigned long	MIDISHAREAPI MidiTotalSpace(void);
-  unsigned long	MIDISHAREAPI MidiGrowSpace(long n);
 
-  MidiEvPtr	MIDISHAREAPI MidiNewCell(void);
-  void		MIDISHAREAPI MidiFreeCell(MidiEvPtr e);
+MIDISHAREAPI unsigned long 	MidiFreeSpace	(void);						
 
-  MidiEvPtr	MIDISHAREAPI MidiNewEv(short typeNum);
-  MidiEvPtr	MIDISHAREAPI MidiCopyEv(MidiEvPtr e);
-  void		MIDISHAREAPI MidiFreeEv(MidiEvPtr e);
+MIDISHAREAPI MidiEvPtr 		MidiNewCell 		(void);			
+MIDISHAREAPI void 	  		MidiFreeCell 		(MidiEvPtr e);					
+MIDISHAREAPI unsigned long 	MidiTotalSpace 		(void);
+MIDISHAREAPI unsigned long 	MidiGrowSpace 		(long n);
 
-  void		MIDISHAREAPI MidiSetField(MidiEvPtr e, long f, long v);
-  long		MIDISHAREAPI MidiGetField(MidiEvPtr e, long f);
-  void		MIDISHAREAPI MidiAddField(MidiEvPtr e, long v);
-  long		MIDISHAREAPI MidiCountFields(MidiEvPtr e);
+MIDISHAREAPI MidiEvPtr 	MidiNewEv 			(short typeNum);			
+MIDISHAREAPI MidiEvPtr 	MidiCopyEv 			(MidiEvPtr e);			
+MIDISHAREAPI void 	  	MidiFreeEv 			(MidiEvPtr e);					
 
-  MidiEvPtr	MIDISHAREAPI MidiGetLink	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetLink	(MidiEvPtr e, MidiEvPtr next);
-
-  long		MIDISHAREAPI MidiGetDate	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetDate	(MidiEvPtr e, long);
-  short		MIDISHAREAPI MidiGetRefNum	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetRefNum	(MidiEvPtr e, short);
-  short		MIDISHAREAPI MidiGetType	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetType	(MidiEvPtr e, short);
-  short		MIDISHAREAPI MidiGetChan	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetChan	(MidiEvPtr e, short);
-  short		MIDISHAREAPI MidiGetPort	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetPort	(MidiEvPtr e, short);
-
-  long		MIDISHAREAPI MidiGetData0	(MidiEvPtr e);
-  long		MIDISHAREAPI MidiGetData1	(MidiEvPtr e);
-  long		MIDISHAREAPI MidiGetData2	(MidiEvPtr e);
-  long		MIDISHAREAPI MidiGetData3	(MidiEvPtr e);
-  void		MIDISHAREAPI MidiSetData0	(MidiEvPtr e, long);
-  void		MIDISHAREAPI MidiSetData1	(MidiEvPtr e, long);
-  void		MIDISHAREAPI MidiSetData2	(MidiEvPtr e, long);
-  void		MIDISHAREAPI MidiSetData3	(MidiEvPtr e, long);
+MIDISHAREAPI void 		MidiSetField 		(MidiEvPtr e, long f, long v);
+MIDISHAREAPI long		MidiGetField 		(MidiEvPtr e, long f);
+MIDISHAREAPI void 		MidiAddField 		(MidiEvPtr e, long v);
+MIDISHAREAPI long 		MidiCountFields 	(MidiEvPtr e);
 
 
 /*------------------------------- Sequence managing ---------------------------*/
-  MidiSeqPtr 	MIDISHAREAPI MidiNewSeq(void);
-  void       	MIDISHAREAPI MidiAddSeq(MidiSeqPtr s, MidiEvPtr e);
-  void       	MIDISHAREAPI MidiFreeSeq(MidiSeqPtr s);
-  void       	MIDISHAREAPI MidiClearSeq(MidiSeqPtr s);
-  void			MIDISHAREAPI MidiApplySeq(MidiSeqPtr s, ApplyProcPtr proc);
+
+MIDISHAREAPI MidiSeqPtr MidiNewSeq			(void);				 			
+MIDISHAREAPI void 		MidiAddSeq 			(MidiSeqPtr s, MidiEvPtr e);
+MIDISHAREAPI void 		MidiFreeSeq 		(MidiSeqPtr s);		
+MIDISHAREAPI void 		MidiClearSeq 		(MidiSeqPtr s);			
+MIDISHAREAPI void 		MidiApplySeq 		(MidiSeqPtr s, ApplyProcPtr proc); 
+
 
 /*------------------------------------- Time ----------------------------------*/
-  unsigned long MIDISHAREAPI MidiGetTime(void);
+
+MIDISHAREAPI unsigned long	MidiGetTime	(void);		
+
 
 /*------------------------------------ Sending --------------------------------*/
-  void MIDISHAREAPI MidiSendIm(short refNum, MidiEvPtr e);
-  void MIDISHAREAPI MidiSend(short refNum, MidiEvPtr e);
-  void MIDISHAREAPI MidiSendAt(short refNum, MidiEvPtr e, unsigned long d);
+
+MIDISHAREAPI void 		MidiSendIm 	(short refNum, MidiEvPtr e);
+MIDISHAREAPI void 		MidiSend 	(short refNum, MidiEvPtr e);
+MIDISHAREAPI void 		MidiSendAt 	(short refNum, MidiEvPtr e, unsigned long d);	
+
+	
 
 /*------------------------------------ Receving -------------------------------*/
-  unsigned long		MIDISHAREAPI MidiCountEvs(short refNum);
-  MidiEvPtr			MIDISHAREAPI MidiGetEv(short refNum);
-  MidiEvPtr			MIDISHAREAPI MidiAvailEv(short refNum);
-  void				MIDISHAREAPI MidiFlushEvs(short refNum);
+
+MIDISHAREAPI unsigned long	MidiCountEvs 	(short refNum);
+MIDISHAREAPI MidiEvPtr 		MidiGetEv 		(short refNum);
+MIDISHAREAPI MidiEvPtr 		MidiAvailEv 	(short refNum);
+MIDISHAREAPI void 			MidiFlushEvs 	(short refNum);	
+
 
 /*----------------------------------- Mail boxes ------------------------------*/
-  LPVOID MIDISHAREAPI MidiReadSync(LPVOID FAR adrMem);
-  LPVOID MIDISHAREAPI MidiWriteSync(LPVOID FAR adrMem,LPVOID val);
+
+MIDISHAREAPI void* 		MidiReadSync 	(void* adrMem);
+MIDISHAREAPI void* 		MidiWriteSync 	(void* adrMem, void* val);
+
 
 /*---------------------------------- Task Managing ----------------------------*/
-  void			MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr 	MIDISHAREAPI MidiTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  MidiEvPtr 	MIDISHAREAPI MidiDTask(TaskPtr routine, unsigned long date, short refNum, long a1,long a2,long a3);
-  void			MIDISHAREAPI MidiForgetTask(MidiEvPtr FAR *e);
-  long			MIDISHAREAPI MidiCountDTasks(short refNum);
-  void			MIDISHAREAPI MidiFlushDTasks(short refNum);
-  void			MIDISHAREAPI MidiExec1DTask(short refNum);
 
-/*----------------------------------- MidiShare -------------------------------*/
-  Boolean	MIDISHAREAPI MidiShare(void);
+MIDISHAREAPI void		MidiCall 	(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
+MIDISHAREAPI MidiEvPtr	MidiTask 	(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
+MIDISHAREAPI MidiEvPtr	MidiDTask 	(TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);
+MIDISHAREAPI void		MidiForgetTask	(MidiEvPtr *e);
+MIDISHAREAPI long		MidiCountDTasks (short refnum);
+MIDISHAREAPI void		MidiFlushDTasks (short refnum);
+MIDISHAREAPI void		MidiExec1DTask  (short refnum);
+
+/*---------------------------------- Filter Managing ----------------------------*/
+
+MIDISHAREAPI MidiFilterPtr  MidiNewFilter  (void);
+MIDISHAREAPI void           MidiFreeFilter (MidiFilterPtr filter);
+
+MIDISHAREAPI void  MidiAcceptPort(MidiFilterPtr f, short port, Boolean state);
+MIDISHAREAPI void  MidiAcceptChan(MidiFilterPtr f, short chan, Boolean state);
+MIDISHAREAPI void  MidiAcceptType(MidiFilterPtr f, short type, Boolean state);
+
+MIDISHAREAPI Boolean MidiIsAcceptedPort(MidiFilterPtr f, short port);
+MIDISHAREAPI Boolean MidiIsAcceptedChan(MidiFilterPtr f, short chan);
+MIDISHAREAPI Boolean MidiIsAcceptedType(MidiFilterPtr f, short type);
+
 
 #ifdef __cplusplus
 }

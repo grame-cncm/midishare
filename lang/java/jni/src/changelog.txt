@@ -5,6 +5,19 @@
 
 
 -----------------------------------------------------
+version 1.1.3
+- crash bug corrected due to asynchrone reentrance between 
+  MidiShare events handlers and java call to native code:
+  the typical symptom was a receive alarm ca&ll interrupted by 
+  a native ApplClose call (from MidiAppl). The rcv alarm was triggered
+  by private events used by java to handle application alarms.
+  Solved by a direct call to MidiAppl::ApplAlarm, removing the use
+  of private events. However, the problem is still present and could
+  occur for example if the application is receiving events at the time
+  of the close call. Client applications should remove all connections
+  and flush the buffers before closing.
+
+-----------------------------------------------------
 version 1.1.2
 - crash bug corrected with MidiGetName called with incorrect refnum
 

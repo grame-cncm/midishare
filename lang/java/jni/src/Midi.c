@@ -159,13 +159,13 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_ClearSeq
   
  	MidiClearSeq((MidiSeqPtr)seq);
  }
- 
- /*--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_Close
   (JNIEnv * env, jclass cl, jint refnum) {
 
- 	 MidiClose(refnum);
+	MidiClose(refnum);
  }
 
  /*--------------------------------------------------------------------------*/
@@ -361,7 +361,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetInfo
 JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetName
   (JNIEnv * env, jclass cl, jint refnum) {
   
-	MidiName midiname = MidiGetName(refnum);
+	const char* midiname = MidiGetName(refnum);
 	return (*env)->NewStringUTF(env, (midiname ? midiname : ""));
 }
 
@@ -496,7 +496,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewCell
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewEv
   (JNIEnv * env, jclass cl, jint type) {
   
-	return (jint)MidiNewEv(type);
+	  return (jint)MidiNewEv(type);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -910,7 +910,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetText
  	const char *midiname;
 
 	midiname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (midiname == NULL) { return NULL; /* OutOfMemoryError already thrown */ }
+	if (midiname == NULL) { return; /* OutOfMemoryError already thrown */ }
 	
 	while (midiname[i]!= 0) {
 		MidiAddField((MidiEvPtr)ev,midiname[i]);
@@ -1115,7 +1115,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfos
 		if (infosName == NULL) { return 0; /* out of memory */ }
 		(*inEnv)->SetObjectField(inEnv, jinfos, name, infosName); /* Set the java String */
 		(*inEnv)->SetShortField(inEnv, jinfos, version,infos.version) ;
-		(*inEnv)->SetShortField(inEnv, jinfos, slots,infos.slots );
+		(*inEnv)->SetShortField(inEnv, jinfos, slots,infos.drvslots );
 		(*inEnv)->DeleteLocalRef(inEnv, infosName);
 	}
 
