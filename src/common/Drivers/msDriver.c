@@ -106,7 +106,7 @@ MSFunctionType(Boolean) MSGetDriverInfos (short ref, TDriverInfos * infos, TClie
 	appl = g->appls[ref];
 	setName (infos->name, appl->name);
 	infos->version = appl->driver->version;
-	infos->slots   = appl->driver->slotsCount;
+	infos->drvslots   = appl->driver->slotsCount;
 	infos->reserved[0] = infos->reserved[1] = 0;
 	return true;
 }
@@ -129,7 +129,7 @@ MSFunctionType(short) MSGetIndDriver (short index, TClientsPtr g)
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, SlotName name, SlotDirection direction, TClientsPtr g)
+MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, const char* name, SlotDirection direction, TClientsPtr g)
 {
 	TDriverPtr drv; SlotRefNum slot;
 	
@@ -165,7 +165,7 @@ MSFunctionType(SlotRefNum) MSAddSlot (short drvRef, SlotName name, SlotDirection
 }
 
 /*____________________________________________________________________________*/
-MSFunctionType(void) MSSetSlotName (SlotRefNum slot, SlotName name, TClientsPtr g)
+MSFunctionType(void) MSSetSlotName (SlotRefNum slot, const char* name, TClientsPtr g)
 {
 	TDriverPtr drv; SInfosPtr iPtr;
 	if (!CheckDriverRefNum(g, slot.drvRef))

@@ -66,13 +66,13 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			setName (infos.name, kMidiShareName);
 			infos.version = MSGetVersion (g);
 		    makeDriver(clients, drv, MidiShareDriverRef, &infos, 0);
-			Clients(g)->nbDrivers++;
+			clients->nbDrivers++;
 		}
 		MidiShareWakeup(g);
 		appl = NewAppl (sizeof(TAppl));
 		if (appl) {
 		    makeClient(clients, appl, MidiShareRef, kMidiShareName, kClientFolder);
-			Clients(g)->nbAppls++;
+			clients->nbAppls++;
 		}
 	}
 	if (CheckClientsCount(clients)) {
@@ -81,7 +81,7 @@ MSFunctionType(short) MSOpen (MidiName name, TMSGlobalPtr g)
 			for (ref = 1; clients->appls[ref]; ref++)
 				;
 			makeClient(clients, appl, ref, name, kClientFolder);
-			Clients(g)->nbAppls++;
+			clients->nbAppls++;
 			CallAlarm (ref, MIDIOpenAppl, clients);
 		}
 	}
@@ -298,13 +298,16 @@ TApplPtr NewAppl(int size)
 	TApplPtr appl;
 
 	ptr = (char*)AllocateMemory(kernelSharedMemory, size + kMemAlign );
-	mod = (int)ptr % kMemAlign;
-	appl = (TApplPtr)(ptr + kMemAlign - mod);
-	appl->mem = ptr;
-	return appl;
+	if (ptr) {
+		mod = (int)ptr % kMemAlign;
+		appl = (TApplPtr)(ptr + kMemAlign - mod);
+		appl->mem = ptr;
+		return appl;
+	}
+	return 0;
 }
 
-void setName (MidiName dst, MidiName name)
+void setName (char* dst, MidiName name)
 {
 #ifdef PascalNames
 	int i, count = *name + 1;
