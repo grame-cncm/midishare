@@ -5,7 +5,12 @@ project(midishare)
 cmake_minimum_required(VERSION 2.6)
 
 if(WIN32)
+ if (${CMAKE_GENERATOR} MATCHES ".*Win64")
+	set (target mshare64)
+	set (X64 -D__x86_64__)
+ else (${CMAKE_GENERATOR} MATCHES ".*Win64")
 	set (target mshare32)
+ endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
 else(WIN32)
 	set (target MidiShare)
 endif(WIN32)
@@ -28,8 +33,7 @@ if(APPLE)
 endif(APPLE)
 
 if(WIN32)
-#	add_definitions(-DWINVER=0x0400 -DWIN32 -D__x86_64__)
-	add_definitions(-DWINVER=0x0400 -DWIN32 )
+	add_definitions(-DWINVER=0x0400 -DWIN32 -DMSEXPORT ${X64})
 endif(WIN32)
 
 #######################################
