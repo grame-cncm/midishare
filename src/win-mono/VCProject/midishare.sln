@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RadioHardDisk", "..\Applications\RadioHD\RadioHardDisk.vcproj", "{E6B597FB-EA83-4970-ABE1-E0C85AA46B76}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msControl32", "..\Applications\msControl\msControl32.vcproj", "{00EB1B52-9018-41D9-A954-7B94EC3D7B16}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msControl", "..\Applications\msControl\msControl32.vcproj", "{00EB1B52-9018-41D9-A954-7B94EC3D7B16}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msDrivers", "..\Applications\msDrivers\msDrivers.vcproj", "{B6FF1B63-1667-4CF4-AF96-F6052A1275CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msEcho32", "..\Applications\msEcho\msEcho32.vcproj", "{72C3BB71-DE7C-443F-AD6E-41BF4031E6EF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msEcho", "..\Applications\msEcho\msEcho32.vcproj", "{72C3BB71-DE7C-443F-AD6E-41BF4031E6EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msLANDriver", "..\Drivers\msNetDrivers\msLANDriver.vcproj", "{AA9FD640-991C-4CDE-BD10-34D24E8B3293}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msMMSystem", "..\Drivers\msMMSystem\msMMSystem.vcproj", "{8311DEA9-5135-4050-B5DC-651D1AE2761D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msWANDriver", "..\Drivers\msNetDrivers\msWANDriver.vcproj", "{945E04E0-405D-4437-BC37-CBA3B28E61D9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "midishare", "midishare.vcproj", "{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testms", "testms\testms.vcproj", "{009BADC7-DE19-40C2-9CB4-E19EC77BD736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +83,20 @@ Global
 		{945E04E0-405D-4437-BC37-CBA3B28E61D9}.Release|Win32.Build.0 = Release|Win32
 		{945E04E0-405D-4437-BC37-CBA3B28E61D9}.Release|x64.ActiveCfg = Release|x64
 		{945E04E0-405D-4437-BC37-CBA3B28E61D9}.Release|x64.Build.0 = Release|x64
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Debug|Win32.Build.0 = Debug|Win32
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Debug|x64.ActiveCfg = Debug|x64
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Debug|x64.Build.0 = Debug|x64
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Release|Win32.ActiveCfg = Release|Win32
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Release|Win32.Build.0 = Release|Win32
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Release|x64.ActiveCfg = Release|x64
+		{B0414BF5-4144-4CF1-B2A2-DD9B7134329D}.Release|x64.Build.0 = Release|x64
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Debug|Win32.ActiveCfg = Debug|Win32
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Debug|Win32.Build.0 = Debug|Win32
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Debug|x64.ActiveCfg = Debug|Win32
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Release|Win32.ActiveCfg = Release|Win32
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Release|Win32.Build.0 = Release|Win32
+		{009BADC7-DE19-40C2-9CB4-E19EC77BD736}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
