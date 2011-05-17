@@ -26,6 +26,8 @@
 #include "msMMInOut.h"
 #include "msMMError.h"
 
+enum { false, true };
+
 extern short gRefNum;
 //_________________________________________________________
 static void MM2MS (SlotPtr slot, char * buff)

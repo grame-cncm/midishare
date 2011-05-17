@@ -27,6 +27,8 @@
 #include "msMMInOut.h"
 #include "msMMError.h"
 
+enum { false, true };
+
 SlotPtr gInSlots = 0, gOutSlots = 0;
 extern LinearizeMthTbl	gLinMethods;
 extern ParseMethodTbl	gParseTbl;

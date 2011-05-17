@@ -26,6 +26,8 @@
 #include "FilterUtils.h"
 #include "msMMState.h"
 
+enum { false, true };
+
 static char * profileName 		 = "msMMSystem.ini";
 static char * outSlotSectionName = "Output Slots";
 static char * inSlotSectionName  = "Input Slots";

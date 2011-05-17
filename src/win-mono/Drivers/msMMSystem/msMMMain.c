@@ -32,6 +32,7 @@
 static void Start();
 static void Stop();
 
+enum { false, true };
 //_________________________________________________________
 BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
