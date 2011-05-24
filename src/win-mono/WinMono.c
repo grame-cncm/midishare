@@ -179,8 +179,12 @@ void DriverSleep (TApplPtr appl)
 /*__________________________________________________________________________*/
 /*	Interrupt handlers														*/
 /*__________________________________________________________________________*/
-//static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
+#define VS6
+#ifdef VS6
+static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
+#else
 static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD_PTR dwUser, DWORD dw1, DWORD_PTR dw2)
+#endif
 {
 	ClockHandler((TMSGlobalPtr)dwUser);
 }
@@ -200,7 +204,11 @@ void OpenTimeInterrupts(TMSGlobalPtr g)
 		res = timeBeginPeriod (t->wTimerRes);	
 
 		if (res == TIMERR_NOERROR) {
+#ifdef VS6
+			t->wTimerID = timeSetEvent(1, t->wTimerRes, TimerProc,(DWORD)g, TIME_PERIODIC);
+#else
 			t->wTimerID = timeSetEvent(1, t->wTimerRes, TimerProc,(DWORD_PTR)g, TIME_PERIODIC);
+#endif
 			return;
 		}
 	}

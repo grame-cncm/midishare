@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// French (France) resources
+// Français (France) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
 #ifdef _WIN32
@@ -27,18 +27,18 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"
@@ -47,15 +47,14 @@ END
 #endif    // APSTUDIO_INVOKED
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,5,0
- PRODUCTVERSION 1,0,5,0
+ FILEVERSION 1,0,6,0
+ PRODUCTVERSION 1,0,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -70,18 +69,15 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "Comments", "Debug version\0"
-            VALUE "CompanyName", "Grame\0"
-            VALUE "FileDescription", "MidiShare Windows Multimedia Driver\0"
-            VALUE "FileVersion", "1, 0, 5, 0\0"
-            VALUE "InternalName", "MidiShare MM Driver\0"
-            VALUE "LegalCopyright", "Grame © 2001-2009, Sony CSL Paris © 2001\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "msMMDriver.dll\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "MidiShare MM Driver\0"
-            VALUE "ProductVersion", "1, 0, 5, 0\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "Comments", "Debug version"
+            VALUE "CompanyName", "Grame"
+            VALUE "FileDescription", "MidiShare Windows Multimedia Driver"
+            VALUE "FileVersion", "1, 0, 6, 0"
+            VALUE "InternalName", "MidiShare MM Driver"
+            VALUE "LegalCopyright", "Grame © 2001-2011, Sony CSL Paris © 2001"
+            VALUE "OriginalFilename", "msMMDriver.dll"
+            VALUE "ProductName", "MidiShare MM Driver"
+            VALUE "ProductVersion", "1, 0, 6, 0"
         END
     END
     BLOCK "VarFileInfo"
@@ -90,9 +86,7 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
-#endif    // French (France) resources
+#endif    // Français (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

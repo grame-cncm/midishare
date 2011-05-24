@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /Ot /Ob2 /I "..\..\common\headers" /I "..\..\common\atomic" /D "NDEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /FR /YX /FD /c
+# ADD CPP /nologo /W3 /GX /Ot /Ob2 /I "..\..\common\headers" /I "..\..\common\atomic" /I "..\..\include" /D "NDEBUG" /D "__Windows__" /D "WIN32" /D "_WINDOWS" /D "__EXPORT__" /D "__LittleEndian__" /D "MSEXPORT" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x40c /d "NDEBUG"
