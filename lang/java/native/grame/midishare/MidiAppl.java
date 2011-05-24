@@ -190,7 +190,6 @@ public class MidiAppl {
 
 		public void Close()
 		{
- //System.out.println("Close... " + refnum);
  			if (filter != 0){
 				Midi.SetFilter(refnum, 0);
 				Midi.FreeFilter(filter);
@@ -199,12 +198,9 @@ public class MidiAppl {
 				
 			if (refnum > 0){
 				if (appl != null) {
- //System.out.println("appl close...");
 					appl.Close();
 				}
- //System.out.println("ApplClose...");
 				ApplClose(refnum);
- //System.out.println("MidiClose...\n");
 				Midi.Close(refnum);
 				refnum = -1; 
 			}
@@ -229,7 +225,6 @@ public class MidiAppl {
 						ApplAlarm(Midi.GetField(ev,0));
 					  	Midi.FreeEv(ev);
 					  	break;
-                 
 					default:
 					  	ReceiveAlarm(ev);
 					  	break;

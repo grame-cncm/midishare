@@ -80,10 +80,10 @@ typedef struct ApplContext {
    JNIEnv * fCallbackEnv;
    JNIEnv * fApplEnv;
    jmethodID fMid;
-   jmethodID fApplAlarm;
    jobject fObj;
    jclass fClass;
    int fAttached;
+   jmethodID fApplAlarm;
 }ApplContext;
 
 /*--------------------------------------------------------------------------*/
@@ -103,8 +103,10 @@ static int CheckThreadEnv(ApplContext* context)
 static void  MSALARMAPI ApplAlarm(short ref,long code)
 {	
 	ApplContext* context = MidiGetInfo(ref);
- 	if (context && CheckThreadEnv(context)) {
-		(*context->fCallbackEnv)->CallIntMethod(context->fCallbackEnv, context->fObj, context->fApplAlarm, code);
+	if (context) {
+		JNIEnv * env;
+		(*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&env, NULL);
+		(*env)->CallIntMethod(env, context->fObj, context->fApplAlarm, code);
 	}
 	else{
 		printf("ApplAlarm error : cannot callback Java ApplAlarm (%d)\n", ref);
@@ -144,26 +146,6 @@ static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, voi
 }
                             
 /*--------------------------------------------------------------------------*/
-/*
-HANDLE gMutex = 0;
-int gMutexRefCount = 0;
-static void initMutex()		{ 
-	if (gMutex == 0) 
-		gMutex = (HANDLE)CreateMutex(0, FALSE, 0); 
-	gMutexRefCount++;
-}
-static void releaseMutex()	{ 
-	if (!--gMutexRefCount) { 
-		CloseHandle(gMutex); 
-		gMutex = 0;
-	}
-}
-static Boolean Lock()		{ return (WAIT_OBJECT_0 == WaitForSingleObject(gMutex, INFINITE)); }
-static Boolean Trylock()	{ return (WAIT_OBJECT_0 == WaitForSingleObject(gMutex, 0)); }
-static Boolean Unlock()		{ return (ReleaseMutex(gMutex) != 0); }
-*/
-
-/*--------------------------------------------------------------------------*/
 static void MSALARMAPI ReceiveAlarm(short ref)
 {
 #if defined (__Macintosh__) && defined(__MacOS9__)
@@ -174,8 +156,7 @@ static void MSALARMAPI ReceiveAlarm(short ref)
 		WakeUpProcess(&gJavaProcess);
 	}
 #else
-		ApplContext* context;
-		context = MidiGetInfo(ref);
+		ApplContext* context = MidiGetInfo(ref);
 		if (context && CheckThreadEnv(context)) { 
 			(*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, context->fObj, context->fMid);
 		}
@@ -206,9 +187,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ApplOpen
 	context->fApplAlarm = (*env)->GetMethodID(env, context->fClass, "ApplAlarm", "(I)V");
 	context->fObj = (*env)->NewGlobalRef(env,obj);
 	context->fAttached = false;
-	
+
 	if ((*context->fJvm)->AttachCurrentThread(context->fJvm, (void **)&context->fApplEnv, NULL) != 0) goto error;
-	 
 	MidiSetInfo(ref,context);
 	
 #if defined( __Macintosh__) && defined( __MacOS9__)
