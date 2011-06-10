@@ -16,33 +16,32 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
 /*****************************************************************************/
 /* Midi.c : interface to MidiShare 
-/*
-/* MidiShare home page 		: http://www.grame.fr/MidiShare/
-/* MidiShare/Java home page : http://www.grame.fr/MidiShare/Develop/Java.html
-/*
-/* Bug & comments report 	: MidiShare@grame.fr
-/*	
-/* History : 01/06/96 version 1.00
-/*           16/07/96 version 1.01 gestion du package MidiShare
-/*   		 20/07/96 version 1.02 fonctions de lecture des ev text : MidiGetText et MidiSetText 
-/*           ??/??/?? version 1.03
-/*           08/10/96 version 1.04 nom des packages en minuscule
-/*           09/01/97 version 1.05 correction bug ReadSysEx (buffer vide apres creation d'une cellule)
-/*           28/11/97 version 1.06 compatible JNI
-/*           14/02/01 version 1.07 fonctions pour la gestion des drivers
-/*           19/03/02 version 1.08 fonctions MidiGetInfo et MidiSetInfo nécessaires pour le thread bloquant sur MacOS9
-/*           19/04/02 version 1.09 implementation de MidiForgetTask
-/*           06/11/02 version 1.10 test de validité des pointeurs sur des objets Java passé au C
-/*           ??/??/?? version 1.11 version Intel
-/*           01/08/06 version 1.12 utilisation des string JNI
-/*
-/*****************************************************************************/
+ *
+ * MidiShare home page 		: http://midishare.sourceforge.net
+ *
+ * Bug & comments report 	: MidiShare@grame.fr
+ *	
+ * History : 01/06/96 version 1.00
+ *           16/07/96 version 1.01 gestion du package MidiShare
+ *   		 20/07/96 version 1.02 fonctions de lecture des ev text : MidiGetText et MidiSetText 
+ *           ??/??/?? version 1.03
+ *           08/10/96 version 1.04 nom des packages en minuscule
+ *           09/01/97 version 1.05 correction bug ReadSysEx (buffer vide apres creation d'une cellule)
+ *           28/11/97 version 1.06 compatible JNI
+ *           14/02/01 version 1.07 fonctions pour la gestion des drivers
+ *           19/03/02 version 1.08 fonctions MidiGetInfo et MidiSetInfo nécessaires pour le thread bloquant sur MacOS9
+ *           19/04/02 version 1.09 implementation de MidiForgetTask
+ *           06/11/02 version 1.10 test de validité des pointeurs sur des objets Java passé au C
+ *           ??/??/?? version 1.11 version Intel
+ *           01/08/06 version 1.12 utilisation des string JNI
+ *
+ *****************************************************************************/
 
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
