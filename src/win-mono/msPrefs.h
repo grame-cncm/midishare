@@ -24,7 +24,8 @@
 #ifndef __msPrefs__
 #define __msPrefs__
 
-#include "msTypes.h"
+//#include "msTypes.h"
+#include "MidiShare.h"
 
 //_________________________________________________________
 unsigned long LoadSpace ();

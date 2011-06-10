@@ -34,6 +34,8 @@ static char * memDefault  		= "default";
 static char * active  			= "active";
 static char * disable  			= "disable";
 
+enum { false, true };
+
 #define kDefaultSpace	40000
 //________________________________________________________________________
 static char * GetProfileFullName ()

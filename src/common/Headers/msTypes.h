@@ -52,10 +52,10 @@
 
 enum { false, true };
 
-typedef unsigned char Boolean;
-typedef unsigned char Byte;
-typedef char * Ptr;
-typedef unsigned long ulong;
-typedef unsigned char uchar;
+//typedef unsigned char Boolean;
+//typedef unsigned char Byte;
+//typedef char * Ptr;
+//typedef unsigned long ulong;
+//typedef unsigned char uchar;
 
 #endif

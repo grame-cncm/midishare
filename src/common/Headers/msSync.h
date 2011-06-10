@@ -23,7 +23,8 @@
 #ifndef __msSync__
 #define __msSync__
 
-#include "msTypes.h"
+//#include "msTypes.h"
+#include "MidiShare.h"
 
 
 #ifdef __Macintosh__
