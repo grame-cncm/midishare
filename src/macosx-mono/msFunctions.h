@@ -148,8 +148,8 @@ extern "C" {
   void            MIDISHAREAPI MidiFlushEvs(short refNum);
 
 /*----------------------------------- Mail boxes ------------------------------*/
-  void* MIDISHAREAPI MidiReadSync( void ** adrMem);
-   void* MIDISHAREAPI MidiWriteSync(void ** adrMem, void* val);
+  void* MIDISHAREAPI MidiReadSync( void * adrMem);
+  void* MIDISHAREAPI MidiWriteSync(void * adrMem, void* val);
 
 /*---------------------------------- Task Managing ----------------------------*/
   void       MIDISHAREAPI MidiCall (TaskPtr routine, unsigned long date, short refNum, void* a1, void* a2, void* a3);

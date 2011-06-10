@@ -329,10 +329,10 @@ Boolean MIDISHAREAPI MidiIsSlotConnected (short port, SlotRefNum slot) {
 }
 
 /*----------------------------------- Mail boxes ------------------------------*/
-void* MIDISHAREAPI MidiReadSync(void** adrMem) {
+void* MIDISHAREAPI MidiReadSync(void* adrMem) {
   	return MSReadSync( adrMem);
 }
-void* MIDISHAREAPI MidiWriteSync(void** adrMem,void* val) {
+void* MIDISHAREAPI MidiWriteSync(void* adrMem,void* val) {
   	return MSWriteSync( adrMem,val);
 }
 
