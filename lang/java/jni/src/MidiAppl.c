@@ -21,21 +21,21 @@
 */
 
 
-/*****************************************************************************/
-/* MidiAppl.c : interface to MidiShare 
-/*
-/* MidiShare home page 	: http://www.grame.fr/MidiShare/
-/* MidiShare/Java home page : http://www.grame.fr/MidiShare/Develop/Java.html
-/*
-/* Bug & comments report : MidiShare@rd.grame.fr
-/*	
-/* History : 20/07/96 Suppression des fonction SetData et GetData : utilisation de MidiSetField
-/*          19/03/02 Thread bloquant sur MacOS9
-/*          17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
-/*			05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback, un pour le thread de l'application. 
-/*			21/04/09 Dans Java_grame_midishare_MidiAppl_ApplClose, utilisation du parametre JNIEnv * env et pas celui garde dans la structure context.
-/*		
-/*****************************************************************************/
+/*****************************************************************************
+ MidiAppl.c : interface to MidiShare 
+
+ MidiShare home page 	: http://www.grame.fr/MidiShare/
+ MidiShare/Java home page : http://www.grame.fr/MidiShare/Develop/Java.html
+
+ Bug & comments report : MidiShare@rd.grame.fr
+	
+ History : 20/07/96 Suppression des fonction SetData et GetData : utilisation de MidiSetField
+          19/03/02 Thread bloquant sur MacOS9
+          17/04/02 Appel direct du code Java dans la ReceiveAlarm sur MacOSX, Windows et Linux
+			05/12/03 Utilisation de deux champs JNIEnv * dans ApplContext, un pour le thread callback, un pour le thread de l'application. 
+			21/04/09 Dans Java_grame_midishare_MidiAppl_ApplClose, utilisation du parametre JNIEnv * env et pas celui garde dans la structure context.
+		
+*****************************************************************************/
 
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
