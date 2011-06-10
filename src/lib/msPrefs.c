@@ -54,6 +54,8 @@
 
 #define DriverMaxEntry	512
 
+enum { false, true };
+
 //________________________________________________________________________
 static char * GetProfileFullName (char* filename)
 {

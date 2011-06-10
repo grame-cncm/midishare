@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 2002
+  Copyright ï¿½ Grame 2002
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -24,7 +24,7 @@
 #ifndef __msPrefs__
 #define __msPrefs__
 
-#include "msTypes.h"
+#include "MidiShare.h"
 
 enum { kTimerTime=1, kAudioTime };
 
