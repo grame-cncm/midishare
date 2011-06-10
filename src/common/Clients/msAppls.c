@@ -294,12 +294,12 @@ void closeClient (short ref, TMSGlobalPtr g)
 TApplPtr NewAppl(int size)
 {
 	char * ptr;
-	int mod;
+	long mod;
 	TApplPtr appl;
 
 	ptr = (char*)AllocateMemory(kernelSharedMemory, size + kMemAlign );
 	if (ptr) {
-		mod = (int)ptr % kMemAlign;
+		mod = (long)ptr % kMemAlign;
 		appl = (TApplPtr)(ptr + kMemAlign - mod);
 		appl->mem = ptr;
 		return appl;
