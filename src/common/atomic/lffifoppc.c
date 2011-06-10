@@ -33,7 +33,7 @@ void fifoinit (fifo* ff)
 }
 
 //----------------------------------------------------------------
-unsigned long fifosize (fifo * ff)
+atomic_long fifosize (fifo * ff)
 {
     return ff->count.value;
 }

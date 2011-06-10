@@ -20,6 +20,9 @@ zip : grame.jar JMidi.dll
 	cp JMidi.dll $(F)
 	cp ../../jni/src/changelog.txt $(F)
 
+Test : Test.class
+	java -d32 Test
+
 folder :
 	-[ -d grameclasses ] && rm -rf grameclasses
 	cp -r grame grameclasses
