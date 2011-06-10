@@ -370,10 +370,8 @@ enum{   MIDIOpenAppl=1,
 
 #ifdef PascalNames
 	typedef unsigned char	DriverName[DrvNameLen];
-	typedef unsigned char *	MidiName;
 #else
 	typedef char   DriverName[DrvNameLen];
-	typedef char *	MidiName;
 #endif
 typedef DriverName SlotName;
 
