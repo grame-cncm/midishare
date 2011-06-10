@@ -29,30 +29,6 @@
 		6A0644BD02C7C4400CC91562 /* native.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6A0644AC02C7C26E0CC91562 /* native.1 */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		130F8B95001BDF0A11CA292A /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		130F8B96001BDF0A11CA292A /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		6A0644BC02C7C42C0CC91562 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -207,16 +183,12 @@
 		00E6828EFEC88D1A11DB9C8B /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B75833F09ED46F8006225A2 /* Build configuration list for PBXProject "native" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				130F8B95001BDF0A11CA292A /* Development */,
-				130F8B96001BDF0A11CA292A /* Deployment */,
-			);
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 00E6828FFEC88D1A11DB9C8B;
 			productRefGroup = 0120612AFEC8923411DB9C8B /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				130F8B90001BDF0A11CA292A /* native */,
 			);
@@ -262,17 +234,6 @@
 				130F8B94001BDF0A11CA292A /* Frameworks */,
 				6A0644BC02C7C42C0CC91562 /* CopyFiles */,
 			);
-			buildSettings = {
-				JAVA_ARCHIVE_CLASSES = YES;
-				JAVA_ARCHIVE_COMPRESSION = NO;
-				JAVA_ARCHIVE_TYPE = JAR;
-				JAVA_COMPILER = /usr/bin/javac;
-				JAVA_MANIFEST_FILE = Manifest;
-				JAVA_SOURCE_SUBDIR = .;
-				PRODUCT_NAME = grame;
-				PURE_JAVA = YES;
-				REZ_EXECUTABLE = YES;
-			};
 			dependencies = (
 			);
 			name = native;
