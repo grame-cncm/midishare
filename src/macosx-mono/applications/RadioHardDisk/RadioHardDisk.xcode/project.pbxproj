@@ -152,8 +152,7 @@
 			sourceTree = "<group>";
 		};
 		20286C33FDCF999611CA2CEA = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
@@ -189,8 +188,6 @@
 //4A3
 //4A4
 		4A9504C5FFE6A39111CA0CBA = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
@@ -205,8 +202,6 @@
 			name = Development;
 		};
 		4A9504C6FFE6A39111CA0CBA = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -216,8 +211,7 @@
 			name = Deployment;
 		};
 		4A9504C8FFE6A3BC11CA0CBA = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = ApplicationServices.framework;
 			path = /System/Library/Frameworks/ApplicationServices.framework;
@@ -225,8 +219,7 @@
 			sourceTree = "<absolute>";
 		};
 		4A9504CAFFE6A41611CA0CBA = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
@@ -2045,7 +2038,7 @@
 		D3EC0A4F07DF5D1B0006B528 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			lastKnownFileType = text.plist.xml;
+			lastKnownFileType = file;
 			path = Info.plist;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;

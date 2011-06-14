@@ -111,7 +111,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 4BB41F0C09ED430000EE9367 /* Build configuration list for PBXProject "msAUDriver" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = F567580C01FDA3E101053105;
 			productRefGroup = F5EFF91601FDA40901053105 /* Products */;
 			projectDirPath = "";
@@ -162,7 +169,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -191,7 +198,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -218,7 +225,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				ZERO_LINK = YES;
 			};
 			name = Default;

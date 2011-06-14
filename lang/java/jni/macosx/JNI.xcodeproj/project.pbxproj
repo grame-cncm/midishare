@@ -14,7 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4B2A2AD309F8C5DF008FC13F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = /System/Library/Frameworks/MidiShare.framework; sourceTree = "<absolute>"; };
+		4B2A2AD309F8C5DF008FC13F /* MidiShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MidiShare.framework; path = ../../../../src/cmake/Release/MidiShare.framework; sourceTree = SOURCE_ROOT; };
 		4B75836C09ED471E006225A2 /* libJMidi.1.1.3.jnilib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJMidi.1.1.3.jnilib; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCBA72406074E9F00D2BE30 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaVM.framework; path = /System/Library/Frameworks/JavaVM.framework; sourceTree = "<absolute>"; };
 		F506805F02083B1F01053105 /* Midi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = Midi.c; path = ../src/Midi.c; sourceTree = SOURCE_ROOT; };
@@ -66,9 +66,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4B75835F09ED471E006225A2 /* libJMidi.jnilib Universal */ = {
+		4B75835F09ED471E006225A2 /* libJMidi.jnilib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B75836809ED471E006225A2 /* Build configuration list for PBXNativeTarget "libJMidi.jnilib Universal" */;
+			buildConfigurationList = 4B75836809ED471E006225A2 /* Build configuration list for PBXNativeTarget "libJMidi.jnilib" */;
 			buildPhases = (
 				4B75836009ED471E006225A2 /* Headers */,
 				4B75836109ED471E006225A2 /* ShellScript */,
@@ -80,7 +80,7 @@
 			);
 			dependencies = (
 			);
-			name = "libJMidi.jnilib Universal";
+			name = libJMidi.jnilib;
 			productInstallPath = /usr/local/lib;
 			productName = libJMidi.jnilib;
 			productReference = 4B75836C09ED471E006225A2 /* libJMidi.1.1.3.jnilib */;
@@ -93,13 +93,20 @@
 			isa = PBXProject;
 			buildConfigurationList = 4B75836E09ED474A006225A2 /* Build configuration list for PBXProject "JNI" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 01F12F4DFEC8CE2211DB9C8B;
 			productRefGroup = 01F12F4FFEC8CEF111DB9C8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4B75835F09ED471E006225A2 /* libJMidi.jnilib Universal */,
+				4B75835F09ED471E006225A2 /* libJMidi.jnilib */,
 			);
 		};
 /* End PBXProject section */
@@ -142,16 +149,22 @@
 		4B75836909ED471E006225A2 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
-				COPY_PHASE_STRIP = NO;
+				ARCHS = (
+					i86_64,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
 				EXECUTABLE_EXTENSION = jnilib;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = ../../../../src/cmake/Release;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREFIX_HEADER = jniheader.h;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../../src/include,
+					/System/Library/Frameworks/JavaVM.framework/Headers,
+				);
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
@@ -177,14 +190,20 @@
 		4B75836A09ED471E006225A2 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				ARCHS = (
+					i86_64,
+					i386,
+				);
 				COPY_PHASE_STRIP = YES;
 				EXECUTABLE_EXTENSION = jnilib;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = ../../../../src/cmake/Release;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREFIX_HEADER = jniheader.h;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../../src/include,
+					/System/Library/Frameworks/JavaVM.framework/Headers,
+				);
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
@@ -207,12 +226,19 @@
 		4B75836B09ED471E006225A2 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				ARCHS = (
+					i86_64,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
 				EXECUTABLE_EXTENSION = jnilib;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = ../../../../src/cmake/Release;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREFIX_HEADER = jniheader.h;
-				HEADER_SEARCH_PATHS = /System/Library/Frameworks/JavaVM.framework/Headers;
+				HEADER_SEARCH_PATHS = (
+					../../../../src/include,
+					/System/Library/Frameworks/JavaVM.framework/Headers,
+				);
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
@@ -237,25 +263,40 @@
 		4B75836F09ED474A006225A2 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					x86_64,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Development;
 		};
 		4B75837009ED474A006225A2 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					x86_64,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Deployment;
 		};
 		4B75837109ED474A006225A2 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					x86_64,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Default;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B75836809ED471E006225A2 /* Build configuration list for PBXNativeTarget "libJMidi.jnilib Universal" */ = {
+		4B75836809ED471E006225A2 /* Build configuration list for PBXNativeTarget "libJMidi.jnilib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B75836909ED471E006225A2 /* Development */,
