@@ -1,10 +1,10 @@
 #######################################
-# CMAKE guidolib
+# CMAKE midisharejni
 #######################################
 project(midisharejni)
 cmake_minimum_required(VERSION 2.6)
 
-set (target jniMidi)
+set (target JMidi)
 #######################################
 # versions management
 set (VERSION 1.13)
@@ -12,14 +12,6 @@ set (STRVERS "v.1.13")
 set (SSTRVERS "1.13")
 
 FIND_PACKAGE(JNI REQUIRED)
-#FIND_PACKAGE(Java REQUIRED)
-#message ( "JNI_INCLUDE_DIRS		 ${JNI_Iset_target_properties (${target} PROPERTIES
-#message ( "JAVA_AWT_LIBRARY		 ${JAVA_AWT_LIBRARY}")
-#message ( "JAVA_JVM_LIBRARY		 ${JAVA_JVM_LIBRARY}")
-#message ( "JAVA_INCLUDE_PATH	 ${JAVA_INCLUDE_PATH}")
-#message ( "JAVA_INCLUDE_PATH2	 ${JAVA_INCLUDE_PATH2}")
-#message ( "JAVA_AWT_INCLUDE_PATH ${JAVA_AWT_INCLUDE_PATH}")
-
 
 if(APPLE)
 	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
@@ -42,7 +34,7 @@ if(WIN32)
  
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
   set (WIN64 1)
-  set (target jniGUIDOEngine64)
+  set (target JMidi64)
  endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
 
 endif(WIN32)
@@ -73,15 +65,12 @@ else(WIN64)
 endif(WIN64)
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})
-set (LINK  ${MSLIB})
+set (LINK ${JNI_LIBRARIES} ${MSLIB})
 
-#if(WIN32)
-#	enable_language(RC)
-#	set(LIBCONTENT ${LIBCONTENT} ../jni/win32/jniGUIDOEngine.rc)
-#	set(LINK ${LINK} Gdiplus)
-#elseif(APPLE)
-#	set(LINK ${LINK}  "-framework Cocoa  -framework CoreFoundation")
-#endif(WIN32)
+if(WIN32)
+	enable_language(RC)
+	set(LIBCONTENT ${LIBCONTENT} ../win32/JMidi.rc)
+endif(WIN32)
 
 add_library(${target} SHARED ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES VERSION ${VERSION})
