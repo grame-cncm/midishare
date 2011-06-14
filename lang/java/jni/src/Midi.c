@@ -45,10 +45,8 @@
 
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
-		#include <MidiShare.h>
 		#include <Memory.h>   // for NewPtr and DisposePtr
 	#else
-		#include <MidiShare.h>
 		#include <stdlib.h>
 		#define NewPtr(v) malloc((v))
 		#define DisposePtr(ptr) free((Ptr)(ptr))
@@ -56,17 +54,13 @@
 #endif
 
 #ifdef __Linux__
-	#include <MidiShare.h>
 	#include <stdlib.h>
 	#define NewPtr(v) malloc((v))
 	#define DisposePtr(ptr) free((Ptr)(ptr))
 	#define MSALARMAPI
 #endif
 
-#ifdef WIN32
-	#include <MidiShare.h>
-#endif
-
+#include "MidiShare.h"
 #include "Midi.h"
 
 
@@ -1167,7 +1161,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfos
 	jbyteArray infosCnx;
 	jclass infosclass;
     Boolean res;
-	int i;
         
 	Check_Pointer(inEnv,jinfos);
 	infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);

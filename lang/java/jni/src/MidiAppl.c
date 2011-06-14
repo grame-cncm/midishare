@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2009
+  Copyright ï¿½ Grame 1999-2009
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,30 +37,26 @@
 		
 *****************************************************************************/
 
+#include "MidiShare.h"
+
 #ifdef __Macintosh__
 	#ifdef __MacOS9__
-            #include <MidiShare.h>
             static  ProcessSerialNumber gJavaProcess;
             UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
             UPPApplAlarmPtr UPPJApplAlarmPtr ;
 	#else
-            #include <MidiShare.h>
             RcvAlarmPtr UPPJRcvAlarmPtr ;
             ApplAlarmPtr UPPJApplAlarmPtr ;
 	#endif
 #endif
 
 #ifdef __Linux__
-	#include "MidiShare.h"
 	#define MSALARMAPI
         RcvAlarmPtr UPPJRcvAlarmPtr ;
         ApplAlarmPtr UPPJApplAlarmPtr ;
 #endif
 
 #ifdef WIN32
-	#define true 1
-	#define false 0
-	#include <MidiShare.h>
 	ApplAlarmPtr UPPJApplAlarmPtr ;
 	RcvAlarmPtr UPPJRcvAlarmPtr ;
 #endif
@@ -73,6 +69,8 @@
 
 #define kPollingMode 	0
 #define kNativeMode 	1
+
+enum { false, true };
 
 /*--------------------------------------------------------------------------*/
 typedef struct ApplContext {
