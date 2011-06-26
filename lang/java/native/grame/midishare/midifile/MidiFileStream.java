@@ -40,6 +40,7 @@
 /* 			
 /* 13/02/98 : Correction of a bug with format 1 in FlushKeyOff
 /* 10/02/99 : Correction of a bug in writeEv
+/* 16/07/02 : Correction of a bug in write_sysex and read_sysex functions, new functions for typeStream
 /*****************************************************************************/
   
  
@@ -128,7 +129,7 @@
         new undef(),             /* $f4                         */
         new undef(),             /* $f5                         */
         new Data0Ev(),           /* $f6 :  14 typeTune          */
-        new sysEx(),             /* $f7 :  18 typeStream        */
+        new stream(),            /* $f7 :  18 typeStream        */
         new Data0Ev(),           /* $f8 :  10 typeClock         */
         new undef(),             /* $f9                         */
         new Data0Ev(),           /* $fa :  11 typeStart         */
@@ -181,7 +182,7 @@
  			new Data0Ev(),		/* 15 typeActiveSens	*/
  			new dont_write(),	/* 16 typeReset			*/
  			new sysEx(),		/* 17 typeSysEx			*/
- 			new sysEx(),		/* 18 typeStream		*/
+ 			new stream(),		/* 18 typeStream		*/
  		};
  
  
@@ -282,8 +283,8 @@
   	 
  	int  	trkHeadOffset;                  /* track header offset                  */
   	int    	_cnt;                           /* count for end track detection        */
- 	int    	keyOff;                         /* keyOff coming from typeNote events   */
-  	int    	curDate;                        /* current date                         */
+ 	long    keyOff;                         /* keyOff coming from typeNote events   */
+  	long    curDate;                        /* current date                         */
   	boolean opened;                     	/* flag for opened track                */
   
   	private  short status = 0;
@@ -478,8 +479,8 @@
 	*@exception Exception If a  MidiShare error occurs.
  	*/
  	
-   final public int ReadEv()throws Exception {
-      int ev = 0;
+   final public long ReadEv()throws Exception {
+      long ev = 0;
  
       if (isTrackOpen()) {
        	if (_cnt > 0) {
@@ -502,9 +503,9 @@
 	*@Exception Exception If the function returns nil when the track is still opened.
  	*/
  	
-  final public int ReadTrack ()throws Exception {
+  final public long ReadTrack ()throws Exception {
   	
-  	 int ev,seq = 0;
+  	 long ev,seq = 0;
  
       OpenTrack();
       
@@ -563,8 +564,8 @@
    // ReadEv
    /*------------------------------------------------------------------*/
  
-     final int ReadEvAux() throws Exception {
-        int ev = 0;
+     final long ReadEvAux() throws Exception {
+        long ev = 0;
         short c;
  
  		try {
@@ -601,7 +602,7 @@
    	// read META
    	/*------------------------------------------------------------------*/
  
-    final int mdf_read_meta() throws Exception{
+    final long mdf_read_meta() throws Exception{
         short type;
         int len;
  				
@@ -623,10 +624,10 @@
    	/*------------------------------------------------------------------*/
  
  	final int ReadVarLen() throws Exception{
-      	long val;
+      	int val;
       	short c;
  
-        if (((val = (long)input.read()) & 0x80) != 0){
+        if (((val = input.read()) & 0x80) != 0){
             val &= 0x7F;
             do {
                 val = (val<< 7) + ((c =  (short)input.read()) & 0x7F);
@@ -634,12 +635,35 @@
            } while ((c & 0x80) != 0);
         }
         _cnt--;       
-        return (int)val;
+        return val;
+ 	}
+ 	
+ 	/*------------------------------------------------------------------*/
+   	// read  var length
+   	/*------------------------------------------------------------------*/
+ 
+ 	final int ReadVarLen1(long ev) throws Exception{
+      	int val;
+      	short c;
+      	
+      	val = input.read();
+      	Midi.AddField(ev,val);
+ 
+        if ((val & 0x80) != 0){
+            val &= 0x7F;
+            do {
+                val = (val<< 7) + ((c =  (short)input.read()) & 0x7F);
+                Midi.AddField(ev,c);
+                _cnt--;
+           } while ((c & 0x80) != 0);
+        }
+        _cnt--;       
+        return val;
  	}
  
  
  /*--------------------------------------------------------------------------*/
-  final void WriteVarLen(int val) throws Exception{
+  final void WriteVarLen(long val) throws Exception{
  	
  	long buf,val1;
  	
@@ -664,7 +688,7 @@
  
  
  /*--------------------------------------------------------------------------*/
-  final static int GetVarLen(int val){
+  final static int GetVarLen(long val){
  	long buf;
  	int res = 0;
  
@@ -704,7 +728,7 @@
  	}
  
  /*--------------------------------------------------------------------------*/
- final  void WriteEvAux(int ev) throws Exception
+ final  void WriteEvAux(long ev) throws Exception
  {
  	int type;
  	
@@ -722,7 +746,7 @@
  /*--------------------------------------------------------------------------*/
   final void FlushKeyOff() throws Exception 
  {
- 	int seq,ev,date;
+ 	long seq,ev,date;
  	
  	seq= keyOff;						/* keyOff sequence ptr	*/
  	ev= Midi.GetFirstEv(seq);			/* first event			*/
@@ -800,8 +824,8 @@
  	*/
  	
  /*--------------------------------------------------------------------------*/
-final  public void WriteEv(int event) throws Exception{
- 	int seq,off,date;
+final  public void WriteEv(long event) throws Exception{
+ 	long seq,off,date;
  	
  	if(!isTrackOpen()) throw new IOException ("Track  closed");
  		
@@ -836,8 +860,8 @@ final  public void WriteEv(int event) throws Exception{
 	*@exception Exception If a IO error or a MidiShare error occurs.
  	*/
  	
- final public void  WriteTrack(int seq) throws Exception  {
- 	int ev;
+ final public void  WriteTrack(long seq) throws Exception  {
+ 	long ev;
  	
  	NewTrack();	  				/* write the track header 	*/
  	ev = Midi.GetFirstEv(seq);
@@ -851,10 +875,10 @@ final  public void WriteEv(int event) throws Exception{
  	CloseTrack();		
  }
  
-  final public void  WriteTrack1(int seq) throws Exception  {
- 	int ev;
+  final public void  WriteTrack1(long seq) throws Exception  {
+ 	long ev;
  	int port = 0;
- 	int lastWrite = 0;
+ 	long lastWrite = 0;
  	
  	NewTrack();	  				/* write the track header 	*/
  	ev = Midi.GetFirstEv(seq);
@@ -900,7 +924,7 @@ final  public void WriteEv(int event) throws Exception{
  	*/
  	
 
- final public void Load (URL url,int seq, MidiFileInfos info ) throws Exception {
+ final public void Load (URL url,long seq, MidiFileInfos info ) throws Exception {
 	Open(url);
  	
  	if (seq == 0) throw new MidiException ("No more MidiShare event");
@@ -934,7 +958,7 @@ final  public void WriteEv(int event) throws Exception{
  	*@exception Exception If the MIDIfile cannot be read of if a MidiShare error occurs. 	
  	*/
 
- final public void Load (File mf, int seq, MidiFileInfos info) throws Exception {
+ final public void Load (File mf, long seq, MidiFileInfos info) throws Exception {
  	int i,tmp,tmp1;
  	
  	Open(mf);
@@ -968,7 +992,7 @@ final  public void WriteEv(int event) throws Exception{
  	*@exception Exception If the MIDIfile cannot be read of if a MidiShare error occurs. 	
  	*/
 
- final public void Load (InputStream  inputstream, int seq, MidiFileInfos info) throws Exception {
+ final public void Load (InputStream  inputstream, long seq, MidiFileInfos info) throws Exception {
  	int i,tmp,tmp1;
  	
  	Open(inputstream);
@@ -1009,7 +1033,7 @@ final  public void WriteEv(int event) throws Exception{
 }
 
 
-final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
+final  void SaveAux (long seq,  MidiFileInfos info) throws Exception {
  	
 	if( info.format < 0 || info.format > 2) throw new IOException ("MidiFileFormat error");
 	InitTrackListe();					/* init track list to nil	*/
@@ -1036,7 +1060,7 @@ final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
 	*@exception Exception If the MIDIfile cannot be saved of if a MidiShare error occurs. 	
  	*/
 
- final public void Save (File file, int seq,  MidiFileInfos info) throws Exception {
+ final public void Save (File file, long seq,  MidiFileInfos info) throws Exception {
  	
  	SaveAux(seq,info);
 	
@@ -1060,7 +1084,7 @@ final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
 	*@exception Exception If the MIDIfile cannot be saved of if a MidiShare error occurs. 	
  	*/
 
- final public void Save (URL url, int seq,  MidiFileInfos info) throws Exception {
+ final public void Save (URL url, long seq,  MidiFileInfos info) throws Exception {
  	
 	SaveAux(seq,info);
 	
@@ -1087,7 +1111,7 @@ final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
  	*/
 
 
- final public void Save (OutputStream outstream, int seq,  MidiFileInfos info) throws Exception {
+ final public void Save (OutputStream outstream, long seq,  MidiFileInfos info) throws Exception {
  	
  	SaveAux(seq,info);
 	
@@ -1101,8 +1125,8 @@ final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
 
   
   /*--------------------------------------------------------------------------*/
-  final void SetLoadDates(  MidiFileInfos info, int s){
-	int e;
+  final void SetLoadDates(  MidiFileInfos info, long s){
+	long e;
 	
 	if( info.timedef != 0 )  				/* SMPTE time*/
 	{
@@ -1118,7 +1142,7 @@ final  void SaveAux (int seq,  MidiFileInfos info) throws Exception {
 
   
 /*--------------------------------------------------------------------------*/
-final void WriteTracks(int seq) throws Exception {
+final void WriteTracks(long seq) throws Exception {
 	short i=0, numPiste= 0;
 	
 	if(format == MidiFileInfos.midifile1) {
@@ -1144,8 +1168,8 @@ final void WriteTracks(int seq) throws Exception {
 }
 
 /*--------------------------------------------------------------------------*/
- final  void AnalyseSeq(int seq){
-	int ev,type;
+ final  void AnalyseSeq(long seq){
+	long ev; int type;
 
 	ev = Midi.GetFirstEv(seq);
 	
@@ -1173,8 +1197,8 @@ final void WriteTracks(int seq) throws Exception {
 
 
 /*--------------------------------------------------------------------------*/
-  final void WriteTempoMap(int seq) throws Exception {
-	int type, ev, lastWrite= 0;
+  final void WriteTempoMap(long seq) throws Exception {
+	int type; long ev, lastWrite= 0;
 	
 	ev = Midi.GetFirstEv(seq);
 	
@@ -1199,10 +1223,10 @@ final void WriteTracks(int seq) throws Exception {
 }
   
   /*--------------------------------------------------------------------------*/
-   final void WriteTrackFormat1 (int seq, short ref, short numPiste) throws Exception {
+   final void WriteTrackFormat1 (long seq, short ref, short numPiste) throws Exception {
 	
 	boolean firstName = true;
-	int type, ev, lastWrite= 0;
+	int type; long ev, lastWrite= 0;
 	int port = 0;
 
 	ev = Midi.GetFirstEv(seq);
@@ -1241,10 +1265,10 @@ final void WriteTracks(int seq) throws Exception {
 	
 	
 /*--------------------------------------------------------------------------*/
-   final void WriteTrackFormat2 (int seq, short ref, short numPiste) throws Exception {
+   final void WriteTrackFormat2 (long seq, short ref, short numPiste) throws Exception {
 
 	boolean firstName = true;
-	int type, ev, lastWrite= 0;
+	int type; long ev, lastWrite= 0;
 	int port = 0;
 
 	ev = Midi.GetFirstEv(seq);
@@ -1277,7 +1301,7 @@ final void WriteTracks(int seq) throws Exception {
 }
 
 /*--------------------------------------------------------------------------*/
-    final void WriteSeqName( int ev, short ref, short numPiste) throws Exception {
+final void WriteSeqName( long ev, short ref, short numPiste) throws Exception {
 	int name;
 		
 	if( ref == numPiste){					/* refNum equal to the track num 	*/
@@ -1294,9 +1318,9 @@ final void WriteTracks(int seq) throws Exception {
 }
 
 
-  /*--------------------------------------------------------------------------*/
-   final void  WriteEndTrack(int prev) throws Exception {
-	int ev, seq;
+/*--------------------------------------------------------------------------*/
+final void  WriteEndTrack(long prev) throws Exception {
+	long ev, seq;
 	
 	if(( ev = Midi.NewEv(Midi.typeEndTrack)) != 0){		/* allocates an EndTrack event	*/
 		Midi.SetLink(ev,0);
@@ -1323,9 +1347,9 @@ final void WriteTracks(int seq) throws Exception {
 }
 
 /*--------------------------------------------------------------------------*/
-final void WritePortPrefix( int prev, int port) throws Exception {
-	int ev;
-	int seq;
+final void WritePortPrefix( long prev, int port) throws Exception {
+	long ev;
+	long seq;
 	
 	if (Midi.GetVersion() < 185) {
 		return;  /* Teste la version de MidiShare */ 
@@ -1358,7 +1382,7 @@ final void WritePortPrefix( int prev, int port) throws Exception {
 /*				read  all tracks of a MidiFile								*/
 /*--------------------------------------------------------------------------*/
 
- final void UseTrack (int seq, int dest , int i)
+ final void UseTrack (long seq, long dest , int i)
 	{
 		SetSeqRef( seq, GetSeqRef(seq, i));		/* restore the refnum			*/
 		SetSeqPort(seq);						/* restore the port				*/
@@ -1371,8 +1395,8 @@ final void WritePortPrefix( int prev, int port) throws Exception {
 
 /*--------------------------------------------------------------------------*/
 
-final void TryToReadTrack ( int dest, int i)  throws Exception {
-	int seq;
+final void TryToReadTrack ( long dest, int i)  throws Exception {
+	long seq;
 
 	seq = ReadTrack();
 	UseTrack (seq, dest, i);
@@ -1380,7 +1404,7 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 }		
 
 /*--------------------------------------------------------------------------*/
- final void ReadTracks( int dest)  throws Exception {
+ final void ReadTracks( long dest)  throws Exception {
 	int i;
 	
 	for (i=0; i< ntrks; i++)
@@ -1390,9 +1414,9 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 }
 
 /*--------------------------------------------------------------------------*/	
-	final  void SetSeqRef(int seq, int refNum)
+	final  void SetSeqRef(long seq, int refNum)
 	{
-	  int ev;
+	  long ev;
 	
 		ev = Midi.GetFirstEv(seq);
 		while( ev != 0)
@@ -1405,9 +1429,9 @@ final void TryToReadTrack ( int dest, int i)  throws Exception {
 /*--------------------------------------------------------------------------*/
 /* 		restore l'information de port										*/
 /*--------------------------------------------------------------------------*/
-final void SetSeqPort( int seq)
+final void SetSeqPort( long seq)
 {
-	int  ev, prev, tmp;
+	long  ev, prev, tmp;
 	int port = 0;
 	
 	prev= 0;
@@ -1448,9 +1472,9 @@ final void SetSeqPort( int seq)
 	}
 
 /*--------------------------------------------------------------------------*/
-  final int RestoreSeqName( String buff)
+  final long RestoreSeqName( String buff)
 {
-	int ev = 0;
+	long ev = 0;
 	
 	if((ev= Midi.NewEv(Midi.typeSeqName)) != 0){		/* new event		*/
 		Midi.SetText(ev, buff.substring(0, GetBeginKey(buff)));
@@ -1460,9 +1484,9 @@ final void SetSeqPort( int seq)
 
 /*--------------------------------------------------------------------------*/
 /* returns the event preceding the first event of type SeqName or TrackName of the sequence */
- final int GetTrackName( int seq)
+ final long GetTrackName( long seq)
 {
-	int ev, prev = 0;
+	long ev, prev = 0;
 	
 	ev = Midi.GetFirstEv(seq);
 	while(ev != 0)
@@ -1499,10 +1523,10 @@ final void SetSeqPort( int seq)
 
 /*--------------------------------------------------------------------------*/
 /*  returns le refNum of a sequence (by default: track number)				*/
-  final int GetSeqRef( int seq, int numPiste)
+  final int GetSeqRef( long seq, int numPiste)
 {
-	int ev, ori,refNum;
-	int prec= 0;
+	long ev, ori; int refNum;
+	long prec= 0;
 	int i, n, l;
 	String buff;
 	
@@ -1648,9 +1672,9 @@ final class TrkHeader{
  
  class MfEvent {
  
- 	  int  read	(MidiFileStream  mfile, int len, short status)throws Exception{return 0;}
- 	  int  read	(MidiFileStream  mfile, short status)throws Exception{return 0;}
-  	  void	write	(MidiFileStream  mfile, int event, short status)throws Exception{}
+ 	  long  read	(MidiFileStream  mfile, int len, short status)throws Exception{return 0;}
+ 	  long  read	(MidiFileStream  mfile, short status)throws Exception{return 0;}
+  	  void	write	(MidiFileStream  mfile, long event, short status)throws Exception{}
   }
  
  /*--------------------------------------------------------------------------*/
@@ -1663,15 +1687,69 @@ final class TrkHeader{
  
  final class  sysEx extends MfEvent {
  
- 	 final int read (MidiFileStream  mfile, short status)throws Exception{
-    	int ev;
+ 	final long read (MidiFileStream  mfile, short status)throws Exception{
+    	long ev1,ev2;
+    	int len;
+    	int c = 0;
+    	
+    	ev1 = Midi.NewEv(Midi.typeSysEx);			
+		ev2 = Midi.NewEv(Midi.typeStream);
+
+    	if ((ev1 != 0) && (ev2 != 0)){
+    		Midi.AddField( ev2, status);			/* store the first byte in the stream event */
+	    	len = mfile.ReadVarLen1(ev2);           /* message length bytes are put in the Stream event	*/
+	    	
+          	while(len-- > 0){
+                c = mfile.input.read();         /* read the datas       */
+                mfile._cnt--;
+                Midi.AddField(ev2, c);          /* and store them to the Stream event */
+                if (c != 0xF7)
+					Midi.AddField( ev1, c);		/* and store them to the SysEx event */
+          	}
+          	
+          	if (c == 0xF7) {					/* Complete SysEx */
+				Midi.FreeEv(ev2);
+				return ev1;
+			}else {								/* Stream */
+		 		Midi.FreeEv(ev1);
+				return ev2;
+			}	
+			
+	    } else throw new MidiException ("No more MidiShare event");
+  	 }
+ 	 
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
+   		
+   		int i,count;
+ 	
+		count= Midi.CountFields( ev);
+		mfile.output.write( 0xF0);						/* sysex header			*/
+		mfile.WriteVarLen( count+1);					/* message length = bytes to be written + last 0xF7	*/
+		
+		for (i = 0; i< count; i++) {
+			mfile.output.write(Midi.GetField(ev,i));		
+		}
+		
+		mfile.output.write( 0xF7);						/* sysex end			*/
+ 	}
+ 
+  }
+ 
+ /*--------------------------------------------------------------------------*/
+ /* class stream                                                              */
+ /*--------------------------------------------------------------------------*/
+ 
+ final class stream extends MfEvent {
+ 
+ 	 final long read (MidiFileStream  mfile, short status) throws Exception{
+    	long ev;
     	int len;
     	int c;
-    	
     
-    	if ((ev = Midi.NewEv( status == 0xF0 ? Midi.typeSysEx : Midi.typeStream)) != 0){
-          len = mfile.ReadVarLen();                     /* message length       */
-          while(len-- > 0){
+    	if ((ev = Midi.NewEv(Midi.typeStream)) != 0){
+    		Midi.AddField(ev, status);                  /* store the first byte in the stream event */
+          	len = mfile.ReadVarLen1(ev);                /* message length       */
+          	while(len-- > 0){
                 c = mfile.input.read();                 /* read the datas       */
                 mfile._cnt--;
                 Midi.AddField(ev, c);                   /* and store them to the event */
@@ -1680,24 +1758,18 @@ final class TrkHeader{
       	return ev;
  	 }
  	 
-    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    		
-   		int i,e,count;
+   		int i,count;
  	
- 			count= Midi.CountFields( ev);
- 			if( Midi.GetType( ev)== Midi.typeSysEx)							/* sysex message		*/
- 				mfile.output.write( 0xF0);									/* sysex header			*/
- 			else															/* stream message		*/
- 				mfile.output.write( 0xF7);									/* header sysex	next 	*/
- 			mfile.WriteVarLen( count);										/* message length		*/
- 			
- 			for (i = 0; i< count; i++) {
- 				mfile.output.write(Midi.GetField(ev,i));		
- 			}
+ 		count= Midi.CountFields( ev);
+ 		for (i = 0; i< count; i++) {
+ 			mfile.output.write(Midi.GetField(ev,i));		
+ 		}
  	}
  
   }
- 
+
  
  /*--------------------------------------------------------------------------*/
  /* class Note                                                                                   
@@ -1705,7 +1777,7 @@ final class TrkHeader{
  
  final class  Note extends MfEvent {
  
-    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    
    		int c;
  	
@@ -1740,7 +1812,7 @@ final class TrkHeader{
  
  final class  NRegP extends MfEvent {
  
-    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    		short num, val;
  
  			num= (short)Midi.GetField( ev, 0);							/* control number	*/
@@ -1756,7 +1828,7 @@ final class TrkHeader{
  
  final class  RegP extends MfEvent {
  
-    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    
    		short num, val;
  
@@ -1775,7 +1847,7 @@ final class TrkHeader{
  
  final class  Ctrl14b extends MfEvent {
  
-    final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    		short num, val;
  	
  			num= (short)Midi.GetField( ev, 0);						/* control number	*/
@@ -1797,8 +1869,8 @@ final class TrkHeader{
  
 final  class  Data2Ev extends MfEvent {
  
- 	 final int read (MidiFileStream  mfile, short status) throws Exception {
-       int ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
+ 	 final long read (MidiFileStream  mfile, short status) throws Exception {
+       long ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
  
      	if (ev != 0) {
             Midi.SetData0(ev, mfile.input.read());
@@ -1808,7 +1880,7 @@ final  class  Data2Ev extends MfEvent {
  	    return ev;
  	 }
  	 
-   final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+   final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    
   		mfile.output.write(status);
  		mfile.output.write( Midi.GetData0( ev));
@@ -1822,8 +1894,8 @@ final  class  Data2Ev extends MfEvent {
  
 final  class  Data1Ev extends MfEvent {
  
- 	final  int read (MidiFileStream  mfile, short status) throws Exception {
-    	int ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
+ 	final  long read (MidiFileStream  mfile, short status) throws Exception {
+    	long ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
  			
      	if (ev != 0) {
  	        Midi.SetData0(ev, mfile.input.read());
@@ -1846,14 +1918,14 @@ final  class  Data1Ev extends MfEvent {
  
  final class  Data0Ev extends MfEvent {
  
- 	final int read (MidiFileStream  mfile, short status)throws Exception{
-    	int ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
+ 	final long read (MidiFileStream  mfile, short status)throws Exception{
+    	long ev = Midi.NewEv(MidiFileStream.typeTbl[status & 0x7F]);
     
     	if (ev == 0) throw new MidiException ("No more MidiShare event");		 
  		return ev;
  	}
  	 
-    final void write(MidiFileStream  mfile, int ev, short status)  throws Exception{
+    final void write(MidiFileStream  mfile, long ev, short status)  throws Exception{
    	 	mfile.output.write(status);
    	}
   }
@@ -1868,9 +1940,9 @@ final  class  Data1Ev extends MfEvent {
  
  final class text extends MfEvent{
  
- 	final int read (MidiFileStream  mfile, int len, short type) throws Exception
+ 	final long read (MidiFileStream  mfile, int len, short type) throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
         
         if((ev = Midi.NewEv( type + 133)) != 0)
         {
@@ -1882,7 +1954,7 @@ final  class  Data1Ev extends MfEvent {
         return ev;
  	}
  	
- 	final  void write(MidiFileStream  mfile, int ev, short status) throws Exception{
+ 	final  void write(MidiFileStream  mfile, long ev, short status) throws Exception{
  		int len,i;
  		
  		mfile.output.write(MidiFileStream.META);						/* meta evt	header	*/
@@ -1904,9 +1976,9 @@ final  class  Data1Ev extends MfEvent {
  
  final class endTrack extends MfEvent{
  
- 	 final int read(MidiFileStream  mfile, int len, short unused1) throws Exception
+ 	 final long read(MidiFileStream  mfile, int len, short unused1) throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
         
         if( len != MidiFileStream.MDF_EndTrkLen){                        /* message length */
          	return	mfile.ReadExtTbl[0].read(mfile, len,(short)0);
@@ -1916,7 +1988,7 @@ final  class  Data1Ev extends MfEvent {
         
          return ev;
  	}
- 	 final void write(MidiFileStream  mfile, int ev, short status) throws Exception{
+ 	 final void write(MidiFileStream  mfile, long ev, short status) throws Exception{
  	
  		mfile.output.write( MidiFileStream.META);			/* meta evt	header	*/
  		mfile.output.write( MidiFileStream.MDF_EndTrk);		/* meta evt	type	*/
@@ -1931,9 +2003,9 @@ final  class  Data1Ev extends MfEvent {
  
  final class tempo extends MfEvent{
  
- 	 final int read (MidiFileStream  mfile, int len, short unused1)throws Exception
+ 	 final long read (MidiFileStream  mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
         int tempo;
         
         if (len != MidiFileStream.MDF_TempoLen){                        /* message length */
@@ -1955,7 +2027,7 @@ final  class  Data1Ev extends MfEvent {
          return ev;
  	}
  	
- 	 final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+ 	 final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
  		int l;
  		short s;
  	
@@ -1976,9 +2048,9 @@ final  class  Data1Ev extends MfEvent {
  
 final  class keySign extends MfEvent{
  
- 	final  int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	final  long read( MidiFileStream mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
  
         if (len != MidiFileStream.MDF_TonLen)                          /* message length */
           return mfile.ReadExtTbl[0].read(mfile, len,(short)0);
@@ -1994,7 +2066,7 @@ final  class keySign extends MfEvent{
           return ev;
      }
      
-      final void write(MidiFileStream  mfile	, int ev, short status)throws Exception{
+      final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
  		mfile.output.write(MidiFileStream.META);			/* meta evt	header*/
  		mfile.output.write(MidiFileStream.MDF_Ton);			/* meta evt	type	*/
@@ -2010,9 +2082,9 @@ final  class keySign extends MfEvent{
  
  final class timeSign extends MfEvent{
  
- 	final  int read( MidiFileStream mfile, int len, short unused1) throws Exception
+ 	final  long read( MidiFileStream mfile, int len, short unused1) throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
  
         if (len != MidiFileStream.MDF_MeasLen)                         /* message length */
            return  mfile.ReadExtTbl[0].read(mfile, len,(short)0);
@@ -2028,7 +2100,7 @@ final  class keySign extends MfEvent{
          return ev;
      }
      
-      final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+      final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
      		mfile.output.write( MidiFileStream.META);						/* meta evt	header	*/
  			mfile.output.write( MidiFileStream.MDF_Meas);					/* meta evt	type	*/
@@ -2047,9 +2119,9 @@ final  class keySign extends MfEvent{
  
  final class seqNum extends MfEvent{
  
- 	 final int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	 final long read( MidiFileStream mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
         int num;
  
         if (len != MidiFileStream.MDF_NumSeqLen)                       /* message length */
@@ -2068,7 +2140,7 @@ final  class keySign extends MfEvent{
         return ev;
     }
      
-     final  void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     final  void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
      	short s;
  			
@@ -2088,9 +2160,9 @@ final  class keySign extends MfEvent{
  
  final class chanPref extends MfEvent{
  
- 	final  int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	final  long read( MidiFileStream mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
  
         if (len != MidiFileStream.MDF_ChanPrefLen)             /* message length */
             return mfile.ReadExtTbl[0].read(mfile, len,(short)0);
@@ -2106,7 +2178,7 @@ final  class keySign extends MfEvent{
         return ev;
     }
      
-     final  void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     final  void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
      	mfile.output.write( MidiFileStream.META);			/* meta evt	header	*/
  		mfile.output.write( MidiFileStream.MDF_ChanPref);	/* meta evt	type	*/
@@ -2122,9 +2194,9 @@ final  class keySign extends MfEvent{
  
  final class portPref extends MfEvent{
  
- 	final  int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	final  long read( MidiFileStream mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
  
         if ((Midi.GetVersion() < 185) || (len != MidiFileStream.MDF_PortPrefLen))             /* message length */
             return mfile.ReadExtTbl[0].read(mfile, len,(short)0);
@@ -2140,7 +2212,7 @@ final  class keySign extends MfEvent{
         return ev;
     }
      
-     final  void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     final  void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
      	mfile.output.write( MidiFileStream.META);			/* meta evt	header	*/
  		mfile.output.write( MidiFileStream.MDF_PortPref);	/* meta evt	type	*/
@@ -2156,9 +2228,9 @@ final  class keySign extends MfEvent{
  
  final class smpte extends MfEvent{
  
- 	final  int read( MidiFileStream mfile, int len, short unused1)throws Exception
+ 	final  long read( MidiFileStream mfile, int len, short unused1)throws Exception
  	{
-        int ev = 0;
+        long ev = 0;
         int tmp;
  
         if (len != MidiFileStream.MDF_OffsetLen)                       /* message length */
@@ -2182,7 +2254,7 @@ final  class keySign extends MfEvent{
         return ev;
     }
      
-      final void write(MidiFileStream  mfile, int ev, short status)throws Exception{
+     final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
      
      		int l;
  
@@ -2208,7 +2280,7 @@ final  class keySign extends MfEvent{
  
  final class  undef extends MfEvent {
  
- 	 final int read (MidiFileStream  mfile, short status)throws Exception{
+ 	 final long read (MidiFileStream  mfile, short status)throws Exception{
     	throw new IOException ("Midifile error unknow");
  
  	 }
@@ -2223,7 +2295,7 @@ final  class keySign extends MfEvent{
  
  final class  ignoreEv extends MfEvent {
  
- 	 final int read (MidiFileStream  mfile, int len,  short status)throws Exception{
+ 	 final long read (MidiFileStream  mfile, int len,  short status)throws Exception{
  	  	mfile._cnt-= len;
  		while( len-->0){ mfile.input.read(); }
  		return 0;

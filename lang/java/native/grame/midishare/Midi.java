@@ -731,7 +731,7 @@ public final class Midi {
     System Exclusive and between 0 and 255 for a Stream. 
 	*/
 	
-	public  static native final void AddField(int event, int val);
+	public  static native final void AddField(long event, int val);
 	
 	/**
   	Inserts an event in to a sequence while maintaining the dates in
@@ -742,8 +742,8 @@ public final class Midi {
     *@param event is the event to be added. 			
 	*/
 	
-	public  static native final void AddSeq(int seq, int event);
-	  		static native final void ApplySeq(int seq, int event);
+	public  static native final void AddSeq(long seq, long event);
+	  		static native final void ApplySeq(long seq, long event);
 	  			
 	/**
   	Gives a pointer to the first event at the head of the reception
@@ -757,7 +757,7 @@ public final class Midi {
 	*/
 
 	public  static native final int AvailEv(int ref);
-	 		static native final void Call(int proc, int date, int ref, int a1, int a2, int a3);
+	 		static native final void Call(long proc, long date, int ref, int a1, int a2, int a3);
 	 				
 	/**
   	Frees the content of a sequence. ClearSeq de-allocates all
@@ -767,7 +767,7 @@ public final class Midi {
 	*@param seq is a pointer on a sequence whose eventsare to be freed.		
 	*/
  				
-	public  static native final void ClearSeq(int seq);
+	public  static native final void ClearSeq(long seq);
 	
 	/**
   	This is used for closing of a MidiShare application. Every
@@ -810,7 +810,7 @@ public final class Midi {
      allocate enough memory space for the copy. 		
 	*/
 	
-	public  static native final int CopyEv(int event);
+	public  static native final int CopyEv(long event);
 	
 	/**
   	Gives the number of Midi applications currently active. 
@@ -838,8 +838,8 @@ public final class Midi {
 	*@return   The result is the number of fields of the event. 		
 	*/
 
-	public  static native final int CountFields(int event);
-	 		static native final int DTask(int proc, int date, int ref, int a1, int a2, int a3);
+	public  static native final int CountFields(long event);
+	 		static native final long DTask(long proc, long date, int ref, int a1, int a2, int a3);
 			static native final void Exec1DTask(int ref);
 			
 	/**
@@ -851,7 +851,7 @@ public final class Midi {
 	*@return The result is the corresponding internal time in milliseconds.		
 	*/
 
-	public  static native final int Ext2IntTime(int time);
+	public  static native final long Ext2IntTime(long time);
 			static native final void FlushDTasks(int ref);
 			
 	/**
@@ -872,7 +872,7 @@ public final class Midi {
     *@param cell is a pointer to a basic cell of 16 bytes.	
 	*/
 
-	public  static native final void FreeCell(int cell);
+	public  static native final void FreeCell(long cell);
 	
 	/**
   	Frees a MidiShare event allocated with NewEv.
@@ -882,7 +882,7 @@ public final class Midi {
     *@param event is a pointer to a basic cell of 16 bytes.	
 	*/
 
-	public  static native final void FreeEv(int event);
+	public  static native final void FreeEv(long event);
 	
 	/**
   	Frees a sequence and its content. FreeSeq first
@@ -890,7 +890,7 @@ public final class Midi {
     sequence header itself.    
     *@param seq is a pointer on a sequence to be freed. 	
 	*/
-	public  static native final void FreeSeq(int seq);
+	public  static native final void FreeSeq(long seq);
 	
 	/**
   	Returns the available free MidiShare event space.
@@ -901,7 +901,7 @@ public final class Midi {
     */
 
 	public  static native final int FreeSpace();
-			static native final int GetApplAlarm(int ref);
+			static native final long GetApplAlarm(int ref);
 			
 	/**
 	Extracts the first event on in the reception FIFO. The received
@@ -914,7 +914,7 @@ public final class Midi {
 	from the reception FIFO.     
 	*/
 
-	public  static native final int GetEv(int ref);
+	public  static native final long GetEv(int ref);
 	
 	/**
     Gives the current external time i.e. the position of the tape
@@ -922,7 +922,7 @@ public final class Midi {
      
     *@return The result is the external time.
     */
-	public  static native final int GetExtTime();
+	public  static native final long GetExtTime();
 	
 	/**
     Gives the index field value of an event. Field index start from 0.
@@ -937,7 +937,7 @@ public final class Midi {
     considered as unsigned. 
     */
 	
-	public  static native final int GetField (int event, int field);
+	public  static native final int GetField (long event, int field);
 	
 	/**
     Gives the associated filter of an application. Each application
@@ -951,7 +951,7 @@ public final class Midi {
     application accepts any events).     
     */
 	
-	public  static native final int GetFilter(int ref);
+	public  static native final long GetFilter(int ref);
 	
 	/**
   	Gives the reference of number of an application from is order
@@ -964,7 +964,7 @@ public final class Midi {
     if the index is out of range.     
     */
 	public  static native final int GetIndAppl(int index);
-			static native final int GetInfo(int ref);
+			static native final long GetInfo(int ref);
 	
 	/**
   	Gives the name of an application. Knowing an application
@@ -998,7 +998,7 @@ public final class Midi {
     */
 	
 	public  static native final int GetPortState(int port);
-			static native final int GetRcvAlarm(int ref);
+			static native final long GetRcvAlarm(int ref);
 	
 	/**
   	Fills a SyncInfo object with information about the current
@@ -1018,7 +1018,7 @@ public final class Midi {
     milliseconds since the starting up of MidiShare.        
     */
     
-	public  static native final int GetTime();
+	public  static native final long GetTime();
 	
 	/**
   	Gives the version number of MidiShare.                  
@@ -1044,7 +1044,7 @@ public final class Midi {
     *@return The result is the corresponding external time,a 32-bits value in milliseconds.        
     */
 
-	public  static native final int Int2ExtTime (int time);
+	public  static native final long Int2ExtTime (long time);
 	
 	/**
     Gives the state of a connection between two MidiShare
@@ -1069,7 +1069,7 @@ public final class Midi {
     *@return The result is a pointer to a memory cell, or 0 when memory space is exhausted.         
     */
 
-	public  static native final int NewCell ();
+	public  static native final long NewCell ();
 	
 	/**
     Allocates a new event of desirable type. 
@@ -1080,14 +1080,14 @@ public final class Midi {
     exhausted.      
     */
 
-	public  static native final int NewEv(int type);
+	public  static native final long NewEv(int type);
 	
 	/**
     Allocation of a new empty sequence.              
     *@return The result is a pointer to an empty sequence.  
     */
 
-	public  static native final int NewSeq();
+	public  static native final long NewSeq();
 	
 	/**
     Opening of MidiShare. Open allows the recording of
@@ -1106,7 +1106,7 @@ public final class Midi {
     
 	public 	static  native final int Open(String midiname); 		
 
-			static native final int ReadSync(int adr);
+			static native final long ReadSync(long adr);
 			
 	/**
     Sends an event. A copy of the event is sent to all the
@@ -1118,7 +1118,7 @@ public final class Midi {
     */
 		
 			
-	public  static native final void Send(int ref, int event);
+	public  static native final void Send(int ref, long event);
 	
 	/**
     Sends an event. A copy of the event is sent to all the
@@ -1130,7 +1130,7 @@ public final class Midi {
     *@param  date ia a 32-bit integer, the date when destinations will receive the event.    
     */
 
-	public  static native final void SendAt(int ref, int event, int date);
+	public  static native final void SendAt(int ref, long event, long date);
 	
 	/**
     Immediately sends an event. A copy of the event is sent to all
@@ -1140,8 +1140,8 @@ public final class Midi {
     *@param  event  is a pointer to the event to send.     
     */		
 	
-	public  static native final void SendIm(int ref, int event);
-			static native final void SetApplAlarm(int ref, int alarm);
+	public  static native final void SendIm(int ref, long event);
+			static native final void SetApplAlarm(int ref, long alarm);
 			
 	/**
     Attributes a value to a field of an event. The access to the
@@ -1155,7 +1155,7 @@ public final class Midi {
     *@param val is 32-bit value to put in the field. This value will beconverted to the right size (8, 16 or 32-bit).  
     */		
 			
-	public  static native final void SetField(int event, int field, int val);
+	public  static native final void SetField(long event, int field, int val);
 		
 	/**
   	Associates a filter to an application. Each application can select
@@ -1169,8 +1169,8 @@ public final class Midi {
     *@param filter is a pointer to the application filter. 
     */
 	
-	public  static native final void SetFilter(int ref, int filter);
-			static native final void SetInfo(int ref, int info);
+	public  static native final void SetFilter(int ref, long filter);
+			static native final void SetInfo(int ref, long info);
 		
 	/**
   	Changes the name of an application.  
@@ -1187,7 +1187,7 @@ public final class Midi {
     */
 
 	public  static native final void SetPortState(int port,int state);
-			static native final void SetRcvAlarm(int ref,int alarm);
+			static native final void SetRcvAlarm(int ref,long alarm);
 			
 	/**
  	Set the synchronisation mode of MidiShare.              
@@ -1233,7 +1233,7 @@ public final class Midi {
     */
     
 	public  static native final int Smpte2Time(SmpteLoc loc);
-			static native final int Task(int proc, int date, int ref, int a1,int a2,int a3);
+			static native final long Task(long proc, long date, int ref, int a1,int a2,int a3);
 			
 	/**
   	Convert a time in millisecond to an SMPTE location.              
@@ -1247,7 +1247,7 @@ public final class Midi {
           the resulting SMPTE location. 
     */
 
-	public  static native final void Time2Smpte(int time, int format, SmpteLoc loc);
+	public  static native final void Time2Smpte(long time, int format, SmpteLoc loc);
 	
 	/**
   	Gives the total number of cells allocated to MidiShare.
@@ -1259,7 +1259,7 @@ public final class Midi {
   	*/
      
 	public  static native final int TotalSpace();
-			static native final int WriteSync(int adr, int val);
+			static native final long WriteSync(long adr, long val);
 
 
 	/* for common fieds management */
@@ -1271,7 +1271,7 @@ public final class Midi {
     *@return The result is a pointer to the event link field.  
     */
 
-	public   static native final int GetLink(int event);
+	public   static native final long GetLink(long event);
 	
 	/**
 	Set the link field of a Midi event with a new event.		
@@ -1280,7 +1280,7 @@ public final class Midi {
     *@param link is a pointer to the new event.
   	*/
 
-	public   static native final void SetLink(int event,int link);
+	public   static native final void SetLink(long event,long link);
 
 	/**
 	Return the date field of a Midi event.
@@ -1289,7 +1289,7 @@ public final class Midi {
     *@return The result is a 32-bits date in milliseconds. 
     */
 
-	public   static native final int GetDate (int event);
+	public   static native final long GetDate (long event);
 	
 	/**
 	 Set the date field of a Midi event with a new date.		
@@ -1298,7 +1298,7 @@ public final class Midi {
     *@param date is the new date.
     */
 
-	public   static native final void SetDate(int event,int date);
+	public   static native final void SetDate(long event,long date);
 
 	/**
 	Return the refnum field of a Midi event.
@@ -1307,7 +1307,7 @@ public final class Midi {
     *@return The result is the event refnum
     */
 
-	public   static native final int GetRefnum(int event);
+	public   static native final int GetRefnum(long event);
 	
 	/**
 	Set the refnum field of a Midi event with a new refnum.		
@@ -1316,7 +1316,7 @@ public final class Midi {
     *@param ref is the new refnum.
   	*/
 
-	public   static native final void SetRefnum(int event,int ref);
+	public   static native final void SetRefnum(long event,int ref);
 
 	/**
 	Return the type field of a Midi event.
@@ -1325,7 +1325,7 @@ public final class Midi {
     *@return The result is the event type
     */
 
-	public   static native final int GetType(int event);
+	public   static native final int GetType(long event);
 	
 	/**
 	Set the type field of a Midi event with a new type. The type
@@ -1336,7 +1336,7 @@ public final class Midi {
     *@param type is the new type.
    */
 
-	public   static native final void SetType(int event,int type);
+	public   static native final void SetType(long event,int type);
 
 	/**
 	Return the channel field of a Midi event.
@@ -1345,7 +1345,7 @@ public final class Midi {
     *@return The result is the event channel.
     */
 
-	public   static native final int GetChan(int event);
+	public   static native final int GetChan(long event);
 	
 	/**
 	Set the channel field of a Midi event with a new channel. 
@@ -1354,7 +1354,7 @@ public final class Midi {
     *@param chan is the new channel.
     */
 
-	public   static native final void SetChan(int event,int chan);
+	public   static native final void SetChan(long event,int chan);
 
 	/**
 	Return the port field of a Midi event.
@@ -1363,7 +1363,7 @@ public final class Midi {
     *@return The result is the event port.
     */
 
-	public   static native final int GetPort(int event);
+	public   static native final int GetPort(long event);
 	
 	/**
 	Set the port field of a Midi event with a new port. 
@@ -1372,17 +1372,17 @@ public final class Midi {
     *@param port is the new port.
  	*/
 
-	public   static native final void SetPort(int event,int port);	
+	public   static native final void SetPort(long event,int port);	
 	
-	public   static native final int GetData0(int event);
-	public   static native final int GetData1(int event);
-	public   static native final int GetData2(int event);
-	public   static native final int GetData3(int event);
+	public   static native final int GetData0(long event);
+	public   static native final int GetData1(long event);
+	public   static native final int GetData2(long event);
+	public   static native final int GetData3(long event);
 	
-	public   static native final void SetData0(int event,int data);
-	public   static native final void SetData1(int event,int data);
-	public   static native final void SetData2(int event,int data);
-	public   static native final void SetData3(int event,int data);
+	public   static native final void SetData0(long event,int data);
+	public   static native final void SetData1(long event,int data);
+	public   static native final void SetData2(long event,int data);
+	public   static native final void SetData3(long event,int data);
 	
 	/* for event with text */
 
@@ -1394,7 +1394,7 @@ public final class Midi {
     *@return The result is a string. 
     */
 
-	public   static  native final String GetText(int event); 		
+	public   static  native final String GetText(long event); 		
 
 	/**
 	Set the text field of a Midi event. This function must be used
@@ -1405,7 +1405,7 @@ public final class Midi {
     *@param text is the new text.
   	*/
 
-	public   static  native final void SetText(int event, String text); 
+	public   static  native final void SetText(long event, String text); 
 
 	/* for sequences */
 
@@ -1416,7 +1416,7 @@ public final class Midi {
     *@return The result is the first event of the sequence.
     */
 
-	public   static native final int GetFirstEv(int seq);
+	public   static native final long GetFirstEv(long seq);
 	
 	/**
 	Set the first event of a Midi sequence. 
@@ -1425,7 +1425,7 @@ public final class Midi {
     *@param event is the new event
 	*/
 
-	public   static native final void SetFirstEv(int seq, int event);
+	public   static native final void SetFirstEv(long seq, long event);
 
 	/**
 	Return the last event  of a Midi sequence.
@@ -1434,7 +1434,7 @@ public final class Midi {
     *@return The result is the last event of the sequence.
     */
 
-	public   static native final int GetLastEv(int seq);
+	public   static native final long GetLastEv(long seq);
 	
 	/**
 	Set the last event of a Midi sequence. 
@@ -1443,7 +1443,7 @@ public final class Midi {
     *@param event is the new event
      */
 
-	public   static native final void SetLastEv(int seq, int event);
+	public   static native final void SetLastEv(long seq, long event);
 
 	/* for filters */
 	
@@ -1455,7 +1455,7 @@ public final class Midi {
     *@return  The result is a pointer to the new filter.
     */
 
-	public  static native final int NewFilter();
+	public  static native final long NewFilter();
 	
 	/**
   	Free an application filter. 
@@ -1463,7 +1463,7 @@ public final class Midi {
     *@param filter is a pointer to the filter.
    	*/
 
-	public  static native  final void FreeFilter(int filter);
+	public  static native  final void FreeFilter(long filter);
 	
 	/**
   	Modify the application filter by accessing the filter bits.  
@@ -1474,7 +1474,7 @@ public final class Midi {
     	if set to 0, the event on this port will be rejected.
   	*/
 
-	public  static native final void AcceptPort(int filter, int port, int val);
+	public  static native final void AcceptPort(long filter, int port, int val);
 	
 	/**
   	Modify the application filter by accessing the filter bits.  
@@ -1485,7 +1485,7 @@ public final class Midi {
     	if set to 0, the event on this channel will be rejected.
   	*/
 
-	public  static native final void AcceptChan(int filter, int chan, int val);
+	public  static native final void AcceptChan(long filter, int chan, int val);
 	
 	/**
   	Modify the application filter by accessing the filter bits.  
@@ -1496,7 +1496,7 @@ public final class Midi {
     	if set to 0, the event of this type will be rejected.
   	*/
     
-	public  static native final void AcceptType(int filter, int type, int val);
+	public  static native final void AcceptType(long filter, int type, int val);
 	
 	/**
   	Test the filter port state.  
@@ -1505,7 +1505,7 @@ public final class Midi {
     *@param port  is a port number to be accessed in the filter (0 to  255).
    	*/
 
-	public  static native final int IsAcceptedPort(int filter, int port);
+	public  static native final int IsAcceptedPort(long filter, int port);
 	
 	/**
   	Test the filter channel state.    
@@ -1514,7 +1514,7 @@ public final class Midi {
     *@param chan  is a channel number to be accessed in the filter (0 to 15).
   	*/
 
-	public  static native final int IsAcceptedChan(int filter, int chan);
+	public  static native final int IsAcceptedChan(long filter, int chan);
 	
 	/**
   	Test the filter type state.   
@@ -1523,7 +1523,7 @@ public final class Midi {
     *@param type  is a type number to be accessed in the filter (0 to  255).
    	*/
     
-	public  static native final int IsAcceptedType(int filter, int type);	
+	public  static native final int IsAcceptedType(long filter, int type);	
 	
 	/** Slot direction code: input slot
  	*/

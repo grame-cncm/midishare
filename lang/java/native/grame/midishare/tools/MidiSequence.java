@@ -38,10 +38,10 @@ final public class MidiSequence {
 	*@return The result is a pointer to the new sequence.
 	*/
 
-	public static int Copy(int seq) {
+	public static long Copy(long seq) {
 	
-		int copy = Midi.NewSeq();
-		int cur = Midi.GetFirstEv(seq);
+		long copy = Midi.NewSeq();
+		long cur = Midi.GetFirstEv(seq);
 		
 		if (copy != 0) {
 	
@@ -58,9 +58,9 @@ final public class MidiSequence {
 /*    					fonctions de mixage des sequences					*/
 /*--------------------------------------------------------------------------*/
 
-static int Add(int e1, int e2)
+static long Add(long e1, long e2)
 {
-	int  next;
+	long  next;
 	
 	while((next= Midi.GetLink(e1)) != 0)				/* tant qu'une séquence n'est finie */
 	{
@@ -92,9 +92,9 @@ Mix two MidiShare sequences and keep the time ordering of their events.
 *@param dest is a pointer to the destination.
 */
 
-public static void Mix( int src, int dest)
+public static void Mix( long src, long dest)
 {
-	int firstSrc, firstDest;
+	long firstSrc, firstDest;
 	
 	if((dest != 0) && (src != 0))							/* dest et src existent		*/
 	{
@@ -131,9 +131,9 @@ Delete endTrack events which are in the middle of a sequence.
 *@param seq is a pointer to the source sequence.
 */
 
- public static void DelEndTrack( int seq)
+ public static void DelEndTrack( long seq)
 {
-	int ev, prev, tmp;
+	long ev, prev, tmp;
 	
 	prev= 0;
 	ev= Midi.GetFirstEv(seq);
@@ -170,9 +170,9 @@ definition.
 *@see grame.midishare.midifile.MidiFileInfos
 */
 
-public static void TrsfSmpte(int s, int fps, int tpf)
+public static void TrsfSmpte(long s, int fps, int tpf)
 	{
-		int	e;
+		long e;
 		int	tps;
 		
 		tps = fps * tpf;
@@ -194,14 +194,14 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 	*@see grame.midishare.midifile.MidiFileInfos
 	*/
 
-	public static void TrsfTempo(int seq, double tick_per_quarter) 
+	public static void TrsfTempo(long seq, double tick_per_quarter) 
 	{
 		double	tt;	// durée d'un ticks (micro sec)
 		double	t1;	// temps du dernier changement de tempo (micro sec)
 		double	t2;	// temps actuel (micro sec)
-		int	d1;		// date du dernier changement de tempo (ticks)
+		long	d1;		// date du dernier changement de tempo (ticks)
 		
-		int	e;
+		long	e;
 		
 		t1 = 0.0;
 		tt = 500000.0 / tick_per_quarter;	
@@ -227,10 +227,10 @@ public static void TrsfSmpte(int s, int fps, int tpf)
 	*@return The result is true if the event has been successfully removed false otherwise.
 	*/
 	
-	public static boolean RemoveEv( int seq, int e)
+	public static boolean RemoveEv( long seq, long e)
 	{
-		int cur = Midi.GetFirstEv(seq);
-		int prev = 0;
+		long cur = Midi.GetFirstEv(seq);
+		long prev = 0;
 		
 		while(cur != 0)
 		{
@@ -272,10 +272,10 @@ final class MidiMatchKey {
 	
 	public MidiMatchKey () {eventTable = new MidiHashtable();}
 		
-		public void MatchKey(int seq) {
+		public void MatchKey(long seq) {
 			int type;
-			int keyon;
-			int prevEv,curEv,lastEv;
+			long keyon;
+			long prevEv,curEv,lastEv;
 			prevEv = curEv =  Midi.GetFirstEv(seq);
 			lastEv = Midi.GetLastEv(seq);
 			
@@ -293,7 +293,7 @@ final class MidiMatchKey {
 					
 						if ((Midi.GetDate(curEv) - Midi.GetDate(keyon)) < 0x7FFF) {
 							Midi.SetType(keyon, Midi.typeNote);
-							Midi.SetField(keyon,2, Midi.GetDate(curEv) - Midi.GetDate(keyon));
+							Midi.SetField(keyon,2, (int)(Midi.GetDate(curEv) - Midi.GetDate(keyon)));
 							Midi.SetLink(prevEv, Midi.GetLink(curEv));  // liberation keyOff
 							if (curEv == lastEv) {
 								Midi.SetLastEv(seq,prevEv); // si on libere le dernier ev
@@ -324,17 +324,17 @@ final class MidiHashtable {
 	
 	static final int HMASK = 511;
 	static final int HSIZE = 512;
-	int table[];
+	long table[];
 	int hspace;
 	
 	public MidiHashtable () { 
-		table = new int[HSIZE]; 
+		table = new long[HSIZE]; 
 		hspace = HSIZE;
 	 }
 
-	int HashKey (int e) { return ((Midi.GetField(e,0) << 4) | Midi.GetChan(e)) & HMASK;}
+	int HashKey (long e) { return ((Midi.GetField(e,0) << 4) | Midi.GetChan(e)) & HMASK;}
 	
-	int put (int e) {
+	int put (long e) {
        	int k;
         
         if (hspace > 0) {
@@ -348,8 +348,8 @@ final class MidiHashtable {
         }
 	}
 	
-	int remove (int e1) {
-        int  k, i, e2;
+	long remove (long e1) {
+        int  k, i; long e2;
          
         k = HashKey(e1);
         
@@ -359,7 +359,7 @@ final class MidiHashtable {
                     && (Midi.GetChan(e1) == Midi.GetChan(e2))
                     && (Midi.GetPort(e1) == Midi.GetPort(e2))){
                     
-                    int res = table[i];
+                    long res = table[i];
                     table[i] = 0; 
                    	hspace++;
                     return res;
@@ -372,7 +372,7 @@ final class MidiHashtable {
                    && (Midi.GetChan(e1) == Midi.GetChan(e2))
                    && (Midi.GetPort(e1) == Midi.GetPort(e2))){
                     
-                    int res = table[i];
+                    long res = table[i];
                     table[i] = 0; 
                    	hspace++;
                     return res;

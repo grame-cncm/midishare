@@ -67,7 +67,7 @@ public class MidiAppl {
  		* The Midi filter associated to the object.
  		*/
 
-		public int filter = 0;
+		public long filter = 0;
 		
 		private native final synchronized int  	ApplOpen(int ref,int mode);
 		private native final synchronized void  ApplClose(int ref);		
@@ -82,7 +82,7 @@ public class MidiAppl {
 	 	be used by the method: either re-sended, or desallocated or kept in a data structure.
 	 	*/
 		
-		public synchronized void ReceiveAlarm(int event){ Midi.FreeEv(event);}
+		public synchronized void ReceiveAlarm(long event){ Midi.FreeEv(event);}
 	
 		/**
 		The <b>ApplAlarm</b> method is automatically 
@@ -107,7 +107,7 @@ public class MidiAppl {
 		*@see grame.midishare.MidiTask  	 
 		*/
 		
-		public final boolean ScheduleTask(MidiTask task, int date)
+		public final boolean ScheduleTask(MidiTask task, long date)
 		{
 			if (task.isIdle()) {
 				return (ScheduleTask(task,date,refnum,mode) != 0);
@@ -119,7 +119,7 @@ public class MidiAppl {
 		/**
  		* Schedule a native task.
 		*/
-		private native int ScheduleTask (MidiTask task, int date, int ref, int mode);
+		private native int ScheduleTask (MidiTask task, long date, int ref, int mode);
 				
 		/**
  		* Constructor.
@@ -212,7 +212,7 @@ public class MidiAppl {
 		
 		void MidiEventLoop() 
 		{
-			int ev,n;
+			long ev; int n;
 			
 			// Execute pending tasks
 			for (n = Midi.CountDTasks(refnum); n > 0; n--) Midi.Exec1DTask(refnum);

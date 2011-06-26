@@ -3,11 +3,14 @@ VERSION = 1.1.2
 F = msjni-$(VERSION)
 
 SRC = $(shell find grame -name "*.java")
+OUTCLASS = $(shell find grame -name "*.class")
 CLASS = $(patsubst %.java, %.class, $(SRC) )
+HEADERS = headers/Midi.h headers/MidiAppl.h 
 JAVA  = java
 #JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
 
-.PHONY: doc
+.PHONY: doc 
+.PHONY: headers
 
 class : $(CLASS)
 
@@ -30,13 +33,18 @@ folder :
 	find grameclasses -name "*.java" -exec rm -rf {} \;
 
 grame.jar : $(CLASS)
-	jar cvf grame.jar $(CLASS)
+	jar cvf grame.jar $(OUTCLASS)
 
 clean :
-	rm -f $(CLASS) *.class
+	rm -f $(OUTCLASS)
+
+headers : $(HEADERS)
+
 
 ##################################################################
 # rule for java compiling
 %.class: %.java
 	javac $< 
 
+headers/%.h: grame/midishare/%.class
+	javah -jni -d headers $(patsubst grame/midishare/%.class, grame.midishare.%, $<) 
