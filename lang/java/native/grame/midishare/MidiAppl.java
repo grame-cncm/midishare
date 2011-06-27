@@ -119,7 +119,7 @@ public class MidiAppl {
 		/**
  		* Schedule a native task.
 		*/
-		private native int ScheduleTask (MidiTask task, long date, int ref, int mode);
+		private native long ScheduleTask (MidiTask task, long date, int ref, int mode);
 				
 		/**
  		* Constructor.

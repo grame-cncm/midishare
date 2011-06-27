@@ -24,6 +24,9 @@ zip : grame.jar JMidi.dll
 	cp ../../jni/src/changelog.txt $(F)
 
 Test : Test.class
+	java Test
+
+Test32 : Test.class
 	java -d32 Test
 
 folder :
@@ -47,4 +50,4 @@ headers : $(HEADERS)
 	javac $< 
 
 headers/%.h: grame/midishare/%.class
-	javah -jni -d headers $(patsubst grame/midishare/%.class, grame.midishare.%, $<) 
+	javah -d headers $(patsubst grame/midishare/%.class, grame.midishare.%, $<) 

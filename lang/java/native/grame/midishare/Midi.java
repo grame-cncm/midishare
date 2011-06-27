@@ -756,7 +756,7 @@ public final class Midi {
     reception FIFO, or 0 if the reception FIFO is empty. 		
 	*/
 
-	public  static native final int AvailEv(int ref);
+	public  static native final long AvailEv(int ref);
 	 		static native final void Call(long proc, long date, int ref, int a1, int a2, int a3);
 	 				
 	/**
@@ -810,7 +810,7 @@ public final class Midi {
      allocate enough memory space for the copy. 		
 	*/
 	
-	public  static native final int CopyEv(long event);
+	public  static native final long CopyEv(long event);
 	
 	/**
   	Gives the number of Midi applications currently active. 
@@ -861,7 +861,7 @@ public final class Midi {
 	*/
 
 	public  static native final void FlushEvs(int ref);
-			static native final void ForgetTask(int ref);
+			static native final void ForgetTask(long ref);
 			
 	/**
     Frees a cell allocated by NewCell function. This is the

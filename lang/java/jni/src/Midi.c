@@ -61,8 +61,13 @@
 #endif
 
 #include "MidiShare.h"
-#include "Midi.h"
+#include "MidiPtrType.h"
 
+#ifdef __x86_64__
+# include "Midi64.h"
+#else
+# include "Midi.h"
+#endif
 
 /*--------------------------------------------------------------------------*/
  void pTocCopy(char *dest,  unsigned char * src)  /* chaine pascal dans chaine c */
@@ -107,40 +112,47 @@
     }\
 
 /*--------------------------------------------------------------------------*/
+#define Check_Pointer0(env,ptr)\
+    if ((ptr) == NULL) {\
+        (*(env))->ThrowNew((env), (*(env))->FindClass((env),"java.lang.NullPointerException"), "");\
+        return 0;\
+    }\
+
+/*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AddField
-  (JNIEnv * env, jclass  cl, jint event, jint val) {
+  (JNIEnv * env, jclass  cl, javaptr event, jint val) {
 
-	MidiAddField((MidiEvPtr)event,val);
+	MidiAddField ((MidiEvPtr)event,val);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AddSeq
-  (JNIEnv * env, jclass cl, jint seq, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr seq, javaptr ev) {
 
-	MidiAddSeq((MidiSeqPtr)seq,(MidiEvPtr)ev);
+	MidiAddSeq ((MidiSeqPtr)seq,(MidiEvPtr)ev);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_ApplySeq
-  (JNIEnv * env, jclass cl, jint a1 , jint a2) {
+  (JNIEnv * env, jclass cl, javaptr a1 , javaptr a2) {
 	/* not implemented */
 }
  
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_AvailEv
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_AvailEv
   (JNIEnv * env, jclass cl, jint refnum) {
   
- 	return (jint) MidiAvailEv(refnum);
+ 	return (javaptr) MidiAvailEv(refnum);
  }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_Call
-  (JNIEnv * env, jclass cl, jint a0, jint a1, jint a2, jint a3, jint a4, jint a5) {
+  (JNIEnv * env, jclass cl, javaptr a0, javaptr a1, jint a2, jint a3, jint a4, jint a5) {
 
  	 /* not implemented */
  }
@@ -148,7 +160,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_Call
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_ClearSeq
-  (JNIEnv * env, jclass cl, jint seq) {
+  (JNIEnv * env, jclass cl, javaptr seq) {
   
  	MidiClearSeq((MidiSeqPtr)seq);
  }
@@ -171,10 +183,10 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_Connect
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_CopyEv
-  (JNIEnv * env, jclass cl, jint ev) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_CopyEv
+  (JNIEnv * env, jclass cl, javaptr ev) {
   
-	return (jint)MidiCopyEv((MidiEvPtr)ev);
+	return (javaptr)MidiCopyEv((MidiEvPtr)ev);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -204,15 +216,15 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_CountEvs
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_CountFields
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
 	return MidiCountFields((MidiEvPtr)ev);
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_DTask
-  (JNIEnv * env, jclass cl, jint a0, jint a1, jint a2, jint a3, jint a4, jint a5) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_DTask
+  (JNIEnv * env, jclass cl, javaptr a0, javaptr a1, jint a2, jint a3, jint a4, jint a5) {
 
 	 /* not implemented */
 	
@@ -229,8 +241,8 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_Exec1DTask
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Ext2IntTime
-  (JNIEnv * env, jclass cl, jint time) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_Ext2IntTime
+  (JNIEnv * env, jclass cl, javadate time) {
   
 	return MidiExt2IntTime (time);
 }
@@ -254,7 +266,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_FlushEvs
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_ForgetTask
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
      MidiEvPtr adr = (MidiEvPtr)ev;
      MidiForgetTask(&adr);
@@ -263,7 +275,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_ForgetTask
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeCell
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
 	MidiFreeCell ((MidiEvPtr) ev);
 }
@@ -271,7 +283,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeCell
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeEv
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
 	MidiFreeEv ((MidiEvPtr) ev);
 }
@@ -279,7 +291,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeEv
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeSeq
-  (JNIEnv * env, jclass cl, jint seq) {
+  (JNIEnv * env, jclass cl, javaptr seq) {
   
 	MidiFreeSeq ((MidiSeqPtr) seq);
 }
@@ -294,7 +306,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_FreeSpace
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetApplAlarm
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetApplAlarm
   (JNIEnv * env, jclass cl, jint a0) {
 
 	/* not implemented */
@@ -302,15 +314,15 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetApplAlarm
 }
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetEv
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetEv
   (JNIEnv * env, jclass cl, jint refnum) {
   
-	return (jint) MidiGetEv(refnum);
+	return (javaptr) MidiGetEv(refnum);
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetExtTime
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetExtTime
   (JNIEnv * env, jclass cl) {
 
 	 return MidiGetExtTime();
@@ -319,17 +331,17 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetExtTime
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetField
-  (JNIEnv * env, jclass cl, jint ev, jint i) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint i) {
   
 	return MidiGetField((MidiEvPtr)ev,i);
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetFilter
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetFilter
   (JNIEnv * env, jclass cl, jint refnum) {
 
-	return (jint)MidiGetFilter(refnum);
+	return (javaptr)MidiGetFilter(refnum);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -343,10 +355,10 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetIndAppl
 /*--------------------------------------------------------------------------*/
 
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetInfo
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetInfo
   (JNIEnv * env, jclass cl, jint refnum) {
   
-	return (jint)MidiGetInfo(refnum);
+	return (javaptr)MidiGetInfo(refnum);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -384,7 +396,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetPortState
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetRcvAlarm
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetRcvAlarm
   (JNIEnv * env, jclass cl, jint a0) {
 
 	/* not implemented */
@@ -438,7 +450,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_GetSyncInfo
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetTime
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetTime
   (JNIEnv * env, jclass cl) {
 
 	return MidiGetTime();
@@ -462,8 +474,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GrowSpace
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Int2ExtTime
-  (JNIEnv * env, jclass cl, jint time) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_Int2ExtTime
+  (JNIEnv * env, jclass cl, javadate time) {
   
 	return MidiInt2ExtTime (time);
 }
@@ -478,26 +490,26 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsConnected
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewCell
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_NewCell
   (JNIEnv * env, jclass cl) {
 
-	return (jint)MidiNewCell();
+	return (javaptr)MidiNewCell();
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewEv
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_NewEv
   (JNIEnv * env, jclass cl, jint type) {
   
-	  return (jint)MidiNewEv(type);
+	  return (javaptr)MidiNewEv(type);
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewSeq
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_NewSeq
   (JNIEnv * env, jclass cl) {
 
-	return (jint) MidiNewSeq();
+	return (javaptr) MidiNewSeq();
 }
 /*--------------------------------------------------------------------------*/
 
@@ -516,8 +528,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Open
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_ReadSync
-  (JNIEnv * env, jclass cl, jint a0) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_ReadSync
+  (JNIEnv * env, jclass cl, javaptr a0) {
 	/* not implemented */
 	return 0;
 }
@@ -525,7 +537,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_ReadSync
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_Send
-  (JNIEnv * env, jclass cl, jint ref, jint ev) {
+  (JNIEnv * env, jclass cl, jint ref, javaptr ev) {
 
 	MidiSend(ref,(MidiEvPtr)ev);
 }
@@ -533,7 +545,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_Send
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SendAt
-  (JNIEnv * env, jclass cl, jint ref , jint ev , jint date) {
+  (JNIEnv * env, jclass cl, jint ref , javaptr ev , javadate date) {
   
 	MidiSendAt(ref,(MidiEvPtr)ev,date);
 }
@@ -541,7 +553,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SendAt
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SendIm
-  (JNIEnv * env, jclass cl, jint ref, jint ev) { 
+  (JNIEnv * env, jclass cl, jint ref, javaptr ev) { 
   
 	MidiSendIm(ref,(MidiEvPtr)ev);
 }
@@ -549,7 +561,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SendIm
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetApplAlarm
-  (JNIEnv * env, jclass cl, jint a0, jint a1) {
+  (JNIEnv * env, jclass cl, jint a0, javaptr a1) {
 
 	/* not implemented */
 }
@@ -557,7 +569,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetApplAlarm
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetField
-  (JNIEnv * env, jclass cl, jint ev , jint i , jint val) {
+  (JNIEnv * env, jclass cl, javaptr ev , jint i , jint val) {
   
 	MidiSetField((MidiEvPtr)ev,i,val);
 }
@@ -565,7 +577,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetField
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetFilter
-  (JNIEnv * env, jclass cl, jint ref, jint filter) {
+  (JNIEnv * env, jclass cl, jint ref, javaptr filter) {
 
 	MidiSetFilter(ref,(MidiFilterPtr)filter);
 }
@@ -573,7 +585,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetFilter
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetInfo
-  (JNIEnv * env, jclass cl, jint refnum, jint info) {
+  (JNIEnv * env, jclass cl, jint refnum, javaptr info) {
 
 	MidiSetInfo(refnum,(void*)info);
 }
@@ -603,7 +615,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetPortState
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetRcvAlarm
-  (JNIEnv * env, jclass cl, jint a0, jint a1) {
+  (JNIEnv * env, jclass cl, jint a0, javaptr a1) {
 
 	/* not implemented */
 }
@@ -634,8 +646,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Smpte2Time
  	jfieldID fformat,fhours,fminutes,fseconds,fframes,ffracs;
  	jclass smpteposclass;
         
-        Check_Pointer(inEnv,smpteloc);
-        smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc); 
+	Check_Pointer0(inEnv,smpteloc);
+	smpteposclass = (*inEnv)->GetObjectClass(inEnv, smpteloc); 
  	
  	fformat = (*inEnv)->GetFieldID(inEnv, smpteposclass, "format",  "S");
  	fhours = (*inEnv)->GetFieldID(inEnv, smpteposclass, "hours",  "S");
@@ -659,8 +671,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Smpte2Time
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Task
-  (JNIEnv * env, jclass cl, jint a0, jint a1, jint a2, jint a3, jint a4, jint a5) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_Task
+  (JNIEnv * env, jclass cl, javaptr a0, javaptr a1, jint a2, jint a3, jint a4, jint a5) {
   
 	/* not implemented */
 	return 0;
@@ -669,7 +681,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_Task
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_Time2Smpte
-  (JNIEnv *  inEnv, jclass cl, jint time, jint format, jobject smpteloc) {
+  (JNIEnv *  inEnv, jclass cl, javadate time, jint format, jobject smpteloc) {
 
 	TSmpteLocation loc;
  	jfieldID fformat,fhours,fminutes,fseconds,fframes,ffracs;
@@ -708,8 +720,8 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_TotalSpace
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_WriteSync
-  (JNIEnv * env, jclass cl, jint a0, jint a1) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_WriteSync
+  (JNIEnv * env, jclass cl, javaptr a0, javaptr a1) {
   
 	/* not implemented */
 	return 0;
@@ -719,32 +731,32 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_WriteSync
 
 /* FOR COMMON FIELDS MANAGEMENT */
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetLink
-  (JNIEnv * env, jclass cl, jint ev) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetLink
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
-	return (jint)Link((MidiEvPtr)ev);
+	return (javaptr)Link((MidiEvPtr)ev);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetLink
-  (JNIEnv * env, jclass cl, jint ev , jint dst) {
+  (JNIEnv * env, jclass cl, javaptr ev , javaptr dst) {
 
 	Link((MidiEvPtr)ev) = (MidiEvPtr)dst;	
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDate
-  (JNIEnv * env, jclass cl, jint ev) {
+JNIEXPORT javadate JNICALL Java_grame_midishare_Midi_GetDate
+  (JNIEnv * env, jclass cl, javaptr ev) {
   
-	return (jint)Date((MidiEvPtr)ev);
+	return (javadate)Date((MidiEvPtr)ev);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetDate
-  (JNIEnv * env, jclass cl, jint ev, jint date) {
+  (JNIEnv * env, jclass cl, javaptr ev, javadate date) {
 
 	Date((MidiEvPtr)ev) = date;
 }
@@ -752,7 +764,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetDate
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetRefnum
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
   
 	return (jint)RefNum((MidiEvPtr)ev);
 }
@@ -760,7 +772,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetRefnum
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetRefnum
-  (JNIEnv * env, jclass cl, jint ev, jint ref) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint ref) {
 
 	RefNum((MidiEvPtr)ev) = ref;
 }
@@ -768,7 +780,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetRefnum
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetType
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
 	return(jint)EvType((MidiEvPtr)ev);
 }
@@ -776,7 +788,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetType
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetType
-  (JNIEnv * env, jclass cl, jint ev, jint type) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint type) {
 
 	EvType((MidiEvPtr)ev) = type;
 }
@@ -784,7 +796,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetType
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetChan
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
 	return (jint)Chan((MidiEvPtr)ev);
 }
@@ -792,7 +804,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetChan
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetChan
-  (JNIEnv * env, jclass cl, jint ev, jint chan) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint chan) {
 
 	Chan((MidiEvPtr)ev) = chan;
 }
@@ -800,7 +812,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetChan
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetPort
-  (JNIEnv * env, jclass cl, jint ev) { 
+  (JNIEnv * env, jclass cl, javaptr ev) { 
 
 	return (jint)Port((MidiEvPtr)ev);
 }
@@ -808,7 +820,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetPort
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetPort
-  (JNIEnv * env, jclass cl, jint ev, jint port) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint port) {
 
 	Port((MidiEvPtr)ev) = port;
 }
@@ -816,7 +828,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetPort
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData0
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
  	return (jint)Data((MidiEvPtr)ev)[0];
  }
@@ -824,7 +836,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData0
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData1
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
  	return (jint)Data((MidiEvPtr)ev)[1];
  }
@@ -832,7 +844,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData1
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData2
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
  	return (jint)Data((MidiEvPtr)ev)[2];
   }
@@ -840,7 +852,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData2
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData3
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
  	return (jint)Data((MidiEvPtr)ev)[3];
   }
@@ -848,7 +860,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData3
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
-  (JNIEnv * env, jclass cl, jint ev, jint val) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
 
  	Data((MidiEvPtr)ev)[0] = val;
@@ -857,7 +869,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
 /*--------------------------------------------------------------------------*/
 
  JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData1
-  (JNIEnv * env, jclass cl, jint ev, jint val) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
  	Data((MidiEvPtr)ev)[1] = val;
   }
@@ -865,7 +877,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData2
-  (JNIEnv * env, jclass cl, jint ev, jint val) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
  	Data((MidiEvPtr)ev)[2] = val;
   }
@@ -873,7 +885,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData2
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData3
-  (JNIEnv * env, jclass cl, jint ev, jint val) {
+  (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
  	Data((MidiEvPtr)ev)[3] = val;
   }
@@ -881,7 +893,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData3
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetText
-  (JNIEnv * env, jclass cl, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr ev) {
 
   	MidiEvPtr tmp = (MidiEvPtr) ev;
 	long i, n = MidiCountFields(tmp);
@@ -897,7 +909,7 @@ JNIEXPORT jstring JNICALL Java_grame_midishare_Midi_GetText
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetText
-  (JNIEnv * env, jclass cl, jint ev, jstring str) {
+  (JNIEnv * env, jclass cl, javaptr ev, jstring str) {
 
  	long i = 0;
  	const char *midiname;
@@ -918,32 +930,32 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetText
 /* FOR SEQUENCES MANAGEMENT */
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetFirstEv
-  (JNIEnv * env, jclass cl, jint seq) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetFirstEv
+  (JNIEnv * env, jclass cl, javaptr seq) {
 
-	return (jint) FirstEv((MidiSeqPtr)seq);
+	return (javaptr) FirstEv((MidiSeqPtr)seq);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetFirstEv
-  (JNIEnv * env, jclass cl, jint seq, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr seq, javaptr ev) {
 
 	FirstEv((MidiSeqPtr)seq) = (MidiEvPtr)ev;
 }
 
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetLastEv
-  (JNIEnv * env, jclass cl, jint seq) {
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_GetLastEv
+  (JNIEnv * env, jclass cl, javaptr seq) {
 
-	return (jint) LastEv((MidiSeqPtr)seq);
+	return (javaptr) LastEv((MidiSeqPtr)seq);
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetLastEv
-  (JNIEnv * env, jclass cl, jint seq, jint ev) {
+  (JNIEnv * env, jclass cl, javaptr seq, javaptr ev) {
 
 	LastEv((MidiSeqPtr)seq) = (MidiEvPtr)ev;
 }
@@ -952,16 +964,16 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetLastEv
 /* FOR FILTER MANAGEMENT */
 /*--------------------------------------------------------------------------*/
 
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewFilter
+JNIEXPORT javaptr JNICALL Java_grame_midishare_Midi_NewFilter
   (JNIEnv * env, jclass cl) {
 
-	return (jint)MidiNewFilter();
+	return (javaptr)MidiNewFilter();
 }
 
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeFilter
-  (JNIEnv * env, jclass cl, jint filter) {
+  (JNIEnv * env, jclass cl, javaptr filter) {
 
 	MidiFreeFilter((MidiFilterPtr) filter);
 }
@@ -969,7 +981,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeFilter
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptPort
-  (JNIEnv * env, jclass cl, jint filter, jint val, jint c) {
+  (JNIEnv * env, jclass cl, javaptr filter, jint val, jint c) {
 	
 	MidiAcceptPort ((MidiFilterPtr) filter,val,c);
 }
@@ -977,7 +989,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptPort
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptChan
-  (JNIEnv * env, jclass cl, jint filter, jint val, jint c) {
+  (JNIEnv * env, jclass cl, javaptr filter, jint val, jint c) {
 
 	MidiAcceptChan ((MidiFilterPtr) filter,val,c);
 }
@@ -985,7 +997,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptChan
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptType
-  (JNIEnv * env, jclass cl, jint filter, jint val, jint c) {
+  (JNIEnv * env, jclass cl, javaptr filter, jint val, jint c) {
 
 	MidiAcceptType ((MidiFilterPtr) filter,val,c);
 }
@@ -993,7 +1005,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_AcceptType
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedPort
-	(JNIEnv * env, jclass cl, jint filter, jint port) {
+	(JNIEnv * env, jclass cl, javaptr filter, jint port) {
   
  	return MidiIsAcceptedPort((MidiFilterPtr)filter,port);
  }
@@ -1001,7 +1013,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedPort
 /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedChan
-	(JNIEnv * env, jclass cl, jint filter, jint chan) {
+	(JNIEnv * env, jclass cl, javaptr filter, jint chan) {
   
  	return MidiIsAcceptedChan((MidiFilterPtr)filter,chan);
  }
@@ -1009,7 +1021,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedChan
  /*--------------------------------------------------------------------------*/
 
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_IsAcceptedType
-	(JNIEnv * env, jclass cl, jint filter, jint type) {
+	(JNIEnv * env, jclass cl, javaptr filter, jint type) {
   
  	return MidiIsAcceptedType((MidiFilterPtr)filter,type);
  }
@@ -1094,7 +1106,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetDriverInfos
 	jstring infosName;
 	jclass infosclass ;
 
-	Check_Pointer(inEnv,jinfos);
+	Check_Pointer0(inEnv,jinfos);
 	infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
 
 	res = MidiGetDriverInfos(refnum,&infos);
@@ -1162,7 +1174,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetSlotInfos
 	jclass infosclass;
     Boolean res;
         
-	Check_Pointer(inEnv,jinfos);
+	Check_Pointer0(inEnv,jinfos);
 	infosclass = (*inEnv)->GetObjectClass(inEnv, jinfos);
 	res = MidiGetSlotInfos(*(SlotRefNum *)&slotrefnum,&infos);
         

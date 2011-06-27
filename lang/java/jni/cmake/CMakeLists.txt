@@ -4,12 +4,14 @@
 project(midisharejni)
 cmake_minimum_required(VERSION 2.6)
 
-set (target JMidi)
 #######################################
 # versions management
-set (VERSION 1.13)
-set (STRVERS "v.1.13")
-set (SSTRVERS "1.13")
+set (VERSION 1.14)
+set (STRVERS "v.1.14")
+set (SSTRVERS "1.14")
+
+set (target JMidi-${VERSION})
+
 
 FIND_PACKAGE(JNI REQUIRED)
 

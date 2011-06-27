@@ -61,7 +61,14 @@
 	RcvAlarmPtr UPPJRcvAlarmPtr ;
 #endif
 
-#include "MidiAppl.h"
+#include "MidiPtrType.h"
+
+#ifdef __x86_64__
+# include "MidiAppl64.h"
+#else
+# include "MidiAppl.h"
+#endif
+
 #include <stdlib.h>
 
 #define typeTask 	19
@@ -239,8 +246,8 @@ JNIEXPORT void JNICALL Java_grame_midishare_MidiAppl_ApplClose
 }
  
 /*--------------------------------------------------------------------------*/
-JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
-	(JNIEnv * env, jobject appl, jobject task, jint date, jint ref, jint mode)
+JNIEXPORT javaptr JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
+	(JNIEnv * env, jobject appl, jobject task, javadate date, jint ref, jint mode)
 {
 	jclass cls;
 	jfieldID taskptr;
@@ -264,8 +271,14 @@ JNIEXPORT jint JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 	
 	cls = (*env)->GetObjectClass(env, task);
 	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "I");
-	(*env)->SetIntField(env,task,taskptr,(jint)taskev); 
-	return (jint)taskev;
+
+	javaptr ltask = (javaptr)taskev;
+#ifdef __x86_64__
+	(*env)->SetLongField(env, task, taskptr, ltask); 
+#else
+	(*env)->SetIntField(env, task, taskptr, ltask); 
+#endif
+	return ltask;
 }
 
 
