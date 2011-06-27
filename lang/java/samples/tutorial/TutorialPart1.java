@@ -247,7 +247,7 @@ public class TutorialPart1 extends Applet
 		
 	void sendNote(int pitch) 
 	{
-		int event = Midi.NewEv(Midi.typeNote);  // ask for a new note event
+		long event = Midi.NewEv(Midi.typeNote);  // ask for a new note event
 		
 		if (event != 0) {				// if the allocation was succesfull
 			Midi.SetChan(event,0); 			// set the Midi channel
@@ -269,8 +269,8 @@ public class TutorialPart1 extends Applet
 	
 	void sendMultipleNotes (int n, int pitch, int delay) 
 	{
-		int event = Midi.NewEv(Midi.typeNote);  	// ask for a new note event
-		int date = Midi.GetTime();              	// remember the current time
+		long event = Midi.NewEv(Midi.typeNote);  	// ask for a new note event
+		long date = Midi.GetTime();              	// remember the current time
 		
 		if (event != 0) {				// if the allocation was succesfull
 			Midi.SetChan(event,0); 			// set the Midi channel
@@ -294,7 +294,7 @@ public class TutorialPart1 extends Applet
 	
 	void sendLyric(String str) 
 	{
-		int event = Midi.NewEv(Midi.typeLyric); 	// ask for a new lyric event
+		long event = Midi.NewEv(Midi.typeLyric); 	// ask for a new lyric event
 			
 		if (event != 0) {				// if the allocation was succesfull
 			Midi.SetChan(event,0); 			// set the Midi channel
@@ -312,7 +312,7 @@ public class TutorialPart1 extends Applet
 		
 	void sendText(int type, String str) 
 	{
-		int event = Midi.NewEv(type);  			// ask for a event
+		long event = Midi.NewEv(type);  			// ask for a event
 			
 		if (event != 0) {				// if the allocation was succesfull
 			Midi.SetChan(event,0); 			// set the Midi channel

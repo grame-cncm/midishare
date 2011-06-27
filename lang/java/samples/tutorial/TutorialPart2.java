@@ -139,7 +139,7 @@ public class TutorialPart2 extends Applet
 		
 	void sendText(int refnum, int type, String str) 
 	{
-		int event = Midi.NewEv(type);  				// ask for a event
+		long event = Midi.NewEv(type);  				// ask for a event
 				
 		if (event != 0) {					// if the allocation was succesfull
 			Midi.SetChan(event,0); 				// set the Midi channel
@@ -179,7 +179,7 @@ public class TutorialPart2 extends Applet
 		
 	void sendNote(int pitch) 
 	{
-		int event = Midi.NewEv(Midi.typeNote);  // ask for a new ctrlchange event
+		long event = Midi.NewEv(Midi.typeNote);  // ask for a new ctrlchange event
 			
 		if (event != 0) {			// if the allocation was succesfull
 			Midi.SetChan(event,0); 		// set the Midi channel
@@ -193,7 +193,7 @@ public class TutorialPart2 extends Applet
 		
 	void sendCtrlChange(int ctrl, int val) 
 	{
-		int event = Midi.NewEv(Midi.typeCtrlChange);  // ask for a new note event
+		long event = Midi.NewEv(Midi.typeCtrlChange);  // ask for a new note event
 			
 		if (event != 0) {			// if the allocation was succesfull
 			Midi.SetChan(event,0); 		// set the Midi channel
@@ -206,7 +206,7 @@ public class TutorialPart2 extends Applet
 		
 	void sendProgChange(int pgm) 
 	{
-		int event = Midi.NewEv(Midi.typeProgChange);  // ask for a new progchange event
+		long event = Midi.NewEv(Midi.typeProgChange);  // ask for a new progchange event
 			
 		if (event != 0) {			// if the allocation was succesfull
 			Midi.SetChan(event,0); 		// set the Midi channel
@@ -377,7 +377,7 @@ class MidiTutorial extends MidiAppl
 
 class TutorialTask extends MidiTask {
 
-	public void Execute (MidiAppl obj, int date)
+	public void Execute (MidiAppl obj, long date)
 	{
 		MidiTutorial appl = (MidiTutorial) obj;
 		
