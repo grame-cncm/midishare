@@ -50,7 +50,7 @@ Real tasks must be defined by deriving the MidiTask class and overloading the Ex
 
 public  class MidiTask {
 
-	private int taskptr = 0;
+	private long taskptr = 0;
 	
 	final boolean isIdle() 		{return (taskptr == 0);}
 	final boolean isRunning() 	{return (taskptr != 0);}
@@ -70,7 +70,7 @@ public  class MidiTask {
 	*@param date is the task scheduling date.
 	*/
 	
-	public void Execute (MidiAppl appl , int date){}
+	public void Execute (MidiAppl appl , long date){}
  
 	/**
 	Forgets a previously scheduled task. 
