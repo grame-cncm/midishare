@@ -43,6 +43,8 @@ clean :
 
 headers : $(HEADERS)
 
+macos: 
+	cp ../jni/cmake/Release/libJMidi-1.14.dylib .
 
 ##################################################################
 # rule for java compiling
