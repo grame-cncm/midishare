@@ -1,5 +1,5 @@
 
-VERSION = 1.1.2
+VERSION = 1.1.4
 F = msjni-$(VERSION)
 
 SRC = $(shell find grame -name "*.java")
@@ -45,6 +45,9 @@ headers : $(HEADERS)
 
 macos: 
 	cp ../jni/cmake/Release/libJMidi-1.14.dylib .
+
+win32: 
+	cp ../jni/cmake/Release/JMidi64.dll ./JMidi.dll
 
 ##################################################################
 # rule for java compiling
