@@ -62,27 +62,27 @@ static long Add(long e1, long e2)
 {
 	long  next;
 	
-	while((next= Midi.GetLink(e1)) != 0)				/* tant qu'une séquence n'est finie */
+	while((next= Midi.GetLink(e1)) != 0)				/* tant qu'une sequence n'est finie */
 	{
 	
-		if( Midi.GetDate(next) <= Midi.GetDate(e2)){	/* date inférieure dans la même seq */
-			e1= next;					/* rien à faire : on continue		*/
+		if( Midi.GetDate(next) <= Midi.GetDate(e2)){	/* date inferieure dans la meme seq */
+			e1= next;					/* rien a faire : on continue		*/
 		}
 		else							/* sinon							*/
 		{
-			Midi.SetLink(e1,e2);		/* on linke avec l'autre séquence	*/
+			Midi.SetLink(e1,e2);		/* on linke avec l'autre sequence	*/
 			e1= e2;						/* et on les inverse				*/
 			e2= next;
 		}
 	}
 	
 	Midi.SetLink(e1, e2);
-	if(Midi.GetLink(e1) != 0)			/* linke avec la fin de l'autre séquence 	*/
+	if(Midi.GetLink(e1) != 0)			/* linke avec la fin de l'autre sequence 	*/
 		while(Midi.GetLink(e2) != 0){
 			e2= Midi.GetLink(e2);
 		}
 
-	return e2;							/* et renvoie le dernier evt de la séquence */
+	return e2;							/* et renvoie le dernier evt de la sequence */
 }
 
 /*--------------------------------------------------------------------------*/
@@ -111,7 +111,7 @@ public static void Mix( long src, long dest)
 
 			}
 			else if( Midi.GetDate(firstSrc) < Midi.GetDate(firstDest))
-													/* 1ier evt source précède	*/
+													/* 1ier evt source precede	*/
 			{										/* le 1ier evt destination	*/
 				Midi.SetFirstEv(dest, firstSrc);    /* range dans destination	*/
 				Midi.SetLastEv(dest, Add( firstSrc, firstDest));	/* et chainage	*/
@@ -148,7 +148,7 @@ Delete endTrack events which are in the middle of a sequence.
 														/* suivant= premier		*/
 			}
 			tmp= Midi.GetLink(ev); 	/* sauve le suivant		*/
-			Midi.FreeEv(ev);		/* libère l'evt			*/
+			Midi.FreeEv(ev);		/* libere l'evt			*/
 			ev= tmp;				/* evt courant=suivant	*/
 		}
 		else 

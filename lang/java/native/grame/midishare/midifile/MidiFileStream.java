@@ -1302,7 +1302,7 @@ final void WriteTracks(long seq) throws Exception {
 
 /*--------------------------------------------------------------------------*/
 final void WriteSeqName( long ev, short ref, short numPiste) throws Exception {
-	int name;
+	long name;
 		
 	if( ref == numPiste){					/* refNum equal to the track num 	*/
 	
@@ -1357,13 +1357,13 @@ final void WritePortPrefix( long prev, int port) throws Exception {
 		Midi.SetLink(ev,0);
 		Midi.SetField(ev,0,port);
 		
-		if( prev!=0)									/* s'il y a un 思始ement avant	*/
+		if( prev!=0)									/* s'il y a un evenement avant	*/
 			Midi.SetDate(ev,Midi.GetDate(prev));		/* positionne sa date			*/
 		else
 			Midi.SetDate(ev,0);
 			
-		WriteEv(ev);	/* 残rit l'思始ement			*/
-		Midi.FreeEv( ev);				/* et le lib俊e					*/
+		WriteEv(ev);	/* ecrit l'evenement			*/
+		Midi.FreeEv( ev);				/* et le libere					*/
 	}else
 		throw new IOException ("No more MidiShare events");
 }
@@ -1446,7 +1446,7 @@ final void SetSeqPort( long seq)
 			else										/* sinon				*/
 				Midi.SetFirstEv(seq,Midi.GetLink(ev)) ; /* suivant= premier		*/
 			tmp= Midi.GetLink(ev);						/* sauve le suivant		*/
-			Midi.FreeEv(ev);							/* lib俊e l'evt			*/
+			Midi.FreeEv(ev);							/* libere l'evt			*/
 			ev= tmp;									/* evt courant=suivant	*/
 		}
 		else 
@@ -1779,7 +1779,7 @@ final class TrkHeader{
  
     final void write(MidiFileStream  mfile, long ev, short status)throws Exception{
    
-   		int c;
+   		long c;
  	
  			if((c = Midi.CopyEv( ev)) != 0) {
  				
