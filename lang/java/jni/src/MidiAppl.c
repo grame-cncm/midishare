@@ -139,8 +139,13 @@ static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, voi
         appl = (jobject)a1;
         task = (jobject)a2;
         class = (*context->fCallbackEnv)->GetObjectClass(context->fCallbackEnv, task);
-        mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
+ #ifdef __x86_64__
+       mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;J)V");
+        taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "J");
+#else
+       mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
         taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "I");
+#endif
         (*context->fCallbackEnv)->SetIntField(context->fCallbackEnv,task,taskptr,0); 
         (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, task, mid, appl,date);
         (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, appl);
@@ -270,15 +275,14 @@ JNIEXPORT javaptr JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 #endif
 	
 	cls = (*env)->GetObjectClass(env, task);
-	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "I");
-
-	javaptr ltask = (javaptr)taskev;
 #ifdef __x86_64__
-	(*env)->SetLongField(env, task, taskptr, ltask); 
+	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "J");
+	(*env)->SetLongField(env, task, taskptr, (javaptr)taskev); 
 #else
-	(*env)->SetIntField(env, task, taskptr, ltask); 
+	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "I");
+	(*env)->SetIntField(env, task, taskptr, (javaptr)taskev); 
 #endif
-	return ltask;
+	return (javaptr)taskev;
 }
 
 

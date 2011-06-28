@@ -912,17 +912,15 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetText
   (JNIEnv * env, jclass cl, javaptr ev, jstring str) {
 
  	long i = 0;
- 	const char *midiname;
-
-	midiname = (*env)->GetStringUTFChars(env, str, NULL);
-	if (midiname == NULL) { return; /* OutOfMemoryError already thrown */ }
+	const char *text = (*env)->GetStringUTFChars(env, str, NULL);
+	if (text == NULL) { return; /* OutOfMemoryError already thrown */ }
 	
-	while (midiname[i]!= 0) {
-		MidiAddField((MidiEvPtr)ev,midiname[i]);
+	while (text[i]!= 0) {
+		MidiAddField((MidiEvPtr)ev,text[i]);
 		i++; 
 	}
 
-	(*env)->ReleaseStringUTFChars(env, str, midiname); 
+	(*env)->ReleaseStringUTFChars(env, str, text); 
  }
   
 

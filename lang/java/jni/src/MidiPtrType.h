@@ -6,8 +6,9 @@
 #define javaptr		jlong
 #define javadate	jlong
 #else
-#define javaptr		jint
-#define javadate	jint
+#define __x86_64__
+#define javaptr		jlong
+#define javadate	jlong
 #endif
 
 #endif
