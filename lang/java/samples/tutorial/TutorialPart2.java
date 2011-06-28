@@ -269,7 +269,7 @@ public class TutorialPart2 extends Applet
 		
 	void test9()
 	{
-		text.appendText("\n\n<TEST 8>Close the MidiAppl instance");
+		text.appendText("\n\n<TEST 9>Close the MidiAppl instance");
 		appl.Close();
 		appl = null;
 		listOfAppl ();
