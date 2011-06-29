@@ -25,8 +25,9 @@ part232 : $(APPLET) $(PART1)
 jar :
 	cp ../../native/grame.jar .
 
-macos : 
-	cp ../../jni/cmake/Release/libJMidi-1.14.dylib .
+macos: 
+	cp ../../jni/cmake/Release/libJMidi-1.15.dylib .
+	ln -sf libJMidi-1.15.dylib libJMidi.dylib
 
 win32: 
 	cp ../../jni/cmake/Release/JMidi64.dll ./JMidi.dll

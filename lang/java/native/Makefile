@@ -48,7 +48,8 @@ clean :
 headers : $(HEADERS)
 
 macos: 
-	cp ../jni/cmake/Release/libJMidi-1.14.dylib .
+	cp ../jni/cmake/Release/libJMidi-1.15.dylib .
+	ln -sf libJMidi-1.15.dylib libJMidi.dylib
 
 win32: 
 	cp ../jni/cmake/Release/JMidi64.dll ./JMidi.dll

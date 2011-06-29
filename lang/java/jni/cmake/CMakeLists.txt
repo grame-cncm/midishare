@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 2.6)
 
 #######################################
 # versions management
-set (VERSION 1.14)
-set (STRVERS "v.1.14")
-set (SSTRVERS "1.14")
+set (VERSION 1.15)
+set (STRVERS "v.1.15")
+set (SSTRVERS "1.15")
 
 set (target JMidi-${VERSION})
 
@@ -60,11 +60,16 @@ include_directories( ${INCL})
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC})
 file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS})
 set (MS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../../src/cmake/)
-if (WIN64)
- find_library (MSLIB mshare64 PATHS ${MS_PATH}/Release NO_DEFAULT_PATH)
-else(WIN64)
- find_library (MSLIB mshare32 PATHS ${MS_PATH}/Release NO_DEFAULT_PATH)
-endif(WIN64)
+if (WIN32)
+ if (WIN64)
+  find_library (MSLIB mshare64 PATHS ${MS_PATH}/Release NO_DEFAULT_PATH)
+ else(WIN64)
+  find_library (MSLIB mshare32 PATHS ${MS_PATH}/Release NO_DEFAULT_PATH)
+ endif(WIN64)
+
+else(WIN32)
+ find_library (MSLIB MidiShare PATHS ${MS_PATH}/Release NO_DEFAULT_PATH)
+endif(WIN32)
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})
 set (LINK ${JNI_LIBRARIES} ${MSLIB})
