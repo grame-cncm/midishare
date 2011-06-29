@@ -1,6 +1,6 @@
 
-VERSION = 1.1.4
-F = msjni-$(VERSION)
+VERSION = 1.1.5
+F = msjni-64-$(VERSION)
 
 SRC = $(shell find grame -name "*.java")
 OUTCLASS = $(shell find grame -name "*.class")
@@ -21,10 +21,14 @@ zip : grame.jar JMidi.dll
 	rm -rf $(F)/*
 	cp grame.jar $(F)
 	cp JMidi.dll $(F)
+	cp mshare64.dll $(F)
 	cp ../../jni/src/changelog.txt $(F)
 
 Test : Test.class
 	java Test
+
+Test64 : Test.class
+	"/c/Program Files/Java/jre6/bin/java.exe" Test
 
 Test32 : Test.class
 	java -d32 Test
