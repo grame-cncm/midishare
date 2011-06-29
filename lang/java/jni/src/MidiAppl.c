@@ -146,7 +146,7 @@ static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, voi
        mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
         taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "I");
 #endif
-        (*context->fCallbackEnv)->SetIntField(context->fCallbackEnv,task,taskptr,0); 
+        (*context->fCallbackEnv)->SetLongField(context->fCallbackEnv,task,taskptr,0); 
         (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, task, mid, appl,date);
         (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, appl);
         (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, task);
