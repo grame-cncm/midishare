@@ -84,7 +84,7 @@ short		myRefNum, selectedRef= noRef;
 MidiFilterPtr	myFilter;
 
 UINT		gStartupMsg;
-MidiName	AppliName = "msDrivers";
+const char*	AppliName = "msDrivers";
 char * profileName = "msDrivers.ini";
 char * sectionName = "Window position";
 char * xEntryName  = "xpos";
@@ -186,7 +186,7 @@ void AddSlots (HWND hDlg, short ref)
 	TDriverInfos infos; LRESULT n;
 	if (MidiGetDriverInfos (ref, &infos)) {
 		short i; SlotRefNum sref; TSlotInfos sinf;
-		for (i=1; i<=infos.slots; i++) {
+		for (i=1; i<=infos.drvslots; i++) {
 			sref = MidiGetIndSlot (ref, i);
 			if (MidiGetSlotInfos (sref, &sinf)) {
 				IncludePortMap (sinf.cnx);

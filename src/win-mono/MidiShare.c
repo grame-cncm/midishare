@@ -61,6 +61,12 @@ BOOL WINAPI DllEntryPoint (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReser
     return TRUE;
 }
 
+//_________________________________________________________
+BOOL WINAPI DllMain (HINSTANCE  hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+{
+	return DllEntryPoint (hinstDLL, fdwReason, lpvReserved );
+}
+
 /*--------------------------- Global MidiShare environment --------------------*/
 void  MIDISHAREAPI MidiShareSpecialInit(unsigned long defaultSpace) {
   MSSpecialInit( defaultSpace, gMem);
@@ -318,10 +324,10 @@ Boolean MIDISHAREAPI MidiIsSlotConnected (short port, SlotRefNum slot) {
 }
 
 /*----------------------------------- Mail boxes ------------------------------*/
-LPVOID MIDISHAREAPI MidiReadSync(LPVOID FAR *adrMem) {
+LPVOID MIDISHAREAPI MidiReadSync(void* adrMem) {
   return MSReadSync( adrMem);
 }
-LPVOID MIDISHAREAPI MidiWriteSync(LPVOID FAR *adrMem,LPVOID val) {
+LPVOID MIDISHAREAPI MidiWriteSync(void* adrMem, void* val) {
   return MSWriteSync( adrMem,val);
 }
 

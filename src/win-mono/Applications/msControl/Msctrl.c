@@ -92,7 +92,7 @@ ScrollActionProcPtr	gScrollAction[]= {
 
 // MidiShare variables
 short myRefNum;		// numero de l'application
-MidiName AppliName = "msControler";
+const char* AppliName = "msControler";
 
 // for private profile file
 char * profileName = "msControl32.ini";
