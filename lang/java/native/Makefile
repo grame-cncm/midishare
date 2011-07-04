@@ -22,7 +22,7 @@ zip : grame.jar JMidi.dll
 	cp grame.jar $(F)
 	cp JMidi.dll $(F)
 	cp mshare64.dll $(F)
-	cp ../../jni/src/changelog.txt $(F)
+	cp ../jni/src/changelog.txt $(F)
 
 Test : Test.class
 	java Test
