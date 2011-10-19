@@ -294,7 +294,7 @@ enum{   MIDIOpenAppl=1,
 		
 #ifdef __x86_64__
 		/* padding for 64 bits and to ensure natural alignment */
-		Byte		data[sizeof(12 - sizeof(long))];	
+		Byte		data[12 - sizeof(long)];
 #endif
         
 		union {                     /* info depending of event type : */
