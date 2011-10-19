@@ -50,7 +50,7 @@ TInetAddress::TInetAddress (IPNum ip, InetServiceRef ref)
 }
 
 //____________________________________________________________
-Boolean TInetAddress::SetAddress (IPNum ip)
+bool TInetAddress::SetAddress (IPNum ip)
 {
 	struct in_addr ipa;
 	ipa.s_addr = ip;
@@ -68,14 +68,14 @@ void TInetAddress::MakeAddress (char *name, char *real, void *ipa)
 }
 
 //____________________________________________________________
-Boolean TInetAddress::SetAddress (unsigned char *host)
+bool TInetAddress::SetAddress (unsigned char *host)
 {
 	host[*host + 1] = 0;
 	return SetAddress ((char *)&host[1]);
 }
 
 //____________________________________________________________
-Boolean TInetAddress::SetAddress (char *host)
+bool TInetAddress::SetAddress (char *host)
 {
 	struct hostent * info;
 	struct in_addr ipa;

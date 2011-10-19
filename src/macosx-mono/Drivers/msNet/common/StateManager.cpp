@@ -32,8 +32,8 @@
 #include "profport.h"
 
 extern char * profileName;
-static char * HostsIn = "Hosts input connections";
-static char * HostsOut = "Hosts output connections";
+static const char * HostsIn = "Hosts input connections";
+static const char * HostsOut = "Hosts output connections";
 #define kMaxEntryLen	1024
 
 //____________________________________________________________
@@ -63,7 +63,7 @@ void StatesManager::SaveState (IPNum ip)
 	if (!fState) return;
 	INetHandle h = fState->GetState ();
 	if (h) {
-		char * fullProfileName = MakeMSFullName (profileName);
+		const char * fullProfileName = MakeMSFullName (profileName);
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
 		buff[0] = 0;
 		GetPorts (buff, infos++);
@@ -74,11 +74,11 @@ void StatesManager::SaveState (IPNum ip)
 	}
 }
 
-static __inline Boolean CnxSeparator(char c) { return ((c)=='	') || ((c)==' '); }
+static __inline bool CnxSeparator(char c) { return ((c)=='	') || ((c)==' '); }
 //________________________________________________________________________
-char * NextCnx (char *ptr, Boolean first)
+char * NextCnx (char *ptr, bool first)
 {
-	Boolean skipped = first;
+	bool skipped = first;
 	while (*ptr) {
 		if (CnxSeparator(*ptr))	skipped = true;
 		else if (skipped)		return ptr;
@@ -108,7 +108,7 @@ void StatesManager::LoadState (IPNum ip)
 	if (h) {
 		int n, m;
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(h);
-		char * fullProfileName = MakeMSFullName (profileName);
+		const char * fullProfileName = MakeMSFullName (profileName);
 		memset (infos, 0, GetHandleSize(h));
 		n = get_private_profile_string (HostsIn, addr.IP2String(), "", buff, 
 								kMaxEntryLen, fullProfileName);	

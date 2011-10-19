@@ -27,12 +27,12 @@
 #include "StrConstants.h"
 #include "InetTypes.h"
 
-extern Boolean doneFlag;
+extern bool doneFlag;
 
 /* Application state	*/
 typedef struct state {
-	Boolean		driverMode;
-	Boolean		autoQuit;
+	bool		driverMode;
+	bool		autoQuit;
 	NetConfig	net;
 	int			maxClients;
 } State, *StatePtr;
@@ -42,7 +42,7 @@ typedef struct state {
 extern "C" {
 #endif
 
-strPtr  SetUpDriver (StatePtr params);
+const strPtr  SetUpDriver (StatePtr params);
 strPtr  ReStart (StatePtr params);
 void 	CloseInetDriver ();
 

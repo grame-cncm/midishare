@@ -32,9 +32,9 @@
 /* ----------------------------------*/
 /* constants definitions             */
 TInetControler * gControl = 0;
-Boolean * 		 gAutoQuit;
+bool *			gAutoQuit;
 pthread_t		 gIdleThread = 0;
-Boolean doneFlag = false;
+bool doneFlag = false;
 
 //_______________________________________________________________________
 static void * IdleThread (void * ptr)

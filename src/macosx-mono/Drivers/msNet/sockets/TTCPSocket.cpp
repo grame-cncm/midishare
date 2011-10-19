@@ -36,7 +36,7 @@
 #include "TTCPSocket.h"
 
 typedef void * (*thread_main_ptr) (void * ptr);
-extern Boolean doneFlag;
+extern bool doneFlag;
 
 #define IP_MTU		14
 //____________________________________________________________

@@ -78,7 +78,7 @@ void OSXFeedback::Remove (TMidiRemote * remote)
 //_________________________________________________________________________________
 void OSXFeedback::CnxRefused (strPtr host, short reason)
 {
-	char *str;
+	const char *str;
 	switch (reason) {
 		case kTooMuchClients: 	str = "too much clients";
 			break;

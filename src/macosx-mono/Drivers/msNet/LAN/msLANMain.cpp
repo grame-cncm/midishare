@@ -39,7 +39,7 @@ State gParams;
 extern "C" {
 #endif
 
-Boolean Start();
+bool Start();
 void Stop();
 
 #ifdef __cplusplus
@@ -47,7 +47,7 @@ void Stop();
 #endif
 
 //_________________________________________________________
-static void GetNetConfig (char *file, NetConfigPtr cfg)
+static void GetNetConfig (const char *file, NetConfigPtr cfg)
 {
 	cfg->port = get_private_profile_int (NetSectionName, UDPPort,
 					kDefaultLANPort, file);	
@@ -58,7 +58,7 @@ static void GetNetConfig (char *file, NetConfigPtr cfg)
 }
 
 //_________________________________________________________
-Boolean Start()
+bool Start()
 {
 	strPtr msg;
 	gParams.driverMode = true;

@@ -32,18 +32,18 @@
 
 /* ----------------------------------*/
 TWANControler * gControl = 0;
-Boolean * 		gAutoQuit;
+bool *			gAutoQuit;
 pthread_t		gIdleThread = 0;
 OSXFeedback *	gFeedback = 0;
 TMidiServer *	gServer = 0;
-Boolean doneFlag = false, launched=false;
+bool doneFlag = false, launched=false;
 
 extern char * Targets;
 extern char * NetSectionName;
 extern char * profileName;
 
 //_________________________________________________________
-char * NextCnx (char *ptr, Boolean first);
+char * NextCnx (char *ptr, bool first);
 static void LaunchTargets()
 {
 	char buff[1024], *next, *ptr;
@@ -96,7 +96,7 @@ static pthread_t ThreadCreate (TInetControler * inet)
 }
 
 /* -----------------------------------------------------------------------------*/
-strPtr SetUpDriver (StatePtr params)
+const strPtr SetUpDriver (StatePtr params)
 {
 	strPtr msg;
 	MidiName name = InetDriverName (strWANName, params->net.port, kDefaultWANPort);

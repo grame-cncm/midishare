@@ -40,7 +40,7 @@
 
 #include "TUDPSocket.h"
 
-extern Boolean doneFlag;
+extern bool doneFlag;
 //____________________________________________________________
 TUDPSocket::TUDPSocket (short port) : TSocket (port)
 {
@@ -126,7 +126,7 @@ int TUDPSocket::ThreadCreate ()
 }
 
 //____________________________________________________________
-SocketStatus TUDPSocket::SetOptions (Boolean local)
+SocketStatus TUDPSocket::SetOptions (bool local)
 {
 #ifndef __MacOSX__
 	char tos = IPTOS_LOWDELAY + IPTOS_RELIABILITY;
@@ -152,7 +152,7 @@ SocketStatus TUDPSocket::SetOptions (Boolean local)
 }
 
 //____________________________________________________________
-SocketStatus TUDPSocket::Open (Boolean local)
+SocketStatus TUDPSocket::Open (bool local)
 {
 	int ret; SocketStatus err;
 	

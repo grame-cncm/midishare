@@ -31,7 +31,7 @@ extern "C" {
 
 MidiName InetDriverName (MidiName baseName, short port, short defaultPort);
 char * CheckName (MidiName name);
-char * MakeMSFullName (char * name);
+const char * MakeMSFullName (const char * name);
 
 #ifdef __cplusplus
 }

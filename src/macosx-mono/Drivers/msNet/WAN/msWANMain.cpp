@@ -29,13 +29,13 @@
 #include "profport.h"
 #include "misc.h"
 
-char * profileName 		= "msWANDriver.ini";
-char * NetSectionName	= "Net Params";
-char * UDPPort			= "UDP port";
-char * GroupTime		= "Grouping time";
-char * MaxLat			= "Maximum latency allowed";
-char * MaxHost			= "Maximum input connections count";
-char * Targets			= "Target hosts";
+const char * profileName 	= "msWANDriver.ini";
+const char * NetSectionName	= "Net Params";
+const char * UDPPort		= "UDP port";
+const char * GroupTime		= "Grouping time";
+const char * MaxLat			= "Maximum latency allowed";
+const char * MaxHost		= "Maximum input connections count";
+const char * Targets		= "Target hosts";
 
 State gParams; 
 
@@ -43,7 +43,7 @@ State gParams;
 extern "C" {
 #endif
 
-Boolean Start();
+bool Start();
 void Stop();
 
 #ifdef __cplusplus
@@ -51,7 +51,7 @@ void Stop();
 #endif
 
 //_________________________________________________________
-static void GetNetConfig (char *file, NetConfigPtr cfg)
+static void GetNetConfig (const char *file, NetConfigPtr cfg)
 {
 	cfg->port = get_private_profile_int (NetSectionName, UDPPort,
 					kDefaultWANPort, file);	
@@ -62,9 +62,9 @@ static void GetNetConfig (char *file, NetConfigPtr cfg)
 }
 
 //_________________________________________________________
-Boolean Start()
+bool Start()
 {
-	strPtr msg; char *fullName = MakeMSFullName (profileName);
+	strPtr msg; const char *fullName = MakeMSFullName (profileName);
 	gParams.driverMode = true;
 	gParams.autoQuit = true;
 	GetNetConfig (fullName, &gParams.net);

@@ -29,12 +29,12 @@
 #include "NetTools.h"
 #include "misc.h"
 
-extern Boolean doneFlag;
+extern bool doneFlag;
 
 #ifdef WANDriver
-static char * ErrFile = "msWANDriver.log";
+static const char * ErrFile = "msWANDriver.log";
 #else
-static char * ErrFile = "msLANDriver.log";
+static const char * ErrFile = "msLANDriver.log";
 #endif
 
 //_______________________________________________________________________

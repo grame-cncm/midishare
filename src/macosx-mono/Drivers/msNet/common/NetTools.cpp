@@ -27,7 +27,7 @@
 #define MidiShareDirectory ".MidiShare"
 
 //________________________________________________________________________
-char * MakeMSFullName (char * name)
+const char * MakeMSFullName (const char * name)
 {
 	static char  buff [1024];
 	const char* home = getenv("HOME");
