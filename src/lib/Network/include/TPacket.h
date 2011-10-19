@@ -108,7 +108,7 @@ class TPacket
 	virtual SocketStatus Send (TSocket *sok, IPAddrPtr to);
 	virtual SocketStatus Send (TSocket *sok);
 
-	static Boolean		Check (msPacketHeaderPtr p);
+	static bool		Check (msPacketHeaderPtr p);
 
 	protected:
 		void	SetType (msPacketType type) 

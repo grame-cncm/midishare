@@ -50,7 +50,7 @@ MidiShareTask::~MidiShareTask()
 }
 
 //_______________________________________________________________________________
-Boolean MidiShareTask::Schedule (long date, short refNum, long a1,long a2)
+bool MidiShareTask::Schedule (long date, short refNum, long a1,long a2)
 {
 #if defined(macintosh) && defined(MidiSharePPC_68k)
 	fTask = MidiTask (fUPPTask, date, refNum, a1, a2, (long)this);
@@ -67,7 +67,7 @@ void MidiShareTask::Forget (void)
 }
 
 //_______________________________________________________________________________
-Boolean MidiShareDTask::Schedule (long date, short refNum, long a1,long a2)
+bool MidiShareDTask::Schedule (long date, short refNum, long a1,long a2)
 {
 #if defined(macintosh) && defined(MidiSharePPC_68k)
 	fTask = MidiDTask (fUPPTask, date, refNum, a1, a2, (long)this);

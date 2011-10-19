@@ -35,7 +35,7 @@ TRemoteAppl::TRemoteAppl (TMidiRemote * owner)
 }
 
 //____________________________________________________________
-Boolean TRemoteAppl::Open (MidiName name, Boolean wantFilter)
+bool TRemoteAppl::Open (MidiName name, bool wantFilter)
 {
 	if (MidiShareAppl::Open (name, wantFilter)) {
 		SetApplAlarm (true);

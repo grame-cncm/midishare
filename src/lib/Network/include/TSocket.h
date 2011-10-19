@@ -35,7 +35,7 @@ class TSocket
 		 	 TSocket (short port)	{ fPort=port; fRef=0; fBind=false; }
 	virtual ~TSocket ()				{}
 			
-				Boolean 		Opened ()	{ return fRef != 0; }
+				bool			Opened ()	{ return fRef != 0; }
 				short			GetPort () 	{ return fPort; }
 				SocketRef		GetRefNum()	{ return fRef; }
 		virtual	SocketStatus	Open () 	= 0;
@@ -46,7 +46,7 @@ class TSocket
 	protected:
 		SocketRef 		fRef;
 		short			fPort;
-		Boolean 		fBind;
+		bool			fBind;
 		GenericPacket	fPacket;
 };
 

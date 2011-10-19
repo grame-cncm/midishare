@@ -36,7 +36,7 @@ TRemoteSlot::TRemoteSlot (IPNum id, short drvRef)
 }
 
 //____________________________________________________________
-Boolean TRemoteSlot::Open (MidiName name, Boolean wantFilter)
+bool TRemoteSlot::Open (MidiName name, bool wantFilter)
 {
 	if (!fInSlot.Open (name, MidiInputSlot))
 		return false;

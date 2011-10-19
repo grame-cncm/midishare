@@ -89,9 +89,9 @@ class InetCtrlDTask : public MidiShareDTask
 		virtual void 	Run	(long date, short refNum, long a1, long a2);
 		virtual void 	Forget (void);
 
-				Boolean _Schedule (void * a1, long type);
-				Boolean _Schedule (long date, void * a1, long type);
-				Boolean FatalError (ErrString msg, long err);
+				bool _Schedule (void * a1, long type);
+				bool _Schedule (long date, void * a1, long type);
+				bool FatalError (const ErrString msg, long err);
 				void 	SetRefNum (short refNum)	{ fRefNum = refNum; }
 				TInetControler * Controler()		{ return fCtrl; }
 
@@ -100,7 +100,7 @@ class InetCtrlDTask : public MidiShareDTask
 		short	fRefNum;
 		long	fFatalErrCode;
 		TInetControler * fCtrl;
-		Boolean fEndFlag, fFatalPending;
+		bool fEndFlag, fFatalPending;
 };
 
 #endif

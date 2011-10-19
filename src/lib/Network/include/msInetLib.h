@@ -32,14 +32,14 @@ extern "C" {
 #endif
 
 // Open Transport utilities
-Boolean CheckOT ();
+bool CheckOT ();
 strPtr TCPOpen ();
 void TCPClose ();
 
 // Net controler utilities
 void Disconnect (TWANControler *wan, TMidiRemote * remote);
 void Connect (TWANControler *wan, Str255 remote);
-Boolean SetDriverMode (TInetControler *ctrl, Boolean on);
+bool SetDriverMode (TInetControler *ctrl, bool on);
 
 // Misc.
 char * HostName ();

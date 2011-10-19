@@ -67,13 +67,13 @@ void TWANControler::CallCheckRemote (TRemoteMgr *mgr)
 }
 
 //_________________________________________________________________________________
-Boolean TWANControler::IsClient (IPNum ip)
+bool TWANControler::IsClient (IPNum ip)
 {
 	return FindUDPRemote (ip) != 0;
 }
 
 //_________________________________________________________________________________
-Boolean TWANControler::Connect (strPtr remote)
+bool TWANControler::Connect (strPtr remote)
 {
 	INetAlert alert; SocketStatus err; TMidiClient * client;
 
@@ -159,7 +159,7 @@ void TWANControler::Disconnect ()
 }
 
 //_________________________________________________________________________________
-void TWANControler::Disconnect (IPNum id, Boolean remove)
+void TWANControler::Disconnect (IPNum id, bool remove)
 {
 	TMidiClient * client = (TMidiClient *)fTCPRemote.Find (id);
 	TMidiRemote * r = FindUDPRemote (id);
@@ -177,7 +177,7 @@ char * TWANControler::RemoteName (IPNum ip, IDPacketPtr id)
 }
 
 //_________________________________________________________________________________
-Boolean TWANControler::UWakeup (Boolean udpMode)
+bool TWANControler::UWakeup (bool udpMode)
 {
 	INetAlert alert; SocketStatus err;
 	if (!Sleeping()) return true;
@@ -198,9 +198,9 @@ void TWANControler::Bye ()
 }
 
 //_________________________________________________________________________________
-void TWANControler::CheckCompletion  (IPNum id, Boolean silently)
+void TWANControler::CheckCompletion  (IPNum id, bool silently)
 {
-	Boolean failed = false;
+	bool failed = false;
 	TMidiRemote * r = FindUDPRemote (id);
 
 	if (r) {
@@ -250,13 +250,13 @@ void TWANControler::OpenComplete  (IPNum id)
 }
 
 //_________________________________________________________________________________
-Boolean TWANControler::AddRemote (TMidiClient * client)
+bool TWANControler::AddRemote (TMidiClient * client)
 {
 	return (fTCPRemote.Add (dynamic_cast<TRemote *>(client)) != 0);
 }
 
 //_________________________________________________________________________________
-Boolean TWANControler::CreateClient (SocketRef sok, TInetAddress * addr)
+bool TWANControler::CreateClient (SocketRef sok, TInetAddress * addr)
 {
 	TMidiClient * client = new TMidiClient (this, sok, addr);
 	if (!client) return false;

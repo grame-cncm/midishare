@@ -46,7 +46,7 @@ class TMidiInStream
 	virtual ~TMidiInStream () {}
 	
 			void 			Reset ()	{ fPacket = 0; }
-			Boolean 		Put (MidiPacketPtr p, long rcvDate);
+			bool			Put (MidiPacketPtr p, long rcvDate);
 			MidiEvPtr		GetEv ();
 
 			unsigned long	Missed ()		{ return fMissed; }

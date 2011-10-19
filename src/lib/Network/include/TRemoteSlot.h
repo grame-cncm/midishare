@@ -36,7 +36,7 @@ class TRemoteSlot : public MidiShareAppl
 			 	 TRemoteSlot (IPNum id, short drvRef);
 		virtual ~TRemoteSlot () { Close(); }
 	
-				Boolean Open (MidiName name, Boolean wantFilter=false);
+				bool	Open (MidiName name, bool wantFilter=false);
 				void 	Close ();
 
 				MidiName 	GetName ();

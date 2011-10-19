@@ -46,22 +46,22 @@ class TWANControler : public TInetControler
 		virtual void 	DoIdle ();
 		virtual void 	RemoveRemote (IPNum id);
 		virtual void	OpenComplete  (IPNum id);
-				void 	CheckCompletion	(IPNum ip, Boolean silently);
+				void 	CheckCompletion	(IPNum ip, bool silently);
 		
 				void 	SetFeedback (FeedbackProvider * f)	{ fFeedback = f; }
-				Boolean Connect 	(strPtr remote);
-				void 	Disconnect	(IPNum ip, Boolean remove=true);
-				Boolean	CreateClient (SocketRef sok, TInetAddress * addr);
-				Boolean	IsClient 	 (IPNum ip);
-				Boolean	AddRemote 	 (TMidiClient *client);
+				bool	Connect 	(strPtr remote);
+				void 	Disconnect	(IPNum ip, bool remove=true);
+				bool	CreateClient (SocketRef sok, TInetAddress * addr);
+				bool	IsClient 	 (IPNum ip);
+				bool	AddRemote 	 (TMidiClient *client);
 				void	CloseClient (IPNum ip, CnxReportPtr report);
 				void	CnxRefused  (strPtr host);
 				void	RefuseCnx   (strPtr host, short reason)	{ fFeedback->CnxRefused (host, reason); }
 	
-				Boolean	Start ()	{ return UWakeup (); }
+				bool	Start ()	{ return UWakeup (); }
 
 	protected:
-		virtual Boolean UWakeup (Boolean udpMode = false);	// deferred wake up
+		virtual bool	UWakeup (bool udpMode = false);	// deferred wake up
 		virtual void 	Bye ();
 		virtual char *	RemoteName (IPNum ip, IDPacketPtr id);
 		virtual IPNum 	GetSpecialIP ()				{ return 0; }

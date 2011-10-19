@@ -64,7 +64,7 @@ MidiShareAppl::~MidiShareAppl()
 }
 
 //_______________________________________________________________________________
-Boolean MidiShareAppl::Open (MidiName name, Boolean wantFilter)
+bool MidiShareAppl::Open (MidiName name, bool wantFilter)
 {
 	if( fRefNum == undefinedRefNum) {
 		fRefNum= MidiOpen (name);		
@@ -91,7 +91,7 @@ void MidiShareAppl::Close()
 }
 
 //_______________________________________________________________________________
-void MidiShareAppl::SetApplAlarm (Boolean on)
+void MidiShareAppl::SetApplAlarm (bool on)
 {
 #if defined(macintosh) && defined(MidiSharePPC_68k)
 	MidiSetApplAlarm (fRefNum, on ? fUPPApplAlarm : 0);
@@ -101,7 +101,7 @@ void MidiShareAppl::SetApplAlarm (Boolean on)
 }	
 
 //_______________________________________________________________________________
-void MidiShareAppl::SetRcvAlarm (Boolean on)
+void MidiShareAppl::SetRcvAlarm (bool on)
 {
 #if defined(macintosh) && defined(MidiSharePPC_68k)
 	MidiSetRcvAlarm (fRefNum, on ? fUPPRcvAlarm : 0);	

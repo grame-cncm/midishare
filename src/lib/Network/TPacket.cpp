@@ -42,7 +42,7 @@ TPacket::TPacket (char type, short len)
 }
 
 //____________________________________________________________
-Boolean TPacket::Check (msPacketHeaderPtr p)
+bool TPacket::Check (msPacketHeaderPtr p)
 {
 	return (p->magic == ntohs(kMagic));
 }

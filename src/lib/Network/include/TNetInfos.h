@@ -34,7 +34,7 @@ class TNetInfos
 		 	 TNetInfos (short port);
 	virtual ~TNetInfos () {}
 	
-			Boolean		Available () 		{ return fError == noErr; }
+			bool		Available () 		{ return fError == noErr; }
 			SocketStatus Error ()			{ return fError; }
 			IPAddrPtr	LocalAddress () 	{ return &fLocal; }
 			IPNum		LocalIP () 			{ return IPField(fLocal); }

@@ -69,7 +69,7 @@ MidiShareDriver::~MidiShareDriver()
 }
 
 //_______________________________________________________________________________
-Boolean MidiShareDriver::Open (MidiName name, Boolean wantFilter)
+bool MidiShareDriver::Open (MidiName name, bool wantFilter)
 {
 	if (!Opened()) {
 #if defined(macintosh) && defined(MidiSharePPC_68k)

@@ -107,7 +107,7 @@ void TRemoteMgr::CheckTimeOut (unsigned long date)
 }
 
 //____________________________________________________________
-Boolean TRemoteMgr::Refresh (IPNum id, PeerTimesPtr times)
+bool TRemoteMgr::Refresh (IPNum id, PeerTimesPtr times)
 {
 	RemotePtr r = Head();
 	while (r) {

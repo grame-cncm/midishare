@@ -37,8 +37,8 @@ class FTMA
 		 	 FTMA (short histSize, short retain, short threshold);
 	virtual ~FTMA () {}
 
-	virtual Boolean Put (long value, long *average);
-		Boolean 	Empty ()	{ return fEmpty; }
+	virtual bool Put (long value, long *average);
+		bool 	Empty ()	{ return fEmpty; }
 		
 	protected:
 		virtual long	Average (long * tbl, short size, short retain);
@@ -49,7 +49,7 @@ class FTMA
 	private:
 		long	fValues[kMaxSize];
 		short	fIndex, fSize, fRetain, fThreshold;
-		Boolean fEmpty;
+		bool fEmpty;
 };
 
 //__________________________________________________________________________
@@ -78,7 +78,7 @@ class AEFTMA : public FTMA
 		 	 AEFTMA (short histSize, short retain, short threshold, short histlen);
 	virtual ~AEFTMA () {}
 
-	virtual Boolean Put (long value, long *average);
+	virtual bool Put (long value, long *average);
 	
 	private:
 		EAverage	fAverage;

@@ -35,7 +35,7 @@ class MidiShareDriver : public MidiShareAppl
 				 MidiShareDriver (short version);
 		virtual ~MidiShareDriver ();
 
-		virtual Boolean Open 	(MidiName name, Boolean wantFilter = false);
+		virtual bool Open 	(MidiName name, bool wantFilter = false);
 		virtual void 	Close	();
 		virtual void	WakeUp (short r) = 0;
 		virtual void	Sleep  (short r) = 0;

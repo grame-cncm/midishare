@@ -63,7 +63,7 @@ TMidiClient::~TMidiClient ()
 }
 
 //________________________________________________________________________
-void TMidiClient::SetRcvAlarm (short refNum, Boolean on)
+void TMidiClient::SetRcvAlarm (short refNum, bool on)
 {
 	if (on) {
 		fSkewTask.ReSchedule (refNum);

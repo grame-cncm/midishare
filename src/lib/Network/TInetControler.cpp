@@ -29,7 +29,7 @@
 #include "INetAlert.h"
 #include "MidiTools.h"
 
-extern Boolean doneFlag;
+extern bool doneFlag;
 //____________________________________________________________
 TInetControler::TInetControler (NetConfigPtr net, MidiName name, short mode) 
 	: fNetInfos (net->port), fSocket (net->port)
@@ -94,7 +94,7 @@ void TInetControler::SetMode (short mode)
 }
 
 //____________________________________________________________
-Boolean TInetControler::Open ()
+bool TInetControler::Open ()
 {
 	if (!fAppl || !fDTasks || !fActiveSensing) return false;
 	if (!fAppl->Open (fDrvName)) {
@@ -158,7 +158,7 @@ void TInetControler::WakeUp (short r)	{ UWakeup (); }
 void TInetControler::Sleep  (short r)	{ USleep(); }
 
 //____________________________________________________________
-Boolean TInetControler::UWakeup (Boolean udpMode)
+bool TInetControler::UWakeup (bool udpMode)
 {
 	INetAlert alert;
 	if (!Sleeping()) return true;
@@ -184,7 +184,7 @@ Boolean TInetControler::UWakeup (Boolean udpMode)
 void TInetControler::Bye ()
 {
 	TByePacket bye;
-	Boolean forget = MidiCountAppls() > 0;
+	bool forget = MidiCountAppls() > 0;
 
 	if (forget) {
 		if (fActiveSensing) fActiveSensing->Forget ();
@@ -286,10 +286,10 @@ void TInetControler::DispatchMidi (IPNum ip, GenericPacketPtr p, short len)
 }
 
 //____________________________________________________________
-Boolean TInetControler::CreateRemote (MidiEvPtr param)
+bool TInetControler::CreateRemote (MidiEvPtr param)
 {
 	TMidiRemote * r; INetAlert alert;
-	IPNum ip; PeerTimes times; Boolean ret = false;
+	IPNum ip; PeerTimes times; bool ret = false;
 	MidiEvPtr name = EvToRemote (param, &ip, &times);
 
 	// check params and if remote exists
@@ -393,7 +393,7 @@ void TInetControler::SockError (SocketStatus err)
 }
 
 //____________________________________________________________
-void TInetControler::FatalError (ErrString msg, SocketStatus err)
+void TInetControler::FatalError (const ErrString msg, SocketStatus err)
 {
 	INetAlert alert;
 	USleep ();
@@ -401,7 +401,7 @@ void TInetControler::FatalError (ErrString msg, SocketStatus err)
 }
 
 //____________________________________________________________
-void TInetControler::RemoteFatalError (IPNum id, ErrString msg, SocketStatus err)
+void TInetControler::RemoteFatalError (IPNum id, const ErrString msg, SocketStatus err)
 {
 	TMidiRemote * r = FindUDPRemote (id);
 	if (r) {

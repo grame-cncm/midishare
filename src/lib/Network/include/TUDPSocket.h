@@ -47,7 +47,7 @@ class TUDPSocket : public TSocket
 		TUDPListener *	GetListener ()						{ return fClient; }
 		
 		virtual	SocketStatus	Open ()		{ return Open (true); }
-		virtual	SocketStatus	Open (Boolean local);
+		virtual	SocketStatus	Open (bool local);
 		virtual	void			Close ();
 		virtual	SocketStatus	Send (IPAddrPtr to, void *buff, short *len);
 		virtual	SocketStatus	Listen (IPAddrPtr from, void *buff, short *len);
@@ -59,7 +59,7 @@ class TUDPSocket : public TSocket
 #endif
 		
 	private:
-		SocketStatus	SetOptions (Boolean local);
+		SocketStatus	SetOptions (bool local);
 		TUDPListener *	fClient;
 #if macintosh
 //		TUnitData	fData;

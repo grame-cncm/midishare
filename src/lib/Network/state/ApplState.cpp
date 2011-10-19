@@ -146,7 +146,7 @@ void ApplState::ChangeCnx (short refnum)
 }
 
 //____________________________________________________________
-Boolean ApplState::Equal (MidiName name, MidiEvPtr evName)
+bool ApplState::Equal (MidiName name, MidiEvPtr evName)
 {
 	short len = *name++;
 	if (MidiCountFields (evName) != len) return false;

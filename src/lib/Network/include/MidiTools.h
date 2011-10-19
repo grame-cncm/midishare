@@ -31,13 +31,13 @@
 class MidiTools
 {
 	public:
-		static	MidiEvPtr Text2Event (char *text);
-		static	MidiEvPtr Text2Event (unsigned char *text);
+		static	MidiEvPtr Text2Event (const char *text);
+		static	MidiEvPtr Text2Event (const unsigned char *text);
 		static	void 	  Event2Text (MidiEvPtr e, char *text, short bufsize);
 		static	void 	  Event2Text (MidiEvPtr e, unsigned char *text, short bufsize);
 
-		static	void 	  Print (char *s, short ref = 0)	{ MidiSendIm (ref, Text2Event (s)); }
-		static	void 	  Print (unsigned char *s, short ref = 0)	{ MidiSendIm (ref, Text2Event (s)); }
+		static	void 	  Print (const char *s, short ref = 0)	{ MidiSendIm (ref, Text2Event (s)); }
+		static	void 	  Print (const unsigned char *s, short ref = 0)	{ MidiSendIm (ref, Text2Event (s)); }
 		static	void 	  Print (long val, short ref = 0);
 		static	void 	  PrintH (long val, short ref = 0);
 		static	void 	  PrintH (void *ptr, short ref = 0)	{ PrintH ((long)ptr, ref); }

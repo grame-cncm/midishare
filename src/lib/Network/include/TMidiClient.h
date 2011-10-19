@@ -47,7 +47,7 @@ class TMidiClient : public TTCPListener, public TTCPClient,
 			void			ReStart (short refNum)	{ fSkewTask.ReSchedule (refNum); }
 		TCPActiveSensing *  SkewTask()				{ return &fSkewTask; }
 			char *			GetName ()				{ return fAddr->HostName (); }
-			void			SetRcvAlarm (short refNum, Boolean on);
+			void			SetRcvAlarm (short refNum, bool on);
 			SocketStatus	Bye (short maxlat, short maxLatOver, unsigned long missing);
 
 		// TTCPListener methods

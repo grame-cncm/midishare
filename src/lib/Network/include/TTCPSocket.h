@@ -65,7 +65,7 @@ class TTCPSocket : public TSocket
 		TTCPListener *	fTCPClient;
 		
 #if macintosh
-		OSStatus	Disconnect	(Boolean orderly);
+		OSStatus	Disconnect	(bool orderly);
 		OSStatus	Listen 		(IPAddrPtr from, SocketRef ref, void *buff, short *len);
 #elif WIN32
 		DWORD	ThreadCreate (TCPSocketMode mode);

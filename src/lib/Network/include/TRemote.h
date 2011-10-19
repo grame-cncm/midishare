@@ -43,7 +43,7 @@ class TRemoteListener
 			 	 TRemoteListener () {}
 		virtual ~TRemoteListener () {}
 	
-		virtual void	SetRcvAlarm (short refNum, Boolean on) = 0;
+		virtual void	SetRcvAlarm (short refNum, bool on) = 0;
 };
 
 #endif

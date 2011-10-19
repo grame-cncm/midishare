@@ -60,11 +60,11 @@ void MidiShareFilter::RejectAll ()
 }
 
 //_______________________________________________________________________________
-Boolean MidiShareFilter::IsAcceptedEv (MidiEvPtr e)
+bool MidiShareFilter::IsAcceptedEv (MidiEvPtr e)
 {
 	unsigned short type = EvType(e);
-	Boolean chanEvent = (type < typeSongPos) || ((type >= typeCtrl14b) && (type <= typeRegParam));
-	Boolean chanAccept = chanEvent ? IsAcceptedChan (Chan(e)) : true;
+	bool chanEvent = (type < typeSongPos) || ((type >= typeCtrl14b) && (type <= typeRegParam));
+	bool chanAccept = chanEvent ? IsAcceptedChan (Chan(e)) : true;
 	return  IsAcceptedPort (Port(e)) &&
 			chanAccept &&
 			IsAcceptedType (EvType(e));

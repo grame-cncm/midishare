@@ -58,7 +58,7 @@ void TMidiOutStream::Set (long collectTime)
 SocketStatus TMidiOutStream::Put (MidiEvPtr ev)
 {
 	SocketStatus err=noErr;
-	MidiPacketPtr packet = Packet(); Boolean continuation = false;
+	MidiPacketPtr packet = Packet(); bool continuation = false;
 	
 	UDPStreamPutEvent (&fStream, ev);
 	do {

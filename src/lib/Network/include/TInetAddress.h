@@ -40,14 +40,14 @@ class TInetAddress
 			IPNum		GetIP () 	{ return IPField(fAddr); }
 			char *		HostName ()	{ return fHostName; }
 			char *		RealName ()	{ return fRealName; }
-			Boolean		Named ()	{ return fRealName[0]; }
+			bool		Named ()	{ return fRealName[0]; }
 			char *		IP2String () { return IP2String (GetIP()); }
 	static	char *		IP2String (IPNum num);
 	static	IPNum		String2IP (char * str);
 
-		virtual Boolean	SetAddress (unsigned char *host);
-		virtual Boolean	SetAddress (char *host);
-		virtual Boolean	SetAddress (IPNum ip);
+		virtual bool	SetAddress (unsigned char *host);
+		virtual bool	SetAddress (char *host);
+		virtual bool	SetAddress (IPNum ip);
 		
 	private:
 		void	Initialize ();

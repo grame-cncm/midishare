@@ -34,9 +34,9 @@ class TMidiSlot
 				 TMidiSlot (short drvref);
 		virtual ~TMidiSlot ();
 
-		virtual Boolean Open 	(MidiName name, SlotDirection dir = MidiInputOutputSlot);
+		virtual bool Open 	(MidiName name, SlotDirection dir = MidiInputOutputSlot);
 		virtual void 	Close	();
-				Boolean Opened 	();
+				bool Opened 	();
 				MidiName GetName();
 
 				short 		DrvRef ()		{ return fRefNum.drvRef; }
@@ -51,6 +51,6 @@ class TMidiSlot
 };
 
 /*_______________________________________________________________________________*/
-inline Boolean TMidiSlot::Opened()	{ return fRefNum.slotRef != undefinedRefNum; }
+inline bool TMidiSlot::Opened()	{ return fRefNum.slotRef != undefinedRefNum; }
 #endif
 

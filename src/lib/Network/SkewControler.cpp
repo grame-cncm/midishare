@@ -36,7 +36,7 @@ SkewControler::SkewControler (SkewParams * params, AEFTMAParams * p)
 }
 
 //________________________________________________________________________
-void SkewControler::GetFTMAParams (Boolean lowLatency, AEFTMAParams * p)
+void SkewControler::GetFTMAParams (bool lowLatency, AEFTMAParams * p)
 {
 	if (lowLatency) {
 /*		p->histSize	= 10;
@@ -58,7 +58,7 @@ void SkewControler::GetFTMAParams (Boolean lowLatency, AEFTMAParams * p)
 }
 
 //________________________________________________________________________
-Boolean SkewControler::Put (unsigned long localtime, long latency)
+bool SkewControler::Put (unsigned long localtime, long latency)
 {
 	long average;
 	if (fAEFTMA.Put (latency, &average)) {

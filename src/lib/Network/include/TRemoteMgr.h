@@ -84,7 +84,7 @@ class TRemoteMgr : public TRemoteList
 			void 	CheckTimeOut (unsigned long date);				
 			short 	RemoteCount ();
 
-			Boolean       Refresh      (IPNum id, PeerTimesPtr times);
+			bool		Refresh      (IPNum id, PeerTimesPtr times);
 			TMidiRemote * FindOutSlot  (short slotRef);
 			TMidiRemote * AddRemote (UPDParamsPtr params, RemoteCtrlParams * rp, short drvRef=0);
 

@@ -90,7 +90,7 @@ class ApplState : public RemoteState
 		CnxDescPtr	Find 	(MidiName name, CnxDescPtr cnx);
 		CnxDescPtr	Find 	(short ref, CnxDescPtr cnx);
 		
-		Boolean		Equal 	(MidiName name, MidiEvPtr evName);
+		bool		Equal 	(MidiName name, MidiEvPtr evName);
 		void		AddCnx 	(short with, CnxDescPtr *dest);
 		void		RmvCnx 	(short with, CnxDescPtr *dest);
 		CnxDescPtr	NewCnx 	(short with);
@@ -102,7 +102,7 @@ class ApplState : public RemoteState
 		void		ClearCnxList (CnxDescPtr list);
 		void		Reset ();
 
-		Boolean 	fIgnoreAlarm;
+		bool		fIgnoreAlarm;
 		INetHandle 	fMemory;
 		CnxDescPtr	fIn, fOut;
 		short		fRefNum;

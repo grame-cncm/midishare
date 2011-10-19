@@ -58,7 +58,7 @@ INetHandle SlotState::GetState ()
 {
 	if (fMemory) {
 		TSlotInfos * infos = (TSlotInfos *)HandlePtr(fMemory);
-		Boolean ok = MidiGetSlotInfos (fSlots->InRef (), infos++);
+		bool ok = MidiGetSlotInfos (fSlots->InRef (), infos++);
 		ok = MidiGetSlotInfos (fSlots->OutRef (), infos);
 	}
 	return fMemory;

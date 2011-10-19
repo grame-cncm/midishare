@@ -100,7 +100,7 @@ TMidiRemote::~TMidiRemote ()
 }
 
 //____________________________________________________________
-Boolean TMidiRemote::SetMode (short mode, short refNum)
+bool TMidiRemote::SetMode (short mode, short refNum)
 {
 	MidiShareAppl * appl = fAppl;
 	fGroupTask.Forget ();
@@ -111,7 +111,7 @@ Boolean TMidiRemote::SetMode (short mode, short refNum)
 }				
 
 //____________________________________________________________
-Boolean TMidiRemote::Open (MidiName name)
+bool TMidiRemote::Open (MidiName name)
 {
 	if (fAppl && fAppl->Open (name)) {
 		return true;
@@ -219,7 +219,7 @@ void TMidiRemote::CollectEvents (unsigned long date, short refnum)
 }
 
 //____________________________________________________________
-void TMidiRemote::RcvPacket (long date, MidiPacketPtr p, Boolean fromtcp)
+void TMidiRemote::RcvPacket (long date, MidiPacketPtr p, bool fromtcp)
 {
 	TMidiInStream * in = fromtcp ? &fTCPIn : &fUDPIn;
 	if (fListener) {

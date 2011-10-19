@@ -83,8 +83,8 @@ class TMidiRemote : public TRemote
 			 	 TMidiRemote (UPDParamsPtr params, RemoteCtrlParams *p, short refNum=0);
 		virtual ~TMidiRemote ();
 	
-				Boolean Open ()			{ return Open (fName); }
-				Boolean Opened ()		{ return fAppl ?  fAppl->Opened() : false; }
+				bool Open ()			{ return Open (fName); }
+				bool Opened ()		{ return fAppl ?  fAppl->Opened() : false; }
 				void 	Close ();
 				IPNum	GetID ()		{ return fIP; }
 				short	GroupTime ()	{ return fGroupTime; }
@@ -99,26 +99,26 @@ class TMidiRemote : public TRemote
 		unsigned long	Missing ()		{ return fUDPIn.Missed(); }
 
 				short	OutSlotRef ()	{ return ((TRemoteSlot *)fAppl)->OutSlotRef(); }
-				void 	SetRcvAlarm  	(Boolean state) { fAppl->SetRcvAlarm(state); }
+				void 	SetRcvAlarm  	(bool state) { fAppl->SetRcvAlarm(state); }
 
 				void 	Put (MidiEvPtr e);
 				void 	CheckLatency  	(PeerTimesPtr times);
 				void 	RcvAlarm  		(short refnum);
 				void	CollectEvents 	(unsigned long date, short refNum);
-				void	RcvPacket 		(long date, MidiPacketPtr p, Boolean fromtcp = false);
+				void	RcvPacket 		(long date, MidiPacketPtr p, bool fromtcp = false);
 
 				void	SetListener  	(TRemoteListener * l)	{ fListener = l; }
-				Boolean SetMode 	 	(short mode, short refNum);				
+				bool SetMode 	 	(short mode, short refNum);				
 				MidiName GetName 		();
 				short 	GetRefNum 		() { return fAppl ? fAppl->GetRefNum() : -1; }
-				Boolean	CallRcvAlarm	() { return fRcvAlarmState && fPutEvs; }
+				bool	CallRcvAlarm	() { return fRcvAlarmState && fPutEvs; }
 				
 	protected:
 		short			fGroupTime;
 		InetCtrlDTask *	fCtrlTask;
 
 	private:
-					Boolean Open (MidiName name);
+					bool Open (MidiName name);
 					void SendError (SocketStatus err);
 
 		SkewControler *	fSkew;
@@ -132,7 +132,7 @@ class TMidiRemote : public TRemote
 		
 		TRemoteListener * fListener;
 		TGroupTask		fGroupTask;
-		Boolean			fRcvAlarmState, fPutEvs, fLocked;
+		bool			fRcvAlarmState, fPutEvs, fLocked;
 };
 
 #endif

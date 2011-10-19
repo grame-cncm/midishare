@@ -68,12 +68,12 @@ class TInetControler : public TUDPListener
 		virtual void 	Quit ()	{ USleep(); }
 		virtual void	RemoveRemote  (IPNum id);
 		virtual void	OpenComplete  (IPNum id) {}
-		virtual void	CheckCompletion  (IPNum id, Boolean silently) {}
+		virtual void	CheckCompletion  (IPNum id, bool silently) {}
 		virtual void	CnxRefused  (strPtr host) {}
 	
 				short 	RemoteCount ()		{ return fRemoteMgr.RemoteCount(); }
 				void 	SetMode  (short mode);
-				Boolean Sleeping ()			{ return fState == kSleeping; }
+				bool Sleeping ()			{ return fState == kSleeping; }
 				void 	RcvAlarm (short refnum);
 				NetConfig * Net ()			{ return &fNetConfig; }
 				TUDPSocket * GetSocket ()	{ return &fSocket; }
@@ -85,7 +85,7 @@ class TInetControler : public TUDPListener
 				void	SockError (SocketStatus err);
 
 				// midishare application methods
-				Boolean Open ();
+				bool Open ();
 				void 	Close ();
 				short 	GetRefNum ()	{ return fAppl ? fAppl->GetRefNum() : -1; }
 				long	CountDTasks ()	{ return fAppl ? fAppl->CountDTasks () : 0; }
@@ -95,8 +95,8 @@ class TInetControler : public TUDPListener
 				void	WakeUp (short r);
 				void	Sleep  (short r);
 
-				void	CallFatalError 	 (ErrString msg, long err);
-				void	CreateRemoteFailed (strPtr reason); 
+				void	CallFatalError 	 (const ErrString msg, long err);
+				void	CreateRemoteFailed (const strPtr reason); 
 				void	DispatchMidi(IPNum ip, GenericPacketPtr p, short len);
 				void	DispatchTCP(IPNum ip, GenericPacketPtr p, short len);
 				void	CallCnxRefused  (strPtr host); 
@@ -104,7 +104,7 @@ class TInetControler : public TUDPListener
 	
 	protected:
 		enum { 	kWakeup, kSleeping, kDefaultLatency = 10 };
-		virtual Boolean UWakeup (Boolean udpMode = true); // deferred wake up
+		virtual bool UWakeup (bool udpMode = true); // deferred wake up
 		virtual void 	USleep ();  					  // deferred sleep
 		virtual void 	Bye ();
 		virtual char *	RemoteName (IPNum ip, IDPacketPtr id)	{ return id->name; }
@@ -112,17 +112,17 @@ class TInetControler : public TUDPListener
 		virtual IPNum 	GetSpecialIP ()							{ return fNetInfos.BroadcastIP (); }
 		virtual short	LocalMTU ()								{ return kMaxPacketBuff; }
 		virtual void	CallCheckRemote  (TRemoteMgr *mgr); 
-		virtual Boolean	CreateRemote	 (MidiEvPtr param);
+		virtual bool	CreateRemote	 (MidiEvPtr param);
 		
 		TMidiRemote * 	FindUDPRemote (IPNum ip)	{ return fRemoteMgr.FindRemote (ip); }
 				void 	ExecDTasks ();
 				void	CallRemoveRemote (IPNum ip); 
-				void	CallCheckCompletion (IPNum ip, unsigned long timeout, Boolean silently); 
+				void	CallCheckCompletion (IPNum ip, unsigned long timeout, bool silently); 
 
 		TRemoteMgr		fRemoteMgr;
 		NetConfig		fNetConfig;
 		short			fMode;
-		Boolean 		fState, fUDPMode;
+		bool 		fState, fUDPMode;
 		TNetInfos 		fNetInfos;
 		strPtr			fDrvName;
 
@@ -131,15 +131,15 @@ class TInetControler : public TUDPListener
 	private:
 		MidiEvPtr	RemoteToEv	 (IPNum ip, char * name, PeerTimesPtr times);
 		MidiEvPtr	EvToRemote	 (MidiEvPtr ev, IPNum *ip, PeerTimesPtr times);
-		void 	RemoteFatalError (IPNum id, ErrString msg, SocketStatus err);				
-		void 	FatalError 		 (ErrString msg, SocketStatus err);				
+		void 	RemoteFatalError (IPNum id, const ErrString msg, SocketStatus err);				
+		void 	FatalError 		 (const ErrString msg, SocketStatus err);				
 
 		void	RemoteID 	(IPAddrPtr ip, IDPacketPtr id, short len);
 		void	Reply 		(IPAddrPtr to, GenericPacketPtr p, short len);
 
 		void	CallCreateRemote (MidiEvPtr param); 
 
-		Boolean 		needWakeup, needSleep;
+		bool 		needWakeup, needSleep;
 		MidiShareAppl *	fAppl;
 		TIDPacket		fIDPacket;
 		TUDPSocket		fSocket;
@@ -148,10 +148,10 @@ class TInetControler : public TUDPListener
 };
 
 //_________________________________________________________________________________
-inline void TInetControler::CreateRemoteFailed (strPtr reason) 
+inline void TInetControler::CreateRemoteFailed (const strPtr reason) 
 				{ INetAlert alert; alert.Report (fDrvName, strRemCreateFailure, reason, 0L); }
 				
-inline void TInetControler::CallFatalError (ErrString msg, long err) 
+inline void TInetControler::CallFatalError (const ErrString msg, long err) 
 				{ fDTasks->FatalError (msg, err); }
 inline void TInetControler::CallCreateRemote (MidiEvPtr param) 
 				{ fDTasks->_Schedule (param, kCreateRemoteTask); }
@@ -161,7 +161,7 @@ inline void TInetControler::CallCnxRefused (strPtr host)
 				{ fDTasks->_Schedule (host, kCnxRefusedTask); }
 inline void TInetControler::CallRemoveRemote (IPNum ip) 
 				{ fDTasks->_Schedule ((void *)ip, kRemoveRemoteTask); }
-inline void TInetControler::CallCheckCompletion (IPNum ip, unsigned long timeout, Boolean silently) 
+inline void TInetControler::CallCheckCompletion (IPNum ip, unsigned long timeout, bool silently) 
 				{ fDTasks->_Schedule (MidiGetTime()+timeout, (void *)ip, 
 				  silently ? kSilentCheckCompletion : kCheckCompletion); }
 

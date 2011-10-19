@@ -41,7 +41,7 @@ class TMidiOutStream : public TPacket
 			MidiPacketPtr 	Packet () 		{ return (MidiPacketPtr)Buffer(); }
 	virtual short			Length();
 			short 			MTU ()			{ return fMTU; }
-			Boolean 		Ready ()		{ return fSocket != 0; }
+			bool			Ready ()		{ return fSocket != 0; }
 			IPNum 			IP ()			{ return IPField(fDest); }
 			short 			Throughput (short * overflow);
 			void 			Set (long collectTime);	

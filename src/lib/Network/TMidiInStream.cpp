@@ -49,7 +49,7 @@ short TMidiInStream::Throughput (short * overflow)
 }
 
 //____________________________________________________________
-Boolean TMidiInStream::Put (MidiPacketPtr p, long rcvDate)
+bool TMidiInStream::Put (MidiPacketPtr p, long rcvDate)
 {
 	unsigned long serial, date; long serialDiff;
 	

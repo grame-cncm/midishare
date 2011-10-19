@@ -40,7 +40,7 @@ TMidiSlot::~TMidiSlot()
 }
 
 //_______________________________________________________________________________
-Boolean TMidiSlot::Open (MidiName name, SlotDirection dir)
+bool TMidiSlot::Open (MidiName name, SlotDirection dir)
 {
 	if (!Opened()) {
 		fRefNum = MidiAddSlot (fDrvRef, name, dir);

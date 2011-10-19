@@ -55,13 +55,13 @@ class SkewControler
 		 	 SkewControler (SkewParams * params, AEFTMAParams * p);
 	virtual ~SkewControler () {}
 	
-				Boolean	Put	(unsigned long localtime, long latency);
+				bool	Put	(unsigned long localtime, long latency);
 		
-		static void GetFTMAParams (Boolean lowLatency, AEFTMAParams * p);
+		static void GetFTMAParams (bool lowLatency, AEFTMAParams * p);
 
 	private:
 		long		fLastAverage;
-		Boolean		fFirst;
+		bool		fFirst;
 		SkewParams	fParams;
 		AEFTMA		fAEFTMA;
 };

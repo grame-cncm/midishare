@@ -103,14 +103,14 @@ void InetCtrlDTask::Forget ()
 }
 
 //_______________________________________________________________________________
-Boolean  InetCtrlDTask::_Schedule (long date, void * a1,long type)
+bool  InetCtrlDTask::_Schedule (long date, void * a1,long type)
 {
 	fEndFlag = false;
 	return Schedule (date, fRefNum, (long)a1, type);
 }
 
 //_______________________________________________________________________________
-Boolean  InetCtrlDTask::_Schedule (void * a1,long type)
+bool  InetCtrlDTask::_Schedule (void * a1,long type)
 {
 	fEndFlag = false;
 #if defined(macintosh) && defined(MidiSharePPC_68k)
@@ -122,7 +122,7 @@ Boolean  InetCtrlDTask::_Schedule (void * a1,long type)
 }
 
 //_______________________________________________________________________________
-Boolean  InetCtrlDTask::FatalError (ErrString msg, long err)
+bool  InetCtrlDTask::FatalError (const ErrString msg, long err)
 {
 	if (!fFatalPending) {
 		fFatalErrCode = err;

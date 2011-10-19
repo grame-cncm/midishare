@@ -40,12 +40,12 @@ class MidiShareAppl
 				 MidiShareAppl ();
 		virtual ~MidiShareAppl ();
 
-		virtual Boolean Open 	(MidiName name, Boolean wantFilter = false);
+		virtual bool Open 	(MidiName name, bool wantFilter = false);
 		virtual void 	Close	();
-				Boolean Opened 	();
+				bool Opened 	();
 
-		virtual void SetApplAlarm 	(Boolean on);	
-		virtual void SetRcvAlarm 	(Boolean on);	
+		virtual void SetApplAlarm 	(bool on);	
+		virtual void SetRcvAlarm 	(bool on);	
 
 		virtual void ApplAlarm 		(short refnum, short srcRefNum, short changeCode) {}	
 		virtual void RcvAlarm 		(short refnum)	{ MidiFlushEvs (refnum); }
@@ -72,7 +72,7 @@ class MidiShareAppl
 inline short 	MidiShareAppl::GetRefNum ()				{ return fRefNum; }
 inline void 	MidiShareAppl::SetName (MidiName name)	{ MidiSetName (fRefNum, name); }
 inline MidiName MidiShareAppl::GetName ()				{ return MidiGetName (fRefNum); }
-inline Boolean 	MidiShareAppl::Opened ()				{ return fRefNum > 0; }
+inline bool 	MidiShareAppl::Opened ()				{ return fRefNum > 0; }
 
 #endif
 

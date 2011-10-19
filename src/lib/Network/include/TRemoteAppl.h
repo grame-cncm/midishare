@@ -36,7 +36,7 @@ class TRemoteAppl : public MidiShareAppl
 			 	 TRemoteAppl (TMidiRemote * owner);
 		virtual ~TRemoteAppl () { if (fApplState) delete fApplState; }
 	
-		Boolean Open 	(MidiName name, Boolean wantFilter = false);
+		bool	Open 	(MidiName name, bool wantFilter = false);
 		void 	Close	();
 		void RcvAlarm  (short refnum);
 		void ApplAlarm (short refnum, short srcRefNum, short changeCode);	

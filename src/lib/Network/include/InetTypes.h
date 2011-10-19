@@ -101,7 +101,7 @@ typedef char 	ErrString[255];
 typedef char 	NameStr[32];
 typedef char * 	strPtr;
 
-typedef unsigned char Boolean;
+//typedef unsigned char Boolean;
 typedef unsigned long		IPNum;
 typedef struct sockaddr_in 	IPAddr, * IPAddrPtr;
 typedef SOCKET				SocketRef;
@@ -117,7 +117,7 @@ typedef long 				SockResult;
 #	include <sys/types.h>
 #	include <sys/socket.h>
 # else
-	typedef int 				Boolean;
+//	typedef int 				Boolean;
 #endif
 
 #include <netinet/in.h>

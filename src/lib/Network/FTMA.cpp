@@ -33,7 +33,7 @@ AEFTMA::AEFTMA (short histSize, short retain, short threshold, short histLen)
 }
 
 //__________________________________________________________________________
-Boolean AEFTMA::Put (long value, long *average)
+bool AEFTMA::Put (long value, long *average)
 {
 	long m;
 	if (FTMA::Put (value, &m)) {
@@ -56,7 +56,7 @@ FTMA::FTMA (short histSize, short retain, short threshold)
 }
 
 //__________________________________________________________________________
-Boolean FTMA::Put (long value, long *average)
+bool FTMA::Put (long value, long *average)
 {
 	fValues[fIndex++] = value;
 	if (fIndex == fSize) {
