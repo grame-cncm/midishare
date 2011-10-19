@@ -280,51 +280,29 @@ static WriteFunc WriteExtTbl[]=
 
 /*--------------------------------------------------------------------------*/
 /* numbers representation dependant	functions										*/
-#ifdef __Macintosh__
-static long  LongVal (long val)  { return val;}
-static short ShortVal(short val) { return val;}
-#endif
 
-#ifdef __Windows__
-static unsigned short ShortVal(unsigned short val)
+#if __LITTLE_ENDIAN__
+static int16 ShortVal(int16 val)
 {
-	unsigned short converted= 0;
+	int16 converted= 0;
 
 	converted= (val & 0xff) << 8;
 	converted|= (val & 0xff00) >> 8;
 	return converted;
 }
 
-static unsigned long  LongVal (long val)
+static int32  LongVal (int32 val)
 {
-	unsigned long converted= 0;
+	int32 converted= 0;
 
-	converted=  (unsigned long)ShortVal((unsigned short)(val & 0xffff)) << 16;
-	converted|= ShortVal((unsigned short)((val & 0xffff0000)>>16));
+	converted=  (int32)ShortVal((int16)(val & 0xffff)) << 16;
+	converted|= ShortVal((int16)((val & 0xffff0000)>>16));
 	return converted;
 }
+#else
+static int32	LongVal (int32 val)		{ return val;}
+static int16	ShortVal(int16 val)		{ return val;}
 #endif
-
-#ifdef  __Linux__
-static unsigned short ShortVal(unsigned short val)
-{
-	unsigned short converted= 0;
-
-	converted= (val & 0xff) << 8;
-	converted|= (val & 0xff00) >> 8;
-	return converted;
-}
-
-static unsigned long  LongVal (long val)
-{
-	unsigned long converted= 0;
-
-	converted=  (unsigned long)ShortVal((unsigned short)(val & 0xffff)) << 16;
-	converted|= ShortVal((unsigned short)((val & 0xffff0000)>>16));
-	return converted;
-}
-#endif
-
 
 /*--------------------------------------------------------------------------*/
 /* Reading and writing variable length coded datas							*/
@@ -898,8 +876,8 @@ Boolean MFAPI MidiFileOpenTrack( MIDIFilePtr fd)
 Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 {
 	long offset1, offset2;					/* beg and end track offsets */
-	long trkLen;							/* track length				 */
-	short ntrks;							/* tracks count				 */
+	int trkLen;								/* track length				 */
+	int16 ntrks;							/* tracks count				 */
 	Boolean ret=true;
 
 	MidiFile_errno= MidiFileNoErr;
@@ -918,7 +896,7 @@ Boolean MFAPI MidiFileCloseTrack( MIDIFilePtr fd)
 			if( fseek( fd->fd, offset1, SEEK_SET))		/* to track length position 	*/
 				return false;
 												/* update the track length 		*/
-			if( fwrite( &trkLen, sizeof( trkLen), 1, fd->fd)!= 1)
+			if( fwrite( &trkLen, 4, 1, fMidiFile.fd)!= 1)
 				return false;
 												/* to track count position		*/
 			if( fseek( fd->fd, offset_ntrks, SEEK_SET))

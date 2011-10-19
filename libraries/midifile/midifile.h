@@ -55,6 +55,13 @@
 #error "architecture undefined"
 #endif
 
+#ifdef __x86_64__
+ typedef int	int32;
+ typedef short	int16;
+#else
+ typedef long	int32;
+ typedef short	int16;
+#endif
 
 /*--------------------------------------------------------------------------*/
 extern int MidiFile_errno;		/* used similarly to errno				*/
@@ -123,16 +130,16 @@ enum { midifile0= 0, midifile1, midifile2};
 
 typedef struct MDF_Header{			/* the file header structure	*/
 	char 	id[4];					/* header id					*/
-	long	len;					/* datas length ( = 6 )			*/
-	short	format;					/* file format					*/
-	unsigned short ntrks;			/* number of tracks				*/
-	short	time;					/* time representation			*/
+	int32	len;					/* datas length ( = 6 )			*/
+	int16	format;					/* file format					*/
+	int16	ntrks;					/* number of tracks				*/
+	int16	time;					/* time representation			*/
 }MDF_Header;
 
 
 typedef struct MDF_Trk{				/* track header structure		*/
-	char id[4];						/* header id					*/
-	unsigned long	len;			/* datas length 				*/
+	char	id[4];					/* header id					*/
+	int32	len;					/* datas length 				*/
 }MDF_Trk;
 
 typedef struct midiFILE{			/* MIDI file descriptor		*/
