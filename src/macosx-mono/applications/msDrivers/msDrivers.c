@@ -107,7 +107,7 @@ static SlotRefNum GetIndSlot (short ref, short index, short direction)
 	short i;
 	
 	if (index && MidiGetDriverInfos (ref, &drvInfo)) {
-		for (i = 1; i <= drvInfo.slots; i++) {
+		for (i = 1; i <= drvInfo.drvslots; i++) {
 			sref = MidiGetIndSlot (ref, i);
 			if (MidiGetSlotInfos (sref, &slotInfo)) {
 				if (slotInfo.direction & direction) {
@@ -215,7 +215,7 @@ static void ApplySlots (ApplySlotsProcPtr f, long refcon)
 	for (i = 1; i <= n; i++) {
 		ref = MidiGetIndDriver (i);
 		if (MidiGetDriverInfos (ref, &drvInfo)) {
-			for (j = 1; j <= drvInfo.slots; j++) {
+			for (j = 1; j <= drvInfo.drvslots; j++) {
 				sref = MidiGetIndSlot (ref, j);
 				if (MidiGetSlotInfos (sref, &slotInfo)) {
 					f (sref, &slotInfo, refcon);
@@ -359,7 +359,7 @@ void FillLists (void)
 	for (i = 1; i <= n; i++) {
 		ref = MidiGetIndDriver (i);
 		if (MidiGetDriverInfos (ref, &drvInfo)) {
-			for (j = 1; j <= drvInfo.slots; j++) {
+			for (j = 1; j <= drvInfo.drvslots; j++) {
 				sref = MidiGetIndSlot (ref, j);
 				if (MidiGetSlotInfos (sref, &slotInfo)) {
 					visible = false;
