@@ -25,7 +25,7 @@
 #include "MidiTools.h"
 
 //________________________________________________________________________
-MidiEvPtr MidiTools::Text2Event (char *text)
+MidiEvPtr MidiTools::Text2Event (const char *text)
 {
 	MidiEvPtr e = MidiNewEv (typeTextual);
 	if (e) {
@@ -35,7 +35,7 @@ MidiEvPtr MidiTools::Text2Event (char *text)
 }
 
 //________________________________________________________________________
-MidiEvPtr MidiTools::Text2Event (unsigned char *text)
+MidiEvPtr MidiTools::Text2Event (const unsigned char *text)
 {
 	MidiEvPtr e = MidiNewEv (typeTextual);
 	if (e) {
