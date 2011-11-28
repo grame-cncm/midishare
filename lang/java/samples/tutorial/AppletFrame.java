@@ -14,6 +14,7 @@ import java.util.*;
 import java.applet.Applet;
 import java.awt.event.*;
 import java.applet.*;
+import java.io.InputStream;
 
 // Utility classes
 
@@ -151,6 +152,10 @@ class OurAppletContext implements AppletContext {
 	public void showDocument(java.net.URL url) {}
 	public void showDocument(java.net.URL url,String target) {}
 	public void showStatus(String status) {}
+
+	public void			setStream(String key, InputStream stream) {}
+	public InputStream	getStream(String key)	{ return null; }
+	public Iterator		getStreamKeys()			{ return null; }
 }
 
 
