@@ -269,7 +269,7 @@ static void ShowDriver (WindowRef win, Point p, ListHandle list)
 	if (index == lastDrv) return;
 	
 	if (index > 0) {
-		MidiName name; short ref;
+		const char* name; short ref;
 		ref = MidiGetIndDriver (index);
 		if (ref > 0) {
 			Str255 buf;
