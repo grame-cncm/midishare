@@ -138,7 +138,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = F54A7D7401FC77AF01053105;
 			productRefGroup = F54A7D7A01FC781301053105 /* Products */;
 			projectDirPath = "";

@@ -143,7 +143,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 4BB41E6209ED417D00EE9367 /* Build configuration list for PBXProject "msDrivers" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 20286C29FDCF999611CA2CEA /* ¬´PROJECTNAME¬ª */;
 			projectDirPath = "";
 			projectRoot = "";
