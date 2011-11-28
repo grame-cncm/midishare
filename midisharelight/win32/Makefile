@@ -12,8 +12,8 @@ STRIP=$(CROSS)strip
 
 SRC = $(wildcard ../src/*.cpp)
 OBJ = $(patsubst ../src/%.cpp, %.o, $(SRC))  lflifo.o
-INC = -I../src -I../src/atomic
-CXXFLAGS = $(INC) -DWIN32
+INC = -I../src -I../../src/common/Headers -I../../src/common/atomic -I../../src/common/Memory
+CXXFLAGS = $(INC) -DWIN32 -DMSLIGHT $(ARCH)
 
 lib = midisharelight.lib
 exe = read.exe write.exe
@@ -34,7 +34,7 @@ write.exe  : ../test/write.cpp
 strip :
 	$(STRIP) $(exe)
 
-lflifo.o : ../src/atomic/lflifo.c
+lflifo.o : ../../src/common/atomic/lflifo.c
 	$(CXX) $(CXXFLAGS) -c $< 
 
 %.o: ../src/%.cpp
