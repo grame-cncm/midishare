@@ -5,8 +5,19 @@ project(midishare)
 cmake_minimum_required(VERSION 2.6)
 
 if(WIN32)
+
+#######################################
+# midi export support
+
  if (${CMAKE_GENERATOR} MATCHES "MSYS*")
+	if (ARCH STREQUAL "64")
+		message (STATUS "64 bits architecture will be generated - Use -DARCH=32 to change.")
+		add_definitions(-m64)
 		set (target mshare64)	
+	else (ARCH STREQUAL "64")
+		message (STATUS "32 bits architecture will be generated - Use -DARCH=64 to change.")
+		set (target mshare32)
+	endif (ARCH STREQUAL "64")
  else (${CMAKE_GENERATOR} MATCHES "MSYS*")
 	 if (${CMAKE_GENERATOR} MATCHES ".*Win64")
 		set (target mshare64)
