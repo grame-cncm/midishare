@@ -43,23 +43,6 @@
  *
  *****************************************************************************/
 
-#ifdef __Macintosh__
-	#ifdef __MacOS9__
-		#include <Memory.h>   // for NewPtr and DisposePtr
-	#else
-		#include <stdlib.h>
-		#define NewPtr(v) malloc((v))
-		#define DisposePtr(ptr) free((Ptr)(ptr))
-	#endif
-#endif
-
-#ifdef __Linux__
-	#include <stdlib.h>
-	#define NewPtr(v) malloc((v))
-	#define DisposePtr(ptr) free((Ptr)(ptr))
-	#define MSALARMAPI
-#endif
-
 #include "MidiShare.h"
 #include "MidiPtrType.h"
 
@@ -1042,38 +1025,6 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_ReadEv
  	
  	return 0; 	
  }
-
-/*--------------------------------------------------------------------------*/
-/* OBSOLETE 
-
-JNIEXPORT jint JNICALL Java_grame_midishare_Midi_NewString
-  (JNIEnv * env, jclass cl) {
-  
-	return (jint)NewPtr(128);
-}
-
-JNIEXPORT void JNICALL Java_grame_midishare_Midi_FreeString
-  (JNIEnv * env, jclass cl, jint str) {
-
-	DisposePtr((Ptr) str);
-}
-
-JNIEXPORT void JNICALL Java_grame_midishare_Midi_WriteChar
-  (JNIEnv * env, jclass cl, jint str, jint index, jbyte character) {
-
-	char * str1 = (char*) str;
-	str1+=index;
-	*str1 =  (char)character;
-}
-
-JNIEXPORT jbyte JNICALL Java_grame_midishare_Midi_ReadChar
-  (JNIEnv * env, jclass cl, jint str, jint index) {
-  
-	char * str1 = (char*) str;
-	str1+=index;
-	return (jbyte)*str1;
-}
-*/
 
 /*--------------------------------------------------------------------------*/
 /* FOR DRIVER MANAGEMENT */
