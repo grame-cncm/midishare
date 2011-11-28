@@ -1,6 +1,6 @@
 /*
 
-  Copyright � Grame 1999-2011
+  Copyright (c) Grame 1999, 2011
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -17,10 +17,6 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   research@grame.fr
-  
-  modifications history:
-   [08-09-99] DF - using lifo for memory management
-                   including methods tables in the module
 
 */
 
@@ -106,6 +102,41 @@ static void	AddFUndefEv	( lifo* freelist, MidiEvPtr e, long v);
 static void	AddNoField	( lifo* freelist, MidiEvPtr e, long v);
 static void	AddFSexEv	( lifo* freelist, MidiEvPtr e, long v);
 
+
+/* data storage */
+
+//#if defined(__Macintosh__) && !(defined(__POWERPC__) || defined(__i386__))
+//
+//static asm void NewEvMeth()       { ds.l 256 }
+//static asm void CopyEvMeth()      { ds.l 256 }
+//static asm void FreeEvMeth()      { ds.l 256 }
+//static asm void SetFieldMeth()    { ds.l 256 }
+//static asm void GetFieldMeth()    { ds.l 256 }
+//static asm void CountFieldsMeth() { ds.l 256 }
+//static asm void AddFieldMeth()    { ds.l 256 }
+//
+//
+//#define NewEvMethodTbl	     ((NewEvMethodPtr *)NewEvMeth)
+//#define CopyEvMethodTbl      ((CopyEvMethodPtr *)CopyEvMeth)
+//#define FreeEvMethodTbl      ((FreeEvMethodPtr *)FreeEvMeth)
+//#define SetFieldMethodTbl    ((SetFieldMethodPtr *)SetFieldMeth)
+//#define GetFieldMethodTbl    ((GetFieldMethodPtr *)GetFieldMeth)
+//#define CountFieldsMethodTbl ((CountFieldsMethodPtr *)CountFieldsMeth)
+//#define AddFieldMethodTbl    ((AddFieldMethodPtr *)AddFieldMeth)
+//
+//static asm void smpteMask() { 
+//	dc.l 0x06000000,0x1F000000,0x00FC0000
+//	dc.l 0x0003F000,0x00000F80,0x0000007F
+//}
+//static asm void smpteShft() { 
+//	dc.b 29,24,18,12,7,0 
+//}
+//
+//#define smpteMaskTbl	  (const unsigned long *)smpteMask
+//#define smpteShftTbl      (const char *)smpteShft
+//
+//#else
+
 static NewEvMethodPtr       NewEvMeth[256];        /* Allocation methods table */
 static CopyEvMethodPtr      CopyEvMeth[256];       /* Copy methods table       */
 static FreeEvMethodPtr      FreeEvMeth[256];       /* Free methods table       */
@@ -135,31 +166,31 @@ const char 		    smpteShft[]= { 29,24,18,12,7,0 };
 /*===========================================================================
   External MidiShare functions implementation
   =========================================================================== */		
-MSFunctionType(MidiEvPtr) MSNewCellFunction (lifo* freelist)
+MidiEvPtr MSNewCellFunction (lifo* freelist)
                                   { return (MidiEvPtr)lfpop(freelist); }
 
-MSFunctionType(void)      MSFreeCellFunction (MidiEvPtr e, lifo* freelist)
+void      MSFreeCellFunction (MidiEvPtr e, lifo* freelist)
                                   { if( e) lfpush(freelist, (lifocell *)e); }
 
-MSFunctionType(MidiEvPtr) MSNewEv (short typeNum, lifo* freelist)
+MidiEvPtr MSNewEv (short typeNum, lifo* freelist)
                                   { return NewEvMethodTbl[typeNum](freelist, typeNum); }
 
-MSFunctionType(void)      MSFreeEv (MidiEvPtr e, lifo* freelist)
+void      MSFreeEv (MidiEvPtr e, lifo* freelist)
                                   { if( e) FreeEvMethodTbl[EvType(e)]( freelist, e); }
 
-MSFunctionType(MidiEvPtr) MSCopyEv (MidiEvPtr e, lifo* freelist)
+MidiEvPtr MSCopyEv (MidiEvPtr e, lifo* freelist)
                                   { return e ? CopyEvMethodTbl[EvType(e)]( freelist, e) : e; }
 
-MSFunctionType(void)      MSSetField (MidiEvPtr e, unsigned long f, long v)
+void      MSSetField (MidiEvPtr e, unsigned long f, long v)
                                   { if( e) SetFieldMethodTbl[EvType(e)]( e, f, v); }
 
-MSFunctionType(long)      MSGetField (MidiEvPtr e, long f)
+long      MSGetField (MidiEvPtr e, long f)
                                   { return e ? GetFieldMethodTbl[EvType(e)]( e, f) : kGetFieldError; }
 
-MSFunctionType(long)      MSCountFields (MidiEvPtr e)
+long      MSCountFields (MidiEvPtr e)
                                   { return e ? CountFieldsMethodTbl[EvType(e)](e) : kCountFieldsError; }
 
-MSFunctionType(void)      MSAddField (MidiEvPtr e, long v, lifo* freelist)
+void      MSAddField (MidiEvPtr e, long v, lifo* freelist)
                                   { if ( e) AddFieldMethodTbl[EvType(e)](freelist, e, v); }
 
 
@@ -606,7 +637,7 @@ static void SetFSexEv( MidiEvPtr e, unsigned long f, long v)
 	MidiSEXPtr ext;
 
 	ext = Link(LinkSE(e));              /* first event extension cell           */
-	while( true) {
+	while( 1) {
 		if( ext == LinkSE(e)) {         /* if it's the last extension cell      */
 			if( f < ext->data[11])		/* if the index is free                 */
 				ext->data[f]=(Byte)v;	/* store the value                  */

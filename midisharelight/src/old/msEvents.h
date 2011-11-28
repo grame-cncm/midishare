@@ -17,29 +17,33 @@
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   grame@rd.grame.fr
-
+  
   modifications history:
-   [08-09-99] DF - adaptation to the new memory management
+   [08-09-99] DF - using lifo for memory management
 
 */
 
-#ifndef __msSeq__
-#define __msSeq__
+#ifndef __msEvents__
+#define __msEvents__
 
-#ifdef MSLIGHT
 #include "MidiShareLight.h"
-#define MSFunctionType(type) type
-#else
-#include "msDefs.h"
-#include "msTypes.h"
-#endif
 #include "lflifo.h"
 
+#define MSNewCell(fl)		(MidiEvPtr)lfpop(fl)
+#define MSFreeCell(e, fl)	lfpush (fl, (lifocell*)(e))
+
 /* MidiShare functions interface */
-MSFunctionType(MidiSeqPtr) MSNewSeq   (lifo* freelist);
-MSFunctionType(void)       MSAddSeq   (MidiSeqPtr s, MidiEvPtr e);
-MSFunctionType(void)       MSFreeSeq  (MidiSeqPtr s, lifo* freelist);
-MSFunctionType(void)       MSClearSeq (MidiSeqPtr s, lifo* freelist);
-MSFunctionType(void)       MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc);
+MidiEvPtr  MSNewEv       (short typeNum, lifo* freelist);
+void       MSFreeEv      (MidiEvPtr e, lifo* freelist);
+MidiEvPtr  MSCopyEv      (MidiEvPtr e, lifo* freelist);
+void       MSSetField    (MidiEvPtr e, unsigned long f, long v);
+long       MSGetField    (MidiEvPtr e, long f);
+long       MSCountFields (MidiEvPtr e);
+void       MSAddField    (MidiEvPtr e, long v, lifo* freelist);
+MidiEvPtr  MSNewCellFunction (lifo* freelist);
+void       MSFreeCellFunction (MidiEvPtr e, lifo* freelist);
+
+/* initialization function */
+void InitEvents (void);
 
 #endif

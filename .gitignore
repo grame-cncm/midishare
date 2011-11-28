@@ -1,1 +1,9 @@
 .DS_Store
+Debug
+Release
+*build
+*.xcodeproj
+CMakeCache.txt
+CMakeScripts
+CMakeFiles
+cmake_*

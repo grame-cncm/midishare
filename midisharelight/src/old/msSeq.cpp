@@ -1,6 +1,6 @@
 /*
 
-  Copyright � Grame 1999-2011
+  Copyright (c) Grame 1999, 2011
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -18,18 +18,17 @@
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
   research@grame.fr
 
-  modifications history:
-   [08-09-99] DF - adaptation to the new memory management
-
 */
 
 #include "msSeq.h"
 #include "msEvents.h"
 
+#include <iostream>
+using namespace std;
 /*==============================================================================
   External MidiShare functions implementation
   ============================================================================== */
-MSFunctionType(MidiSeqPtr) MSNewSeq (lifo* freelist)
+MidiSeqPtr MSNewSeq (lifo* freelist)
 {
 	MidiSeqPtr seq = (MidiSeqPtr)MSNewCell(freelist);
 	if( seq) {
@@ -40,7 +39,7 @@ MSFunctionType(MidiSeqPtr) MSNewSeq (lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
+void MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
 {
 	MidiEvPtr current;
 	unsigned long date;
@@ -73,7 +72,7 @@ MSFunctionType(void) MSAddSeq (MidiSeqPtr s, MidiEvPtr e)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, lifo* freelist)
+void MSFreeSeq (MidiSeqPtr s, lifo* freelist)
 {
 	if( s) {
 		MSClearSeq (s, freelist);
@@ -82,7 +81,7 @@ MSFunctionType(void) MSFreeSeq (MidiSeqPtr s, lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
+void MSClearSeq (MidiSeqPtr s, lifo* freelist)
 {
 	if ( s ) {
 		MidiEvPtr next, e = s->first;
@@ -96,7 +95,7 @@ MSFunctionType(void) MSClearSeq (MidiSeqPtr s, lifo* freelist)
 }
 
 /*______________________________________________________________________________*/
-MSFunctionType(void) MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc)
+void MSApplySeq (MidiSeqPtr s, ApplyProcPtr proc)
 {
 	MidiEvPtr e, next;
 	if( s && proc) {

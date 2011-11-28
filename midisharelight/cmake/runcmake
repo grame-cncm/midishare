@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+
+host=$(uname)
+
+[ $host = Darwin ] && cmake -G Xcode
+[ $host = Linux ]  && cmake -G "CodeBlocks - Unix Makefiles"
+

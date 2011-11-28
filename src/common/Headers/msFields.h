@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999
+  Copyright ï¿½ Grame 1999-2011
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -16,15 +16,20 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-  grame@rd.grame.fr
+  research@grame.fr
 
 */
 
 #ifndef __msFields__
 #define __msFields__
 
-#include "msDefs.h"
-#include "msTypes.h"
+#ifdef MSLIGHT
+# include "MidiShareLight.h"
+# define MSFunctionType(type) type
+#else
+# include "msDefs.h"
+# include "msTypes.h"
+#endif
 
 MSFunctionType(MidiEvPtr) MSGetLink (MidiEvPtr e);
 MSFunctionType(void)      MSSetLink (MidiEvPtr e, MidiEvPtr next);

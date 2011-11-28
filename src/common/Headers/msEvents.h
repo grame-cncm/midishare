@@ -26,9 +26,15 @@
 #ifndef __msEvents__
 #define __msEvents__
 
-#include "msDefs.h"
+
+#ifdef MSLIGHT
+# include "MidiShareLight.h"
+# define MSFunctionType(type) type
+#else
+# include "msDefs.h"
+# include "msTypes.h"
+#endif
 #include "lflifo.h"
-#include "msTypes.h"
 
 #define MSNewCell(fl)		(MidiEvPtr)lfpop(fl)
 #define MSFreeCell(e, fl)	lfpush (fl, (lifocell*)(e))
