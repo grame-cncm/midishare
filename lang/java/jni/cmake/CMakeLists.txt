@@ -12,7 +12,6 @@ set (SSTRVERS "1.15")
 
 set (target JMidi-${VERSION})
 
-
 FIND_PACKAGE(JNI REQUIRED)
 
 if(APPLE)
@@ -87,10 +86,6 @@ target_link_libraries (${target} ${LINK})
 # install settings
 if(!WIN32)
 set (LIBDEST /usr/lib)
-if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-  set (LIBDEST /usr/lib64)
-  message (STATUS "64 bits system detected : setting install dir to ${LIBDEST}")
-endif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
 
 install ( TARGETS ${target}	LIBRARY DESTINATION ${LIBDEST})
 endif(!WIN32)
