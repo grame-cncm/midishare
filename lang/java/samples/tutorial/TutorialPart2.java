@@ -385,6 +385,6 @@ class TutorialTask extends MidiTask {
 		appl.myUser.text.appendText(String.valueOf(date));
 		appl.myUser.text.appendText("\n");
 		appl.myUser.sendText(appl.refnum, Midi.typeText, "Hello from tutorial");
-		appl.ScheduleTask(this, date + 3000);
+		appl.ScheduleTask(this, date + 2000);
 	}
 } 
