@@ -3,8 +3,17 @@ VERSION = 1.16
 
 system := $(shell uname -s)
 
+JAVA  = java
+PREFIX = cmake/lib
+
 ifeq ($(system), MINGW32_NT-6.1)
-  lib = JMidi.dll
+	lib = JMidi.dll
+	ifeq ($(ARCH), 32)
+		lib := $(lib) mshare32.dll
+	else 
+		JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
+		lib := $(lib) mshare64.dll
+	endif
 else
   lib =  libJMidi.dylib
 endif
@@ -21,17 +30,17 @@ path   = -classpath .:grame.jar
 java64 = "/c/Program Files/Java/jre6/bin/java.exe"
 
 part1 :  $(lib) $(JAR) $(APPLET) $(PART1)
-		java $(path) $(JOPT) TutorialPart1
+#		$(JAVA) $(path) $(JOPT) TutorialPart1
 
 
 part164 :  $(lib) $(JAR) $(APPLET) $(PART1)
-		$(java64) TutorialPart1
+		$(JAVA) TutorialPart1
 
 part2 :  $(lib) $(JAR) $(APPLET) $(PART2)
-		java $(path) $(JOPT) TutorialPart2
+		$(JAVA) $(path) $(JOPT) TutorialPart2
 
 part264 :  $(lib) $(JAR) $(APPLET) $(PART2)
-		$(java64) TutorialPart2
+		$(JAVA) TutorialPart2
 
 $(JAR)  : ../../native/grame.jar
 	cp ../../native/grame.jar .
@@ -43,13 +52,8 @@ libJMidi.dylib: ../../jni/cmake/Release/libJMidi-$(VERSION).dylib
 	cp ../../jni/cmake/Release/libJMidi-$(VERSION).dylib .
 	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
 
-ifeq ($(ARCH), 64)
-JMidi.dll : ../../jni/cmake/Release/JMidi64.dll
-	cp ../../jni/cmake/Release/JMidi64.dll ./JMidi.dll
-else
-JMidi.dll : ../../jni/cmake/Release/JMidi32.dll
-	cp ../../jni/cmake/Release/JMidi32.dll ./JMidi.dll
-endif
+JMidi.dll : ../../jni/$(PREFIX)JMidi-$(VERSION).dll
+	cp ../../jni/$(PREFIX)JMidi-$(VERSION).dll JMidi.dll
 
 
 ##################################################################

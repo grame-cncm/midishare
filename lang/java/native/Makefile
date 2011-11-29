@@ -3,24 +3,30 @@ VERSION = 1.16
 F = msjni-64-$(VERSION)
 
 system := $(shell uname -s)
+JAVA  = java
 
 ifeq ($(system), MINGW32_NT-6.1)
   lib = JMidi.dll
+	ifeq ($(ARCH), 64)
+		JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
+		lib := $(lib) mshare64.dll
+	else 
+		lib := $(lib) mshare32.dll
+	endif
 else
-  lib =  libJMidi.dylib
+	lib =  libJMidi.dylib
 endif
 
 ifeq ($(ARCH), 32)
 	JOPT := -d32
 endif
 
+PREFIX = cmake/lib
 
 SRC = $(shell find grame -name "*.java")
 OUTCLASS = $(shell find grame -name "*.class")
 CLASS = $(patsubst %.java, %.class, $(SRC) )
 HEADERS = headers/Midi.h headers/MidiAppl.h 
-JAVA  = java
-#JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
 
 .PHONY: doc 
 .PHONY: headers
@@ -38,7 +44,7 @@ zip : grame.jar JMidi.dll
 	cp ../jni/src/changelog.txt $(F)
 
 Test : $(lib) Test.class
-	java $(JOPT) Test
+	$(JAVA) $(JOPT) Test
 
 ifeq ($(ARCH), 64)
 TestWin : $(lib) Test.class
@@ -66,13 +72,11 @@ libJMidi.dylib: ../jni/cmake/Release/libJMidi-$(VERSION).dylib
 	cp ../jni/cmake/Release/libJMidi-$(VERSION).dylib .
 	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
 
-ifeq ($(ARCH), 64)
-JMidi.dll : ../jni/cmake/Release/JMidi64.dll
-	cp ../jni/cmake/Release/JMidi64.dll ./JMidi.dll
-else
-JMidi.dll : ../jni/cmake/Release/JMidi32.dll
-	cp ../jni/cmake/Release/JMidi32.dll ./JMidi.dll
-endif
+mshare32.dll: ../../../src/$(PREFIX)/mshare32.dll
+	cp ../../../src/$(PREFIX)/mshare32.dll .
+
+JMidi.dll : ../jni/$(PREFIX)JMidi-$(VERSION).dll
+	cp ../jni/$(PREFIX)JMidi-$(VERSION).dll JMidi.dll
 
 ##################################################################
 # rule for java compiling
