@@ -76,7 +76,10 @@ endforeach(folder)
 set (SRC ${SRC} "${SRC_PATH}/common/atomic/lffifo.c"  "${SRC_PATH}/common/atomic/lflifo.c")
 
 if(WIN32)
-	set (SRC ${SRC} "${SRC_PATH}/common/atomic/msAtomicWin32.obj")
+	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
+		set (SRC ${SRC} "${SRC_PATH}/common/atomic/msAtomicWin32.obj")
+	endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
+
 	set (SRC ${SRC} "${IMPL_PATH}/*.c")					# add source files
 elseif(APPLE)
 	set (SRC ${SRC} "${IMPL_PATH}/*.c"  "${SRC_PATH}/lib/msPrefs.c" "${SRC_PATH}/lib/profport.c")
