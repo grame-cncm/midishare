@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 2.6)
 
 #######################################
 # versions management
-set (VERSION 1.15)
-set (STRVERS "v.1.15")
-set (SSTRVERS "1.15")
+set (VERSION 1.16)
+set (STRVERS "v.1.16")
+set (SSTRVERS "1.16")
 
 set (target JMidi-${VERSION})
 
