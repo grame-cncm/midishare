@@ -36,6 +36,9 @@
 			21/04/09 Dans Java_grame_midishare_MidiAppl_ApplClose, utilisation du parametre JNIEnv * env et pas celui garde dans la structure context.
 		
 *****************************************************************************/
+#ifdef WIN32
+#pragma warning(disable: 4244)
+#endif
 
 #include "MidiShare.h"
 
@@ -106,7 +109,7 @@ static void  MSALARMAPI ApplAlarm(short ref,long code)
 }
          
 /*--------------------------------------------------------------------------*/
-static void MSALARMAPI JavaTask(unsigned long date, short refNum, void* a1, void* a2, void* a3)
+static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, void* a3)
 {
     ApplContext* context = MidiGetInfo(refNum);
     jclass class;

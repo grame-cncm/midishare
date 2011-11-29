@@ -42,15 +42,20 @@
  *           01/08/06 version 1.12 utilisation des string JNI
  *
  *****************************************************************************/
+#ifdef WIN32
+#pragma warning(disable: 4244)
+#endif
 
 #include "MidiShare.h"
 #include "MidiPtrType.h"
+
 
 //#ifdef __x86_64__
 # include "Midi64.h"
 //#else
 //# include "Midi.h"
 //#endif
+
 
 /*--------------------------------------------------------------------------*/
  void pTocCopy(char *dest,  unsigned char * src)  /* chaine pascal dans chaine c */
