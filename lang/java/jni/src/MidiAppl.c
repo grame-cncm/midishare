@@ -39,35 +39,22 @@
 
 #include "MidiShare.h"
 
-#ifdef __Macintosh__
-	#ifdef __MacOS9__
-            static  ProcessSerialNumber gJavaProcess;
-            UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
-            UPPApplAlarmPtr UPPJApplAlarmPtr ;
-	#else
-            RcvAlarmPtr UPPJRcvAlarmPtr ;
-            ApplAlarmPtr UPPJApplAlarmPtr ;
-	#endif
-#endif
-
-#ifdef __Linux__
-	#define MSALARMAPI
-        RcvAlarmPtr UPPJRcvAlarmPtr ;
-        ApplAlarmPtr UPPJApplAlarmPtr ;
-#endif
-
-#ifdef WIN32
-	ApplAlarmPtr UPPJApplAlarmPtr ;
-	RcvAlarmPtr UPPJRcvAlarmPtr ;
+#ifdef __MacOS9__
+	static  ProcessSerialNumber gJavaProcess;
+	UPPRcvAlarmPtr UPPJRcvAlarmPtr ;
+	UPPApplAlarmPtr UPPJApplAlarmPtr ;
+#else
+	RcvAlarmPtr		UPPJRcvAlarmPtr ;
+	ApplAlarmPtr	UPPJApplAlarmPtr ;
 #endif
 
 #include "MidiPtrType.h"
 
-#ifdef __x86_64__
+//#ifdef __x86_64__
 # include "MidiAppl64.h"
-#else
-# include "MidiAppl.h"
-#endif
+//#else
+//# include "MidiAppl.h"
+//#endif
 
 #include <stdlib.h>
 
@@ -116,17 +103,10 @@ static void  MSALARMAPI ApplAlarm(short ref,long code)
 	else{
 		printf("ApplAlarm error : cannot callback Java ApplAlarm (%d)\n", ref);
 	}
-/*
-	MidiEvPtr e = MidiNewEv(typeAlarm);    
-    if (e ) {
-		MidiSetField(e,0,code);
-		MidiSendIm (ref+128, e);
-    }
-*/
 }
          
 /*--------------------------------------------------------------------------*/
-static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, void* a3)
+static void MSALARMAPI JavaTask(unsigned long date, short refNum, void* a1, void* a2, void* a3)
 {
     ApplContext* context = MidiGetInfo(refNum);
     jclass class;
@@ -134,20 +114,20 @@ static void MSALARMAPI JavaTask(long date, short refNum, void* a1, void* a2, voi
     jobject task;
     jobject appl;
     jfieldID taskptr;
-    
+ 
     if (context && CheckThreadEnv(context)) {
         appl = (jobject)a1;
         task = (jobject)a2;
         class = (*context->fCallbackEnv)->GetObjectClass(context->fCallbackEnv, task);
- #ifdef __x86_64__
-       mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;J)V");
+// #ifdef __x86_64__
+		mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;J)V");
         taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "J");
-#else
-       mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
-        taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "I");
-#endif
+//#else
+//		mid = (*context->fCallbackEnv)->GetMethodID(context->fCallbackEnv, class, "Execute", "(Lgrame/midishare/MidiAppl;I)V");
+//        taskptr = (*context->fCallbackEnv)->GetFieldID(context->fCallbackEnv, class, "taskptr",  "I");
+//#endif
         (*context->fCallbackEnv)->SetLongField(context->fCallbackEnv,task,taskptr,0); 
-        (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, task, mid, appl,date);
+        (*context->fCallbackEnv)->CallVoidMethod(context->fCallbackEnv, task, mid, appl, (jlong)date);
         (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, appl);
         (*context->fCallbackEnv)->DeleteGlobalRef(context->fCallbackEnv, task);
     }else{
@@ -258,7 +238,7 @@ JNIEXPORT javaptr JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 	jfieldID taskptr;
 	MidiEvPtr taskev = 0;
 	
-#if defined (__Macintosh__) && defined(__MacOS9__)
+#if defined(__MacOS9__)
 	taskev = MidiDTask(JavaTask, date, ref, (long)((*env)->NewGlobalRef(env,appl)), (long)((*env)->NewGlobalRef(env,task)), 0);
 #else
 	
@@ -275,13 +255,13 @@ JNIEXPORT javaptr JNICALL Java_grame_midishare_MidiAppl_ScheduleTask
 #endif
 	
 	cls = (*env)->GetObjectClass(env, task);
-#ifdef __x86_64__
+//#ifdef __x86_64__
 	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "J");
 	(*env)->SetLongField(env, task, taskptr, (javaptr)taskev); 
-#else
-	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "I");
-	(*env)->SetIntField(env, task, taskptr, (javaptr)taskev); 
-#endif
+//#else
+//	taskptr = (*env)->GetFieldID(env, cls, "taskptr",  "I");
+//	(*env)->SetIntField(env, task, taskptr, (javaptr)taskev); 
+//#endif
 	return (javaptr)taskev;
 }
 

@@ -46,11 +46,11 @@
 #include "MidiShare.h"
 #include "MidiPtrType.h"
 
-#ifdef __x86_64__
+//#ifdef __x86_64__
 # include "Midi64.h"
-#else
-# include "Midi.h"
-#endif
+//#else
+//# include "Midi.h"
+//#endif
 
 /*--------------------------------------------------------------------------*/
  void pTocCopy(char *dest,  unsigned char * src)  /* chaine pascal dans chaine c */
