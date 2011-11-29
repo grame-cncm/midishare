@@ -1,1 +1,0 @@
-This is the output directory of the libraries compiled by the CodeWarrior project.
