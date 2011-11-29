@@ -1,6 +1,19 @@
 
-VERSION = 1.1.5
+VERSION = 1.16
 F = msjni-64-$(VERSION)
+
+system := $(shell uname -s)
+
+ifeq ($(system), MINGW32_NT-6.1)
+  lib = JMidi.dll
+else
+  lib =  libJMidi.dylib
+endif
+
+ifeq ($(ARCH), 32)
+	JOPT := -d32
+endif
+
 
 SRC = $(shell find grame -name "*.java")
 OUTCLASS = $(shell find grame -name "*.class")
@@ -24,14 +37,16 @@ zip : grame.jar JMidi.dll
 	cp mshare64.dll $(F)
 	cp ../jni/src/changelog.txt $(F)
 
-Test : Test.class
-	java Test
+Test : $(lib) Test.class
+	java $(JOPT) Test
 
-Test64 : Test.class
+ifeq ($(ARCH), 64)
+TestWin : $(lib) Test.class
 	"/c/Program Files/Java/jre6/bin/java.exe" Test
-
-Test32 : Test.class
-	java -d32 Test
+else
+TestWin : $(lib) Test.class
+	java Test
+endif
 
 folder :
 	-[ -d grameclasses ] && rm -rf grameclasses
@@ -47,12 +62,17 @@ clean :
 
 headers : $(HEADERS)
 
-macos: 
-	cp ../jni/cmake/Release/libJMidi-1.15.dylib .
-	ln -sf libJMidi-1.15.dylib libJMidi.dylib
+libJMidi.dylib: ../jni/cmake/Release/libJMidi-$(VERSION).dylib
+	cp ../jni/cmake/Release/libJMidi-$(VERSION).dylib .
+	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
 
-win32: 
+ifeq ($(ARCH), 64)
+JMidi.dll : ../jni/cmake/Release/JMidi64.dll
 	cp ../jni/cmake/Release/JMidi64.dll ./JMidi.dll
+else
+JMidi.dll : ../jni/cmake/Release/JMidi32.dll
+	cp ../jni/cmake/Release/JMidi32.dll ./JMidi.dll
+endif
 
 ##################################################################
 # rule for java compiling
