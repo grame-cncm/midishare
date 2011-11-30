@@ -5,6 +5,10 @@
 
 
 -----------------------------------------------------
+version 1.1.6
+- transparent support for 32 bits and 64 bits architectures
+
+-----------------------------------------------------
 version 1.1.5
 - 64 bits version. Requires mshare64.dll.
   For java clients, the main change is the type of all pointer 
