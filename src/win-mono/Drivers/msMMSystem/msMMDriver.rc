@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,6,0
- PRODUCTVERSION 1,0,6,0
+ FILEVERSION 1,0,7,0
+ PRODUCTVERSION 1,0,7,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -72,12 +72,12 @@ BEGIN
             VALUE "Comments", "Debug version"
             VALUE "CompanyName", "Grame"
             VALUE "FileDescription", "MidiShare Windows Multimedia Driver"
-            VALUE "FileVersion", "1, 0, 6, 0"
+            VALUE "FileVersion", "1, 0, 7, 0"
             VALUE "InternalName", "MidiShare MM Driver"
             VALUE "LegalCopyright", "Grame © 2001-2011, Sony CSL Paris © 2001"
             VALUE "OriginalFilename", "msMMDriver.dll"
             VALUE "ProductName", "MidiShare MM Driver"
-            VALUE "ProductVersion", "1, 0, 6, 0"
+            VALUE "ProductVersion", "1, 0, 7, 0"
         END
     END
     BLOCK "VarFileInfo"
