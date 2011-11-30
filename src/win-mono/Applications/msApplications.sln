@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msDrivers", "msDrivers\msDrivers.vcproj", "{8A84142F-4A20-45A2-8DE8-11A591F24C7A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msControl32", "msControl\msControl32.vcproj", "{92A12075-5A33-45B5-AE60-01CBCA23FE07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Debug|Win32.Build.0 = Debug|Win32
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Debug|x64.ActiveCfg = Debug|x64
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Debug|x64.Build.0 = Debug|x64
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Release|Win32.ActiveCfg = Release|Win32
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Release|Win32.Build.0 = Release|Win32
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Release|x64.ActiveCfg = Release|x64
+		{8A84142F-4A20-45A2-8DE8-11A591F24C7A}.Release|x64.Build.0 = Release|x64
+		{92A12075-5A33-45B5-AE60-01CBCA23FE07}.Debug|Win32.ActiveCfg = Debug|Win32
+		{92A12075-5A33-45B5-AE60-01CBCA23FE07}.Debug|Win32.Build.0 = Debug|Win32
+		{92A12075-5A33-45B5-AE60-01CBCA23FE07}.Debug|x64.ActiveCfg = Debug|Win32
+		{92A12075-5A33-45B5-AE60-01CBCA23FE07}.Release|Win32.ActiveCfg = Release|Win32
+		{92A12075-5A33-45B5-AE60-01CBCA23FE07}.Release|x64.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
