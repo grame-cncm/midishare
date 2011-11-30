@@ -49,6 +49,7 @@ zip : grame.jar JMidi.dll
 	cp $(JMIDI) $(F)/JMidi.dll
 	cp $(mspath) $(F)
 	cp Test.java $(F)
+	cp -r doc $(F)
 	cp ../jni/src/changelog.txt $(F)
 
 Test : $(lib) Test.class
