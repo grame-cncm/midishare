@@ -2,58 +2,53 @@
 VERSION = 1.16
 
 system := $(shell uname -s)
-
 JAVA  = java
-PREFIX = cmake/lib
 
 ifeq ($(system), MINGW32_NT-6.1)
-	lib = JMidi.dll
 	ifeq ($(ARCH), 32)
-		lib := $(lib) mshare32.dll
+		lib := JMidi.dll mshare32.dll
+		PREFIX=vs2005/Release/
+		mspath := ../../../../src/$(PREFIX)/mshare32.dll
 	else 
 		JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
-		lib := $(lib) mshare64.dll
+		lib := JMidi.dll mshare64.dll
+		PREFIX=vs2005-64/Release/
+		mspath := ../../../../src/$(PREFIX)/mshare64.dll
 	endif
 else
   lib =  libJMidi.dylib
-endif
-
-ifeq ($(ARCH), 32)
+  ifeq ($(ARCH), 32)
 	JOPT := -d32
+  endif
 endif
 
-JAR	   = grame.jar
 APPLET = AppletFrame.class
-PART1  = TutorialPart1.class
-PART2  = TutorialPart2.class
-path   = -classpath .:grame.jar
-java64 = "/c/Program Files/Java/jre6/bin/java.exe"
+path   = -classpath .:../../native
 
-part1 :  $(lib) $(JAR) $(APPLET) $(PART1)
-#		$(JAVA) $(path) $(JOPT) TutorialPart1
+test:
+	echo $(lib)
 
+part1 :  $(lib) $(APPLET) TutorialPart1.class
+		$(JAVA) $(path) $(JOPT) TutorialPart1
 
-part164 :  $(lib) $(JAR) $(APPLET) $(PART1)
-		$(JAVA) TutorialPart1
-
-part2 :  $(lib) $(JAR) $(APPLET) $(PART2)
+part2 :  $(lib) $(APPLET) TutorialPart2.class
 		$(JAVA) $(path) $(JOPT) TutorialPart2
 
-part264 :  $(lib) $(JAR) $(APPLET) $(PART2)
-		$(JAVA) TutorialPart2
+clean:
+	rm -f *.class JMidi.dll mshare*.dll 
 
-$(JAR)  : ../../native/grame.jar
-	cp ../../native/grame.jar .
-
-../../native/grame.jar:
-	make -C ../../native jar
-	
 libJMidi.dylib: ../../jni/cmake/Release/libJMidi-$(VERSION).dylib
 	cp ../../jni/cmake/Release/libJMidi-$(VERSION).dylib .
 	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
 
 JMidi.dll : ../../jni/$(PREFIX)JMidi-$(VERSION).dll
 	cp ../../jni/$(PREFIX)JMidi-$(VERSION).dll JMidi.dll
+
+mshare32.dll: $(mspath) 
+	cp $(mspath) .
+
+mshare64.dll: $(mspath) 
+	cp $(mspath) .
 
 
 ##################################################################

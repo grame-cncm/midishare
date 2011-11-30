@@ -14,7 +14,7 @@ else
 	if [ "$1" = "WIN64" ]
 	then
 		shift
-		dir=../vs2005_64
+		dir=../vs2005-64
 		gen="Visual Studio 8 2005 Win64"
 	else
 		dir=../vs2005

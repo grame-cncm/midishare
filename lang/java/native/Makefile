@@ -4,14 +4,19 @@ F = msjni-64-$(VERSION)
 
 system := $(shell uname -s)
 JAVA  = java
+PREFIX = cmake/lib
 
 ifeq ($(system), MINGW32_NT-6.1)
   lib = JMidi.dll
 	ifeq ($(ARCH), 64)
 		JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
 		lib := $(lib) mshare64.dll
+		PREFIX=vs2005-64/Release/
+		mspath := ../../../src/$(PREFIX)/mshare64.dll
 	else 
 		lib := $(lib) mshare32.dll
+		PREFIX=vs2005/Release/
+		mspath := ../../../src/$(PREFIX)/mshare32.dll
 	endif
 else
 	lib =  libJMidi.dylib
@@ -21,7 +26,6 @@ ifeq ($(ARCH), 32)
 	JOPT := -d32
 endif
 
-PREFIX = cmake/lib
 
 SRC = $(shell find grame -name "*.java")
 OUTCLASS = $(shell find grame -name "*.class")
@@ -72,8 +76,11 @@ libJMidi.dylib: ../jni/cmake/Release/libJMidi-$(VERSION).dylib
 	cp ../jni/cmake/Release/libJMidi-$(VERSION).dylib .
 	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
 
-mshare32.dll: ../../../src/$(PREFIX)/mshare32.dll
-	cp ../../../src/$(PREFIX)/mshare32.dll .
+mshare32.dll: $(mspath) 
+	cp $(mspath) .
+
+mshare64.dll: $(mspath) 
+	cp $(mspath) .
 
 JMidi.dll : ../jni/$(PREFIX)JMidi-$(VERSION).dll
 	cp ../jni/$(PREFIX)JMidi-$(VERSION).dll JMidi.dll
