@@ -25,6 +25,8 @@ if(APPLE)
 	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
  	add_definitions(-D__Macintosh__ -D__MacOSX__)
+elseif(UNIX)
+ 	add_definitions(-fPIC)
 endif(APPLE)
 
 if(WIN32)
@@ -83,7 +85,7 @@ if(WIN32)
 set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
 elseif(APPLE)
 set_target_properties (${target} PROPERTIES LINK_FLAGS -flat_namespace)
-endif(WIN32)
+endif()
 
 target_link_libraries (${target} ${LINK})
 
