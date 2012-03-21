@@ -12,9 +12,7 @@ endif(WIN32)
 
 #######################################
 # versions management
-set (VERSION A)
-set (STRVERS "v.1.00")
-set (SSTRVERS "1.00")
+set (VERSION 1.00)
 
 add_definitions(-DMSLIGHT)
 
@@ -55,7 +53,7 @@ if(WIN32)
 endif(WIN32)
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC})
 
-set (PUBLICHEADERS ${SRC_PATH}/MidiShareLight.h)
+set (PUBLIC ${SRC_PATH}/MidiShareLight.h ${SRC_PATH}/midifile.h)
 set (HEADERS ${SRC_PATH}/*.h ${ATOMIC_PATH}/*.h ${MEM_PATH}/*.h)
 
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${PUBLICHEADERS}")
@@ -68,7 +66,7 @@ set(INCL ${HEADERS_PATH} ${MEM_PATH})				# add include folders
 include_directories( ${INCL})
 set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 
-file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/MidiShareLight.h" "${HEADERS_PATH}/midifile.h")
+file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${PUBLIC})
 
 
 #######################################
@@ -76,7 +74,10 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/M
 set(LIBCONTENT ${LIBSRC} ${LIBH} ${PUBLICHEADERS})
 
 add_library(${target} STATIC ${LIBCONTENT})
-set_target_properties (${target} PROPERTIES PUBLIC_HEADER "${PUBLICHEADERS}")
+set_target_properties (${target} PROPERTIES 
+		PUBLIC_HEADER "${PUBLICHEADERS}"
+		VERSION ${VERSION}
+	)
 
 if(WIN32)
 set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
@@ -100,10 +101,10 @@ add_dependencies(write ${target})
 #######################################
 # install setup
 if (NOT WIN32)
-	set(LIBPATH "/usr/local/lib")
+	set(LIBPATH "/usr/lib")
 install ( TARGETS ${target}
     	ARCHIVE DESTINATION ${LIBPATH}
-    	PUBLIC_HEADER DESTINATION /usr/local/include/
+    	PUBLIC_HEADER DESTINATION /usr/local/include/MidiShareLight
 )
 endif(NOT WIN32)
 
