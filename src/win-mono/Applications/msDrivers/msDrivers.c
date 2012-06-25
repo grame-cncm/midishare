@@ -64,7 +64,7 @@ void		FramePort (HWND hDlg, short port);
 void		DrawPorts (HWND hDlg);
 
 void MSALARMAPI ApplAlarm(short,long);
-BOOL CALLBACKAPI msCnctDlg(HWND hDlg, UINT message, UINT wParam, LONG lParam);
+BOOL CALLBACKAPI msCnctDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACKAPI AboutDlgProc(HWND hDlg,UINT message,
 													UINT wParam,LONG lParam);
 

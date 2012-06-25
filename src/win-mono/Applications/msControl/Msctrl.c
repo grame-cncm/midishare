@@ -119,8 +119,6 @@ APPLICATION MAIN ENTRY POINT
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			LPSTR lpszCmdLine, int nCmdShow)
 {
-	int ret;
-
 	if ( hPrevInstance ) return FALSE ;
 #ifdef WIN32
 	gStartupMsg = RegisterWindowMessage("msControlToFront");
@@ -132,7 +130,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 	if ( !SetUpMidi() ) return 0;
 	ghInst = hInstance;
-	ret=DialogBox(hInstance, "UCTRL", NULL, MakeProcInstance(UniversalCtrlDlgProc,hInstance));
+	DialogBox(hInstance, "UCTRL", NULL, MakeProcInstance(UniversalCtrlDlgProc,hInstance));
 	MidiClose(myRefNum);
 	return TRUE;
 }

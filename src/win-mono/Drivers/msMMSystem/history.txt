@@ -5,6 +5,7 @@ Built on top of Windows MMSystem
 Versions history:
 ---------------------------------------------------------------------------
 
+v 1.0.8.0	: corrects bad data on 64 bits architectures
 v 1.0.7.0	: 64 bits architectures support
 v 1.0.5.0	: supports error message log using ini file (section [log], file="yes"|"no")
 v 1.0.4.0	: supports error message box using ini file (section [error], messagebox="yes"|"no")

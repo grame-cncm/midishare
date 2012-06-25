@@ -29,10 +29,10 @@
 
 #include "msMMError.h"
 
-#define kGetErrorTextBuf	256
+#define kGetErrorTextBuf	512
 
 static char * ErrFile = "\\msMMSystem.log";
-void MMTrace (char *s, long value);
+void MMTrace (const char *s, long value);
 char * GetProfileFullName ();
 
 //_________________________________________________________
@@ -78,7 +78,7 @@ static char *makeShortString (char *s, SlotRefNum ref, int errCode, short in)
 static char *makeErrString (char *s, SlotRefNum ref, int errCode, short in)
 {
 	static char out[1024];
-	char buff[kGetErrorTextBuf];
+	char buff[kGetErrorTextBuf+1];
 	TSlotInfos infos;
 
 	if(in)
@@ -112,7 +112,6 @@ void MMError (char *s, SlotRefNum ref, int errCode, short in)
 	char * errFile = ErrFilePath ();
 
 	GetPrivateProfileString("log", "file", "yes", buff, 20, GetProfileFullName());
-
 	if (strcmp(buff, "yes") == 0) {
 		if (errFile) {
 			HANDLE h = CreateFile (errFile, GENERIC_WRITE, FILE_SHARE_READ,
@@ -129,7 +128,7 @@ void MMError (char *s, SlotRefNum ref, int errCode, short in)
 }
 
 //_________________________________________________________
-void MMTrace (char *s, long value)
+void MMTrace (const char *s, long value)
 {
 	char * errFile = ErrFilePath ();
 	if (errFile) {

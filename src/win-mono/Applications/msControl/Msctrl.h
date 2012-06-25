@@ -125,6 +125,6 @@ typedef char TSTR[MAXLEN];
 #define CALLBACKAPI		FAR PASCAL _export
 #endif
 
-BOOL CALLBACKAPI UniversalCtrlDlgProc(HWND,UINT,UINT,LONG);
+BOOL CALLBACKAPI UniversalCtrlDlgProc(HWND,UINT,WPARAM,LPARAM);
 
 #endif /* __WMSCTRL__ */
