@@ -45,15 +45,15 @@ typedef Byte 			Status2TypeTbl[256];
 
 /*__________________________________________________________________________*/
 /*      fields fast access structure            							*/
-typedef union TMidiFastEv {
-    MidiEvPtr std;
-    struct {
-        MidiEvPtr     link;        /* link to next event           */
-        unsigned long date;        /* event date (in ms)           */
-        long      	  common;
-        long      	  specific;
-    } * fast;
-} TMidiFastEv;
+//typedef union TMidiFastEv {
+//    MidiEvPtr std;
+//    struct {
+//        MidiEvPtr     link;        /* link to next event           */
+//        unsigned long date;        /* event date (in ms)           */
+//        long      	  common;
+//        long      	  specific;
+//    } * fast;
+//} TMidiFastEv;
 
 #define Common(e)        (e).fast->common
 #define Specific(e)      (e).fast->specific

@@ -187,13 +187,18 @@ static MidiEvPtr rcvStatus (StreamFifoPtr f, char c)
 //_____________________________________________________________________________
 static MidiEvPtr rcvStore (StreamFifoPtr f)
 {
-	TMidiFastEv e;
-	e.std= MidiNewCell();
-	if( e.std) {
-		Date(e.std)= f->date;
-		e.fast->common = f->common.fast;
-		e.fast->specific = f->infos.fast;
-		return e.std;
+	int i;
+	MidiEvPtr e = MidiNewCell();
+	if( e) {
+		Date(e)= f->date;
+		e->evType = f->common.field.msType;
+		e->refNum = f->common.field.refNum;
+		e->port   = f->common.field.port;
+		e->chan   = f->common.field.chan;
+		for (i=0; i<4; i++) {
+			e->info.data[i] = f->infos.data[i];
+		}
+		return e;
 	}
 	return 0;
 }
