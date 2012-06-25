@@ -6,20 +6,17 @@ JAVA	= java
 mode	= Release
 
 ifeq ($(system), MINGW32_NT-6.1)
-  lib = JMidi.dll
 	ifeq ($(ARCH), 64)
 		JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
-		lib := $(lib) mshare64.dll
+		lib := JMidi64.dll mshare64.dll
 		PREFIX=vs2005-64/$(mode)/
 		mspath := ../../../src/$(PREFIX)/mshare64.dll
-		F = msjni-64-$(VERSION)
 	else 
-		lib := $(lib) mshare32.dll
+		lib := JMidi32.dll mshare32.dll
 		PREFIX=vs2005/$(mode)/
 		mspath := ../../../src/$(PREFIX)/mshare32.dll
-		F = msjni-32-$(VERSION)
 	endif
-	JMIDI := ../jni/$(PREFIX)JMidi-$(VERSION).dll
+	F = msjni-$(VERSION)
 else
 	lib =  libJMidi.dylib
 endif
@@ -41,19 +38,26 @@ class : $(CLASS)
 
 jar : grame.jar
 
-zip : grame.jar JMidi.dll
+zip : grame.jar
 	[ -d $(F) ] || mkdir $(F)
 	rm -rf $(F)/grame
 	cp -r grame  $(F)
 	cp grame.jar $(F)
-	cp $(JMIDI) $(F)/JMidi.dll
-	cp $(mspath) $(F)
+	cp JMidi??.dll $(F)
+	cp mshare??.dll $(F)
+	cp msMMSystem.dll $(F)
+	cp msMMSystem64.dll $(F)
+	cp midishare.ini $(F)
 	cp Test.java $(F)
+	cp bug.java $(F)
 	cp -r doc $(F)
 	cp ../jni/src/changelog.txt $(F)
 
 Test : $(lib) Test.class
 	$(JAVA) $(JOPT) Test
+
+bug : $(lib) bug.class
+	$(JAVA) $(JOPT) bug
 
 doc:
 	[ -d doc ] || mkdir doc
@@ -80,8 +84,12 @@ mshare32.dll: $(mspath)
 mshare64.dll: $(mspath) 
 	cp $(mspath) .
 
-JMidi.dll : $(JMIDI)
-	cp $(JMIDI) JMidi.dll
+
+JMidi32.dll: ../jni/$(PREFIX)JMidi32-$(VERSION).dll
+	cp ../jni/$(PREFIX)JMidi32-$(VERSION).dll) JMidi32.dll
+
+JMidi64.dll: ../jni/$(PREFIX)JMidi64-$(VERSION).dll 
+	cp ../jni/$(PREFIX)JMidi64-$(VERSION).dll) JMidi64.dll
 
 ##################################################################
 # rule for java compiling

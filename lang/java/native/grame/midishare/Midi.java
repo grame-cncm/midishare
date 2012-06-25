@@ -1215,7 +1215,11 @@ public final class Midi {
 			return 1;
 		}else{
 			try {
-			  	System.loadLibrary("JMidi");
+				String arch = System.getProperty("os.arch");
+				if (arch.equals("x86"))
+					System.loadLibrary("JMidi32");
+				else
+					System.loadLibrary("JMidi64");
 				interfaceLoaded = true;
 				return 1;
 	      	} catch (UnsatisfiedLinkError e) {
