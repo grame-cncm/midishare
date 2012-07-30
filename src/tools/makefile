@@ -11,13 +11,16 @@ else
 endif
 endif
 
-INC = -I../include
+INC = -I../include -I../lib
 CFLAGS := -O3 $(OPTIONS) $(INC)
 CC    = cc
-TESTS = TFonctions TEvents TFilters TDrivers TOutEvents
+TESTS = TFonctions TEvents TFilters TDrivers TOutEvents TLin
 RES   = results
 
 all : $(TESTS)
+
+TLin : TLin.o ../lib/EventToMidiStream.o ../lib/MidiStreamToEvent.o
+	$(CC) $(CFLAGS) $(LIB) TLin.o ../lib/EventToMidiStream.o ../lib/MidiStreamToEvent.o -o TLin
 
 TDrivers : TDrivers.c TDrivers.h
 	$(CC) $(CFLAGS) $(LIB) TDrivers.c -o TDrivers
