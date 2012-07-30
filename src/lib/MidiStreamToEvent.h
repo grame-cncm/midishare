@@ -55,8 +55,8 @@ typedef Byte 			Status2TypeTbl[256];
 //    } * fast;
 //} TMidiFastEv;
 
-#define Common(e)        (e).fast->common
-#define Specific(e)      (e).fast->specific
+//#define Common(e)        (e).fast->common
+//#define Specific(e)      (e).fast->specific
 
 
 /*------------------------------------------------------------------------*/
@@ -74,12 +74,12 @@ typedef struct StreamFifo{
 		 	Byte port;
 		 	Byte chan;
 		 } field;
-		 long    fast;
+//		 long    fast;			// removed for 64 bits support
 	 } common;
 
 	 union {
 		  char   data[4];       /* received datas    */
-		  long   fast;
+//		  long   fast;			// removed for 64 bits support
 	 } infos;
 } StreamFifo;
 
