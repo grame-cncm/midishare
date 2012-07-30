@@ -24,28 +24,12 @@
 #include <stdio.h>
 #include "MidiShare.h"
 
-#define CTASKS
-#define CNAME
 #define flush   fflush(stdout)
 #define print	printf
-#define nil 0
-
 
 #if macintosh
 #	include <stdio.h>
 #	include "MidiShare.h"
-# if (defined(__ppc__) || defined(__i386__)) && defined(__GNUC__)
-#	define CNAME
-#	define CTASKS
-#	define nil 0
-# else
-#	define PASCALNAME
-#	define PASCALTASKS
-#	define unused1
-#	define unused2
-#	define unused3
-#	define unused4
-# endif
 #	define TestMidiCall
 #	define flush        fflush(stdout)
 #	define print        printf
@@ -68,9 +52,6 @@ inline Boolean MidiShare() { return true; }
 #	define flush           fflush(stdout)
 #	define print(args...)	fprintf(stdout, ## args)
 #endif
-#	define CNAME
-#	define CTASKS
-#	define nil 0
 #endif
 
 #include "TDrivers.h"
@@ -83,17 +64,6 @@ inline Boolean MidiShare() { return true; }
 char *OK = "OK", *Erreur= "ERREUR";
 short refNum= 0;
 
-#ifdef PASCALNAME
-MidiName ApplName   = "\pDrivers";
-DriverName TestName   = "\pTest Driver";
-TDriverInfos	gDrvInfo1 = { "\pTest Driver1", 100, 0 };
-TDriverInfos	gDrvInfo2 = { "\pTest Driver2", 100, 0 };
-MidiName		gSlot1 = "\pSlot 1";
-MidiName		gSlot2 = "\pSlot 2";
-MidiName		NewName = "\pNew Name";
-#endif
-
-#ifdef CNAME
 const char* ApplName   = "Drivers";
 const char* TestName   = "Test Driver";
 TDriverInfos	gDrvInfo1 = { "Test Driver1", 100, 0 };
@@ -101,7 +71,6 @@ TDriverInfos	gDrvInfo2 = { "Test Driver2", 100, 0 };
 const char*		gSlot1 = "Slot 1";
 const char*		gSlot2 = "Slot 2";
 const char*		NewName = "New Name";
-#endif
 
 static void MSALARMAPI wakeup (short refnum);
 static void MSALARMAPI sleep  (short refnum);
@@ -114,12 +83,7 @@ TDriverOperation gSilentOp   = { silentwakeup, silentsleep, 0, 0, 0 };
 MidiEvPtr		 gReceived   = 0;
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void RcvAlarm( short refnum)
-#endif
-#ifdef CTASKS
 void MSALARMAPI RcvAlarm( short refnum)
-#endif
 {
 	MidiEvPtr e;
 	while ((e= MidiGetEv(refnum))) {
@@ -281,12 +245,7 @@ void Infos()
 		for (i = 1; i<=n; i++) {
 			ref = MidiGetIndDriver(i);
 			name = MidiGetName (ref);
-#ifdef PASCALNAME
-			name[name[0]+1] = 0;
-			s = (char *)&name[1];
-#else
 			s = name;
-#endif
 			print ("      %d : \"%s\" (%d)\n", i, s, ref);
 		}
 		
@@ -294,12 +253,7 @@ void Infos()
 		for (i = 1; i<=n; i++) {
 			ref = MidiGetIndDriver(i);
 			if (MidiGetDriverInfos (ref, &infos)) {
-#ifdef PASCALNAME
-				infos.name[infos.name[0]+1] = 0;
-				s = (char *)&infos.name[1];
-#else
 				s = infos.name;
-#endif
 				print ("      %d : \"%s\" v%d - %d slots\n", i, s, infos.version, infos.drvslots);
 			}
 			else print ("Warning : MidiGetDriverInfos returned false for %d\n", ref);
@@ -357,19 +311,10 @@ void Connections()
 /*____________________________________________________________________*/
 static int EqualNames (const char* n1, const char* n2)
 {
-#ifdef PASCALNAME
-		int n = *n1++;
-		if (*n2++ != n) return false;
-		while (n--) {
-			if (*n1++ != *n2++) return false;
-		}
-		return true;
-#else
 		while (*n1) {
 			if (*n1++ != *n2++) return false;
 		}
 		return *n2 ? false : true;
-#endif
 }
 
 /*____________________________________________________________________*/
@@ -399,11 +344,7 @@ void Slots()
 		sr = MidiGetIndSlot (r1, i);
 		if (sr.slotRef >= 0) {
 			if (MidiGetSlotInfos (sr, &islot)) {
-#ifdef PASCALNAME
-				s = (char *)&islot.name[1];
-#else
 				s = islot.name;
-#endif
 				print ("      %d : \"%s\" direction: %s slot\n", i, s, 
 						(islot.direction == MidiInputSlot) ? "input" : "output");				
 			}
@@ -420,11 +361,7 @@ void Slots()
 	print ("    MidiSetSlotName : ");flush;
 	MidiSetSlotName (sref1, NewName);
 	if (MidiGetSlotInfos (sref1, &islot)) {
-#ifdef PASCALNAME
-				s = (char *)&islot.name[1];
-#else
-				s = islot.name;
-#endif
+		s = islot.name;
 		print ("\"%s\" %s\n", s, OK);
 		if (!EqualNames (NewName, islot.name))
 			print ("\nWarning : new name not correctly set : \"%s\" instead \"%s\"\n", s, NewName);

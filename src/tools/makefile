@@ -1,8 +1,17 @@
 
-#OPTIONS = -Dmacintosh -D__Types__
-#INC = -I../macosx-mono
-#LIB = -framework MidiShare
-LIB = -lMidiShare
+system	:= $(shell uname -s)
+ifeq ($(system), Darwin)
+	OPTIONS = -Dmacintosh -D__Types__
+	LIB = -F../cmake/Release -framework MidiShare
+else
+ifeq ($(system), MINGW32_NT-6.1)
+  	LIB =  ../cmake/Release/MidiShare.lib
+else
+	LIB = -lMidiShare
+endif
+endif
+
+INC = -I../include
 CFLAGS := -O3 $(OPTIONS) $(INC)
 CC    = cc
 TESTS = TFonctions TEvents TFilters TDrivers TOutEvents
