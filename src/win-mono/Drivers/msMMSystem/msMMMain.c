@@ -87,6 +87,17 @@ static void SetupFilter (MidiFilterPtr filter)
 		AcceptBit(filter->evType,i);
 }
 
+#include <stdio.h>
+/*____________________________________________________________________*/
+static void print(MidiEvPtr e)
+{
+	MMTrace("date: ", Date(e));
+	MMTrace("ev	type: ", (long)EvType(e));
+	MMTrace("	chan: ", (long)Chan(e));
+	MMTrace("	data 0: ", (long)Data(e)[0]);
+	MMTrace("	data 1: ", (long)Data(e)[1]);
+}
+
 //_________________________________________________________
 static void CALLBACK msWakeup (short refnum)
 {
@@ -101,6 +112,19 @@ static void CALLBACK msWakeup (short refnum)
 	MidiParseInitTypeTbl (gTypeTbl);
 	AddSlots (refnum);
 	LoadState (gInSlots, gOutSlots);
+/*
+	{
+		StreamFifo f; MidiEvPtr e;
+		MidiParseInit (&f, gParseTbl, gTypeTbl);
+		e = MidiParseByte (&f, 177);		// ctrl change channel 1
+//		if (e) printf ("got unexpected event !\n");
+		e = MidiParseByte (&f, 7);			// volume
+//		if (e) printf ("got unexpected event !\n");
+		e = MidiParseByte (&f, 120);		// value
+		if (!e) printf ("no event received !\n");
+		else print(e);
+	}
+*/
 }
 
 static void CALLBACK msSleep (short refnum)
