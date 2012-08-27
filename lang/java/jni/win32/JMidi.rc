@@ -27,8 +27,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,6,0
- PRODUCTVERSION 1,1,6,0
+ FILEVERSION 1,1,7,0
+ PRODUCTVERSION 1,1,7,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -46,12 +46,12 @@ BEGIN
             VALUE "Comments", "JMidi JNI Library"
             VALUE "CompanyName", "Grame"
             VALUE "FileDescription", "JMidi"
-            VALUE "FileVersion", "1, 1, 6, 0"
+            VALUE "FileVersion", "1, 1, 7, 0"
             VALUE "InternalName", "JMidi JNI 32 bits"
-            VALUE "LegalCopyright", "Copyright © GRAME 1996,2011"
+            VALUE "LegalCopyright", "Copyright © GRAME 1996,2012"
             VALUE "OriginalFilename", "JMidi.dll"
             VALUE "ProductName", "JMidi Shared Library"
-            VALUE "ProductVersion", "1, 1, 6, 0"
+            VALUE "ProductVersion", "1, 1, 7, 0"
         END
     END
     BLOCK "VarFileInfo"

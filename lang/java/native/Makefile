@@ -1,5 +1,5 @@
 
-VERSION = 1.16
+VERSION = 1.17
 
 system := $(shell uname -s)
 JAVA	= java
@@ -58,6 +58,9 @@ Test : $(lib) Test.class
 
 bug : $(lib) bug.class
 	$(JAVA) $(JOPT) bug
+
+BugMS64: $(lib) BugMS64.class
+	$(JAVA) $(JOPT) BugMS64
 
 doc:
 	[ -d doc ] || mkdir doc
