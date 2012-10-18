@@ -2,7 +2,7 @@
 Player Library
 ================
 
-This library allows to develop multi-tracks synchronisable MidiShare sequencers.
+This library allows to develop multi-tracks synchronizable MidiShare sequencers.
 
 06/19/96 : Version 1.00
 
@@ -17,7 +17,7 @@ the Player with SetTrack function.
 12/02/96 : Version  1.09 : correction of a bug when a Player alarm in called 
 during the Player destruction
 
-06/28/97 : Version  1.10 : librairies to be used with CW11 and CWPro. Correction of a bug 
+06/28/97 : Version  1.10 : libraries to be used with CW11 and CWPro. Correction of a bug 
 when the Player is in SynchroClock mode (pending KeyOff were not correctly sent)
 
 12/28/97 : Version  1.11 : Correction of some bugs in Chase Events management.
@@ -40,12 +40,12 @@ Bug correction in chase management for KeyOn with velocity of 0.
 Bug correction in the TickTask class destructor.
 
 01/07/00 : Version  2.03 : Merge of the new scheduler branch : simplification of the scheduler class
-to correct a synchronization problem on Linux. Works with MidiShare untill version 1.84
+to correct a synchronization problem on Linux. Works with MidiShare until version 1.84
 
 27/04/01 : Version  > 2.03 : Works only with MidiShare version >= 1.85
 Add the management of PortPrefix events in MIDIFiles
 
-06/02/03 : Version 2.04 : Correct a bug in ouput clock synchronization. Doxygen based source documentation.
+06/02/03 : Version 2.04 : Correct a bug in output clock synchronization. Doxygen based source documentation.
 Cleanup.
 
 20/11/03 : Version 2.05 : Correct the position setting bug introduced in 2.04. Correct ChaseOff bug for PitchBend :
@@ -53,7 +53,7 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 21/01/04 : Version 2.06 : New SetPosTicks and Version functions, ticks field in PlayerState.
 
-??/??/?? : Version 2.07 : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa). Correct bug in ConvertTickToTickAtPrevSP and ConvertTickToTickAtPrevClock : floor must be used. Correct ScoreFollower intialization. Correct BBU values: start at 1 1 0.
+??/??/?? : Version 2.07 : Correct bugs in Midifile.c and Tmtracks.c (J.J Ceresa). Correct bug in ConvertTickToTickAtPrevSP and ConvertTickToTickAtPrevClock : floor must be used. Correct ScoreFollower initialization. Correct BBU values: start at 1 1 0.
 
 20/04/06 : Version 2.08 : Compilation on MacIntel as universal binary.
 
@@ -65,7 +65,7 @@ default values (0 64) were sent in ChaseOff, this behaviour is incorrect. ChaseO
 
 12/10/08 : Version 2.12 : Correct IsTempoMap macro (typeKeySign not a tempo map event), use mutex in all platforms and also protect TPlayer::~TPlayer.
 
-18/11/08 : Version 2.13 : Correct bug in midifile.c (in MidiFileWriteEv,  private events are just ignored).
+18/11/08 : Version 2.13 : Correct bug in midifile.c (in MidiFileWriteEv, private events are just ignored).
 
 16/01/09 : Version 2.14 : Correct Convert2UTF8.
 
