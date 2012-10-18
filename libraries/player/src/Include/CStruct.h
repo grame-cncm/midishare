@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2006
+  Copyright ï¿½ Grame 1996-2006
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -37,8 +37,8 @@
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct PlayerState  FAR * PlayerStatePtr;
-typedef struct PlayerState{
+typedef struct PlayerState FAR * PlayerStatePtr;
+typedef struct PlayerState {
 	long date;
 	long tempo;
 	short tsnum;
@@ -51,13 +51,13 @@ typedef struct PlayerState{
 	short state;
 	short syncin;
 	short syncout;
-        long ticks;
+    long ticks;
 }PlayerState;
 
 /*--------------------------------------------------------------------------*/
 
-typedef struct Pos  FAR * PosPtr;
-typedef struct Pos{
+typedef struct Pos FAR * PosPtr;
+typedef struct Pos {
 	short bar;
 	short beat;
 	short unit;
