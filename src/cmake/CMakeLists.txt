@@ -169,7 +169,7 @@ endforeach(tool)
 
 #######################################
 # set test targets
-set (MSTESTS TFonctions TEvents TFilters TDrivers TOutEvents)
+set (MSTESTS TLin TFonctions TEvents TFilters TDrivers TOutEvents)
 
 include_directories( ${SRC_PATH}/include)
 

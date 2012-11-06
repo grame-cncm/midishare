@@ -68,8 +68,17 @@ void MidiParseInit (StreamFifoPtr f, ParseMethodTbl rcv, Byte * typesTbl)
 	f->typesTbl  = typesTbl;
 	f->ptrCur    	= 0;
 	f->date      	= 0;
-	f->common.fast 	= 0;
-	f->infos.fast 	= 0;
+//	f->common.fast 	= 0;		// removed for 64 bits support
+	f->common.field.msType	= 0;
+	f->common.field.refNum	= 0;
+	f->common.field.port	= 0;
+	f->common.field.chan	= 0;
+
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 }
 
 //_____________________________________________________________________________
@@ -78,8 +87,16 @@ void MidiParseReset (StreamFifoPtr f)
 	if (f->ptrCur) MidiFreeEv (f->ptrCur);
 	f->ptrCur    	= 0;
 	f->date      	= 0;
-	f->common.fast 	= 0;
-	f->infos.fast 	= 0;
+//	f->common.fast 	= 0;		// removed for 64 bits support
+	f->common.field.msType	= 0;
+	f->common.field.refNum	= 0;
+	f->common.field.port	= 0;
+	f->common.field.chan	= 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse     	= rcvStatus;
 }
 
@@ -212,7 +229,11 @@ static MidiEvPtr rcvChan2 (StreamFifoPtr f, char c)
 {
 	f->common.field.msType = type(c, f);
 	f->common.field.chan = c & 0x0f;
-	f->infos.fast = 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse = rcvDataM;
 	return 0;
 }
@@ -244,7 +265,11 @@ static MidiEvPtr rcvChan1 (StreamFifoPtr f, char c)
 {
 	f->common.field.msType = type(c, f);
 	f->common.field.chan = c & 0x0f;
-	f->infos.fast = 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse= rcvDataU;
 	return 0;
 }
@@ -265,7 +290,11 @@ static MidiEvPtr rcvCommon2 (StreamFifoPtr f, char c)
 {
 	f->common.field.msType = type(c, f);
 	f->common.field.chan = 0;
-	f->infos.fast = 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse= rcvDataM;
 	return 0;
 }
@@ -276,7 +305,11 @@ static MidiEvPtr rcvCommon1 (StreamFifoPtr f, char c)
 {
 	f->common.field.msType = type(c, f);
 	f->common.field.chan = 0;
-	f->infos.fast= 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse= rcvDataU;
 	return 0;
 }
@@ -303,7 +336,11 @@ static MidiEvPtr rcvQFrame (StreamFifoPtr f, char c)
 {
 	f->common.field.msType = typeQuarterFrame;
 	f->common.field.chan = 0;
-	f->infos.fast = 0;
+//	f->infos.fast 	= 0;		// removed for 64 bits support
+	f->infos.data[0]	= 0;
+	f->infos.data[1]	= 0;
+	f->infos.data[2]	= 0;
+	f->infos.data[3]	= 0;
 	f->parse = rcvDataQ;
 	return 0;
 }

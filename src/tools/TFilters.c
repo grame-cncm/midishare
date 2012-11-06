@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include "MidiShare.h"
 
-#define CTASKS
-#define CNAME
 #define flush   fflush(stdout)
 #define print	printf
 #define nil 0
@@ -48,8 +46,6 @@ inline Boolean MidiShare() { return true; }
 #	define flush		fflush( stdout)
 #	define print(args...)	fprintf(stdout, ## args)
 #endif
-#	define CNAME
-#	define CTASKS
 #	define MidiAvailEv(r)  MidiGetEv(r)
 #endif
 
@@ -58,13 +54,6 @@ inline Boolean MidiShare() { return true; }
 #	include <stdio.h>
 #	include <String.h>
 #	include "MidiShare.h"
-# if (defined(__ppc__) || defined(__i386__)) && defined(__GNUC__)
-#	define CNAME
-#	define CTASKS
-# else
-#	define PASCALNAME
-#	define PASCALTASKS
-# endif
 #endif
 
 #include "TFilters.h"
@@ -76,13 +65,7 @@ static short 	refNum= 0;
 static short 	version= 0;
 static MidiFilterPtr myFilterPtr = 0;
 
-#ifdef PASCALNAME
-MidiName ApplName = "\pFiltres";
-#endif
-
-#ifdef CNAME
 const char* ApplName = "Filtres";
-#endif
 
 #define LastPort 32
 

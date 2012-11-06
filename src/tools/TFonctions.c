@@ -51,19 +51,10 @@
 #if macintosh
 #	include <stdio.h>
 #	include "MidiShare.h"
-# if (defined(__ppc__) || defined(__i386__)) && defined(__GNUC__)
 #	define __POWERPC__
 #	define CNAME
 #	define CTASKS
 #	define nil 0
-# else
-#	define PASCALNAME
-#	define PASCALTASKS
-#	define unused1
-#	define unused2
-#	define unused3
-#	define unused4
-# endif
 #	define TestMidiCall
 #	define flush        fflush(stdout)
 #	define print        printf
@@ -99,13 +90,6 @@ inline Boolean MidiShare() { return true; }
 char *OK = "OK", *Erreur= "ERREUR";
 short refNum= 0;
 
-#ifdef PASCALNAME
-MidiName ApplName   = "\pFonctions";
-MidiName NewName    = "\pNewName";
-MidiName MidiShareName = "\pMidiShare";
-MidiName TestName   = "\pTest";
-#endif
-
 #ifdef CNAME
 const char* ApplName   = "Fonctions";
 const char* NewName    = "NewName";
@@ -115,23 +99,13 @@ const char* TestName   = "Test";
 
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void RcvAlarm( short unused1)
-#endif
-#ifdef CTASKS
 void MSALARMAPI RcvAlarm( short unused1)
-#endif
 {
 }
 
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void ApplAlarm( short unused1, long unused2)
-#endif
-#ifdef CTASKS
 void MSALARMAPI ApplAlarm( short unused1, long unused2)
-#endif
 {
 }
 
@@ -264,17 +238,9 @@ void ApplConfiguration()
 	print ("    MidiGetName : ");flush;
 	if( (s= MidiGetName( refNum)))
 	{
-#ifdef CNAME
 		print ("%s %s\n", s, OK);
 		if( equal( s, ApplName))
 			print ("Warning : incoherent name !\n");
-#endif
-#ifdef PASCALNAME
-		s[s[0]+1]=0;
-		print ("%s %s\n", &s[1], OK);
-		if( pascalcmp( s, ApplName))
-			print ("Warning : incoherent name !\n");
-#endif
 	}
 	else print ("nil  %s\n", Erreur);
 	
@@ -283,17 +249,9 @@ void ApplConfiguration()
 	print ("%s : ", OK);
 	if( (s= MidiGetName( refNum)))
 	{
-#ifdef CNAME
 		print ("%s\n", s);
 		if( equal( s, NewName))
 			print ("Warning : incoherent name !\n");
-#endif
-#ifdef PASCALNAME
-		s[s[0]+1]=0;
-		print ("%s\n", &s[1]);
-		if( pascalcmp( s, NewName))
-			print ("Warning : incoherent name !\n");
-#endif
 	}
 	else print ("MidiGetName nil  %s\n", Erreur);
 	MidiSetName( refNum, ApplName);
@@ -526,12 +484,7 @@ static long CountOfEvents( MidiSeqPtr s)
 }
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void ApplyProc( MidiEvPtr e )
-#endif
-#ifdef CTASKS
 void MSALARMAPI ApplyProc( MidiEvPtr e )
-#endif
 {
 	if( EvType(e)== typeNote)
 		Pitch(e)++;
@@ -744,24 +697,14 @@ typedef struct ApplContext {
 ApplContext gContext;
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void MyTask( long unused1, short unused2, long a1,long unused3,long unused4)
-#endif
-#ifdef CTASKS
 void MSALARMAPI MyTask( long unused1, short unused2, void* a1, void* unused3, void* unused4)
-#endif
 {
 	if( a1)
 		*(long *)a1= 1;
 }
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void MyTask2( long unused1, short unused2, long a1,long unused3,long unused4)
-#endif
-#ifdef CTASKS
 void MSALARMAPI MyTask2( long unused1, short unused2, void* a1, void* unused3, void* unused4)
-#endif
 {
 	gContext.res1 = true;
 	MidiForgetTask(&gContext.t1);
@@ -769,23 +712,13 @@ void MSALARMAPI MyTask2( long unused1, short unused2, void* a1, void* unused3, v
 }
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void MyTask3( long unused1, short unused2, long a1,long a2,long unused4)
-#endif
-#ifdef CTASKS
 void MSALARMAPI MyTask3( long unused1, short unused2, void* a1, void* a2, void* unused4)
-#endif
 {
 	gContext.res2 = true;
 }
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void MyTask4( long time, short refnum, long a1,long a2,long a3)
-#endif
-#ifdef CTASKS
 void MSALARMAPI MyTask4( long time, short refnum, void* a1, void* a2, void* a3)
-#endif
 {
 	gContext.res1 = true;
 	gContext.t2 = MidiTask( MyTask3, time, refnum, a1, a2, a3);
@@ -793,12 +726,7 @@ void MSALARMAPI MyTask4( long time, short refnum, void* a1, void* a2, void* a3)
 }
 
 /*____________________________________________________________________*/
-#ifdef PASCALTASKS
-static pascal void MyDTask( long unused1, short unused2, long a1,long a2,long a3)
-#endif
-#ifdef CTASKS
 void MSALARMAPI MyDTask( long unused1, short unused2, void* a1, void* a2, void* a3)
-#endif
 {
 	print ("dtask rcv %ld %ld %ld ", (long)a1, (long)a2, (long)a3);
 }

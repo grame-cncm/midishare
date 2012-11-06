@@ -5,6 +5,10 @@
 
 
 -----------------------------------------------------
+version 1.1.7
+- 64 buts arch: bug in Midi.GetData[0-3] corrected
+
+-----------------------------------------------------
 version 1.1.6
 - transparent support for 32 bits and 64 bits architectures
 
