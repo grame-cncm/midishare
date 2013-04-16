@@ -1,7 +1,8 @@
-This is the current state of the MidiShare project. The project is published
-under the GNU Library General Public License. You should have received a copy 
-of the GNU LGPL along with this distribution; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+This is the current state of the MidiShare project. 
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
+If a copy of the MPL was not distributed with this file, 
+You can obtain one at http://mozilla.org/MPL/2.0/.
+
 
 The MidiShare kernel development documentation is located in the DevGuide folder.
 

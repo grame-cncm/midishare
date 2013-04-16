@@ -169,7 +169,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.7;
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -198,7 +198,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.7;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -225,7 +225,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.7;
 				ZERO_LINK = YES;
 			};
 			name = Default;
