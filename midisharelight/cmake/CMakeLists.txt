@@ -5,10 +5,14 @@ project(midisharelight)
 cmake_minimum_required(VERSION 2.6)
 
 if(WIN32)
+	if ( ${CMAKE_CL_64} )
+		set (target midisharelight64)
+	else()
+		set (target midisharelight)
+	endif()
+else()
 	set (target midisharelight)
-else(WIN32)
-	set (target midisharelight)
-endif(WIN32)
+endif()
 
 #######################################
 # versions management
@@ -30,9 +34,12 @@ elseif(UNIX)
 endif(APPLE)
 
 if(WIN32)
-#	add_definitions(-DWINVER=0x0400 -DWIN32 -D__x86_64__)
-	add_definitions(-DWINVER=0x0400 -DWIN32)
-endif(WIN32)
+	if ( ${CMAKE_CL_64} )
+		add_definitions(-DWINVER=0x0400 -DWIN32 -D__x86_64__)
+	else ()
+		add_definitions(-DWINVER=0x0400 -DWIN32)
+	endif()
+endif()
 
 #######################################
 # set directories, src and headers.
@@ -48,11 +55,7 @@ set (TESTS_PATH ${ROOT_PATH}/test)
 # add src and headers files
 set (SRC ${SRC} "${SRC_PATH}/*.cpp")				# add source files
 set (SRC ${SRC} "${ATOMIC_PATH}/lflifo.c")
-#set (SRC ${SRC} "${MEM_PATH}/msEvents.c" "${MEM_PATH}/msFields.c" "${MEM_PATH}/msSeq.c")
 
-if(WIN32)
-	set (SRC ${SRC} "${SRC_PATH}/common/atomic/msAtomicWin32.asm")
-endif(WIN32)
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC})
 
 set (PUBLIC ${SRC_PATH}/MidiShareLight.h ${SRC_PATH}/midifile.h)
@@ -74,6 +77,9 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${PUBLIC})
 #######################################
 # set library target
 set(LIBCONTENT ${LIBSRC} ${LIBH} ${PUBLICHEADERS})
+if ( ${CMAKE_CL_64} )
+		set (LIBCONTENT ${LIBCONTENT} "../../src/common/atomic/msAtomicWin32.obj")
+endif()
 
 add_library(${target} STATIC ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES 
