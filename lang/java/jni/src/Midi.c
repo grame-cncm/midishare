@@ -1,21 +1,12 @@
 /*
+  MidiShare Project
+  Copyright (C) Grame 1999-2009
 
-  Copyright © Grame 1999-2009
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
-  Free Software Foundation version 2 of the License, or any later version.
-
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
-  for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
 
 */
@@ -559,7 +550,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetApplAlarm
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetField
   (JNIEnv * env, jclass cl, javaptr ev , jint i , jint val) {
   
-	MidiSetField((MidiEvPtr)ev,i,val);
+	  MidiSetField((MidiEvPtr)ev,i,val);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -818,7 +809,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetPort
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData0
   (JNIEnv * env, jclass cl, javaptr ev) {
 
- 	return (jint)Data((MidiEvPtr)ev)[0];
+ 	return MidiGetField((MidiEvPtr)ev, 0);
  }
  
 /*--------------------------------------------------------------------------*/
@@ -826,7 +817,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData0
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData1
   (JNIEnv * env, jclass cl, javaptr ev) {
 
- 	return (jint)Data((MidiEvPtr)ev)[1];
+ 	return MidiGetField((MidiEvPtr)ev, 1);
  }
  
 /*--------------------------------------------------------------------------*/
@@ -834,7 +825,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData1
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData2
   (JNIEnv * env, jclass cl, javaptr ev) {
 
- 	return (jint)Data((MidiEvPtr)ev)[2];
+ 	return MidiGetField((MidiEvPtr)ev, 2);
   }
   
 /*--------------------------------------------------------------------------*/
@@ -842,7 +833,7 @@ JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData2
 JNIEXPORT jint JNICALL Java_grame_midishare_Midi_GetData3
   (JNIEnv * env, jclass cl, javaptr ev) {
 
- 	return (jint)Data((MidiEvPtr)ev)[3];
+ 	return MidiGetField((MidiEvPtr)ev, 3);
   }
   
 /*--------------------------------------------------------------------------*/
@@ -851,7 +842,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
   (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
 
- 	Data((MidiEvPtr)ev)[0] = val;
+ 	MidiSetField((MidiEvPtr)ev, 0, val);
   }
 
 /*--------------------------------------------------------------------------*/
@@ -859,7 +850,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
  JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData1
   (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
- 	Data((MidiEvPtr)ev)[1] = val;
+ 	MidiSetField((MidiEvPtr)ev, 1, val);
   }
 
 /*--------------------------------------------------------------------------*/
@@ -867,7 +858,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData0
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData2
   (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
- 	Data((MidiEvPtr)ev)[2] = val;
+ 	MidiSetField((MidiEvPtr)ev, 2, val);
   }
 
 /*--------------------------------------------------------------------------*/
@@ -875,7 +866,7 @@ JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData2
 JNIEXPORT void JNICALL Java_grame_midishare_Midi_SetData3
   (JNIEnv * env, jclass cl, javaptr ev, jint val) {
 
- 	Data((MidiEvPtr)ev)[3] = val;
+ 	MidiSetField((MidiEvPtr)ev, 3, val);
   }
 
 /*--------------------------------------------------------------------------*/
