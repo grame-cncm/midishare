@@ -23,15 +23,25 @@ public class Test {
 		Midi.Connect (ref, 0, 1);
 		Midi.Connect (ref, ref2, 1);
 		System.out.println("Connection state: " + Midi.IsConnected(1,0));
+
 		sendNote (72, ref);
-		while (Midi.GetTime() < 2000) ;
-		
+		while (Midi.GetTime() < 500) ;
 		long ev = Midi.GetEv (ref2);
 		System.out.println("rcv fifo ev: " + ev);
 		if (ev != 0) {
 			printev (ev);
 			Midi.FreeEv (ev);
 		}
+		
+		sendCtrlChge (7, 120, ref);
+		while (Midi.GetTime() < 1000) ;		
+		ev = Midi.GetEv (ref2);
+		System.out.println("rcv fifo ev: " + ev);
+		if (ev != 0) {
+			printev (ev);
+			Midi.FreeEv (ev);
+		}
+
 		ev = Midi.GetEv (ref2);
 		System.out.println("rcv fifo ev: " + ev);
 		if (ev != 0) Midi.FreeEv (ev);
@@ -59,12 +69,25 @@ public class Test {
 	{
 		long event = Midi.NewEv(Midi.typeNote);  // ask for a new note event	
 		if (event != 0) {					// if the allocation was succesfull
-			Midi.SetChan(event,0); 			// set the Midi channel
-			Midi.SetPort(event,0); 			// set the destination port
+			Midi.SetChan(event,1); 			// set the Midi channel
+			Midi.SetPort(event,1); 			// set the destination port
 			Midi.SetField(event,0,pitch); 	// set the pitch field
 			Midi.SetField(event,1,80); 		// set the velocity field
 			Midi.SetField(event,2,1000); 	// set the duration field
 			Midi.SendIm(ref, event);  		// send the note immediatly
 		}
+	}
+
+	static void sendCtrlChge(int ctrlnum, int val, int ref) 
+	{
+		long event = Midi.NewEv(Midi.typeCtrlChange);  // ask for a new ctrl change	
+		if (event != 0) {					// if the allocation was succesfull
+			Midi.SetChan(event,1); 			// set the Midi channel
+			Midi.SetPort(event,1); 			// set the destination port
+			Midi.SetField(event,0,ctrlnum); 	// set the control number
+			Midi.SetField(event,1,val); 		// set the control value
+			Midi.SendIm(ref, event);  		// send the note immediatly
+		}
+		else System.out.println ("sendCtrlChge: can't allocate a new ev");
 	}
 }
