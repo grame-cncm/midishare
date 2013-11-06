@@ -179,7 +179,6 @@ void DriverSleep (TApplPtr appl)
 /*__________________________________________________________________________*/
 /*	Interrupt handlers														*/
 /*__________________________________________________________________________*/
-#define VS6
 #ifdef VS6
 static void CALLBACK TimerProc(UINT wID, UINT wMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
 #else
