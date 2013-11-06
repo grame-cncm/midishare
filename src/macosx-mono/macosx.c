@@ -10,10 +10,7 @@
   research@grame.fr
 
 */
-  
-  modifications history:
 
-*/
 #include "msKernel.h"
 
 #include "msExtern.h"
