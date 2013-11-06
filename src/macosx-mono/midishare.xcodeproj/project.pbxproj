@@ -408,9 +408,15 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 4BB41D0509ED34E100EE9367 /* Build configuration list for PBXProject "midishare" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* midishare */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
 			projectDirPath = "";
@@ -496,10 +502,7 @@
 		4BB41D0209ED34E100EE9367 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -533,7 +536,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -548,10 +551,7 @@
 		4BB41D0309ED34E100EE9367 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1.92;
@@ -583,7 +583,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -598,10 +598,7 @@
 		4BB41D0409ED34E100EE9367 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1.92;
 				EXPORTED_SYMBOLS_FILE = _MidiShare.exp;
@@ -631,7 +628,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PRODUCT_NAME = MidiShare;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(value)";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
