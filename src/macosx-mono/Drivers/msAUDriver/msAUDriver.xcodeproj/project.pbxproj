@@ -109,6 +109,8 @@
 /* Begin PBXProject section */
 		F567580B01FDA3E101053105 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 4BB41F0C09ED430000EE9367 /* Build configuration list for PBXProject "msAUDriver" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
@@ -169,7 +171,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				ZERO_LINK = YES;
 			};
 			name = Development;
@@ -198,7 +200,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -225,7 +227,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msAUDriver.1.0.0;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				ZERO_LINK = YES;
 			};
 			name = Default;
