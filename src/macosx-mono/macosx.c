@@ -250,7 +250,14 @@ Boolean ForgetTaskSync(MidiEvPtr * taskPtr, MidiEvPtr content)
 /*_________________________________________________________________________*/
 /* memory allocation implementation                                        */
 /*_________________________________________________________________________*/
-void* AllocateMemory(MemoryType type, unsigned long size) {return (void*)malloc(size);}
+void* AllocateMemory(MemoryType type, unsigned long size)
+{
+	void * ptr;
+	if (posix_memalign(&ptr, 16, size))
+		return 0;
+	else return ptr;
+//	return (void*)malloc(size);
+}
 void DisposeMemory(void* memPtr) {if (memPtr) free(memPtr);}
 
 /*_________________________________________________________________________*/
