@@ -136,6 +136,8 @@
 /* Begin PBXProject section */
 		F54A7D7301FC77AF01053105 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 4BB41EE809ED42BB00EE9367 /* Build configuration list for PBXProject "msMidiDriver" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
@@ -241,7 +243,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.9;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.8;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};
@@ -278,7 +280,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.9;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.8;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = NO;
 			};
@@ -313,7 +315,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.8;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};

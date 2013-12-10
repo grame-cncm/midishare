@@ -10,15 +10,15 @@
 #ifndef UI_DIALOG_H
 #define UI_DIALOG_H
 
-#include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QSlider>
-#include <QtGui/QSpinBox>
+#include <QVariant>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QSlider>
+#include <QSpinBox>
 
 QT_BEGIN_NAMESPACE
 
@@ -203,10 +203,10 @@ public:
 
     void retranslateUi(QDialog *Dialog)
     {
-        Dialog->setWindowTitle(QApplication::translate("Dialog", "msControl", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("Dialog", "Chan     Port", 0, QApplication::UnicodeUTF8));
-        groupBox_3->setTitle(QApplication::translate("Dialog", "Prog     Vol     Mod     Pan", 0, QApplication::UnicodeUTF8));
-        groupBox_4->setTitle(QApplication::translate("Dialog", "Pitch    Vel", 0, QApplication::UnicodeUTF8));
+        Dialog->setWindowTitle(QApplication::translate("Dialog", "msControl"));
+        groupBox_2->setTitle(QApplication::translate("Dialog", "Chan     Port"));
+        groupBox_3->setTitle(QApplication::translate("Dialog", "Prog     Vol     Mod     Pan"));
+        groupBox_4->setTitle(QApplication::translate("Dialog", "Pitch    Vel"));
     } // retranslateUi
 
 };

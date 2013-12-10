@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+#QT += core gui
+QT += widgets printsupport
 
 TARGET = msControler
 TEMPLATE = app
@@ -17,7 +18,6 @@ FORMS    += dialog.ui
 INCLUDEPATH += ../../include
 
 macx {
-	QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
 	CONFIG+=x86 x86_64
 	RC_FILE = msControler.icns
 }

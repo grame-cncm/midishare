@@ -468,9 +468,9 @@ static void DoRedraw (WindowRef win)
 static void AdjustCursor() 
 {
 	if (foreGround) {
-		Cursor c;
-		GetQDGlobalsArrow(&c);
-		SetCursor(&c);
+//		Cursor c;
+//		GetQDGlobalsArrow(&c);
+//		SetCursor(&c);
 	}
 }
 
