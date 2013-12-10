@@ -55,6 +55,7 @@ set (ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (SRC_PATH  ${ROOT_PATH})
 set (TOOLS_PATH  ${ROOT_PATH}/mstools)
 set (TESTS_PATH  ${ROOT_PATH}/tools)
+set (LIB_PATH  ${ROOT_PATH}/lib)
 set (SRCFOLDERS  common/Clients common/Drivers common/Kernel common/Memory  common/Sorter)
 set (HEADERS_PATH ${SRC_PATH}/common/Headers ${SRC_PATH}/common/atomic ${SRC_PATH}/lib)
 if(WIN32)
@@ -167,7 +168,7 @@ endforeach(tool)
 
 #######################################
 # set test targets
-set (MSTESTS TLin TFonctions TEvents TFilters TDrivers TOutEvents)
+set (MSTESTS TFonctions TEvents TFilters TDrivers TOutEvents)
 
 include_directories( ${SRC_PATH}/include)
 
@@ -176,3 +177,7 @@ foreach(tool ${MSTESTS})
 	target_link_libraries( ${tool} ${target})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
+
+add_executable( TLin ${TESTS_PATH}/TLin.c ${LIB_PATH}/EventToMidiStream.c ${LIB_PATH}/MidiStreamToEvent.c)
+target_link_libraries( TLin ${target})
+add_dependencies(TLin ${target})
