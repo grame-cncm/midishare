@@ -76,10 +76,16 @@ headers : $(HEADERS)
 
 ##################################################################
 # platform dependant resources
+macos : libJMidi.dylib
 
-libJMidi.dylib: ../jni/cmake/$(mode)/libJMidi-$(VERSION).dylib
-	cp ../jni/cmake/$(mode)/libJMidi-$(VERSION).dylib .
-	ln -sf libJMidi-$(VERSION).dylib libJMidi.dylib
+win32 : mshare32.dll JMidi32.dll
+
+win64 : mshare64.dll JMidi64.dll
+
+libJMidi.dylib: ../jni/cmake/$(mode)/libJMidi.$(VERSION).dylib
+	cp ../jni/cmake/$(mode)/libJMidi.$(VERSION).dylib .
+	ln -sf libJMidi.$(VERSION).dylib libJMidi.dylib
+	ln -sf libJMidi.$(VERSION).dylib libJMidi64.dylib
 
 mshare32.dll: $(mspath) 
 	cp $(mspath) .
