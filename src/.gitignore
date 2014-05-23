@@ -1,0 +1,10 @@
+*.o
+tools/TDrivers
+tools/TEvents
+tools/TFilters
+tools/TFonctions
+tools/TLin
+tools/TOutEvents
+common/atomic/benchs/ffbench
+common/atomic/benchs/ffbench2
+common/atomic/benchs/lfbench
