@@ -77,6 +77,8 @@ if(WIN32)
 set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
 elseif(APPLE)
 set_target_properties (${target} PROPERTIES LINK_FLAGS -flat_namespace)
+elseif(UNIX)
+set_target_properties (${target} PROPERTIES LINK_FLAGS -fPIC)
 endif(WIN32)
 
 #target_link_libraries (${target} ${LINK})
