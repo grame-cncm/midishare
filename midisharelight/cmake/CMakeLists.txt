@@ -17,7 +17,7 @@ set (STRVERS "v.1.00")
 set (SSTRVERS "1.00")
 
 if(UNIX)
-	add_definitions(-Wall -DGCC)
+	add_definitions(-Wall -DGCC -fPIC)
 endif(UNIX)
 
 if(APPLE)
