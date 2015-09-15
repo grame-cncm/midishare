@@ -27,6 +27,10 @@ endif(APPLE)
 
 if(WIN32)
 	add_definitions(-DWINVER=0x0400 -DWIN32)
+	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
+		add_definitions(-D__x86_64__)
+		set (statictarget SGUIDOEngine64)
+	endif ()
 endif(WIN32)
 add_definitions(-DMSLIGHT)
 
