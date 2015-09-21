@@ -50,7 +50,7 @@ MSFunctionType(short) MSGetVersion (TMSGlobalPtr g)
 //printf("sizeof(long): %d\n", sizeof(long));
 //printf("sizeof(int): %d\n", sizeof(int));
 //printf("sizeof(short): %d\n", sizeof(short));
-	return 194;
+	return 195;
 #else
 //printf("sizeof(long): %d\n", sizeof(long));
 //printf("sizeof(int): %d\n", sizeof(int));

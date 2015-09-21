@@ -62,7 +62,8 @@ Status2TypeTbl	gTypeTbl;
 //_________________________________________________________
 static void Start()
 {
-	gRefNum = MidiRegisterDriver (&drvInfos, &drvOps);
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	gRefNum = MidiRegisterDriver(&drvInfos, &drvOps);
 }
 
 //_________________________________________________________

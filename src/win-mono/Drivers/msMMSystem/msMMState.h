@@ -25,7 +25,15 @@
 
 #include "msMMDriver.h"
 
-void SaveState (SlotPtr in, SlotPtr out);
-void LoadState (SlotPtr in, SlotPtr out);
+#ifdef __cplusplus
+extern "C" {
+#endif
+	char * GetProfileFullName();
+	void SaveState(SlotPtr in, SlotPtr out);
+	void LoadState(SlotPtr in, SlotPtr out);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -7,7 +7,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include "winres.h"
 #include "msctrl.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -142,10 +142,10 @@ BEGIN
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", "MidiShare Universal Controler\0"
             VALUE "FileVersion", "1.02\0"
-            VALUE "InternalName", "msControl32\0"
+            VALUE "InternalName", "msControl\0"
             VALUE "LegalCopyright", "Copyright © Grame 1996\0"
-            VALUE "OriginalFilename", "msControl32.exe\0"
-            VALUE "ProductName", "GRAME msControl32\0"
+            VALUE "OriginalFilename", "msControl.exe\0"
+            VALUE "ProductName", "GRAME msControl\0"
             VALUE "ProductVersion", "1.02\0"
         END
     END
