@@ -62,8 +62,7 @@ Status2TypeTbl	gTypeTbl;
 //_________________________________________________________
 static void Start()
 {
-//	std::setlocale(LC_ALL, "en_US.utf8");
-//	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	gRefNum = MidiRegisterDriver(&drvInfos, &drvOps);
 }
 
@@ -89,6 +88,7 @@ static void SetupFilter (MidiFilterPtr filter)
 		AcceptBit(filter->evType,i);
 }
 
+#include <stdio.h>
 /*____________________________________________________________________*/
 static void print(MidiEvPtr e)
 {
@@ -102,7 +102,7 @@ static void print(MidiEvPtr e)
 //_________________________________________________________
 static void CALLBACK msWakeup (short refnum)
 {
-	MidiSetRcvAlarm(refnum, RcvAlarm);
+	MidiSetRcvAlarm (refnum, RcvAlarm);
 	MidiSetApplAlarm (refnum, ApplAlarm);
     SetupFilter (&gFilter);
     MidiSetFilter (refnum, &gFilter);	
@@ -112,8 +112,8 @@ static void CALLBACK msWakeup (short refnum)
 	MidiParseInitMthTbl	 (gParseTbl);
 	MidiParseInitTypeTbl (gTypeTbl);
 	AddSlots (refnum);
-	LoadState(gInSlots, gOutSlots);
-	/*
+	LoadState (gInSlots, gOutSlots);
+/*
 	{
 		StreamFifo f; MidiEvPtr e;
 		MidiParseInit (&f, gParseTbl, gTypeTbl);
