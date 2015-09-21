@@ -26,9 +26,15 @@
 #include "MidiShare.h"
 #include "msMMDriver.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-MidiEvPtr MS2MM (SlotPtr slot, MidiEvPtr e);
-void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT wMsg, 
-			DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
+	MidiEvPtr MS2MM(SlotPtr slot, MidiEvPtr e);
+	void CALLBACK MidiInProc(HMIDIIN hMidiIn, UINT wMsg,
+		DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

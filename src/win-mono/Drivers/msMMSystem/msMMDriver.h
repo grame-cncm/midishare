@@ -46,18 +46,24 @@ struct slot {
 //	char		buff[kBuffSize];
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern SlotPtr gInSlots, gOutSlots;
 
 //_________________________________________________________
 // functions definitions
 //_________________________________________________________
+	void MSALARMAPI RcvAlarm(short refNum);
+	void MSALARMAPI ApplAlarm(short refNum, long code);
 
-void MSALARMAPI RcvAlarm  (short refNum );
-void MSALARMAPI ApplAlarm (short refNum, long code );
-
-void AddSlots (short refnum);
-void RemoveSlots (short refnum);
-Boolean OpenSlot (SlotPtr slot, Boolean inputSlot);
-void Disconnect (SlotRefNum sref);
+	void AddSlots(short refnum);
+	void RemoveSlots(short refnum);
+	Boolean OpenSlot(SlotPtr slot, Boolean inputSlot);
+	void Disconnect(SlotRefNum sref);
+#ifdef __cplusplus
+}
+#endif
 
 #endif
