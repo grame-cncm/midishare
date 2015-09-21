@@ -28,7 +28,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	wchar_t * GetProfileFullName();
+	char * GetProfileFullName();
 	void SaveState(SlotPtr in, SlotPtr out);
 	void LoadState(SlotPtr in, SlotPtr out);
 
