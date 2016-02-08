@@ -20,11 +20,11 @@ if(APPLE)
 endif()
 
 if(WIN32)
- set (libgen vs2005)
+ set (libgen win32)
  add_definitions(-DWINVER=0x0400 -DWIN32) 
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
   set (WIN64 1)
-  set (libgen vs2005-64)
+  set (libgen win64)
  endif()
 
  set (CMAKE_CURRENT_BINARY_DIR ${libgen})
