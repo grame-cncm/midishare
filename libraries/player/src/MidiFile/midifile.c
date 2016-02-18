@@ -316,11 +316,9 @@ static unsigned long LongValSwap(long val)
 	#ifdef __POWERPC__
 		#define LongVal(val) LongValDirect(val)
 		#define ShortVal(val) ShortValDirect(val)
-	#elifdef __i386__
+	#else
 		#define LongVal(val) LongValSwap(val)
 		#define ShortVal(val) ShortValSwap(val)
-	#else
-		#error undefined indianness
 	#endif
 #endif
 
