@@ -1,7 +1,7 @@
 #######################################
 # CMAKE player
 #######################################
-project(midishare)
+project(Player)
 cmake_minimum_required(VERSION 2.6)
 
 set (target Player)
@@ -18,8 +18,8 @@ endif(UNIX)
 
 if(APPLE)
 	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
-	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
+	set (CMAKE_MACOSX_RPATH 1)
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.7)
  	add_definitions(-D__Macintosh__ -D__MacOSX__)
 endif(APPLE)
 
@@ -61,6 +61,7 @@ set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 #######################################
 # set input libraries
 if(APPLE)
+	set(LINK_FLAGS "-F ${ROOT_PATH}/../../src/build/macos/Release/")
 	set(LINK "-framework MidiShare")
 endif(APPLE)
 
@@ -88,8 +89,6 @@ set_target_properties (${target} PROPERTIES
 			MACOSX_FRAMEWORK_BUNDLE_VERSION ${SSTRVERS}
 			MACOSX_FRAMEWORK_BUNDLE_VERSION "A"
 )
-if(WIN32)
-set_target_properties (${target} PROPERTIES LINK_FLAGS /ENTRY:DllEntryPoint)
-endif(WIN32)
+set_target_properties (${target} PROPERTIES LINK_FLAGS ${LINK_FLAGS})
 
 target_link_libraries (${target} ${LINK})
