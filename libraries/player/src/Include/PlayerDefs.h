@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1996-2005
+  Copyright ï¿½ Grame 1996-2005
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
@@ -25,6 +25,8 @@
 #define __PlayerDefs__
 
 #define nil 0
+
+typedef const char* MidiName;
 
 #if defined(linux) || defined(__MACH__) // for linux and Mac OS X
 	#define true 1

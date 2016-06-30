@@ -4,11 +4,16 @@
 project(midishare)
 cmake_minimum_required(VERSION 2.6)
 
-if(WIN32)
+#######################################
+#  Android support
+if(ANDROID)
+	message (STATUS "Setting android-based variables")
+	set (CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/android.toolchain.cmake)
+	set (STATICLIB "yes")
+endif(ANDROID)
 
 #######################################
-# midi export support
-
+if(WIN32)
  if (${CMAKE_GENERATOR} MATCHES "MSYS*")
 	if (ARCH STREQUAL "64")
 		message (STATUS "64 bits architecture will be generated - Use -DARCH=32 to change.")
@@ -40,14 +45,28 @@ if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
 
-if(APPLE)
+if(ANDROID)
+ 	add_definitions(-Dandroid)
+elseif(APPLE)
 	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
  	add_definitions(-D__Macintosh__ -D__MacOSX__)
-endif(APPLE)
+	set (CMAKE_C_FLAGS -mmacosx-version-min=10.6)
+endif()
 
 if(WIN32)
 	add_definitions(-DWINVER=0x0400 -DWIN32 -DMSEXPORT ${X64})
 endif(WIN32)
+
+#######################################
+# Options disabled by default
+option ( NODRIVERS 	"compiles midishare without drivers support" off )
+
+if (NODRIVERS)
+	message (STATUS "Generates the midishare kernel without drivers support - use -DNODRIVERS=off to change")
+	add_definitions(-DNODRIVERS)
+else()
+	message (STATUS "Generates the midishare kernel with drivers support - use -DNODRIVERS=on to change")
+endif()
 
 #######################################
 # set directories, src and headers.
@@ -56,7 +75,8 @@ set (SRC_PATH  ${ROOT_PATH})
 set (TOOLS_PATH  ${ROOT_PATH}/mstools)
 set (TESTS_PATH  ${ROOT_PATH}/tools)
 set (LIB_PATH  ${ROOT_PATH}/lib)
-set (SRCFOLDERS  common/Clients common/Drivers common/Kernel common/Memory  common/Sorter)
+set (SRCFOLDERS  common/Clients common/Kernel common/Drivers common/Memory  common/Sorter)
+
 set (HEADERS_PATH ${SRC_PATH}/common/Headers ${SRC_PATH}/common/atomic ${SRC_PATH}/lib)
 if(WIN32)
 	set(IMPL_PATH ${ROOT_PATH}/win-mono)
@@ -134,6 +154,11 @@ else(WIN32)
 	set(LIBCONTENT ${LIBSRC} ${LIBH} ${PUBLICHEADERS})
 endif(WIN32)
 
+if (STATICLIB)
+	add_library(${target}-static STATIC ${LIBCONTENT})
+	set_target_properties (${target}-static PROPERTIES
+			output_name libmidishare.a)
+endif()
 
 add_library(${target} SHARED ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES
@@ -168,7 +193,10 @@ endforeach(tool)
 
 #######################################
 # set test targets
-set (MSTESTS TFonctions TEvents TFilters TDrivers TOutEvents)
+set (MSTESTS TFonctions TEvents TFilters TDrivers)
+if (NOT NODRIVERS)
+	set (MSTESTS  ${MSTESTS} TOutEvents)
+endif()
 
 include_directories( ${SRC_PATH}/include)
 

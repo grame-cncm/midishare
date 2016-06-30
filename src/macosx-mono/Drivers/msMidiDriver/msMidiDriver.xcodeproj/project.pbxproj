@@ -114,9 +114,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */ = {
+		4BD92D9009EE502D002DCEE0 /* msMidiDriver */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver Universal" */;
+			buildConfigurationList = 4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver" */;
 			buildPhases = (
 				4BD92D8D09EE502D002DCEE0 /* Headers */,
 				4BD92D8E09EE502D002DCEE0 /* Sources */,
@@ -126,8 +126,8 @@
 			);
 			dependencies = (
 			);
-			name = "msMidiDriver Universal";
-			productName = "msMidiDriver Universal1";
+			name = "msMidiDriver";
+			productName = "msMidiDriver1";
 			productReference = 4BD92D9109EE502D002DCEE0 /* msMidiDriver.1.0.9.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
@@ -153,7 +153,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4BD92D9009EE502D002DCEE0 /* msMidiDriver Universal */,
+				4BD92D9009EE502D002DCEE0 /* msMidiDriver */,
 			);
 		};
 /* End PBXProject section */
@@ -221,8 +221,8 @@
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
+					../../../build/macos/Release,
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -243,7 +243,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.9;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};
@@ -260,8 +260,8 @@
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
+					../../../build/macos/Release,
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -280,7 +280,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.9;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = NO;
 			};
@@ -296,8 +296,8 @@
 				EXECUTABLE_EXTENSION = so;
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
+					../../../build/macos/Release,
 					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../cmake/Release\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -315,7 +315,7 @@
 				OTHER_LDFLAGS = "-flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = msMidiDriver.1.0.7;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 				USER_HEADER_SEARCH_PATHS = ../../../lib;
 				ZERO_LINK = YES;
 			};
@@ -334,7 +334,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver Universal" */ = {
+		4BD92D9E09EE5098002DCEE0 /* Build configuration list for PBXNativeTarget "msMidiDriver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4BD92D9F09EE5098002DCEE0 /* Development */,
