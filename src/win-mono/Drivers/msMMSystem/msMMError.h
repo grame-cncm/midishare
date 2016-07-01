@@ -24,7 +24,12 @@
 #define __msMMError__
 
 #include "MidiShare.h"
-
-void MMError (char *s, SlotRefNum ref, int errCode, short in);
+#ifdef __cplusplus
+extern "C" {
+#endif
+void MMError(char *s, SlotRefNum ref, int errCode, short in);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

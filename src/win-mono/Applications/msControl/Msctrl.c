@@ -22,6 +22,8 @@
 
 */
 
+#pragma warning(disable: 4133)
+
 #include <windows.h>
 #include <MidiShare.h>
 #include "msctrl.h"
@@ -128,9 +130,11 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	}
 	InterlockedIncrement (&gInstanceCount);
 #endif
-	if ( !SetUpMidi() ) return 0;
+	if (!SetUpMidi()) {
+		return 0;
+	}
 	ghInst = hInstance;
-	DialogBox(hInstance, "UCTRL", NULL, MakeProcInstance(UniversalCtrlDlgProc,hInstance));
+	INT_PTR ret = DialogBox(hInstance, "UCTRL", NULL, MakeProcInstance(UniversalCtrlDlgProc, hInstance));
 	MidiClose(myRefNum);
 	return TRUE;
 }
@@ -347,7 +351,7 @@ Boolean SetUpMidi(void) {
 		return false;
 	}
 	myRefNum = MidiOpen(AppliName);
-	if ( myRefNum == MIDIerrSpace ) {
+	if (myRefNum == MIDIerrSpace) {
 		AlertUser("Too much MidiShare client applications");
 		return false;
 	}

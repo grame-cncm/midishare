@@ -93,7 +93,7 @@ static Boolean LoadDriver (char *drvName)
 	mem->next = gWinRsrc.drivers;
 	mem->libRef = LoadLibrary (drvName);
 	if (mem->libRef) {
- 		gWinRsrc.drivers = mem;
+		gWinRsrc.drivers = mem;
 	}
 	else {
 		DisposeMemory (mem);
@@ -246,28 +246,15 @@ Boolean ForgetTaskSync (MidiEvPtr * taskPtr, MidiEvPtr content)
 /*_________________________________________________________________________*/
 void* AllocateMemory (MemoryType type, unsigned long size)
 {
-	HLOCAL h = LocalAlloc (LMEM_FIXED, size + sizeof(HLOCAL));
-	if (h) {
-		HLOCAL * ptr = (HLOCAL *)LocalLock (h);
-		if (ptr) {
-			*ptr++ = h;
-			return ptr;
-		}
-	}
-	return 0;
+	void* ptr= HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
+	return ptr;
 }
 
 /*_________________________________________________________________________*/
 void DisposeMemory  (void* memPtr)
 {
-	HLOCAL * ptr = (HLOCAL *)memPtr;
-	if (ptr) {
-		HLOCAL h = *--ptr;
-		if (h) {
-			LocalUnlock (h);
-			LocalFree (h);
-		}
-	}
+	if (memPtr)
+		HeapFree(GetProcessHeap(), 0, memPtr);
 }
 
 

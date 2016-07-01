@@ -1,9 +1,56 @@
 
 #include <iostream>
+#include <map>
 
 #include "midifile.h"
 
 using namespace std;
+
+const char * typeNames[] = {
+	"Note",
+	"KeyOn",
+	"KeyOff",
+	"KeyPress",
+	"CtrlChange",
+	"ProgChange",
+	"ChanPress",
+	"PitchWheel",
+	"SongPos",
+	"SongSel",
+	"Clock",
+	"Start",
+	"Continue",
+	"Stop",
+	"Tune",
+	"ActiveSens",
+	"Reset",
+	"SysEx",
+	"Stream"
+};
+//Private         19   /* 19..127 Private events for applications internal use */
+
+const char * typeExtNames[] = {			// from 130 to 149
+	"QuarterFrame",
+	"Ctrl14b",
+	"NonRegParam",
+	"RegParam",
+	"SeqNum",
+	"Textual",
+	"Copyright",
+	"SeqName",
+	"InstrName",
+	"Lyric",
+	"Marker",
+	"CuePoint",
+	"ChanPrefix",
+	"EndTrack",
+	"Tempo",
+	"SMPTEOffset",
+	"TimeSign",
+	"KeySign",
+	"Specific",
+	"PortPrefix"
+};
 
 /*--------------------------------------------------------------------------
  *
@@ -29,8 +76,23 @@ static int count(MidiSeqPtr seq, int& dur)
 static void print(MidiSeqPtr seq)
 {
 	MidiEvPtr e = seq->first;
+	const char * name = "unexpected unknown event type";
+	unsigned int t = (unsigned int)EvType(e);
+	if (t < typePrivate)			name = typeNames[t];
+	else if (t < 128)				name = "unexpected private event";
+	else if ((t >= typeQuarterFrame) && (t <= typePortPrefix))
+									name = typeExtNames[t-typeQuarterFrame];
 	while (e) {
-		cout << "  " << Date(e) << " : type " << int(EvType(e)) << endl;
+		cout << "  " << Date(e) << " : type " << name ;
+		switch (t) {
+			case typeNote:
+				cout << " duration: " << Dur(e);
+			case typeKeyOn:
+			case typeKeyOff:
+				cout << " pitch: " << int(Pitch(e)) << " vel: " << int(Vel(e));
+				break;
+		}
+		cout << endl;
 		e = Link(e);
 	}
 }

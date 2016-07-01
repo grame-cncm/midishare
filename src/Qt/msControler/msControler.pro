@@ -26,8 +26,8 @@ win32:LIBS += ../../cmake/release/MidiShare.lib
 unix:!macx:LIBS += -L../../cmake -lMidiShare
 
 macx:debug {
-	LIBS += -F../../cmake/Debug -framework MidiShare
+	LIBS += -F../../build/macos/Debug -framework MidiShare
 } 
 macx:release {
-	LIBS += -F../../cmake/Release -framework MidiShare
+	LIBS += -F../../build/macos/Release/ -framework MidiShare
 }
