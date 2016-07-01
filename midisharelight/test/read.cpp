@@ -81,9 +81,9 @@ static void print(MidiSeqPtr seq)
 	if (t < typePrivate)			name = typeNames[t];
 	else if (t < 128)				name = "unexpected private event";
 	else if ((t >= typeQuarterFrame) && (t <= typePortPrefix))
-									name = typeExtNames[t];
+									name = typeExtNames[t-typeQuarterFrame];
 	while (e) {
-		cout << "  " << Date(e) << " : type " << name;
+		cout << "  " << Date(e) << " : type " << name ;
 		switch (t) {
 			case typeNote:
 				cout << " duration: " << Dur(e);
