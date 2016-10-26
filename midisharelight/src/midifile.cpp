@@ -120,7 +120,7 @@ static unsigned char codeTbl[]=
 	};
 
 /*------------------- status byte/type correspondence ---------------------*/
-static char typeTbl[]=
+static unsigned char typeTbl[]=
 	{ 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 	  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
@@ -135,7 +135,7 @@ static char typeTbl[]=
 /* this table is also in charge of the following event types :				*/
 /* QFrame, Ctrl14Bits, NonRegParam and RegParam								*/
 
-static char metaCodeTbl[]=
+static unsigned char metaCodeTbl[]=
 	{
 		0xf1, 0xb0, 0xb0, 0xb0,
 		0, 1, 2, 3, 4, 5, 6, 7,
